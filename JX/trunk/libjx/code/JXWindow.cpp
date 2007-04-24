@@ -6,7 +6,7 @@
 
 	BASE CLASS = JXContainer
 
-	Copyright © 1996 by John Lindal. All rights reserved.
+	Copyright  1996 by John Lindal. All rights reserved.
 
  ******************************************************************************/
 
@@ -33,10 +33,17 @@
 #include <jXUtil.h>
 #include <jXGlobals.h>
 
+//#define THREAD_TEST
+
+#ifdef THREAD_TEST
+#include <ace/Thread.h>
+#endif
+
 #include <X11/Xatom.h>
 #include <jXKeysym.h>
 
 #include <JString.h>
+#include <JString16.h>
 #include <jASCIIConstants.h>
 #include <JMinMax.h>
 #include <jStreamUtil.h>
@@ -49,9 +56,16 @@
 #include <limits.h>
 #include <jAssert.h>
 
+#define KEYSYM2UCS
+
+#ifdef KEYSYM2UCS
+#include <keysym2ucs.h>
+#endif
+
 JBoolean JXWindow::theFoundWMFrameMethodFlag = kJFalse;
 JBoolean JXWindow::theWMFrameCompensateFlag  = kJFalse;
 const JCoordinate kWMFrameSlop               = 2;	// pixels
+const JCharacter* JXWindow::theDefaultWMCommand = "jxapp";
 
 static const JCharacter* kWMOffsetFileName = "~/.jx/wm_offset";
 JBoolean JXWindow::theWMOffsetInitFlag     = kJFalse;
@@ -134,6 +148,7 @@ JXWindow::JXWindow
 	itsKeepBufferPixmapFlag = isMenu;
 	itsUseBkgdPixmapFlag    = isMenu;
 	itsCursorIndex          = kJXDefaultCursor;
+	itsUpdating				= kJFalse;
 	itsUpdateRegion         = XCreateRegion();
 	itsIcon                 = NULL;
 	itsIconDir              = NULL;
@@ -220,8 +235,9 @@ JXWindow::JXWindow
 	wmHints.initial_state = NormalState;
 	wmHints.input         = True;
 
+	const JCharacter* argv = theDefaultWMCommand;
 	XSetWMProperties(*itsDisplay, itsXWindow, &windowName, &windowName,
-					 NULL, 0, &sizeHints, &wmHints, NULL);
+					 (char**) &argv, 1, &sizeHints, &wmHints, NULL);
 
 	XFree(windowName.value);
 
@@ -919,9 +935,32 @@ JXWindow::BufferDrawing
 
  ******************************************************************************/
 
+class bool_value_change
+{
+public:
+	bool_value_change(JBoolean& variable, JBoolean change_to)
+		: mVariable(variable), mOriginalValue(variable)
+		{ mVariable = change_to; }
+	~bool_value_change()
+		{ mVariable = mOriginalValue; }
+private:
+	JBoolean&	mVariable;
+	JBoolean	mOriginalValue;
+};
+
 void
 JXWindow::Update()
 {
+#ifdef THREAD_TEST
+	static int main_tid = 0;
+	if (main_tid == 0)
+		main_tid = ACE_Thread::self();
+	if (main_tid != ACE_Thread::self())
+	{
+		cerr << endl << "Window Update from background thread" << endl;
+	}
+#endif
+
 	if (XEmptyRegion(itsUpdateRegion))
 		{
 		return;
@@ -934,6 +973,18 @@ JXWindow::Update()
 		}
 
 	assert( !itsUseBkgdPixmapFlag || itsBufferDrawingFlag );
+
+	// Prevent re-entrant updates
+	if (itsUpdating)
+	{
+		// Make sure display will update this window next time through its idle loop
+		itsDisplay->WindowNeedsUpdate(const_cast<JXWindow*>(this));
+		return;
+	}
+
+	// Set flag to indicate inside update - use stack class
+	// so it gets changed back if an exception occurs
+	bool_value_change _preserve_value(itsUpdating, kJTrue);
 
 	// We clear itsUpdateRegion first so widgets call call Refresh() inside Draw()
 
@@ -3030,6 +3081,11 @@ JXWindow::HandleFocusIn
 		(itsDockWidget->GetDockDirector())->SetFocusWindow(this);
 		}
 
+	
+	//if (itsDirector && !itsDirector->IsClosing())
+	if (itsDirector)
+		itsDirector->WindowFocussed(kJTrue);
+
 //	cout << "in : " << xEvent.window << ' ' << xEvent.detail << endl;
 }
 
@@ -3054,6 +3110,10 @@ JXWindow::HandleFocusOut
 		{
 		(itsDockWidget->GetDockDirector())->ClearFocusWindow(this);
 		}
+	
+	//if (itsDirector && !itsDirector->IsClosing())
+	if (itsDirector)
+		itsDirector->WindowFocussed(kJFalse);
 
 //	cout << "out: " << xEvent.window << ' ' << xEvent.detail << endl;
 }
@@ -3081,8 +3141,14 @@ JXWindow::HandleKeyPress
 
 	JCharacter buffer[10];
 	KeySym keySym;
+#undef X_HAVE_UTF8_STRING
+#ifdef X_HAVE_UTF8_STRING
+	JSize charCount =
+		Xutf8LookupString(NULL, const_cast<XKeyEvent*>(&(xEvent.xkey)), buffer, 10, &keySym, NULL);
+#else
 	JSize charCount =
 		XLookupString(const_cast<XKeyEvent*>(&(xEvent.xkey)), buffer, 10, &keySym, NULL);
+#endif
 	if (charCount == 0)
 		{
 		buffer[0] = '\0';
@@ -3152,12 +3218,16 @@ JXWindow::HandleKeyPress
 
 	const JXKeyModifiers modifiers(itsDisplay, state);
 
+	// Get current state without shift
 	JXKeyModifiers noShift(modifiers);
 	noShift.SetState(kJXShiftKeyIndex, kJFalse);
+
+	// Don't treat caps/num/scroll-locks as modifiers
 	noShift.SetState(kJXShiftLockKeyIndex, kJFalse);
 	noShift.SetState(kJXNumLockKeyIndex, kJFalse);
 	noShift.SetState(kJXScrollLockKeyIndex, kJFalse);
 	const JBoolean modsOff = noShift.AllOff();
+	const JBoolean shiftOn = JBoolean(modifiers.shift());
 
 	JXDisplay* display = itsDisplay;	// need local copy, since we might be deleted
 	Display* xDisplay  = *display;
@@ -3185,7 +3255,8 @@ JXWindow::HandleKeyPress
 
 	else if (keySym == XK_Tab && itsFocusWidget != NULL &&
 			 itsFocusWidget->WillAcceptFocus() &&
-			 (( modsOff && itsFocusWidget->WantsTab()) ||
+			 (( modsOff && !shiftOn && itsFocusWidget->WantsTab()) ||
+			  ( modsOff && shiftOn && itsFocusWidget->WantsShiftTab()) ||
 			  (!modsOff && itsFocusWidget->WantsModifiedTab())))
 		{
 		// We send tab directly to the focus widget so it
@@ -3208,6 +3279,30 @@ JXWindow::HandleKeyPress
 
 		if (charCount > 0)
 			{
+#ifdef X_HAVE_UTF8_STRING
+			// Convert buffer to UTF16
+			JString utf8(buffer, charCount);
+			JString16 utf16;
+			utf16.FromUTF8(utf8);
+			JSize utf16Count = utf16.GetLength();
+			for (JIndex i=0; i<utf16Count; i++)
+				{
+				if (utf16[i] < 0x100)
+					itsFocusWidget->HandleKeyPress((unsigned char) utf16[i], modifiers);
+				else
+				{
+					// Look for JTEBase16 and use special utf16 key input
+				}
+				if (utf16Count > 1 && i < utf16Count-1 &&
+					!JXDisplay::WindowExists(display, xDisplay, xWindow))
+					{
+					break;
+					}
+				}
+#else
+			// We are going to assume UTF-8 locale so characters returned
+			// are UTF-8 and we must convert to UCS2 (int)
+#if 0
 			for (JIndex i=0; i<charCount; i++)
 				{
 				itsFocusWidget->HandleKeyPress((unsigned char) buffer[i], modifiers);
@@ -3217,9 +3312,37 @@ JXWindow::HandleKeyPress
 					break;
 					}
 				}
+#else
+			if (charCount == 1)
+				itsFocusWidget->HandleKeyPress((unsigned char) buffer[0], modifiers);
+			else if (charCount > 1)
+				{
+				buffer[charCount] = '\0';
+				JString16 ucs2;
+				ucs2.FromUTF8(buffer);
+				JSize ucsCount = ucs2.GetLength();
+				const JCharacter16* ucsBuffer = ucs2.GetCString();
+				for (JIndex i=0; i<ucsCount; i++)
+					{
+					itsFocusWidget->HandleKeyPress(ucsBuffer[i], modifiers);
+					if (ucsCount > 1 && i < ucsCount-1 &&
+						!JXDisplay::WindowExists(display, xDisplay, xWindow))
+						{
+						break;
+						}
+					}
+				}
+#endif
+#endif
 			}
 		else
 			{
+#ifdef KEYSYM2UCS
+			int codepoint = keysym2ucs(keySym);
+			if (codepoint != -1)
+				itsFocusWidget->HandleKeyPress(codepoint, modifiers);
+			else
+#endif
 			itsFocusWidget->HandleKeyPress(keySym, modifiers);
 			}
 		}
@@ -3862,6 +3985,23 @@ JXWindow::InstallShortcuts
 				InstallShortcut(widget, (unsigned char) JXCtrl(c1), modifiers);
 				}
 			}
+		// cd: Added option for alt-key shortcut
+		else if (c == '@')
+			{
+			i++;
+			if (i < length)
+				{
+				const int c1 = toupper((unsigned char) list[i]);
+				const int c2 = tolower((unsigned char) list[i]);
+				modifiers.SetState(kJXAltKeyIndex, kJTrue);
+				InstallShortcut(widget, c1, modifiers);
+				if (c2 != c1)
+					{
+					InstallShortcut(widget, c2, modifiers);
+					}
+				modifiers.SetState(kJXAltKeyIndex, kJFalse);
+				}
+			}
 		else if (c == '#')
 			{
 			i++;
@@ -3924,7 +4064,7 @@ JXWindow::GetULShortcutIndex
 		}
 
 	JCharacter c = list->GetCharacter(1);
-	if (c == '^' || c == '#')
+	if (c == '^' || c == '#' || c == '@')		// cd: Added option for alt-key shortcut
 		{
 		if (list->GetLength() < 2)
 			{
@@ -4053,7 +4193,11 @@ JXWindow::IsShortcut
 	JXKeyModifiers modifiers(itsDisplay, state);
 	modifiers.SetState(kJXNumLockKeyIndex, kJFalse);
 	modifiers.SetState(kJXScrollLockKeyIndex, kJFalse);
-	modifiers.SetState(kJXShiftLockKeyIndex, kJFalse);
+	if (modifiers.shiftLock())
+		{
+		key = tolower(key);
+		modifiers.SetState(kJXShiftLockKeyIndex, kJFalse);
+		}
 	state = modifiers.GetState();
 
 	if (0 < key && key <= 255)

@@ -19,29 +19,44 @@
 
 typedef unsigned long	JFontID;
 
+#ifdef _J_USE_XFT
+const JSize kJDefaultFontSize = 10;
+#else
 const JSize kJDefaultFontSize = 12;
+#endif
 
 struct JFontStyle
 {
 private:
 
 	static JColorIndex itsDefaultColorIndex;
+	static JColorIndex itsDefaultBackColorIndex;
 
 public:
+
+	enum EUnderlineType
+	{
+		plain_Underline = 0,
+		redwavy_Underline = 1
+	};
 
 	JBoolean			bold;
 	JBoolean			italic;
 	JSize				underlineCount;		// may change font height
+	EUnderlineType		underlineType;
 	JBoolean			strike;
 	JColorIndex			color;
+	JColorIndex			backcolor;
 
 	JFontStyle()
 		:
 		bold(kJFalse),
 		italic(kJFalse),
 		underlineCount(0),
+		underlineType(plain_Underline),
 		strike(kJFalse),
-		color(itsDefaultColorIndex)
+		color(itsDefaultColorIndex),
+		backcolor(itsDefaultBackColorIndex)
 	{ };
 
 	JFontStyle
@@ -56,8 +71,10 @@ public:
 		bold(b),
 		italic(i),
 		underlineCount(u),
+		underlineType(plain_Underline),
 		strike(s),
-		color(c)
+		color(c),
+		backcolor(itsDefaultBackColorIndex)
 	{ };
 
 	JFontStyle
@@ -68,8 +85,10 @@ public:
 		bold(kJFalse),
 		italic(kJFalse),
 		underlineCount(0),
+		underlineType(plain_Underline),
 		strike(kJFalse),
-		color(c)
+		color(c),
+		backcolor(itsDefaultBackColorIndex)
 	{ };
 
 	static void
@@ -79,6 +98,15 @@ public:
 		)
 	{
 		itsDefaultColorIndex = c;
+	};
+
+	static void
+	SetDefaultBackColorIndex
+		(
+		const JColorIndex c
+		)
+	{
+		itsDefaultBackColorIndex = c;
 	};
 };
 

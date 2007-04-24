@@ -74,6 +74,7 @@ const JCoordinate kArrowHalfHeight = 3;
 
 const JCharacter* JXMenu::kNeedsUpdate  = "NeedsUpdate::JXMenu";
 const JCharacter* JXMenu::kItemSelected = "ItemSelected::JXMenu";
+const JCharacter* JXMenu::kClosed = "Closed::JXMenu";
 
 /******************************************************************************
  Constructor
@@ -1113,6 +1114,10 @@ JXMenu::Close()
 		{
 		(GetWindow())->RequestFocus();
 		}
+
+	// broadcast the message
+
+	Broadcast(Closed());
 }
 
 /******************************************************************************

@@ -112,6 +112,8 @@ public:
 	void			HandlePTPageSetup();
 	void			PrintPT();
 
+	virtual JColorIndex	GetSelectionColor() const;
+
 	static PartialWordModifier	GetPartialWordModifier();
 	static void					SetPartialWordModifier(const PartialWordModifier mod);
 
@@ -298,6 +300,7 @@ private:
 
 	void	HandleSearchReplaceCmd(const CmdIndex cmd);
 
+protected:	// CD need access to these to implement special clipboard behaviour
 	JBoolean	GetAvailDataTypes(const JArray<Atom>& typeList,
 								  JBoolean* canGetStyledText,
 								  JBoolean* canGetText, Atom* textType) const;
@@ -307,6 +310,7 @@ private:
 								 const JArray<Atom>& typeList, const Time time,
 								 JString* text, JRunArray<Font>* style) const;
 
+private:
 	JBoolean	OKToPassToJTE(const int key, char* c) const;
 	void		RemapWindowsHomeEnd(int* key, JXKeyModifiers* modifiers) const;
 

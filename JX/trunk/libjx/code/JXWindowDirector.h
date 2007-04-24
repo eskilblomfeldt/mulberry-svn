@@ -32,6 +32,7 @@ public:
 
 	virtual void		Activate();
 	virtual JBoolean	Deactivate();
+	virtual void		WindowFocussed(JBoolean focussed);
 
 	virtual void	Suspend();
 	virtual void	Resume();

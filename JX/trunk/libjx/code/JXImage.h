@@ -58,6 +58,7 @@ public:
 			const JSize depth = 0);
 
 	JXImage(JXDisplay* display, JXColormap* colormap, const JXPM& data);
+	JXImage(JXDisplay* display, JXColormap* colormap);
 
 	JXImage(const JXImage& source);
 	JXImage(const JXImage& source, const JRect& rect);
@@ -159,8 +160,6 @@ private:
 	JArray<JColorIndex>*	itsColorList;		// can be NULL
 
 private:
-
-	JXImage(JXDisplay* display, JXColormap* colormap);
 
 	void	JXImageX(JXDisplay* display, JXColormap* colormap, const JSize depth = 0);
 	void	JXImageFromDrawable(JXDisplay* display, JXColormap* colormap,

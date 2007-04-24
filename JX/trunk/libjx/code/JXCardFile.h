@@ -34,6 +34,9 @@ public:
 	JXWidgetSet*	PrependCard();
 	JXWidgetSet*	AppendCard();
 
+	JXWidgetSet*	GetCurrentCard();
+	JXWidgetSet*	GetCard(const JIndex index);
+
 	void			InsertCard(const JIndex index, JXWidgetSet* card);
 	void			PrependCard(JXWidgetSet* card);
 	void			AppendCard(JXWidgetSet* card);

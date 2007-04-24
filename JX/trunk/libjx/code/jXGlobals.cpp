@@ -3,7 +3,7 @@
 
 	Access to JX global objects and factories.
 
-	Copyright © 1997-99 John Lindal. All rights reserved.
+	Copyright ) 1997-99 John Lindal. All rights reserved.
 
  ******************************************************************************/
 
@@ -735,11 +735,13 @@ JXInitLocale()
 	// We don't understand UTF-8, so ask for the plain language instead
 
 	JString langAlias = langAliasPtr;
+#if 0
 	if (langAlias.EndsWith(kUTF8Suffix))
 		{
 		langAlias.RemoveSubstring(langAlias.GetLength() - kUTF8SuffixLength + 1, langAlias.GetLength());
 		setenv("LC_ALL", langAlias, kJTrue);
 		}
+#endif
 
 	setlocale(LC_ALL, "");	// for Xkb support (e.g. Russian)
 
@@ -836,9 +838,13 @@ JXInitLocale()
 			composeFile = JReadUntilws(composeDirInput);
 			name        = JReadUntilws(composeDirInput);
 
+			// New syntax for compose.dir has a ':' at the end of the compose file name
+			// We have to strip that off if present
+			if (composeFile.GetLength() && (composeFile.GetLastCharacter() == ':'))
+				composeFile.SetCharacter(composeFile.GetLength(), 0);
+			//cout << "compose: " << composeFile << " : " << name << endl;
 			if (JStringCompare(name, langName, kJFalse) == 0)
 				{
-				found = kJTrue;
 				break;
 				}
 			}
@@ -879,7 +885,12 @@ JXOpenLocaleFile
 	input.close();
 
 	input.clear();
-	JString fullName = JCombinePathAndName("/usr/X11R6/lib/X11/locale/", fileName);
+	// Check for standard X11 path or OpenWindows (Solaris) path
+	JString locale_path = "/usr/X11R6/lib/X11/locale/";
+	if (!JDirectoryExists(locale_path))
+		locale_path = "/usr/openwin/lib/locale/";
+
+	JString fullName = JCombinePathAndName(locale_path, fileName);
 	input.open(fullName);
 	if (input.good())
 		{

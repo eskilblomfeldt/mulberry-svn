@@ -15,6 +15,7 @@
 #include <JXDirector.h>
 #include <JString.h>
 #include <JPoint.h>
+#include <JRect.h>
 #include <X11/X.h>
 
 class JXContainer;
@@ -25,7 +26,7 @@ class JXHintManager
 {
 public:
 
-	JXHintManager(JXContainer* widget, const JCharacter* text);
+	JXHintManager(JXContainer* widget, const JCharacter* text, const JRect* rect = NULL);
 
 	~JXHintManager();
 
@@ -39,7 +40,7 @@ public:
 	void	HandleMouseLeave();
 
 	const JString&	GetText() const;
-	void			SetText(const JCharacter* text);
+	void			SetText(const JCharacter* text, const JRect* rect = NULL);
 
 	Time	GetStartTime() const;
 	void	SetStartTime(const Time t);
@@ -52,6 +53,7 @@ private:
 
 	JXContainer*	itsWidget;		// not owned
 	JString			itsText;
+	JRect			itsHintRect;
 	JBoolean		itsActiveFlag;	// kJTrue if should show hint
 	Time			itsStartTime;
 	JPoint			itsPrevPt;
@@ -82,10 +84,15 @@ JXHintManager::GetText()
 inline void
 JXHintManager::SetText
 	(
-	const JCharacter* text
+	const JCharacter* text,
+	const JRect*	  rect
 	)
 {
 	itsText = text;
+	if (rect)
+		itsHintRect = *rect;
+	else
+		itsHintRect = JRect(0, 0, 0, 0);
 }
 
 /******************************************************************************

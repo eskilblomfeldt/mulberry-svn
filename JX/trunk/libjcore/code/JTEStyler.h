@@ -98,6 +98,7 @@ private:
 	JSize		itsFontSize;
 	JFontStyle	itsDefFontStyle;
 	JFontID		itsDefFontID;
+	JTextEditor::AlignmentType	itsDefFontAlign;
 
 	JIndexRange*	itsRecalcRange;					// not owned; NULL unless lexing
 	JIndexRange*	itsRedrawRange;					// not owned; NULL unless lexing

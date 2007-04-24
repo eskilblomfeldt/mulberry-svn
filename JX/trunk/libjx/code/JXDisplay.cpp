@@ -330,6 +330,23 @@ JXDisplay::HideAllWindows()
 }
 
 /******************************************************************************
+ RefreshAllWindows
+
+Refresh all windows on this display.
+
+******************************************************************************/
+
+void
+JXDisplay::RefreshAllWindows()
+{
+  const JSize count = itsWindowList->GetElementCount();
+  for (JIndex i=1; i<=count; i++)
+    {
+      ((itsWindowList->GetElement(i)).window)->Refresh();
+    }
+}
+
+/******************************************************************************
  UndockAllWindows
 
  ******************************************************************************/

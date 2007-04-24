@@ -25,6 +25,7 @@
 .cpp ./code/JXSelectionManager
 .cpp ./code/JXSelectionData
 .cpp ./code/JXTextSelection
+.cpp ./code/JXTextSelection16
 .cpp ./code/JXImageSelection
 .cpp ./code/JXFileSelection
 .cpp ./code/JXDNDManager
@@ -91,7 +92,9 @@
 .cpp ./code/JXFileHistoryMenu
 .cpp ./code/JXXFontMenu
 .cpp ./code/JXTEBase
+.cpp ./code/JXTEBase16
 .cpp ./code/JXTEBlinkCaretTask
+.cpp ./code/JXTEBlinkCaretTask16
 .cpp ./code/JXSearchTextDialog
 .cpp ./code/JXSearchTextButton
 .cpp ./code/JXRegexInput
@@ -232,3 +235,4 @@
 .cpp ./code/JXChooseColorDialog
 .cpp ./code/jXUtil
 .cpp ./code/JXAssert
+.cpp ./code/keysym2ucs

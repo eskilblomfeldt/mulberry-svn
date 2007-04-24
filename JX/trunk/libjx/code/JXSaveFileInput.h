@@ -43,7 +43,7 @@ private:
 
 private:
 
-	static JBoolean	IsCharacterInWord(const JString& text, const JIndex charIndex);
+	static JBoolean	SIsCharacterInWord(const JString& text, const JIndex charIndex);
 
 	// not allowed
 

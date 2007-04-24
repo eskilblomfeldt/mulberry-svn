@@ -81,7 +81,8 @@ JRead
 	)
 {
 	JString str;
-	str.Read(input, count);
+	if (count != 0)
+		str.Read(input, count);
 	return str;
 }
 

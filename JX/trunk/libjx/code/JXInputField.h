@@ -38,8 +38,9 @@ public:
 	void	SetFontName(const JCharacter* name);
 	void	SetFontSize(const JSize size);
 	void	SetFontStyle(const JFontStyle& style);
+	void	SetFontAlign(const AlignmentType align);
 	void	SetFont(const JCharacter* name, const JSize size,
-					const JFontStyle& style = JFontStyle());
+					const JFontStyle& style = JFontStyle(), const AlignmentType align = kAlignLeft);
 
 	JBoolean	IsRequired() const;
 	void		SetIsRequired(const JBoolean isRequired = kJTrue);

@@ -61,7 +61,7 @@ protected:
 
 	virtual void	Receive(JBroadcaster* sender, const Message& message);
 
-private:
+// private: - modified by CD - need access to these
 
 	const JXTextMenuData*	itsTextMenuData;
 	JIndex					itsHilightRow;

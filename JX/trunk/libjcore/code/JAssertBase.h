@@ -24,7 +24,8 @@ public:
 	{
 		kIgnoreFailure,
 		kAbort,
-		kAskUser
+		kAskUser,
+		kPrint
 	};
 
 public:

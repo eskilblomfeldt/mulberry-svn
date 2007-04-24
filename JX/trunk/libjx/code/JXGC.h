@@ -20,6 +20,9 @@
 #include <JArray.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#ifdef _J_USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 class JXDisplay;
 class JXColormap;
@@ -77,6 +80,8 @@ public:
 	void	SetFont(const JFontID id);
 	void	DrawString(const Drawable drawable, const JCoordinate x,
 					   const JCoordinate y, const JCharacter* str) const;
+	void	DrawString16(const Drawable drawable, const JCoordinate x,
+					   const JCoordinate y, const JCharacter16* str) const;
 
 	void	CopyPixels(const Drawable source,
 					   const JCoordinate src_x, const JCoordinate src_y,
@@ -95,6 +100,12 @@ private:
 	JXColormap*	itsColormap;	// we don't own this
 	GC			itsXGC;
 	JSize		itsDepth;
+#ifdef _J_USE_XFT
+	Drawable		itsXftDrawable;
+	XftDraw*		itsXftDraw;		// not assigned until required
+	XftFont*		itsXftFont;		// we don't own this, JXFontManager does
+	JRGB			itsXftColorRGB;	// cached rgb color
+#endif
 
 	// clipping
 
@@ -116,6 +127,10 @@ private:
 
 	void	ClearPrivateClipping();
 	int		GetXLineStyle(const JBoolean drawDashedLines) const;
+
+#ifdef _J_USE_XFT
+	XftDraw*	GetXftDraw() const;		// will create if not already present
+#endif
 
 	// not allowed
 

@@ -57,6 +57,8 @@ JBroadcaster::JBroadcaster()
 {
 	itsSenders    = NULL;
 	itsRecipients = NULL;
+	itsIsBroadcasting = kJTrue;
+	itsIsListening = kJTrue;
 }
 
 /******************************************************************************
@@ -75,6 +77,8 @@ JBroadcaster::JBroadcaster
 {
 	itsSenders    = NULL;
 	itsRecipients = NULL;
+	itsIsBroadcasting = kJTrue;
+	itsIsListening = kJTrue;
 }
 
 /******************************************************************************
@@ -361,14 +365,15 @@ JBroadcaster::BroadcastPrivate
 	const Message& message
 	)
 {
-	assert( itsRecipients != NULL );
+	assert( (IsBroadcasting() == kJTrue) && (itsRecipients != NULL) );
 
 	JBroadcasterIterator	iterator(itsRecipients, kJIteratorStartAtBeginning);
 	JBroadcaster*			recipient;
 
 	while (iterator.Next(&recipient))
 		{
-		recipient->Receive(this, message);
+		if (recipient->IsListening() == kJTrue)
+			recipient->Receive(this, message);
 		}
 }
 
@@ -425,14 +430,15 @@ JBroadcaster::BroadcastWithFeedbackPrivate
 	Message* message
 	)
 {
-	assert( itsRecipients != NULL );
+	assert( (IsBroadcasting() == kJTrue) && (itsRecipients != NULL) );
 
 	JBroadcasterIterator	iterator(itsRecipients, kJIteratorStartAtBeginning);
 	JBroadcaster*			recipient;
 
 	while (iterator.Next(&recipient))
 		{
-		recipient->ReceiveWithFeedback(this, message);
+		if (recipient->IsListening() == kJTrue)
+			recipient->ReceiveWithFeedback(this, message);
 		}
 }
 

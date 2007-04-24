@@ -62,6 +62,7 @@
 #include <JFontManager.h>
 #include <JRegex.h>
 #include <JString.h>
+#include <JString16.h>
 #include <jAssert.h>
 
 /******************************************************************************
@@ -151,6 +152,77 @@ JFontManager::GetStringWidth
 	const
 {
 	return GetStringWidth(GetFontID(name, size, style), size, style, str, charCount);
+}
+
+/******************************************************************************
+ GetStringWidth16
+
+ ******************************************************************************/
+
+JSize
+JFontManager:: GetStringWidth16
+	(
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16*	str
+	)
+	const
+{
+	return  GetStringWidth16(GetFontID(name, size, style), size, style, str, strlen16(str));
+}
+
+JSize
+JFontManager:: GetStringWidth16
+	(
+	const JFontID		fontID,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16*	str
+	)
+	const
+{
+	return  GetStringWidth16(fontID, size, style, str, strlen16(str));
+}
+
+JSize
+JFontManager:: GetStringWidth16
+	(
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JString16&	str
+	)
+	const
+{
+	return  GetStringWidth16(GetFontID(name, size, style), size, style, str, str.GetLength());
+}
+
+JSize
+JFontManager:: GetStringWidth16
+	(
+	const JFontID		fontID,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JString16&	str
+	)
+	const
+{
+	return  GetStringWidth16(fontID, size, style, str, str.GetLength());
+}
+
+JSize
+JFontManager:: GetStringWidth16
+	(
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16*	str,
+	const JSize			charCount
+	)
+	const
+{
+	return  GetStringWidth16(GetFontID(name, size, style), size, style, str, charCount);
 }
 
 /******************************************************************************

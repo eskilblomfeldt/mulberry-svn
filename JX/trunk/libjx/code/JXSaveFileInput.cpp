@@ -36,7 +36,7 @@ JXSaveFileInput::JXSaveFileInput
 	:
 	JXInputField(enclosure, hSizing, vSizing, x,y, w,h)
 {
-	SetCharacterInWordFunction(IsCharacterInWord);
+	SetCharacterInWordFunction(SIsCharacterInWord);
 
 #ifdef _J_UNIX
 	SetMaxLength(255);
@@ -138,12 +138,12 @@ JXSaveFileInput::FilterText
 }
 
 /******************************************************************************
- IsCharacterInWord (static private)
+ SIsCharacterInWord (static private)
 
  ******************************************************************************/
 
 JBoolean
-JXSaveFileInput::IsCharacterInWord
+JXSaveFileInput::SIsCharacterInWord
 	(
 	const JString&	text,
 	const JIndex	charIndex

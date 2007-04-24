@@ -134,13 +134,13 @@ JXPSPrintSetupDialog::BuildWindow
         new JXTextRadioButton(1, JGetString("obj2_JXLayout::JXPSPrintSetupDialog::JXLayout"), itsDestination,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 5,8, 70,20);
     assert( obj2_JXLayout != NULL );
-    obj2_JXLayout->SetShortcuts(JGetString("obj2_JXLayout::JXPSPrintSetupDialog::shortcuts::JXLayout"));
+    //obj2_JXLayout->SetShortcuts(JGetString("obj2_JXLayout::JXPSPrintSetupDialog::shortcuts::JXLayout"));
 
     JXTextRadioButton* obj3_JXLayout =
         new JXTextRadioButton(2, JGetString("obj3_JXLayout::JXPSPrintSetupDialog::JXLayout"), itsDestination,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 75,8, 50,20);
     assert( obj3_JXLayout != NULL );
-    obj3_JXLayout->SetShortcuts(JGetString("obj3_JXLayout::JXPSPrintSetupDialog::shortcuts::JXLayout"));
+    //obj3_JXLayout->SetShortcuts(JGetString("obj3_JXLayout::JXPSPrintSetupDialog::shortcuts::JXLayout"));
 
     itsPrintCmd =
         new JXInputField(window,
@@ -300,10 +300,10 @@ JXPSPrintSetupDialog::SetObjects
 	itsCollateCB->SetState(collate);
 	itsBWCheckbox->SetState(bw);
 
-    itsChooseFileButton->SetShortcuts("#O");
-    itsBWCheckbox->SetShortcuts("#B");
-    itsPrintAllCB->SetShortcuts("#L");
-    itsCollateCB->SetShortcuts("#E");
+    //itsChooseFileButton->SetShortcuts("#O");
+    //itsBWCheckbox->SetShortcuts("#B");
+    //itsPrintAllCB->SetShortcuts("#L");
+    //itsCollateCB->SetShortcuts("#E");
 }
 
 /******************************************************************************

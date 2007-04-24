@@ -75,7 +75,7 @@ protected:
 
 	virtual void	Receive(JBroadcaster* sender, const Message& message);
 
-private:
+protected:	// CD changed to allow access from derived classes
 
 	JXScrollbarSet*	itsScrollbarSet;		// can be NULL
 	JBoolean		itsAlwaysShowScrollFlag;
@@ -100,10 +100,11 @@ private:
 	JBoolean	itsHCtrl, itsHMeta;
 	JBoolean	itsVCtrl, itsVMeta;
 
+	virtual void	AdjustScrollbars();
+
 private:
 
 	void	NeedAdjustScrollbars();
-	void	AdjustScrollbars();
 
 	// not allowed
 

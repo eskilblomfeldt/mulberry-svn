@@ -19,6 +19,7 @@
 #include <JFontStyle.h>
 
 class JString;
+class JString16;
 class JFontManager;
 class JColormap;
 class JImage;
@@ -124,6 +125,11 @@ public:
 						   const JCharacter* str) const;
 	JSize	GetStringWidth(const JCharacter* str) const;
 
+	JSize	GetStringWidth16(const JCharacter* name, const JSize size,
+						   const JFontStyle& style,
+						   const JCharacter16* str) const;
+	JSize	GetStringWidth16(const JCharacter16* str) const;
+
 	virtual void	String(const JCoordinate left, const JCoordinate top,
 						   const JCharacter* str,
 						   const JCoordinate width = 0,
@@ -151,6 +157,36 @@ public:
 						   const VAlignment vAlign = kVAlignTop);
 	void			String(const JFloat angle, const JRect& rect,
 						   const JCharacter* str,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const VAlignment vAlign = kVAlignTop);
+
+	virtual void	String16(const JCoordinate left, const JCoordinate top,
+						   const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop) = 0;
+	void			String16(const JPoint& topLeft, const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+	void			String16(const JRect& rect, const JCharacter16* str,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const VAlignment vAlign = kVAlignTop);
+	virtual void	String16(const JFloat angle, const JCoordinate left,
+						   const JCoordinate top, const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop) = 0;
+	void			String16(const JFloat angle, const JPoint& topLeft,
+						   const JCharacter16* str, const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+	void			String16(const JFloat angle, const JRect& rect,
+						   const JCharacter16* str,
 						   const HAlignment hAlign = kHAlignLeft,
 						   const VAlignment vAlign = kVAlignTop);
 
@@ -204,6 +240,9 @@ public:
 protected:
 
 	void	AlignString(JCoordinate* left, JCoordinate* top, const JCharacter* str,
+						const JCoordinate width, const HAlignment hAlign,
+						const JCoordinate height, const VAlignment vAlign) const;
+	void	AlignString16(JCoordinate* left, JCoordinate* top, const JCharacter16* str,
 						const JCoordinate width, const HAlignment hAlign,
 						const JCoordinate height, const VAlignment vAlign) const;
 
@@ -532,6 +571,66 @@ JPainter::String
 	)
 {
 	String(angle, rect.left, rect.top, str,
+		   rect.width(), hAlign, rect.height(), vAlign);
+}
+
+/******************************************************************************
+ String16
+
+ ******************************************************************************/
+
+inline void
+JPainter::String16
+	(
+	const JPoint&		topLeft,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	String16(topLeft.x, topLeft.y, str, width, hAlign, height, vAlign);
+}
+
+inline void
+JPainter::String16
+	(
+	const JRect&		rect,
+	const JCharacter16*	str,
+	const HAlignment	hAlign,
+	const VAlignment	vAlign
+	)
+{
+	String16(rect.left, rect.top, str, rect.width(), hAlign, rect.height(), vAlign);
+}
+
+inline void
+JPainter::String16
+	(
+	const JFloat		angle,
+	const JPoint&		topLeft,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	String16(angle, topLeft.x, topLeft.y, str, width, hAlign, height, vAlign);
+}
+
+inline void
+JPainter::String16
+	(
+	const JFloat		angle,
+	const JRect&		rect,
+	const JCharacter16*	str,
+	const HAlignment	hAlign,
+	const VAlignment	vAlign
+	)
+{
+	String16(angle, rect.left, rect.top, str,
 		   rect.width(), hAlign, rect.height(), vAlign);
 }
 

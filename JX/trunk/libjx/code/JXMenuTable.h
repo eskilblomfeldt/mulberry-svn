@@ -92,6 +92,7 @@ private:
 	JPoint		itsCurrPt;
 	JBoolean	itsIsFirstDragFlag;
 
+protected:	// Modified by CD - need access to these from derived class
 	JBoolean	itsHasScrollUpFlag;
 	JBoolean	itsMouseInScrollUpFlag;
 	JRect		itsScrollUpRect;

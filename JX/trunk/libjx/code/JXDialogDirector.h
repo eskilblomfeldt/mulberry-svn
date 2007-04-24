@@ -45,7 +45,7 @@ protected:
 
 	virtual void	Receive(JBroadcaster* sender, const Message& message);
 
-private:
+protected:	// CD: changed to allow child class access
 
 	const JBoolean	itsModalFlag;
 	JBoolean		itsAutoGeomFlag;

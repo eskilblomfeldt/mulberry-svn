@@ -278,3 +278,16 @@ JXWindowDirector::NeedsSave()
 {
 	return kJFalse;
 }
+
+/******************************************************************************
+ WindowFocussed
+
+	Notification of focus/unfocus event.
+
+ ******************************************************************************/
+
+void
+JXWindowDirector::WindowFocussed(JBoolean focussed)
+{
+	// Sub-classes can do their own things
+}

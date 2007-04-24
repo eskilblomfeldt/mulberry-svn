@@ -35,17 +35,14 @@ public:
 	void	SetToPopupChoice(const JBoolean isPopup = kJTrue);
 
 protected:
-
-	virtual void	Receive(JBroadcaster* sender, const Message& message);
-
-private:
-
 	JIndex		itsFontIndex;
 	JBoolean	itsBroadcastNameChangeFlag;
 
+	virtual void	Receive(JBroadcaster* sender, const Message& message);
+	virtual void	BuildMenu();
+
 private:
 
-	void	BuildMenu();
 	JString	GetFontName(const JIndex index) const;
 	void	SetFontName1(const JIndex index);
 

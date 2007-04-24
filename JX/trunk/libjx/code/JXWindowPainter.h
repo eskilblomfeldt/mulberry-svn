@@ -60,6 +60,19 @@ public:
 						   const JCoordinate height = 0,
 						   const VAlignment vAlign = kVAlignTop);
 
+	virtual void	String16(const JCoordinate left, const JCoordinate top,
+						   const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+	virtual void	String16(const JFloat angle, const JCoordinate left,
+						   const JCoordinate top, const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+
 	virtual void	Point(const JCoordinate x, const JCoordinate y);
 
 	virtual void	Line(const JCoordinate x1, const JCoordinate y1,
@@ -89,6 +102,13 @@ public:
 						   const JCoordinate height = 0,
 						   const VAlignment vAlign = kVAlignTop);
 
+	virtual void	String16(const JCoordinate left, const JCoordinate top,
+						   const JCharacter16* str, const JIndex uIndex,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+
 	// use with extreme caution
 
 	JBoolean	GetDefaultClipRegion(Region* region) const;
@@ -113,6 +133,11 @@ private:
 private:
 
 	void	StyleString(const JCharacter* str,
+						const JCoordinate x, const JCoordinate y,
+						const JCoordinate ascent, const JCoordinate descent,
+						const JColorIndex color);
+
+	void	StyleString16(const JCharacter16* str,
 						const JCoordinate x, const JCoordinate y,
 						const JCoordinate ascent, const JCoordinate descent,
 						const JColorIndex color);

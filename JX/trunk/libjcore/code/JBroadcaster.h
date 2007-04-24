@@ -36,6 +36,19 @@ public:
 			{ };
 		};
 
+	class StStopListening
+	{
+public:
+		StStopListening(JBroadcaster* broad)
+			{ mBroadcaster = broad; mRestart = mBroadcaster->IsListening(); mBroadcaster->SetListening(kJFalse); }
+		~StStopListening()
+			{ if (mRestart) mBroadcaster->SetListening(kJTrue); }
+	private:
+		JBroadcaster*	mBroadcaster;
+		bool			mRestart;
+	};
+	friend class StStopListening;
+
 public:
 
 	JBroadcaster();
@@ -55,6 +68,12 @@ protected:
 	void	ListenTo(const JBroadcaster* aSender);
 	void	StopListening(const JBroadcaster* aSender);
 
+	void			SetBroadcasting(JBoolean broadcasting);
+	JBoolean		IsBroadcasting() const;
+
+	void			SetListening(JBoolean listening);
+	JBoolean		IsListening() const;
+
 	void			Send(JBroadcaster* recipient, const Message& message);
 	void			Broadcast(const Message& message);
 	virtual void	Receive(JBroadcaster* sender, const Message& message);
@@ -69,6 +88,8 @@ private:
 
 	JBroadcasterList*	itsSenders;			// the objects to which we listen
 	JBroadcasterList*	itsRecipients;		// the objects that listen to us
+	JBoolean			itsIsBroadcasting;	// actively broadcasting
+	JBoolean			itsIsListening;		// actively listening
 
 private:
 
@@ -82,6 +103,25 @@ private:
 	void	BroadcastWithFeedbackPrivate(Message* message);
 };
 
+inline void JBroadcaster::SetBroadcasting(JBoolean broadcasting)
+{
+	itsIsBroadcasting = broadcasting;
+}
+
+inline JBoolean JBroadcaster::IsBroadcasting() const
+{
+	return itsIsBroadcasting;
+}
+
+inline void JBroadcaster::SetListening(JBoolean listening)
+{
+	itsIsListening = listening;
+}
+
+inline JBoolean JBroadcaster::IsListening() const
+{
+	return itsIsListening;
+}
 
 /******************************************************************************
  Broadcast (protected)
@@ -104,7 +144,7 @@ JBroadcaster::Broadcast
 	const Message& message
 	)
 {
-	if (itsRecipients != NULL)
+	if ((IsBroadcasting() == kJTrue) && (itsRecipients != NULL))
 		{
 		BroadcastPrivate(message);
 		}
@@ -132,7 +172,7 @@ JBroadcaster::BroadcastWithFeedback
 	Message* message
 	)
 {
-	if (itsRecipients != NULL)
+	if ((IsBroadcasting() == kJTrue) && (itsRecipients != NULL))
 		{
 		BroadcastWithFeedbackPrivate(message);
 		}

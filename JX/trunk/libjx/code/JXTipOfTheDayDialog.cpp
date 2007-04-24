@@ -144,8 +144,9 @@ JXTipOfTheDayDialog::BuildWindow
 	title->SetBorderWidth(kJXDefaultBorderWidth);
 	title->TESetLeftMarginWidth(5);
 	title->SetBackColor(title->GetFocusColor());
-	title->JTextEditor::SetFont(1, title->GetTextLength(), "Times", 18,
-								JFontStyle(kJTrue, kJFalse, 0, kJFalse), kJTrue);
+	title->JTextEditor::SetFont(1, title->GetTextLength(), "Times",
+				    18,	JFontStyle(kJTrue, kJFalse, 0, kJFalse),
+				    JTextEditor::kAlignLeft, kJTrue);
 	title->SetCaretLocation(1);
 	title->Paste("\n");
 

@@ -48,6 +48,7 @@
 #include <JFontManager.h>
 #include <JColormap.h>
 #include <JString.h>
+#include <JString16.h>
 #include <jTime.h>
 #include <stdlib.h>
 #include <jAssert.h>
@@ -359,6 +360,14 @@ JPSPrinterBase::PSString
 	const JCharacter*	str
 	)
 {
+#ifdef _J_USE_UTF8_STRINGS
+	// Need to convert utf-8 to iso-8859-1
+	JString16 utf16;
+	utf16.FromUTF8(str);
+	JString iso = utf16.ToASCII();
+	str = iso.GetCString();
+#endif
+
 	if (!PSShouldPrintCurrentPage())
 		{
 		return;
@@ -465,6 +474,38 @@ JPSPrinterBase::PSString
 	// clean up
 
 	*itsFile << "grestore\n";
+}
+
+/******************************************************************************
+ PSString16
+
+ ******************************************************************************/
+
+void
+JPSPrinterBase::PSString16
+	(
+	const JFontManager*	fontManager,
+	const JFontID		fontID,
+	const JSize			fontSize,
+	const JFontStyle&	fontStyle,
+
+	const JCoordinate	ascent,
+	const JCoordinate	aligndx,
+	const JCoordinate	aligndy,
+
+	const JFloat		userAngle,
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str
+	)
+{
+	// For now convert to utf-8 and print that
+	JString16 utf16(str);
+	JString temp = utf16.ToUTF8();
+
+	PSString(fontManager, fontID, fontSize, fontStyle,
+				ascent, aligndx, aligndy,
+				userAngle, left, top, temp.GetCString());
 }
 
 /******************************************************************************

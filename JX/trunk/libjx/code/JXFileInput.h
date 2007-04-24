@@ -59,7 +59,7 @@ public:
 	static JColorIndex	GetTextColor(const JCharacter* fileName, const JCharacter* basePath,
 									 const JBoolean requireRead, const JBoolean requireWrite,
 									 const JBoolean requireExec, const JColormap* colormap);
-	static JBoolean		IsCharacterInWord(const JString& text, const JIndex charIndex);
+	static JBoolean		SIsCharacterInWord(const JString& text, const JIndex charIndex);
 
 protected:
 

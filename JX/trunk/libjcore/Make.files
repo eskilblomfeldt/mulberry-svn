@@ -13,7 +13,9 @@ JBroadcastSnooper
 JCollection
 JContainer
 JString
+JString16
 JPtrArray-JString
+JPtrArray-JString16
 JStringManager
 JSubstitute
 JSubset
@@ -86,6 +88,16 @@ JExtractHTMLTitle
 JHTMLScanner
 .l JHTMLScannerL
 
+JTextEditor16
+JTEUndoBase16
+JTEUndoTextBase16
+JTEUndoTyping16
+JTEUndoPaste16
+JTEUndoDrop16
+JTEUndoStyle16
+JTEUndoTabShift16
+JTEStyler16
+
 JVector
 JMatrix
 
@@ -153,10 +165,14 @@ Templates-ulong
 Templates-float
 Templates-double
 Templates-JCharacter
+Templates-JCharacter16
 Templates-JBoolean
 Templates-JTextEditor
+Templates-JTextEditor16
 Templates-JString
+Templates-JString16
 Templates-JString2
+Templates-JString216
 
 # JMemoryManager (Dustin Laurence)
 literal: ${JMM_FILES}

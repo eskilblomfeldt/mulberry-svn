@@ -72,6 +72,12 @@ public:
 					 const JCoordinate aligndx, const JCoordinate aligndy,
 					 const JFloat angle, const JCoordinate left,
 					 const JCoordinate top, const JCharacter* str);
+	void	PSString16(const JFontManager* fontManager,
+					 const JFontID fontID, const JSize fontSize,
+					 const JFontStyle& fontStyle, const JCoordinate ascent,
+					 const JCoordinate aligndx, const JCoordinate aligndy,
+					 const JFloat angle, const JCoordinate left,
+					 const JCoordinate top, const JCharacter16* str);
 
 	void	PSLine(const JCoordinate x1, const JCoordinate y1,
 				   const JCoordinate x2, const JCoordinate y2,

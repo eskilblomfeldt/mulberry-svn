@@ -56,6 +56,7 @@ public:
 	Atom	GetTimeStampXAtom() const;
 	Atom	GetTextXAtom() const;
 	Atom	GetCompoundTextXAtom() const;
+	Atom	GetUTF8StringXAtom() const;
 	Atom	GetMultipleXAtom() const;
 	Atom	GetMimePlainTextXAtom() const;
 	Atom	GetURLXAtom() const;
@@ -89,6 +90,7 @@ private:
 	Atom itsTimeStampXAtom;				// returns type XA_INTEGER
 	Atom itsTextXAtom;					//  8-bit characters
 	Atom itsCompoundTextXAtom;			// 16-bit characters
+	Atom itsUTF8StringXAtom;			// utf-8 characters
 	Atom itsMultipleXAtom;				// several formats at once
 	Atom itsMimePlainTextXAtom;			// "text/plain"
 	Atom itsURLXAtom;					// "text/uri-list"
@@ -164,6 +166,13 @@ JXSelectionManager::GetCompoundTextXAtom()
 	const
 {
 	return itsCompoundTextXAtom;
+}
+
+inline Atom
+JXSelectionManager::GetUTF8StringXAtom()
+	const
+{
+	return itsUTF8StringXAtom;
 }
 
 inline Atom

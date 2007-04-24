@@ -47,7 +47,7 @@
 
 	BASE CLASS = none
 
-	Copyright © 1996 by John Lindal. All rights reserved.
+	Copyright  1996 by John Lindal. All rights reserved.
 
  ******************************************************************************/
 
@@ -403,6 +403,34 @@ JPainter::GetStringWidth
 }
 
 /******************************************************************************
+ GetStringWidth16
+
+ ******************************************************************************/
+
+JSize
+JPainter::GetStringWidth16
+	(
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16*	str
+	)
+	const
+{
+	return itsFontManager->GetStringWidth16(name, size, style, str);
+}
+
+JSize
+JPainter::GetStringWidth16
+	(
+	const JCharacter16* str
+	)
+	const
+{
+	return itsFontManager->GetStringWidth16(itsFontID, itsFontSize, itsFontStyle, str);
+}
+
+/******************************************************************************
  AlignString (protected)
 
 	Adjust the given coordinates as appropriate for the given alignment.
@@ -425,11 +453,54 @@ JPainter::AlignString
 	if (hAlign == kHAlignCenter)
 		{
 		const JSize strWidth = GetStringWidth(str);
-		*left += (width-strWidth)/2;
+		*left += (width-(JCoordinate)strWidth)/2;
 		}
 	else if (hAlign == kHAlignRight)
 		{
 		const JSize strWidth = GetStringWidth(str);
+		*left += width-(JCoordinate)strWidth;
+		}
+
+	if (vAlign == kVAlignCenter)
+		{
+		const JSize lineHeight = GetLineHeight();
+		*top += (height-(JCoordinate)lineHeight)/2;
+		}
+	else if (vAlign == kVAlignBottom)
+		{
+		const JSize lineHeight = GetLineHeight();
+		*top += height-(JCoordinate)lineHeight;
+		}
+}
+
+/******************************************************************************
+ AlignString16 (protected)
+
+	Adjust the given coordinates as appropriate for the given alignment.
+
+ ******************************************************************************/
+
+void
+JPainter::AlignString16
+	(
+	JCoordinate*		left,
+	JCoordinate*		top,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+	const
+{
+	if (hAlign == kHAlignCenter)
+		{
+		const JSize strWidth = GetStringWidth16(str);
+		*left += (width-strWidth)/2;
+		}
+	else if (hAlign == kHAlignRight)
+		{
+		const JSize strWidth = GetStringWidth16(str);
 		*left += width-strWidth;
 		}
 

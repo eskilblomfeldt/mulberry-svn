@@ -53,7 +53,7 @@ protected:
 	virtual void	Draw(JXWindowPainter& p, const JRect& rect);
 	virtual void	DrawBackground(JXWindowPainter& p, const JRect& frame);
 
-private:
+//private: modified by CD - need access to these in child classes
 
 	JString		itsLabel;
 	JString*	itsShortcuts;	// can be NULL

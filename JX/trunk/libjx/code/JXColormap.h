@@ -20,6 +20,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#define USE_DYNAMIC_SELECTION
+
 class JXDisplay;
 
 typedef long (*JXColorDistanceFn)(const long r1, const long g1, const long b1,
@@ -135,6 +137,9 @@ public:
 	virtual JColorIndex	GetBrownColor() const;
 	virtual JColorIndex	GetPinkColor() const;
 
+#ifdef USE_DYNAMIC_SELECTION
+	virtual void SetDefaultSelectionColor(const JRGB& color);
+#endif
 	virtual JColorIndex	GetDefaultSelectionColor() const;
 
 	virtual JColorIndex	GetDefaultBackColor() const;
@@ -201,6 +206,10 @@ private:
 	JXColorDistanceFn	itsColorDistanceFn;
 	JSize				itsColorBoxHW;
 	JSize				itsPreColorBoxHW;
+
+#ifdef USE_DYNAMIC_SELECTION
+	JColorIndex			itsSelectionColor;
+#endif
 
 	// for calculating preallocated X pixel values
 

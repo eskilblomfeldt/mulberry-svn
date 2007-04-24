@@ -71,8 +71,8 @@ JIndex
 JXRadioGroup::GetSelectedItem()
 	const
 {
-	assert( itsSelection != NULL );
-	return itsSelection->GetID();
+	//assert( itsSelection != NULL );
+	return itsSelection ? itsSelection->GetID() : 0;
 }
 
 /******************************************************************************
@@ -86,9 +86,9 @@ JXRadioGroup::SelectItem
 	const JIndex id
 	)
 {
-	assert( itsSelection != NULL );
+	//assert( itsSelection != NULL );
 
-	if (id != itsSelection->GetID())
+	if (id != GetSelectedItem())
 		{
 		JXRadioButton* newButton = NULL;
 		const JSize count = itsButtons->GetElementCount();
@@ -210,5 +210,7 @@ JXRadioGroup::DrawBorder
 	const JRect&		frame
 	)
 {
-	JXDrawEngravedFrame(p, frame, kFrameDownWidth, kFrameBetweenWidth, kFrameUpWidth);
+	// Modified by CD - don't draw frame if width is zero
+	if (GetBorderWidth())
+		JXDrawEngravedFrame(p, frame, kFrameDownWidth, kFrameBetweenWidth, kFrameUpWidth);
 }

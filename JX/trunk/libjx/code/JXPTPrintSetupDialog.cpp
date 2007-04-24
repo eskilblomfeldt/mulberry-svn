@@ -130,13 +130,13 @@ JXPTPrintSetupDialog::BuildWindow
         new JXTextRadioButton(1, JGetString("obj2_JXLayout::JXPTPrintSetupDialog::JXLayout"), itsDestination,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 5,8, 70,20);
     assert( obj2_JXLayout != NULL );
-    obj2_JXLayout->SetShortcuts(JGetString("obj2_JXLayout::JXPTPrintSetupDialog::shortcuts::JXLayout"));
+    //obj2_JXLayout->SetShortcuts(JGetString("obj2_JXLayout::JXPTPrintSetupDialog::shortcuts::JXLayout"));
 
     JXTextRadioButton* obj3_JXLayout =
         new JXTextRadioButton(2, JGetString("obj3_JXLayout::JXPTPrintSetupDialog::JXLayout"), itsDestination,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 75,8, 50,20);
     assert( obj3_JXLayout != NULL );
-    obj3_JXLayout->SetShortcuts(JGetString("obj3_JXLayout::JXPTPrintSetupDialog::shortcuts::JXLayout"));
+    //obj3_JXLayout->SetShortcuts(JGetString("obj3_JXLayout::JXPTPrintSetupDialog::shortcuts::JXLayout"));
 
     itsPrintCmd =
         new JXInputField(window,
@@ -286,9 +286,9 @@ JXPTPrintSetupDialog::SetObjects
 
 	itsPrintLineNumbersCB->SetState(printLineNumbers);
 
-    itsChooseFileButton->SetShortcuts("#O");
-    itsPrintAllCB->SetShortcuts("#L");
-    itsPrintLineNumbersCB->SetShortcuts("#N");
+    //itsChooseFileButton->SetShortcuts("#O");
+    //itsPrintAllCB->SetShortcuts("#L");
+    //itsPrintLineNumbersCB->SetShortcuts("#N");
 }
 
 /******************************************************************************

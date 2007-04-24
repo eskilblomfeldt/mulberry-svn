@@ -644,7 +644,7 @@ JTable::HilightIfSelected
 		const JColorIndex origColor = p.GetPenColor();
 		const JBoolean origFill     = p.IsFilling();
 
-		p.SetPenColor(itsSelectionColor);
+		p.SetPenColor(GetSelectionColor());
 		p.SetFilling(kJTrue);
 		p.Rect(rect);
 

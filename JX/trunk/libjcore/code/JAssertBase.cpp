@@ -35,7 +35,10 @@
 
 static const JCharacter* kAssertActionEnvName = "J_ASSERT_ACTION";
 static const JCharacter* kAskUserAction       = "ask_user";
+static const JCharacter* kPrintAction         = "print";
 static const JCharacter* kIgnoreFailureAction = "silent";
+
+static JAssertBase::Action sDefaultAction = JAssertBase::kAbort;
 
 /******************************************************************************
  Constructor
@@ -100,6 +103,8 @@ JAssertBase::DefaultAssert
 				return 0;
 				}
 			}
+		else if (action == kPrint)
+			return 0;
 
 		JAssertBase* ah;
 		if (JGetAssertHandler(&ah))
@@ -123,6 +128,7 @@ JAssertBase::DefaultAssert
 JAssertBase::Action
 JAssertBase::GetAction()
 {
+#if 0
 	const char* action = getenv(kAssertActionEnvName);
 	if (action == NULL)
 		{
@@ -136,10 +142,17 @@ JAssertBase::GetAction()
 		{
 		return kAskUser;
 		}
+	else if (strcmp(action, kPrintAction) == 0)
+		{
+		return kPrint;
+		}
 	else
 		{
 		return kAbort;
 		}
+#else
+	return sDefaultAction;
+#endif
 }
 
 /******************************************************************************
@@ -155,6 +168,7 @@ JAssertBase::SetAction
 	const Action action
 	)
 {
+#if 0
 	if (action == kIgnoreFailure)
 		{
 		setenv(kAssertActionEnvName, kIgnoreFailureAction, 1);
@@ -163,9 +177,16 @@ JAssertBase::SetAction
 		{
 		setenv(kAssertActionEnvName, kAskUserAction, 1);
 		}
+	else if (action == kPrint)
+		{
+		setenv(kAssertActionEnvName, kPrintAction, 1);
+		}
 	else
 		{
 		assert( action == kAbort );
 		setenv(kAssertActionEnvName, "", 1);
 		}
+#else
+	sDefaultAction = action;
+#endif
 }

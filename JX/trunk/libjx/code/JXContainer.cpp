@@ -96,12 +96,14 @@ JXContainer::JXContainerX
 	itsWindow          = window;
 	itsEnclosure       = enclosure;
 	itsEnclosedObjs    = NULL;
+	itsIgnoreEnclosedObjs = kJFalse;
 	itsActiveFlag      = kJFalse;
 	itsWasActiveFlag   = kJTrue;
 	itsVisibleFlag     = kJFalse;
 	itsWasVisibleFlag  = kJTrue;
 	itsIsDNDSourceFlag = kJFalse;
 	itsIsDNDTargetFlag = kJFalse;
+	itsIsDNDFinishFlag = kJFalse;
 	itsGoingAwayFlag   = kJFalse;
 
 	if (enclosure != NULL)
@@ -453,7 +455,7 @@ JXContainer::DispatchNewMouseEvent
 
 	// check if enclosed object wants it
 
-	if (IsActive() && itsEnclosedObjs != NULL)
+	if (IsActive() && !itsIgnoreEnclosedObjs && itsEnclosedObjs != NULL)
 		{
 		const JSize objCount = itsEnclosedObjs->GetElementCount();
 		for (JIndex i=1; i<=objCount; i++)
@@ -484,7 +486,7 @@ JXContainer::DispatchNewMouseEvent
 		const JPoint pt = GlobalToLocal(ptG);
 		const JXKeyModifiers modifiers(GetDisplay(), state);
 		const JBoolean wantDrag = AcceptDrag(pt, button, modifiers);
-		if (wantDrag)
+		if (wantDrag || (button == kJXRightButton))			// CD: changed to allow right-click to pass through to inactive widget
 			{
 			itsWindow->SetWantDrag(kJTrue);
 			const JSize clickCount = itsWindow->CountClicks(this, pt);
@@ -542,17 +544,22 @@ JXContainer::DispatchMouseUp
 	const JXKeyModifiers&	modifiers
 	)
 {
-	if (itsIsDNDSourceFlag && buttonStates.AllOff())
-		{
-		(GetDNDManager())->FinishDND();
-		itsIsDNDSourceFlag = kJFalse;
-		}
-	else if (!itsIsDNDSourceFlag)
-		{
-		// can delete us
+	if (!itsIsDNDFinishFlag)
+	{
+		if (itsIsDNDSourceFlag && buttonStates.AllOff())
+			{
+			itsIsDNDFinishFlag = kJTrue;
+			(GetDNDManager())->FinishDND();
+			itsIsDNDFinishFlag = kJFalse;
+			itsIsDNDSourceFlag = kJFalse;
+			}
+		else if (!itsIsDNDSourceFlag)
+			{
+			// can delete us
 
-		HandleMouseUp(pt, button, buttonStates, modifiers);
-		}
+			HandleMouseUp(pt, button, buttonStates, modifiers);
+			}
+	}
 }
 
 /******************************************************************************
@@ -591,7 +598,8 @@ JXContainer::GetHint
 void
 JXContainer::SetHint
 	(
-	const JCharacter* text
+	const JCharacter* text,
+	const JRect* rect
 	)
 {
 	if (JStringEmpty(text))
@@ -600,12 +608,12 @@ JXContainer::SetHint
 		}
 	else if (itsHintMgr == NULL)
 		{
-		itsHintMgr = new JXHintManager(this, text);
+		itsHintMgr = new JXHintManager(this, text, rect);
 		assert( itsHintMgr != NULL );
 		}
 	else
 		{
-		itsHintMgr->SetText(text);
+		itsHintMgr->SetText(text, rect);
 		}
 }
 
@@ -765,6 +773,14 @@ JXContainer::HandleMouseDown
 	const JXKeyModifiers&	modifiers
 	)
 {
+	// Always pass context menu event up to parent
+	if ((button == kJXRightButton) && (itsEnclosure != NULL))
+		{
+		// Convert point into local co-ords of enclosure
+		JPoint enclosure_pt = LocalToGlobal(pt);
+		enclosure_pt = itsEnclosure->GlobalToLocal(enclosure_pt);
+		itsEnclosure->HandleMouseDown(enclosure_pt, button, clickCount, buttonStates, modifiers);
+		}
 }
 
 /******************************************************************************
@@ -1605,6 +1621,30 @@ JXContainer::LocalToGlobal
 	const JPoint topLeft  = LocalToGlobal(r.left, r.top);
 	const JPoint botRight = LocalToGlobal(r.right, r.bottom);
 	return JRect(topLeft.y, topLeft.x, botRight.y, botRight.x);
+}
+
+/******************************************************************************
+ SetEnclosure (public)
+
+	Move into a new enclosure.
+
+ ******************************************************************************/
+
+void
+JXContainer::SetEnclosure(JXContainer* enclosure)
+{
+	// Only bother if different
+	if (itsEnclosure == enclosure)
+		return;
+
+	// First remove from existing
+	if (itsEnclosure)
+		itsEnclosure->RemoveEnclosedObject(this);
+
+	// Now add to new one
+	itsEnclosure = enclosure;
+	if (itsEnclosure)
+		itsEnclosure->AddEnclosedObject(this);
 }
 
 /******************************************************************************

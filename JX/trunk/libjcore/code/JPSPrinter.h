@@ -96,6 +96,19 @@ public:
 						   const JCoordinate height = 0,
 						   const VAlignment vAlign = kVAlignTop);
 
+	virtual void	String16(const JCoordinate left, const JCoordinate top,
+						   const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+	virtual void	String16(const JFloat angle, const JCoordinate left,
+						   const JCoordinate top, const JCharacter16* str,
+						   const JCoordinate width = 0,
+						   const HAlignment hAlign = kHAlignLeft,
+						   const JCoordinate height = 0,
+						   const VAlignment vAlign = kVAlignTop);
+
 	virtual void	Point(const JCoordinate x, const JCoordinate y);
 
 	virtual void	Line(const JCoordinate x1, const JCoordinate y1,

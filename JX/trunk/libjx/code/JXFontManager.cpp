@@ -15,6 +15,7 @@
 #include <JPtrArray-JString.h>
 #include <JOrderedSetUtil.h>
 #include <JMinMax.h>
+#include <JString16.h>
 #include <jStreamUtil.h>
 #include <jMath.h>
 #include <JRegex.h>
@@ -66,27 +67,16 @@ JXFontManager::~JXFontManager()
 		{
 		FontInfo info = itsFontList->GetElement(i);
 		delete info.name;
+#ifdef _J_USE_XFT
+		XftFontClose(*itsDisplay, info.xftfont);
+#else
 		XFreeFont(*itsDisplay, info.xfont);
+#endif
 		}
 	delete itsFontList;
 
 	delete itsAllFontNames;
 	delete itsMonoFontNames;
-}
-
-/******************************************************************************
- IsMonospace (private)
-
- ******************************************************************************/
-
-inline int
-JXFontManager::IsMonospace
-	(
-	const XFontStruct& xfont
-	)
-	const
-{
-	return (xfont.min_bounds.width == xfont.max_bounds.width);
 }
 
 /******************************************************************************
@@ -116,6 +106,27 @@ JXFontManager::GetFontNames
 		fontNames->SetCompareFunction(JCompareStringsCaseInsensitive);
 		fontNames->SetSortOrder(JOrderedSetT::kSortAscending);
 
+#ifdef _J_USE_XFT
+		FcBool scalable = 1;
+		XftFontSet* fs = XftListFonts(*itsDisplay, DefaultScreen((Display*)*itsDisplay), XFT_SCALABLE, XftTypeBool, scalable, 0, XFT_FAMILY, 0);
+
+		for (int i=0; i<fs->nfont; i++)
+		{
+			char* raw_name;
+			if (XftPatternGetString(fs->fonts[i], XFT_FAMILY, 0, &raw_name) == XftResultMatch)
+			{
+				JString name(raw_name);
+				JBoolean isDuplicate;
+				const JIndex index = fontNames->GetInsertionSortIndex(&name, &isDuplicate);
+				if (!isDuplicate)
+				{
+					fontNames->InsertAtIndex(index, name);
+				}
+			}
+		}
+		
+		XftFontSetDestroy(fs);		
+#else
 		int nameCount;
 		char** nameList = XListFonts(*itsDisplay, "-*-*-*-*-*-*-*-*-75-75-*-*-*-*",
 									 INT_MAX, &nameCount);
@@ -168,6 +179,7 @@ JXFontManager::GetFontNames
 			}
 
 		XFreeFontNames(nameList);
+#endif
 
 		// save names for next time
 
@@ -215,6 +227,28 @@ JXFontManager::GetMonospaceFontNames
 		fontNames->SetCompareFunction(JCompareStringsCaseInsensitive);
 		fontNames->SetSortOrder(JOrderedSetT::kSortAscending);
 
+#ifdef _J_USE_XFT
+		FcBool scalable = 1;
+		XftFontSet* fs = XftListFonts(*itsDisplay, DefaultScreen((Display*)*itsDisplay), XFT_SPACING, XftTypeInteger, XFT_MONO,
+																			XFT_SCALABLE, XftTypeBool, scalable, 0, XFT_FAMILY, 0);
+
+		for (int i=0; i<fs->nfont; i++)
+		{
+			char* raw_name;
+			if (XftPatternGetString(fs->fonts[i], XFT_FAMILY, 0, &raw_name) == XftResultMatch)
+			{
+				JString name(raw_name);
+				JBoolean isDuplicate;
+				const JIndex index = fontNames->GetInsertionSortIndex(&name, &isDuplicate);
+				if (!isDuplicate)
+				{
+					fontNames->InsertAtIndex(index, name);
+				}
+			}
+		}
+		
+		XftFontSetDestroy(fs);		
+#else
 		JPtrArray<JString> allFontNames(JPtrArrayT::kDeleteAll);
 		allFontNames.SetCompareFunction(JCompareStringsCaseInsensitive);
 		allFontNames.SetSortOrder(JOrderedSetT::kSortAscending);
@@ -286,6 +320,7 @@ JXFontManager::GetMonospaceFontNames
 
 			XFreeFontNames(nameList);
 			}
+#endif
 
 		// save names for next time
 
@@ -321,6 +356,8 @@ JXFontManager::GetXFontNames
 					compare != NULL ? compare : JCompareStringsCaseInsensitive);
 	fontNames->SetSortOrder(JOrderedSetT::kSortAscending);
 
+#ifdef _J_USE_XFT
+#else
 	int nameCount;
 	char** nameList = XListFonts(*itsDisplay, "*", INT_MAX, &nameCount);
 	if (nameList == NULL)
@@ -346,6 +383,7 @@ JXFontManager::GetXFontNames
 		}
 
 	XFreeFontNames(nameList);
+#endif
 }
 
 /******************************************************************************
@@ -373,6 +411,58 @@ JXFontManager::GetFontSizes
 	sizeList->SetCompareFunction(JCompareSizes);
 	sizeList->SetSortOrder(JOrderedSetT::kSortAscending);
 
+#ifdef _J_USE_XFT
+	XftFontSet* fs = XftListFonts(*itsDisplay, DefaultScreen((Display*)*itsDisplay), XFT_FAMILY, XftTypeString, name, 0, XFT_SIZE, 0);
+
+	if (fs->nfont == 0)
+	{
+		*minSize = 8;
+		*maxSize = 24;
+		XftFontSetDestroy(fs);		
+		return kJTrue;
+	}
+
+	for (int i=0; i<fs->nfont; i++)
+	{
+		double raw_size;
+		if (XftPatternGetDouble(fs->fonts[i], XFT_SIZE, 0, &raw_size) == XftResultMatch)
+		{
+			JSize fontSize = static_cast<JSize>(raw_size);
+			if (sizeList->IsEmpty())
+			{
+				*minSize = *maxSize = fontSize;
+			}
+
+			JBoolean isDuplicate;
+			const JIndex index =
+				sizeList->GetInsertionSortIndex(fontSize, &isDuplicate);
+			if (!isDuplicate)
+			{
+				sizeList->InsertElementAtIndex(index, fontSize);
+
+				if (fontSize < *minSize)
+				{
+					*minSize = fontSize;
+				}
+				else if (fontSize > *maxSize)
+				{
+					*maxSize = fontSize;
+				}
+			}
+		}
+	}
+	
+	// Look for scalable
+	if ((*minSize == 0) && (*maxSize == 0))
+	{
+		*minSize = 8;
+		*maxSize = 24;
+		XftFontSetDestroy(fs);		
+		return kJTrue;
+	}
+	
+	XftFontSetDestroy(fs);		
+#else
 	JString xFontName, charSet;
 	if (!ConvertToXFontName(name, &xFontName, &charSet))
 		{
@@ -448,6 +538,7 @@ JXFontManager::GetFontSizes
 		}
 
 	XFreeFontNames(nameList);
+#endif
 
 	return JNegate( sizeList->IsEmpty() );
 }
@@ -470,6 +561,34 @@ JXFontManager::GetFontStyles
 {
 	JFontStyle style(kJFalse, kJFalse, 0, kJTrue);
 
+#ifdef _J_USE_XFT
+	double raw_size = size;
+	XftFontSet* fs = XftListFonts(*itsDisplay, DefaultScreen((Display*)*itsDisplay), XFT_FAMILY, XftTypeString, name, XFT_SIZE, XftTypeDouble, raw_size, 0, XFT_SLANT, XFT_WEIGHT, 0);
+
+	if (fs->nfont == 0)
+	{
+		return style;
+	}
+
+	for (int i=0; i<fs->nfont; i++)
+	{
+		int raw_slant;
+		if (XftPatternGetInteger(fs->fonts[i], XFT_SLANT, 0, &raw_slant) == XftResultMatch)
+		{
+			if (raw_slant == XFT_SLANT_ITALIC)
+				style.italic = kJTrue;
+		}
+
+		int raw_weight;
+		if (XftPatternGetInteger(fs->fonts[i], XFT_WEIGHT, 0, &raw_weight) == XftResultMatch)
+		{
+			if (raw_weight == XFT_WEIGHT_BOLD)
+				style.bold = kJTrue;
+		}
+	}
+	
+	XftFontSetDestroy(fs);		
+#else
 	JString xFontName, charSet;
 	if (!ConvertToXFontName(name, &xFontName, &charSet))
 		{
@@ -510,6 +629,8 @@ JXFontManager::GetFontStyles
 		}
 
 	XFreeFontNames(nameList);
+#endif
+
 	return style;
 }
 
@@ -613,6 +734,17 @@ JXFontManager::GetFontID
 	JString xFontName, charSet;
 	ConvertToXFontName(name, &xFontName, &charSet);
 
+#ifdef _J_USE_XFT
+	FontInfo info;
+	info.xftfont = GetNewFont(xFontName, charSet, size, style);
+	info.exact = kJTrue;
+
+	if (info.xftfont == NULL)
+		{
+		info.exact = kJFalse;
+		info.xftfont = ApproximateFont(xFontName, charSet, size, style);
+		}
+#else
 	FontInfo info;
 	info.xfont = GetNewFont(xFontName, charSet, size, style);
 	info.exact = kJTrue;
@@ -621,6 +753,7 @@ JXFontManager::GetFontID
 		info.exact = kJFalse;
 		info.xfont = ApproximateFont(xFontName, charSet, size, style);
 		}
+#endif
 
 	info.name = new JString(name);
 	assert( info.name != NULL );
@@ -647,6 +780,10 @@ JXFontManager::GetFontID
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	*fontID = 0;
+	return kJFalse;
+#else
 	const JSize count = itsFontList->GetElementCount();
 	for (JIndex i=1; i<=count; i++)
 		{
@@ -680,6 +817,7 @@ JXFontManager::GetFontID
 
 	*fontID = itsFontList->GetElementCount();
 	return kJTrue;
+#endif
 }
 
 /******************************************************************************
@@ -687,7 +825,11 @@ JXFontManager::GetFontID
 
  ******************************************************************************/
 
+#ifdef _J_USE_XFT
+XftFont*
+#else
 XFontStruct*
+#endif
 JXFontManager::GetNewFont
 	(
 	const JCharacter*	name,
@@ -697,6 +839,15 @@ JXFontManager::GetNewFont
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	double raw_size = size;
+	XftFont* font = XftFontOpen(*itsDisplay, DefaultScreen((Display*)*itsDisplay),
+									XFT_FAMILY, XftTypeString, name,
+									XFT_SIZE, XftTypeDouble, raw_size,
+									XFT_WEIGHT, XftTypeInteger, style.bold ? XFT_WEIGHT_BOLD : XFT_WEIGHT_MEDIUM,
+									XFT_SLANT, XftTypeInteger, style.italic ? XFT_SLANT_ITALIC : XFT_SLANT_ROMAN, 0);
+	return font;
+#else
 	const JCharacter* italicStr = kObliqueStr;	// try oblique before italic
 	JBoolean iso                = JStringEmpty(charSet);
 
@@ -726,6 +877,7 @@ JXFontManager::GetNewFont
 		}
 
 	return xfont;
+#endif
 }
 
 /******************************************************************************
@@ -745,6 +897,10 @@ JXFontManager::BuildFontName
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	JString xFontName;
+	return xFontName;
+#else
 	// handle NxM separately
 
 	nxmRegex.SetMatchOnly(kJTrue);
@@ -824,6 +980,7 @@ JXFontManager::BuildFontName
 	// return the result
 
 	return xFontName;
+#endif
 }
 
 /******************************************************************************
@@ -836,7 +993,11 @@ JXFontManager::BuildFontName
 
  ******************************************************************************/
 
+#ifdef _J_USE_XFT
+XftFont*
+#else
 XFontStruct*
+#endif
 JXFontManager::ApproximateFont
 	(
 	const JCharacter*	origName,
@@ -851,7 +1012,11 @@ JXFontManager::ApproximateFont
 	JSize size       = origSize;
 	JFontStyle style = origStyle;
 
+#ifdef _J_USE_XFT
+	XftFont* xfont = NULL;
+#else
 	XFontStruct* xfont = NULL;
+#endif
 	while (xfont == NULL)
 		{
 		if (size % 2 == 1)
@@ -953,15 +1118,31 @@ JXFontManager::GetLineHeight
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	XftFont* xftfont = GetXftFont(fontID);
+	*ascent  = xftfont->ascent;
+	*descent = xftfont->descent;
+#else
 	XFontStruct* xfont = GetXFontInfo(fontID);
 	*ascent  = xfont->ascent;
 	*descent = xfont->descent;
+#endif
 
-	const JSize underlineThickness = GetUnderlineThickness(size);
-	if (((JSize) *descent) < 2 * underlineThickness * style.underlineCount)
-		{
-		*descent = 2 * underlineThickness * style.underlineCount;
-		}
+	// Look for underline types
+	if (style.underlineType == JFontStyle::plain_Underline)
+	{
+		const JSize underlineThickness = GetUnderlineThickness(size);
+		if (((JSize) *descent) < 2 * underlineThickness * style.underlineCount)
+			{
+			*descent = 2 * underlineThickness * style.underlineCount;
+			}
+	}
+	else
+	{
+		// Special underline types always have height 3
+		if (((JSize) *descent) < 3)
+			*descent = 3;
+	}
 
 	return (*ascent + *descent);
 }
@@ -981,6 +1162,13 @@ JXFontManager::GetCharWidth
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	XftFont* xftfont = GetXftFont(fontID);
+	XGlyphInfo extents;
+	//XftTextExtents8(*itsDisplay, xftfont, (XftChar8*)&c, 1, &extents);
+	XftTextExtentsUtf8(*itsDisplay, xftfont, (XftChar8*)&c, 1, &extents);
+	return extents.xOff;
+#else
 	XFontStruct* xfont = GetXFontInfo(fontID);
 	if (xfont->min_bounds.width == xfont->max_bounds.width)
 		{
@@ -990,6 +1178,43 @@ JXFontManager::GetCharWidth
 		{
 		return XTextWidth(xfont, &c, 1);
 		}
+#endif
+}
+
+/******************************************************************************
+ GetCharWidth16 (virtual)
+
+ ******************************************************************************/
+
+JSize
+JXFontManager::GetCharWidth16
+	(
+	const JFontID		fontID,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16	c
+	)
+	const
+{
+#ifdef _J_USE_XFT
+	XftFont* xftfont = GetXftFont(fontID);
+	XGlyphInfo extents;
+	unsigned short test = 0x00FF;
+	bool bigE = ((const char*)&test)[0] == 0x00;
+	XftTextExtentsUtf16(*itsDisplay, xftfont, (XftChar8*)&c, bigE ? FcEndianBig : FcEndianLittle, 2, &extents);
+	return extents.xOff;
+#else
+	XFontStruct* xfont = GetXFontInfo(fontID);
+	if (xfont->min_bounds.width == xfont->max_bounds.width)
+		{
+		return xfont->min_bounds.width;
+		}
+	else
+		{
+		JCharacter cc = c & 0x00FF;
+		return XTextWidth(xfont, &cc, 1);
+		}
+#endif
 }
 
 /******************************************************************************
@@ -1008,6 +1233,13 @@ JXFontManager::GetStringWidth
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	XftFont* xftfont = GetXftFont(fontID);
+	XGlyphInfo extents;
+	//XftTextExtents8(*itsDisplay, xftfont, (XftChar8*)str, charCount, &extents);
+	XftTextExtentsUtf8(*itsDisplay, xftfont, (XftChar8*)str, charCount, &extents);
+	return extents.xOff;
+#else
 	XFontStruct* xfont = GetXFontInfo(fontID);
 	if (IsMonospace(*xfont))
 		{
@@ -1028,6 +1260,58 @@ JXFontManager::GetStringWidth
 
 		return width;
 		}
+#endif
+}
+
+/******************************************************************************
+ GetStringWidth16 (virtual)
+
+ ******************************************************************************/
+
+JSize
+JXFontManager::GetStringWidth16
+	(
+	const JFontID		fontID,
+	const JSize			size,
+	const JFontStyle&	style,
+	const JCharacter16*	str,
+	const JSize			charCount
+	)
+	const
+{
+#ifdef _J_USE_XFT
+	XftFont* xftfont = GetXftFont(fontID);
+	XGlyphInfo extents;
+	unsigned short test = 0x00FF;
+	bool bigE = ((const char*)&test)[0] == 0x00;
+	XftTextExtentsUtf16(*itsDisplay, xftfont, (XftChar8*)str, bigE ? FcEndianBig : FcEndianLittle, charCount * sizeof(JCharacter16), &extents);
+	return extents.xOff;
+#else
+	XFontStruct* xfont = GetXFontInfo(fontID);
+	if (IsMonospace(*xfont))
+		{
+		return charCount * xfont->min_bounds.width;
+		}
+	else
+		{
+		JString16 utf16(str, charCount);
+		JString str_ascii = utf16.ToASCII();
+		const JCharacter* _str = str_ascii.GetCString();
+		JSize actualCount = str_ascii.GetLength();
+		const JSize maxStringLength = itsDisplay->GetMaxStringLength();
+
+		JSize width  = 0;
+		JSize offset = 0;
+		while (offset < actualCount)
+			{
+			const JSize count = JMin(actualCount - offset, maxStringLength);
+			width  += XTextWidth(xfont, _str + offset, count);
+			offset += count;
+			}
+
+		return width;
+		}
+#endif
 }
 
 /******************************************************************************
@@ -1035,6 +1319,18 @@ JXFontManager::GetStringWidth
 
  ******************************************************************************/
 
+#ifdef _J_USE_XFT
+XftFont*
+JXFontManager::GetXftFont
+	(
+	const JFontID id
+	)
+	const
+{
+	const FontInfo info = itsFontList->GetElement(id);
+	return info.xftfont;
+}
+#else
 XFontStruct*
 JXFontManager::GetXFontInfo
 	(
@@ -1045,6 +1341,7 @@ JXFontManager::GetXFontInfo
 	const FontInfo info = itsFontList->GetElement(id);
 	return info.xfont;
 }
+#endif
 
 /******************************************************************************
  ConvertToXFontName (private)

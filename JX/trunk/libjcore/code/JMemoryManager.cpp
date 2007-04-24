@@ -213,9 +213,17 @@
 #include <JMMHashTable.h>
 #include <JMMErrorPrinter.h>
 
+#include <ace/Synch.h>
+
 #include <jAssert.h>
 #undef new
 #undef delete
+
+//#define DEBUG_MALLOC
+#ifdef DEBUG_MALLOC
+extern void* debug_malloc(size_t size);
+extern void debug_free(void* ptr);
+#endif
 
 // Broadcaster message types
 
@@ -406,6 +414,7 @@ JMemoryManager::New
 	const JBoolean    isArray
 	)
 {
+#if 0
 	if (theAbortUnknownAllocFlag && line == 0)
 		{
 		cout << "Memory allocated by unknown code, aborting...\n" << endl;
@@ -441,6 +450,14 @@ JMemoryManager::New
 		}
 
 	return newBlock;
+#else
+	const size_t trueSize = size ? size : 1;
+#ifdef DEBUG_MALLOC
+	return debug_malloc(trueSize);
+#else
+	return malloc(trueSize);
+#endif
+#endif
 }
 
 /******************************************************************************
@@ -455,6 +472,7 @@ JMemoryManager::Delete
 	const JBoolean isArray
 	)
 {
+#if 0
 	if (theConstructingFlag || Instance()->itsRecursionDepth > 0)
 		{
 		DeleteRequest thisRequest;
@@ -477,6 +495,14 @@ JMemoryManager::Delete
 
 	itsLastDeleteFile = kUnknownFile;
 	itsLastDeleteLine = 0;
+#else
+	if (block)
+#ifdef DEBUG_MALLOC
+		debug_free(block);
+#else
+		free(block);
+#endif
+#endif
 }
 
 /******************************************************************************

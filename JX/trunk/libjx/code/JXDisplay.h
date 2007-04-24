@@ -3,7 +3,7 @@
 
 	Interface for the JXDisplay class
 
-	Copyright © 1996-99 by John Lindal. All rights reserved.
+	Copyright Â© 1996-99 by John Lindal. All rights reserved.
 
  ******************************************************************************/
 
@@ -73,6 +73,7 @@ public:
 
 	void	RaiseAllWindows();
 	void	HideAllWindows();
+	void	RefreshAllWindows();
 	void	UndockAllWindows();
 	void	CloseAllOtherWindows(JXWindow* window);
 

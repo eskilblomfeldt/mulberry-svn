@@ -45,6 +45,7 @@ static const JCharacter* kTargetsXAtomName         = "TARGETS";
 static const JCharacter* kTimeStampXAtomName       = "TIMESTAMP";
 static const JCharacter* kTextXAtomName            = "TEXT";
 static const JCharacter* kCompoundTextXAtomName    = "COMPOUND_TEXT";
+static const JCharacter* kUTF8StringXAtomName      = "UTF8_STRING";
 static const JCharacter* kMultipleXAtomName        = "MULTIPLE";
 static const JCharacter* kMimePlainTextXAtomName   = "text/plain";
 static const JCharacter* kURLXAtomName             = "text/uri-list";
@@ -102,6 +103,7 @@ JXSelectionManager::JXSelectionManager
 	itsTimeStampXAtom         = itsDisplay->RegisterXAtom(kTimeStampXAtomName);
 	itsTextXAtom              = itsDisplay->RegisterXAtom(kTextXAtomName);
 	itsCompoundTextXAtom      = itsDisplay->RegisterXAtom(kCompoundTextXAtomName);
+	itsUTF8StringXAtom        = itsDisplay->RegisterXAtom(kUTF8StringXAtomName);
 	itsMultipleXAtom          = itsDisplay->RegisterXAtom(kMultipleXAtomName);
 	itsMimePlainTextXAtom     = itsDisplay->RegisterXAtom(mimePlainTextXAtomName);
 	itsURLXAtom               = itsDisplay->RegisterXAtom(kURLXAtomName);

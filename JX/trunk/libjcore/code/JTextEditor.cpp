@@ -168,6 +168,20 @@
 #include <jGlobals.h>
 #include <jAssert.h>
 
+template <class T> class StValueChanger
+{
+public:
+	StValueChanger(T &ioVariable, T inNewValue) :
+		mVariable(ioVariable),
+		mOrigValue(ioVariable)
+		{ ioVariable = inNewValue; };
+	~StValueChanger()
+		{ mVariable = mOrigValue; };
+
+	T	&mVariable;
+	T	mOrigValue;
+};
+
 const JCoordinate kDefLeftMarginWidth = 10;
 const JCoordinate kRightMarginWidth   = 2;
 
@@ -187,6 +201,7 @@ static const JCharacter* kCRM2CaretActionText     = "Coerce paragraph margins";
 static const JCharacter* kCRM2SelectionActionText = "Coerce margins for selection";
 
 JBoolean JTextEditor::itsCopyWhenSelectFlag = kJFalse;
+JBoolean JTextEditor::itsReplaceIllegalChars = kJFalse;
 
 JBoolean (*JTextEditor::itsI18NCharInWordFn)(const JCharacter) = NULL;
 
@@ -262,6 +277,7 @@ JTextEditor::JTextEditor
 	itsBcastAllTextChangedFlag = kJFalse;
 	itsBreakCROnlyFlag         = breakCROnly;
 	itsIsPrintingFlag          = kJFalse;
+	itsDoCopySelectFlag        = kJFalse;
 	itsDrawWhitespaceFlag      = kJFalse;
 
 	itsDefFont.size = kJDefaultFontSize;
@@ -279,6 +295,9 @@ JTextEditor::JTextEditor
 	assert( itsLineStarts != NULL );
 	itsLineStarts->SetCompareFunction(JCompareIndices);
 	itsLineStarts->SetSortOrder(JOrderedSetT::kSortAscending);
+
+	itsLineWidths = new JArray<JCoordinate>;
+	assert( itsLineWidths != NULL );
 
 	itsLineGeom = new JRunArray<LineGeometry>;
 	assert( itsLineGeom != NULL );
@@ -307,6 +326,7 @@ JTextEditor::JTextEditor
 		itsBuffer->SetBlockSize(1024);
 		itsStyles->SetBlockSize(128);
 		itsLineStarts->SetBlockSize(128);
+		itsLineWidths->SetBlockSize(100);
 		itsLineGeom->SetBlockSize(128);
 		}
 }
@@ -372,6 +392,9 @@ JTextEditor::JTextEditor
 	itsLineStarts = new JArray<JIndex>(*(source.itsLineStarts));
 	assert( itsLineStarts != NULL );
 
+	itsLineWidths = new JArray<JCoordinate>(*(source.itsLineWidths));
+	assert( itsLineWidths != NULL );
+
 	itsLineGeom = new JRunArray<LineGeometry>(*(source.itsLineGeom));
 	assert( itsLineGeom != NULL );
 
@@ -412,6 +435,7 @@ JTextEditor::~JTextEditor()
 	delete itsStyles;
 	delete itsUndo;
 	delete itsLineStarts;
+	delete itsLineWidths;
 	delete itsLineGeom;
 	delete itsUndoList;
 
@@ -501,11 +525,15 @@ JTextEditor::SetText1
 		{
 		assert( itsBuffer->GetLength() == style->GetElementCount() );
 		*itsStyles = *style;
-		cleaned    = RemoveIllegalChars(itsBuffer, itsStyles);
+		cleaned = itsReplaceIllegalChars ?
+							ReplaceIllegalChars(itsBuffer, itsStyles) :
+							RemoveIllegalChars(itsBuffer, itsStyles);
 		}
 	else
 		{
-		cleaned = RemoveIllegalChars(itsBuffer);
+		cleaned = itsReplaceIllegalChars ?
+							ReplaceIllegalChars(itsBuffer) :
+							RemoveIllegalChars(itsBuffer);
 
 		itsStyles->RemoveAll();
 		if (!itsBuffer->IsEmpty())
@@ -2201,7 +2229,7 @@ JTextEditor::HTMLLexerState::HTMLLexerState
 	styles(s),
 	te(editor),
 	font(editor->itsFontMgr->GetFontID(JGetDefaultFontName(), 12, JFontStyle()),
-		 12, JFontStyle()),
+		 12, JFontStyle(), kAlignLeft),
 	fontName(JGetDefaultFontName()),
 	fontNameStack(JPtrArrayT::kDeleteAll),
 	blankLineFont(font),
@@ -2257,7 +2285,7 @@ JTextEditor::HTMLLexerState::UpdateFontID()
 JTextEditor::Font
 JTextEditor::HTMLLexerState::GetWSFont()
 {
-	JTextEditor::Font wsFont(0, font.size, JFontStyle());
+	JTextEditor::Font wsFont(0, font.size, JFontStyle(), kAlignLeft);
 	wsFont.id = te->itsFontMgr->GetFontID(fontName, wsFont.size, wsFont.style);
 	return wsFont;
 }
@@ -2439,6 +2467,7 @@ JTextEditor::SearchForward
 
 	if (found)
 		{
+		StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 		SetSelection(startIndex, startIndex + searchLength - 1);
 		return kJTrue;
 		}
@@ -2543,6 +2572,7 @@ JTextEditor::SearchBackward
 
 	if (found)
 		{
+		StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 		SetSelection(startIndex, startIndex + searchLength - 1);
 		return kJTrue;
 		}
@@ -2663,6 +2693,7 @@ JTextEditor::SearchForward
 
 	if (found)
 		{
+		StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 		SetSelection(all);
 		return kJTrue;
 		}
@@ -2757,6 +2788,7 @@ JTextEditor::SearchBackward
 
 	if (found)
 		{
+		StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 		SetSelection(all);
 		return kJTrue;
 		}
@@ -3058,6 +3090,7 @@ JTextEditor::ReplaceSelection
 	Paste(replaceText);
 	if (!replaceText.IsEmpty())
 		{
+		StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 		SetSelection(selStart, selStart + replaceText.GetLength()-1);
 		}
 }
@@ -3140,6 +3173,7 @@ JTextEditor::SearchForward
 				const JSize runLength      = itsStyles->GetRunLength(i);
 				if (match.Match(itsFontMgr->GetFontName(f.id), f.size, f.style))
 					{
+					StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 					SetSelection(firstIndexInRun, firstIndexInRun + runLength-1);
 					return kJTrue;
 					}
@@ -3224,6 +3258,7 @@ JTextEditor::SearchBackward
 				const JTextEditor::Font& f = itsStyles->GetRunDataRef(i);
 				if (match.Match(itsFontMgr->GetFontName(f.id), f.size, f.style))
 					{
+					StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 					SetSelection(firstIndexInRun,
 								 firstIndexInRun + itsStyles->GetRunLength(i)-1);
 					return kJTrue;
@@ -3413,12 +3448,21 @@ JTextEditor::GetCurrentFontStyle()
 	return f.style;
 }
 
+JTextEditor::AlignmentType
+JTextEditor::GetCurrentFontAlign()
+	const
+{
+	const Font f = GetCurrentFont();
+	return f.align;
+}
+
 void
 JTextEditor::GetCurrentFont
 	(
 	JString*	name,
 	JSize*		size,
-	JFontStyle*	style
+	JFontStyle*	style,
+	AlignmentType*	align
 	)
 	const
 {
@@ -3426,6 +3470,7 @@ JTextEditor::GetCurrentFont
 	*name  = itsFontMgr->GetFontName(f.id);
 	*size  = f.size;
 	*style = f.style;
+	*align = f.align;
 }
 
 void
@@ -3433,7 +3478,8 @@ JTextEditor::GetCurrentFont
 	(
 	JFontID*	id,
 	JSize*		size,
-	JFontStyle*	style
+	JFontStyle*	style,
+	AlignmentType*	align
 	)
 	const
 {
@@ -3441,6 +3487,7 @@ JTextEditor::GetCurrentFont
 	*id    = f.id;
 	*size  = f.size;
 	*style = f.style;
+	*align = f.align;
 }
 
 // protected
@@ -3547,6 +3594,25 @@ JTextEditor::SetCurrentFontUnderline
 }
 
 void
+JTextEditor::SetCurrentFontUnderlineType
+	(
+	const JFontStyle::EUnderlineType type
+	)
+{
+	#define LocalVarName      type
+	#define StructElementName style.underlineType
+	#include <JTESetCurrentFont.th>
+	#undef LocalVarName
+	#undef StructElementName
+	
+	// Set underline count as well
+	if (type == JFontStyle::plain_Underline)
+		SetCurrentFontUnderline(0);
+	else
+		SetCurrentFontUnderline(1);
+}
+
+void
 JTextEditor::SetCurrentFontStrike
 	(
 	const JBoolean strike
@@ -3573,6 +3639,19 @@ JTextEditor::SetCurrentFontColor
 }
 
 void
+JTextEditor::SetCurrentFontBackColor
+	(
+	const JColorIndex color
+	)
+{
+	#define LocalVarName      color
+	#define StructElementName style.backcolor
+	#include <JTESetCurrentFont.th>
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
 JTextEditor::SetCurrentFontStyle
 	(
 	const JFontStyle& style
@@ -3586,25 +3665,59 @@ JTextEditor::SetCurrentFontStyle
 }
 
 void
+JTextEditor::SetCurrentFontAlign
+	(
+	const AlignmentType align
+	)
+{
+	// Get the range for the current paragraphs and set alignment for all of those
+	JIndex start;
+	JIndex stop;
+	if (!itsSelection.IsEmpty())
+	{
+		start = GetParagraphStart(itsSelection.first);
+		stop = GetParagraphEnd(itsSelection.last);
+	}
+	else
+	{
+		start = GetParagraphStart(itsCaretLoc.charIndex);
+		stop = GetParagraphEnd(itsCaretLoc.charIndex);
+	}
+	
+	if (start < stop)
+	  SetRangeFontAlign(start, stop, align);
+	else if (align != itsInsertionFont.align)
+	  {
+	    itsInsertionFont.align = align;
+	    itsInsertionFont.id =
+		itsFontMgr->UpdateFontID(itsInsertionFont.id, itsInsertionFont.size,
+								 itsInsertionFont.style);
+
+	  }
+}
+
+void
 JTextEditor::SetCurrentFont
 	(
 	const JCharacter*	name,
-	const JSize			size,
-	const JFontStyle&	style
+	const JSize		size,
+	const JFontStyle&	style,
+	const AlignmentType align
 	)
 {
-	SetCurrentFont(Font(itsFontMgr->GetFontID(name, size, style), size, style));
+	SetCurrentFont(Font(itsFontMgr->GetFontID(name, size, style), size, style, align));
 }
 
 void
 JTextEditor::SetCurrentFont
 	(
 	const JFontID		id,
-	const JSize			size,
-	const JFontStyle&	style
+	const JSize		size,
+	const JFontStyle&	style,
+	const AlignmentType align
 	)
 {
-	SetCurrentFont(Font(id, size, style));
+	SetCurrentFont(Font(id, size, style, align));
 }
 
 // protected
@@ -3626,6 +3739,280 @@ JTextEditor::SetCurrentFont
 		{
 		itsInsertionFont = f;
 		}
+}
+
+/******************************************************************************
+ Set range font
+
+ ******************************************************************************/
+
+void
+JTextEditor::SetRangeFontName
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JCharacter* name
+	)
+{
+	JBoolean isNew;
+	JTEUndoStyle* undo = GetStyleUndo(&isNew);
+
+	const JBoolean changed =
+		SetFontName(startIndex, endIndex, name, kJFalse);
+
+	if (changed)
+		{
+		NewUndo(undo, isNew);
+		}
+	else if (isNew)
+		{
+		delete undo;
+		}
+}
+
+void
+JTextEditor::SetRangeFontSize
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JSize size
+	)
+{
+	#define LocalVarName      size
+	#define StructElementName size
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontBold
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JBoolean bold
+	)
+{
+	#define LocalVarName      bold
+	#define StructElementName style.bold
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontItalic
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JBoolean italic
+	)
+{
+	#define LocalVarName      italic
+	#define StructElementName style.italic
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontUnderline
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JSize count
+	)
+{
+	#define LocalVarName      count
+	#define StructElementName style.underlineCount
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontUnderlineType
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JFontStyle::EUnderlineType type
+	)
+{
+	#define LocalVarName      type
+	#define StructElementName style.underlineType
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+	
+	// Set underline count as well
+	SetRangeFontUnderline(startIndex, endIndex, (type == JFontStyle::plain_Underline) ? 0 : 1);
+}
+
+void
+JTextEditor::SetRangeFontStrike
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JBoolean strike
+	)
+{
+	#define LocalVarName      strike
+	#define StructElementName style.strike
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontColor
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JColorIndex color
+	)
+{
+	#define LocalVarName      color
+	#define StructElementName style.color
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontColor
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JRGB& color
+	)
+{
+	SetRangeFontColor(startIndex, endIndex, RGBToColorIndex(color));
+}
+
+void
+JTextEditor::SetRangeFontBackColor
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JColorIndex color
+	)
+{
+	#define LocalVarName      color
+	#define StructElementName style.backcolor
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontBackColor
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JRGB& color
+	)
+{
+	SetRangeFontBackColor(startIndex, endIndex, RGBToColorIndex(color));
+}
+
+void
+JTextEditor::SetRangeFontStyle
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JFontStyle& style
+	)
+{
+	#define LocalVarName      style
+	#define StructElementName style
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFontAlign
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const AlignmentType align
+	)
+{
+	#define LocalVarName      align
+	#define StructElementName align
+	#define RangeStart		  startIndex
+	#define RangeStop		  endIndex
+	#include <JTESetFontRange.th>
+	#undef RangeStop
+	#undef RangeStart
+	#undef LocalVarName
+	#undef StructElementName
+}
+
+void
+JTextEditor::SetRangeFont
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const AlignmentType align
+	)
+{
+	SetRangeFont(startIndex, endIndex, Font(itsFontMgr->GetFontID(name, size, style), size, style, align));
+}
+
+// protected
+
+void
+JTextEditor::SetRangeFont
+	(
+	const JIndex startIndex,
+	const JIndex endIndex,
+	const Font& f
+	)
+{
+	JBoolean isNew;
+	JTEUndoStyle* undo = GetStyleUndo(&isNew);
+	SetFont(startIndex, endIndex, f, kJFalse);
+	NewUndo(undo, isNew);
 }
 
 /******************************************************************************
@@ -3846,6 +4233,22 @@ JTextEditor::SetFontStyle
 	#undef StructElementName
 }
 
+JBoolean
+JTextEditor::SetFontAlign
+	(
+	const JIndex		startIndex,
+	const JIndex		endIndex,
+	const AlignmentType	align,
+	const JBoolean		clearUndo
+	)
+{
+	#define LocalVarName      align
+	#define StructElementName align
+	#include <JTESetFont.th>
+	#undef LocalVarName
+	#undef StructElementName
+}
+
 void
 JTextEditor::SetFont
 	(
@@ -3854,11 +4257,12 @@ JTextEditor::SetFont
 	const JCharacter*	name,
 	const JSize			size,
 	const JFontStyle&	style,
+	const AlignmentType	align,
 	const JBoolean		clearUndo
 	)
 {
 	SetFont(startIndex, endIndex,
-			Font(itsFontMgr->GetFontID(name, size, style), size, style), clearUndo);
+			Font(itsFontMgr->GetFontID(name, size, style), size, style, align), clearUndo);
 }
 
 // protected
@@ -3998,15 +4402,17 @@ JTextEditor::GetDefaultFontName()
 void
 JTextEditor::GetDefaultFont
 	(
-	JString*	name,
-	JSize*		size,
-	JFontStyle*	style
+	JString*		name,
+	JSize*			size,
+	JFontStyle*		style,
+	AlignmentType*	align
 	)
 	const
 {
 	*name  = GetDefaultFontName();
 	*size  = itsDefFont.size;
 	*style = itsDefFont.style;
+	*align = itsDefFont.align;
 }
 
 /******************************************************************************
@@ -4058,16 +4464,31 @@ JTextEditor::SetDefaultFontStyle
 }
 
 void
+JTextEditor::SetDefaultFontAlign
+	(
+	const AlignmentType align
+	)
+{
+	itsDefFont.align = align;
+	if (itsBuffer->IsEmpty())
+		{
+		itsInsertionFont = CalcInsertionFont(1);
+		}
+}
+
+void
 JTextEditor::SetDefaultFont
 	(
 	const JFontID		id,
 	const JSize			size,
-	const JFontStyle&	style
+	const JFontStyle&	style,
+	const AlignmentType	align
 	)
 {
 	itsDefFont.id    = id;
 	itsDefFont.size  = size;
 	itsDefFont.style = style;
+	itsDefFont.align = align;
 
 	if (itsBuffer->IsEmpty())
 		{
@@ -4458,6 +4879,31 @@ JTextEditor::GetSelection
 		}
 }
 
+JBoolean
+JTextEditor::GetTextRange
+	(
+	JString*			text,
+	JRunArray<Font>*	style,
+	const JIndex		range_start,
+	const JIndex		range_end
+	)
+	const
+{
+	style->RemoveAll();
+
+	if ((range_start <= range_end) && (range_end != 0))
+		{
+		*text = itsBuffer->GetSubstring(range_start, range_end);
+		style->InsertElementsAtIndex(1, *itsStyles, range_start, range_end - range_start + 1);
+		return kJTrue;
+		}
+	else
+		{
+		text->Clear();
+		return kJFalse;
+		}
+}
+
 /******************************************************************************
  SetSelection
 
@@ -4505,7 +4951,7 @@ JTextEditor::SetSelection
 
 	TECaretShouldBlink(kJFalse);
 
-	if (itsCopyWhenSelectFlag && itsType != kStaticText)
+	if (itsCopyWhenSelectFlag && itsDoCopySelectFlag && itsType != kStaticText)
 		{
 		Copy();
 		}
@@ -4537,6 +4983,18 @@ JTextEditor::SetSelection
 		TERefreshCaret(origCaretLoc);
 		TERefreshLines(newStartLine, newEndLine);
 		}
+}
+
+/******************************************************************************
+ EditSelectAll - called in response to user Edit menu command
+
+ ******************************************************************************/
+
+void
+JTextEditor::EditSelectAll()
+{
+	StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
+	SelectAll();
 }
 
 /******************************************************************************
@@ -6390,6 +6848,34 @@ JTextEditor::GetStyleUndo
 		}
 }
 
+JTEUndoStyle*
+JTextEditor::GetStyleUndo
+	(
+	JBoolean* isNew,
+	const JIndex range_start,
+	const JIndex range_end
+	)
+{
+	JTEUndoStyle* styleUndo = NULL;
+
+	JTEUndoBase* undo = NULL;
+	if (GetCurrentUndo(&undo) &&
+		(styleUndo = undo->CastToJTEUndoStyle()) != NULL &&
+		styleUndo->IsActive())
+		{
+		*isNew = kJFalse;
+		return styleUndo;
+		}
+	else
+		{
+		styleUndo = new JTEUndoStyle(this, range_start, range_end);
+		assert( styleUndo != NULL );
+
+		*isNew = kJTrue;
+		return styleUndo;
+		}
+}
+
 /******************************************************************************
  GetTabShiftUndo (private)
 
@@ -7168,7 +7654,20 @@ JTextEditor::TEDrawLine
 		lineEndsWithNewline = kJTrue;
 		}
 
-	JCoordinate left = 0;
+	// Handle alignment
+	JCoordinate dx = 0;
+	const Font& af = itsStyles->GetRunDataRef(*runIndex);
+	if (af.align != kAlignLeft)
+	{
+		JCoordinate drawwidth = TEGetBoundsWidth();
+		JCoordinate linewidth = GetLineWidth(lineIndex);
+		if (af.align == kAlignCenter)
+			dx = (drawwidth - linewidth) / 2;
+		else if (af.align == kAlignRight)
+			dx = drawwidth - linewidth;
+	}
+
+	JCoordinate left = dx;
 
 	JBoolean wsInit = kJFalse;
 	JRect wsRect;
@@ -7233,6 +7732,21 @@ JTextEditor::TEDrawLine
 			p.SetFont(f.id, f.size, f.style);
 			JCoordinate ascent,descent;
 			p.GetLineHeight(&ascent, &descent);
+			JSize str_width = p.GetStringWidth(s);
+			
+			// Use background color if text is NOT selected
+			if ((f.style.backcolor != 0) &&
+				(itsSelection.IsEmpty() ||
+				 (!itsSelection.Contains(startChar) &&
+				  !itsSelection.Contains(startChar + runLength-1))))
+			{
+				JColorIndex old_pen_color = p.GetPenColor();
+				p.SetPenColor(f.style.backcolor);
+				p.SetFilling(kJTrue);
+				p.Rect(left, top + geom.ascent - ascent, str_width, ascent + descent);
+				p.SetFilling(kJFalse);
+				p.SetPenColor(old_pen_color);
+			}
 
 			p.String(left, top + geom.ascent - ascent, s);
 
@@ -7413,12 +7927,12 @@ JTextEditor::TEDrawSelection
 	const JBoolean savedFill     = p.IsFilling();
 	if (itsSelActiveFlag)
 		{
-		p.SetPenColor(itsSelectionColor);
+		p.SetPenColor(GetSelectionColor());
 		p.SetFilling(kJTrue);
 		}
 	else
 		{
-		p.SetPenColor(itsSelectionOutlineColor);
+		p.SetPenColor(GetSelectionOutlineColor());
 		p.SetFilling(kJFalse);
 		}
 
@@ -7437,6 +7951,11 @@ JTextEditor::TEDrawSelection
 			{
 			endChar = itsSelection.last;
 			w = GetStringWidth(startChar, endChar);
+			
+			// If selecting from the start of a line we must account
+			// for alignment offset in the width
+			if (x == 0 && w > 0)
+				w += GetCharLeft(CaretLocation(startChar, i));
 			}
 		else
 			{
@@ -7616,6 +8135,8 @@ JTextEditor::TEHandleMouseDown
 
 	itsStartPt = itsPrevPt = pt;
 
+	StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
+
 	if (!itsSelection.IsEmpty() && extendSelection &&
 		caretLoc.charIndex <= itsSelection.first)
 		{
@@ -7698,6 +8219,8 @@ JTextEditor::TEHandleMouseDrag
 		}
 
 	TEScrollForDrag(origPt);
+
+	StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 
 	const CaretLocation caretLoc = CalcCaretLocation(pt);
 
@@ -7943,6 +8466,7 @@ JTextEditor::TEHandleDNDDrop
 		const JIndex index = GetInsertionIndex();
 		if (index > itsDropLoc.charIndex)
 			{
+			StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 			SetSelection(itsDropLoc.charIndex, index-1);
 			}
 		}
@@ -8038,6 +8562,7 @@ JTextEditor::DropSelection
 	newUndo->SetPasteLength(pasteLength);
 
 	Recalc(dropLoc, textLen, kJFalse, kJFalse);
+	StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 	SetSelection(dropLoc, dropLoc + textLen-1);
 	TEScrollToSelection(kJFalse);
 
@@ -8138,6 +8663,8 @@ JTextEditor::TEHandleKeyPress
 	assert( itsActiveFlag );
 	assert( (!itsSelection.IsEmpty() && itsCaretLoc.charIndex == 0) ||
 			( itsSelection.IsEmpty() && itsCaretLoc.charIndex >  0) );
+
+	StValueChanger<JBoolean> _change(itsDoCopySelectFlag, kJTrue);
 
 	if (itsType == kStaticText)
 		{
@@ -8622,7 +9149,7 @@ JTextEditor::InsertSpacesForTab()
 
  ******************************************************************************/
 
-static const JRegex illegalCharRegex = "[\\0\x01-\x08\x0B\x0E-\x1F\x7F]+";
+static const JRegex illegalCharRegex("[\x01-\x08\x0B\x0E-\x1F\x7F]+", 11, kJFalse);
 
 JBoolean
 JTextEditor::ContainsIllegalChars
@@ -8676,6 +9203,63 @@ JTextEditor::RemoveIllegalChars
 
 		const JSize pgDelta = (illegal.first - remainder.first) + illegal.GetLength();
 		remainder.Set(illegal.first, text->GetLength());
+
+		if (!pg.IncrementProgress(pgDelta))
+			{
+			text->RemoveSubstring(remainder);
+			if (style != NULL)
+				{
+				style->RemoveNextElements(remainder.first, remainder.GetLength());
+				}
+			break;
+			}
+		}
+
+	pg.ProcessFinished();
+
+	text->SetBlockSize(saveBlockSize);
+	return JConvertToBoolean( text->GetLength() < origTextLength );
+}
+
+/******************************************************************************
+ ReplaceIllegalChars (static)
+
+	Returns kJTrue if we had to replace any characters that
+	ContainsIllegalChars() would flag.
+
+	If the user cancels, we toss the entire string and return kJTrue.
+
+	style can be NULL or empty.
+
+ ******************************************************************************/
+
+JBoolean
+JTextEditor::ReplaceIllegalChars
+	(
+	JString*			text,
+	JRunArray<Font>*	style
+	)
+{
+	assert( style == NULL || style->IsEmpty() ||
+			style->GetElementCount() == text->GetLength() );
+
+	const JSize origTextLength = text->GetLength();
+	const JSize saveBlockSize  = text->GetBlockSize();
+	text->SetBlockSize(origTextLength);			// avoid realloc
+
+	JLatentPG pg(100);
+	pg.FixedLengthProcessBeginning(origTextLength,
+				"Replacing illegal characters...", kJTrue, kJFalse);
+
+	JIndexRange remainder(1, text->GetLength());
+	JIndexRange illegal;
+	while (illegalCharRegex.MatchWithin(*text, remainder, &illegal))
+		{
+		for(JIndex idx = illegal.first; idx <= illegal.last; idx++)
+			text->ReplaceSubstring(idx, idx, "?");
+
+		const JSize pgDelta = (illegal.first - remainder.first) + illegal.GetLength();
+		remainder.Set(illegal.last + 1, text->GetLength());
 
 		if (!pg.IncrementProgress(pgDelta))
 			{
@@ -8767,7 +9351,7 @@ JTextEditor::GetWordEnd
 			}
 		}
 
-	while (i <= bufLen && IsCharacterInWord(*itsBuffer, i))
+	while (i <= bufLen && IsCharacterInWord(GetText(), i))
 		{
 		i++;
 		}
@@ -9859,6 +10443,22 @@ JTextEditor::GetCharLeft
 		{
 		x = GetStringWidth(firstChar, charLoc.charIndex-1);
 		}
+
+	// Handle alignment
+	if (!itsStyles->IsEmpty())
+	{
+		const Font af = itsStyles->GetElement(firstChar);
+		if (af.align != kAlignLeft)
+		{
+			JCoordinate drawwidth = TEGetBoundsWidth();
+			JCoordinate linewidth = GetLineWidth(charLoc.lineIndex);
+			if (af.align == kAlignCenter)
+				x += (drawwidth - linewidth) / 2;
+			else if (af.align == kAlignRight)
+				x += drawwidth - linewidth;
+		}
+	}
+
 	return x;
 }
 
@@ -10063,6 +10663,9 @@ JTextEditor::RecalcAll
 	itsLineStarts->RemoveAll();
 	itsLineStarts->AppendElement(1);
 
+	itsLineWidths->RemoveAll();
+	itsLineWidths->AppendElement(0);
+
 	itsLineGeom->RemoveAll();
 
 	Recalc(CaretLocation(1,1), itsBuffer->GetLength(), kJFalse,
@@ -10156,6 +10759,9 @@ JTextEditor::Recalc
 		{
 		itsLineStarts->RemoveAll();
 		itsLineStarts->AppendElement(1);
+
+		itsLineWidths->RemoveAll();
+		itsLineWidths->AppendElement(0);
 
 		itsLineGeom->RemoveAll();
 
@@ -10299,6 +10905,8 @@ JTextEditor::Recalc1
 		JCoordinate lineWidth;
 		const JSize charCount = RecalcLine(bufLength, firstChar, lineIndex, &lineWidth,
 										   &runIndex, &firstInRun);
+		itsLineWidths->SetElement(lineIndex, lineWidth);
+
 		totalCharCount += charCount;
 		if (*maxLineWidth < lineWidth)
 			{
@@ -10315,6 +10923,7 @@ JTextEditor::Recalc1
 					bufLength - endChar)
 			{
 			itsLineStarts->RemoveElement(lineIndex+1);
+			itsLineWidths->RemoveElement(lineIndex+1);
 			itsLineGeom->RemoveElement(lineIndex+1);
 			}
 
@@ -10353,6 +10962,7 @@ JTextEditor::Recalc1
 		firstChar += charCount;
 
 		itsLineStarts->InsertElementAtIndex(lineIndex, firstChar);
+		itsLineWidths->InsertElementAtIndex(lineIndex, 0);
 		itsLineGeom->InsertElementAtIndex(lineIndex, LineGeometry());
 
 		// This catches the case when the new and old line starts
@@ -10364,6 +10974,7 @@ JTextEditor::Recalc1
 					bufLength - (endChar+1))
 			{
 			itsLineStarts->RemoveElement(lineIndex+1);
+			itsLineWidths->RemoveElement(lineIndex+1);
 			itsLineGeom->RemoveElement(lineIndex+1);
 			}
 		}
@@ -10810,7 +11421,9 @@ JTextEditor::CalcCaretLocation
 		}
 	else
 		{
-		JCoordinate x = 0;
+		// Offset to take into account alignment
+		JCoordinate x = GetCharLeft(CaretLocation(lineStart, lineIndex));
+		prevD = pt.x - x;
 		for (JIndex i=lineStart; i<=lineEnd; i++)
 			{
 			x += GetCharWidth(CaretLocation(i, lineIndex));

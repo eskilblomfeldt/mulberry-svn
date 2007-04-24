@@ -52,6 +52,9 @@ public:
 	void	InstallIdleTask(JXIdleTask* newTask);
 	void	RemoveIdleTask(JXIdleTask* task);
 
+	void	InstallPermanentTask(JXIdleTask* newTask);
+	void	RemovePermanentTask(JXIdleTask* task);
+
 	void	InstallUrgentTask(JXUrgentTask* newTask);
 	void	RemoveUrgentTask(JXUrgentTask* task);
 
@@ -90,8 +93,15 @@ public:
 
 	// for use by special windows that block until dismissed
 
+	void	PrepareForBlockingWindow();
+	void	BlockingWindowFinished();
+
 	JBoolean	HasBlockingWindow() const;
 	JBoolean	HadBlockingWindow() const;
+	JBoolean	HandleOneEventForWindow(JXWindow* window,
+										const JBoolean allowSleep = kJTrue,
+										const JBoolean do_tasks = kJTrue);
+	JBoolean	HandleOneBusyEvent(const JBoolean allowSleep = kJTrue);
 
 	// required by JXInitGlobals()
 
@@ -126,9 +136,11 @@ private:
 
 	Time					itsCurrentTime;			// in milliseconds
 	JPtrArray<JXIdleTask>*	itsIdleTasks;
+	JPtrArray<JXIdleTask>*	itsPermanentTasks;
 	Time					itsMaxSleepTime;		// in milliseconds
 	Time					itsLastIdleTime;		// in milliseconds
 	Time					itsLastIdleTaskTime;	// in milliseconds
+	Time					itsLastPermanentTaskTime;	// in milliseconds
 	JSize					itsWaitForChildCounter;
 	IdleTaskStack*			itsIdleTaskStack;
 
@@ -144,6 +156,7 @@ private:
 
 	void	HandleOneEvent();
 	void	PerformIdleTasks();
+	void	PerformPermanentTasks();
 	void	PerformUrgentTasks();
 
 	void	PushIdleTaskStack();
@@ -154,14 +167,10 @@ private:
 
 	static Bool	GetNextWindowEvent(Display* display, XEvent* event, char* arg);
 	static Bool	GetNextBkgdEvent(Display* display, XEvent* event, char* arg);
+	static Bool	GetNextBusyEvent(Display* display, XEvent* event, char* arg);
 	static Bool	DiscardNextEvent(Display* display, XEvent* event, char* arg);
 
 	// for use by special windows that block until dismissed
-
-	void		PrepareForBlockingWindow();
-	void		BlockingWindowFinished();
-	JBoolean	HandleOneEventForWindow(JXWindow* window,
-										const JBoolean allowSleep = kJTrue);
 
 	friend class JXCSFDialogBase;
 	friend class JXChooseSaveFile;

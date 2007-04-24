@@ -810,6 +810,83 @@ JXTextMenuData::ClearImage
 }
 
 /******************************************************************************
+ GetImageID
+
+******************************************************************************/
+
+JBoolean
+JXTextMenuData::GetImageID
+(
+ const JIndex index,
+ JIndex* imageID
+ )
+const
+{
+  const TextItemData itemData = itsTextItemData->GetElement(index);
+  if (itemData.imageID != 0)
+    {
+      *imageID = itemData.imageID;
+      return kJTrue;
+    }
+  else
+    {
+      return kJFalse;
+    }
+}
+
+/******************************************************************************
+ SetImageID
+
+******************************************************************************/
+
+void
+JXTextMenuData::SetImageID
+(
+ const JIndex index,
+ JIndex imageID
+ )
+{
+  if (imageID == 0)
+    {
+      ClearImageID(index);
+      return;
+    }
+
+  TextItemData itemData = itsTextItemData->GetElement(index);
+
+  if (itemData.imageID == 0)
+    {
+      itsNeedGeomRecalcFlag = kJTrue;
+    }
+
+  itemData.imageID   = imageID;
+  itsTextItemData->SetElement(index, itemData);
+
+  Broadcast(ImageChanged(index));
+}
+
+/******************************************************************************
+ ClearImage
+
+******************************************************************************/
+
+void
+JXTextMenuData::ClearImageID
+(
+ const JIndex index
+ )
+{
+  TextItemData itemData = itsTextItemData->GetElement(index);
+  if (itemData.imageID != 0)
+    {
+      itemData.imageID = 0;
+      itsTextItemData->SetElement(index, itemData);
+
+      itsNeedGeomRecalcFlag = kJTrue;
+    }
+}
+
+/******************************************************************************
  GetNMShortcut
 
  ******************************************************************************/

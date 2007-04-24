@@ -50,6 +50,8 @@ protected:
 											  const JBoolean centerInDisplay = kJFalse);
 	virtual JCoordinate	TableGetApertureWidth() const;
 
+	virtual JColorIndex	GetSelectionColor() const;
+
 	void		BeginSelectionDrag(const JPoint& cell, const JXMouseButton button,
 								   const JXKeyModifiers& modifiers);
 	void		ContinueSelectionDrag(const JPoint& pt, const JXKeyModifiers& modifiers);

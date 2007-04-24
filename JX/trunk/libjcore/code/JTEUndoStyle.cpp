@@ -36,6 +36,25 @@ JTEUndoStyle::JTEUndoStyle
 	assert( hasSelection );
 }
 
+JTEUndoStyle::JTEUndoStyle
+	(
+	JTextEditor* te,
+	const JIndex range_start,
+	const JIndex range_end
+	)
+	:
+	JTEUndoBase(te)
+{
+	itsStartIndex = range_start;
+
+	itsOrigStyles = new JRunArray<JTextEditor::Font>;
+	assert( itsOrigStyles != NULL );
+
+	JString selText;
+	const JBoolean hasSelection = te->GetTextRange(&selText, itsOrigStyles, range_start, range_end);
+	assert( hasSelection );
+}
+
 /******************************************************************************
  Destructor
 

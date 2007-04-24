@@ -38,6 +38,8 @@
 #include <jTime.h>
 #include <jAssert.h>
 
+#include <sys/time.h>
+
 #define JXDND_DEBUG_MSGS	0	// boolean
 #define JXDND_SOURCE_DELAY	0	// time in seconds
 #define JXDND_TARGET_DELAY	0	// time in seconds
@@ -74,6 +76,9 @@ static const JCharacter* kDNDActionListXAtomName        = "XdndActionList";
 static const JCharacter* kDNDActionDescriptionXAtomName = "XdndActionDescription";
 
 static const JCharacter* kDNDDirectSave0XAtomName = "XdndDirectSave0";
+
+const time_t kTimerStart = J_TIME_T_MAX/1000U;	// milliseconds before rollover
+const Time kMinDNDHereTime = 50;				// 0.05 seconds (in milliseconds)
 
 // message data
 
@@ -166,6 +171,8 @@ JXDNDManager::JXDNDManager
 	itsUserDropAction         = NULL;
 
 	itsSentFakePasteFlag = kJFalse;
+
+	itsLastDNDHereTime = 0;
 
 	InitCursors();
 
@@ -313,6 +320,15 @@ JXDNDManager::HandleDND
 		AnnounceAskActions(buttonStates, modifiers);
 		}
 
+	// cd: Check for timeout while mouse held in one place during drag
+	itimerval timerInfo;
+	getitimer(ITIMER_REAL, &timerInfo);
+	Time currentTime = JRound(1000 * (kTimerStart -
+		 (timerInfo.it_value.tv_sec + timerInfo.it_value.tv_usec/1e6)));
+
+	if (currentTime - itsLastDNDHereTime > kMinDNDHereTime)
+		forceSendDNDHere = kJTrue;
+	
 	// contact the target
 
 	if (forceSendDNDHere || pt != itsPrevHandleDNDPt ||
@@ -320,6 +336,7 @@ JXDNDManager::HandleDND
 		{
 		itsPrevHandleDNDPt     = pt;
 		itsPrevHandleDNDAction = dropAction;
+		itsLastDNDHereTime     = currentTime;
 		SendDNDHere(pt, dropAction);
 		}
 

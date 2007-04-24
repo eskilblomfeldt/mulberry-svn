@@ -18,6 +18,7 @@
 #include <JFontStyle.h>
 
 class JString;
+class JString16;
 
 class JFontManager
 {
@@ -63,6 +64,11 @@ public:
 	virtual JSize	GetCharWidth(const JFontID fontID, const JSize size,
 								 const JFontStyle& style, const JCharacter c) const = 0;
 
+	JSize			GetCharWidth16(const JCharacter* name, const JSize size,
+								 const JFontStyle& style, const JCharacter16 c) const;
+	virtual JSize	GetCharWidth16(const JFontID fontID, const JSize size,
+								 const JFontStyle& style, const JCharacter16 c) const = 0;
+
 	JSize			GetStringWidth(const JCharacter* name, const JSize size,
 								   const JFontStyle& style, const JCharacter* str) const;
 	JSize			GetStringWidth(const JFontID fontID, const JSize size,
@@ -78,6 +84,23 @@ public:
 								   const JSize charCount) const;
 	virtual JSize	GetStringWidth(const JFontID fontID, const JSize size,
 								   const JFontStyle& style, const JCharacter* str,
+								   const JSize charCount) const = 0;
+
+	JSize			GetStringWidth16(const JCharacter* name, const JSize size,
+								   const JFontStyle& style, const JCharacter16* str) const;
+	JSize			GetStringWidth16(const JFontID fontID, const JSize size,
+								   const JFontStyle& style, const JCharacter16* str) const;
+
+	JSize			GetStringWidth16(const JCharacter* name, const JSize size,
+								   const JFontStyle& style, const JString16& str) const;
+	JSize			GetStringWidth16(const JFontID fontID, const JSize size,
+								   const JFontStyle& style, const JString16& str) const;
+
+	JSize			GetStringWidth16(const JCharacter* name, const JSize size,
+								   const JFontStyle& style, const JCharacter16* str,
+								   const JSize charCount) const;
+	virtual JSize	GetStringWidth16(const JFontID fontID, const JSize size,
+								   const JFontStyle& style, const JCharacter16* str,
 								   const JSize charCount) const = 0;
 
 	static JString	CombineNameAndCharacterSet(const JCharacter* name,

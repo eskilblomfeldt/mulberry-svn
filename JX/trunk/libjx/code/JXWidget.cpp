@@ -85,6 +85,7 @@ JXWidget::JXWidget
 
 	itsWantInputFlag  = kJFalse;
 	itsWantTabFlag    = kJFalse;
+	itsWantShiftTabFlag = kJFalse;
 	itsWantModTabFlag = kJFalse;
 
 	const JPoint pt = enclosure->LocalToGlobal(x,y);
@@ -242,7 +243,8 @@ JXWidget::AcceptDrag
  WantInput (protected)
 
 	wantInput:        everything else
-	wantTab:          tab and Shift-tab
+	wantTab:          tab
+	wantShiftTab:     Shift-tab
 	wantModifiedTab:  Meta-tab, Ctrl-tab, etc.
 
 	If there is more than one input area in a window, do not grab both tab
@@ -256,12 +258,14 @@ JXWidget::WantInput
 	(
 	const JBoolean wantInput,
 	const JBoolean wantTab,
+	const JBoolean wantShiftTab,
 	const JBoolean wantModifiedTab
 	)
 {
-	itsWantInputFlag  = wantInput;
-	itsWantTabFlag    = wantTab;
-	itsWantModTabFlag = wantModifiedTab;
+	itsWantInputFlag    = wantInput;
+	itsWantTabFlag      = wantTab;
+	itsWantShiftTabFlag = wantShiftTab;
+	itsWantModTabFlag   = wantModifiedTab;
 
 	if (itsWantInputFlag)
 		{

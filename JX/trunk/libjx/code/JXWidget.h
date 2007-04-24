@@ -63,6 +63,7 @@ public:
 	void				SetSingleFocusWidget();
 	virtual JBoolean	OKToUnfocus();
 	JBoolean			WantsTab() const;
+	JBoolean			WantsShiftTab() const;
 	JBoolean			WantsModifiedTab() const;
 	virtual void		HandleKeyPress(const int key,				// must call inherited
 									   const JXKeyModifiers& modifiers);
@@ -114,6 +115,7 @@ protected:
 
 	void	WantInput(const JBoolean wantInput,
 					  const JBoolean wantTab = kJFalse,
+					  const JBoolean wantShiftTab = kJFalse,
 					  const JBoolean wantModifiedTab = kJFalse);
 
 	virtual void	HandleFocusEvent();			// must call inherited
@@ -185,6 +187,7 @@ private:
 
 	JBoolean	itsWantInputFlag;
 	JBoolean	itsWantTabFlag;
+	JBoolean	itsWantShiftTabFlag;
 	JBoolean	itsWantModTabFlag;
 
 	// background colors
@@ -362,6 +365,13 @@ JXWidget::WantsTab()
 	const
 {
 	return itsWantTabFlag;
+}
+
+inline JBoolean
+JXWidget::WantsShiftTab()
+	const
+{
+	return itsWantShiftTabFlag;
 }
 
 inline JBoolean

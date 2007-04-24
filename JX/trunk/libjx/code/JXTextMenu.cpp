@@ -488,6 +488,41 @@ JXTextMenu::ClearItemImage
 }
 
 /******************************************************************************
+ Item image ID
+
+ ******************************************************************************/
+
+JBoolean
+JXTextMenu::GetItemImageID
+	(
+	const JIndex	index,
+	JIndex*	imageID
+	)
+	const
+{
+	return itsTextMenuData->GetImageID(index, imageID);
+}
+
+void
+JXTextMenu::SetItemImageID
+	(
+	const JIndex	index,
+	JIndex			imageID
+	)
+{
+	itsTextMenuData->SetImageID(index, imageID);
+}
+
+void
+JXTextMenu::ClearItemImageID
+	(
+	const JIndex index
+	)
+{
+	itsTextMenuData->ClearImageID(index);
+}
+
+/******************************************************************************
  Item non-menu shortcut
 
  ******************************************************************************/

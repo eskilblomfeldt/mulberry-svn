@@ -54,7 +54,7 @@ protected:
 
 	virtual void	Receive(JBroadcaster* sender, const Message& message);
 
-private:
+//private:	cd: need to access these in drived class
 
 	JXFontNameMenu*	itsFontNameMenu;	// can be NULL
 	JSize			itsFontSize;
@@ -66,13 +66,14 @@ private:
 
 	JXChooseFontSizeDialog*	itsChooseSizeDialog;	// can be NULL
 
-private:
+//private:	cd: need to access these in drived class
 
 	void	JXFontSizeMenuX(JXFontNameMenu* fontMenu);
 	void	BuildMenu(const JCharacter* fontName);
 	void	AdjustVarSizeItem(const JSize fontSize);
 	void	ChooseFontSize(const JIndex sizeIndex);
 
+private:
 	// not allowed
 
 	JXFontSizeMenu(const JXFontSizeMenu& source);

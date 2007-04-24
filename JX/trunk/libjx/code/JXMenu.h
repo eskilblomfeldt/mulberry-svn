@@ -133,6 +133,7 @@ public:
 	JBoolean	GetSubmenu(const JIndex index, const JXMenu** menu) const;
 
 	void		SetUpdateAction(const UpdateAction action);
+	UpdateAction		GetUpdateAction() const;
 
 	JBoolean		IsPopupChoice() const;
 	virtual void	SetToPopupChoice(const JBoolean isPopup,
@@ -268,6 +269,7 @@ public:
 
 	static const JCharacter* kNeedsUpdate;
 	static const JCharacter* kItemSelected;
+	static const JCharacter* kClosed;
 
 	class NeedsUpdate : public JBroadcaster::Message
 		{
@@ -305,6 +307,17 @@ public:
 
 			JIndex		itsIndex;
 			JBoolean	itsFromShortcutFlag;
+		};
+
+	class Closed : public JBroadcaster::Message
+		{
+		public:
+
+			Closed()
+				:
+				JBroadcaster::Message(kClosed)
+				{ };
+
 		};
 };
 
@@ -372,6 +385,18 @@ JXMenu::SetUpdateAction
 	)
 {
 	itsUpdateAction = action;
+}
+
+/******************************************************************************
+ GetUpdateAction
+
+ ******************************************************************************/
+
+inline JXMenu::UpdateAction
+JXMenu::GetUpdateAction()
+	const
+{
+	return itsUpdateAction;
 }
 
 /******************************************************************************

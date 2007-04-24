@@ -114,7 +114,7 @@ JXInputField::SetTable
 	assert( itsTable == NULL && table != NULL );
 
 	itsTable = table;
-	WantInput(kJTrue, kJTrue);
+	WantInput(kJTrue, kJTrue, kJTrue);
 	SetBorderWidth(1);
 }
 
@@ -166,19 +166,39 @@ JXInputField::SetFontStyle
 }
 
 void
-JXInputField::SetFont
+JXInputField::SetFontAlign
 	(
-	const JCharacter*	name,
-	const JSize			size,
-	const JFontStyle&	style
+	const AlignmentType align
 	)
 {
 	if (!IsEmpty())
 		{
-		JXTEBase::SetFont(1, GetTextLength(), name, size, style, kJTrue);
+		JXTEBase::SetFontAlign(1, GetTextLength(), align, kJTrue);
+		}
+	else
+		{
+		SetCurrentFontAlign(align);
+		ClearUndo();
 		}
 
-	SetDefaultFont(name, size, style);
+	SetDefaultFontAlign(align);
+}
+
+void
+JXInputField::SetFont
+	(
+	const JCharacter*	name,
+	const JSize			size,
+	const JFontStyle&	style,
+	const AlignmentType align
+	)
+{
+	if (!IsEmpty())
+		{
+		JXTEBase::SetFont(1, GetTextLength(), name, size, style, align, kJTrue);
+		}
+
+	SetDefaultFont(name, size, style, align);
 }
 
 /******************************************************************************
@@ -238,7 +258,7 @@ JXInputField::HandleFocusEvent()
 {
 	JXTEBase::HandleFocusEvent();
 	ClearUndo();
-	SelectAll();
+	EditSelectAll();
 }
 
 /******************************************************************************

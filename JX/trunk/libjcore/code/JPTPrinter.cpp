@@ -13,6 +13,7 @@
 #include <JPTPrinter.h>
 #include <JLatentPG.h>
 #include <JString.h>
+#include <JString16.h>
 #include <jFStreamUtil.h>
 #include <jStreamUtil.h>
 #include <jASCIIConstants.h>
@@ -110,6 +111,14 @@ JPTPrinter::Print
 	ostream&			trueOutput
 	)
 {
+#ifdef _J_USE_UTF8_STRINGS
+	// Need to convert utf-8 to iso-8859-1
+	JString16 utf16;
+	utf16.FromUTF8(text);
+	JString iso = utf16.ToASCII();
+	text = iso.GetCString();
+#endif
+
 	ostream* dataOutput  = &trueOutput;
 	ofstream* tempOutput = NULL;
 	JString tempName;
@@ -263,6 +272,32 @@ JPTPrinter::Print
 		}
 
 	return keepGoing;
+}
+
+/******************************************************************************
+ Print16 (protected)
+
+	Prints the given text to the output stream, formatting it into
+	pages based on our page width (characters) and page height (lines).
+	Returns kJFalse if the process was cancelled.
+
+	Derived classes can override the header and footer functions to
+	print a header and/or footer on each page.
+
+ ******************************************************************************/
+
+JBoolean
+JPTPrinter::Print16
+	(
+	const JCharacter16*	text,
+	ostream&			trueOutput
+	)
+{
+	// For now convert to utf-8 and print that
+	JString16 utf16(text);
+	JString temp = utf16.ToUTF8();
+
+	return Print(temp.GetCString(), trueOutput);
 }
 
 /******************************************************************************

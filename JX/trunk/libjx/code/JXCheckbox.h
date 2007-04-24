@@ -22,9 +22,9 @@ public:
 
 	virtual ~JXCheckbox();
 
-	JBoolean	IsChecked() const;
-	void		SetState(const JBoolean on);
-	void		ToggleState();
+	virtual JBoolean	IsChecked() const;
+	virtual void		SetState(const JBoolean on);
+	virtual void		ToggleState();
 
 	virtual void	SetShortcuts(const JCharacter* list);
 	virtual void	HandleShortcut(const int key, const JXKeyModifiers& modifiers);

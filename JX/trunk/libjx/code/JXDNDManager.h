@@ -187,6 +187,8 @@ private:
 	Time		itsFakeButtonPressTime;
 	Time		itsFakeButtonReleaseTime;
 
+	Time		itsLastDNDHereTime;
+
 	JCursorIndex	itsDefDNDCursor [ kDefDNDCursorCount ];
 
 	Atom itsDNDSelectionName;

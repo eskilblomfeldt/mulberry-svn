@@ -21,6 +21,7 @@
 #include <jXUtil.h>
 #include <JFontManager.h>
 #include <JString.h>
+#include <JString16.h>
 #include <string.h>
 #include <jAssert.h>
 
@@ -531,6 +532,227 @@ JXWindowPainter::String
 }
 
 /******************************************************************************
+ String16 (virtual)
+
+ ******************************************************************************/
+
+void
+JXWindowPainter::String16
+	(
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	String16(left, top, str, 0, width, hAlign, height, vAlign);
+}
+
+void
+JXWindowPainter::String16
+	(
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str,
+	const JIndex		uIndex,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	if (JString16Empty(str))
+		{
+		return;
+		}
+
+	const JFontID fontID        = GetFontID();
+	const JSize fontSize        = GetFontSize();
+	const JFontStyle& fontStyle = GetFontStyle();
+
+	itsGC->SetFont(fontID);
+	itsGC->SetDrawingColor(fontStyle.color);
+
+	JCoordinate ascent, descent;
+	GetLineHeight(&ascent, &descent);
+
+	const JPoint& o = GetOrigin();
+	JCoordinate x   = o.x + left;
+	JCoordinate y   = o.y + top + ascent;
+	AlignString16(&x,&y, str, width, hAlign, height, vAlign);
+
+	itsGC->DrawString16(itsDrawable, x,y, str);
+	if (uIndex > 0)
+		{
+		const JFontManager* fontMgr = GetFontManager();
+
+		JCoordinate xu = x;
+		if (uIndex > 1)
+			{
+			xu += fontMgr->GetStringWidth16(GetFontID(), GetFontSize(), GetFontStyle(),
+										  str, uIndex-1);
+			}
+
+		const JCoordinate w =
+			fontMgr->GetCharWidth16(fontID, fontSize, fontStyle, str[uIndex-1]);
+
+		const JCoordinate lineWidth = fontMgr->GetUnderlineThickness(fontSize);
+		const JCoordinate yu        = y + JLFloor(1.5 * lineWidth);
+
+		itsGC->SetDrawingColor(fontStyle.color);
+		itsGC->SetLineWidth(lineWidth);
+		itsGC->DrawDashedLines(kJFalse);
+		itsGC->DrawLine(itsDrawable, xu, yu, xu+w-1, yu);
+		}
+
+	StyleString16(str, x-o.x, y-o.y, ascent, descent, fontStyle.color);
+}
+
+void
+JXWindowPainter::String16
+	(
+	const JFloat		userAngle,
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	if (JString16Empty(str))
+		{
+		return;
+		}
+
+	// Adjust the angle to lie between -45 and 315.
+
+	JFloat angle = userAngle;
+	while (angle <= -45.0)
+		{
+		angle += 360.0;
+		}
+	while (angle > 315.0)
+		{
+		angle -= 360.0;
+		}
+
+	// If the angle is zero, we can do it easily.
+
+	JIndex quadrant;
+	if (-45.0 < angle && angle <= 45.0)
+		{
+		String16(left, top, str, width, hAlign, height, vAlign);
+		return;
+		}
+	else if (45.0 < angle && angle <= 135.0)
+		{
+		quadrant = 2;
+		}
+	else if (135.0 < angle && angle <= 225.0)
+		{
+		quadrant = 3;
+		}
+	else	// 225.0 < angle && angle <= 315.0
+		{
+		quadrant = 4;
+		}
+
+	// We have to do it pixel by pixel.
+
+	JCoordinate dx=0, dy=0;
+	AlignString16(&dx,&dy, str, width, hAlign, height, vAlign);
+
+	JCoordinate ascent, descent;
+	const JSize lineHeight  = GetLineHeight(&ascent, &descent) + 1;
+	const JSize stringWidth = GetStringWidth16(str);
+
+	Pixmap tempPixmap =
+		XCreatePixmap(*itsDisplay, itsDrawable, stringWidth, lineHeight,
+					  DefaultDepth((Display*) *itsDisplay,
+					  DefaultScreen((Display*) *itsDisplay)));
+	assert( tempPixmap != 0 );
+
+	JXColormap* colormap = itsDisplay->GetColormap();
+	if (itsRotTextGC == NULL)
+		{
+		itsRotTextGC = new JXGC(itsDisplay, colormap, itsDrawable);
+		assert( itsRotTextGC != NULL );
+		}
+
+	itsRotTextGC->SetFont(GetFontID());
+	const JFontStyle& fontStyle = GetFontStyle();
+
+	JXColormap* rotCMap = itsRotTextGC->GetColormap();
+	itsRotTextGC->SetDrawingColor(rotCMap->GetWhiteColor());
+	itsRotTextGC->FillRect(tempPixmap, 0,0, stringWidth,lineHeight);
+	itsRotTextGC->SetDrawingColor(rotCMap->GetBlackColor());
+	itsRotTextGC->DrawString16(tempPixmap, 0, ascent, str);
+
+	{
+	const JPoint origOrigin     = GetOrigin();
+	const Drawable origDrawable = itsDrawable;
+	JXGC* origGC                = itsGC;
+
+	SetOrigin(0,0);
+	itsDrawable = tempPixmap;
+	itsGC       = itsRotTextGC;
+
+	StyleString16(str, 0,ascent, ascent, descent, rotCMap->GetBlackColor());
+
+	SetOrigin(origOrigin);
+	itsDrawable = origDrawable;
+	itsGC       = origGC;
+	}
+
+	XImage* tempImage =
+		XGetImage(*itsDisplay, tempPixmap, 0,0, stringWidth, lineHeight, 0x01, ZPixmap);
+	assert( tempImage != NULL );
+
+	const JColorIndex foreColor = colormap->GetXPixel(colormap->GetBlackColor());
+	const JColorIndex backColor = colormap->GetXPixel(colormap->GetWhiteColor());
+
+	const JPoint& o = GetOrigin();
+	itsGC->SetDrawingColor(fontStyle.color);
+	JCoordinate xp,yp;
+	for (JCoordinate x=0; x < (JCoordinate) stringWidth; x++)
+		{
+		for (JCoordinate y=0; y < (JCoordinate) lineHeight; y++)
+			{
+			const unsigned long pixelValue = XGetPixel(tempImage, x,y);
+			if (pixelValue == foreColor)
+				{
+				if (quadrant == 2)
+					{
+					xp = left+dy+y;
+					yp = top-dx-x;
+					}
+				else if (quadrant == 3)
+					{
+					xp = left-dx-x;
+					yp = top-dy-y;
+					}
+				else
+					{
+					assert( quadrant == 4 );
+					xp = left-dy-y;
+					yp = top+dx+x;
+					}
+
+				itsGC->DrawPoint(itsDrawable, o.x+xp, o.y+yp);
+				}
+			}
+		}
+
+	XDestroyImage(tempImage);
+	XFreePixmap(*itsDisplay, tempPixmap);
+}
+
+/******************************************************************************
  StyleString (private)
 
 	Apply styles that the font id doesn't include.
@@ -570,11 +792,146 @@ JXWindowPainter::StyleString
 			const JSize ulWidth = fontManager->GetUnderlineThickness(fontSize);
 			SetLineWidth(ulWidth);
 
+			// Look for special underline types
+			if (fontStyle.underlineType == JFontStyle::redwavy_Underline)
+			{
+				// Draw in red
+				SetPenColor(GetXColormap()->GetRedColor());
+
+				// Layout:
+				//
+				// x mod 4		0123
+				//               *
+				//              * *
+				//                 *
+				//
+				// y offset     0-0+0
+				JCoordinate yu = JLFloor(y + 1.5 * ulWidth);	// thick line is centered on path
+				for (JCoordinate xpos=x; xpos<=x+(JCoordinate)strWidth; xpos++)
+					{
+					JCoordinate ypos = yu;
+					switch(xpos % 4)
+					{
+					case 1:
+						ypos--;
+						break;
+					case 3:
+						ypos++;
+						break;
+					default:;
+					}
+					Point(xpos, ypos);
+					}
+			}
+			
+			// Do plain underline by default
+			else
+			{
+				JCoordinate yu = JLFloor(y + 1.5 * ulWidth);	// thick line is centered on path
+				for (JIndex i=1; i<=fontStyle.underlineCount; i++)
+					{
+					Line(x,yu, x+strWidth,yu);
+					yu += 2 * ulWidth;
+					}
+			}
+			}
+
+		if (fontStyle.strike)
+			{
+			const JSize strikeWidth = fontManager->GetStrikeThickness(fontSize);
+			const JCoordinate ys    = y - ascent/2;		// thick line is centered on path
+			SetLineWidth(strikeWidth);
+			Line(x,ys, x+strWidth,ys);
+			}
+
+		SetPenLocation(origPenLoc);
+		SetPenColor(origPenColor);
+		SetLineWidth(origLW);
+		DrawDashedLines(wasDashed);
+		}
+}
+
+/******************************************************************************
+ StyleString16 (private)
+
+	Apply styles that the font id doesn't include.
+
+ ******************************************************************************/
+
+void
+JXWindowPainter::StyleString16
+	(
+	const JCharacter16* str,
+	const JCoordinate x,
+	const JCoordinate y,
+	const JCoordinate ascent,
+	const JCoordinate descent,
+	const JColorIndex color
+	)
+{
+	const JFontStyle& fontStyle = GetFontStyle();
+
+	if (fontStyle.underlineCount > 0 || fontStyle.strike)
+		{
+		const JFontManager* fontManager = GetFontManager();
+
+		const JPoint origPenLoc        = GetPenLocation();
+		const JColorIndex origPenColor = GetPenColor();
+		const JSize origLW             = GetLineWidth();
+		const JBoolean wasDashed       = LinesAreDashed();
+
+		SetPenColor(color);
+		DrawDashedLines(kJFalse);
+
+		const JSize fontSize = GetFontSize();
+		const JSize strWidth = GetStringWidth16(str);
+
+		if (fontStyle.underlineCount > 0)
+			{
+			const JSize ulWidth = fontManager->GetUnderlineThickness(fontSize);
+			SetLineWidth(ulWidth);
+
+			// Look for special underline types
+			if (fontStyle.underlineType == JFontStyle::redwavy_Underline)
+			{
+				// Draw in red
+				SetPenColor(GetXColormap()->GetRedColor());
+
+				// Layout:
+				//
+				// x mod 4		0123
+				//               *
+				//              * *
+				//                 *
+				//
+				// y offset     0-0+0
+				JCoordinate yu = JLFloor(y + 1.5 * ulWidth);	// thick line is centered on path
+				for (JCoordinate xpos=x; xpos<=x+(JCoordinate)strWidth; xpos++)
+					{
+					JCoordinate ypos = yu;
+					switch(xpos % 4)
+					{
+					case 1:
+						ypos--;
+						break;
+					case 3:
+						ypos++;
+						break;
+					default:;
+					}
+					Point(xpos, ypos);
+					}
+			}
+			
+			// Do plain underline by default
+			else
+			{
 			JCoordinate yu = JLFloor(y + 1.5 * ulWidth);	// thick line is centered on path
 			for (JIndex i=1; i<=fontStyle.underlineCount; i++)
 				{
 				Line(x,yu, x+strWidth,yu);
 				yu += 2 * ulWidth;
+					}
 				}
 			}
 

@@ -21,6 +21,7 @@ class JTEUndoStyle : public JTEUndoBase
 public:
 
 	JTEUndoStyle(JTextEditor* te);
+	JTEUndoStyle(JTextEditor* te, const JIndex range_start, const JIndex range_end);
 
 	virtual ~JTEUndoStyle();
 

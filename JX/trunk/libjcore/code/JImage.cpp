@@ -13,10 +13,18 @@
 #include <JImage.h>
 #include <JImageMask.h>
 #include <JColormap.h>
+#include <JString.h>
 #include <JStdError.h>
 #include <jFileUtil.h>
 #include <jGlobals.h>
 #include <jAssert.h>
+
+#define JTemplateType unsigned char
+#include <JStringMap.tmpls>
+
+#undef JTemplateType
+#define JTemplateType JStrValue<unsigned char>
+#include <JHashTable.tmpls>
 
 const int kGDNoTransparentColor = -1;
 const int kGDColorScale         = 65535/255;
@@ -654,13 +662,8 @@ JIndex i;
 	assert( readCount == 4 );
 	assert( colorCount < 256 );
 
-	// init color table (never more than 255 unique colors)
-
-	unsigned char charToCTIndex[256];	// maps XPM chars to color table indices
-	for (i=0; i<256; i++)
-		{
-		charToCTIndex[i] = 0;
-		}
+	// This is the index label -> color index mapper
+	JStringMap<unsigned char> map;
 
 	JColorIndex* colorTable = new JColorIndex [ colorCount ];
 	assert( colorTable != NULL );
@@ -676,18 +679,19 @@ JIndex i;
 
 	for (i=1; i<=colorCount; i++)
 		{
-		charToCTIndex[ (unsigned char) pixmap.xpm[i][0] ] = (unsigned char) i-1;
+		JString label(&pixmap.xpm[i][0], imageCharSize);
+		map.SetNewElement(label, i-1);
 
 		JIndex j = 0;
 		JCharacter c;
 		do
 			{
-			c = pixmap.xpm[i][j+4];
+			c = pixmap.xpm[i][j + imageCharSize + 3];
 			j++;
 			}
 			while (c != '\0' && c != '\t');
 
-		const JString colorName(pixmap.xpm[i] + 4, j-1);
+		const JString colorName(pixmap.xpm[i] + imageCharSize + 3, j-1);
 		if (JStringCompare(colorName, "none", kJFalse) == 0)
 			{
 			hasMask         = kJTrue;
@@ -715,9 +719,15 @@ JIndex i;
 	for (JCoordinate y=0; y<itsHeight; y++)
 		{
 		JIndex charIndex = 0;
+		JString label;
 		for (JCoordinate x=0; x<itsWidth; x++)
 			{
-			cols[x][y] = charToCTIndex[ (unsigned char) pixmap.xpm[lineIndex][charIndex] ];
+			// Get label and look it up in the map to get the color index
+			label.Set(&pixmap.xpm[lineIndex][charIndex], imageCharSize);
+			unsigned char index = 0;
+			map.GetElement(label, &index);
+			
+			cols[x][y] = index;
 			charIndex += imageCharSize;
 			}
 		lineIndex++;

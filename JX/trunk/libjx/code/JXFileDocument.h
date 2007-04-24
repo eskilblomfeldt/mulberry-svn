@@ -58,6 +58,8 @@ public:
 	void		CheckIfModifiedByOthers();
 	void		RevertIfChangedByOthers(const JBoolean force = kJFalse);
 
+	JBoolean	IsFirstSave() const;
+
 	JBoolean	WillMakeBackupFile() const;
 	void		ShouldMakeBackupFile(const JBoolean wantBackup);
 
@@ -274,6 +276,13 @@ JXFileDocument::Save()
 		}
 
 	return itsSavedFlag;
+}
+
+inline JBoolean
+JXFileDocument::IsFirstSave()
+	const
+{
+	return itsIsFirstSaveFlag;
 }
 
 /******************************************************************************

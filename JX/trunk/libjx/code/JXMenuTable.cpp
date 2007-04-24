@@ -93,7 +93,7 @@ JXMenuTable::JXMenuTable
 	itsHasScrollDownFlag     = kJFalse;
 	itsMouseInScrollDownFlag = kJFalse;
 
-	WantInput(kJTrue, kJTrue, kJTrue);		// we don't have a scrollbar set
+	WantInput(kJTrue, kJTrue, kJTrue, kJTrue);		// we don't have a scrollbar set
 
 	SetDrawOrder(kDrawByRow);
 	SetRowBorderInfo(0, (GetColormap())->GetBlackColor());

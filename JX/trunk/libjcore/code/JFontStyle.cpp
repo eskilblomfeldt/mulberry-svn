@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 JColorIndex JFontStyle::itsDefaultColorIndex = 0;
+JColorIndex JFontStyle::itsDefaultBackColorIndex = 0;
 
 int
 operator==
@@ -28,8 +29,10 @@ operator==
 	return (s1.bold           == s2.bold &&
 			s1.italic         == s2.italic &&
 			s1.underlineCount == s2.underlineCount &&
+			s1.underlineType  == s2.underlineType &&
 			s1.strike         == s2.strike &&
-			s1.color          == s2.color);
+			s1.color          == s2.color &&
+			s1.backcolor      == s2.backcolor);
 }
 
 #define JTemplateType JFontStyle

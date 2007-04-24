@@ -57,6 +57,13 @@ public:
 		kDOSText
 	};
 
+	enum AlignmentType
+	{
+		kAlignLeft,
+		kAlignCenter,
+		kAlignRight
+	};
+
 	enum CmdIndex
 	{
 		kSeparatorCmd = 1,	// always disabled, use if menu separator is separate item
@@ -99,16 +106,17 @@ public:
 		JFontID		id;
 		JSize		size;
 		JFontStyle	style;
+		AlignmentType	align;
 
 		Font()
 			:
-			id(0), size(kJDefaultFontSize), style()
+			id(0), size(kJDefaultFontSize), style(), align(kAlignLeft)
 		{ };
 
 		Font(const JFontID anID, const JSize aSize,
-			 const JFontStyle& aStyle)
+			 const JFontStyle& aStyle, const AlignmentType align = kAlignLeft)
 			:
-			id(anID), size(aSize), style(aStyle)
+			id(anID), size(aSize), style(aStyle), align(kAlignLeft)
 		{ };
 	};
 
@@ -294,9 +302,12 @@ public:
 							 const JColorIndex color, const JBoolean clearUndo);
 	JBoolean	SetFontStyle(const JIndex startIndex, const JIndex endIndex,
 							 const JFontStyle& style, const JBoolean clearUndo);
+	JBoolean	SetFontAlign(const JIndex startIndex, const JIndex endIndex,
+							 const AlignmentType align, const JBoolean clearUndo);
 	void		SetFont(const JIndex startIndex,const JIndex endIndex,
 						const JCharacter* name, const JSize size,
-						const JFontStyle& style, const JBoolean clearUndo);
+						const JFontStyle& style, const AlignmentType align,
+						const JBoolean clearUndo);
 
 	JBoolean	GetCaretLocation(JIndex* charIndex) const;
 	void		SetCaretLocation(const JIndex charIndex);
@@ -315,6 +326,8 @@ public:
 										  const JBoolean partialWord,
 										  const JBoolean dragging, JIndexRange* range);
 
+	JBoolean	GetTextRange(JString* text, JRunArray<Font>* style, const JIndex range_start, const JIndex range_end) const;
+
 	JIndex		GetInsertionIndex() const;
 	JBoolean	IsEntireWord(const JIndex startIndex, const JIndex endIndex) const;
 	JBoolean	IsEntireWord(const JIndexRange& range) const;
@@ -330,39 +343,67 @@ public:
 	const JCharacter*	GetCurrentFontName() const;
 	JSize				GetCurrentFontSize() const;
 	JFontStyle			GetCurrentFontStyle() const;
+	AlignmentType		GetCurrentFontAlign() const;
 	void				GetCurrentFont(JString* name, JSize* size,
-									   JFontStyle* style) const;
+									   JFontStyle* style, AlignmentType* align) const;
 	void				GetCurrentFont(JFontID* id, JSize* size,
-									   JFontStyle* style) const;
+									   JFontStyle* style, AlignmentType* align) const;
 
 	void	SetCurrentFontName(const JCharacter* name);
 	void	SetCurrentFontSize(const JSize size);
 	void	SetCurrentFontBold(const JBoolean bold);
 	void	SetCurrentFontItalic(const JBoolean italic);
 	void	SetCurrentFontUnderline(const JSize count);
+	void	SetCurrentFontUnderlineType(const JFontStyle::EUnderlineType type);
 	void	SetCurrentFontStrike(const JBoolean strike);
 	void	SetCurrentFontColor(const JColorIndex color);
+	void	SetCurrentFontBackColor(const JColorIndex color);
 	void	SetCurrentFontStyle(const JFontStyle& style);
+	void	SetCurrentFontAlign(const AlignmentType align);
 	void	SetCurrentFont(const JCharacter* name, const JSize size,
-						   const JFontStyle& style = JFontStyle());
+						   const JFontStyle& style = JFontStyle(),
+						   const AlignmentType align = kAlignLeft);
 	void	SetCurrentFont(const JFontID id, const JSize size,
-						   const JFontStyle& style = JFontStyle());
+						   const JFontStyle& style = JFontStyle(),
+						   const AlignmentType align = kAlignLeft);
+
+	void	SetRangeFontName(const JIndex startIndex, const JIndex endIndex, const JCharacter* name);
+	void	SetRangeFontSize(const JIndex startIndex, const JIndex endIndex, const JSize size);
+	void	SetRangeFontBold(const JIndex startIndex, const JIndex endIndex, const JBoolean bold);
+	void	SetRangeFontItalic(const JIndex startIndex, const JIndex endIndex, const JBoolean italic);
+	void	SetRangeFontUnderline(const JIndex startIndex, const JIndex endIndex, const JSize count);
+	void	SetRangeFontUnderlineType(const JIndex startIndex, const JIndex endIndex, const JFontStyle::EUnderlineType type);
+	void	SetRangeFontStrike(const JIndex startIndex, const JIndex endIndex, const JBoolean strike);
+	void	SetRangeFontColor(const JIndex startIndex, const JIndex endIndex, const JColorIndex color);
+	void	SetRangeFontColor(const JIndex startIndex, const JIndex endIndex, const JRGB& color);
+	void	SetRangeFontBackColor(const JIndex startIndex, const JIndex endIndex, const JColorIndex color);
+	void	SetRangeFontBackColor(const JIndex startIndex, const JIndex endIndex, const JRGB& color);
+	void	SetRangeFontStyle(const JIndex startIndex, const JIndex endIndex, const JFontStyle& style);
+	void	SetRangeFontAlign(const JIndex startIndex, const JIndex endIndex, const AlignmentType align);
+	void	SetRangeFont(const JIndex startIndex, const JIndex endIndex, const JCharacter* name,
+							const JSize size, const JFontStyle& style, const AlignmentType align = kAlignLeft);
+	void	SetRangeFont(const JIndex startIndex, const JIndex endIndex, const JFontID id,
+							const JSize size, const JFontStyle& style, const AlignmentType align = kAlignLeft);
 
 	const JCharacter*	GetDefaultFontName() const;
 	JSize				GetDefaultFontSize() const;
 	const JFontStyle&	GetDefaultFontStyle() const;
+	AlignmentType		GetDefaultFontAlign() const;
 	void				GetDefaultFont(JString* name, JSize* size,
-									   JFontStyle* style) const;
+									   JFontStyle* style, AlignmentType* align) const;
 	void				GetDefaultFont(JFontID* id, JSize* size,
-									   JFontStyle* style) const;
+									   JFontStyle* style, AlignmentType* align) const;
 
 	void	SetDefaultFontName(const JCharacter* name);
 	void	SetDefaultFontSize(const JSize size);
 	void	SetDefaultFontStyle(const JFontStyle& style);
+	void	SetDefaultFontAlign(const AlignmentType align);
 	void	SetDefaultFont(const JCharacter* name, const JSize size,
-						   const JFontStyle& style = JFontStyle());
+						   const JFontStyle& style = JFontStyle(),
+						   const AlignmentType align = kAlignLeft);
 	void	SetDefaultFont(const JFontID id, const JSize size,
-						   const JFontStyle& style = JFontStyle());
+						   const JFontStyle& style = JFontStyle(),
+						   const AlignmentType align = kAlignLeft);
 
 	JCoordinate	GetDefaultTabWidth() const;
 	void		SetDefaultTabWidth(const JCoordinate width);
@@ -392,6 +433,7 @@ public:
 	JCoordinate	GetLineTop(const JIndex lineIndex) const;
 	JCoordinate	GetLineBottom(const JIndex lineIndex) const;
 	JSize		GetLineHeight(const JIndex lineIndex) const;
+	JCoordinate	GetLineWidth(const JIndex lineIndex) const;
 	JIndex		CRLineIndexToVisualLineIndex(const JIndex crLineIndex) const;
 	JIndex		VisualLineIndexToCRLineIndex(const JIndex visualLineIndex) const;
 
@@ -419,6 +461,7 @@ public:
 	void	DeleteSelection();
 	void	DeleteToStartOfWord();
 	void	DeleteToEndOfWord();
+	void	EditSelectAll();
 	void	SelectAll();
 
 	// internal clipboard
@@ -438,10 +481,12 @@ public:
 	static JBoolean	ContainsIllegalChars(const JString& text);
 	static JBoolean	ContainsIllegalChars(const JCharacter* text, const JSize length);
 	static JBoolean	RemoveIllegalChars(JString* text, JRunArray<Font>* style = NULL);
+	static JBoolean	ReplaceIllegalChars(JString* text, JRunArray<Font>* style = NULL);
 
 	void	Paginate(const JCoordinate pageHeight,
 					 JArray<JCoordinate>* breakpts) const;
-	void	Print(JPagePrinter& p);
+	virtual void	Print(JPagePrinter& p);
+	void	SetPrinting(JBoolean printing);
 
 	JBoolean	CleanRightMargin(const JBoolean coerce, JIndexRange* reformatRange);
 
@@ -468,6 +513,9 @@ public:
 	static JBoolean	WillCopyWhenSelect();
 	static void		ShouldCopyWhenSelect(const JBoolean copy);
 
+	static JBoolean	WillReplaceIllegalChars();
+	static void		ShouldReplaceIllegalChars(const JBoolean replace);
+
 	JCoordinate	TEGetMinPreferredGUIWidth() const;
 
 	JCoordinate	TEGetLeftMarginWidth() const;
@@ -475,9 +523,9 @@ public:
 
 	JColorIndex	GetCaretColor() const;
 	void		SetCaretColor(const JColorIndex color);
-	JColorIndex	GetSelectionColor() const;
+	virtual JColorIndex	GetSelectionColor() const;
 	void		SetSelectionColor(const JColorIndex color);
-	JColorIndex	GetSelectionOutlineColor() const;
+	virtual JColorIndex	GetSelectionOutlineColor() const;
 	void		SetSelectionOutlineColor(const JColorIndex color);
 	JColorIndex	GetDragColor() const;
 	void		SetDragColor(const JColorIndex color);
@@ -664,7 +712,7 @@ protected:
 	JBoolean	GetInternalClipboard(const JString** text,
 									 const JRunArray<Font>** style = NULL) const;
 
-	JBoolean	IsCharacterInWord(const JString& text,
+	virtual JBoolean	IsCharacterInWord(const JString& text,
 								  const JIndex charIndex) const;
 
 	// OK to override, but don't call directly
@@ -684,6 +732,7 @@ protected:
 						const JBoolean clearUndo);
 	Font		GetCurrentFont() const;
 	void		SetCurrentFont(const Font& f);
+	void		SetRangeFont(const JIndex startIndex,const JIndex endIndex, const Font& f);
 	const Font&	GetDefaultFont() const;
 	void		SetDefaultFont(const Font& f);
 	void		SetAllFontNameAndSize(const JCharacter* name, const JSize size,
@@ -758,7 +807,9 @@ private:
 	JBoolean			itsBcastAllTextChangedFlag;	// kJTrue => broadcast TextChanged every time
 	JBoolean			itsIsPrintingFlag;			// kJTrue => stack threads through Print()
 	JBoolean			itsDrawWhitespaceFlag;		// kJTrue => show tabs, spaces, newlines
+	JBoolean			itsDoCopySelectFlag;		// kJTrue => SetSelection() calls Copy()
 	static JBoolean		itsCopyWhenSelectFlag;		// kJTrue => SetSelection() calls Copy()
+	static JBoolean		itsReplaceIllegalChars;		// kJTrue => default for replace instead of remove illegal chars
 
 	const JFontManager*	itsFontMgr;
 	Font				itsDefFont;
@@ -785,6 +836,7 @@ private:
 	JCoordinate					itsDefTabWidth;		// pixels
 	JCoordinate					itsMaxWordWidth;	// pixels -- widest single word; only if word wrap
 	JArray<JIndex>*				itsLineStarts;		// index of first character on each line
+	JArray<JCoordinate>*		itsLineWidths;		// width of each line
 	JRunArray<LineGeometry>*	itsLineGeom;		// geometry of each line
 
 	JBoolean (*itsCharInWordFn)(const JString&, const JIndex);
@@ -881,6 +933,7 @@ private:
 	void				ClearOutdatedUndo();
 	JTEUndoTyping*		GetTypingUndo(JBoolean* isNew);
 	JTEUndoStyle*		GetStyleUndo(JBoolean* isNew);
+	JTEUndoStyle*		GetStyleUndo(JBoolean* isNew, const JIndex range_start, const JIndex range_end);
 	JTEUndoTabShift*	GetTabShiftUndo(JBoolean* isNew);
 
 	JSize	PrivatePaste(const JCharacter* text, const JRunArray<Font>* style);
@@ -1468,18 +1521,27 @@ JTextEditor::GetDefaultFontStyle()
 	return itsDefFont.style;
 }
 
+inline JTextEditor::AlignmentType
+JTextEditor::GetDefaultFontAlign()
+	const
+{
+	return itsDefFont.align;
+}
+
 inline void
 JTextEditor::GetDefaultFont
 	(
-	JFontID*	id,
-	JSize*		size,
-	JFontStyle*	style
+	JFontID*		id,
+	JSize*			size,
+	JFontStyle*		style,
+	AlignmentType*	align
 	)
 	const
 {
 	*id    = itsDefFont.id;
 	*size  = itsDefFont.size;
 	*style = itsDefFont.style;
+	*align = itsDefFont.align;
 }
 
 // protected
@@ -1501,12 +1563,14 @@ JTextEditor::SetDefaultFont
 	(
 	const JCharacter*	name,
 	const JSize			size,
-	const JFontStyle&	style
+	const JFontStyle&	style,
+	const AlignmentType	align
 	)
 {
 	itsDefFont.size  = size;
 	itsDefFont.style = style;
 	SetDefaultFontName(name);	// last, so itsDefFont.id gets set correctly
+	itsDefFont.align = align;
 }
 
 // protected
@@ -1517,7 +1581,7 @@ JTextEditor::SetDefaultFont
 	const Font& f
 	)
 {
-	SetDefaultFont(f.id, f.size, f.style);
+	SetDefaultFont(f.id, f.size, f.style, f.align);
 }
 
 /******************************************************************************
@@ -1653,6 +1717,29 @@ JTextEditor::ShouldCopyWhenSelect
 }
 
 /******************************************************************************
+Replace illegal chars instead of remove them
+
+	This is primarily useful under the X Window System.  It is static
+	because all text should work the same way.
+
+ ******************************************************************************/
+
+inline JBoolean
+JTextEditor::WillReplaceIllegalChars()
+{
+	return itsReplaceIllegalChars;
+}
+
+inline void
+JTextEditor::ShouldReplaceIllegalChars
+	(
+	const JBoolean replace
+	)
+{
+	itsReplaceIllegalChars = replace;
+}
+
+/******************************************************************************
  Drag-And-Drop
 
  ******************************************************************************/
@@ -1671,6 +1758,15 @@ JTextEditor::ShouldAllowDragAndDrop
 	)
 {
 	itsPerformDNDFlag = allow;
+}
+
+inline void
+JTextEditor::SetPrinting
+	(
+	const JBoolean printing
+	)
+{
+	itsIsPrintingFlag = printing;
 }
 
 /******************************************************************************
@@ -1859,6 +1955,23 @@ JTextEditor::GetLineBottom
 	const
 {
 	return (GetLineTop(lineIndex) + GetLineHeight(lineIndex) - 1);
+}
+
+/******************************************************************************
+ GetLineWidth
+
+	Returns the width of the specified line.
+
+ ******************************************************************************/
+
+inline JCoordinate
+JTextEditor::GetLineWidth
+	(
+	const JIndex lineIndex
+	)
+	const
+{
+	return itsLineWidths->GetElement(lineIndex);
 }
 
 /******************************************************************************
@@ -2184,7 +2297,7 @@ operator==
 	const JTextEditor::Font& f2
 	)
 {
-	return (f1.id == f2.id && f1.size == f2.size && f1.style == f2.style);
+	return (f1.id == f2.id && f1.size == f2.size && f1.style == f2.style && f1.align == f2.align);
 }
 
 inline int

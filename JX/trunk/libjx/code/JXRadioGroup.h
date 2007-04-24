@@ -42,7 +42,7 @@ protected:
 	virtual void	Draw(JXWindowPainter& p, const JRect& rect);
 	virtual void	DrawBorder(JXWindowPainter& p, const JRect& frame);
 
-private:
+//private: - modified by CD - we need access to these
 
 	JPtrArray<JXRadioButton>*	itsButtons;
 	JXRadioButton*				itsSelection;

@@ -57,7 +57,7 @@ JXEditTable::JXEditTable
 {
 	itsInputField      = NULL;
 	itsEditMenuHandler = NULL;
-	WantInput(kJTrue, kJTrue);		// tab moves to next column
+	WantInput(kJTrue, kJTrue, kJTrue);		// tab/shift-tab moves to next/previous column
 	SetBackColor(GetFocusColor());	// remain white when input has focus
 }
 
@@ -354,7 +354,8 @@ JXEditTable::GetMin1DVisibleWidth
 			JFontID id;
 			JSize size;
 			JFontStyle style;
-			itsInputField->GetDefaultFont(&id, &size, &style);
+			JTextEditor::AlignmentType align;
+			itsInputField->GetDefaultFont(&id, &size, &style, &align);
 			return kMin1DVisCharCount *
 				(itsInputField->GetFontManager())->GetCharWidth(id, size, style, 'W');
 			}

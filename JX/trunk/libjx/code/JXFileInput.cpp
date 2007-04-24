@@ -61,7 +61,7 @@ JXFileInput::JXFileInput
 	itsRequireExecFlag      = kJFalse;
 	itsExpectURLDropFlag    = kJFalse;
 	SetIsRequired();
-	SetCharacterInWordFunction(IsCharacterInWord);
+	SetCharacterInWordFunction(SIsCharacterInWord);
 	SetDefaultFontName(kFontName);
 	ShouldBroadcastCaretLocationChanged(kJTrue);
 	SetHint(JGetString(kHintID));
@@ -680,12 +680,12 @@ JXFileInput::SaveFile
 }
 
 /******************************************************************************
- IsCharacterInWord (static)
+ SIsCharacterInWord (static)
 
  ******************************************************************************/
 
 JBoolean
-JXFileInput::IsCharacterInWord
+JXFileInput::SIsCharacterInWord
 	(
 	const JString&	text,
 	const JIndex	charIndex

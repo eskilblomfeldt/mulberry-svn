@@ -235,11 +235,11 @@ JXChoosePathDialog::SetObjects
 	ListenTo(&(fileBrowser->GetTableSelection()));
 
     cancelButton->SetShortcuts("^[");
-    itsSelectButton->SetShortcuts("#E");
-    homeButton->SetShortcuts("#H");
-    upButton->SetShortcuts("#U");
-    newDirButton->SetShortcuts("#N");
-    showHiddenCB->SetShortcuts("#S");
+    //itsSelectButton->SetShortcuts("#E");
+    //homeButton->SetShortcuts("#H");
+    //upButton->SetShortcuts("#U");
+    //newDirButton->SetShortcuts("#N");
+    //showHiddenCB->SetShortcuts("#S");
 }
 
 /******************************************************************************

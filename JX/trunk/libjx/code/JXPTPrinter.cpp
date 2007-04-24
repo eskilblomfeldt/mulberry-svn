@@ -262,6 +262,95 @@ JXPTPrinter::Print
 }
 
 /******************************************************************************
+ Print16 (virtual)
+
+******************************************************************************/
+
+void
+JXPTPrinter::Print16
+	(
+	const JCharacter16* text
+	)
+{
+	JString fileName;
+	if (itsDestination == kPrintToPrinter)
+		{
+		if (!(JCreateTempFile(&fileName)).OK())
+			{
+			fileName = JGetRootDirectory();		// force failure below
+			}
+		}
+	else
+		{
+		assert( itsDestination == kPrintToFile );
+		fileName = *itsFileName;
+		}
+
+	ofstream output(fileName);
+	if (output.fail())
+		{
+		if (itsDestination == kPrintToPrinter)
+			{
+			(JGetUserNotification())->ReportError(
+				"Unable to create a temporary file.  "
+				"Please check that the disk is not full.");
+			}
+		else
+			{
+			assert( itsDestination == kPrintToFile );
+			(JGetUserNotification())->ReportError(
+				"Unable to create the file.  Please check that the directory "
+				"is writable and that the disk is not full.");
+			}
+		return;
+		}
+
+	JBoolean success = JPTPrinter::Print16(text, output);
+	if (output.fail())
+		{
+		success = kJFalse;
+		(JGetUserNotification())->ReportError(
+			"An error occurred while trying to print.  "
+			"Please check that the disk is not full.");
+		}
+
+	output.close();
+
+	JBoolean removeFile = kJFalse;
+	if (success && itsDestination == kPrintToPrinter)
+		{
+		const JString sysCmd  = *itsPrintCmd + " " + JPrepArgForExec(fileName);
+		const JSize copyCount = GetCopyCount();
+		for (JIndex i=1; i<=copyCount; i++)
+			{
+			const JError err = JExecute(sysCmd, NULL);
+			if (!err.OK())
+				{
+				err.ReportIfError();
+				break;
+				}
+
+			if (i < copyCount)
+				{
+				JWait(2);
+				}
+			}
+
+		removeFile = kJTrue;
+		}
+	else if (!success)
+		{
+		removeFile = kJTrue;
+		}
+
+	if (removeFile)
+		{
+		const JError err = JRemoveFile(fileName);
+		assert_ok( err );
+		}
+}
+
+/******************************************************************************
  BeginUserPageSetup
 
 	Displays a dialog with page setup information.  We broadcast

@@ -293,9 +293,9 @@ JXChooseFileDialog::SetObjects
 		}
 
     cancelButton->SetShortcuts("^[");
-    homeButton->SetShortcuts("#H");
-    upButton->SetShortcuts("#U");
-    showHiddenCB->SetShortcuts("#S");
+    //homeButton->SetShortcuts("#H");
+    //upButton->SetShortcuts("#U");
+    //showHiddenCB->SetShortcuts("#S");
 
 	// select initial file
 

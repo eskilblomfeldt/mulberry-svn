@@ -143,7 +143,7 @@ JTEStyler::UpdateStyles
 		return;
 		}
 
-	te->GetDefaultFont(&itsDefFontID, &itsFontSize, &itsDefFontStyle);
+	te->GetDefaultFont(&itsDefFontID, &itsFontSize, &itsDefFontStyle, &itsDefFontAlign);
 	itsFontName = te->GetDefaultFontName();
 
 	TokenData tokenData;
@@ -354,7 +354,7 @@ JTEStyler::SetStyle
 			{
 			fid = itsFontMgr->GetFontID(itsFontName, itsFontSize, style);
 			}
-		itsStyles->AppendElements(JTextEditor::Font(fid, itsFontSize, style),
+		itsStyles->AppendElements(JTextEditor::Font(fid, itsFontSize, style, itsDefFontAlign),
 								  range.GetLength());
 		}
 	else if (range.last >= itsCheckRange.first)
@@ -411,6 +411,7 @@ JTEStyler::SetStyle
 				{
 				f.id = itsFontMgr->GetFontID(itsFontName, itsFontSize, style);
 				}
+			f.align  = itsDefFontAlign;
 
 			itsStyles->RemoveNextElements(range.first, range.GetLength(),
 										  &itsTokenRunIndex, &itsTokenFirstInRun);

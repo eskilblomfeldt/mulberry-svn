@@ -39,9 +39,15 @@ using std::ws;
 	// general types
 
 typedef char								JCharacter;
+typedef JCharacter							JCharacter8;
 
 const JCharacter kJCharacterMin				= CHAR_MIN;
 const JCharacter kJCharacterMax				= (JCharacter) CHAR_MAX;	// cast required for VCPP
+
+typedef unsigned short						JCharacter16;
+
+const JCharacter16 kJCharacter16Min			= 0;
+const JCharacter16 kJCharacter16Max			= (JCharacter16) USHRT_MAX;	// cast required for VCPP
 
 typedef long								JInteger;
 
@@ -107,6 +113,7 @@ const JBinIndex kJBinIndexMax				= kJIndexMax;
 
 	// boolean type
 
+#if 0
 enum JBoolean
 {
 	kJFalse = 0,
@@ -117,6 +124,13 @@ const JSize kJBooleanDataStreamLength = sizeof(JCharacter);
 
 istream& operator>>(istream& input, JBoolean& jbool);
 ostream& operator<<(ostream& output, const JBoolean jbool);
+#else
+typedef bool JBoolean;
+const bool kJFalse = false;
+const bool kJTrue = true;
+const bool kFalse = false;
+const bool kTrue = true;
+#endif
 
 inline JBoolean
 JConvertToBoolean

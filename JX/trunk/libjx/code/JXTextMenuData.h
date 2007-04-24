@@ -100,6 +100,10 @@ public:
 						 const JBoolean menuOwnsImage);
 	void		ClearImage(const JIndex index);
 
+	JBoolean	GetImageID(const JIndex index, JIndex* imageID) const;
+	void		SetImageID(const JIndex index, JIndex imageID);
+	void		ClearImageID(const JIndex index);
+
 	JBoolean	GetNMShortcut(const JIndex index, const JString** str) const;
 	void		SetNMShortcut(const JIndex index, const JCharacter* str);
 
@@ -134,13 +138,14 @@ private:
 		JFontStyle	fontStyle;
 		JXImage*	image;				// can be NULL
 		JBoolean	ownsImage;			// kJTrue if we should delete image
+		JIndex		imageID;			// id for icon resource
 		JBoolean	separator;			// kJTrue if item is followed by separator
 
 		TextItemData()
 			:
 			text( NULL ), ulIndex( 0 ), nmShortcut( NULL ),
 			fontID( 0 ), fontSize( 0 ), fontStyle(),
-			image( NULL ), ownsImage( kJTrue ), separator( kJFalse )
+			image( NULL ), ownsImage( kJTrue ), imageID(0), separator( kJFalse )
 		{ };
 
 		TextItemData(JString* str, const JFontID id, const JSize size,
@@ -148,7 +153,7 @@ private:
 			:
 			text( str ), ulIndex( 0 ), nmShortcut( NULL ),
 			fontID( id ), fontSize( size ), fontStyle( style ),
-			image( NULL ), ownsImage( kJTrue ), separator( kJFalse )
+			image( NULL ), ownsImage( kJTrue ), imageID(0), separator( kJFalse )
 		{ };
 	};
 

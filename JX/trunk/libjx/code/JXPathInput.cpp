@@ -62,7 +62,7 @@ JXPathInput::JXPathInput
 	itsRequireWriteFlag     = kJFalse;
 	itsExpectURLDropFlag    = kJFalse;
 	SetIsRequired();
-	SetCharacterInWordFunction(IsCharacterInWord);
+	SetCharacterInWordFunction(SIsCharacterInWord);
 	SetDefaultFontName(kFontName);
 	ShouldBroadcastCaretLocationChanged(kJTrue);
 	SetHint(JGetString(kHintID));
@@ -671,12 +671,12 @@ JXPathInput::ChoosePath
 }
 
 /******************************************************************************
- IsCharacterInWord (static)
+ SIsCharacterInWord (static)
 
  ******************************************************************************/
 
 JBoolean
-JXPathInput::IsCharacterInWord
+JXPathInput::SIsCharacterInWord
 	(
 	const JString&	text,
 	const JIndex	charIndex

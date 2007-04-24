@@ -39,9 +39,9 @@ public:
 	void	ShowVScrollbar();
 	void	HideVScrollbar();
 
-	void	ShowScrollbars(const JBoolean showH, const JBoolean showV);
+	virtual void	ShowScrollbars(const JBoolean showH, const JBoolean showV);
 
-private:
+protected:	// Changed by CD - derived classes need these
 
 	JXWidgetSet*	itsScrollEnclosure;
 	JXScrollbar*	itsHScrollbar;

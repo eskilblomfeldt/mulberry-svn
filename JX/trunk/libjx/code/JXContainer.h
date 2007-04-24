@@ -54,6 +54,7 @@ public:
 	virtual void	Redraw() const = 0;
 	JBoolean		IsVisible() const;
 	void			SetVisible(const JBoolean vis);
+	void			SetVisibleState(const JBoolean vis);
 	JBoolean		WouldBeVisible() const;
 
 	virtual void	Activate();				// must call inherited
@@ -61,6 +62,8 @@ public:
 	JBoolean		IsActive() const;
 	void			SetActive(const JBoolean active);
 	JBoolean		WouldBeActive() const;
+
+	void			SetIgnoreEnclosed(const JBoolean ignore);
 
 	JBoolean		IsDNDSource() const;
 	JBoolean		IsDNDTarget() const;
@@ -71,6 +74,8 @@ public:
 	virtual JPoint	LocalToGlobal(const JCoordinate x, const JCoordinate y) const = 0;
 	JPoint			LocalToGlobal(const JPoint& pt) const;
 	JRect			LocalToGlobal(const JRect& r) const;
+
+	void			SetEnclosure(JXContainer* enclosure);
 
 	virtual void	Place(const JCoordinate enclX, const JCoordinate enclY) = 0;
 	virtual void	Move(const JCoordinate dx, const JCoordinate dy) = 0;
@@ -109,7 +114,7 @@ public:
 	JCursorIndex	GetDefaultCursor() const;
 
 	JBoolean	GetHint(JString* text) const;
-	void		SetHint(const JCharacter* text);
+	void		SetHint(const JCharacter* text, const JRect* rect = NULL);
 	void		ClearHint();
 
 	JBoolean	GetVisibleRectGlobal(const JRect& origRectG,
@@ -131,7 +136,7 @@ protected:
 	JXContainer(JXDisplay* display, JXWindow* window, JXContainer* enclosure);
 
 	void			TurnOnBufferedDrawing();
-	void			DrawAll(JXWindowPainter& p, const JRect& frameG);
+	virtual void	DrawAll(JXWindowPainter& p, const JRect& frameG);
 	virtual void	Draw(JXWindowPainter& p, const JRect& rect) = 0;
 	virtual void	DrawBorder(JXWindowPainter& p, const JRect& frame) = 0;
 	virtual void	DrawBackground(JXWindowPainter& p, const JRect& frame) = 0;
@@ -204,6 +209,7 @@ private:
 	JXWindow*				itsWindow;
 	JXContainer*			itsEnclosure;
 	JPtrArray<JXContainer>*	itsEnclosedObjs;
+	JBoolean				itsIgnoreEnclosedObjs;
 	JBoolean				itsGoingAwayFlag;
 
 	JBoolean	itsActiveFlag;
@@ -213,6 +219,7 @@ private:
 
 	JBoolean	itsIsDNDSourceFlag;
 	JBoolean	itsIsDNDTargetFlag;
+	JBoolean	itsIsDNDFinishFlag;
 
 	// avoids repeated DispatchMouse()
 
@@ -310,6 +317,20 @@ JXContainer::SetVisible
 }
 
 /******************************************************************************
+ SetVisibleState
+
+ ******************************************************************************/
+
+inline void
+JXContainer::SetVisibleState
+	(
+	const JBoolean vis
+	)
+{
+	itsVisibleFlag = vis;
+}
+
+/******************************************************************************
  IsActive
 
  ******************************************************************************/
@@ -340,6 +361,20 @@ JXContainer::SetActive
 		{
 		Deactivate();
 		}
+}
+
+/******************************************************************************
+ SetIgnoreEnclosed
+
+ ******************************************************************************/
+
+inline void
+JXContainer::SetIgnoreEnclosed
+	(
+	const JBoolean ignore
+	)
+{
+	itsIgnoreEnclosedObjs = ignore;
 }
 
 /******************************************************************************

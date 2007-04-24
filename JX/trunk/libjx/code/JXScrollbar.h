@@ -116,7 +116,7 @@ private:
 		kDragThumb
 	};
 
-private:
+protected:		// Changed by CD - need access to these in derived class
 
 	JCoordinate	itsValue;
 	JCoordinate	itsStepSize;

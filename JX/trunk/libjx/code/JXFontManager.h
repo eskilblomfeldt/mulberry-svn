@@ -17,6 +17,9 @@
 #include <JFontManager.h>
 #include <JArray.h>
 #include <X11/Xlib.h>
+#ifdef _J_USE_XFT
+#include <X11/Xft/Xft.h>
+#endif
 
 class JString;
 class JRegex;
@@ -53,10 +56,15 @@ public:
 
 	virtual JSize	GetCharWidth(const JFontID fontID, const JSize size,
 								 const JFontStyle& style, const JCharacter c) const;
+	virtual JSize	GetCharWidth16(const JFontID fontID, const JSize size,
+								 const JFontStyle& style, const JCharacter16 c) const;
 
 	virtual JSize	GetStringWidth(const JFontID fontID, const JSize size,
 								   const JFontStyle& style,
 								   const JCharacter* str, const JSize charCount) const;
+	virtual JSize	GetStringWidth16(const JFontID fontID, const JSize size,
+								   const JFontStyle& style,
+								   const JCharacter16* str, const JSize charCount) const;
 
 	// for X Windows only
 
@@ -64,7 +72,11 @@ public:
 								  JPtrArray<JString>* fontNames,
 								  JSortXFontNamesFn compare = NULL) const;
 	JBoolean		GetFontID(const JCharacter* xFontStr, JFontID* fontID) const;
+#ifdef _J_USE_XFT
+	XftFont*		GetXftFont(const JFontID id) const;
+#else
 	XFontStruct*	GetXFontInfo(const JFontID id) const;
+#endif
 
 private:
 
@@ -73,7 +85,11 @@ private:
 		JString*		name;
 		JSize			size;
 		JFontStyle		style;
+#ifdef _J_USE_XFT
+		XftFont*		xftfont;
+#else
 		XFontStruct*	xfont;
+#endif
 		JBoolean		exact;	// kJTrue => exact match to requested specs
 	};
 
@@ -91,21 +107,62 @@ private:
 						  const JSize size, const JFontStyle& style,
 						  const JCharacter* italicStr, const JBoolean iso) const;
 
+#ifdef _J_USE_XFT
+	XftFont*		GetNewFont(const JCharacter* name, const JCharacter* charSet,
+							   const JSize size, const JFontStyle& style) const;
+	XftFont*		ApproximateFont(const JCharacter* name, const JCharacter* charSet,
+									const JSize size, const JFontStyle& style) const;
+#else
 	XFontStruct*	GetNewFont(const JCharacter* name, const JCharacter* charSet,
 							   const JSize size, const JFontStyle& style) const;
 	XFontStruct*	ApproximateFont(const JCharacter* name, const JCharacter* charSet,
 									const JSize size, const JFontStyle& style) const;
+#endif
 
 	JBoolean	ConvertToXFontName(const JCharacter* origName,
 								   JString* fontName, JString* charSet) const;
 	void		ConvertToPSFontName(JString* name) const;
 
+#ifdef _J_USE_XFT
+	int	IsMonospace(const XftFont& xftfont) const;
+#else
 	int	IsMonospace(const XFontStruct& xfont) const;
+#endif
 
 	// not allowed
 
 	JXFontManager(const JXFontManager& source);
 	const JXFontManager& operator=(const JXFontManager& source);
 };
+
+
+
+/******************************************************************************
+ IsMonospace (private)
+
+ ******************************************************************************/
+
+#ifdef _J_USE_XFT
+inline int
+JXFontManager::IsMonospace
+	(
+	const XftFont& xftfont
+	)
+	const
+{
+	//  Not used by the Xft part of the code
+	return false;
+}
+#else
+inline int
+JXFontManager::IsMonospace
+	(
+	const XFontStruct& xfont
+	)
+	const
+{
+	return (xfont.min_bounds.width == xfont.max_bounds.width);
+}
+#endif
 
 #endif

@@ -381,3 +381,10 @@ JXTable::Receive
 	JXScrollableWidget::Receive(sender, message);
 	JTable::Receive(sender, message);
 }
+
+
+JColorIndex	JXTable::GetSelectionColor() const
+{
+	return GetColormap()->GetDefaultSelectionColor();
+}
+

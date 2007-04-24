@@ -58,6 +58,8 @@ public:
 	const JString&	GetTitle() const;
 	void			SetTitle(const JCharacter* title);
 
+	static void		SetDefaultWMCommand(const JCharacter* cmd);
+
 	JBoolean	Close();
 	CloseAction	GetCloseAction() const;
 	void		SetCloseAction(const CloseAction closeAction);
@@ -107,6 +109,7 @@ public:
 	virtual void	Move(const JCoordinate dx, const JCoordinate dy);
 	virtual void	SetSize(const JCoordinate w, const JCoordinate h);
 	virtual void	AdjustSize(const JCoordinate dw, const JCoordinate dh);
+	void			UpdateFrame();
 	void			CenterOnScreen();
 	void			PlaceAsDialogWindow();
 
@@ -177,7 +180,7 @@ public:
 
 	// called by JXDisplay
 
-	void	Update();
+	virtual void	Update();
 	void	ColormapChanged(JXColormap* colormap);
 	void	DispatchMouse();
 
@@ -346,6 +349,7 @@ private:
 	JPoint		itsDesktopLoc;				// stored separately, since bounds = (0,0,h,w)
 	JRect		itsBounds;
 	JPoint		itsWMFrameLoc;				// upper left of Window Manager border
+	JBoolean	itsUpdating;
 	Region		itsUpdateRegion;
 	JBoolean	itsIsMappedFlag;
 	JBoolean	itsIsIconifiedFlag;
@@ -409,6 +413,9 @@ private:
 	static JBoolean	theWMOffsetInitFlag;
 	static JPoint	theWMOffset;
 
+	// WM_COMMAND global
+	static const JCharacter* theDefaultWMCommand;
+
 private:
 
 	Drawable	PrepareForUpdate();
@@ -436,7 +443,6 @@ private:
 	JBoolean	IsShortcut(const KeySym keySym, const unsigned int state);
 	JBoolean	InstallShortcut(const Shortcut& s);
 
-	void	UpdateFrame();
 	void	UpdateBounds(const JCoordinate w, const JCoordinate h);
 	JPoint	CalcDesktopLocation(const JCoordinate x, const JCoordinate y,
 								const JCoordinate direction) const;
@@ -549,6 +555,15 @@ JXWindow::GetTitle()
 	const
 {
 	return itsTitle;
+}
+
+inline void
+JXWindow::SetDefaultWMCommand
+	(
+	const JCharacter* cmd
+	)
+{
+	theDefaultWMCommand = cmd;
 }
 
 /******************************************************************************

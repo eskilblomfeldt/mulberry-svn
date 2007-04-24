@@ -117,6 +117,7 @@ JXFileDocument::JXFileDocument
 	itsAllocateTitleSpaceFlag     = kJFalse;
 	itsWantBackupFileFlag         = wantBackupFile;
 	itsWantNewBackupEveryOpenFlag = kJTrue;
+	itsIsFirstSaveFlag            = kJTrue;
 	itsAutosaveBeforeCloseFlag    = kJFalse;
 	itsCSF                        = JGetChooseSaveFile();
 	itsNeedSafetySaveFlag         = kJFalse;

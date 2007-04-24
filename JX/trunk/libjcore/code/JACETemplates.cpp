@@ -49,10 +49,14 @@ template class ACE_Svc_Handler<JTemplateType, ACE_SYNCH>;
 template class ACE_Svc_Handler<JTemplateType, ACE_SYNCH>;
 #undef JTemplateType
 
+template class ACE_Task<ACE_MT_SYNCH>;
 template class ACE_Task<ACE_NULL_SYNCH>;
 template class ACE_Message_Queue<ACE_NULL_SYNCH>;
+template class ACE_Message_Queue<ACE_MT_SYNCH>;
 template class ACE_Module<ACE_NULL_SYNCH>;
+template class ACE_Module<ACE_MT_SYNCH>;
 template class ACE_Thru_Task<ACE_NULL_SYNCH>;
+template class ACE_Thru_Task<ACE_MT_SYNCH>;
 
 #define JTemplateType iovec
 #include <JArray.tmpls>

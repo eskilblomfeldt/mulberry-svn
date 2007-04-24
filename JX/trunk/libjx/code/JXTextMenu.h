@@ -109,6 +109,10 @@ public:
 	void		SetItemImage(const JIndex index, const JXPM& data);
 	void		ClearItemImage(const JIndex index);
 
+	JBoolean	GetItemImageID(const JIndex index, JIndex* imageID) const;
+	void		SetItemImageID(const JIndex index, JIndex image);
+	void		ClearItemImageID(const JIndex index);
+
 	JBoolean	GetItemNMShortcut(const JIndex index, JString* str) const;
 	void		SetItemNMShortcut(const JIndex index, const JCharacter* str);
 

@@ -53,6 +53,90 @@ const JCoordinate kDefPreColorBoxHW = 4000;
 
 const JCharacter* JXColormap::kNewColormap = "NewColormap::JXColormap";
 
+enum
+{
+	kBlackColor = 1,
+	kRedColor,
+	kGreenColor,
+	kYellowColor,
+	kBlueColor,
+	kMagentaColor,
+	kCyanColor,
+	kWhiteColor,
+
+	kGray10Color,
+	kGray20Color,
+	kGray30Color,
+	kGray40Color,
+	kGray50Color,
+	kGray60Color,
+	kGray70Color,
+	kGray80Color,
+	kGray90Color,
+
+	kGray25Color,
+	kGray75Color,
+
+	kDarkRedColor,
+	kOrangeColor,
+	kDarkGreenColor,
+	kLightBlueColor,
+	kBrownColor,
+	kPinkColor,
+
+	kDefaultSelectionColor,
+
+	kLastPredefColor = kDefaultSelectionColor,
+
+	// useful aliases
+
+	kDefaultBackColor       = kGray80Color,
+	kDefaultFocusColor      = kWhiteColor,
+	kDefaultSliderBackColor = kGray70Color,
+	kInactiveLabelColor     = kGray60Color,
+	kDefaultSelButtonColor  = kWhiteColor,
+	kDefaultDNDBorderColor  = kBlueColor,
+
+	k3DLightColor = kGray90Color,
+	k3DShadeColor = kGray50Color
+};
+
+static const JRGB kDefColor[] =
+{
+	JRGB(     0,      0,      0),		// black
+	JRGB(0xFFFF,      0,      0),		// red
+	JRGB(     0, 0xFFFF,      0),		// green
+	JRGB(0xFFFF, 0xFFFF,      0),		// yellow
+	JRGB(     0,      0, 0xFFFF),		// blue
+	JRGB(0xFFFF,      0, 0xFFFF),		// magenta
+	JRGB(     0, 0xFFFF, 0xFFFF),		// cyan
+	JRGB(0xFFFF, 0xFFFF, 0xFFFF),		// white
+
+	JRGB(0x1999, 0x1999, 0x1999),		// gray 10
+	JRGB(0x3333, 0x3333, 0x3333),		// gray 20
+	JRGB(0x4CCC, 0x4CCC, 0x4CCC),		// gray 30
+	JRGB(0x6666, 0x6666, 0x6666),		// gray 40
+	JRGB(0x8000, 0x8000, 0x8000),		// gray 50
+	JRGB(0x9999, 0x9999, 0x9999),		// gray 60
+	JRGB(0xB333, 0xB333, 0xB333),		// gray 70
+	JRGB(0xCCCC, 0xCCCC, 0xCCCC),		// gray 80
+	JRGB(0xE666, 0xE666, 0xE666),		// gray 90
+
+	JRGB(0x4000, 0x4000, 0x4000),		// gray 25
+	JRGB(0xC000, 0xC000, 0xC000),		// gray 75
+
+	JRGB(0x9999,      0,      0),		// dark red
+	JRGB(0xFFFF, 0x9999,      0),		// orange
+	JRGB(     0, 0x6666,      0),		// dark green
+	JRGB(     0, 0x9999, 0xFFFF),		// light blue
+	JRGB(0x9999, 0x6666,      0),		// brown
+	JRGB(0xFFFF,      0, 0x9999),		// pink
+
+	JRGB(0x9999, 0xFFFF, 0xFFFF)		// selection hilighting
+};
+
+const JSize kDefColorCount = sizeof(kDefColor)/sizeof(JRGB);
+
 /******************************************************************************
  Constructor function (static)
 
@@ -159,6 +243,10 @@ JXColormap::JXColormap
 	itsXColorListInitFlag    = kJFalse;
 	itsXColorList            = NULL;
 
+#ifdef USE_DYNAMIC_SELECTION
+	itsSelectionColor        = kDefaultSelectionColor;
+#endif
+
 	// check if our visual lets us get an empty colormap
 
 	const long vTemplateMask = VisualIDMask | VisualScreenMask;
@@ -244,90 +332,6 @@ JXColormap::~JXColormap()
 
  ******************************************************************************/
 
-enum
-{
-	kBlackColor = 1,
-	kRedColor,
-	kGreenColor,
-	kYellowColor,
-	kBlueColor,
-	kMagentaColor,
-	kCyanColor,
-	kWhiteColor,
-
-	kGray10Color,
-	kGray20Color,
-	kGray30Color,
-	kGray40Color,
-	kGray50Color,
-	kGray60Color,
-	kGray70Color,
-	kGray80Color,
-	kGray90Color,
-
-	kGray25Color,
-	kGray75Color,
-
-	kDarkRedColor,
-	kOrangeColor,
-	kDarkGreenColor,
-	kLightBlueColor,
-	kBrownColor,
-	kPinkColor,
-
-	kDefaultSelectionColor,
-
-	kLastPredefColor = kDefaultSelectionColor,
-
-	// useful aliases
-
-	kDefaultBackColor       = kGray80Color,
-	kDefaultFocusColor      = kWhiteColor,
-	kDefaultSliderBackColor = kGray70Color,
-	kInactiveLabelColor     = kGray60Color,
-	kDefaultSelButtonColor  = kWhiteColor,
-	kDefaultDNDBorderColor  = kBlueColor,
-
-	k3DLightColor = kGray90Color,
-	k3DShadeColor = kGray50Color
-};
-
-static const JRGB kDefColor[] =
-{
-	JRGB(     0,      0,      0),		// black
-	JRGB(0xFFFF,      0,      0),		// red
-	JRGB(     0, 0xFFFF,      0),		// green
-	JRGB(0xFFFF, 0xFFFF,      0),		// yellow
-	JRGB(     0,      0, 0xFFFF),		// blue
-	JRGB(0xFFFF,      0, 0xFFFF),		// magenta
-	JRGB(     0, 0xFFFF, 0xFFFF),		// cyan
-	JRGB(0xFFFF, 0xFFFF, 0xFFFF),		// white
-
-	JRGB(0x1999, 0x1999, 0x1999),		// gray 10
-	JRGB(0x3333, 0x3333, 0x3333),		// gray 20
-	JRGB(0x4CCC, 0x4CCC, 0x4CCC),		// gray 30
-	JRGB(0x6666, 0x6666, 0x6666),		// gray 40
-	JRGB(0x8000, 0x8000, 0x8000),		// gray 50
-	JRGB(0x9999, 0x9999, 0x9999),		// gray 60
-	JRGB(0xB333, 0xB333, 0xB333),		// gray 70
-	JRGB(0xCCCC, 0xCCCC, 0xCCCC),		// gray 80
-	JRGB(0xE666, 0xE666, 0xE666),		// gray 90
-
-	JRGB(0x4000, 0x4000, 0x4000),		// gray 25
-	JRGB(0xC000, 0xC000, 0xC000),		// gray 75
-
-	JRGB(0x9999,      0,      0),		// dark red
-	JRGB(0xFFFF, 0x9999,      0),		// orange
-	JRGB(     0, 0x6666,      0),		// dark green
-	JRGB(     0, 0x9999, 0xFFFF),		// light blue
-	JRGB(0x9999, 0x6666,      0),		// brown
-	JRGB(0xFFFF,      0, 0x9999),		// pink
-
-	JRGB(0x9999, 0xFFFF, 0xFFFF)		// selection hilighting
-};
-
-const JSize kDefColorCount = sizeof(kDefColor)/sizeof(JRGB);
-
 void
 JXColormap::AllocateDefaultColors()
 {
@@ -350,6 +354,10 @@ JXColormap::AllocateDefaultColors()
 
 		FreeXColorList();
 		}
+
+#ifdef USE_DYNAMIC_SELECTION
+	itsSelectionColor = kDefaultSelectionColor;
+#endif
 }
 
 /******************************************************************************
@@ -582,10 +590,34 @@ JXColormap::GetPinkColor()
 	#undef ColorIndex
 }
 
+#ifdef USE_DYNAMIC_SELECTION
+void JXColormap::SetDefaultSelectionColor(const JRGB& color)
+{
+	// Free existing color
+	if (itsSelectionColor != kDefaultSelectionColor)
+	{
+		DeallocateColor(itsSelectionColor);
+		itsSelectionColor = kDefaultSelectionColor;
+	}
+
+	// Allocate new color if possible
+	JColorIndex colorIndex;
+	if (JColormap::AllocateStaticColor(color, &colorIndex))
+	{
+		itsSelectionColor = colorIndex;
+	}
+}
+#endif
+
 JColorIndex
 JXColormap::GetDefaultSelectionColor()
 	const
 {
+#ifdef USE_DYNAMIC_SELECTION
+	if (itsSelectionColor != kDefaultSelectionColor)
+		return itsSelectionColor;
+#endif
+
 	#define ColorIndex	kDefaultSelectionColor
 	#include <JXGetPreallocColor.th>
 	#undef ColorIndex

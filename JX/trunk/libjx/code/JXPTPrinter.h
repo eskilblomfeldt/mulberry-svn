@@ -38,6 +38,7 @@ public:
 	virtual ~JXPTPrinter();
 
 	virtual void	Print(const JCharacter* text);
+	virtual void	Print16(const JCharacter16* text);
 
 	// saving setup information
 

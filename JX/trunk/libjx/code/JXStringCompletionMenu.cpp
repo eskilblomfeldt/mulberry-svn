@@ -83,7 +83,8 @@ JXStringCompletionMenu::AddString
 			JFontID id;
 			JSize size;
 			JFontStyle style;
-			itsTE->GetDefaultFont(&id, &size, &style);
+			JTextEditor::AlignmentType align;
+			itsTE->GetDefaultFont(&id, &size, &style, &align);
 			SetDefaultFont(id, size, style, kJFalse);
 			}
 

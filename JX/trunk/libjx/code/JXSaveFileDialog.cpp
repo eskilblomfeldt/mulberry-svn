@@ -310,10 +310,10 @@ JXSaveFileDialog::SetObjects
 	ListenTo(itsFileNameInput);
 
     cancelButton->SetShortcuts("^[");
-    homeButton->SetShortcuts("#H");
-    upButton->SetShortcuts("#U");
-    newDirButton->SetShortcuts("#N");
-    showHiddenCB->SetShortcuts("#S");
+    //homeButton->SetShortcuts("#H");
+    //upButton->SetShortcuts("#U");
+    //newDirButton->SetShortcuts("#N");
+    //showHiddenCB->SetShortcuts("#S");
 }
 
 /******************************************************************************

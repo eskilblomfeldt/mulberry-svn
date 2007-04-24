@@ -104,6 +104,18 @@ JXCardFile::InsertCard
 		}
 }
 
+JXWidgetSet*
+JXCardFile::GetCurrentCard()
+{
+	return dynamic_cast<JXWidgetSet*>(itsCards->NthElement(itsCurrCardIndex));
+}
+
+JXWidgetSet*
+JXCardFile::GetCard(const JIndex index)
+{
+	return dynamic_cast<JXWidgetSet*>(itsCards->NthElement(index));
+}
+
 /******************************************************************************
  RemoveCard
 

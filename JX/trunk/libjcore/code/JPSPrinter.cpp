@@ -578,6 +578,56 @@ JPSPrinter::String
 }
 
 /******************************************************************************
+ String16
+
+ ******************************************************************************/
+
+void
+JPSPrinter::String16
+	(
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	JCoordinate ascent, descent;
+	GetLineHeight(&ascent, &descent);
+
+	JCoordinate dx = 0, dy = 0;
+	AlignString16(&dx,&dy, str, width, hAlign, height, vAlign);
+
+	PSString16(GetFontManager(), GetFontID(), GetFontSize(), GetFontStyle(),
+			 ascent, dx,dy, 0, left,top, str);
+}
+
+void
+JPSPrinter::String16
+	(
+	const JFloat		userAngle,
+	const JCoordinate	left,
+	const JCoordinate	top,
+	const JCharacter16*	str,
+	const JCoordinate	width,
+	const HAlignment	hAlign,
+	const JCoordinate	height,
+	const VAlignment	vAlign
+	)
+{
+	JCoordinate ascent, descent;
+	GetLineHeight(&ascent, &descent);
+
+	JCoordinate dx = 0, dy = 0;
+	AlignString16(&dx,&dy, str, width, hAlign, height, vAlign);
+
+	PSString16(GetFontManager(), GetFontID(), GetFontSize(), GetFontStyle(),
+			 ascent, dx,dy, userAngle, left,top, str);
+}
+
+/******************************************************************************
  Point
 
  ******************************************************************************/

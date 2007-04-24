@@ -88,6 +88,10 @@ JXRadioButton::HandleMouseDown
 		itsIsPushedFlag = kJTrue;
 		Redraw();
 		}
+	else if (button == kJXRightButton)
+		{
+		JXWidget::HandleMouseDown(pt, button, clickCount, buttonStates, modifiers);
+		}
 }
 
 /******************************************************************************

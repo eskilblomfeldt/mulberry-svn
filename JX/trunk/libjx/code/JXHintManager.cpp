@@ -25,7 +25,8 @@ const Time kHintWaitDelay = 500;	// milliseconds
 JXHintManager::JXHintManager
 	(
 	JXContainer*		widget,
-	const JCharacter*	text
+	const JCharacter*	text,
+	const JRect*		rect
 	)
 	:
 	itsWidget(widget),
@@ -36,6 +37,9 @@ JXHintManager::JXHintManager
 	itsDirector(NULL)
 {
 	assert( itsWidget != NULL );
+	
+	if (rect)
+		itsHintRect = *rect;
 }
 
 /******************************************************************************
@@ -74,7 +78,10 @@ JXHintManager::HandleMouseHere
 	const JPoint& pt
 	)
 {
-	HandleMouseHere(pt, itsWidget->GetFrameLocal());
+	if (itsHintRect.IsEmpty())
+		HandleMouseHere(pt, itsWidget->GetFrameLocal());
+	else
+		HandleMouseHere(pt, itsHintRect);
 }
 
 void

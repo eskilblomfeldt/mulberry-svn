@@ -89,7 +89,7 @@ public:
 	void	GetColBorderInfo(JCoordinate* lineWidth, JColorIndex* color) const;
 	void	SetColBorderInfo(const JCoordinate lineWidth, const JColorIndex color);
 
-	JColorIndex	GetSelectionColor() const;
+	virtual JColorIndex	GetSelectionColor() const;
 	void		SetSelectionColor(const JColorIndex color);
 
 	JBoolean	GetRowHeader(const JTable** table) const;

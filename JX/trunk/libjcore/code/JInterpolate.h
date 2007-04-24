@@ -75,7 +75,9 @@ JInterpolate::SetMatchResults
 	)
 {
 	itsSource    = source;
+#ifdef PCRE_MAJOR
 	itsRegex     = regex;
+#endif
 	itsMatchList = matchList;
 }
 

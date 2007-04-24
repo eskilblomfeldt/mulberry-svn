@@ -24,6 +24,7 @@
 #include <JXFontManager.h>
 #include <jXUtil.h>
 #include <JMinMax.h>
+#include <JString16.h>
 #include <jMath.h>
 #include <string.h>
 #include <jAssert.h>
@@ -62,6 +63,12 @@ JXGC::JXGC
 	assert( ok );
 	itsDepth = depth;
 
+#ifdef _J_USE_XFT
+	itsXftDrawable = drawable;
+	itsXftDraw = NULL;
+	itsXftFont = NULL;
+#endif
+
 	itsClipRegion = NULL;
 	itsClipPixmap = None;
 
@@ -83,6 +90,11 @@ JXGC::~JXGC()
 {
 	ClearPrivateClipping();
 	XFreeGC(*itsDisplay, itsXGC);
+
+#ifdef _J_USE_XFT
+	if (itsXftDraw != NULL)
+		::XftDrawDestroy(itsXftDraw);
+#endif
 }
 
 /******************************************************************************
@@ -143,6 +155,13 @@ JXGC::SetClipRect
 	itsClipRegion    = JXRectangleRegion(&xrect);
 	itsClipOffset    = JPoint(0,0);
 	XSetClipRectangles(*itsDisplay, itsXGC, 0,0, &xrect, 1, Unsorted);
+
+#ifdef _J_USE_XFT
+	if (itsXftDraw != NULL)
+	{
+		XftDrawSetClip(GetXftDraw(), itsClipRegion);
+	}
+#endif
 }
 
 /******************************************************************************
@@ -169,6 +188,13 @@ JXGC::SetClipRegion
 	values.clip_x_origin = 0;
 	values.clip_y_origin = 0;
 	XChangeGC(*itsDisplay, itsXGC, valueMask, &values);
+
+#ifdef _J_USE_XFT
+	if (itsXftDraw != NULL)
+	{
+		XftDrawSetClip(GetXftDraw(), itsClipRegion);
+	}
+#endif
 }
 
 /******************************************************************************
@@ -278,6 +304,14 @@ JXGC::SetDrawingColor
 			}
 
 		XSetForeground(*itsDisplay, itsXGC, xPixel);
+
+#ifdef _J_USE_XFT
+		JSize r, g, b;
+		itsColormap->GetRGB(color, &r, &g, &b);
+		itsXftColorRGB.red = r;
+		itsXftColorRGB.green = g;
+		itsXftColorRGB.blue = b;
+#endif
 		}
 }
 
@@ -578,8 +612,12 @@ JXGC::SetFont
 		{
 		itsLastFont = id;
 
+#ifdef _J_USE_XFT
+		itsXftFont = (itsDisplay->GetXFontManager())->GetXftFont(id);
+#else
 		XFontStruct* xfont = (itsDisplay->GetXFontManager())->GetXFontInfo(id);
 		XSetFont(*itsDisplay, itsXGC, xfont->fid);
+#endif
 		}
 }
 
@@ -601,6 +639,34 @@ JXGC::DrawString
 	)
 	const
 {
+#ifdef _J_USE_XFT
+	XftDrawChange(GetXftDraw(), drawable);
+
+	XftColor xftColor;
+	XRenderColor xr_color;
+	xr_color.red = itsXftColorRGB.red;
+	xr_color.green = itsXftColorRGB.green;
+	xr_color.blue = itsXftColorRGB.blue;
+	xr_color.alpha = 0xFFFF;
+	XftColorAllocValue(*GetDisplay(), GetDisplay()->GetDefaultVisual(), *GetColormap(), &xr_color, &xftColor);
+
+#ifdef _J_USE_UTF8_STRINGS
+	XftDrawStringUtf8(GetXftDraw(), &xftColor, itsXftFont, origX, y, (FcChar8*) str, ::strlen(str));
+#else
+	XftDrawString8(GetXftDraw(), &xftColor, itsXftFont, origX, y, (FcChar8*) str, ::strlen(str));
+#endif
+
+	XftColorFree(*GetDisplay(), GetDisplay()->GetDefaultVisual(), *GetColormap(), &xftColor);
+#else
+
+#ifdef _J_USE_UTF8_STRINGS
+	// Need to convert utf-8 to iso-8859-1
+	JString16 utf16;
+	utf16.FromUTF8(str);
+	JString iso = utf16.ToASCII();
+	str = iso.GetCString();
+#endif
+
 	const JFontManager* fontMgr = itsDisplay->GetFontManager();
 
 	const JSize length          = strlen(str);
@@ -620,6 +686,68 @@ JXGC::DrawString
 			}
 		offset += count;
 		}
+#endif
+}
+
+/******************************************************************************
+ DrawString16
+
+	If the string is too long to be sent to the server in one chunk,
+	we split it up.
+
+ ******************************************************************************/
+
+void
+JXGC::DrawString16
+	(
+	const Drawable		drawable,
+	const JCoordinate	origX,
+	const JCoordinate	y,
+	const JCharacter16*	str
+	)
+	const
+{
+#ifdef _J_USE_XFT
+	XftDrawChange(GetXftDraw(), drawable);
+
+	XftColor xftColor;
+	XRenderColor xr_color;
+	xr_color.red = itsXftColorRGB.red;
+	xr_color.green = itsXftColorRGB.green;
+	xr_color.blue = itsXftColorRGB.blue;
+	xr_color.alpha = 0xFFFF;
+	XftColorAllocValue(*GetDisplay(), GetDisplay()->GetDefaultVisual(), *GetColormap(), &xr_color, &xftColor);
+
+	unsigned short test = 0x00FF;
+	bool bigE = ((const char*)&test)[0] == 0x00;
+	XftDrawStringUtf16(GetXftDraw(), &xftColor, itsXftFont, origX, y, (FcChar8*) str, bigE ? FcEndianBig : FcEndianLittle, strlen16(str) * sizeof(JCharacter16));
+	
+	XftColorFree(*GetDisplay(), GetDisplay()->GetDefaultVisual(), *GetColormap(), &xftColor);
+#else
+	JString16 utf16(str);
+	JString str_ascii = utf16.ToASCII();
+	const JCharacter* _str = str_ascii.GetCString();
+
+	const JFontManager* fontMgr = itsDisplay->GetFontManager();
+
+	const JSize length          = strlen(_str);
+	const JSize maxStringLength = itsDisplay->GetMaxStringLength();
+
+	JCoordinate x = origX;
+	JSize offset  = 0;
+	while (offset < length)
+		{
+		const JSize count = JMin(length - offset, maxStringLength);
+		XDrawString(*itsDisplay, drawable, itsXGC, x,y, _str + offset, count);
+
+		if (offset + count < length)
+			{
+			x += fontMgr->GetStringWidth(itsLastFont, 0, JFontStyle(),
+										 _str + offset, count);
+			}
+		offset += count;
+		}
+#endif
 }
 
 /******************************************************************************
@@ -667,3 +795,16 @@ JXGC::CopyImage
 	XPutImage(*itsDisplay, dest, itsXGC, const_cast<XImage*>(source),
 			  src_x, src_y, dest_x, dest_y, width, height);
 }
+
+#ifdef _J_USE_XFT
+// will create if not already present
+XftDraw* JXGC::GetXftDraw() const
+{
+	if (itsXftDraw == NULL)
+	{
+		const_cast<JXGC*>(this)->itsXftDraw = ::XftDrawCreate(*GetDisplay(), itsXftDrawable, GetDisplay()->GetDefaultVisual(), *GetColormap());	
+	}
+	
+	return itsXftDraw;
+}
+#endif

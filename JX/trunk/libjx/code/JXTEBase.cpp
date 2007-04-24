@@ -1281,7 +1281,8 @@ JXTEBase::MoveCaretToEdge
 	JFontID id;
 	JSize size;
 	JFontStyle style;
-	GetDefaultFont(&id, &size, &style);
+	AlignmentType align;
+	GetDefaultFont(&id, &size, &style, &align);
 	const JSize h = (3 * (GetFontManager())->GetLineHeight(id, size, style)) / 4;
 
 	JPoint pt;
@@ -2330,7 +2331,7 @@ JXTEBase::HandleEditMenu
 
 	else if (cmd == kSelectAllCmd)
 		{
-		SelectAll();
+		EditSelectAll();
 		}
 
 	else if (cmd == kCleanRightMarginCmd)
@@ -3196,6 +3197,11 @@ JXTEBase::PrintPT()
 	itsPTPrinter->SetFileName(GetPTPrintFileName());
 	itsPTPrinter->BeginUserPrintSetup();
 	ListenTo(itsPTPrinter);
+}
+
+JColorIndex	JXTEBase::GetSelectionColor() const
+{
+	return GetColormap()->GetDefaultSelectionColor();
 }
 
 /******************************************************************************

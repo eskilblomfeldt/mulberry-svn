@@ -16,6 +16,19 @@ J_X11_LIB_DIR := -L/usr/X11R6/lib
 
 # JX_INCLUDE_LIBXPM := yes
 
+# Uncomment these for Xft support
+
+JX_USE_XFT := yes
+J_XFT_LIB := -lXft
+J_USE_XFT := -D_J_USE_XFT
+
+# Uncomment these for utf-8 string drawing
+# This can be used even if Xft is not used, as JX will downgrade
+# utf8 strings to iso-8859-1
+
+JX_USE_UTF8_STRINGS := yes
+J_USE_UTF8_STRINGS := -D_J_USE_UTF8_STRINGS
+
 # This sets the optimization level
 
 J_OPTIMIZE_LEVEL := 0
@@ -51,6 +64,9 @@ J_ARRAY_NEW_OVERRIDABLE := -D_J_ARRAY_NEW_OVERRIDABLE
 # This command is used to strip debugging info but not the symbol table.
 
 J_STRIP_DEBUG := strip -g
+
+# Uncomment this if your system does not support threads
+J_USE_THREADS := yes
 
 # Comment this out if your version of "ar" does not accept the -s option.
 
@@ -88,7 +104,7 @@ CXXFLAGS  = ${J_MAKE_NEEDS_OUTPUT_ARG}
 
 J_GCC_LIBS  := -lstdc++ -lm -lc -ldl
 J_ACE_LIBS  := -L${JX_ROOT}/lib -lACE-${ACE_LIB_VERSION}
-J_X11_LIBS  := -L${JX_ROOT}/lib ${J_X11_LIB_DIR} -lXext -lXpm -lX11
+J_X11_LIBS  := -L${JX_ROOT}/lib ${J_X11_LIB_DIR} -lXext -lXpm -lX11 ${J_XFT_LIB}
 J_MESA_LIBS := -L${JX_ROOT}/lib -lglut -lGLU -lGL
 
 # gzipped libraries to include in RPM

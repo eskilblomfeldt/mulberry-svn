@@ -29,6 +29,7 @@
 #include <JXAssert.h>
 #include <jXEventUtil.h>
 #include <jXGlobals.h>
+#include <jXKeysym.h>
 
 #include <JThisProcess.h>
 #include <ace/Reactor.h>
@@ -81,6 +82,9 @@ JXApplication::JXApplication
 
 	itsIdleTasks = new JPtrArray<JXIdleTask>(JPtrArrayT::kDeleteAll);
 	assert( itsIdleTasks != NULL );
+
+	itsPermanentTasks = new JPtrArray<JXIdleTask>(JPtrArrayT::kDeleteAll);
+	assert( itsPermanentTasks != NULL );
 
 	itsCurrentTime         = 0;
 	itsMaxSleepTime        = 0;
@@ -168,6 +172,7 @@ JXApplication::~JXApplication()
 
 	delete itsIdleTaskStack;
 	delete itsIdleTasks;
+	delete itsPermanentTasks;
 	delete itsUrgentTasks;
 
 	JXDeleteGlobals2();
@@ -519,6 +524,7 @@ JXApplication::HandleOneEvent()
 
 	if (!hasEvents)
 		{
+		PerformPermanentTasks();
 		PerformIdleTasks();
 		itsLastIdleTime = itsCurrentTime;
 		PerformUrgentTasks();
@@ -530,12 +536,14 @@ JXApplication::HandleOneEvent()
 	else if (hasEvents &&
 			 itsCurrentTime - itsLastIdleTime > itsMaxSleepTime)
 		{
+		PerformPermanentTasks();
 		PerformIdleTasks();
 		itsLastIdleTime = itsCurrentTime;
 		PerformUrgentTasks();
 		}
 	else
 		{
+		PerformPermanentTasks();
 		PerformUrgentTasks();
 		}
 }
@@ -597,7 +605,8 @@ JBoolean
 JXApplication::HandleOneEventForWindow
 	(
 	JXWindow*		window,
-	const JBoolean	origAllowSleep
+	const JBoolean	origAllowSleep,
+	const JBoolean do_tasks
 	)
 {
 	const JBoolean origHadBlockingWindowFlag = itsHadBlockingWindowFlag;
@@ -669,10 +678,14 @@ JXApplication::HandleOneEventForWindow
 					}
 				display->HandleEvent(xEvent, itsCurrentTime);
 				}
+#if 0
+			// cd: background event check is now done as part of window event check
+			// to give better update responsiveness when dragging a window
 			else if (XCheckIfEvent(*display, &xEvent, GetNextBkgdEvent, NULL))
 				{
 				display->HandleEvent(xEvent, itsCurrentTime);
 				}
+#endif
 			else if (display == uiDisplay &&
 					 display->GetMouseContainer(&mouseContainer) &&
 					 mouseContainer == window)
@@ -709,33 +722,106 @@ JXApplication::HandleOneEventForWindow
 
 	// Perform idle tasks when we don't receive any events and
 	// during long intervals of "mouse moved".
-
-	if (!windowHasEvents)
-		{
-		PerformIdleTasks();
-		itsLastIdleTime = itsCurrentTime;
-		PerformUrgentTasks();
-		if (allowSleep)
+	if (do_tasks)
+	{
+		if (!windowHasEvents)
 			{
-			JWait(itsMaxSleepTime / 1000.0);
+				PerformPermanentTasks();
+			PerformIdleTasks();
+			itsLastIdleTime = itsCurrentTime;
+			PerformUrgentTasks();
+			if (allowSleep)
+				{
+				JWait(itsMaxSleepTime / 1000.0);
+				}
 			}
-		}
-	else if (windowHasEvents &&
-			 itsCurrentTime - itsLastIdleTime > itsMaxSleepTime)
-		{
-		PerformIdleTasks();
-		itsLastIdleTime = itsCurrentTime;
-		PerformUrgentTasks();
-		}
-	else
-		{
-		PerformUrgentTasks();
-		}
+		else if (windowHasEvents &&
+				 itsCurrentTime - itsLastIdleTime > itsMaxSleepTime)
+			{
+				PerformPermanentTasks();
+			PerformIdleTasks();
+			itsLastIdleTime = itsCurrentTime;
+			PerformUrgentTasks();
+			}
+		else
+			{
+				PerformPermanentTasks();
+			PerformUrgentTasks();
+			}
+	}
 
 	itsHasBlockingWindowFlag = kJFalse;
 	itsHadBlockingWindowFlag = kJTrue;
 
 	return windowHasEvents;
+}
+
+JBoolean
+JXApplication::HandleOneBusyEvent
+	(
+	const JBoolean	origAllowSleep
+	)
+{
+	itsHadBlockingWindowFlag = kJFalse;
+
+	UpdateCurrentTime();
+	JBoolean cancelRequest = kJFalse;
+
+	JPtrArrayIterator<JXDisplay> iter(itsDisplayList);
+	JXDisplay* display;
+	JIndex displayIndex = 0;
+	while (iter.Next(&display))
+		{
+		displayIndex++;
+		itsCurrDisplayIndex = displayIndex;		// itsCurrDisplayIndex might change during event
+		if (XPending(*display) != 0)
+			{
+			// look for update events
+			XEvent xEvent;
+			if (XCheckIfEvent(*display, &xEvent, GetNextBusyEvent, NULL))
+				{
+				display->HandleEvent(xEvent, itsCurrentTime);
+				}
+
+			// discard mouse and keyboard events
+
+			DiscardEventInfo discardInfo(display, NULL);
+			while (XCheckIfEvent(*display, &xEvent, DiscardNextEvent,
+								 reinterpret_cast<char*>(&discardInfo)))
+				{
+				// Look for key press cancel
+				if (xEvent.type == KeyPress)
+					{
+					JCharacter buffer[10];
+					KeySym keySym;
+					JSize charCount =
+						XLookupString(const_cast<XKeyEvent*>(&(xEvent.xkey)), buffer, 10, &keySym, NULL);
+					if (keySym == XK_Escape)
+						{
+						cancelRequest = kJTrue;
+						}
+					}
+				}
+			}
+
+			{
+			// Do display idle but don't allow it to dispatch the mouse
+			// as we are likely to have the busy cursor currently displayed
+			JXWindow* container = NULL;
+			display->GetMouseContainer(&container);
+			display->SetMouseContainer(NULL);
+			display->Idle(itsCurrentTime);
+			display->SetMouseContainer(container);
+			}
+		}
+
+	// Perform permanent & urgent tasks
+	//PerformPermanentTasks();
+	//PerformUrgentTasks();
+
+	itsHadBlockingWindowFlag = kJTrue;
+
+	return cancelRequest;
 }
 
 // static private
@@ -759,7 +845,9 @@ JXApplication::GetNextWindowEvent
 			}
 		}
 
-	return False;
+	// cd: Now checks for a background event to give better response
+	// to update events while dragging a window
+	return GetNextBkgdEvent(display, event, arg);
 }
 
 Bool
@@ -782,6 +870,29 @@ JXApplication::GetNextBkgdEvent
 		event->type == UnmapNotify      ||
 		event->type == SelectionRequest ||
 		event->type == SelectionClear)
+		{
+		return True;
+		}
+	else
+		{
+		return False;
+		}
+}
+
+Bool
+JXApplication::GetNextBusyEvent
+	(
+	Display*	display,
+	XEvent*		event,
+	char*		arg
+	)
+{
+	// Only allow expose (update) events when busy processing
+	// Others, such as configure/resize may cause Xerrors as the busy
+	// processing may happen inside a window update
+
+	if (event->type == MapNotify || event->type == UnmapNotify ||
+		event->type == Expose || event->type == ButtonRelease)
 		{
 		return True;
 		}
@@ -871,15 +982,6 @@ JXApplication::InstallIdleTask
 	if (!itsIdleTasks->Includes(newTask))
 		{
 		itsIdleTasks->Prepend(newTask);
-
-		// Make sure it isn't stored anywhere else, so PopIdleTaskTask()
-		// doesn't have to worry about duplicates when merging lists.
-
-		const JSize count = itsIdleTaskStack->GetElementCount();
-		for (JIndex i=1; i<=count; i++)
-			{
-			(itsIdleTaskStack->NthElement(i))->Remove(newTask);
-			}
 		}
 }
 
@@ -903,6 +1005,44 @@ JXApplication::RemoveIdleTask
 			{
 			(itsIdleTaskStack->NthElement(i))->Remove(task);
 			}
+		}
+}
+
+/******************************************************************************
+ InstallPermanentTask
+
+	We append the task so it will be performed next time if PerformPermanentTasks
+	is executing.  This insures that we will eventually reach the end
+	of the task list.
+
+ ******************************************************************************/
+
+void
+JXApplication::InstallPermanentTask
+	(
+	JXIdleTask* newTask
+	)
+{
+	if (!itsPermanentTasks->Includes(newTask))
+		{
+		itsPermanentTasks->Prepend(newTask);
+		}
+}
+
+/******************************************************************************
+ RemovePermanentTask
+
+ ******************************************************************************/
+
+void
+JXApplication::RemovePermanentTask
+	(
+	JXIdleTask* task
+	)
+{
+	if (!itsIgnoreTaskDeletedFlag)
+		{
+		itsPermanentTasks->Remove(task);
 		}
 }
 
@@ -1015,7 +1155,38 @@ JXApplication::PerformIdleTasks()
 }
 
 /******************************************************************************
- CheckACEReactor (static)
+ PerformPermanentTasks (private)
+
+ ******************************************************************************/
+
+void
+JXApplication::PerformPermanentTasks()
+{
+	itsMaxSleepTime = kMaxSleepTime;
+
+	if (!itsPermanentTasks->IsEmpty())		// avoid constructing iterator
+		{
+		JPtrArrayIterator<JXIdleTask> iter(itsPermanentTasks);
+		JXIdleTask* task;
+		const Time deltaTime = itsCurrentTime - itsLastPermanentTaskTime;
+		while (iter.Next(&task))
+			{
+			Time maxSleepTime = itsMaxSleepTime;
+			task->Perform(deltaTime, &maxSleepTime);
+			if (maxSleepTime < itsMaxSleepTime)
+				{
+				itsMaxSleepTime = maxSleepTime;
+				}
+			}
+		}
+
+	// save time for next call
+
+	itsLastPermanentTaskTime = itsCurrentTime;
+}
+
+/******************************************************************************
+ CheckACEReactor (protected)
 
 	Bumps the ACE reactor to check sockets, signals, etc.
 
