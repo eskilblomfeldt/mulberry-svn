@@ -39,10 +39,14 @@ ifdef J_FORCE_ACE_STATIC
   jxinstall: static
 	@${RM} -r ACE_wrappers/ace/libACE.so ACE_wrappers/ace/.shobj/
 else
+ifdef J_BUILD_BOTH_LIB
+  jxinstall: shared static
+else
 ifdef J_BUILD_SHARED_LIB
   jxinstall: shared
 else
   jxinstall: static
+endif
 endif
 endif
   ifeq ($(shell whoami),root)
