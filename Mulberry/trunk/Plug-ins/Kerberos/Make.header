@@ -1,0 +1,41 @@
+#########################################
+### 
+###      M A K E F I L E
+###
+###
+###
+
+
+
+# compiler flags ------------------------------
+
+include ../include/stl.mak
+
+BIN = .obj
+
+KRBHOME = ${DEV_ROOT}/tools/krb4-1.0.1
+KRBINCS = -I${KRBHOME}/include
+KRBLDFLAGS = -L${KRBHOME}/lib/krb -L${KRBHOME}/lib/des
+KRBLIBS = -lkrb -ldes
+
+CINCS = \
+-I../Common \
+-I../../Sources_Common/Utilities \
+-I./sources \
+ ${KRBINCS}
+ 
+LDFLAGS = -L${DEV_ROOT}/lib -L/usr/X11R6/lib -shared ${KRBLDFLAGS}
+
+LOADLIBES := ${KRBLIBS} ${LOADLIBES} -lresolv
+
+VPATH := sources:\
+		../Common:\
+		../../Sources_Common/Utilities:\
+		../../Sources_Common/Mail/Charsets:\
+		../../Sources_Common/Mail/URLs:\
+		../CRAM-MD5/sources/md5
+		
+$.${BIN}/%.o %.o: %.cp
+	@ echo "    ---- Compiling $< (C++)"
+	 $(CPP) $(CFLAGS) -c -o $@ $<
+
