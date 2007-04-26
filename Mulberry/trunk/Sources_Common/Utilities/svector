@@ -1,0 +1,9 @@
+#if __dest_os != __linux_os
+#ifdef __GNUC__
+#include "svector_gcc40"
+#else
+#include "svector9"
+#endif
+#else
+#include "svector_unx"
+#endif
