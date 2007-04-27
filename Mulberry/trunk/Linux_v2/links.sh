@@ -23,8 +23,7 @@ all_paths="../Sources/Application \
 	    ../../../Libraries/XMLLib/Source"
 
 # clear out old link directory
-\rm -rf Includes
-mkdir Includes
+\rm -rf Includes/*
 cd Includes
 
 # get list of header files
