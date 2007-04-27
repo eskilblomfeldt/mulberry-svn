@@ -4,18 +4,19 @@ include make.local
 include make.version
 
 DEVHOME=/users/dev
-TOP_DIR := ..
+MULBERRY_DIR := ..
 
-APP_DIR := ${TOP_DIR}/Linux_v2
+APP_DIR := ${MULBERRY_DIR}/Linux_v2
 APP_NAME := mulberry
 
-PLUGINS_DIR := ${TOP_DIR}/Plug-ins
+PLUGINS_DIR := ${MULBERRY_DIR}/Plug-ins
 PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
+JX_DIR := ${DEVHOME}/JX
 
 BITS_DIR := ./Bits
 TIMEZONE_DIR := ./Bits/Timezones
-RESOURCES_DIR := ../Sources_Common/Resources
+RESOURCES_DIR := ${MULBERRY_DIR}/Sources_Common/Resources
 LICENSE_FILE := Mulberry_License
 CHANGES_FILE := CHANGES
 CHANGES_FILE_DEV := CHANGES-DEV
@@ -54,41 +55,31 @@ GZIP_FILE := mulberry-${MUL_VERSION}-${ARCHIVE_SUFFIX}.tgz
 TAR_ITEMS := ${APP_NAME} ${LICENSE_FILE} ${HIDDEN_DIR}
 TAR_ITEMS_LIB := ${APP_NAME} ${LICENSE_FILE} ${HIDDEN_DIR} lib
 
-JXDIR := ${DEVHOME}/JX-1.5.4
-ACE_LIB := ${JXDIR}/ACE/ACE_wrappers/ace/libACE.so
-ACE_LIB_RENAME := libACE-5_0_2.so
-JCORE_LIB := ${JXDIR}/libjcore/libjcore-1_5_4.so
-JX_LIB := ${JXDIR}/libjx/libjx-1_5_4.so
+ACE_LIB := ${JX_DIR}/ACE/ACE_wrappers/ace/libACE.so
+ACE_LIB_RENAME := libACE-5_4_7.so
+JCORE_LIB := ${JX_DIR}/libjcore/libjcore-2_5_0.so
+JX_LIB := ${JX_DIR}/libjx/libjx-2_5_0.so
 STL_LIB := ${DEVHOME}/STLport/lib/libstlport_gcc.so
 GCCSTD_LIB := /usr/local/lib/libstdc++.so.2.10.0
 
-# ftp defines
-FTP_DIR := /var/ftp/pub/Mulberry/${MUL_STAGE}v${MUL_VERSION}
-SSH_HOST := darius.cyrusoft.com
-SCP_DEST := daboo@${SSH_HOST}
-MKDIR_CMD := ssh -t ${SSH_HOST} 'if [ ! -d ${FTP_DIR} ]; then mkdir ${FTP_DIR}; fi;'
-SCP_CMD := scp ${RELEASE_DIR}/${GZIP_FILE} ${SCP_DEST}:${FTP_DIR}
-GPG_CMD := ssh -t ${SSH_HOST} 'gpg -b -u mulberry@cyrusoft.com ${FTP_DIR}/${GZIP_FILE};'
-
 # Plugins to build
-BUILD_PLUGINS := CRAM-MD5 DIGEST-MD5 GSSAPI Kerberos NTLM \
+BUILD_PLUGINS := CRAM-MD5 DIGEST-MD5 GSSAPI Kerberos \
 			CommunicatorAdbkIO Eudora4AdbkIO EudoraAdbkIO NetscapeAdbkIO \
 			PineAdbkIO QuickmailAdbkIO vCardAdbkIO \
 			ISpell \
 			GPG SMIME SSL
 
 # Plugins not built
-NO_BUILD_PLUGINS := PSpell PGP QuickmailProAdbkIO Spellswell POPPASSD URLPASSD
+NO_BUILD_PLUGINS := PGP QuickmailProAdbkIO POPPASSD URLPASSD
 
 STATIC_FLAGS := static=1
 NODEBUG_FLAGS := nodebug=1
 
 help:
 	@echo "Targets:"
-	@echo "cvs      - do cvs update of all mulberry files."
-	@echo "           NB does not update new directories."
-	@echo "cvsfull  - do full update of all mulberry files."
-	@echo "           NB Does update new directories."
+	@echo "svnjx    - do SVN update of JX."
+	@echo "jx       - build the JX Libraries."
+	@echo "svn      - do svn update of all mulberry files."
 	@echo ""
 	@echo "static   - build static application package."
 	@echo "staticcw - build static application package without app build"
@@ -98,35 +89,28 @@ help:
 	@echo ""
 	@echo "rpm      - build binary rpm package."
 	@echo ""
-	@echo "upload	- upload to ftp.cyrusoft.com"
-	@echo ""
 
-cvs:
-	@echo "--> Updating ClientLibs"
-	@(cd ../../ClientLibs/Libraries; cvs -q update)
-	@echo "--> Updating Sources_Common"
-	@(cd ../Sources_Common; cvs -q update)
-	@echo "--> Updating Linux_v2"
-	@(cd ../Linux_v2; cvs -q update)
-	@echo "--> Updating Plug-ins"
-	@(cd ../Plug-ins; cvs -q update)
-	@echo "--> Updating Bits"
-	@(cvs -q update make.version)
-	@(cd Bits; cvs -q update)
+svnjx:
+	@echo "--> Updating JX"
+	@(cd ${JX_DIR}; svn update)
 
-cvsfull:
-	@echo "--> Updating ClientLibs"
-	@(cd ../../ClientLibs/Libraries/iCalendar; cvs -q update -d)
-	@(cd ../../ClientLibs/Libraries/XMLLib; cvs -q update -d)
+jx:
+	@echo "--> Building JX"
+	@(cd ${JX_DIR}; ./build)
+
+svn:
+	@echo "--> Updating Libraries"
+	@(cd ${DEV_HOME}/Libraries/CICalendar; svn update)
+	@(cd ${DEV_HOME}/Libraries/XMLLib; svn update)
 	@echo "--> Updating Sources_Common"
-	@(cd ../Sources_Common; cvs -q update -d)
+	@(cd ${MULBERRY_DIR}/Sources_Common; svn update)
 	@echo "--> Updating Linux_v2"
-	@(cd ../Linux_v2; cvs -q update -d)
+	@(cd ${MULBERRY_DIR}/Linux_v2; svn update)
 	@echo "--> Updating Plug-ins"
-	@(cd ../Plug-ins; cvs -q update -d)
+	@(cd ${MULBERRY_DIR}/Plug-ins; svn update)
 	@echo "--> Updating Bits"
-	@(cvs -q update make.version)
-	@(cd Bits; cvs -q update -d)
+	@(svn update make.version)
+	@(cd Bits; svn update)
 
 static: cleanrelease plugins appstatic archivestatic
 staticcw: cleanrelease plugins appstaticcw archivestatic
@@ -274,11 +258,6 @@ rpm:
 	@touch ${RPM_SOURCES_DIR}/mulberry.tar
 	@mkdir ${RPM_BUILD_DIR}
 	@rpm -bb ./mulberry.spec
-
-upload:
-	@(${MKDIR_CMD}; \
-	${SCP_CMD}; \
-	${GPG_CMD})
 
 clean:
 	@rm -rf ${RELEASE_DIR}
