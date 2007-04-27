@@ -1,73 +1,62 @@
-createdirs:
-	mkdir /users/dev
-	mkdir /users/dev/mulberry4
-	mkdir /users/dev/ClientLibs
+DEV_HOME := .
+MULBERRY_HOME := ${DEV_HOME}/Mulberry
+JX_HOME := ${DEV_HOME}/JX
+LIBRARIES_HOME := ${DEV_HOME}/Libraries
 
-initcvs:
-	export CVSROOT=:ext:daboo@cvs.mulberrymail.com:/users/dev/CVSClient
+SVN_ROOT := http://svn.mulberrymail.com
+SVN_MULBERRY := ${SVN_ROOT}/mulberry
+SVN_LIBRARIES := ${SVN_ROOT}/repos
 
-frameworksrc:
-	cd /users/dev
-	cvs checkout STLport
-	cvs checkout ACE_wrappers_v2
-	cvs checkout JX-1.5.4
+jxsrc:
+	svn checkout ${SVN_MULBERRY}/JX/trunk JX
+
+librariessrc:
+	(mkdir ${LIBRARIES_HOME}; \
+	 cd ${LIBRARIES_HOME}; \
+	 svn checkout ${SVN_LIBRARIES}/CICalendar/trunk CICalendar; \
+	 svn checkout ${SVN_LIBRARIES}/XMLLib/trunk XMLLib)
 
 mulberrysrc:
-	cd /users/dev/mulberry
-	cvs checkout Build
-	cvs checkout -r Mulberry_v4 Plug-ins
-	cvs checkout -r Mulberry_v4 Sources_Common
-	cvs checkout -r Mulberry_v4 Linux_v2
-	cd /users/dev/ClientLibs
-	cvs checkout Libraries/iCalendar
-	cvs checkout Libraries/XMLLib
+	svn checkout ${SVN_MULBERRY}/Mulberry/trunk Mulberry
 
 jxinit:
-	cd /users/dev/JX-1.5.4/ACE
-	ln -s ../../ACE_wrappers_v2 ACE_wrappers
-	cd ../lib
-	ln -s ../ACE_wrappers/ace/libACE.a libACE-5_0_2.a
-	ln -s ../ACE_wrappers/ace/libACE.so libACE-5_0_2.so
-	ln -s ../libjcore/libjcore-1.5.4.a libjcore-1.5.4.a
-	ln -s ../libjcore/libjcore-1.5.4.so libjcore-1.5.4.so
-	ln -s ../libjcore/libjx-1.5.4.a libjx-1.5.4.a
-	ln -s ../libjcore/libjx-1.5.4.so libjx-1.5.4.so
-	cd ../include
-	ln -s ../libjcore/code jcore
-	ln -s ../libjx/code jx
+	(cd ${JX_HOME}/include; \
+	 ln -s ../libjcore/code jcore; \
+	 ln -s ../libjx/code jx; \
+	 ln -s ../libjx/image jximage; \
+	 ln -s ../libjx/strings jxstrings)
+	(cd ${JX_HOME}/lib; \
+	 ln -s ../ACE/ACE_wrappers/ace/libACE.so libACE-5_4_7.so; \
+	 ln -s ../ACE/ACE_wrappers/ace/libACE.so.5.4.7 libACE.so.5_4_7; \
+	 ln -s ../libjcore/libjcore-2.5.0.a libjcore-2.5.0.a; \
+	 ln -s ../libjcore/libjcore-2.5.0.so libjcore-2.5.0.so; \
+	 ln -s ../libjcore/libjx-2.5.0.a libjx-2.5.0.a; \
+	 ln -s ../libjcore/libjx-2.5.0.so libjx-2.5.0.so)
+	touch ${JX_HOME}/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
 
 mulberryinit:
-	cd /users/dev/mulberry/Build
-	touch make.local
-	cd /users/dev/mulberry/Sources_Common/Plugins
-	ln -s "Address IO" Address_IO
-	ln -s "Pswd Change" Pswd_Change
-
-buildstl:
-	cd /users/dev/STLport/src
-	make -f xxx release_static release_dynamic
-	cd ../lib
-	ln -s libstlport_gcc.so.4.6 libstlport_gcc.so
+	(cd ${MULBERRY_HOME}/Sources_Common/Plugins; \
+	 ln -s "Address IO" Address_IO; \
+	 ln -s "Pswd Change" Pswd_Change)
 
 buildjx:
-	cd /users/dev/JX-1.5.4
-	./build
+	(cd ${JX_HOME}; \
+	 ./build)
 
 buildmulberry:
-	cd /users/dev/mulberry4/Linux_v2
-	./links.sh
-	makemake
-	make -k
+	(cd ${MULBERRY_HOME}/Linux_v2; \
+	 ./links.sh; \
+	 makemake; \
+	 make static -k)
 
 buildplugins:
-	cd ../Build
-	make plugins
-	make splugins
-	cd ../Plug-ins
-	source installall
+	(cd ${MULBERRY_HOME}/Build; \
+	 make plugins)
+	(cd ${MULBERRY_HOME}/Plug-ins; \
+	 make install)
 
-init: createdirs initcvs frameworksrc mulberrysrc jxinit mulberry init
+init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
 
-build: buildstl buildjx buildmulberry buildplugins
+build: buildjx buildmulberry buildplugins
 
 all: init build
