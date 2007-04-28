@@ -62,16 +62,6 @@ JX_LIB := ${JX_DIR}/libjx/libjx-2_5_0.so
 STL_LIB := ${DEVHOME}/STLport/lib/libstlport_gcc.so
 GCCSTD_LIB := /usr/local/lib/libstdc++.so.2.10.0
 
-# Plugins to build
-BUILD_PLUGINS := CRAM-MD5 DIGEST-MD5 GSSAPI Kerberos \
-			CommunicatorAdbkIO Eudora4AdbkIO EudoraAdbkIO NetscapeAdbkIO \
-			PineAdbkIO QuickmailAdbkIO vCardAdbkIO \
-			ISpell \
-			GPG SMIME SSL
-
-# Plugins not built
-NO_BUILD_PLUGINS := PGP QuickmailProAdbkIO POPPASSD URLPASSD
-
 STATIC_FLAGS := static=1
 NODEBUG_FLAGS := nodebug=1
 
@@ -132,6 +122,7 @@ cleanapp:
 cleanplugins:
 	@echo ""
 	@echo "--> Removing current plugins"
+	@(cd ${PLUGINS_DIR}; ${MAKE} clean)
 	@rm -f ${PLUGINS_DIR}/*/*Plugin.so
 	@rm -f ${PLUGINLIB_DIR}/*.a
 
@@ -146,35 +137,17 @@ cleanrelease:
 	@mkdir ${RESOURCE_RELEASE_DIR}
 	@ln -s ${RELEASE_DIR} ${LINK_DIR}
 
-pluginlib:
-	@echo ""
-	@echo "-->Building PluginLibrary"
-	@(cd ${PLUGINLIB_DIR}; makemake --bin_dir BIN; ${MAKE})
-
-plugins: pluginlib
+plugins:
+	@echo "-->Building Plugins"
 	@rm -rf ${PLUGIN_RELEASE_DIR}; mkdir ${PLUGIN_RELEASE_DIR}
-	@for i in $(BUILD_PLUGINS); do \
-		${MAKE} "PLUGIN=$$i" plugin; \
-	done
-
-pluginsnobuild:
-	@rm -rf ${PLUGIN_RELEASE_DIR}; mkdir ${PLUGIN_RELEASE_DIR}
-	@for i in $(BUILD_PLUGINS); do \
-		${MAKE} "PLUGIN=$$i" pluginnobuild; \
-	done
-
-plugin:
-	@echo ""
-	@echo "-->Building ${PLUGIN}"
-	@(cd ${PLUGINS_DIR}/${PLUGIN}; makemake --bin_dir BIN; ${MAKE})
-	@echo "-->Copying ${PLUGIN}"
-	@cp ${PLUGINS_DIR}/${PLUGIN}/*Plugin.so ${PLUGIN_RELEASE_DIR}
+	@(cd ${PLUGINS_DIR}; ${MAKE} all)
+	@echo "-->Copying Plugins"
+	@cp ${PLUGINS_DIR}/*/*Plugin.so ${PLUGIN_RELEASE_DIR}
 	@strip ${PLUGIN_RELEASE_DIR}/*Plugin.so
 
-pluginnobuild:
-	@echo ""
-	@echo "-->Copying ${PLUGIN}"
-	@cp ${PLUGINS_DIR}/${PLUGIN}/*Plugin.so ${PLUGIN_RELEASE_DIR}
+pluginsnobuild:
+	@echo "-->Copying Plugins"
+	@cp ${PLUGINS_DIR}/*/*Plugin.so ${PLUGIN_RELEASE_DIR}
 	@strip ${PLUGIN_RELEASE_DIR}/*Plugin.so
 
 appstatic:
@@ -262,3 +235,8 @@ rpm:
 clean:
 	@rm -rf ${RELEASE_DIR}
 	@rm -rf ${RPM_DIR}
+
+install:
+	@cp ${RELEASE_DIR}/${GZIP_FILE} ~
+	@(cd ~; tar zxf ${GZIP_FILE}; rm ${GZIP_FILE})
+	

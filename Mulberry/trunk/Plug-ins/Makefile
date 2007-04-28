@@ -1,6 +1,7 @@
 # Makefile for Mulberry Plugin builds
 
 PLUGINS_DIR := ./
+PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
 # Plugins to build
 BUILD_PLUGINS := PluginLibrary CRAM-MD5 DIGEST-MD5 GSSAPI Kerberos \
@@ -30,6 +31,7 @@ cleanall:
 cleanplugins:
 	@echo "--> Removing current plugins"
 	@rm -f ${PLUGINS_DIR}/*/*Plugin.so
+	@rm -f ${PLUGINLIB_DIR}/*.a
 
 plugins:
 	@for i in $(BUILD_PLUGINS); do \
