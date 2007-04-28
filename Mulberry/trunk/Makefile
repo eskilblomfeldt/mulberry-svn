@@ -39,20 +39,19 @@ mulberryinit:
 	(cd ${MULBERRY_HOME}/Sources_Common/Plugins; \
 	 ln -s "Address IO" Address_IO; \
 	 ln -s "Pswd Change" Pswd_Change)
-	(cd ${MULBERRY_HOME}/Linux_v2; \
-	 ./links.sh; \
-	 makemake)
+	(cd ${MULBERRY_HOME}/Linux_v2; ./links.sh; makemake)
 
 buildjx:
-	(cd ${JX_HOME}; \
-	 ./build)
+	(cd ${JX_HOME}; ./build)
 
 buildmulberry:
-	(cd ${MULBERRY_HOME}/Build; \
-	 make static)
+	(cd ${MULBERRY_HOME}/Build; make static)
 
+install:
+	(cd ${MULBERRY_HOME}/Build; make install)
+	
 init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
 
-build: buildjx buildmulberry buildplugins
+build: buildjx buildmulberry
 
-all: init build
+all: init build install
