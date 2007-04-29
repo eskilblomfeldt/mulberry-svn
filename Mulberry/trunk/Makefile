@@ -38,8 +38,14 @@ jxinit:
 mulberryinit:
 	(cd ${MULBERRY_HOME}/Linux; ./links.sh; makemake)
 
+updatejx:
+	(cd ${JX_HOME}; svn update)
+
 buildjx:
 	(cd ${JX_HOME}; ./build)
+
+updatemulberry:
+	(cd ${MULBERRY_HOME}/Build; make svn)
 
 buildmulberry:
 	(cd ${MULBERRY_HOME}/Build; make static)
@@ -51,7 +57,9 @@ init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
 
 build: buildjx buildmulberry
 
-runit: ${MULBERRY_HOME}/Linux
+update: updatejx updatemulberry
+
+runit: ${MULBERRY_HOME}/Linux/mulberry
 
 run: update build runit
 

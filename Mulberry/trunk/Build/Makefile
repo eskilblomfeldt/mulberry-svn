@@ -3,7 +3,7 @@
 include make.local
 include make.version
 
-DEVHOME=/users/dev
+DEVHOME=../..
 MULBERRY_DIR := ..
 
 APP_DIR := ${MULBERRY_DIR}/Linux
@@ -90,8 +90,8 @@ jx:
 
 svn:
 	@echo "--> Updating Libraries"
-	@(cd ${DEV_HOME}/Libraries/CICalendar; svn update)
-	@(cd ${DEV_HOME}/Libraries/XMLLib; svn update)
+	@(cd ${DEVHOME}/Libraries/CICalendar; svn update)
+	@(cd ${DEVHOME}/Libraries/XMLLib; svn update)
 	@echo "--> Updating Sources_Common"
 	@(cd ${MULBERRY_DIR}/Sources_Common; svn update)
 	@echo "--> Updating Linux"
