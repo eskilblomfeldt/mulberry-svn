@@ -1022,13 +1022,13 @@
 .cp CConfigPlugin
 -prefix ../Sources_Common/Plugins/Authentication/
 .cp CAuthPlugin
--prefix ../Sources_Common/Plugins/Address_IO/
+-prefix ../Sources_Common/Plugins/AddressBooks/
 .cp CAdbkIOPlugin
 -prefix ../Sources_Common/Plugins/Security/
 .cp CSecurityPlugin
 -prefix Sources/Plugins/Security/
 .cp CGetPassphraseDialog
--prefix ../Sources_Common/Plugins/Pswd_Change/
+-prefix ../Sources_Common/Plugins/PasswordChange/
 .cp CPswdChangePlugin
 -prefix ../Sources_Common/Plugins/Spelling/
 .cp CSpellPlugin

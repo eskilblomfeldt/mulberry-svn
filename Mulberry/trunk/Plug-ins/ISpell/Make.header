@@ -16,7 +16,7 @@ BIN = .obj
 LOADLIBES := ../PluginLibrary/PluginLib.a ${LOADLIBES}
 
 CINCS = \
--I../../Linux_v2/Sources/Utilities \
+-I../../Linux/Sources/Utilities \
 -I../../Sources_Common/Utilities \
 -I../../Sources_Common/i18n/Charsets \
 -I../Common \

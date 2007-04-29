@@ -6,7 +6,7 @@ include make.version
 DEVHOME=/users/dev
 MULBERRY_DIR := ..
 
-APP_DIR := ${MULBERRY_DIR}/Linux_v2
+APP_DIR := ${MULBERRY_DIR}/Linux
 APP_NAME := mulberry
 
 PLUGINS_DIR := ${MULBERRY_DIR}/Plug-ins
@@ -94,8 +94,8 @@ svn:
 	@(cd ${DEV_HOME}/Libraries/XMLLib; svn update)
 	@echo "--> Updating Sources_Common"
 	@(cd ${MULBERRY_DIR}/Sources_Common; svn update)
-	@echo "--> Updating Linux_v2"
-	@(cd ${MULBERRY_DIR}/Linux_v2; svn update)
+	@echo "--> Updating Linux"
+	@(cd ${MULBERRY_DIR}/Linux; svn update)
 	@echo "--> Updating Plug-ins"
 	@(cd ${MULBERRY_DIR}/Plug-ins; svn update)
 	@echo "--> Updating Bits"

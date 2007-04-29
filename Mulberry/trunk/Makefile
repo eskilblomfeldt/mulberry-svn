@@ -36,10 +36,7 @@ jxinit:
 	touch ${JX_HOME}/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
 
 mulberryinit:
-	(cd ${MULBERRY_HOME}/Sources_Common/Plugins; \
-	 ln -s "Address IO" Address_IO; \
-	 ln -s "Pswd Change" Pswd_Change)
-	(cd ${MULBERRY_HOME}/Linux_v2; ./links.sh; makemake)
+	(cd ${MULBERRY_HOME}/Linux; ./links.sh; makemake)
 
 buildjx:
 	(cd ${JX_HOME}; ./build)
@@ -53,5 +50,9 @@ install:
 init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
 
 build: buildjx buildmulberry
+
+runit: ${MULBERRY_HOME}/Linux
+
+run: update build runit
 
 all: init build install
