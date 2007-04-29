@@ -1,6 +1,6 @@
-%define mulberry_version      3.0.2
-%define BuiltDir             /users/dev/mulberry3/Build
-%define TarDir               /users/dev/mulberry3/Build/obj
+%define mulberry_version      4.0.9b1
+%define BuiltDir             /users/dev/Mulberry/Build
+%define TarDir               /users/dev/Mulberry/Build/obj
 %define _topdir              %BuiltDir/rpmdir
 %define _rpmfilename         %%{NAME}-%%{VERSION}.%%{ARCH}.rpm
 
@@ -10,7 +10,7 @@ Version: %mulberry_version
 Release: 0
 ExclusiveArch: i386
 ExclusiveOS: Linux
-Copyright: Commercial License (with 30-day demo).
+Copyright: Apache 2 License.
 Group: Applications/Internet
 Source0: mulberry.tar
 AutoReqProv: no
@@ -31,7 +31,7 @@ directory services.
 Mulberry is currently available for Macintosh, Win32 and
 various Unix flavors, including Linux and Solaris.
 
-<http://www.cyrusoft.com>
+<http://www.mulberrymail.com>
 
 %prep
 cd $RPM_BUILD_ROOT/SOURCES
