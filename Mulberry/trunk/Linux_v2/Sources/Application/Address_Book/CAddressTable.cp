@@ -858,7 +858,7 @@ bool CAddressTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 			// Copy to global after lock
 			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
 			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long*);
+			pAddr += sizeof(unsigned long);
 			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
 				*pAddr++ = *iter;
 
@@ -901,7 +901,7 @@ bool CAddressTable::DropData(Atom theFlavor, unsigned char* drag_data, unsigned 
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CMessage* theMsg = ((CMessage**) drag_data)[i];
@@ -976,7 +976,7 @@ bool CAddressTable::DropData(Atom theFlavor, unsigned char* drag_data, unsigned 
 	else if (theFlavor == CMulberryApp::sFlavorAddrList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CAddress* theAddr = ((CAddress**) drag_data)[i];
@@ -996,7 +996,7 @@ bool CAddressTable::DropData(Atom theFlavor, unsigned char* drag_data, unsigned 
 	else if (theFlavor == CMulberryApp::sFlavorGrpList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CGroup* theGrp = ((CGroup**) drag_data)[i];

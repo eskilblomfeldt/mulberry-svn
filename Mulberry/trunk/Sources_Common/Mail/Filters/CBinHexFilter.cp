@@ -882,7 +882,7 @@ void CBinHexFilter::InputFileInit()
 		if (mFileStream->GetResourceForkRefNum() != refNum_Undefined)
 			ThrowIfOSErr_(::SetFPos(mFileStream->GetResourceForkRefNum(), fsFromStart, 0L));
 #elif __dest_os == __win32_os || __dest_os == __linux_os
-		// In the beginingÉ
+		// In the begining
 		mFileStream->SeekToBegin();
 #else
 #error __dest_os
@@ -949,15 +949,15 @@ void CBinHexFilter::CreateHeader()
 
 	// Copy type, creator, flags, data & resource fork lengths
 	*((OSType*) p) = htonl('TEXT');
-	p += sizeof(OSType*);
+	p += sizeof(OSType);
 	*((OSType*) p) = htonl('ttxt');
-	p += sizeof(OSType*);
+	p += sizeof(OSType);
 	*((short*) p) = 0;
-	p += sizeof(short*);
+	p += sizeof(short);
 	*((long*) p) = htonl(mFileStream->GetLength());
-	p += sizeof(long*);
+	p += sizeof(long);
 	*((long*) p) = 0;
-	p += sizeof(long*);
+	p += sizeof(long);
 #endif
 	// Update buffer length
 	mBufferLength = p - mBuffer;

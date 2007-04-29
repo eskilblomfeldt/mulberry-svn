@@ -1219,7 +1219,7 @@ bool CGroupTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 			// Copy to global after lock
 			CGroup** pGrp = reinterpret_cast<CGroup**>(data);
 			*((unsigned long*) pGrp) = grps.size();
-			pGrp += sizeof(unsigned long*);
+			pGrp += sizeof(unsigned long);
 			for(CGroupList::iterator iter = grps.begin(); iter != grps.end(); iter++)
 				*pGrp++ = *iter;
 
@@ -1247,7 +1247,7 @@ bool CGroupTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 			// Copy to global after lock
 			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
 			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long*);
+			pAddr += sizeof(unsigned long);
 			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
 				*pAddr++ = *iter;
 
@@ -1287,7 +1287,7 @@ bool CGroupTable::DropData(Atom inFlavor, unsigned char* drag_data, unsigned lon
 	if (inFlavor == CMulberryApp::sFlavorGrpList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		
 		CGroupTableNewAction* add_action = NULL;
 
@@ -1341,7 +1341,7 @@ bool CGroupTable::DropDataIntoCell(Atom theFlavor,
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CMessage* theMsg = ((CMessage**) drag_data)[i];
@@ -1387,7 +1387,7 @@ bool CGroupTable::DropDataIntoCell(Atom theFlavor,
 	else if (theFlavor == CMulberryApp::sFlavorAddrList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CAddress* theAddr = ((CAddress**) drag_data)[i];
@@ -1402,7 +1402,7 @@ bool CGroupTable::DropDataIntoCell(Atom theFlavor,
 	else if (theFlavor == CMulberryApp::sFlavorGrpList)
 	{
 		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long*);
+		drag_data += sizeof(unsigned long);
 		for(unsigned long i = 0; i < count; i++)
 		{
 			CGroup* theGrp = ((CGroup**) drag_data)[i];

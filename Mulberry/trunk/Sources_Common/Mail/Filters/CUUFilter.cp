@@ -143,7 +143,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy the char
 				*((unsigned char*) outBuffer) = *p++;
-				outBuffer += sizeof(unsigned char*);
+				outBuffer += sizeof(unsigned char);
 				mBufferLength--;
 				total++;
 			}
@@ -211,7 +211,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char*);
+				outBuffer += sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mEncodeStatus = eLineBuild;		// switch state if line complete
@@ -236,7 +236,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy the char
 				*((unsigned char*) outBuffer) = *p++;
-				outBuffer += sizeof(unsigned char*);
+				outBuffer += sizeof(unsigned char);
 				mBufferLength--;
 				total++;
 			}
@@ -644,7 +644,7 @@ void CUUFilter::InputFileInit()
 			ThrowIfOSErr_(::SetFPos(mFileStream->GetDataForkRefNum(), fsFromStart, 0L));
 		}
 #elif __dest_os == __win32_os || __dest_os == __linux_os
-		// In the beginingÉ
+		// In the begining
 		mFileStream->SeekToBegin();
 #else
 #error __dest_os

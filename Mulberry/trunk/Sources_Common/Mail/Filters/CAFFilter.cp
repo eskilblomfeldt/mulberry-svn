@@ -1065,13 +1065,13 @@ void CAFFilter::CreateHeader()
 	tm appleRef = {0, 0, 0, 1, 0, 100, 0,0,0};
 	time_t reference = mktime(&appleRef);
 	*((long*) p) = htonl(file_status.st_ctime - reference);
-	p += sizeof(long*);
+	p += sizeof(long);
 	*((long*) p) = htonl(file_status.st_mtime - reference);
-	p += sizeof(long*);
+	p += sizeof(long);
 	*((long*) p) = htonl(cAppleFile_DateUnknown);
-	p += sizeof(long*);
+	p += sizeof(long);
 	*((long*) p) = htonl(cAppleFile_DateUnknown);
-	p += sizeof(long*);
+	p += sizeof(long);
 
 	// Add comment (none for Windows)
 

@@ -625,7 +625,7 @@ bool CAdbkSearchTable::RenderSelectionData(CMulSelectionData* seldata, Atom type
 			// Copy to global after lock
 			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
 			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long*);
+			pAddr += sizeof(unsigned long);
 			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
 				*pAddr++ = *iter;
 			
