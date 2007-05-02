@@ -7,7 +7,7 @@
 
 # compiler flags ------------------------------
 
-DEV_ROOT=/users/dev
+DEV_ROOT=../../..
 
 CPP = g++
 LINKER = ${CPP}
