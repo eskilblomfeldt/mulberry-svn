@@ -12,7 +12,7 @@
 
 #where does stuff live? Note JX_ROOT and ACE_ROOT don't have
 #to be under DEV_ROOT 
-DEV_ROOT=/users/dev
+DEV_ROOT=../..
 JX_ROOT = ${DEV_ROOT}/JX
 ACE_ROOT = ${JX_ROOT}/ACE/ACE_wrappers
 export JXLAYOUTDIR = ${JX_ROOT}/programs/jxlayout
