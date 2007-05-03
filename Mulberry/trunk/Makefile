@@ -59,7 +59,8 @@ build: buildjx buildmulberry
 
 update: updatejx updatemulberry
 
-runit: ${MULBERRY_HOME}/Linux/mulberry
+runit:
+	(cd ${MULBERRY_HOME}/Linux; ./mulberry &)
 
 run: update build runit
 
