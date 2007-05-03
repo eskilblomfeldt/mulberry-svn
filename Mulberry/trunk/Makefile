@@ -45,13 +45,13 @@ buildjx:
 	(cd ${JX_HOME}; ./build)
 
 updatemulberry:
-	(cd ${MULBERRY_HOME}/Build; make svn)
+	(cd ${MULBERRY_HOME}/Build; ${MAKE} svn)
 
 buildmulberry:
-	(cd ${MULBERRY_HOME}/Build; make static)
+	(cd ${MULBERRY_HOME}/Build; ${MAKE} static)
 
 install:
-	(cd ${MULBERRY_HOME}/Build; make install)
+	(cd ${MULBERRY_HOME}/Build; ${MAKE} install)
 	
 init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
 
