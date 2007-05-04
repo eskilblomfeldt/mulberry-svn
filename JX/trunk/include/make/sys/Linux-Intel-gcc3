@@ -21,6 +21,7 @@ J_X11_LIB_DIR := -L/usr/X11R6/lib
 JX_USE_XFT := yes
 J_XFT_LIB := -lXft
 J_USE_XFT := -D_J_USE_XFT
+J_INCLUDE_FREETYPE := ${shell echo `freetype-config --cflags`}
 
 # Uncomment these for utf-8 string drawing
 # This can be used even if Xft is not used, as JX will downgrade

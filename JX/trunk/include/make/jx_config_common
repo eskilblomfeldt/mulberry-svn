@@ -81,7 +81,8 @@ J_COMPILER_DEPEND_FLAGS := \
   ${J_COMPILER_DEPEND_FLAGS_FOR_BISON} ${J_DIE_ON_WARNING}
 
 SEARCHDIRS += -I${JX_ROOT}/include/jximage \
-              ${J_X11_INCLUDE_DIR}
+              ${J_X11_INCLUDE_DIR} \
+              ${J_INCLUDE_FREETYPE}
 
 ifdef ACE_ROOT
   SEARCHDIRS += -I${ACE_ROOT}
