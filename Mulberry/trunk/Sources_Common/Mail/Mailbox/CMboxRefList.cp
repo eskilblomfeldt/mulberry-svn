@@ -33,7 +33,6 @@ CMboxRefList::CMboxRefList(const char* name)
 {
 	mFlags.Set(eHierarchic, false);
 	mFlags.Set(eAdjustDelete);			// Must remove directories with no children
-	set_keep_small(true);				// Allocate memory for each object
 }
 
 // Add mailbox to list

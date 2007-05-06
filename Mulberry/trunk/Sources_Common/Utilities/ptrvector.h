@@ -20,7 +20,7 @@
 #ifndef __PTRVECTOR__MULBERRY__
 #define __PTRVECTOR__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 
 // Classes
 
@@ -28,11 +28,11 @@
 	namespace std {
 #endif
 
-template <class T> class ptrvector : public svector<T*>
+template <class T> class ptrvector : public vector<T*>
 {
 public:
-		typedef typename svector<T*>::iterator           iterator;
-		typedef typename svector<T*>::size_type         size_type;
+		typedef typename vector<T*>::iterator           iterator;
+		typedef typename vector<T*>::size_type         size_type;
 
 		ptrvector() {_delete_data = true;};
 		ptrvector(const ptrvector& copy)
@@ -110,7 +110,7 @@ template <class T> void ptrvector<T>::pop_back()
 {
 	if (_delete_data)
 		delete this->back();
-	svector<T*>::pop_back();
+	vector<T*>::pop_back();
 }
 
 // Delete object as well
@@ -118,7 +118,7 @@ template <class T> typename ptrvector<T>::iterator ptrvector<T>::erase(iterator 
 {
 	if (_delete_data)
 		delete *position;
-	return svector<T*>::erase(position);
+	return vector<T*>::erase(position);
 }
 
 // Delete object as well
@@ -130,7 +130,7 @@ template <class T> typename ptrvector<T>::iterator ptrvector<T>::erase(iterator 
 			delete *iter;
 	}
 
-	return svector<T*>::erase(first, last);
+	return vector<T*>::erase(first, last);
 }
 
 // Delete objects as well

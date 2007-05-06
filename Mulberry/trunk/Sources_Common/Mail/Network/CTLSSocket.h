@@ -72,7 +72,7 @@ protected:
 	bool			mTLSOn;
 	ssl_ctx_st*		m_ctx;
 	ssl_st*			m_tls;
-	svector<int>	mCertErrors;
+	vector<int>		mCertErrors;
 	cdstring		mCertText;
 	cdstring		mCertSubject;
 	cdstring		mCertIssuer;

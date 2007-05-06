@@ -20,12 +20,12 @@
 #ifndef __CBROADCASTER__MULBERRY__
 #define __CBROADCASTER__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 
 using namespace std;
 
 class CListener;
-typedef svector<CListener*> CListenerList;
+typedef vector<CListener*> CListenerList;
 
 class CBroadcaster
 {

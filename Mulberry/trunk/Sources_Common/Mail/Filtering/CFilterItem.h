@@ -30,7 +30,7 @@
 // Classes
 class CFilterItem;
 typedef prefsptrvector<CFilterItem> CFilterItemList;
-typedef svector<CFilterItem*> CFilterItems;
+typedef vector<CFilterItem*> CFilterItems;
 
 class CMbox;
 class char_stream;

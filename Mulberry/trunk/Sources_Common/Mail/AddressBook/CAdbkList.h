@@ -32,6 +32,6 @@ class CAddressBook;
 class cdstring;
 
 typedef ptr_hierarchy<CAddressBook, cdstring> CAdbkList;
-typedef svector<CAddressBook*> CFlatAdbkList;
+typedef vector<CAddressBook*> CFlatAdbkList;
 
 #endif

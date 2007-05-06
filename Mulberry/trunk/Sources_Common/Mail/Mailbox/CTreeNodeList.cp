@@ -37,8 +37,8 @@ typedef bool (*voidCompare)(const void*, const void*);
 void stable_sort (CTreeNodeList::iterator first, CTreeNodeList::iterator last, CompareNodePP comp);
 void stable_sort (CTreeNodeList::iterator first, CTreeNodeList::iterator last, CompareNodePP comp)
 {
-	stable_sort(reinterpret_cast<svector<void*>::iterator>(first),
-					reinterpret_cast<svector<void*>::iterator>(last),
+	stable_sort(reinterpret_cast<vector<void*>::iterator>(first),
+					reinterpret_cast<vector<void*>::iterator>(last),
 					reinterpret_cast<voidCompare>(comp));
 }
 
@@ -47,8 +47,8 @@ CTreeNodeList::iterator upper_bound (CTreeNodeList::iterator first, CTreeNodeLis
 {
 	return
 		reinterpret_cast<CTreeNodeList::iterator>(upper_bound(
-				reinterpret_cast<svector<void*>::iterator>(first),
-				reinterpret_cast<svector<void*>::iterator>(last),
+				reinterpret_cast<vector<void*>::iterator>(first),
+				reinterpret_cast<vector<void*>::iterator>(last),
 				reinterpret_cast<const void*&>(value),
 				reinterpret_cast<voidCompare>(comp)));
 }
@@ -66,8 +66,6 @@ CTreeNodeList::CTreeNodeList()
 
 	// Must not broadcast changes
 	Stop_Broadcasting();
-
-	set_keep_small(true);	// Allocate memory for each object added
 }
 
 // Default constructor
@@ -87,8 +85,6 @@ CTreeNodeList::CTreeNodeList(bool owns_nodes)
 
 	// Must not broadcast changes
 	Stop_Broadcasting();
-
-	set_keep_small(true);	// Allocate memory for each object added
 }
 
 // Default destructor
@@ -103,8 +99,6 @@ CTreeNodeList::~CTreeNodeList()
 // Default constructor
 void CTreeNodeList::InitTreeNodeList()
 {
-	set_keep_small(false);	// Allocate memory in increments of page size
-
 	mFlags.Set(eOwnsNodes | eHierarchic | eVisible);
 
 	mDoDescovery = true;
@@ -190,7 +184,7 @@ CTreeNode* CTreeNodeList::AddNode(CTreeNode* node, iterator pos)
 	}
 
 	// Tweak for memory consumption peformance
-	if (!get_keep_small() && (capacity() == size()))
+	if (capacity() == size())
 	{
 		// Must keep iterator in sync with changes
 		difference_type old_pos = pos - begin();
@@ -969,7 +963,7 @@ size_t CTreeNodeList::AdjustNodeStructure(iterator& iter, cdstring& stack, size_
 			if (stack != previous)
 			{
 				// Tweak for memory consumption peformance
-				if (!get_keep_small() && (capacity() == size()))
+				if (capacity() == size())
 				{
 					// Must keep iterator in sync with changes
 					difference_type old_pos = iter - begin();
@@ -1053,7 +1047,7 @@ size_t CTreeNodeList::AdjustNodeStructure(iterator& iter, cdstring& stack, size_
 				if (stack != previous)
 				{
 					// Tweak for memory consumption peformance
-					if (!get_keep_small() && (capacity() == size()))
+					if (capacity() == size())
 					{
 						// Must keep iterator in sync with changes
 						difference_type old_pos = iter - begin();

@@ -20,7 +20,7 @@
 #ifndef __PVECTOR__MULBERRY__
 #define __PVECTOR__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 #include <iterator>
 
 // Classes
@@ -29,15 +29,15 @@
 	namespace std {
 #endif
 
-template <class T> class pvector : public svector<void*>
+template <class T> class pvector : public vector<void*>
 {
 public:
     typedef          allocator<T>                     allocator_type;
     typedef          T                                value_type;
     typedef typename allocator_type::pointer          pointer;
     typedef typename allocator_type::const_pointer    const_pointer;
-    typedef typename svector<T>::iterator	      	  iterator;
-    typedef typename svector<T>::const_iterator       const_iterator;
+    typedef typename vector<T>::iterator	      	  iterator;
+    typedef typename vector<T>::const_iterator        const_iterator;
     typedef typename allocator_type::reference        reference;
     typedef typename allocator_type::const_reference  const_reference;
     typedef typename allocator_type::size_type        size_type;
@@ -50,13 +50,13 @@ public:
 		~pvector() {};
 
 	iterator begin()
-		{ return *static_cast<iterator*>((void*) &svector<void*>::begin());  }
+		{ return *static_cast<iterator*>((void*) &vector<void*>::begin());  }
 	const_iterator begin() const
-		{ return *static_cast<const_iterator*>((void*) &svector<void*>::begin());;  }
+		{ return *static_cast<const_iterator*>((void*) &vector<void*>::begin());;  }
 	iterator end()
-		{ return *static_cast<iterator*>((void*) &svector<void*>::end());  }
+		{ return *static_cast<iterator*>((void*) &vector<void*>::end());  }
 	const_iterator end() const
-		{ return *static_cast<const_iterator*>((void*) &svector<void*>::end());;  }
+		{ return *static_cast<const_iterator*>((void*) &vector<void*>::end());;  }
 
     reverse_iterator       rbegin () 
       { return  reverse_iterator (end ()); }
@@ -68,9 +68,9 @@ public:
       { return const_reverse_iterator (begin ()); }
 
 	const_reference at(size_type n) const
-		{ return (const_reference) svector<void*>::at(n); }
+		{ return (const_reference) vector<void*>::at(n); }
 	reference at(size_type n)
-		{ return (reference) svector<void*>::at(n); }
+		{ return (reference) vector<void*>::at(n); }
 
 	reference front()
 		{ return *begin(); }
@@ -82,22 +82,22 @@ public:
 		{ return *(end() - 1); }
 
     void push_back(const T& x)
-    	{ svector<void*>::push_back((void*&) x); }
+    	{ vector<void*>::push_back((void*&) x); }
 
     iterator insert(iterator position, const T& x = T ())
-    	{ return  *static_cast<iterator*>((void*) &svector<void*>::insert(*static_cast<svector<void*>::iterator*>((void*) &position), x)); }
+    	{ return  *static_cast<iterator*>((void*) &vector<void*>::insert(*static_cast<svector<void*>::iterator*>((void*) &position), x)); }
     void insert(iterator position, size_type n, const T& x)
-    	{ svector<void*>::insert(*static_cast<svector<void*>::iterator*>((void*) &position), n, x); }
+    	{ vector<void*>::insert(*static_cast<vector<void*>::iterator*>((void*) &position), n, x); }
     void insert(iterator position, 
                   const_iterator first, const_iterator last)
-    	{ svector<void*>::insert(*static_cast<svector<void*>::iterator*>((void*) &position),
-    								*static_cast<svector<void*>::iterator*>((void*) &first),
-    								*static_cast<svector<void*>::iterator*>((void*) &last)); }
+    	{ vector<void*>::insert(*static_cast<vector<void*>::iterator*>((void*) &position),
+    								*static_cast<vector<void*>::iterator*>((void*) &first),
+    								*static_cast<vector<void*>::iterator*>((void*) &last)); }
 
     iterator erase(iterator position)
-    	{ return *static_cast<iterator*>((void*) &svector<void*>::erase(*static_cast<svector<void*>::iterator*>((void*) &position))); }
+    	{ return *static_cast<iterator*>((void*) &vector<void*>::erase(*static_cast<vector<void*>::iterator*>((void*) &position))); }
     iterator erase(iterator first, iterator last)
-    	{ return *static_cast<iterator*>((void*) &svector<void*>::erase(*static_cast<svector<void*>::iterator*>((void*) &first), *static_cast<svector<void*>::iterator*>((void*) &last))); }
+    	{ return *static_cast<iterator*>((void*) &vector<void*>::erase(*static_cast<vector<void*>::iterator*>((void*) &first), *static_cast<vector<void*>::iterator*>((void*) &last))); }
 };
 
 #ifdef MSIPL_USING_NAMESPACE

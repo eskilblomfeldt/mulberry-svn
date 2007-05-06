@@ -512,7 +512,7 @@ const CIdentity* CIdentity::GetInherited(TInheritTest inheritfn) const
 	const CIdentity* inherit = this;
 
 	// Holds the list of identities alread inherited from
-	svector<const CIdentity*> ids;
+	vector<const CIdentity*> ids;
 
 	// Check whether to inherit data
 	while(!(inherit->*inheritfn)())
@@ -524,7 +524,7 @@ const CIdentity* CIdentity::GetInherited(TInheritTest inheritfn) const
 		inherit = &inherit->GetInheritIdentity();
 		
 		// Make sure its not in the current chain (circular inheritance)
-		svector<const CIdentity*>::const_iterator found = ::find(ids.begin(), ids.end(), inherit);
+		vector<const CIdentity*>::const_iterator found = ::find(ids.begin(), ids.end(), inherit);
 		if (found != ids.end())
 			return NULL;
 	}

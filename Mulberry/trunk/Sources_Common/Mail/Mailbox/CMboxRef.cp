@@ -257,6 +257,5 @@ int CWildcardMboxRef::operator==(const CMbox& mbox) const
 // Resolve into all matching mailboxes
 void CWildcardMboxRef::ResolveMbox(CMboxList& mboxes, bool dynamic, bool no_dir) const
 {
-	mboxes.set_keep_small(false);			// Optimised for large # of mailboxes
 	CMailAccountManager::sMailAccountManager->FindWildcard(GetAccountName(), mboxes, dynamic, no_dir);
 }

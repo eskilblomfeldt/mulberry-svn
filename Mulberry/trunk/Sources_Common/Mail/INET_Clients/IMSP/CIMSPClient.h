@@ -24,8 +24,6 @@
 #include "CAdbkClient.h"
 #include "CIMSPCommon.h"
 
-#include "svector.h"
-
 // Others
 enum EIMSPVersion
 {

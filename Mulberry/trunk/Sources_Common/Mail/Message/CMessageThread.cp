@@ -397,8 +397,7 @@ void CMessageThread::ThreadSort(CMessageThread* root, bool do_children)
 	CMessageThread* child;
 
 	// sort the grandchildren
-	svector<CMessageThread*> list;
-	list.set_keep_small(false);	// Better performance
+	vector<CMessageThread*> list;
 	child = root->mChild;
 	while(child)
 	{
@@ -416,7 +415,7 @@ void CMessageThread::ThreadSort(CMessageThread* root, bool do_children)
 		::sort(list.begin(), list.end(), thread_sort_comp);
 
 		child = root->mChild = list.front();
-		for(svector<CMessageThread*>::iterator iter = list.begin() + 1; iter != list.end(); iter++)
+		for(vector<CMessageThread*>::iterator iter = list.begin() + 1; iter != list.end(); iter++)
 		{
 			child->mNext = *iter;
 			child = child->mNext;
@@ -630,7 +629,6 @@ void CMessageThread::ExplodeReferencesHeader(const cdstring& hdr, cdstrvect& res
 	cdstring temp(hdr);
 	char* p = temp.c_str_mod();
 
-	results.set_keep_small(false);	// Better performance
 	results.reserve(20);
 
 	while(*p)

@@ -23,8 +23,6 @@
 #include "COptionsClient.h"
 #include "CAdbkClient.h"
 
-#include "svector.h"
-
 // Others
 enum EACAPVersion
 {

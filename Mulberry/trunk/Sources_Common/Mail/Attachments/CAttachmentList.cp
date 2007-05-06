@@ -24,7 +24,6 @@
 // Default constructor
 CAttachmentList::CAttachmentList()
 {
-	set_keep_small(true);	// Allocate memory in increments of one
 }
 
 // Copy constructor

@@ -41,11 +41,10 @@
 #include "C3PaneOptions.h"
 
 #include "cdstring.h"
-#include "svector.h"
 #include "templs.h"
 
 // Types
-typedef svector<RGBColor> CColourList;
+typedef vector<RGBColor> CColourList;
 
 // Consts
 

@@ -22,7 +22,7 @@
 #include "CContextMenu.h"
 #include "CCommander.h"
 
-#include <vector>
+#include "vector.h"
 
 #include "CICalendarPeriod.h"
 #include "CICalendarVEvent.h"

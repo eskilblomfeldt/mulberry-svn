@@ -49,7 +49,6 @@
 #endif
 
 #include "cdstring.h"
-#include "svector.h"
 
 // Typedefs
 
@@ -330,6 +329,6 @@ private:
 	CPlugin* mPlugin;
 };
 
-typedef svector<CPlugin*> CPluginList;
+typedef vector<CPlugin*> CPluginList;
 
 #endif

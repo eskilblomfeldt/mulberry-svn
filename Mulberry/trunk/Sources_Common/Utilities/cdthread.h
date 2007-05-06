@@ -21,7 +21,7 @@
 #define __CDTHREAD__MULBERRY__
 
 #include "cdmutex.h"
-#include "svector.h"
+#include "vector.h"
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 class LThread;
@@ -104,6 +104,6 @@ private:
 		{ mThread = 0L; }
 };
 
-typedef svector<cdthread*> cdthreadvect;
+typedef vector<cdthread*> cdthreadvect;
 
 #endif

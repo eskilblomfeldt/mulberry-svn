@@ -20,7 +20,7 @@
 #ifndef __CMBOXFWD__MULBERRY__
 #define __CMBOXFWD__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 
 namespace NMbox
 {
@@ -71,6 +71,6 @@ namespace NMbox
 	};
 }
 
-typedef svector<pair<unsigned long, unsigned long> > threadvector;
+typedef vector<pair<unsigned long, unsigned long> > threadvector;
 
 #endif

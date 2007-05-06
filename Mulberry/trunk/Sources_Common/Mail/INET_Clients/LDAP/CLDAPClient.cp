@@ -802,7 +802,7 @@ int CLDAPClient::Verify(int ok, X509_STORE_CTX *ctx)
 void CLDAPClient::AddCertError(int err)
 {
 	// Add to list if unique
-	svector<int>::const_iterator found = ::find(mCertErrors.begin(), mCertErrors.end(), err);
+	vector<int>::const_iterator found = ::find(mCertErrors.begin(), mCertErrors.end(), err);
 	if (found == mCertErrors.end())
 		mCertErrors.push_back(err);
 }

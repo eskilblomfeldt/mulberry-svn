@@ -26,7 +26,7 @@
 #include "CMessageWindow.h"
 #include <JColorList.h>
 #include <set>
-#include "svector.h"
+#include "vector.h"
 
 // Classes
 class CKeyModifiers;

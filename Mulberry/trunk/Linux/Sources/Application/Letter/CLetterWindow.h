@@ -83,7 +83,7 @@ class CLetterWindow : public CFileDocument,
 	};
 
 public:
-	typedef svector<CLetterWindow*>	CLetterWindowList;
+	typedef vector<CLetterWindow*>	CLetterWindowList;
 	static cdmutexprotect<CLetterWindowList> sLetterWindows;				// List of windows (protected for multi-thread access)
 
 	CLetterWindow(JXDirector* owner);

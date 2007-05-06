@@ -20,14 +20,14 @@
 #ifndef __TEMPLS__MULBERRY__
 #define __TEMPLS__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 
 #include <map>
 #include <set>
 
-typedef svector<bool> boolvector;
-typedef svector<long> lvector;
-typedef svector<unsigned long> ulvector;
+typedef vector<bool> boolvector;
+typedef vector<long> lvector;
+typedef vector<unsigned long> ulvector;
 typedef map<unsigned long, unsigned long> ulmap;
 typedef multimap<unsigned long, unsigned long> ulmultimap;
 typedef set<unsigned long> ulset;

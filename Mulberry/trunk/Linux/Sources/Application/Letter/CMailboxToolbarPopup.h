@@ -56,7 +56,7 @@ public:
 						{ return mMissingName.c_str(); }
 
 private:
-	typedef svector<CMailboxToolbarPopup*> CMailboxToolbarPopupList;
+	typedef vector<CMailboxToolbarPopup*> CMailboxToolbarPopupList;
 	static CMailboxToolbarPopupList	sMailboxToolbarPopupMenus;
 
 	bool			mCopyTo;											// Copy to or append to?

@@ -31,7 +31,7 @@ class JXTextButton;
 
 class CCalendarPopup;
 class CNewComponentPanel;
-typedef svector<CNewComponentPanel*> CNewComponentPanelList;
+typedef vector<CNewComponentPanel*> CNewComponentPanelList;
 
 // ===========================================================================
 //	CNewEventDialog

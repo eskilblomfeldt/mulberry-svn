@@ -22,7 +22,7 @@
 
 #include "cdmutex.h"
 #include "cdstring.h"
-#include "svector.h"
+#include "vector.h"
 #include <time.h>
 
 #include "CMailControl.h"
@@ -55,8 +55,8 @@ typedef unsigned short tcp_port;
 typedef unsigned long ip_addr;
 
 class CTCPSocket;
-typedef svector<CTCPSocket*> CTCPSocketList;
-typedef svector<ip_addr> CTCPAddrList;
+typedef vector<CTCPSocket*> CTCPSocketList;
+typedef vector<ip_addr> CTCPAddrList;
 
 class CTCPSocket
 {

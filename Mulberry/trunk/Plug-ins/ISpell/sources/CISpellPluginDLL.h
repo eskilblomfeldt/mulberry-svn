@@ -155,7 +155,7 @@ private:
 	int				mSelectionAdjust;
 	cdstring		mLastCheck;
 
-	svector<CErrorDetails> mErrorList;
+	vector<CErrorDetails> mErrorList;
 	cdstring mErrorWord;
 	cdstrmap mSuggestions;
 	unsigned long mErrorIndex;

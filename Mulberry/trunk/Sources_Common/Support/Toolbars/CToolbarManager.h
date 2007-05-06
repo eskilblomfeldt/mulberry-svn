@@ -179,7 +179,7 @@ private:
 	CToolbarItem::CToolbarPtrItems	mCurrentCommands[eLastToolbar];
 	
 	typedef CScreenDimensions<cdstring> CScreenToolbars;
-	typedef svector<CScreenToolbars> CScreenToolbarList;
+	typedef vector<CScreenToolbars> CScreenToolbarList;
 	
 	CScreenToolbarList				mScreenToolbars;
 	

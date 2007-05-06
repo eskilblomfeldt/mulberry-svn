@@ -550,7 +550,7 @@ time_t GetDefinitiveFileTime(time_t time, const char* fpath)
 		// for daylight savings
 
 		typedef pair<cdstring, bool> TFileSystemTimeUTC;
-		typedef svector<TFileSystemTimeUTC> CFileSystemTimeUTCArray;
+		typedef vector<TFileSystemTimeUTC> CFileSystemTimeUTCArray;
 		static CFileSystemTimeUTCArray sFileSystemTimeUTC;
 
 		// Check on daylight savings

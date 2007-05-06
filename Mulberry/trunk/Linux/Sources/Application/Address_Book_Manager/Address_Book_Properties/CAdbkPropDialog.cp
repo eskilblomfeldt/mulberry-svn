@@ -170,7 +170,7 @@ void CAdbkPropDialog::SetAdbkList(CFlatAdbkList* adbk_list)
 		mAccessBtn->Deactivate();
 
 	// Give list to each panel
-	for(svector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 		static_cast<CAdbkPropPanel*>(*iter)->SetAdbkList(mAdbkList);
 
 	// Initial panel

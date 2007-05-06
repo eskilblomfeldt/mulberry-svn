@@ -28,7 +28,6 @@
 
 #include "cdstring.h"
 #include "templs.h"
-#include "svector.h"
 #include <JBroadcaster.h>
 #include <jColor.h>
 
@@ -117,7 +116,7 @@ protected:
 			{ return mType & eServerBrowseIndex; }
 	};
 
-	typedef svector<SServerBrowseData> CServerNodeArray;
+	typedef vector<SServerBrowseData> CServerNodeArray;
 
 	CMboxProtocol*		mServer;					// Mail server associated with this window
 	CServerNodeArray	mData;						// data

@@ -33,7 +33,7 @@ class JXTextButton;
 class CCalendarPopup;
 class CDateTimeZoneSelect;
 class CNewComponentPanel;
-typedef svector<CNewComponentPanel*> CNewComponentPanelList;
+typedef vector<CNewComponentPanel*> CNewComponentPanelList;
 
 // ===========================================================================
 //	CNewToDoDialog

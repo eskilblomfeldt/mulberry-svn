@@ -38,7 +38,7 @@ class CSplitterView;
 class CMailboxWindow : public CTableViewWindow
 {
 public:
-	typedef svector<CMailboxWindow*>	CMailboxWindowList;
+	typedef vector<CMailboxWindow*>	CMailboxWindowList;
 	static cdmutexprotect<CMailboxWindowList> sMboxWindows;	// List of windows (protected for multi-thread access)
 
 	CMailboxWindow(JXDirector* supervisor);

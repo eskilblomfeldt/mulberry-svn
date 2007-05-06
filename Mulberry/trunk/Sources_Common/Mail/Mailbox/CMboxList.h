@@ -81,6 +81,6 @@ private:
 
 };
 
-typedef svector<CMboxList*> CHierarchies;
+typedef vector<CMboxList*> CHierarchies;
 
 #endif

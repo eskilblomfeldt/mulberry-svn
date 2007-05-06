@@ -39,7 +39,7 @@
 // Consts
 
 // Types
-typedef svector<CMboxList*> CHierarchies;
+typedef vector<CMboxList*> CHierarchies;
 
 // Classes
 class CACL;

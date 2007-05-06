@@ -30,8 +30,8 @@ typedef bool (*voidCompare)(const void*, const void*);
 void stable_sort (CGroupList::iterator first, CGroupList::iterator last, GroupCompare comp);
 void stable_sort (CGroupList::iterator first, CGroupList::iterator last, GroupCompare comp)
 {
-	stable_sort(reinterpret_cast<svector<void*>::iterator>(first),
-			reinterpret_cast<svector<void*>::iterator>(last),
+	stable_sort(reinterpret_cast<vector<void*>::iterator>(first),
+			reinterpret_cast<vector<void*>::iterator>(last),
 			reinterpret_cast<voidCompare>(comp));
 }
 
@@ -40,8 +40,8 @@ CGroupList::iterator lower_bound (CGroupList::iterator first, CGroupList::iterat
 {
 	return
 		reinterpret_cast<CGroupList::iterator>(lower_bound(
-				reinterpret_cast<svector<void*>::iterator>(first),
-				reinterpret_cast<svector<void*>::iterator>(last),
+				reinterpret_cast<vector<void*>::iterator>(first),
+				reinterpret_cast<vector<void*>::iterator>(last),
 				reinterpret_cast<const void*>(value),
 				reinterpret_cast<voidCompare>(comp)));
 }
@@ -51,8 +51,8 @@ CGroupList::const_iterator lower_bound (CGroupList::const_iterator first, CGroup
 {
 	return
 		reinterpret_cast<CGroupList::const_iterator>(lower_bound(
-				reinterpret_cast<svector<void*>::const_iterator>(first),
-				reinterpret_cast<svector<void*>::const_iterator>(last),
+				reinterpret_cast<vector<void*>::const_iterator>(first),
+				reinterpret_cast<vector<void*>::const_iterator>(last),
 				reinterpret_cast<const void*>(value),
 				reinterpret_cast<voidCompare>(comp)));
 }
@@ -91,8 +91,6 @@ CGroupList::~CGroupList()
 
 void CGroupList::InitGroupList(unsigned long capacity)
 {
-	set_keep_small(true);	// Allocate memory in increments of one
-
 	if (capacity)
 		reserve(capacity);
 
@@ -174,7 +172,7 @@ unsigned long CGroupList::FetchInsertIndexOf(const CGroup* grp) const
 void CGroupList::clear_without_delete()
 {
 	// Do inherited erase
-	svector<CGroup*>::erase(begin(), end());
+	vector<CGroup*>::erase(begin(), end());
 }
 
 // Remove matching group (without deleting it)
@@ -195,6 +193,6 @@ void CGroupList::RemoveGroup(CGroup* grp)
 
 	CGroupList::iterator found = ::find(begin(), end(), grp);
 	if (found != end())
-		svector<CGroup*>::erase(found);
+		vector<CGroup*>::erase(found);
 }
 

@@ -22,13 +22,13 @@
 
 #include <JXWidgetSet.h>
 
-#include "svector.h"
+#include "vector.h"
 
 // Constants
 
 // Classes
 class CCriteriaBase;
-typedef svector<CCriteriaBase*> CCriteriaBaseList;
+typedef vector<CCriteriaBase*> CCriteriaBaseList;
 class JXMultiImageButton;
 
 class CCriteriaBase : public JXWidgetSet

@@ -21,7 +21,6 @@
 #define __CGROUPTABLE__MULBERRY__
 
 #include "CHierarchyTableDrag.h"
-#include "svector.h"
 
 // Classes
 

@@ -23,7 +23,6 @@
 #define __CADDRESSACCOUNT__MULBERRY__
 
 #include "CINETAccount.h"
-#include "svector.h"
 #include "ptrvector.h"
 
 #include "CAdbkAddress.h"

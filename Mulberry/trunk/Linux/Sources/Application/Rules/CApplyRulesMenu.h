@@ -23,7 +23,6 @@
 #include "CListener.h"
 
 #include "cdstring.h"
-#include "svector.h"
 #include "templs.h"
 #include <JXTextMenu.h>
 

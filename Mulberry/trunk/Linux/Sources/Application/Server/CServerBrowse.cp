@@ -88,9 +88,6 @@ void CServerBrowse::InitServerBrowse(void)
 	
 	mHierarchyCol = 0;
 	
-	// Allow page size buffer for data
-	mData.set_keep_small(false);
-
 	// Do not listen until reset completed
 	Stop_Listening();
 	

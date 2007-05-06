@@ -23,7 +23,6 @@
 #include "CListener.h"
 #include "CBroadcaster.h"
 
-#include "svector.h"
 #include "templs.h"
 #include "cdstring.h"
 #include "CMenu.h"

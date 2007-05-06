@@ -22,13 +22,13 @@
 
 #include "cdstring.h"
 
-#include "svector.h"
+#include "vector.h"
 
 // Typedefs
 class CQuotaItem;
 class CQuotaRoot;
-typedef svector<CQuotaItem> CQuotaItemList;
-typedef svector<CQuotaRoot> CQuotaRootList;
+typedef vector<CQuotaItem> CQuotaItemList;
+typedef vector<CQuotaRoot> CQuotaRootList;
 
 // CQuotaItem: contains specific quota item
 

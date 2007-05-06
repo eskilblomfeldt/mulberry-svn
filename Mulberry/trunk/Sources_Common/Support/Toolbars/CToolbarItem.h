@@ -62,7 +62,7 @@ public:
 	};
 
 	typedef ptrvector<CToolbarItem> CToolbarItems;
-	typedef svector<CToolbarItemInfo> CToolbarPtrItems;
+	typedef vector<CToolbarItemInfo> CToolbarPtrItems;
 
 	enum EItemType
 	{

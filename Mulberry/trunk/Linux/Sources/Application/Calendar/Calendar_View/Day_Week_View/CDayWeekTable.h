@@ -26,7 +26,7 @@
 #include "CICalendarVEvent.h"
 #include "CICalendarComponentExpanded.h"
 
-#include <vector>
+#include "vector.h"
 
 class CDayEvent;
 typedef std::vector<CDayEvent*> CDayEventList;

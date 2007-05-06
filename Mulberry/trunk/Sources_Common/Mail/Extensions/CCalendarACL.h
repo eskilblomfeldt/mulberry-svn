@@ -28,7 +28,7 @@
 
 // Typedefs
 class CCalendarACL;
-typedef svector<CCalendarACL> CCalendarACLList;
+typedef vector<CCalendarACL> CCalendarACLList;
 
 // CCalendarACL: contains specific ACL item for a mailbox
 

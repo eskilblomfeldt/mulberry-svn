@@ -37,7 +37,7 @@
 #endif
 
 class CWindowState;
-typedef svector<CWindowState*> CWindowStateArray;
+typedef vector<CWindowState*> CWindowStateArray;
 
 using namespace std;
 

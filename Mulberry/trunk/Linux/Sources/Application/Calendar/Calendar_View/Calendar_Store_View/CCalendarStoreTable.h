@@ -78,7 +78,7 @@ public:
 protected:
 	CCalendarStoreView*						mTableView;
 	bool									mListChanging;			// In the process of changing the list
-	svector<calstore::CCalendarStoreNode*>	mData;					// data
+	vector<calstore::CCalendarStoreNode*>	mData;					// data
 
 	virtual void	LClickCell(const STableCell& inCell, const JXKeyModifiers& mods); // Clicked item
 	virtual void	LDblClickCell(const STableCell& inCell, const JXKeyModifiers& mods); // Double Clicked item

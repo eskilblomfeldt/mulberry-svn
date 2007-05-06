@@ -25,7 +25,7 @@
 
 #include "CAdbkList.h"
 #include "cdstring.h"
-#include "svector.h"
+#include "vector.h"
 
 // Classes
 class CAdbkProtocol;
@@ -53,7 +53,7 @@ private:
 	CAddressBookWindow*		mDropAdbkWnd;			// Address book window dropped onto
 	bool					mAddressAdded;			// Indicates address added
 	bool					mGroupAdded;			// Indicates group added
-	svector<void*>			mData;					// data
+	vector<void*>			mData;					// data
 
 public:
 

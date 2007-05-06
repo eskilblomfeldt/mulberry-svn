@@ -21,15 +21,14 @@
 #define __CACL__MULBERRY__
 
 #include "cdstring.h"
-#include "svector.h"
 
 // Typedefs
 class CACL;
-typedef svector<CACL> CACLList;
+typedef vector<CACL> CACLList;
 
 struct SACLRight;
 typedef pair<cdstring, SACLRight> SACLStyle;
-typedef svector<SACLStyle> SACLStyleList;
+typedef vector<SACLStyle> SACLStyleList;
 
 // SACLRight: the base struct for the rights object
 // This should be used where 'raw' rights are required

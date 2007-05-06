@@ -38,8 +38,8 @@ typedef bool (*voidCompare)(const void*, const void*);
 void sort (CMessageList::iterator first, CMessageList::iterator last, MessageCompare comp);
 void sort (CMessageList::iterator first, CMessageList::iterator last, MessageCompare comp)
 {
-	sort(reinterpret_cast<svector<void*>::iterator>(first),
-			reinterpret_cast<svector<void*>::iterator>(last),
+	sort(reinterpret_cast<vector<void*>::iterator>(first),
+			reinterpret_cast<vector<void*>::iterator>(last),
 			reinterpret_cast<voidCompare>(comp));
 }
 
@@ -48,8 +48,8 @@ CMessageList::iterator lower_bound (CMessageList::iterator first, CMessageList::
 {
 	return
 		reinterpret_cast<CMessageList::iterator>(lower_bound(
-				reinterpret_cast<svector<void*>::iterator>(first),
-				reinterpret_cast<svector<void*>::iterator>(last),
+				reinterpret_cast<vector<void*>::iterator>(first),
+				reinterpret_cast<vector<void*>::iterator>(last),
 #if __dest_os == __mac_os || __dest_os == __mac_os_x || __dest_os == __win32_os
 				reinterpret_cast<const void*&>(&value),
 #else
@@ -64,8 +64,8 @@ CMessageList::iterator stable_partition (CMessageList::iterator first, CMessageL
 {
 	return
 		reinterpret_cast<CMessageList::iterator>(stable_partition(
-			reinterpret_cast<svector<void*>::iterator>(first),
-			reinterpret_cast<svector<void*>::iterator>(last),
+			reinterpret_cast<vector<void*>::iterator>(first),
+			reinterpret_cast<vector<void*>::iterator>(last),
 			reinterpret_cast<voidPartition>(pred)));
 }
 #endif

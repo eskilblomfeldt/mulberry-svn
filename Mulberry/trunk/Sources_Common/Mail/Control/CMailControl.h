@@ -30,7 +30,6 @@
 #include <queue>
 #include <vector>
 #include "cdstring.h"
-#include "svector.h"
 #include "templs.h"
 
 #include "CINETAccount.h"
@@ -51,9 +50,9 @@ class CMboxProtocol;
 class CMbox;
 class CMessage;
 
-typedef svector<CINETProtocol*> CINETProtocolList;
+typedef vector<CINETProtocol*> CINETProtocolList;
 
-typedef svector<CMbox*> CSimpleMboxList;
+typedef vector<CMbox*> CSimpleMboxList;
 
 class CBusyContext
 {

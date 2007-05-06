@@ -1287,7 +1287,6 @@ void CMboxProtocol::SyncFlag(const cdstrpairvect& mboxes, NMbox::EFlags flag)
 				continue;
 
 			// Find list of matching mailboxes
-			mboxlist.set_keep_small(false);			// Optimised for large # of mailboxes
 			FindWildcard(mbox_name, mboxlist, false);
 		}
 		else

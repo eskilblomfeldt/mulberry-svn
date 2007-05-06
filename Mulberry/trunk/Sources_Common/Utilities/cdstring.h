@@ -39,8 +39,6 @@
 #include <string>
 #include <vector.h>
 
-#include "svector.h"
-
 #include "CCharsetCodes.h"
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
@@ -53,16 +51,16 @@
 
 class cdstring;
 
-typedef svector<cdstring> cdstrvect;				// Use small vector
+typedef vector<cdstring> cdstrvect;				// Use small vector
 typedef deque<cdstring> cdstrdeque;
 typedef queue<cdstring, cdstrdeque> cdstrqueue;
 //typedef stack<cdstrvect, cdstrdeque> cdstrstack;
 typedef pair<cdstring, cdstring> cdstrpair;
-typedef svector<cdstrpair> cdstrpairvect;			// Use small vector
+typedef vector<cdstrpair> cdstrpairvect;			// Use small vector
 typedef pair<cdstring, bool> cdstrbool;
-typedef svector<cdstrbool> cdstrboolvect;			// Use small vector
+typedef vector<cdstrbool> cdstrboolvect;			// Use small vector
 typedef pair<cdstring, long> cdstrlong;
-typedef svector<cdstrlong> cdstrlongvect;			// Use small vector
+typedef vector<cdstrlong> cdstrlongvect;			// Use small vector
 typedef map<cdstring, cdstring> cdstrmap;
 typedef map<cdstring, uint32_t> cdstruint32map;
 typedef multimap<cdstring, cdstring> cdstrmultimap;

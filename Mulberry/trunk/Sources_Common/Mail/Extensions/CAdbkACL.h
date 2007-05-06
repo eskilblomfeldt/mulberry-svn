@@ -24,7 +24,7 @@
 
 // Typedefs
 class CAdbkACL;
-typedef svector<CAdbkACL> CAdbkACLList;
+typedef vector<CAdbkACL> CAdbkACLList;
 
 // CAdbkACL: contains specific ACL item for a mailbox
 

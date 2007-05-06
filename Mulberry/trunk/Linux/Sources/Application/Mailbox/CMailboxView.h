@@ -79,7 +79,7 @@ public:
 		unsigned long	mNewIndex;
 	};
 
-	typedef svector<CMailboxView*>	CMailboxViewList;
+	typedef vector<CMailboxView*>	CMailboxViewList;
 	static cdmutexprotect<CMailboxViewList> sMailboxViews;	// List of windows (protected for multi-thread access)
 
 	struct SMailboxSubstitute
@@ -124,7 +124,7 @@ public:
 			  mLastAccess = copy.mLastAccess;
 			  mMessageView = copy.mMessageView; }
 	};
-	typedef svector<SMailboxSubstitute>	SMailboxSubstituteList;
+	typedef vector<SMailboxSubstitute>	SMailboxSubstituteList;
 
 	CMailboxView(JXContainer* enclosure,
 				const HSizingOption hSizing, const VSizingOption vSizing,

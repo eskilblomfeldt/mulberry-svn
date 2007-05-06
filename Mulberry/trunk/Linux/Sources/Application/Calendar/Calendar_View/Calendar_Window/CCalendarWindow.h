@@ -40,7 +40,7 @@ class	CCalendarWindow : public CWindow,
 							public CListener
 {
 public:
-	typedef svector<CCalendarWindow*>	CCalendarWindowList;
+	typedef vector<CCalendarWindow*>	CCalendarWindowList;
 	static cdmutexprotect<CCalendarWindowList> sCalendarWindows;	// List of windows (protected for multi-thread access)
 
 	CCalendarWindow(JXDirector* owner);

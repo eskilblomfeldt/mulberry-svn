@@ -28,7 +28,6 @@
 
 #include "CAdbkList.h"
 #include "CAddressAccount.h"
-#include "svector.h"
 #include "cdstring.h"
 
 // Classes
@@ -39,11 +38,11 @@ class CAddressList;
 class CMessage;
 class CMessageList;
 
-typedef svector<CAdbkProtocol*> CAdbkProtocolList;
-typedef svector<CAddrLookupProtocol*> CAddrLookupProtocolList;
+typedef vector<CAdbkProtocol*> CAdbkProtocolList;
+typedef vector<CAddrLookupProtocol*> CAddrLookupProtocolList;
 
 typedef pair<cdstring, CAddressList*> CAddressSearchResult;
-typedef svector<CAddressSearchResult*> CAddressSearchResultList;
+typedef vector<CAddressSearchResult*> CAddressSearchResultList;
 
 class CAddressBookManager : public CBroadcaster
 {

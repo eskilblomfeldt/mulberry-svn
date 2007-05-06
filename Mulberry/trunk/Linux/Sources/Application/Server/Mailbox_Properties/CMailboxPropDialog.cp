@@ -230,7 +230,7 @@ void CMailboxPropDialog::SetMboxList(CMboxList* mbox_list)
 		mQuotaBtn->Deactivate();
 
 	// Give list to each panel
-	for(svector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 	{
 		static_cast<CMailboxPropPanel*>(*iter)->SetMboxList(mMboxList);
 		static_cast<CMailboxPropPanel*>(*iter)->SetProtocol(mMboxProtocol);
@@ -261,7 +261,7 @@ void CMailboxPropDialog::SetProtocol(CMboxProtocol* proto)
 	mQuotaBtn->Deactivate();
 
 	// Give server to each panel
-	for(svector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 		static_cast<CMailboxPropPanel*>(*iter)->SetProtocol(mMboxProtocol);
 
 	// Initial panel

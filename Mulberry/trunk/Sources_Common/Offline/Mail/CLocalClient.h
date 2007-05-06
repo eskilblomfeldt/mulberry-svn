@@ -171,8 +171,8 @@ protected:
 		void read(istream& in);
 	};
 
-	typedef svector<SIndexRecord>	SIndexList;
-	typedef svector<SIndexRecord*>	SIndexRefList;
+	typedef vector<SIndexRecord>	SIndexList;
+	typedef vector<SIndexRecord*>	SIndexRefList;
 
 	// I N S T A N C E  V A R I A B L E S
 

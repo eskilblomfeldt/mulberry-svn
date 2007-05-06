@@ -20,7 +20,7 @@
 #ifndef __CTREENODELIST__MULBERRY__
 #define __CTREENODELIST__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 #include "CBroadcaster.h"
 
 #include "cdstring.h"
@@ -32,7 +32,7 @@ class CTreeNode;
 typedef CTreeNode CMboxNode;
 typedef bool (*CompareNodePP)(const CTreeNode* node1, const CTreeNode* node2);
 
-class CTreeNodeList : public svector<CTreeNode*>, public CBroadcaster
+class CTreeNodeList : public vector<CTreeNode*>, public CBroadcaster
 {
 public:
 	// Messages for broadcast

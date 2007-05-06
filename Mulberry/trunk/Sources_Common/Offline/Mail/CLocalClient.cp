@@ -234,8 +234,6 @@ void CLocalClient::InitLocalClient()
 
 	mEndl = eEndl_Auto;
 
-	mIndexList.set_keep_small(false);
-
 	mMboxNew = 0;
 	mInPostProcess = false;
 	mMboxUpdate = false;

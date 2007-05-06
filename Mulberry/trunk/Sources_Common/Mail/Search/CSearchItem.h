@@ -23,7 +23,6 @@
 #define __CSEARCHITEM__MULBERRY__
 
 #include "cdstring.h"
-#include "svector.h"
 #include "templs.h"
 #include "CMessageFwd.h"
 
@@ -32,7 +31,7 @@
 // Typedefs
 class CSearchItem;
 
-typedef svector<CSearchItem*> CSearchItemList;
+typedef vector<CSearchItem*> CSearchItemList;
 
 // CSearchItem: represents a single search criteria
 

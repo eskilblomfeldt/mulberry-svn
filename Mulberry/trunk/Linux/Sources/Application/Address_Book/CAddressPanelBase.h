@@ -22,7 +22,7 @@
 
 #include "CTabPanel.h"
 
-#include "svector.h"
+#include "vector.h"
 
 // Classes
 class CAdbkAddress;
@@ -48,6 +48,6 @@ protected:
 	virtual bool	GetFields(CAdbkAddress* addr) = 0;			// Get fields from dialog
 };
 
-typedef svector<CAddressPanelBase*> CAddressPanelList;
+typedef vector<CAddressPanelBase*> CAddressPanelList;
 
 #endif

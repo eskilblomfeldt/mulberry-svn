@@ -49,8 +49,6 @@ CMessageList::CMessageList(bool sorted)
 	// Set appropriate comparator
 	if (IsSorted())
 		SetComparator(new CMessageNumberComparator());
-
-	set_keep_small(false);	// Allocate memory in increments of page size
 }
 
 // Default destructor

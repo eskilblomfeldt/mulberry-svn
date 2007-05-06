@@ -74,8 +74,8 @@ public:
 	void	AddButton(CToolbarButton* btn, const CToolbarItem::CToolbarItemInfo& details);
 
 protected:
-	typedef svector<CToolbar*> CToolbarList;
-	typedef svector<CCommander*> CCommanderArray;
+	typedef vector<CToolbar*> CToolbarList;
+	typedef vector<CCommander*> CCommanderArray;
 
 	static CToolbarList	sToolbars;
 
@@ -108,7 +108,7 @@ protected:
 		JXWidget* mWnd;
 		CToolbarItem::CToolbarItemInfo	mDetails;
 	};
-	typedef svector<SItemSpec> CItemArray;
+	typedef vector<SItemSpec> CItemArray;
 
 	CItemArray mItemList;
 	

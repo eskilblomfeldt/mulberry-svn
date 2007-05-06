@@ -21,7 +21,6 @@
 #define __CBODYTABLE__MULBERRY__
 
 #include "CHierarchyTableDrag.h"
-#include "svector.h"
 
 class JXImage;
 

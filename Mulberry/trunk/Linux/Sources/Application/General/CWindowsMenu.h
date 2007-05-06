@@ -20,7 +20,7 @@
 #ifndef __CWINDOWSMENU__MULBERRY__
 #define __CWINDOWSMENU__MULBERRY__
 
-#include "svector.h"
+#include "vector.h"
 #include "CCommander.h"
 #include <functional>
 
@@ -29,7 +29,7 @@ class JXTextMenu;
 
 class CWindowsMenu
 {
-	typedef svector<JXWindowDirector*> CWindowList;
+	typedef vector<JXWindowDirector*> CWindowList;
 
 private:
 	static CWindowList		sWindowList;

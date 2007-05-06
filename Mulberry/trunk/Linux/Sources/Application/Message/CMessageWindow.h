@@ -108,7 +108,7 @@ class CMessageWindow : public CFileDocument
 	};
 
 public:
-	typedef svector <CMessageWindow*> CMessageWindowList;
+	typedef vector <CMessageWindow*> CMessageWindowList;
 	static cdmutexprotect<CMessageWindowList> sMsgWindows;	// List of windows (protected for multi-thread access)
 
 			CMessageWindow(JXDirector* supervisor);

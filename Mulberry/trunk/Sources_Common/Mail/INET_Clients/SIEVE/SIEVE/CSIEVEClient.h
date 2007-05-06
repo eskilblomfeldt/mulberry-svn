@@ -22,8 +22,6 @@
 
 #include "CFilterClient.h"
 
-#include "svector.h"
-
 // Others
 class CSIEVEClient: public CFilterClient
 {

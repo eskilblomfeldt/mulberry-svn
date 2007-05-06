@@ -1630,9 +1630,6 @@ void CMbox::Search(const CSearchItem* spec, ulvector* results, bool uids, bool n
 		results->clear();
 	}
 
-	// Clear previous search results
-	results->set_keep_small(false);	// Large allocation size in case of large mbox
-
 	// Only bother with search if something to search for
 	if (spec)
 	{

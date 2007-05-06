@@ -109,7 +109,7 @@ public:
 			  mFontScale = copy.mFontScale;  }
 	};
 
-	typedef svector<CMessageView*>	CMessageViewList;
+	typedef vector<CMessageView*>	CMessageViewList;
 	static cdmutexprotect<CMessageViewList> sMsgViews;	// List of windows (protected for multi-thread access)
 
 private:

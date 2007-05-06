@@ -52,12 +52,12 @@ public:
 	virtual bool HandleResult(int code);
 
 private:
-	typedef svector<CLDAPClient*>	CLDAPClientList;
+	typedef vector<CLDAPClient*>	CLDAPClientList;
 
 	static CBusyContext*		sBusy;
 	static CLDAPClientList		sClients;
 	CBusyContext				mBusy;
-	svector<int>				mCertErrors;
+	vector<int>					mCertErrors;
 	
 
 			void SetStatus(const char* rsrcid);

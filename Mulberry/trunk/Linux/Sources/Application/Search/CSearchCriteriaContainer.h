@@ -34,7 +34,7 @@ class JXTextButton;
 class JXWidget;
 
 class CCriteriaBase;
-typedef svector<CCriteriaBase*> CCriteriaBaseList;
+typedef vector<CCriteriaBase*> CCriteriaBaseList;
 
 class CSearchCriteriaContainer : public JXWidgetSet, public CBroadcaster, public CListener
 {

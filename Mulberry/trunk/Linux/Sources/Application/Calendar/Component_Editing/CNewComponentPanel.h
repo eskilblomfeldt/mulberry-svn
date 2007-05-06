@@ -19,7 +19,7 @@
 
 #include "CTabPanel.h"
 
-#include <svector.h>
+#include <vector.h>
 
 #include "CICalendarVEvent.h"
 #include "CICalendarVToDo.h"
@@ -60,6 +60,6 @@ protected:
 	bool			mReadOnly;
 };
 
-typedef svector<CNewComponentPanel*> CNewComponentPanelList;
+typedef vector<CNewComponentPanel*> CNewComponentPanelList;
 
 #endif

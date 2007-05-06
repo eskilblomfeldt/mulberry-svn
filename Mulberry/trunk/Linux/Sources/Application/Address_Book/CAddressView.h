@@ -40,7 +40,7 @@ class CGroupPreview;
 class CAddressView : public CBaseView
 {
 public:
-	typedef svector<CAddressView*>	CAddressViewList;
+	typedef vector<CAddressView*>	CAddressViewList;
 	static cdmutexprotect<CAddressViewList>	sAddressViews;
 
 					CAddressView(JXContainer* enclosure,

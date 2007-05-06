@@ -797,7 +797,7 @@ bool CCertificateManager::ImportCertificateFile(CCertificateManager::ECertificat
 	return true;
 }
 
-bool CCertificateManager::CheckServerCertificate(const cdstring& server, svector<int>& errors, X509* server_cert)
+bool CCertificateManager::CheckServerCertificate(const cdstring& server, vector<int>& errors, X509* server_cert)
 {
 	// Make sure certs are loaded
 	LoadCertificates();
@@ -852,7 +852,7 @@ bool CCertificateManager::CheckServerCertificate(const cdstring& server, svector
 	
 	// Get list of error strings
 	cdstrvect error_txt;
-	for(svector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		// Special for application error
 		if (*iter == X509_V_ERR_APPLICATION_VERIFICATION)
@@ -865,7 +865,7 @@ bool CCertificateManager::CheckServerCertificate(const cdstring& server, svector
 	return AcceptableServer(server, server_cert, errors, error_txt);
 }
 
-bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_cert, const svector<int>& errors, const cdstrvect& error_txt)
+bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_cert, const vector<int>& errors, const cdstrvect& error_txt)
 {
 	// Get the fingerprint of the cert
 	CCertificate cert(NULL, server_cert);
@@ -873,7 +873,7 @@ bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_
 
 	// Check to see whether we have any 'dire' errors that need an extra alert to the user
 	bool dire_error = false;
-	for(svector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		switch(*iter)
 		{
@@ -1124,7 +1124,7 @@ STACK_OF(X509)* CCertificateManager::GetCerts(const char* key, ECertificateType 
 	return result;	
 }
 
-bool CCertificateManager::CheckUserCertificate(const cdstring& email, svector<int>& errors, X509* user_cert)
+bool CCertificateManager::CheckUserCertificate(const cdstring& email, vector<int>& errors, X509* user_cert)
 {
 	// Make sure certs are loaded
 	LoadCertificates();
@@ -1182,7 +1182,7 @@ bool CCertificateManager::CheckUserCertificate(const cdstring& email, svector<in
 	
 	// Get list of error strings
 	cdstrvect error_txt;
-	for(svector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		// Special for application error
 		if (*iter == X509_V_ERR_APPLICATION_VERIFICATION)
@@ -1195,7 +1195,7 @@ bool CCertificateManager::CheckUserCertificate(const cdstring& email, svector<in
 	return AcceptableUser(email, user_cert, errors, error_txt);
 }
 
-bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert, const svector<int>& errors, const cdstrvect& error_txt)
+bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert, const vector<int>& errors, const cdstrvect& error_txt)
 {
 	// Get the fingerprint of the cert
 	CCertificate cert(NULL, user_cert);
@@ -1203,7 +1203,7 @@ bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert,
 
 	// Check to see whether we have any 'dire' errors that need an extra alert to the user
 	bool dire_error = false;
-	for(svector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		switch(*iter)
 		{

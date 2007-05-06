@@ -26,9 +26,9 @@
 #include "CCalendarACL.h"
 #include "CMboxACL.h"
 
-#include "svector.h"
+#include "vector.h"
 class JXImage;
-typedef svector<JXImage*> CIconArray;
+typedef vector<JXImage*> CIconArray;
 
 // Classes
 

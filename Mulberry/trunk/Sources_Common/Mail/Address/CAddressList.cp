@@ -38,8 +38,8 @@ typedef bool (*voidCompare)(const void*, const void*);
 void stable_sort (CAddressList::iterator first, CAddressList::iterator last, AddressCompare comp);
 void stable_sort (CAddressList::iterator first, CAddressList::iterator last, AddressCompare comp)
 {
-	stable_sort(reinterpret_cast<svector<void*>::iterator>(first),
-				reinterpret_cast<svector<void*>::iterator>(last),
+	stable_sort(reinterpret_cast<vector<void*>::iterator>(first),
+				reinterpret_cast<vector<void*>::iterator>(last),
 				reinterpret_cast<voidCompare>(comp));
 }
 
@@ -48,8 +48,8 @@ CAddressList::iterator lower_bound (CAddressList::iterator first, CAddressList::
 {
 	return
 		reinterpret_cast<CAddressList::iterator>(lower_bound(
-				reinterpret_cast<svector<void*>::iterator>(first),
-				reinterpret_cast<svector<void*>::iterator>(last),
+				reinterpret_cast<vector<void*>::iterator>(first),
+				reinterpret_cast<vector<void*>::iterator>(last),
 				reinterpret_cast<const void*>(value),
 				reinterpret_cast<voidCompare>(comp)));
 }
@@ -59,8 +59,8 @@ CAddressList::const_iterator lower_bound (CAddressList::const_iterator first, CA
 {
 	return
 		reinterpret_cast<CAddressList::const_iterator>(lower_bound(
-				reinterpret_cast<svector<void*>::const_iterator>(first),
-				reinterpret_cast<svector<void*>::const_iterator>(last),
+				reinterpret_cast<vector<void*>::const_iterator>(first),
+				reinterpret_cast<vector<void*>::const_iterator>(last),
 				reinterpret_cast<const void*>(value),
 				reinterpret_cast<voidCompare>(comp)));
 }
@@ -111,7 +111,7 @@ CAddressList::CAddressList(const char* txt, long txt_length, unsigned long capac
 	char* adl = NULL;
 	bool more = true;
 
-	// Check each character - need to balance "É" & (É)
+	// Check each character - need to balance "" & ()
 	while(more) {
 		switch (*p) {
 
@@ -230,8 +230,6 @@ CAddressList::~CAddressList()
 // Common init
 void CAddressList::InitAddressList(unsigned long capacity)
 {
-	set_keep_small(true);	// Allocate memory in increments of one
-
 	if (capacity)
 		reserve(capacity);
 
@@ -446,7 +444,7 @@ unsigned long CAddressList::FetchInsertIndexOf(const CAddress* addr) const
 void CAddressList::clear_without_delete()
 {
 	// Do inherited erase
-	svector<CAddress*>::erase(begin(), end());
+	vector<CAddress*>::erase(begin(), end());
 }
 
 // Remove matching address (without deleting it)
@@ -469,7 +467,7 @@ void CAddressList::RemoveAddress(CAddress* addr)
 
 	CAddressList::iterator found = ::find(begin(), end(), addr);
 	if (found != end())
-		svector<CAddress*>::erase(found);
+		vector<CAddress*>::erase(found);
 }
 
 // Find duplicate in list

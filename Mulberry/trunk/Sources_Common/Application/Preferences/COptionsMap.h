@@ -41,7 +41,7 @@
 
 #include "templs.h"
 
-typedef svector<RGBColor> CColourList;
+typedef vector<RGBColor> CColourList;
 
 // Classes
 

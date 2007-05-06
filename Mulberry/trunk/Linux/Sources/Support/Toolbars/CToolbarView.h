@@ -33,7 +33,7 @@ class CToolbarView : public JXEngravedRect, public CListener
 	friend class CToolbar;
 
 public:
-	typedef svector<CToolbarView*> CToolbarViewList;
+	typedef vector<CToolbarView*> CToolbarViewList;
 	static CToolbarViewList sToolbarViews;
 
 	enum
@@ -69,7 +69,7 @@ public:
 
 protected:
 	JXWidgetSet*			mSibling;
-	typedef svector<CToolbar*> SToolbars;
+	typedef vector<CToolbar*> SToolbars;
 	SToolbars				mToolbars;
 	bool					mIsVisible;
 	unsigned long			mActiveIndex;

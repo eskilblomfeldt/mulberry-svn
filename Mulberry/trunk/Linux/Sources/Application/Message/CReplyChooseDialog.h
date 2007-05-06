@@ -25,7 +25,7 @@
 #include "CTable.h"
 #include "CMessageWindow.h"
 #include "CMIMETypes.h"
-#include "svector.h"
+#include "vector.h"
 
 #include "HPopupMenu.h"
 
@@ -46,7 +46,7 @@ struct SReplyElement
 };
 
 class JXImage;
-typedef svector<SReplyElement> CReplyList;
+typedef vector<SReplyElement> CReplyList;
 
 class CReplyChooseTable : public CTable
 {
