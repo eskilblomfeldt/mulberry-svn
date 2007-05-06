@@ -10,6 +10,3 @@ PluginDLLmain
 CPluginDLL
 CSecurityPluginDLL
 os_dep
--prefix ../../Sources_Common/Plugins/SSL/
-CDLLFunctions
-loadsslfunc
