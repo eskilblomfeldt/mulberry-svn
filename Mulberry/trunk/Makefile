@@ -31,7 +31,7 @@ jxinit:
 	 ln -s ../ACE/ACE_wrappers/ace/libACE.so.5.4.7 libACE.so.5.4.7; \
 	 ln -s ../libjcore/libjcore-2_5_0.a libjcore-2_5_0.a; \
 	 ln -s ../libjcore/libjcore-2_5_0.so libjcore-2_5_0.so; \
-	 ln -s ../libjx/libjx-2_5_0.a libjx-2_5_.0.a; \
+	 ln -s ../libjx/libjx-2_5_0.a libjx-2_5_0.a; \
 	 ln -s ../libjx/libjx-2_5_0.so libjx-2_5_0.so)
 	touch ${JX_HOME}/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
 
