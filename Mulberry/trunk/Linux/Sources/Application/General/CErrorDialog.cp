@@ -343,10 +343,10 @@ void CErrorDialog::BuildWindow(CErrorDialog::EErrDialogType type,
 	{
 		JSize txt_lines = mTextCtrl->GetLineCount();
 		unsigned long txt_height = mTextCtrl->GetLineTop(txt_lines) + mTextCtrl->GetLineHeight(txt_lines);
-		if (txt_height + 8UL > mTextCtrl->GetBoundsHeight())
+		if (txt_height + 8UL > mTextCtrl->GetFrameHeight())
 		{
 			// Just resize main window - child windows will resize/move as appropriate
-			height_resize = txt_height + 8 - mTextCtrl->GetBoundsHeight();
+			height_resize = txt_height + 8 - mTextCtrl->GetFrameHeight();
 		}
 	}
 	
