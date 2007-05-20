@@ -56,10 +56,8 @@ char* strgettokenstr(char** s1,
 char* strduptokenstr(char** s1,
 						const char* tokens);	// Duplicate possibly quoted string without destroying end
 
-#ifndef strdup
+#ifndef __GNUC__
 char* strdup(const char* s1);					// Duplicate a string
-#endif
-#ifndef strndup
 char* strndup(const char* s1, size_t len);		// Duplicate len chars of string
 #endif
 

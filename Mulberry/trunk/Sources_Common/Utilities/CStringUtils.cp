@@ -23,7 +23,7 @@
 
 // S T R I N G  F U N C T I O N S
 
-#ifndef strdup
+#ifndef __GNUC__
 // Duplicate string
 char* strdup(const char* s1)
 {
@@ -36,9 +36,7 @@ char* strdup(const char* s1)
 	else
 		return NULL;
 }
-#endif
 
-#ifndef strndup
 // Duplicate string a fixed length
 char* strndup(const char* s1, size_t len)
 {
@@ -61,10 +59,7 @@ void strlower(char* s1)
 
 	if (s1)
 		while(*s1)
-		{
-			*s1 = tolower(*s1);
-			s1++;
-		}
+			*s1++ = tolower(*s1);
 #else
 	if (s1--)
 		while(*++s1)
@@ -79,10 +74,7 @@ void strupper(char* s1)
 
 	if (s1)
 		while(*s1)
-		{
-			*s1 = toupper(*s1);
-			s1++;
-		}
+			*s1++ = toupper(*s1);
 #else
 	if (s1--)
 		while(*++s1)
