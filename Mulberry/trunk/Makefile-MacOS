@@ -1,0 +1,56 @@
+DEV_HOME := .
+MULBERRY_HOME := ${DEV_HOME}/Mulberry
+LIBRARIES_HOME := ${DEV_HOME}/Libraries
+POWERPLANT_HOME := ${LIBRARIES_HOME}/open-powerplant
+
+SVN_ROOT := http://svn.mulberrymail.com
+SVN_MULBERRY := ${SVN_ROOT}/mulberry
+SVN_POWERPLANT := https://open-powerplant.svn.sourceforge.net/svnroot/open-powerplant/trunk
+
+libraries:
+	mkdir ${LIBRARIES_HOME}
+
+ppsrc: libraries
+	svn checkout ${SVN_POWERPLANT} ${POWERPLANT_HOME};
+
+otherlibs: libraries
+	(cd ${LIBRARIES_HOME}; \
+	 curl -O http://developer.apple.com/samplecode/MoreFiles/MoreFiles.zip; \
+	 unzip MoreFiles.zip; \
+	 rm MoreFiles.zip; \
+	 curl -O http://developer.apple.com/samplecode/MoreFilesX/MoreFilesX.zip; \
+	 unzip MoreFilesX.zip; \
+	 rm MoreFilesX.zip)
+
+librariessrc: libraries
+	(cd ${LIBRARIES_HOME}; \
+	 svn checkout ${SVN_LIBRARIES}/CICalendar/trunk CICalendar; \
+	 svn checkout ${SVN_LIBRARIES}/XMLLib/trunk XMLLib)
+
+mulberrysrc:
+	svn checkout ${SVN_MULBERRY}/Mulberry/trunk Mulberry
+
+patchpp:
+	(cd ${MULBERRY_HOME}/MacOS/Patches; \
+	 ./patchapply.py)
+
+updatepp:
+	(cd ${POWERPLANT_HOME}; svn update)
+
+updatelibraries:
+	(cd ${LIBRARIES_HOME}; \
+	 cd CICalendar; svn update; \
+	 cd ../XMLLib; svn update)
+
+updatemulberry:
+	(cd ${MULBERRY_HOME}; svn update)
+
+init: ppsrc librariessrc mulberrysrc patchpp
+
+build:
+	(cd ${MULBERRY_HOME}/MacOS; \
+	 osascript BuildAllXcode)
+
+update: updatelibraries updatemulberry
+
+all: init build
