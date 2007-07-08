@@ -21,6 +21,8 @@
 
 #include "CStringUtils.h"
 
+#include <memory>
+
 #pragma mark ____________________________CQuotaItem
 
 // CQuotaItem: contains specific quota item
@@ -94,7 +96,7 @@ void CQuotaRoot::ParseList(const char* txt)
 	mItems.clear();
 
 	// Duplicate for parsing
-	auto_ptr<char> dup(::strdup(txt));
+	std::auto_ptr<char> dup(::strdup(txt));
 	char* p = dup.get();
 
 	while(p && *p)

@@ -102,7 +102,7 @@ cdustring& cdustring::erase(size_type pos, size_type n)
 
 cdstring cdustring::ToUTF8() const
 {
-	ostrstream sout;
+	std::ostrstream sout;
 	i18n::CCharsetManager::sCharsetManager.ToUTF8(i18n::eUTF16, (const char*)_str, length() * 2, sout);
 	sout << ends;
 	cdstring result;
@@ -118,7 +118,7 @@ void cdustring::ConvertEndl(EEndl endl)
 		return;
 
 	// Now filter arbitrary line endings to local
-	ostrstream out;
+	std::ostrstream out;
 	const unichar_t* p = c_str();
 	
 	while(*p)
@@ -190,7 +190,7 @@ void cdustring::_allocate(const char* utf8buf, size_type size)
 			size = ::strlen(utf8buf);
 		if (size != 0)
 		{
-			ostrstream sout;
+			std::ostrstream sout;
 			i18n::CCharsetManager::sCharsetManager.FromUTF8(utf8buf, size, sout);
 			sout << ends << ends;
 			steal((unichar_t*)sout.str());
@@ -277,16 +277,16 @@ istream& operator >> (istream& is, cdustring& str)
               c1 = is.rdbuf ()->sbumpc();
               if (c1 == EOF)
               {
-                  is.setstate (ios_base::eofbit);
+                  is.setstate (std::ios_base::eofbit);
                   break;
               }
               c2 = is.rdbuf ()->sbumpc();
               if (c2 == EOF)
               {
-                  is.setstate (ios_base::eofbit);
+                  is.setstate (std::ios_base::eofbit);
                   break;
               }
-			unichar_t c = ((c1 & 0xFF) << 8) | (c2 & 0xFF);
+			  unichar_t c = ((c1 & 0xFF) << 8) | (c2 & 0xFF);
 
               if (isuspace(c))
               {
@@ -316,10 +316,10 @@ istream& getline (istream& is, cdustring& str, unichar_t delim)
 	int c1;
 	int c2;
 
-	ios_base::iostate flg = ios_base::goodbit;  // state of istream obj.
+	std::ios_base::iostate flg = std::ios_base::goodbit;  // state of istream obj.
 	// Don't skipws when starting as we might have an empty line or
 	// leading spaces are significant
-	istream::sentry s_ (is, true);
+	std::istream::sentry s_ (is, true);
 	if (s_)
 	{
 		const int BSIZE = 512;
@@ -336,13 +336,13 @@ istream& getline (istream& is, cdustring& str, unichar_t delim)
 				have_c1 = false;
 			if (c1 == EOF)
 			{
-				flg |= ios_base::eofbit;
+				flg |= std::ios_base::eofbit;
 				break;								// stop reading - eof was reached
 			}
 			c2 = is.rdbuf ()->sbumpc();				// try to extract a character
 			if (c2 == EOF)
 			{
-				flg |= ios_base::eofbit;
+				flg |= std::ios_base::eofbit;
 				break;								// stop reading - eof was reached
 			}
 			unichar_t c = ((c1 & 0xFF) << 8) | (c2 & 0xFF);
@@ -372,7 +372,7 @@ istream& getline (istream& is, cdustring& str, unichar_t delim)
 	}
 
 
-	if (flg != ios_base::goodbit)				// setstate is called now to avoid
+	if (flg != std::ios_base::goodbit)				// setstate is called now to avoid
 		is.setstate (flg);						// throwing eof exception even when no
 												// char is extracted, in which case
 												// failure should be thrown.
@@ -381,12 +381,12 @@ istream& getline (istream& is, cdustring& str, unichar_t delim)
 												// November DWP.
 }
 
-ostream& operator << (ostream& os, cdustring& str)
+std::ostream& operator << (std::ostream& os, cdustring& str)
 {
      return os.write((const char*)str.c_str(), str.length() * sizeof(unichar_t));
 }
 
-ostream& operator << (ostream& os, const cdustring& str)
+std::ostream& operator << (std::ostream& os, const cdustring& str)
 {
      return os.write((const char*)str.c_str(), str.length() * sizeof(unichar_t));
 }

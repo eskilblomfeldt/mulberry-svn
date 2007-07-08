@@ -865,10 +865,14 @@ void CAFFilter::CreateHeader()
 	p += sizeof(FXInfo);
 
 	// Add dates
-	*((long*) p)++ = cpb.hFileInfo.ioFlCrDat - cAppleFile_MacToASDate;
-	*((long*) p)++ = cpb.hFileInfo.ioFlMdDat - cAppleFile_MacToASDate;
-	*((long*) p)++ = cpb.hFileInfo.ioFlBkDat - cAppleFile_MacToASDate;
-	*((long*) p)++ = cAppleFile_DateUnknown;
+	*((long*) p) = cpb.hFileInfo.ioFlCrDat - cAppleFile_MacToASDate;
+	p += sizeof(long);
+	*((long*) p) = cpb.hFileInfo.ioFlMdDat - cAppleFile_MacToASDate;
+	p += sizeof(long);
+	*((long*) p) = cpb.hFileInfo.ioFlBkDat - cAppleFile_MacToASDate;
+	p += sizeof(long);
+	*((long*) p) = cAppleFile_DateUnknown;
+	p += sizeof(long);
 
 	// Addcomment
 	::memcpy(p, &comment[1], *comment);

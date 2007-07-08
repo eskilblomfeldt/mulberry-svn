@@ -42,11 +42,11 @@ void mimefilterbuf::write_endl()
 
 #pragma mark ____________________________mime_7bit_filterbuf
 
-streamsize mime_7bit_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize mime_7bit_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// Filter in LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		switch(*p)
@@ -80,11 +80,11 @@ streamsize mime_7bit_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize mime_7bit_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize mime_7bit_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Filter out LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		switch(*p)
@@ -114,11 +114,11 @@ streamsize mime_7bit_filterbuf::decode (const char_type* s, streamsize n)
 
 #pragma mark ____________________________mime_8bit_filterbuf
 
-streamsize mime_8bit_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize mime_8bit_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// Filter in LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		switch(*p)
@@ -153,11 +153,11 @@ streamsize mime_8bit_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize mime_8bit_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize mime_8bit_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Filter out LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		switch(*p)
@@ -186,11 +186,11 @@ streamsize mime_8bit_filterbuf::decode (const char_type* s, streamsize n)
 
 #pragma mark ____________________________mime_qp_filterbuf
 
-streamsize mime_qp_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize mime_qp_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// Filter in LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		switch(*p)
@@ -248,11 +248,11 @@ streamsize mime_qp_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize mime_qp_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize mime_qp_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Filter out CRLFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 
 	while(ntemp)
 	{
@@ -390,11 +390,11 @@ const char cbase64pad = '=';
 
 const long cEncodeLength = (3L*cWrapLength) >> 2;
 
-streamsize mime_base64_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize mime_base64_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// Filter in LFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 
 	while(ntemp)
 	{
@@ -451,11 +451,11 @@ streamsize mime_base64_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize mime_base64_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize mime_base64_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Filter out CRLFs
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(s);
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 
 	while(ntemp)
 	{

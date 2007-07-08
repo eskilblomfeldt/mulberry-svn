@@ -24,6 +24,7 @@
 
 #include <strstream>
 #include <algorithm>
+
 // __________________________________________________________________________________________________
 // C L A S S __ C S E Q U E N C E
 // __________________________________________________________________________________________________
@@ -58,7 +59,7 @@ const char* CSequence::GetSequenceText()
 	{
 
 		// Create stream to append chars to
-		ostrstream out;
+		std::ostrstream out;
 
 		unsigned long firstNum = 0;
 		unsigned long lastNum = 0;

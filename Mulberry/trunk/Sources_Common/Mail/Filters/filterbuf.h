@@ -22,23 +22,23 @@
 
 #include "cdstring.h"
 
-#include <streambuf.h>
-#include <iostream.h>
+#include <streambuf>
+#include <iostream>
 
 const long filterbuf_size = 8192;
 
 class CProgress;
 class LStream;
 
-class filterbuf : public streambuf
+class filterbuf : public std::streambuf
 {
 public:
 	filterbuf(bool encode, CProgress* progress = NULL);
 	virtual ~filterbuf();
 
-	virtual void	SetStream(ostream* out)
+	virtual void	SetStream(std::ostream* out)
 		{ mOut = out; }
-	virtual ostream*	GetOStream()
+	virtual std::ostream*	GetOStream()
 		{ return mOut; }
 	virtual void	SetStream(LStream* out)
 		{ mLOut = out; }
@@ -54,7 +54,7 @@ public:
 		{ return mBOutWritten; }
 
 protected:
-	ostream* 		mOut;
+	std::ostream* 	mOut;
 	LStream*		mLOut;
 	char*			mBOut;
 	unsigned long	mBOutSize;
@@ -66,21 +66,21 @@ protected:
 	unsigned long	mBufferCount;
 
 	void CreateBuffer();
-	void WriteBuffer(const char_type* s, streamsize n);
+	void WriteBuffer(const char_type* s, std::streamsize n);
 	bool CheckBuffer(bool force = false);
 
     virtual int sync ()
     	{ CheckBuffer(true); return 0; }
 
-	virtual void	write(const char_type* s, streamsize n);
+	virtual void	write(const char_type* s, std::streamsize n);
 
-	virtual streamsize xsputn (const char_type* s, streamsize n)
+	virtual std::streamsize xsputn (const char_type* s, std::streamsize n)
 		{ return (mEncode ? encode(s, n) : decode(s, n)); }
 	virtual int_type overflow (int_type c = traits_type::eof () )
 		{ char ch = c; xsputn(&ch, 1); return c; }
 
-	virtual streamsize encode (const char_type* s, streamsize n) = 0;
-	virtual streamsize decode (const char_type* s, streamsize n) = 0;
+	virtual std::streamsize encode (const char_type* s, std::streamsize n) = 0;
+	virtual std::streamsize decode (const char_type* s, std::streamsize n) = 0;
 };
 
 // Class to do line end conversions on a stream
@@ -95,8 +95,8 @@ protected:
 	EEndl	mOutEndl;
 	bool	mCRLast;
 
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 };
 
 // Class to dot-stuff a stream (used for SMTP send DATA command)
@@ -108,8 +108,8 @@ public:
 
 protected:
 	bool got_crlf;
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 };
 
 // Class to from-stuff a stream (used to prevent unix mailbox format delimiters
@@ -125,14 +125,14 @@ protected:
 	bool		got_crlf;
 	cdstring	mPartialLine;
 
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 
     virtual int sync ()		// Must output any remaining partial atom if encoding
     	{ if (mEncode) FinishLine(); CheckBuffer(true); return 0; }
 
 private:
-	void WriteLineWithStuffing(const char_type* s, streamsize n);
+	void WriteLineWithStuffing(const char_type* s, std::streamsize n);
 	void FinishLine();
 };
 

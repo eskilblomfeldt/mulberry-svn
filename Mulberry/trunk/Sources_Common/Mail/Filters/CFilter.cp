@@ -280,7 +280,7 @@ ExceptionCode CFilterEndls::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mStatus = eLineBuild;		// switch state if line complete
@@ -315,14 +315,14 @@ ExceptionCode CFilterEndls::PutBytes(const void* inBuffer, SInt32& inByteCount)
 #endif
 		{
 			*mBufferPos++ = *((unsigned char*) inBuffer);
-			inBuffer += sizeof(unsigned char);
+			inBuffer = (unsigned char*)inBuffer + sizeof(unsigned char);
 			total++;
 			mBufferLength++;
 		}
 #if __line_end != __crlf
 		else
 		{
-			inBuffer += sizeof(unsigned char);
+			inBuffer = (unsigned char*)inBuffer + sizeof(unsigned char);
 			total++;
 		}
 #endif

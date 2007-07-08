@@ -52,8 +52,8 @@ public:
 protected:
 	bool mGotLineEnd;
 
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 };
 
 class mime_8bit_filterbuf : public mimefilterbuf
@@ -66,8 +66,8 @@ public:
 protected:
 	bool mGotLineEnd;
 
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 };
 
 class mime_qp_filterbuf : public mimefilterbuf
@@ -89,8 +89,8 @@ protected:
 	EQPDecodeState mDecodeState;
 	char mQuotedChar;
 	char mEndlLast;
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 };
 
 class mime_base64_filterbuf : public mimefilterbuf
@@ -129,8 +129,8 @@ protected:
 	TAtom			mAtom;
 	short			mAtomPos;
 	short			mEncodeLength;
-	virtual streamsize encode (const char_type* s, streamsize n);
-	virtual streamsize decode (const char_type* s, streamsize n);
+	virtual std::streamsize encode (const char_type* s, std::streamsize n);
+	virtual std::streamsize decode (const char_type* s, std::streamsize n);
 
 private:
 	void WriteAtom();

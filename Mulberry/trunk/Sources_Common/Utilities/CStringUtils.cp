@@ -36,7 +36,9 @@ char* strdup(const char* s1)
 	else
 		return NULL;
 }
+#endif
 
+#if !defined(__GNUC__) || __dest_os == __mac_os_x
 // Duplicate string a fixed length
 char* strndup(const char* s1, size_t len)
 {

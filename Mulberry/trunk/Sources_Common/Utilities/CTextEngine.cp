@@ -34,7 +34,7 @@ cdstring CTextEngine::sCurrentPrefix;
 const char* CTextEngine::WrapLines(const char* text, unsigned long length, unsigned long wrap_len, bool flowed)
 {
 	// Create stream to handle writing
-	ostrstream out;
+	std::ostrstream out;
 
 	// Make wrap length safe
 	if (wrap_len == 0)
@@ -176,7 +176,7 @@ const char* CTextEngine::WrapLines(const char* text, unsigned long length, unsig
 
 const char* CTextEngine::UnwrapLines(const char* text, unsigned long length)
 {
-	ostrstream out;
+	std::ostrstream out;
 
 	const char* s = text;
 	char last_char = 0;
@@ -262,7 +262,7 @@ const char* CTextEngine::QuoteLines(const char* text, unsigned long length,
 		prefix_matches.push_back(prefix);
 
 	// Create stream to handle writing
-	ostrstream out;
+	std::ostrstream out;
 
 	// Loop over all text and wrap
 	bool first = true;
@@ -273,7 +273,7 @@ const char* CTextEngine::QuoteLines(const char* text, unsigned long length,
 	// Adjust prefix length for tabs
 	if (prefix_length)
 	{
-		long tab_cnt = ::count(prefix.c_str(), prefix.c_str() + prefix_length, '\t');
+		long tab_cnt = std::count(prefix.c_str(), prefix.c_str() + prefix_length, '\t');
 		prefix_length += (sSpacesPerTab - 1) * tab_cnt;
 	}
 
@@ -513,7 +513,7 @@ const char* CTextEngine::UnquoteLines(const char* text, unsigned long length, co
 	if (!prefix || !*prefix)
 		return ::strndup(text, length);
 
-	ostrstream out;
+	std::ostrstream out;
 	long prefix_length = (prefix ? ::strlen(prefix) : 0);
 	const char* s = text;
 	unsigned long count = 0;
@@ -558,7 +558,7 @@ const char* CTextEngine::UnquoteLines(const char* text, unsigned long length, co
 // Remove lines that start with a quote character
 const char* CTextEngine::StripQuotedLines(const char* text, const cdstrvect& quotes)
 {
-	ostrstream out;
+	std::ostrstream out;
 	
 	// Start of text => start of line
 	bool line_start = true;

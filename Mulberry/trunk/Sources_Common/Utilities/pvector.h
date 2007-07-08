@@ -85,7 +85,7 @@ public:
     	{ vector<void*>::push_back((void*&) x); }
 
     iterator insert(iterator position, const T& x = T ())
-    	{ return  *static_cast<iterator*>((void*) &vector<void*>::insert(*static_cast<svector<void*>::iterator*>((void*) &position), x)); }
+    	{ return  *static_cast<iterator*>((void*) &vector<void*>::insert(*static_cast<vector<void*>::iterator*>((void*) &position), x)); }
     void insert(iterator position, size_type n, const T& x)
     	{ vector<void*>::insert(*static_cast<vector<void*>::iterator*>((void*) &position), n, x); }
     void insert(iterator position, 

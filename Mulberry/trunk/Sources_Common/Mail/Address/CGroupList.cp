@@ -101,7 +101,7 @@ void CGroupList::InitGroupList(unsigned long capacity)
 void CGroupList::Sort()
 {
 	if (mComparator)
-		::stable_sort(begin(), end(), mComparator->GetComparator());
+		std::stable_sort(begin(), end(), mComparator->GetComparator());
 }
 
 // Insert non-duplicates
@@ -137,7 +137,7 @@ void CGroupList::push_back_sorted(CGroup* aGrp)
 	CGroupList::iterator found = end();
 
 	if (mComparator)
-		found = ::lower_bound(begin(), end(), (const CGroup*&) aGrp, mComparator->GetComparator());
+		found = std::lower_bound(begin(), end(), (const CGroup*&) aGrp, mComparator->GetComparator());
 
 	insert(found, aGrp);
 }
@@ -191,7 +191,7 @@ void CGroupList::RemoveGroup(CGroup* grp)
 	if (!grp)
 		return;
 
-	CGroupList::iterator found = ::find(begin(), end(), grp);
+	CGroupList::iterator found = std::find(begin(), end(), grp);
 	if (found != end())
 		vector<CGroup*>::erase(found);
 }

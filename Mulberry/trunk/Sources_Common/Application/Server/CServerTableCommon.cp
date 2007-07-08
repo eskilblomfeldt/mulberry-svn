@@ -239,7 +239,7 @@ void CServerTable::DoPreview(bool clear)
 	{
 		// Add mailbox selection to list
 		CMboxList selected;
-		DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected);
+		DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected);
 
 		// Only do one if preview does not do substitute
 		if (mTableView->GetPreview()->GetUseSubstitute() || (selected.size() == 1))
@@ -356,7 +356,7 @@ void CServerTable::DoNewLetter(bool option_key)
 	{
 		// Add selection to list
 		CMboxList selected;
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddDSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddDSelectionToList, &selected))
 		{
 			// New draft with identity tied to first selected mailbox
 			CActionManager::NewDraft(static_cast<CMbox*>(selected.front()));
@@ -414,7 +414,7 @@ void CServerTable::DoLogonServers(void)
 	CServerNodeArray selected;
 
 	// Add selection to list
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 	{
 		// Logon to all protocols
 		for(CServerNodeArray::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -432,7 +432,7 @@ void CServerTable::DoLogoffServers(void)
 	CServerNodeArray selected;
 
 	// Add selection to list
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 	{
 		// Logoff to all protocols
 		for(CServerNodeArray::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -634,7 +634,7 @@ void CServerTable::DoRenameFavourite(void)
 	CServerNodeArray selected;
 
 	// Remove selection from list
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 	{
 		for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
 		{
@@ -664,7 +664,7 @@ void CServerTable::DoRemoveFavourite(void)
 		CServerNodeArray selected;
 
 		// Remove selection from list
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 		{
 			for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
 			{
@@ -686,7 +686,7 @@ void CServerTable::DoRemoveFavouriteItems(void)
 		CServerNodeArray selected;
 
 		// Add selection to list
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 		{
 			for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
 			{
@@ -826,7 +826,7 @@ void CServerTable::DoRenameHierarchy(void)
 	CServerNodeArray selected;
 
 	// Add selection to list
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 	{
 		// Remove wds from account (do in reverse)
 		for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
@@ -865,7 +865,7 @@ void CServerTable::DoDeleteHierarchy(void)
 		CServerNodeArray selected;
 
 		// Add selection to list
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 		{
 			// Remove wds from account (do in reverse)
 			for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
@@ -890,7 +890,7 @@ void CServerTable::DoResetHierarchy(void)
 		CServerNodeArray selected;
 
 		// Add selection to list
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 		{
 			// Reset hierarchy for each node (avoid doing more than once per server)
 			CMboxProtocol* proto = NULL;
@@ -965,7 +965,7 @@ void CServerTable::DoMailboxProperties(void)
 	try
 	{
 		// Add selection to list
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddDSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddDSelectionToList, &selected))
 		{
 			// Check all mboxes first
 			for(CMboxList::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -1107,7 +1107,7 @@ void CServerTable::DoCheckMail(void)
 
 	try
 	{
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 		{
 			// Check all mboxes
 			for(CMboxList::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -1243,7 +1243,7 @@ void CServerTable::DoOpenMailbox(void)
 	CMboxList mboxes;
 
 	// Add named selection to list
-	DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &mboxes);
+	DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &mboxes);
 
 	// Check that each mailbox to be opened is on a logged in server
 	if (!mSingle)
@@ -1441,7 +1441,7 @@ void CServerTable::DoPuntUnseenMailbox()
 	try
 	{
 		// Get all selected mailboxes
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 		{
 			// Punt unseen in all mboxes
 			for(CMboxList::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -1500,7 +1500,7 @@ void CServerTable::DoDeleteMailbox(void)
 			CServerNodeArray selected;
 
 			// Add selection to list
-			if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+			if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 			{
 				for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
 				{
@@ -1526,7 +1526,7 @@ void CServerTable::DoDeleteMailbox(void)
 	{
 		// Get all selected mailboxes
 		CMboxList selected;
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddDSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddDSelectionToList, &selected))
 		{
 			// Generate string for list of items being deleted
 			cdstring deletes;
@@ -1600,7 +1600,7 @@ void CServerTable::DoRenameMailbox(void)
 
 	try
 	{
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddDSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddDSelectionToList, &selected))
 		{
 			//StValueChanger<bool> change(mListChanging, true);
 
@@ -1675,7 +1675,7 @@ void CServerTable::DoSynchroniseMailbox(void)
 	try
 	{
 		// Get all selected mailboxes
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 			CSynchroniseDialog::PoseDialog(&selected);
 	}
 	catch (...)
@@ -1696,7 +1696,7 @@ void CServerTable::DoClearDisconnectMailbox(void)
 		try
 		{
 			// Get all selected mailboxes
-			if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+			if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 			{
 				// Clear all mboxes
 				for(CMboxList::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -1737,7 +1737,7 @@ void CServerTable::DoSubscribeMailbox(void)
 
 	try
 	{
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 		{
 			//StValueChanger<bool> change(mListChanging, true);
 
@@ -1781,7 +1781,7 @@ void CServerTable::DoUnsubscribeMailbox(void)
 
 	try
 	{
-		if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 		{
 			bool unsubscribed = false;
 
@@ -1822,7 +1822,7 @@ void CServerTable::OnSearchMailbox()
 	CServerNodeArray selected;
 
 	// Add selection to list
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectedNodesToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
 	{
 		// Logon to all protocols
 		for(CServerNodeArray::iterator iter = selected.begin(); iter != selected.end(); iter++)
@@ -1901,7 +1901,7 @@ void CServerTable::OnSearchAgainMailbox()
 {
 	CMboxList selected;
 
-	if (DoToSelection1((DoToSelection1PP) &CServerTable::AddSelectionToList, &selected))
+	if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectionToList, &selected))
 	{
 		// Do it again
 		CSearchWindow::CreateSearchWindow();

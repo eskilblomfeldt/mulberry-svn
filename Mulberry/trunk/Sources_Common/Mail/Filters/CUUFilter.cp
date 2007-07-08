@@ -143,7 +143,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy the char
 				*((unsigned char*) outBuffer) = *p++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				mBufferLength--;
 				total++;
 			}
@@ -211,7 +211,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mEncodeStatus = eLineBuild;		// switch state if line complete
@@ -236,7 +236,7 @@ ExceptionCode CUUFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy the char
 				*((unsigned char*) outBuffer) = *p++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				mBufferLength--;
 				total++;
 			}
@@ -289,10 +289,10 @@ ExceptionCode CUUFilter::PutBytes(const void *inBuffer, SInt32& inByteCount)
 					p++;
 					p = (unsigned char*) ::memchr(p, cUUDBegin[0], inByteCount - total);
 					if (!p)
-						return mDecodedOne ? noErr : writErr;
+						return mDecodedOne ? (ExceptionCode)noErr : (ExceptionCode)writErr;
 					total = p - reinterpret_cast<const unsigned char*>(inBuffer);
 					if (total > inByteCount)
-						return mDecodedOne ? noErr : writErr;
+						return mDecodedOne ? (ExceptionCode)noErr : (ExceptionCode)writErr;
 				}
 
 				// Step over first bit and look for base64

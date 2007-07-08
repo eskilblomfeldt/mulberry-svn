@@ -58,7 +58,7 @@ void filterbuf::CreateBuffer()
 	mBufferCount = 0;
 }
 
-void filterbuf::WriteBuffer(const char_type* s, streamsize n)
+void filterbuf::WriteBuffer(const char_type* s, std::streamsize n)
 {
 	// See if new data would overflow buffer
 	if (mBufferCount + n > filterbuf_size)
@@ -91,7 +91,7 @@ bool filterbuf::CheckBuffer(bool force)
 		return false;
 }
 
-void filterbuf::write(const char_type* s, streamsize n)
+void filterbuf::write(const char_type* s, std::streamsize n)
 {
 	if (mOut)
 		mOut->write(s, n);
@@ -109,14 +109,14 @@ void filterbuf::write(const char_type* s, streamsize n)
 
 #pragma mark ____________________________crlf_filterbuf
 
-streamsize crlf_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize crlf_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	const char* out_endl = ::get_endl(mOutEndl);
 	unsigned long out_endl_len = ::get_endl_len(mOutEndl);
 
 	// Filter from one endl to another
 	const char_type* p;
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		// Start at beginning of next bit
@@ -173,7 +173,7 @@ streamsize crlf_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize crlf_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize crlf_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Does nothing!
 	return n;
@@ -181,11 +181,11 @@ streamsize crlf_filterbuf::decode (const char_type* s, streamsize n)
 
 #pragma mark ____________________________dotstuff_filterbuf
 
-streamsize dotstuff_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize dotstuff_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// Dot stuff contents
 	const char_type* p;
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		// Start at beginning of next bit
@@ -228,7 +228,7 @@ streamsize dotstuff_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize dotstuff_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize dotstuff_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Never need to un-dot-stuff - delivery agent always does it
 	WriteBuffer(s, n);
@@ -237,11 +237,11 @@ streamsize dotstuff_filterbuf::decode (const char_type* s, streamsize n)
 
 #pragma mark ____________________________fromstuff_filterbuf
 
-streamsize fromstuff_filterbuf::encode (const char_type* s, streamsize n)
+std::streamsize fromstuff_filterbuf::encode (const char_type* s, std::streamsize n)
 {
 	// From stuff contents
 	const char_type* p;
-	streamsize ntemp = n;
+	std::streamsize ntemp = n;
 	while(ntemp)
 	{
 		// Start at beginning of next bit
@@ -370,14 +370,14 @@ streamsize fromstuff_filterbuf::encode (const char_type* s, streamsize n)
 	return n;
 }
 
-streamsize fromstuff_filterbuf::decode (const char_type* s, streamsize n)
+std::streamsize fromstuff_filterbuf::decode (const char_type* s, std::streamsize n)
 {
 	// Never need to un-from-stuff - its a one-way conversion when writing to a mailbox file
 	WriteBuffer(s, n);
 	return n;
 }
 
-void fromstuff_filterbuf::WriteLineWithStuffing(const char_type* s, streamsize n)
+void fromstuff_filterbuf::WriteLineWithStuffing(const char_type* s, std::streamsize n)
 {
 	// Look at start for 'From '
 	if (!::strncmp(s, "From ", 5))

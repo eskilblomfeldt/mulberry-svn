@@ -22,7 +22,7 @@
 
 #include "cdstring.h"
 
-#include <istream.h>
+#include <istream>
 
 class CAddress;
 class CAddressList;
@@ -41,10 +41,10 @@ public:
 	CRFC822Parser(bool stream = false, CMessage* owner = NULL);
 	~CRFC822Parser();
 	
-	CMessageList*	ListFromStream(istream& in, CProgress* progress = NULL);
-	CLocalMessage*	MessageFromStream(istream& in, CProgress* progress = NULL, CMessage* owner = NULL);
-	void			EnvelopeFromStream(istream& in, CLocalMessage& msg);
-	CAttachment*	AttachmentFromStream(istream& in, CLocalAttachment* parent);
+	CMessageList*	ListFromStream(std::istream& in, CProgress* progress = NULL);
+	CLocalMessage*	MessageFromStream(std::istream& in, CProgress* progress = NULL, CMessage* owner = NULL);
+	void			EnvelopeFromStream(std::istream& in, CLocalMessage& msg);
+	CAttachment*	AttachmentFromStream(std::istream& in, CLocalAttachment* parent);
 
 	CAddressList*	ParseAddressList(char* str);
 
@@ -62,8 +62,8 @@ protected:
 	CAddressList*		mAddrList;
 	cdstrvect			mBoundaries;
 	CProgress*			mProgress;
-	streamsize			mProgressStart;
-	streamsize			mProgressTotal;
+	std::streamsize		mProgressStart;
+	std::streamsize		mProgressTotal;
 	bool				mStreamAttachment;
 	bool				mValidMIMEVersion;
 	
@@ -71,27 +71,27 @@ protected:
 	
 	void			DefaultSubtype(CLocalAttachment* body);
 
-	istream::pos_type	MessageStart(istream& in, bool do_progress = false);
+	std::istream::pos_type	MessageStart(std::istream& in, bool do_progress = false);
 	bool			ValidMessageStart(const cdstring& start);
 
-	void			GetLine(istream& in, cdstring& line);
-	void			GetHeader(istream& in, cdstring& hdr);
+	void			GetLine(std::istream& in, cdstring& line);
+	void			GetHeader(std::istream& in, cdstring& hdr);
 
-	bool			StreamDone(istream& in) const
+	bool			StreamDone(std::istream& in) const
 		{ return in.fail(); }
 
 	void			ParseHeader(CLocalMessage* msg, char* str);
 	void			ParseHeader(CLocalAttachment* msg, char* str);
-	void			ParseContent(CLocalAttachment* body, istream& in);
+	void			ParseContent(CLocalAttachment* body, std::istream& in);
 	void			ParseContentHeader(CLocalAttachment* body, char* name, char* s);
 	void			ParseParameter(CLocalAttachment* body, char* text, bool disposition);
 	bool			ParseMIMEVersion(char* text);
 
-	void			ParseSinglePart(CLocalAttachment* body, istream& in);
-	void			ParseMultipart(CLocalAttachment* body, istream& in);
-	void			ParseMessagePart(CLocalAttachment* body, istream& in);
+	void			ParseSinglePart(CLocalAttachment* body, std::istream& in);
+	void			ParseMultipart(CLocalAttachment* body, std::istream& in);
+	void			ParseMessagePart(CLocalAttachment* body, std::istream& in);
 
-	bool			ParseToBoundary(istream& in, const cdstring& bdry, bool rewind);
+	bool			ParseToBoundary(std::istream& in, const cdstring& bdry, bool rewind);
 
 	CAddress*		ParseAddress(char** str);
 	CAddress*		ParseGroup(char** str);
@@ -101,12 +101,12 @@ protected:
 	CAddress*		ParseRouteAddr(char *string, char **ret);
 	CAddress*		ParseAddrSpec(char *string, char **ret);
 		
-	void			InitProgress(istream& in, CProgress* progress);
-	void			UpdateProgress(istream& in);
-	void			UpdateProgress(streamoff pos);
+	void			InitProgress(std::istream& in, CProgress* progress);
+	void			UpdateProgress(std::istream& in);
+	void			UpdateProgress(std::streamoff pos);
 
 private:
-	long			SafeTellg(istream& in, bool& has_eof) const;
+	long			SafeTellg(std::istream& in, bool& has_eof) const;
 };
 
 #endif

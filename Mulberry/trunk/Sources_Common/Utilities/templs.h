@@ -20,10 +20,10 @@
 #ifndef __TEMPLS__MULBERRY__
 #define __TEMPLS__MULBERRY__
 
-#include "vector.h"
-
-#include <map>
-#include <set>
+#include <map.h>
+#include <multimap.h>
+#include <set.h>
+#include <vector.h>
 
 typedef vector<bool> boolvector;
 typedef vector<long> lvector;

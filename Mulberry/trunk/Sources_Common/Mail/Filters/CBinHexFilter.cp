@@ -422,10 +422,10 @@ ExceptionCode CBinHexFilter::PutBytes(const void *inBuffer, SInt32& inByteCount)
 					p++;
 					p = (unsigned char*) ::memchr(p, cBinHexTitle[0], mBufferLength);
 					if (!p)
-						return mDecodedOne ? noErr : writErr;
+						return mDecodedOne ? (ExceptionCode)noErr : (ExceptionCode)writErr;
 					mBufferLength = inByteCount - (p - reinterpret_cast<const unsigned char*>(inBuffer));
 					if (mBufferLength < 1)
-						return mDecodedOne ? noErr : writErr;
+						return mDecodedOne ? (ExceptionCode)noErr : (ExceptionCode)writErr;
 				}
 
 				// Step over everything until colon
@@ -923,16 +923,21 @@ void CBinHexFilter::CreateHeader()
 	FinderInfo finfo;
 	spec.GetFinderInfo(&finfo, NULL, NULL);
 
-	*((OSType*) p)++ = finfo.file.fileType;
-	*((OSType*) p)++ = finfo.file.fileCreator;
-	*((short*) p)++ = finfo.file.finderFlags  & ~(kIsOnDesk | kIsInvisible | kHasBeenInited);
+	*((OSType*) p) = finfo.file.fileType;
+	p += sizeof(OSType);
+	*((OSType*) p) = finfo.file.fileCreator;
+	p += sizeof(OSType);
+	*((short*) p) = finfo.file.finderFlags  & ~(kIsOnDesk | kIsInvisible | kHasBeenInited);
+	p += sizeof(short);
 
 	// Ddata & resource fork lengths
 	FSCatalogInfo catInfo;
 	spec.GetCatalogInfo(kFSCatInfoDataSizes | kFSCatInfoRsrcSizes, catInfo);
 
-	*((long*) p)++ = catInfo.dataLogicalSize;
-	*((long*) p)++ = catInfo.rsrcLogicalSize;
+	*((long*) p) = catInfo.dataLogicalSize;
+	p += sizeof(long);
+	*((long*) p) = catInfo.rsrcLogicalSize;
+	p += sizeof(long);
 #else
 	cdstring fname = mFileStream->GetFileName();
 	int length = ::strlen(fname);

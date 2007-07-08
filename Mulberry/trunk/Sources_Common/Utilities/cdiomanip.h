@@ -19,16 +19,16 @@
 
 #include "cdstring.h"
 
-#include <iomanip.h>
-#include <ostream.h>
+#include <iomanip>
+#include <ostream>
 
 // Fast version of endl that does not flush the stream
 template<class charT, class traits> 
-inline basic_ostream<charT, traits>& cd_endl (basic_ostream<charT, traits>& os);
+inline std::basic_ostream<charT, traits>& cd_endl (std::basic_ostream<charT, traits>& os);
 
 template<class chT, class trts> 
-inline basic_ostream<chT, trts>&
-cd_endl (basic_ostream<chT, trts>& os)
+inline std::basic_ostream<chT, trts>&
+cd_endl (std::basic_ostream<chT, trts>& os)
 {
      return os.put('\n');
 }

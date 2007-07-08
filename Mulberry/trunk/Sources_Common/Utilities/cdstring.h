@@ -37,6 +37,7 @@
 #include <multiset.h>
 #endif
 #include <string>
+using std::string;
 #include <vector.h>
 
 #include "CCharsetCodes.h"

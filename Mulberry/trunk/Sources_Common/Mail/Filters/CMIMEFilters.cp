@@ -324,7 +324,7 @@ ExceptionCode C8bitFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mStatus = eLineBuild;		// switch state if line complete
@@ -583,7 +583,7 @@ ExceptionCode CQPFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mReadStatus = eLineBuild;		// switch state if line complete
@@ -918,7 +918,7 @@ ExceptionCode CBase64Filter::GetBytes(void* outBuffer, SInt32& inByteCount)
 			{
 				// Copy byte and adjust ctrs
 				*((unsigned char*) outBuffer) = *mLinePos++;
-				outBuffer += sizeof(unsigned char);
+				outBuffer = (unsigned char*)outBuffer + sizeof(unsigned char);
 				total++;
 				if (!--mLineLength)
 					mReadStatus = eLineBuild;		// switch state if line complete
@@ -951,7 +951,7 @@ ExceptionCode CBase64Filter::PutBytes(const void *inBuffer, SInt32& inByteCount)
 	{
 		unsigned char c;
 		c = *((unsigned char*) inBuffer);
-		inBuffer += sizeof(unsigned char);
+		inBuffer = (unsigned char*)inBuffer + sizeof(unsigned char);
 		total++;
 
 		// Do not decode CRLF's

@@ -589,43 +589,43 @@ void CEnvelope::WriteCacheToStream(ostream& out, CEnvelopeIndex& index) const
 	// Write out envelope information first
 	index.SetDateIndex(0);
 	::WriteHost(out, mDate);
-	index.SetZoneIndex(out.tellp() - streamoff(offset));
+	index.SetZoneIndex(out.tellp() - std::streamoff(offset));
 	::WriteHost(out, mZone);
 	out << cd_endl;
 
-	index.SetSubjectIndex(out.tellp() - streamoff(offset));
+	index.SetSubjectIndex(out.tellp() - std::streamoff(offset));
 	::Write1522(out, mSubject);
-	index.SetSubjectLength(out.tellp() - streamoff(offset + index.GetSubjectIndex() + 1));
+	index.SetSubjectLength(out.tellp() - std::streamoff(offset + index.GetSubjectIndex() + 1));
 
-	index.SetFromIndex(out.tellp() - streamoff(offset));
+	index.SetFromIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mFrom);
-	index.SetFromLength(out.tellp() - streamoff(offset + index.GetFromIndex() + 1));
+	index.SetFromLength(out.tellp() - std::streamoff(offset + index.GetFromIndex() + 1));
 
-	index.SetSenderIndex(out.tellp() - streamoff(offset));
+	index.SetSenderIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mSender);
-	index.SetSenderLength(out.tellp() - streamoff(offset + index.GetSenderIndex() + 1));
+	index.SetSenderLength(out.tellp() - std::streamoff(offset + index.GetSenderIndex() + 1));
 
-	index.SetReplyToIndex(out.tellp() - streamoff(offset));
+	index.SetReplyToIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mReply_to);
-	index.SetReplyToLength(out.tellp() - streamoff(offset + index.GetReplyToIndex() + 1));
+	index.SetReplyToLength(out.tellp() - std::streamoff(offset + index.GetReplyToIndex() + 1));
 
-	index.SetToIndex(out.tellp() - streamoff(offset));
+	index.SetToIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mTo);
-	index.SetToLength(out.tellp() - streamoff(offset + index.GetToIndex() + 1));
+	index.SetToLength(out.tellp() - std::streamoff(offset + index.GetToIndex() + 1));
 
-	index.SetCCIndex(out.tellp() - streamoff(offset));
+	index.SetCCIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mCc);
-	index.SetCCLength(out.tellp() - streamoff(offset + index.GetCCIndex() + 1));
+	index.SetCCLength(out.tellp() - std::streamoff(offset + index.GetCCIndex() + 1));
 
-	index.SetBccIndex(out.tellp() - streamoff(offset));
+	index.SetBccIndex(out.tellp() - std::streamoff(offset));
 	WriteAddressListToStream(out, mBcc);
-	index.SetBccLength(out.tellp() - streamoff(offset + index.GetBccIndex() + 1));
+	index.SetBccLength(out.tellp() - std::streamoff(offset + index.GetBccIndex() + 1));
 
-	index.SetInReplyToIndex(out.tellp() - streamoff(offset));
+	index.SetInReplyToIndex(out.tellp() - std::streamoff(offset));
 	index.SetInReplyToLength(mIn_reply_to.length());
 	out << mIn_reply_to << cd_endl;
 
-	index.SetMessageIDIndex(out.tellp() - streamoff(offset));
+	index.SetMessageIDIndex(out.tellp() - std::streamoff(offset));
 	index.SetMessageIDLength(mMessage_id.length());
 	out << mMessage_id << cd_endl;
 }

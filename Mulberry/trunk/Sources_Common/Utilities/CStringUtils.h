@@ -58,6 +58,9 @@ char* strduptokenstr(char** s1,
 
 #ifndef __GNUC__
 char* strdup(const char* s1);					// Duplicate a string
+#endif
+
+#if !defined(__GNUC__) || __dest_os == __mac_os_x
 char* strndup(const char* s1, size_t len);		// Duplicate len chars of string
 #endif
 

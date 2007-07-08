@@ -38,8 +38,10 @@ using namespace std;
 
 const int cRulerWidth = 50;
 
-CParserHTML::CParserHTML(const unichar_t* st, CFormatList* format, CClickList* click, CAnchorElementMap* anchor, bool use_styles) :
-  mFontNames(JPtrArrayT::kDeleteAll)
+CParserHTML::CParserHTML(const unichar_t* st, CFormatList* format, CClickList* click, CAnchorElementMap* anchor, bool use_styles)
+#if __dest_os == __linux_os
+	: mFontNames(JPtrArrayT::kDeleteAll)
+#endif
 {
 	InitParserHTML();
 
@@ -55,8 +57,10 @@ CParserHTML::CParserHTML(const unichar_t* st, CFormatList* format, CClickList* c
 	mUseStyles = use_styles;
 }
 
-CParserHTML::CParserHTML(CFormatList* format, CClickList* click, CAnchorElementMap* anchor) :
-  mFontNames(JPtrArrayT::kDeleteAll)
+CParserHTML::CParserHTML(CFormatList* format, CClickList* click, CAnchorElementMap* anchor)
+#if __dest_os == __linux_os
+	: mFontNames(JPtrArrayT::kDeleteAll)
+#endif
 {
 	InitParserHTML();
 
@@ -66,8 +70,10 @@ CParserHTML::CParserHTML(CFormatList* format, CClickList* click, CAnchorElementM
 }
 
 
-CParserHTML::CParserHTML() :
-  mFontNames(JPtrArrayT::kDeleteAll)
+CParserHTML::CParserHTML()
+#if __dest_os == __linux_os
+	: mFontNames(JPtrArrayT::kDeleteAll)
+#endif
 {
 	InitParserHTML();
 }

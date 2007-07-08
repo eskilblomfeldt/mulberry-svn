@@ -95,7 +95,7 @@ CRFC822Parser::~CRFC822Parser()
 #pragma global_optimizer on
 #pragma optimization_level 4
 
-CMessageList* CRFC822Parser::ListFromStream(istream& in, CProgress* progress)
+CMessageList* CRFC822Parser::ListFromStream(std::istream& in, CProgress* progress)
 {
 	// This assumes an mbx format mailbox.
 	// Therefore need to break down the mailbox into individual messages based
@@ -115,7 +115,7 @@ CMessageList* CRFC822Parser::ListFromStream(istream& in, CProgress* progress)
 		mMsgList = new CMessageList;
 
 		// Look for From at start of line
-		istream::pos_type msg_start = MessageStart(in);
+		std::istream::pos_type msg_start = MessageStart(in);
 		if (msg_start >= 0)
 			in.seekg(msg_start);
 
@@ -146,7 +146,7 @@ CMessageList* CRFC822Parser::ListFromStream(istream& in, CProgress* progress)
 	return mMsgList;
 }
 
-CLocalMessage* CRFC822Parser::MessageFromStream(istream& in, CProgress* progress, CMessage* owner)
+CLocalMessage* CRFC822Parser::MessageFromStream(std::istream& in, CProgress* progress, CMessage* owner)
 {
 	// Preserve old owner
 	CLocalMessage* old = mMsg;
@@ -310,7 +310,7 @@ CLocalMessage* CRFC822Parser::MessageFromStream(istream& in, CProgress* progress
 	return temp;
 }
 
-void CRFC822Parser::EnvelopeFromStream(istream& in, CLocalMessage& msg)
+void CRFC822Parser::EnvelopeFromStream(std::istream& in, CLocalMessage& msg)
 {
 	try
 	{
@@ -331,7 +331,7 @@ void CRFC822Parser::EnvelopeFromStream(istream& in, CLocalMessage& msg)
 	}
 }
 
-CAttachment* CRFC822Parser::AttachmentFromStream(istream& in, CLocalAttachment* parent)
+CAttachment* CRFC822Parser::AttachmentFromStream(std::istream& in, CLocalAttachment* parent)
 {
 	CLocalAttachment* attach = NULL;
 	unsigned long msg_index_start = mMsg ? mMsg->GetIndexStart() : 0;
@@ -462,7 +462,7 @@ void CRFC822Parser::DefaultSubtype(CLocalAttachment* body)
 }
 
 // Look for properly formatted 'From user date' line
-istream::pos_type CRFC822Parser::MessageStart(istream& in, bool do_progress)
+std::istream::pos_type CRFC822Parser::MessageStart(std::istream& in, bool do_progress)
 {
 	bool got_LF = true;		// Start of processing equiv. to end of line last time
 
@@ -623,10 +623,10 @@ bool CRFC822Parser::ValidMessageStart(const cdstring& start)
 	return ti;
 }
 
-void CRFC822Parser::GetLine(istream& in, cdstring& line)
+void CRFC822Parser::GetLine(std::istream& in, cdstring& line)
 {
 	// Get current stream pos
-	istream::pos_type line_start = in.tellg();
+	std::istream::pos_type line_start = in.tellg();
 
 	// Speedier version with direct streambuf access
 	streambuf* sb = in.rdbuf();
@@ -666,23 +666,23 @@ void CRFC822Parser::GetLine(istream& in, cdstring& line)
 	}
 
 	// Get final stream position
-	istream::pos_type line_end = in.tellg() - streamoff((got_eof ? 0L : (got_lf ? 2L : 1L)));
+	std::istream::pos_type line_end = in.tellg() - std::streamoff((got_eof ? 0L : (got_lf ? 2L : 1L)));
 
 	// Copy from stream into line (don't include EOL)
-	line.reserve(line_end - line_start + (istream::pos_type)1);
+	line.reserve(line_end - line_start + (std::istream::pos_type)1);
 	in.seekg(line_start);
 	in.read(line.c_str_mod(), line_end - line_start);
 	if (!got_eof)
 		in.ignore(got_lf ? 2 : 1);
 }
 
-void CRFC822Parser::GetHeader(istream& in, cdstring& hdr)
+void CRFC822Parser::GetHeader(std::istream& in, cdstring& hdr)
 {
 	// Get current stream pos
-	istream::pos_type hdr_start = in.tellg();
+	std::istream::pos_type hdr_start = in.tellg();
 
 	// Speedier version with direct streambuf access
-	streambuf* sb = in.rdbuf();
+	std::streambuf* sb = in.rdbuf();
 
 	// Find header end
 	bool got_eol1 = true;	// Must assume that previous char was line end
@@ -717,8 +717,8 @@ void CRFC822Parser::GetHeader(istream& in, cdstring& hdr)
 	}
 
 	// Get final stream position
-	istream::pos_type hdr_end = in.tellg();
-	if (hdr_end == istream::pos_type(-1L))
+	std::istream::pos_type hdr_end = in.tellg();
+	if (hdr_end == std::istream::pos_type(-1L))
 	{
 		in.clear();
 		in.seekg(0, ios_base::end);
@@ -726,7 +726,7 @@ void CRFC822Parser::GetHeader(istream& in, cdstring& hdr)
 	}
 
 	// Copy from stream into header
-	hdr.reserve(hdr_end - hdr_start + (istream::pos_type)1);
+	hdr.reserve(hdr_end - hdr_start + (std::istream::pos_type)1);
 	in.seekg(hdr_start);
 	in.read(hdr.c_str_mod(), hdr_end - hdr_start);
 }
@@ -967,7 +967,7 @@ bool CRFC822Parser::ParseMIMEVersion(char* text)
 #endif
 }
 
-void CRFC822Parser::ParseContent(CLocalAttachment* body, istream& in)
+void CRFC822Parser::ParseContent(CLocalAttachment* body, std::istream& in)
 {
 	// Assume attachment already has content, but default subtype just in case
 	DefaultSubtype(body);
@@ -981,10 +981,10 @@ void CRFC822Parser::ParseContent(CLocalAttachment* body, istream& in)
 		ParseSinglePart(body, in);
 }
 
-void CRFC822Parser::ParseMultipart(CLocalAttachment* body, istream& in)
+void CRFC822Parser::ParseMultipart(CLocalAttachment* body, std::istream& in)
 {
 	// Get current pos in case of error
-	istream::pos_type start_multi = in.tellg();
+	std::istream::pos_type start_multi = in.tellg();
 
 	// Get current boundary
 	cdstring boundary = "--";
@@ -1029,7 +1029,7 @@ void CRFC822Parser::ParseMultipart(CLocalAttachment* body, istream& in)
 				else
 				{
 					// Must punt past any postamble to start of next message
-					istream::pos_type next_msg = MessageStart(in);
+					std::istream::pos_type next_msg = MessageStart(in);
 					if (next_msg >= 0)
 						// Adjust back
 						in.seekg(next_msg);
@@ -1077,20 +1077,20 @@ void CRFC822Parser::ParseMultipart(CLocalAttachment* body, istream& in)
 	}
 }
 
-void CRFC822Parser::ParseMessagePart(CLocalAttachment* body, istream& in)
+void CRFC822Parser::ParseMessagePart(CLocalAttachment* body, std::istream& in)
 {
 	// Parse it from the stream and add it to its owner
 	body->SetMessage(MessageFromStream(in, NULL, mMsg ? mMsg : mOwner));
 }
 
-void CRFC822Parser::ParseSinglePart(CLocalAttachment* body, istream& in)
+void CRFC822Parser::ParseSinglePart(CLocalAttachment* body, std::istream& in)
 {
 	// Check for current boundary
 	const cdstring& boundary = mBoundaries.size() ? mBoundaries.back() : cdstring::null_str;
 	if (boundary.empty())
 	{
 		// Find valid start of next message (with progress indicator)
-		istream::pos_type next_msg = MessageStart(in, true);
+		std::istream::pos_type next_msg = MessageStart(in, true);
 
 		// if start exists (i.e. NOT last message in file) then seek back to it
 		if (next_msg >= 0)
@@ -1101,7 +1101,7 @@ void CRFC822Parser::ParseSinglePart(CLocalAttachment* body, istream& in)
 		ParseToBoundary(in, boundary, true);
 }
 
-bool CRFC822Parser::ParseToBoundary(istream& in, const cdstring& boundary, bool rewind)
+bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, bool rewind)
 {
 	bool boundary_at_from = false;
 
@@ -1858,7 +1858,7 @@ char* CRFC822Parser::SkipComment(char** s, long trim)
 	return NULL;			/* impossible, but pacify lint et al */
 }
 
-void CRFC822Parser::InitProgress(istream& in, CProgress* progress)
+void CRFC822Parser::InitProgress(std::istream& in, CProgress* progress)
 {
 	// Initialise progress indicator
 	if (progress)
@@ -1870,7 +1870,7 @@ void CRFC822Parser::InitProgress(istream& in, CProgress* progress)
 	}
 }
 
-void CRFC822Parser::UpdateProgress(istream& in)
+void CRFC822Parser::UpdateProgress(std::istream& in)
 {
 	UpdateProgress(in.tellg());
 }
@@ -1896,7 +1896,7 @@ void CRFC822Parser::UpdateProgress(streamoff pos)
 	}
 }
 
-long CRFC822Parser::SafeTellg(istream& in, bool& has_eof) const
+long CRFC822Parser::SafeTellg(std::istream& in, bool& has_eof) const
 {
 	long end_pos = in.tellg();
 	if (end_pos == -1L)
