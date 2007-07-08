@@ -275,7 +275,7 @@ long CVCardAdbkIOPluginDLL::ExportAddress(SAdbkIOPluginAddress* addr)
 	std::ostrstream out;
 	mEngine.WriteOne(out, *addr);
 	out << ends;
-	auto_ptr<char> data(out.str());
+	std::auto_ptr<char> data(out.str());
 	::fwrite(data.get(), 1, ::strlen(data.get()), mExportFile);
 	return 1;
 }
