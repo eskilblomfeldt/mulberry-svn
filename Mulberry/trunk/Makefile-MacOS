@@ -5,6 +5,7 @@ POWERPLANT_HOME := ${LIBRARIES_HOME}/open-powerplant
 
 SVN_ROOT := http://svn.mulberrymail.com
 SVN_MULBERRY := ${SVN_ROOT}/mulberry
+SVN_LIBRARIES := ${SVN_ROOT}/repos
 SVN_POWERPLANT := https://open-powerplant.svn.sourceforge.net/svnroot/open-powerplant/trunk
 
 libraries:
