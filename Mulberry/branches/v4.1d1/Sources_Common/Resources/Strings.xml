@@ -23,6 +23,8 @@
 
 <!-- Day Week Table -->
 	<string id="CDayWeekTable::All Day">All Day</string>
+	<string id="CDayWeekTable::Busy">Busy</string>
+	<string id="CDayWeekTable::BlockedBusy">Blocked-out Busy Time</string>
 	<string id="CDayWeekTable::00 am">:00 am</string>
 	<string id="CDayWeekTable::00 pm">:00 pm</string>
 	<string id="CDayWeekTable::00">:00</string>

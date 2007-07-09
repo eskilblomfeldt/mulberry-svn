@@ -104,12 +104,13 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 				SetServerDescriptor((*request->GetResponseHeaders().find(cHeaderServer)).second);
 			}
 			
-			// Now check the response headers for a DAV version
-			if (request->GetResponseHeaders().count(cHeaderDAV) != 0)
+			// Now check the response headers for a DAV version (may be more than one)
+			mVersion = eDAVUnknown;
+			for(cdstrmultimapcasei::const_iterator iter = request->GetResponseHeaders().lower_bound(cHeaderDAV); iter != request->GetResponseHeaders().upper_bound(cHeaderDAV); iter++)
 			{
+			
 				// Get the dav version value
-				cdstring dav_version = (*request->GetResponseHeaders().find(cHeaderDAV)).second;
-				mVersion = eDAVUnknown;
+				cdstring dav_version = (*iter).second;
 
 				// Tokenize on commas
 				const char* p = ::strtok(dav_version.c_str_mod(), ",");
@@ -119,24 +120,23 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 					temp.trimspace();
 					if (temp == cHeaderDAV1)
 						mVersion |= eDAV1;
-					if (temp == cHeaderDAV2)
+					else if (temp == cHeaderDAV2)
 						mVersion |= eDAV2;
-					if (temp == cHeaderDAVbis)
+					else if (temp == cHeaderDAVbis)
 						mVersion |= eDAV2bis;
-					if (temp == cHeaderDAVACL)
+					else if (temp == cHeaderDAVACL)
 						mVersion |= eDAVACL;
-					if (temp == caldav::cHeaderCalendarAccess)
+					else if (temp == caldav::cHeaderCalendarAccess)
 						mVersion |= eCALDAVaccess;
-					if (temp == caldav::cHeaderCalendarSchedule)
+					else if (temp == caldav::cHeaderCalendarSchedule)
 						mVersion |= eCALDAVsched;
-					if (temp == slide::cHeaderCyrusoftInheritable)
+					else if (temp == slide::cHeaderCyrusoftInheritable)
 						mVersion |= eCyrusoftInheritable;
 					
 					p = ::strtok(NULL, ",");
 				}
-				
-				SetServerType(mVersion);
 			}
+			SetServerType(mVersion);
 
 			// Put other strings into capability
 			cdstring capa;
@@ -144,7 +144,7 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 			{
 				if (((*iter).first.compare(cHeaderServer, true) != 0) &&
 					((*iter).first.compare(cHeaderDate, true) !=0) &&
-					((*iter).first.compare_start("Content-", true) != 0))
+					!(*iter).first.compare_start("Content-", true))
 				{
 					capa += (*iter).first;
 					capa += ": ";

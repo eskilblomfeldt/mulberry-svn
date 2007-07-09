@@ -168,6 +168,10 @@ bool CINETProtocol::IsOfflineAllowed() const
 		// Only if local allowed
 		return !CAdminLock::sAdminLock.mNoLocalCalendars;
 	case CINETAccount::eWebDAVCalendar:
+	case CINETAccount::eCalDAVCalendar:
+		// Only if disconnect allowed
+		return !CAdminLock::sAdminLock.mNoDisconnect;
+	case CINETAccount::eCardDAVAdbk:
 		// Only if disconnect allowed
 		return !CAdminLock::sAdminLock.mNoDisconnect;
 	default:
@@ -202,6 +206,11 @@ bool CINETProtocol::IsOpenAllowed() const
 		// Only if local allowed
 		return !CAdminLock::sAdminLock.mNoLocalCalendars;
 	case CINETAccount::eWebDAVCalendar:
+	case CINETAccount::eCalDAVCalendar:
+		// Only if disconnect allowed
+		return CConnectionManager::sConnectionManager.IsConnected() ||
+				!CAdminLock::sAdminLock.mNoDisconnect;
+	case CINETAccount::eCardDAVAdbk:
 		// Only if disconnect allowed
 		return CConnectionManager::sConnectionManager.IsConnected() ||
 				!CAdminLock::sAdminLock.mNoDisconnect;
@@ -262,6 +271,8 @@ cdstring CINETProtocol::GetURL(bool full) const
 		url += cCALURLScheme;
 		break;
 	case CINETAccount::eWebDAVCalendar:
+	case CINETAccount::eCalDAVCalendar:
+	case CINETAccount::eCardDAVAdbk:
 		url += cHTTPURLScheme;
 		break;
 	default:;
@@ -280,6 +291,8 @@ cdstring CINETProtocol::GetURL(bool full) const
 		case CINETAccount::eACAP:
 		case CINETAccount::eLDAP:
 		case CINETAccount::eWebDAVCalendar:
+		case CINETAccount::eCalDAVCalendar:
+		case CINETAccount::eCardDAVAdbk:
 			// Add user id based on auth method
 			if (GetAccount()->GetAuthenticator().RequiresUserPswd())
 			{
@@ -325,6 +338,8 @@ cdstring CINETProtocol::GetURL(bool full) const
 	case CINETAccount::eACAP:
 	case CINETAccount::eLDAP:
 	case CINETAccount::eWebDAVCalendar:
+	case CINETAccount::eCalDAVCalendar:
+	case CINETAccount::eCardDAVAdbk:
 		url += mDescriptor;
 		break;
 	case CINETAccount::eLocal:

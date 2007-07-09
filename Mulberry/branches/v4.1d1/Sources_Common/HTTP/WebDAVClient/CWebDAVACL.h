@@ -26,6 +26,7 @@
 
 #include "CWebDAVRequestResponse.h"
 
+#include "CAdbkACL.h"
 #include "CCalendarACL.h"
 
 #include <vector>
@@ -41,11 +42,13 @@ namespace webdav {
 class CWebDAVACL: public CWebDAVRequestResponse
 {
 public:
+	CWebDAVACL(CWebDAVSession* session, const cdstring& ruri, const CAdbkACLList* acls);
 	CWebDAVACL(CWebDAVSession* session, const cdstring& ruri, const CCalendarACLList* acls);
 	virtual ~CWebDAVACL();
 
 protected:
-	const CCalendarACLList*	mACLs;
+	const CAdbkACLList*		mAdbkACLs;
+	const CCalendarACLList*	mCalACLs;
 
 	void	InitRequestData();
 	

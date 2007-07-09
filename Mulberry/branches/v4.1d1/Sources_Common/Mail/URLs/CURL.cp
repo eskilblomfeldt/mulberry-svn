@@ -154,25 +154,30 @@ void CURL::Parse(const cdstring& url, bool decode)
 	cdstring temp(url);
 
 	// Strip off main scheme
-	if (temp.compare_start(cURLMainScheme))
+	if (temp.compare_start(cURLMainScheme, true))
 		temp.erase(0, ::strlen(cURLMainScheme));
 
 	// Only handle HTTP, HTTPS & Webcal right now
 	uint32_t punt_size = 0;
-	if (temp.compare_start(cHTTPURLScheme))
+	if (temp.compare_start(cHTTPURLScheme, true))
 	{
 		mSchemeType = eHTTP;
 		punt_size = ::strlen(cHTTPURLScheme);
 	}
-	else if (temp.compare_start(cHTTPSURLScheme))
+	else if (temp.compare_start(cHTTPSURLScheme, true))
 	{
 		mSchemeType = eHTTPS;
 		punt_size = ::strlen(cHTTPSURLScheme);
 	}
-	else if (temp.compare_start(cWEBCALURLScheme))
+	else if (temp.compare_start(cWEBCALURLScheme, true))
 	{
 		mSchemeType = eWebcal;
 		punt_size = ::strlen(cWEBCALURLScheme);
+	}
+	else if (temp.compare_start(cMailtoURLScheme, true))
+	{
+		mSchemeType = eMailto;
+		punt_size = ::strlen(cMailtoURLScheme);
 	}
 	
 	// Special if it starts with a / its a relative http url
@@ -220,6 +225,19 @@ void CURL::Parse(const cdstring& url, bool decode)
 		}
 		break;
 	}
+	case eMailto:
+	{
+		if (punt_size != 0)
+		{
+			mScheme.assign(temp, 0, punt_size);
+			temp.erase(0, punt_size);
+		}
+		
+		// Look for server
+		mServer = temp;
+		break;
+	}
+		
 	default:;
 	}
 }

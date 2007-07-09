@@ -234,7 +234,7 @@ void CCalendarRecord::Playback_Create(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, action.GetCalendarAction().mName));
+		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
 
 		// Create on server
 		mPlayRemote->CreateCalendar(*node.get());
@@ -259,7 +259,7 @@ void CCalendarRecord::Playback_Delete(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, action.GetCalendarAction().mName));
+		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
 
 		// Delete on server
 		mPlayRemote->DeleteCalendar(*node.get());
@@ -284,7 +284,7 @@ void CCalendarRecord::Playback_Rename(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarActionRename().first.mIsDir, action.GetCalendarActionRename().first.mName));
+		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarActionRename().first.mIsDir, false, false, action.GetCalendarActionRename().first.mName));
 
 		// Rename on server
 		mPlayRemote->RenameCalendar(*node.get(), action.GetCalendarActionRename().second);
@@ -314,7 +314,7 @@ void CCalendarRecord::Playback_Change(CCalendarAction& action)
 	try
 	{
 		// Create temp node and calendar
-		node.reset(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, action.GetCalendarAction().mName));
+		node.reset(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
 		cal.reset(new iCal::CICalendar);
 		node->SetCalendar(cal.get());
 

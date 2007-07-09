@@ -30,7 +30,8 @@ namespace NCalendarView
 		eViewWeek,
 		eViewMonth,
 		eViewYear,
-		eViewSummary
+		eViewSummary,
+		eViewFreeBusy
 	};
 
 	// Year table layouts

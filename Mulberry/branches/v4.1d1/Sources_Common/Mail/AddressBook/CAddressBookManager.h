@@ -26,8 +26,9 @@
 
 #include "CBroadcaster.h"
 
-#include "CAdbkList.h"
 #include "CAddressAccount.h"
+#include "CAddressBook.h"
+#include "ptrvector.h"
 #include "cdstring.h"
 
 // Classes
@@ -38,8 +39,8 @@ class CAddressList;
 class CMessage;
 class CMessageList;
 
-typedef vector<CAdbkProtocol*> CAdbkProtocolList;
-typedef vector<CAddrLookupProtocol*> CAddrLookupProtocolList;
+typedef ptrvector<CAdbkProtocol> CAdbkProtocolList;
+typedef ptrvector<CAddrLookupProtocol> CAddrLookupProtocolList;
 
 typedef pair<cdstring, CAddressList*> CAddressSearchResult;
 typedef vector<CAddressSearchResult*> CAddressSearchResultList;
@@ -51,7 +52,12 @@ public:
 	enum
 	{
 		eBroadcast_NewAdbkAccount = 'abna',
-		eBroadcast_RemoveAdbkAccount = 'abra'
+		eBroadcast_InsertAdbkAccount = 'abni',
+		eBroadcast_RemoveAdbkAccount = 'abra',
+		eBroadcast_InsertNode = 'abin',
+		eBroadcast_RemoveNode = 'abrn',
+		eBroadcast_DeleteNode = 'abdn',
+		eBroadcast_ChangedNode = 'abch'
 	};
 
 	enum EAddrLookup
@@ -68,59 +74,63 @@ public:
 	~CAddressBookManager();
 	
 	void UpdateWindows();
+	void SyncAccounts();								// Sync account changes
 
 	void AddProtocol(CAdbkProtocol* proto);				// Add a new adbk remote protocol
 	void RemoveProtocol(CAdbkProtocol* proto);			// Remove an adbk remote protocol
 	CAdbkProtocol* GetProtocol(const cdstring& name);	// Get protocol by name
 	CAdbkProtocolList& GetProtocolList()				// Get protocol list
 		{ return mProtos; }
-	void GetProtocolNameList(cdstrvect& names);			// Get list of protocol names
+	bool HasMultipleProtocols() const
+	{
+		return mProtos.size() > 1;
+	}
+	unsigned long GetProtocolCount() const					// Number of protocols
+		{ return mProtoCount; }
 
-	const CAdbkList& GetAddressBooks() const
-		{ return mAdbks; }
-
-	CAddrLookupProtocolList& GetLookupList()					// Get lookup list
+	CAddrLookupProtocolList& GetLookupList()				// Get lookup list
 		{ return mLookups; }
 
-	bool CanSearch() const							// Check for searchable adbks/lookups
+	bool CanSearch() const									// Check for searchable adbks/lookups
 		{ return (mAdbkSearch.size() > 0) || (mLookups.size() > 0); }
-	void ClearSearch();									// Clear search results
+	void ClearSearch();										// Clear search results
 	void ClearSearchItem(CAddressSearchResult* item);		// Clear search results
 	void ClearSearchItemAddress(CAddressSearchResult* item, CAddress* addr);	// Clear search results
 	const CAddressSearchResultList& GetSearchResultList() const
 		{ return mSearchResultList; }
 
-	void SyncAccounts(const CAddressAccountList& accts);	// Sync with changed accounts
 private:
-	void SyncProtos(const CAddressAccountList& accts);		// Sync with changed accounts
-	void SyncLookups(const CAddressAccountList& accts);		// Sync with changed accounts
+	void SyncProtos();										// Sync with changed accounts
+	void SyncLookups();										// Sync with changed accounts
 
 public:	
-	void SyncCache();										// Sync cache with prefs
-
-	void StartLocal();								// Do initial local address books
-
 	void StartProtocol(CAdbkProtocol* proto, bool silent = true);			// Start protocol
 	void UpdateProtocol(CAdbkProtocol* proto);			// Update protocol
 	void StopProtocol(CAdbkProtocol* proto);			// Stop protocol
 
+	long GetProtocolIndex(const CAdbkProtocol* proto) const;		// Get index of protocol
+	bool FindProtocol(const CAdbkProtocol* proto, unsigned long& pos) const;
+
+	void MoveProtocol(long old_index, long new_index);	// Move protocol
+
+	CAddressBook& GetRoot()
+	{
+		return mRoot;
+	}
+
+	CAddressBookList& GetNodes()
+	{
+		return *mRoot.GetChildren();
+	}
+
+	const CAddressBook* GetNode(const cdstring& adbk) const;
+
+	// Managing the store
+	CAddressBook* NewAddressBook(CAdbkProtocol* proto, const cdstring& name, bool directory);
+	void RenameAddressBook(CAddressBook* node, const cdstring& new_name);
+	void DeleteAddressBook(CAddressBook* node);
+
 	void SyncAddressBook(CAddressBook* adbk, bool add);
-
-	void AddLocal(CAddressBook* local);				// Add local address book
-#if __dest_os == __mac_os || __dest_os == __mac_os_x
-	const CAddressBook* CheckLocalOpen(const PPx::FSObject* fspec) const;		// Check if local address book already open
-#else
-	const CAddressBook* CheckLocalOpen(const char* fname) const;		// Check if local address book already open
-#endif
-	void RemoveLocal(CAddressBook* local);			// Remove local address book
-
-	void AddAddressBook(CAddressBook* adbk);		// Add an address book
-	void RemoveAddressBook(CAddressBook* adbk);		// Remove an address book
-	void RefreshAddressBook(CAddressBook* adbk);	// Refresh an address book
-
-	bool FindAddressBook(const CAddressBook* adbk, int& pos) const;
-	CAddressBook* FindAddressBook(const cdstring& name, bool url = true) const;
-	bool FindProtocol(const CAdbkProtocol* proto, int& pos) const;
 
 	void GetCurrentAddressBookList(cdstrvect& adbks, bool url = true) const;
 	
@@ -149,6 +159,7 @@ public:
 						CAddressList& results);							// Do search
 
 	void ExpandAddresses(const cdstring& expand, cdstrvect& results);	// Do address expansion
+	void ExpandCalendarAddresses(const cdstring& expand, cdstrvect& results);	// Do address expansion
 
 	void CaptureAddress(const cdstring& expand);						// Do address capture
 	void CaptureAddress(const CMessage& msg);							// Do address capture
@@ -166,14 +177,14 @@ public:
 	void	Resume();
 
 private:
-	CAdbkList					mAdbks;
-	CAdbkProtocolList			mProtos;
-	CAddrLookupProtocolList		mLookups;
-	CFlatAdbkList				mAdbkNickName;
-	CFlatAdbkList				mAdbkSearch;
-	
 	CAdbkProtocol*				mLocalProto;
 	CAdbkProtocol*				mOSProto;
+	CAdbkProtocolList			mProtos;
+	unsigned long				mProtoCount;
+	CAddrLookupProtocolList		mLookups;
+	CAddressBook				mRoot;
+	CAddressBookList			mAdbkNickName;
+	CAddressBookList			mAdbkSearch;
 	
 	CAddressSearchResultList	mSearchResultList;
 };

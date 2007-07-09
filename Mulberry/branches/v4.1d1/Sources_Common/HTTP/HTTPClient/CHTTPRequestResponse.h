@@ -71,7 +71,10 @@ public:
 		eRequest_ACL,
 		
 		// CalDAV requests
-		eRequest_MKCALENDAR
+		eRequest_MKCALENDAR,
+		
+		// CardDAV requests
+		eRequest_MKADBK
 	};
 
 	class CHTTPResponseException : public exception

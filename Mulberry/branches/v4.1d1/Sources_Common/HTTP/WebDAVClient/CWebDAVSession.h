@@ -62,7 +62,7 @@ public:
 	{
 		return mInitialised;
 	}
-	bool Initialise(const cdstring& host, const cdstring& base_uri);
+	virtual bool Initialise(const cdstring& host, const cdstring& base_uri);
 
 	bool HasDAVVersion(EDAVVersion version) const
 	{

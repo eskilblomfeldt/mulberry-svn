@@ -21,6 +21,7 @@
 
 #include "CAdbkManagerTable.h"
 #include "CAdbkProtocol.h"
+#include "CAddressBook.h"
 #include "CAddressBookToolbar.h"
 #include "CAddressBookWindow.h"
 #include "CAddressComparators.h"
@@ -28,10 +29,8 @@
 #include "CAddressView.h"
 #include "CErrorHandler.h"
 #include "CGroupTable.h"
-#include "CLocalAddressBook.h"
 #include "CLog.h"
 #include "CPreferences.h"
-#include "CRemoteAddressBook.h"
 #include "CTableViewWindow.h"
 #include "CTaskClasses.h"
 #include "C3PaneWindow.h"
@@ -112,8 +111,7 @@ void CAddressBookView::DoProtocolClearList(CAdbkProtocol* proto)
 void CAddressBookView::DoProtocolLogoff(CAdbkProtocol* proto)
 {
 	// See if it matches current address book
-	if (proto && dynamic_cast<CRemoteAddressBook*>(GetAddressBook()) &&
-		(dynamic_cast<CRemoteAddressBook*>(GetAddressBook())->GetProtocol() == proto))
+	if (proto && (GetAddressBook()->GetProtocol() == proto))
 	{
 		// Special case 3-pane/1-pane
 		if (Is3Pane())
@@ -132,11 +130,6 @@ CAddressBookWindow* CAddressBookView::GetAddressBookWindow(void) const
 // Check that close is allowed
 bool CAddressBookView::TestClose()
 {
-	// Check for local (file-based) address book
-	if (dynamic_cast<CLocalAddressBook*>(GetAddressBook()))
-		// Ask user whether they really want to do this
-		return CErrorHandler::PutCautionAlertRsrc(true, "Alerts::Adbk::CloseDeactivate") == CErrorHandler::Ok;
-	else
 		// Can always close remote
 		return true;
 }
@@ -164,13 +157,6 @@ void CAddressBookView::DoClose()
 		
 		// Now close the address book if this is the last view containing it
 		GetAddressBook()->Close();
-
-		// Must delete local address books
-		if (dynamic_cast<CLocalAddressBook*>(GetAddressBook()))
-		{
-			delete mAdbk;
-			mAdbk = NULL;
-		}
 	}
 	
 	// Always NULL out address book as it will not be valid from this point on
@@ -305,19 +291,19 @@ void CAddressBookView::SetAddressBook(CAddressBook* adbk)
 		old_adbk->Close();
 		
 		// Stop listening to previous address book's protocol
-		if (dynamic_cast<CRemoteAddressBook*>(old_adbk))
-			dynamic_cast<CRemoteAddressBook*>(old_adbk)->GetProtocol()->Remove_Listener(this);
+		old_adbk->GetProtocol()->Remove_Listener(this);
 	}
 
 	mAdbk = adbk;
 	
 	// Open the address book first
 	if (adbk)
+	{
 		GetAddressBook()->Open();
 		
 	// Start listening to new address book's protocol
-	if (dynamic_cast<CRemoteAddressBook*>(GetAddressBook()))
-		dynamic_cast<CRemoteAddressBook*>(GetAddressBook())->GetProtocol()->Add_Listener(this);
+		GetAddressBook()->GetProtocol()->Add_Listener(this);
+	}
 
 	// Reset table items and initiate sort
 	GetAddressTable()->SetAddressBook(adbk);

@@ -46,6 +46,7 @@
 #include "CWebDAVMakeCollection.h"
 #include "CWebDAVMove.h"
 #include "CWebDAVOptions.h"
+#include "CWebDAVPrincipalMatch.h"
 #include "CWebDAVPropFind.h"
 #include "CWebDAVPut.h"
 #include "CWebDAVUnlock.h"
@@ -308,7 +309,7 @@ void CWebDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 		}
 
 		// Create the new node and add to parent
-		CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, is_dir, rpath);
+		CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, is_dir, false, false, rpath);
 		root->AddChild(node);
 		
 		// Grab the size if present
@@ -1089,6 +1090,34 @@ void CWebDAVCalendarClient::_MyRights(CCalendarStoreNode& node)
 	}
 }
 
+#pragma mark ____________________________Schedule
+
+// Get Scheduling Inbox/Outbox URIs
+void CWebDAVCalendarClient::_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI)
+{
+}
+
+// Run scheduling request
+void CWebDAVCalendarClient::_Schedule(const cdstring& outboxURI,
+									  const cdstring& originator,
+									  const cdstrvect& recipients,
+									  const iCal::CICalendar& cal,
+									  iCal::CITIPScheduleResultsList& results)
+
+{
+	
+}
+
+void CWebDAVCalendarClient::_GetFreeBusyCalendars(cdstrvect& calendars)
+{
+	
+}
+
+void CWebDAVCalendarClient::_SetFreeBusyCalendars(const cdstrvect& calendars)
+{
+	
+}
+
 #pragma mark ____________________________Utils
 
 cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lock_token)
@@ -1140,6 +1169,174 @@ cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lo
 	}
 
 	return result;
+}
+
+cdstrvect CWebDAVCalendarClient::GetHrefListProperty(const cdstring& rurl, const xmllib::XMLName& propname)
+{
+	cdstrvect results;
+
+	// Create WebDAV propfind
+	xmllib::XMLNameList props;
+	props.push_back(propname);
+	auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+
+	// Process it
+	RunSession(request.get());
+
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+
+		// Look at each propfind result and extract any Hrefs
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+		
+			// Must match rurl
+			if (name.compare_end(rurl))
+			{
+				if ((*iter1)->GetNodeProperties().count(propname.FullName()) != 0)
+				{
+					const xmllib::XMLNode* hrefs = (*(*iter1)->GetNodeProperties().find(propname.FullName())).second;
+					for(xmllib::XMLNodeList::const_iterator iter2 = hrefs->Children().begin(); iter2 !=  hrefs->Children().end(); iter2++)
+					{
+						// Make sure we got an Href
+						if ((*iter2)->CompareFullName(http::webdav::cElement_href))
+							results.push_back((*iter2)->Data());
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return results;
+	}
+
+	return results;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVCalendarClient::GetSelfProperties(const cdstring& rurl, const xmllib::XMLNameList& props, cdstrmap& results)
+{
+	// Create WebDAV principal-match
+	auto_ptr<http::webdav::CWebDAVPrincipalMatch> request(new http::webdav::CWebDAVPrincipalMatch(this, rurl, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+
+	// Process it
+	RunSession(request.get());
+
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+
+		// Look at each principal-match result and return first one that is appropriate
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+			if ((parser.Results().size() > 1) && (name.find("/users/") == cdstring::npos))
+				continue;
+		
+			for(xmllib::XMLNameList::const_iterator iter2 = props.begin(); iter2 != props.end(); iter2++)
+			{
+				if ((*iter1)->GetNodeProperties().count((*iter2).FullName()) != 0)
+				{
+					const xmllib::XMLNode* hrefs = (*(*iter1)->GetNodeProperties().find((*iter2).FullName())).second;
+					if (hrefs->Children().size() == 1)
+					{
+						// Make sure we got an Href
+						if ((*hrefs->Children().begin())->CompareFullName(http::webdav::cElement_href))
+							results.insert(cdstrmap::value_type((*iter2).FullName(), (*hrefs->Children().begin())->Data()));
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return false;
+	}
+	
+	return true;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVCalendarClient::GetSelfHrefs(const cdstring& rurl, cdstrvect& results)
+{
+	xmllib::XMLNameList props;
+	props.push_back(http::webdav::cProperty_principal_URL);
+
+	// Create WebDAV principal-match
+	auto_ptr<http::webdav::CWebDAVPrincipalMatch> request(new http::webdav::CWebDAVPrincipalMatch(this, rurl, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+	
+	// Process it
+	RunSession(request.get());
+	
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+		
+		// Look at each principal-match result and return first one that is appropriate
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+			
+			results.push_back(name);
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return false;
+	}
+	
+	return true;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVCalendarClient::GetSelfPrincipalResource(const cdstring& rurl, cdstring& result)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Listing", "Error::Calendar::OSErrListCalendars", "Error::Calendar::NoBadListCalendars");
+	
+	cdstrvect hrefs = GetHrefListProperty(rurl, http::webdav::cProperty_principal_collection_set);
+	if (hrefs.empty())
+		return false;
+	
+	// For each principal collection find one that matches self
+	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
+	{
+		cdstrvect results;
+		if (GetSelfHrefs(*iter, results))
+		{
+			if (results.size() > 0)
+			{
+				result = results.front();
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
 cdstring CWebDAVCalendarClient::LockResource(const cdstring& rurl, unsigned long timeout, bool lock_null)
@@ -1336,7 +1533,6 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 	if (request != NULL)
 	{
 		// Handle delayed authorization
-		bool no_auth = !HasAuthorization();
 		bool first_time = true;
 		while(true)
 		{
@@ -1344,7 +1540,7 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 			SendRequest(request);
 			
 			// Check for auth failure if none before
-			if ((request->GetStatusCode() == eStatus_Unauthorized) && no_auth)
+			if (request->GetStatusCode() == eStatus_Unauthorized)
 			{
 				// If we had authorization before, then chances are auth details are wrong - so delete and try again with new auth
 				if (HasAuthorization())
@@ -1352,7 +1548,9 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 					delete mAuthorization;
 					mAuthorization = NULL;
 					
-					// Display error so user knows why the prompt occurs again
+					// Display error so user knows why the prompt occurs again - but not the first time
+					// as we might have a digest re-auth.
+					if (!first_time)
 					DisplayHTTPError(request);
 				}
 
@@ -1386,10 +1584,10 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 	CloseConnection();
 }
 
-const char* cType_HTTP = "HTTP";
-const char* cType_DAV1 = "DAV Level 1";
-const char* cType_DAV2 = "DAV Level 2";
-const char* cType_DAV2bis = "DAV Level 2bis";
+static const char* cType_HTTP = "HTTP";
+static const char* cType_DAV1 = "DAV Level 1";
+static const char* cType_DAV2 = "DAV Level 2";
+static const char* cType_DAV2bis = "DAV Level 2bis";
 
 void CWebDAVCalendarClient::SetServerType(unsigned long type)
 {

@@ -66,9 +66,11 @@ public:
 
 	bool	GetIllegalAddress(const CAddress*& unqual) const;		// Get first illegal address
 
-	void	AddMailAddressToList(cdstrvect& list,				// Add email addresses to list
+	void	AddMailAddressToList(cdstrvect& list,					// Add email addresses to list
+								 bool full) const;
+	void	AddCalendarAddressToList(cdstrvect& list,				// Add calendar addresses to list
 									bool full) const;
-	void	WriteToStream(ostream& stream) const;				// Write to stream
+	void	WriteToStream(ostream& stream) const;					// Write to stream
 
 private:
 	CAddressComparator*	mComparator;

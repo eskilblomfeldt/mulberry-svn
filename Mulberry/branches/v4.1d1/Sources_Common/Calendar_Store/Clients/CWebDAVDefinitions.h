@@ -56,6 +56,13 @@ extern const xmllib::XMLName	cProperty_supported_privilege_set;
 
 extern const xmllib::XMLName	cProperty_current_user_privilege_set;
 
+extern const xmllib::XMLName	cProperty_principal_collection_set;
+
+extern const xmllib::XMLName	cProperty_principal_URL;
+extern const xmllib::XMLName	cProperty_alternate_URI_set;
+extern const xmllib::XMLName	cProperty_group_member_set;
+extern const xmllib::XMLName	cProperty_group_membership;
+
 extern const xmllib::XMLName	cProperty_acl;
 	extern const xmllib::XMLName	cProperty_ace;
 		extern const xmllib::XMLName	cProperty_principal;
@@ -84,11 +91,14 @@ extern const xmllib::XMLName	cProperty_privilege;
 	extern const xmllib::XMLName	cProperty_privilege_unbind;
 	extern const xmllib::XMLName	cProperty_privilege_all;
 
+extern const xmllib::XMLName	cElement_principal_match;
+
 }
 
 namespace caldav 
 {
 
+// Access
 extern const char*	cNamespace;
 
 extern const xmllib::XMLName	cProperty_caldavcalendar;
@@ -122,8 +132,60 @@ extern const xmllib::XMLName	cElement_freebusyquery;
 
 	extern const xmllib::XMLName	cAttributeValue_yes;
 	extern const xmllib::XMLName	cAttributeValue_no;
+
+extern const xmllib::XMLName	cProperty_privilege_readfreebusy;
+
+// Schedule
+extern const xmllib::XMLName	cProperty_scheduleinbox;
+extern const xmllib::XMLName	cProperty_scheduleoutbox;
+extern const xmllib::XMLName	cProperty_scheduleinboxURL;
+extern const xmllib::XMLName	cProperty_scheduleoutboxURL;
+
+extern const xmllib::XMLName	cProperty_schedulefreebusyset;
+
+extern const char* cHeaderOriginator;
+extern const char* cHeaderRecipient;
+
+extern const xmllib::XMLName	cElement_scheduleresponse;
+extern const xmllib::XMLName	cElement_caldavresponse;
+extern const xmllib::XMLName	cElement_recipient;
+extern const xmllib::XMLName	cElement_requeststatus;
+
+extern const xmllib::XMLName	cProperty_privilege_schedule;
 }
 
+
+namespace carddav 
+{
+
+extern const char*	cNamespace;
+
+extern const xmllib::XMLName	cProperty_carddavadbk;
+
+extern const xmllib::XMLName	cElement_adbkquery;
+extern const xmllib::XMLName	cElement_adbkmultiget;
+
+	extern const xmllib::XMLName	cElement_adbkdata;
+		extern const xmllib::XMLName	cAttribute_returncontenttype;
+
+	extern const xmllib::XMLName	cElement_allprop;
+	extern const xmllib::XMLName	cElement_prop;
+		extern const xmllib::XMLName	cAttribute_name;
+		extern const xmllib::XMLName	cAttribute_novalue;
+
+	extern const xmllib::XMLName	cElement_filter;
+	extern const xmllib::XMLName	cElement_compfilter;
+	extern const xmllib::XMLName	cElement_propfilter;
+	extern const xmllib::XMLName	cElement_paramfilter;
+
+	extern const xmllib::XMLName	cElement_isdefined;
+	extern const xmllib::XMLName	cElement_textmatch;
+		extern const xmllib::XMLName	cAttribute_caseless;
+
+	extern const xmllib::XMLName	cAttributeValue_yes;
+	extern const xmllib::XMLName	cAttributeValue_no;
+
+}
 
 namespace slide
 {

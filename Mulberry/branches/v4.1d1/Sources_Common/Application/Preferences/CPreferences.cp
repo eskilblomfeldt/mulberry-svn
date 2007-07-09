@@ -1813,6 +1813,69 @@ void CPreferences::ToolbarChanged()
 
 #pragma mark ____________________________Address Book Flags
 
+// Rename address book
+void CPreferences::RenameAddressBook(const cdstring& old_name, const cdstring& new_name)
+{
+	// mExpandedAdbks
+	cdstrset::iterator found = mExpandedAdbks.Value().find(old_name);
+	if (found != mExpandedAdbks.Value().end())
+	{
+		mExpandedAdbks.Value().erase(found);
+		mExpandedAdbks.Value().insert(new_name);
+		mExpandedAdbks.SetDirty();
+	}
+}
+
+// Rename address book
+void CPreferences::RenameAddressBookURL(const cdstring& old_name, const cdstring& new_name)
+{
+	RenameAddressBookFlag(old_name, new_name, mAdbkOpenAtStartup);
+	RenameAddressBookFlag(old_name, new_name, mAdbkNickName);
+	RenameAddressBookFlag(old_name, new_name, mAdbkSearch);
+	RenameAddressBookFlag(old_name, new_name, mAdbkAutoSync);
+}
+
+// Rename address book
+void CPreferences::RenameAddressBookFlag(const cdstring& old_name, const cdstring& new_name, CPreferenceValueMap<cdstrvect>& list)
+{
+	cdstrvect::iterator found = ::find(list.Value().begin(), list.Value().end(), old_name);
+	if (found != list.Value().end())
+	{
+		*found = new_name;
+		list.SetDirty();
+	}
+}
+
+// Delete address book
+void CPreferences::DeleteAddressBook(const cdstring& name)
+{
+	// mExpandedAdbks
+	if (mExpandedAdbks.Value().erase(name) != 0)
+	{
+		mExpandedAdbks.SetDirty();
+	}
+}
+
+// Delete address book
+void CPreferences::DeleteAddressBookURL(const cdstring& name)
+{
+	DeleteAddressBookFlag(name, mAdbkOpenAtStartup);
+	DeleteAddressBookFlag(name, mAdbkNickName);
+	DeleteAddressBookFlag(name, mAdbkSearch);
+	DeleteAddressBookFlag(name, mAdbkAutoSync);
+}
+
+// Delete address book
+void CPreferences::DeleteAddressBookFlag(const cdstring& name, CPreferenceValueMap<cdstrvect>& list)
+{
+	cdstrvect::iterator found = ::find(list.Value().begin(), list.Value().end(), name);
+	if (found != list.Value().end())
+	{
+		list.Value().erase(found);
+		list.SetDirty();
+	}
+}
+
 // Changing address book flag
 void CPreferences::ChangeAddressBookOpenOnStart(CAddressBook* adbk, bool set)
 {

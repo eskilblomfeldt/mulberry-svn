@@ -22,41 +22,81 @@
 #include "CACAPClient.h"
 #include "CActionManager.h"
 #include "CAdbkClient.h"
-#include "CAdbkList.h"
+#include "CAddressBook.h"
 #include "CAddressBookManager.h"
 #include "CConnectionManager.h"
 #include "CIMSPClient.h"
 #include "CLocalAdbkClient.h"
+#include "CLocalVCardClient.h"
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #if PP_Target_Carbon
 #include "CMacOSXAdbkClient.h"
 #endif
 #endif
 #include "CPreferences.h"
-#include "CRemoteAddressBook.h"
+
+#include "CCardDAVVCardClient.h"
+
+#include "CVCardStoreXML.h"					// Share XML defintions with calendar store
+
+#include "CVCardAddressBook.h"
+#include "CVCardSync.h"
 
 #include "cdfstream.h"
+
+#include "XMLDocument.h"
+#include "XMLNode.h"
+#include "XMLObject.h"
+#include "XMLSAXSimple.h"
+
+#define USE_LOCAL_VCARDS
+
+using namespace vcardstore;
 
 // CAdbkProtocol: Handles quotas for all resources
 
 // Constructor
 CAdbkProtocol::CAdbkProtocol(CINETAccount* account)
-	: CINETProtocol(account)
+	: CINETProtocol(account),
+		mStoreRoot(this)
 {
 	mClient = NULL;
-	mAdbkList = new CAdbkList(false);
+	mCacheClient = NULL;
+	mCacheIsPrimary = false;
+	mSyncingList = false;
 
-	// Only IMSP/ACAP servers can disconnect
+	// Only IMSP/ACAP/CardDAV servers can disconnect
 	switch(GetAccountType())
 	{
 	case CINETAccount::eIMSP:
 	case CINETAccount::eACAP:
-		SetFlags(eCanDisconnect, IsOfflineAllowed() &&
-									GetAddressAccount()->GetDisconnected());
+	case CINETAccount::eCardDAVAdbk:
+		SetFlags(eCanDisconnect, IsOfflineAllowed() && GetAddressAccount()->GetDisconnected());
 		break;
 	default:
 		SetFlags(eCanDisconnect, false);
 		SetACLDisabled(true);
+		break;
+	}
+
+	// If not login at startup but it can disconnect, set to force disconnect mode
+	mFlags.Set(eForceDisconnect, !GetAddressAccount()->GetLogonAtStart());
+
+	switch(GetAccountType())
+	{
+	case CINETAccount::eLocalAdbk:
+	case CINETAccount::eOSAdbk:
+		mDirDelim = os_dir_delim;
+		break;
+	case CINETAccount::eIMSP:
+		mDirDelim = '.';
+		break;
+	case CINETAccount::eACAP:
+	case CINETAccount::eCardDAVAdbk:
+		mDirDelim = '/';
+		break;
+	default:
+		mDirDelim = 0;
 		break;
 	}
 
@@ -67,17 +107,22 @@ CAdbkProtocol::CAdbkProtocol(CINETAccount* account)
 
 // Copy constructor
 CAdbkProtocol::CAdbkProtocol(const CAdbkProtocol& copy, bool force_local, bool force_remote)
-	: CINETProtocol(copy)
+	: CINETProtocol(copy),
+		mStoreRoot(this)
 {
 	// Init instance variables
 	mClient = NULL;
-	mAdbkList = new CAdbkList(false);
+	mCacheClient = NULL;
+	mCacheIsPrimary = false;
 
 	mRecorder = NULL; 				// Only original proto uses this - clones do not
 
+	mDirDelim = copy.mDirDelim;
+
 	// Copy client
 	if (((GetAccountType() == CINETAccount::eIMSP) ||
-		 (GetAccountType() == CINETAccount::eACAP))
+		 (GetAccountType() == CINETAccount::eACAP) ||
+		 (GetAccountType() == CINETAccount::eCardDAVAdbk))
 		&& (force_local || force_remote))
 	{
 		if (force_remote)
@@ -88,9 +133,30 @@ CAdbkProtocol::CAdbkProtocol(const CAdbkProtocol& copy, bool force_local, bool f
 			{
 			case CINETAccount::eIMSP:
 				mClient = new CIMSPClient(NULL, this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
 				break;
 			case CINETAccount::eACAP:
 				mClient = new CACAPClient(NULL, this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
+				break;
+			case CINETAccount::eCardDAVAdbk:
+				mClient = new CCardDAVVCardClient(this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
 				break;
 			default:;
 			}
@@ -100,8 +166,8 @@ CAdbkProtocol::CAdbkProtocol(const CAdbkProtocol& copy, bool force_local, bool f
 			SetFlags(eIsOffline, true);
 			SetFlags(eDisconnected, true);
 			InitDisconnect();
-			mClient = new CLocalAdbkClient(this);
-			static_cast<CLocalAdbkClient*>(mClient)->SetRecorder(mRecorder);
+			mClient = new CLocalVCardClient(this);
+			static_cast<CLocalVCardClient*>(mClient)->SetRecorder(mRecorder);
 		}
 		CINETProtocol::mClient = mClient;
 	}
@@ -113,11 +179,12 @@ CAdbkProtocol::CAdbkProtocol(const CAdbkProtocol& copy, bool force_local, bool f
 // Default destructor
 CAdbkProtocol::~CAdbkProtocol()
 {
+	// Clear nodes first to ensure any active nodes write themselves out before the
+	// client is deleted
+	mStoreRoot.Clear();
+
 	// Delete client
 	RemoveClient();
-
-	delete mAdbkList;
-	mAdbkList = NULL;
 
 	// Delete recorder
 	delete mRecorder;
@@ -135,6 +202,7 @@ void CAdbkProtocol::SetAccount(CINETAccount* account)
 	{
 	case CINETAccount::eIMSP:
 	case CINETAccount::eACAP:
+	case CINETAccount::eCardDAVAdbk:
 		SetFlags(eCanDisconnect, IsOfflineAllowed() &&
 									GetAddressAccount()->GetDisconnected());
 		break;
@@ -143,6 +211,69 @@ void CAdbkProtocol::SetAccount(CINETAccount* account)
 		break;
 	}
 
+	switch(GetAccountType())
+	{
+	case CINETAccount::eLocalAdbk:
+	case CINETAccount::eOSAdbk:
+		mDirDelim = os_dir_delim;
+		break;
+	case CINETAccount::eIMSP:
+		mDirDelim = '.';
+		break;
+	case CINETAccount::eACAP:
+	case CINETAccount::eCardDAVAdbk:
+		mDirDelim = '/';
+		break;
+	default:
+		mDirDelim = 0;
+		break;
+	}
+
+	// Look for change in account name
+	if (mStoreRoot.GetName() != GetAccountName())
+	{
+		// Need to rename offline
+		if (mCacheClient != NULL)
+		{
+			RenameOffline();
+		}
+		
+		// Rename root
+		mStoreRoot.SetName(GetAccountName());
+	}
+
+	if (mCacheClient != NULL)
+	{
+		// Don't allow throw
+		try
+		{
+			mCacheClient->Reset();
+		}
+		catch (...)
+		{
+			CLOG_LOGCATCH(...);
+		}
+	}
+
+}
+
+void CAdbkProtocol::DirtyAccount()
+{
+	// Must override in derived classes
+	switch(GetAccountType())
+	{
+	case CINETAccount::eLocalAdbk:
+	case CINETAccount::eIMSP:
+	case CINETAccount::eACAP:
+	case CINETAccount::eCardDAVAdbk:
+		CPreferences::sPrefs->mAddressAccounts.SetDirty();
+		break;
+	case CINETAccount::eOSAdbk:
+		CPreferences::sPrefs->mOSAdbkAccount.SetDirty();
+		break;
+	default:
+		break;
+	}
 }
 
 void CAdbkProtocol::CreateClient()
@@ -154,7 +285,8 @@ void CAdbkProtocol::CreateClient()
 	{
 	case CINETAccount::eIMSP:
 	case CINETAccount::eACAP:
-		if (CConnectionManager::sConnectionManager.IsConnected() || !CanDisconnect())
+	case CINETAccount::eCardDAVAdbk:
+		if (CConnectionManager::sConnectionManager.IsConnected() && !IsForceDisconnect() || !CanDisconnect())
 		{
 			SetFlags(eIsOffline, false);
 			SetFlags(eDisconnected, false);
@@ -162,9 +294,30 @@ void CAdbkProtocol::CreateClient()
 			{
 			case CINETAccount::eIMSP:
 				mClient = new CIMSPClient(NULL, this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
 				break;
 			case CINETAccount::eACAP:
 				mClient = new CACAPClient(NULL, this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
+				break;
+			case CINETAccount::eCardDAVAdbk:
+				mClient = new CCardDAVVCardClient(NULL, this);
+				if (CanDisconnect())
+				{
+					InitOfflineCWD();
+					mCacheClient = new CLocalVCardClient(this);
+					mCacheIsPrimary = false;
+				}
 				break;
 			default:;
 			}
@@ -174,15 +327,19 @@ void CAdbkProtocol::CreateClient()
 			SetFlags(eIsOffline, true);
 			SetFlags(eDisconnected, true);
 			InitDisconnect();
-			mClient = new CLocalAdbkClient(this);
-			static_cast<CLocalAdbkClient*>(mClient)->SetRecorder(mRecorder);
+			mClient = new CLocalVCardClient(this);
+			static_cast<CLocalVCardClient*>(mClient)->SetRecorder(mRecorder);
 		}
 		break;
 	case CINETAccount::eLocalAdbk:
 		SetFlags(eIsOffline, true);
 		SetFlags(eDisconnected, false);
 		InitOffline();
+#ifdef USE_LOCAL_VCARDS
+		mClient = new CLocalVCardClient(this);
+#else
 		mClient = new CLocalAdbkClient(this);
+#endif
 		break;
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #if PP_Target_Carbon
@@ -209,8 +366,12 @@ void CAdbkProtocol::CopyClient(const CINETProtocol& copy)
 		mClient = new CIMSPClient(static_cast<const CIMSPClient&>(*copy_it), NULL, this);
 	else if (dynamic_cast<CACAPClient*>(copy_it))
 		mClient = new CACAPClient(static_cast<const CACAPClient&>(*copy_it), NULL, this);
+	else if (dynamic_cast<CCardDAVVCardClient*>(copy_it))
+		mClient = new CCardDAVVCardClient(static_cast<const CCardDAVVCardClient&>(*copy_it), this);
 	else if (dynamic_cast<CLocalAdbkClient*>(copy_it))
 		mClient = new CLocalAdbkClient(static_cast<const CLocalAdbkClient&>(*copy_it), this);
+	else if (dynamic_cast<CLocalVCardClient*>(copy_it))
+		mClient = new CLocalVCardClient(static_cast<const CLocalVCardClient&>(*copy_it), this);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #if PP_Target_Carbon
 	else if (dynamic_cast<CMacOSXAdbkClient*>(copy_it))
@@ -230,12 +391,24 @@ void CAdbkProtocol::SetSynchronising()
 	if (mRecorder)
 	{
 		// Remove from local client
+#ifdef USE_LOCAL_VCARDS
+		CLocalVCardClient* client = dynamic_cast<CLocalVCardClient*>(mClient);
+#else
 		CLocalAdbkClient* client = dynamic_cast<CLocalAdbkClient*>(mClient);
+#endif
 		if (client)
 			client->SetRecorder(NULL);
 
 		delete mRecorder;
 		mRecorder = NULL;
+	}
+	
+	// Remove cache client
+	if (mCacheClient != NULL)
+	{
+		delete mCacheClient;
+		mCacheClient = NULL;
+		mCacheIsPrimary = false;
 	}
 }
 
@@ -244,76 +417,158 @@ void CAdbkProtocol::RemoveClient()
 	delete mClient;
 	mClient = NULL;
 	CINETProtocol::mClient = NULL;
+	
+	delete mCacheClient;
+	mCacheClient = NULL;
+	mCacheIsPrimary = false;
 }
 
-// Logoff from protocol server
-void CAdbkProtocol::Logoff()
+// Open connection to protocol server
+void CAdbkProtocol::Open()
 {
-	if (IsLoggedOn())
+	// Only bother if not already open
+	if (IsOpenAllowed() && IsNotOpen())
 	{
+		// Get client to open
+		SetErrorProcess(false);
+		mClient->Open();
+		if (mCacheClient != NULL)
+			mCacheClient->Open();
+		mMPState = eINETOpen;
+	}
+
+}
+
+// Close connection to protocol server
+void CAdbkProtocol::Close()
+{
+	// Only bother if not already closed
+	if (IsNotOpen())
+		return;
+
 		try
 		{
-			// Tell listeners we are about to remove all address books
-			// Do this BEFORE logging out so that any pending address book changes can be committed
-			// whilst connection is still in place
-			Broadcast_Message(eBroadcast_ClearList, this);
+		// Logoff if required
+		if (IsLoggedOn())
+			Logoff();
 
-			// Do inherited
-			CINETProtocol::Logoff();
+		// Get client to close
+		mClient->Close();
+		if (mCacheClient != NULL)
+			mCacheClient->Close();
 
-			// Remove address books
-			mAdbkList->erase_children();
+		mMPState = eINETNotOpen;
+		SetErrorProcess(false);
+		
+		// Clean any free connections in cache
+		CleanConnections();
 		}
 		catch (...)
 		{
 			CLOG_LOGCATCH(...);
 
-			// Tell listeners we are about to remove all address books
-			Broadcast_Message(eBroadcast_ClearList, this);
-
-			// Always remove address books
-			mAdbkList->erase_children();
+		// Clean up and throw up
+		mMPState = eINETNotOpen;
+		SetErrorProcess(false);
+		
+		// Clean any free connections in cache
+		CleanConnections();
 
 			CLOG_LOGRETHROW;
 			throw;
 		}
 	}
-}
 
-// Force off from protocol server
-void CAdbkProtocol::Forceoff()
+// Logon to server
+void CAdbkProtocol::Logon()
 {
-	// Do inherited
-	CINETProtocol::Forceoff();
+	// No need to block since if its not logged in there can be no other network
+	// operation in progress. If it is logged in it won't issue a network call either.
 
-	// Tell listeners we are about to remove all address books
-	Broadcast_Message(eBroadcast_ClearList, this);
-
-	// Remove address books
-	mAdbkList->erase_children();
-}
-
-// Set list title
-void CAdbkProtocol::SetDescriptor(const char* desc)
-{
-	cdstring* name = new cdstring(GetAccountName());
-	mAdbkList->SetData(name);
-
-	CINETProtocol::SetDescriptor(desc);
-}
-
-char CAdbkProtocol::GetSeparator() const
-{
-	switch(GetAccountType())
+	if (IsOpenAllowed() && !IsLoggedOn())
 	{
-	case CINETAccount::eLocalAdbk:
-	case CINETAccount::eOSAdbk:
-	default:
-		return os_dir_delim;
-	case CINETAccount::eIMSP:
-		return '.';
-	case CINETAccount::eACAP:
-		return '/';
+		// Recovering after a failure should be on here as it can be turned off
+		// at logoff
+		SetNoRecovery(false);
+
+		// Get client to logon
+		mClient->Logon();
+		if (mCacheClient != NULL)
+			mCacheClient->Logon();
+
+		// Recache user id & password after successful logon
+		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+		{
+			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+			// Only bother if it contains something
+			if (!auth->GetPswd().empty())
+				SetCachedPswd(auth->GetUID(), auth->GetPswd());
+}
+
+		// Make copy of current authenticator
+		SetAuthenticatorUniqueness(GetAccount()->GetAuthenticator().GetUniqueness());
+
+		// Add to list of periodic items
+		CMailControl::RegisterPeriodic(this, true);
+
+		mMPState = eINETLoggedOn;
+		SetErrorProcess(false);
+
+		// Broadcast change in state
+		Broadcast_Message(eBroadcast_Logon, this);
+	}
+}
+
+// Logoff from protocol server
+void CAdbkProtocol::Logoff()
+{
+	// Must block
+	cdmutex::lock_cdmutex _lock(_mutex);
+
+	if (IsLoggedOn())
+	{
+		// Remove from list of periodic items
+		CMailControl::RegisterPeriodic(this, false);
+
+		// Do without errors appearing on screen as the user
+		// is not really interested in failures during logoff
+		bool old_error_alert = GetNoErrorAlert();
+		SetNoErrorAlert(true);
+
+		// No point in recovering after a failure
+		SetNoRecovery(true);
+
+		try
+		{
+			// Get client to logoff
+			mClient->Logoff();
+		}
+		catch(...)
+		{
+			CLOG_LOGCATCH(...);
+		}
+		try
+		{
+			// Get client to logoff
+			if (mCacheClient != NULL)
+				mCacheClient->Logoff();
+		}
+		catch(...)
+		{
+			CLOG_LOGCATCH(...);
+		}
+		SetNoErrorAlert(old_error_alert);
+
+		// Set flag
+		mMPState = eINETLoggedOff;
+		SetErrorProcess(false);
+
+		// Broadcast change in state
+		Broadcast_Message(eBroadcast_Logoff, this);
+		
+		// Clean any free connections in cache
+		CleanConnections();
 	}
 }
 
@@ -324,6 +579,7 @@ const char* CAdbkProtocol::GetUserPrefix() const
 	case CINETAccount::eIMSP:
 	case CINETAccount::eLocalAdbk:
 	case CINETAccount::eOSAdbk:
+	case CINETAccount::eCardDAVAdbk:
 	default:
 		return cdstring::null_str;
 	case CINETAccount::eACAP:
@@ -336,12 +592,27 @@ const char* CAdbkProtocol::GetUserPrefix() const
 // Load adbk list from server
 void CAdbkProtocol::LoadList()
 {
-	// Check whether connected or not
-	if (IsDisconnected())
+	// NB This protocol does not delete the list items when it logs out, so we
+	// need to do that here before reloading
+
+	// Tell listeners we are about to remove all calendar store nodes
+	Broadcast_Message(eBroadcast_ClearList, this);
+
+	// Remove calendar store nodes
+	mStoreRoot.Clear();
+	
+	// Check whether connected or not or whether we always read from local cache
+	if (IsDisconnected() || mCacheIsPrimary)
 		ReadAddressBooks();
 	else
 	{
-		mClient->_FindAllAdbks("");
+		mClient->_ListAddressBooks(&mStoreRoot);
+
+		// Always keep disconnected cache list in sync with server
+		if (mCacheClient != NULL)
+		{
+			DumpAddressBooks();
+		}
 
 		// Look for default address book if remote
 		if (!IsOffline())
@@ -355,11 +626,11 @@ void CAdbkProtocol::LoadList()
 			default_name += GetAccount()->GetAuthenticator().GetAuthenticator()->GetActualUID();
 
 			// Scan abooks for default
-			if (mAdbkList->HasChildren())
-				for(CAdbkList::node_list::const_iterator niter = mAdbkList->GetChildren()->begin();
-					!has_default && (niter != mAdbkList->GetChildren()->end()); niter++)
+			if (mStoreRoot.CountDescendants())
+				for(CAddressBookList::const_iterator niter = mStoreRoot.GetChildren()->begin();
+					!has_default && (niter != mStoreRoot.GetChildren()->end()); niter++)
 				{
-					if ((*niter)->IsSelectable() && ((*niter)->GetSelectData()->GetName() == default_name))
+					if ((*niter)->IsAdbk() && ((*niter)->GetName() == default_name))
 						has_default = true;
 				}
 
@@ -367,7 +638,7 @@ void CAdbkProtocol::LoadList()
 			if (!has_default)
 			{
 				// Add adress book to list
-				CRemoteAddressBook* adbk = new CRemoteAddressBook(this, default_name);
+				CAddressBook* adbk = new CAddressBook(this, &mStoreRoot, true, false, default_name);
 				
 				// Policy:
 				//   IMSP: create a dummy entry in default address book then delete it
@@ -376,7 +647,7 @@ void CAdbkProtocol::LoadList()
 				{
 				case CINETAccount::eIMSP:
 				{
-					GetAdbkList()->push_back(adbk, false);
+					mStoreRoot.AddChild(adbk);
 
 					// Now force real creation of address book by storing fake address
 					CAddressList list;
@@ -387,7 +658,7 @@ void CAdbkProtocol::LoadList()
 				}
 				case CINETAccount::eACAP:
 					CreateAdbk(adbk);
-					GetAdbkList()->push_back(adbk, true);
+					mStoreRoot.AddChild(adbk);
 					break;
 				default:;
 				}
@@ -405,24 +676,52 @@ void CAdbkProtocol::LoadList()
 			}
 		}
 	}
+
+	SyncList();
+	Broadcast_Message(eBroadcast_RefreshList, this);
 }
 
+
+// Load calendar list from server
+void CAdbkProtocol::LoadSubList(CAddressBook* adbk, bool deep)
+{
+	// When disconnected or cache is primary the list is always up to date
+	if (IsDisconnected() || mCacheIsPrimary)
+		return;
+	
+	// Tell listeners we are about to remove all child nodes
+	Broadcast_Message(eBroadcast_ClearSubList, adbk);
+
+	// Remove address book nodes
+	adbk->Clear();
+	
+	// Now get new list
+	mClient->_ListAddressBooks(adbk);
+
+	// Always keep disconnected cache list in sync with server
+	if (mCacheClient != NULL)
+	{
+		DumpAddressBooks();
+}
+
+	SyncSubList(adbk);
+
+	// Tell listeners we have added child nodes
+	Broadcast_Message(eBroadcast_RefreshSubList, adbk);
+}
 
 // Sync adbks with prefs options
 void CAdbkProtocol::SyncList()
 {
-	// Only if its not empty
-	if (!mAdbkList->GetChildren())
-		return;
+	SyncSubList(&mStoreRoot);
+}
 
-	// Look for matching address book
-	for(CAdbkList::node_list::const_iterator niter = mAdbkList->GetChildren()->begin();
-		niter != mAdbkList->GetChildren()->end(); niter++)
+// Sync adbks with prefs options
+void CAdbkProtocol::SyncSubList(CAddressBook* adbk)
+{
+	// Synf if real address book
+	if (adbk->IsAdbk())
 	{
-		if ((*niter)->IsSelectable())
-		{
-			CAddressBook* adbk = (*niter)->GetSelectData();
-
 			// Get adbk URL
 			cdstring adbk_url = adbk->GetURL();
 
@@ -463,86 +762,166 @@ void CAdbkProtocol::SyncList()
 
 			// Force update of manager
 			CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, true);
-		}
 	}
 
-	Broadcast_Message(eBroadcast_RefreshList, this);
+	// Look at each child
+	if (adbk->HasInferiors())
+	{
+		for(CAddressBookList::const_iterator iter = adbk->GetChildren()->begin(); iter != adbk->GetChildren()->end(); iter++)
+		{
+			SyncSubList(*iter);
+		}
+	}
 }
 
 // Refresh adbk list from server
 void CAdbkProtocol::RefreshList()
 {
-	// Tell listeners we are about to remove all address books
-	Broadcast_Message(eBroadcast_ClearList, this);
-
-	// Remove address books
-	mAdbkList->erase_children();
-	
 	// Reload and sync
 	LoadList();
-	SyncList();
 }
 
-// FInd address book with matching name
-CAddressBook* CAdbkProtocol::FindAddressBook(const char* name)
+void CAdbkProtocol::RefreshSubList(CAddressBook* adbk)
 {
-	// Write out each address book
-	if (mAdbkList && mAdbkList->HasChildren())
+	// Reload and sync
+	LoadSubList(adbk, false);
+}
+
+// List was changed in some way
+void CAdbkProtocol::ListChanged()
+{
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
 	{
-		for(CAdbkList::node_list::const_iterator niter = mAdbkList->GetChildren()->begin();
-			niter != mAdbkList->GetChildren()->end(); niter++)
-		{
-			if ((*niter)->IsSelectable())
-			{
-				const CAddressBook* adbk = (*niter)->GetSelectData();
-				if (adbk->GetName() == name)
-					return const_cast<CAddressBook*>(adbk);
+		DumpAddressBooks();
 			}
 		}
+
+CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
+{
+	// Break the name down into components
+	cdstrvect names;
+	const char* start = adbk.c_str();
+	const char* end = ::strchr(start, cMailAccountSeparator);
+	while(end != NULL)
+	{
+		names.push_back(cdstring(start, end - start));
+		start = end + 1;
+		end = ::strchr(start, GetDirDelim());
+	}
+	if (!parent)
+		names.push_back(cdstring(start));
+	::reverse(names.begin(), names.end());
+	
+	// Now test account name
+	if (names.back() != GetAccountName())
+		return NULL;
+	names.pop_back();
+	
+	return names.empty() ? const_cast<CAddressBook*>(&mStoreRoot) : mStoreRoot.FindNode(names);
 	}
 
-	return NULL;
+CAddressBook* CAdbkProtocol::GetParentNode(const cdstring& adbk) const
+{
+	return GetNode(adbk, true);
+}
+
+bool CAdbkProtocol::HasDisconnectedAdbks()
+{
+	if (CanDisconnect() || mCacheIsPrimary)
+	{
+		if (!mStoreRoot.HasInferiors())
+			ReadAddressBooks();
+		return mStoreRoot.HasInferiors();
+	}
+	else
+		return false;
 }
 
 // Create a new adbk
 void CAdbkProtocol::CreateAdbk(CAddressBook* adbk)
 {
-	// Do create action
+	// Don't do on server if cache is primary
+	if (!mCacheIsPrimary)
 	mClient->_CreateAdbk(adbk);
+
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
+	{
+		mCacheClient->_CreateAdbk(adbk);
+		DumpAddressBooks();
+	}
+	
+	// Always sync the cache state
+	if (IsDisconnected())
+		adbk->TestDisconnectCache();
 }
 
 // Touch mbox on server
 void CAdbkProtocol::TouchAdbk(CAddressBook* adbk)
 {
-	// Do touch action
+	// Don't do on server if cache is primary
+	if (!mCacheIsPrimary)
 	mClient->_TouchAdbk(adbk);
 
-	// If disconnected set flag
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
+	{
+		if (mCacheClient->_TouchAdbk(adbk))
+			DumpAddressBooks();
+	}
+	
+	// Always sync the cache state
 	if (IsDisconnected())
-		// Now convert to local adbk
-		adbk->SetFlags(CAddressBook::eCachedAdbk);
+		adbk->TestDisconnectCache();
 }
 
 // Test mbox on server
 bool CAdbkProtocol::TestAdbk(CAddressBook* adbk)
 {
 	// Do test action
-	return mClient->_TestAdbk(adbk);
+	return (mCacheIsPrimary && (mCacheClient != NULL)) ? mCacheClient->_TestAdbk(adbk) : mClient->_TestAdbk(adbk);
 
 }
 
 // Delete adbk
 void CAdbkProtocol::DeleteAdbk(CAddressBook* adbk)
 {
-	// Do delete action
+	// Don't do on server if cache is primary
+	if (!mCacheIsPrimary)
 	mClient->_DeleteAdbk(adbk);
+
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
+	{
+		if (mCacheClient->_TestAdbk(adbk))
+			mCacheClient->_DeleteAdbk(adbk);
+	}
+}
+
+void CAdbkProtocol::SizeAdbk(CAddressBook* adbk)
+{
+	// Don't do on server if cache is primary
+	if (mCacheIsPrimary)
+		mCacheClient->_SizeAdbk(adbk);
+	else
+		mClient->_SizeAdbk(adbk);
 }
 
 // Rename adbk
 void CAdbkProtocol::RenameAdbk(CAddressBook* adbk, const char* adbk_new)
 {
-	// Do rename action
+	// Rename it on the server
+	// Don't do on server if cache is primary
+	if (!mCacheIsPrimary)
 	mClient->_RenameAdbk(adbk, adbk_new);
+
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
+	{
+		if (mCacheClient->_TestAdbk(adbk))
+			mCacheClient->_RenameAdbk(adbk, adbk_new);
+	}
 }
 
 // Open adbk on server
@@ -552,12 +931,127 @@ void CAdbkProtocol::OpenAdbk(CAddressBook* adbk)
 	if (IsDisconnected())
 		TouchAdbk(adbk);
 
-	mClient->_FindAllAddresses(adbk);
+	// See if offline or disconnected	
+	if (IsOffline() || IsDisconnected())
+	{
+		// Just read full calendar from offline/disconnect store
+		ReadFullAddressBook(adbk);
+	}
+	else
+	{
+		// Look for local cache first
+		if ((mCacheClient != NULL) && !mCacheIsPrimary)
+		{
+			// Read in the calendar cache if it exists
+			if (mCacheClient->_TestAdbk(adbk))
+				mCacheClient->_ReadFullAddressBook(adbk);
+
+			// Sync cache with server doing playback if needed
+			SyncFromServer(adbk);
+		}
+		else
+		{
+			// Just read full calendar from server
+			ReadFullAddressBook(adbk);
+		}
+	}
 }
 
-// State of adbk changed
-void CAdbkProtocol::AdbkChanged(CAddressBook* adbk)
+void CAdbkProtocol::SyncFromServer(CAddressBook* adbk)
 {
+	// Different based on full or component sync
+	if (IsReadComponentAdbk())
+		SyncComponentsFromServer(adbk);
+	else
+		SyncFullFromServer(adbk);
+}
+
+void CAdbkProtocol::SyncFullFromServer(CAddressBook* adbk)
+{
+	// Must have a loaded vcard address book
+	if (adbk->GetVCardAdbk() == NULL)
+		return;
+
+	// We need to do this as a proper transaction with locking
+	try
+	{
+		// We need to do this as a proper transaction with locking
+		mClient->_LockAdbk(adbk);
+
+		// Get client and server data state
+		bool server_changed = false;
+		bool cache_changed = false;
+
+		// Special for empty local cache
+		if (adbk->GetVCardAdbk()->GetETag().empty())
+		{
+			// Force server -> cache sync
+			server_changed = true;
+			cache_changed = false;
+		}
+		else
+		{
+			// Check to see whether server/cache state changed
+			server_changed = mClient->_AdbkChanged(adbk);
+			cache_changed = adbk->GetVCardAdbk()->NeedsSync();
+		}
+		
+		// Now do appropriate sync (if neither have changed no need to do anything - just use the cache as-is)
+		if (server_changed && !cache_changed)
+		{
+			// Server overwrites local cache
+			adbk->ClearContents();
+			mClient->_ReadFullAddressBook(adbk);
+			
+			// Write changes back to local cache
+			if (mCacheClient->_TouchAdbk(adbk))
+				DumpAddressBooks();
+			mCacheClient->_WriteFullAddressBook(adbk);
+		}
+		else if (!server_changed && cache_changed)
+		{
+			// Local cache overwrites server
+			mClient->_WriteFullAddressBook(adbk);
+		}
+		else if (server_changed && cache_changed)
+		{
+			// Get temp copy of server calendar
+			CAddressBook temp(this, NULL);
+			mClient->_ReadFullAddressBook(&temp);
+			
+			// Sync the two - after this 'adbk' will contain the sync'd data
+			vCard::CVCardSync sync(*adbk->GetVCardAdbk(), *temp.GetVCardAdbk());
+			sync.Sync();
+			
+			// Local overwrites server
+			adbk->GetVCardAdbk()->ClearRecording();
+			
+			// Now write back to both server and cache
+			mClient->_WriteFullAddressBook(adbk);
+			if (mCacheClient->_TouchAdbk(adbk))
+				DumpAddressBooks();
+			mCacheClient->_WriteFullAddressBook(adbk);
+		}
+
+		// Always unlock
+		mClient->_UnlockAdbk(adbk);
+	}
+	catch(...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Always unlock
+		mClient->_UnlockAdbk(adbk);
+
+		CLOG_LOGRETHROW;
+		throw;
+	}
+}
+
+void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
+{
+#ifdef TODO
+#endif
 }
 
 // Close existing address book
@@ -565,40 +1059,186 @@ void CAdbkProtocol::CloseAdbk(CAddressBook* adbk)
 {
 }
 
-// Add address
-void CAdbkProtocol::AddAddress(CAddressBook* adbk, CAddressList* addrs)
+void CAdbkProtocol::ReadFullAddressBook(CAddressBook* adbk)
 {
-	mClient->_StoreAddress(adbk, addrs);
+	// Don't do on server if cache is primary
+	if (mCacheIsPrimary)
+		mCacheClient->_ReadFullAddressBook(adbk);
+	else
+		mClient->_ReadFullAddressBook(adbk);
 }
 
-// Add group
+void CAdbkProtocol::WriteFullAddressBook(CAddressBook* adbk)
+{
+	// Don't do on server if cache is primary
+	if (mCacheIsPrimary)
+		mCacheClient->_WriteFullAddressBook(adbk);
+	else
+	{
+		mClient->_WriteFullAddressBook(adbk);
+
+		// Always keep disconnected cache in sync with server
+		if (mCacheClient != NULL)
+		{
+			if (mCacheClient->_TouchAdbk(adbk))
+				DumpAddressBooks();
+			mCacheClient->_WriteFullAddressBook(adbk);
+
+			// Set sync time in node
+			adbk->SyncNow();
+		}
+	}
+}
+
+bool CAdbkProtocol::DoWriteFull(CAddressBook* adbk)
+{
+	// Check for per-component protocol
+	if (!IsWriteComponentAdbk() || IsDisconnected())
+	{
+		// Always fall back to writing entire address book
+		WriteFullAddressBook(adbk);
+		return true;
+	}
+	else
+		return false;
+}
+
+void CAdbkProtocol::DidComponentWrite(CAddressBook* adbk)
+{
+	// Clear cache state after write
+	if (adbk->IsOpen())
+	{
+		adbk->GetVCardAdbk()->ClearRecording();
+		adbk->GetVCardAdbk()->SetDirty(false);
+	}
+	
+	// Always keep disconnected cache in sync with server
+	if (mCacheClient != NULL)
+	{
+		if (mCacheClient->_TouchAdbk(adbk))
+			DumpAddressBooks();
+		mCacheClient->_WriteFullAddressBook(adbk);
+
+		// Set sync time in node
+		adbk->SyncNow();
+	}
+}
+
+// Add address - the address must already be stored in the address book
+// and have a vCard representation if the address book is open
+void CAdbkProtocol::AddAddress(CAddressBook* adbk, CAddressList* addrs)
+{
+	// Write to store - this will work even if the address book is not open
+	mClient->_StoreAddress(adbk, addrs);
+	if (adbk->IsOpen() && !IsDisconnected())
+	{
+		adbk->GetVCardAdbk()->ClearRecording();
+		adbk->GetVCardAdbk()->SetDirty(false);
+}
+
+	// Always keep disconnected cache in sync with server
+	if (adbk->IsOpen() && (mCacheClient != NULL))
+	{
+		if (mCacheClient->_TouchAdbk(adbk))
+			DumpAddressBooks();
+		mCacheClient->_StoreAddress(adbk, addrs);
+
+		// Set sync time in node
+		adbk->SyncNow();
+	}
+}
+
+// Add group - the address must already be stored in the address book
+// and have a vCard representation if the address book is open
 void CAdbkProtocol::AddGroup(CAddressBook* adbk, CGroupList* grps)
 {
+	// Write to store - this will work even if the address book is not open
 	mClient->_StoreGroup(adbk, grps);
+	if (adbk->IsOpen() && !IsDisconnected())
+	{
+		adbk->GetVCardAdbk()->ClearRecording();
+		adbk->GetVCardAdbk()->SetDirty(false);
+}
+
+	// Always keep disconnected cache in sync with server
+	if (adbk->IsOpen() && (mCacheClient != NULL))
+	{
+		if (mCacheClient->_TouchAdbk(adbk))
+			DumpAddressBooks();
+		mCacheClient->_StoreGroup(adbk, grps);
+
+		// Set sync time in node
+		adbk->SyncNow();
+	}
 }
 
 // Change address
 void CAdbkProtocol::ChangeAddress(CAddressBook* adbk, CAddressList* addrs)
 {
+	// The address book MUST be open
+	if (!adbk->IsOpen())
+		return;
+
+	// Check for per-component protocol
+	if (DoWriteFull(adbk))
+		return;
+	
 	mClient->_ChangeAddress(adbk, addrs);
+	
+	// Always keep disconnected cache in sync with server
+	DidComponentWrite(adbk);
 }
 
 // Change group
 void CAdbkProtocol::ChangeGroup(CAddressBook* adbk, CGroupList* grps)
 {
+	// The address book MUST be open
+	if (!adbk->IsOpen())
+		return;
+
+	// Check for per-component protocol
+	if (DoWriteFull(adbk))
+		return;
+	
 	mClient->_ChangeGroup(adbk, grps);
+	
+	// Always keep disconnected cache in sync with server
+	DidComponentWrite(adbk);
 }
 
 // Remove address
 void CAdbkProtocol::RemoveAddress(CAddressBook* adbk, CAddressList* addrs)
 {
+	// The address book MUST be open
+	if (!adbk->IsOpen())
+		return;
+
 	mClient->_DeleteAddress(adbk, addrs);
 }
 
 // Remove group
 void CAdbkProtocol::RemoveGroup(CAddressBook* adbk, CGroupList* grps)
 {
+	// The address book MUST be open
+	if (!adbk->IsOpen())
+		return;
+
 	mClient->_DeleteGroup(adbk, grps);
+}
+
+// Address/Group was removed
+void CAdbkProtocol::RemovalOfAddress(CAddressBook* adbk)
+{
+	// The address book MUST be open
+	if (!adbk->IsOpen())
+		return;
+	
+	// Check for per-component protocol
+	if (DoWriteFull(adbk))
+		return;
+	
+	// Always keep disconnected cache in sync with server
+	DidComponentWrite(adbk);
 }
 
 #pragma mark ____________________________Lookup
@@ -711,294 +1351,89 @@ void CAdbkProtocol::GoOffline()
 	// Now do inherited connection switch
 	CINETProtocol::GoOffline();
 	
-	// Must reload/sync list
-	if (IsLoggedOn())
-	{
-		LoadList();
-		SyncList();
-	}
+	// Check each node to get cached state
+	mStoreRoot.TestDisconnectCache();
 }
 
 void CAdbkProtocol::GoOnline()
 {
+	// Always playback sync'd data
+	DoPlayback();
+
 	// Reset state of address books
 	RecoverAddressBooks();
 
 	// Now do inherited connection switch
 	CINETProtocol::GoOnline();
-	
-	// Must reload/sync list
-	if (IsLoggedOn())
-	{
-		LoadList();
-		SyncList();
-	}
 }
+
+const char* cAdbkListName = "adbklist.xml";
 
 void CAdbkProtocol::DumpAddressBooks()
 {
-	cdstring list_name = mOfflineCWD + "adbklist";
-	cdofstream dump(list_name);
+	cdstring list_name = mOfflineCWD + cAdbkListName;
 
-	// Write out each address book
-	if (mAdbkList && mAdbkList->HasChildren())
-	{
-		// Create local clone
-		auto_ptr<CAdbkProtocol> clone(new CAdbkProtocol(*this, true));
-		clone->SetSynchronising();
+	// Create output file
+	cdofstream fout(list_name.c_str());
+	if (fout.fail())
+		return;
 
-		try
-		{
-			clone->Open();
-
-			for(CAdbkList::node_list::iterator niter = mAdbkList->GetChildren()->begin();
-				niter != mAdbkList->GetChildren()->end(); niter++)
-			{
-				if ((*niter)->IsSelectable())
-				{
-					CAddressBook* adbk = (*niter)->GetSelectData();
-					dump << adbk->GetName() << endl;
-					dump << 1 << endl;
-					
-					adbk->SwitchDisconnect(clone.get());
-				}
-				else
-				{
-					const cdstring* name = (*niter)->GetNoSelectData();
-					dump << name << endl;
-					dump << 0 << endl;
-				}
-			}
+	// Create XML document object
+	std::auto_ptr<xmllib::XMLDocument> doc(new xmllib::XMLDocument);
+	
+	// Root element is the preferences element
+	doc->GetRoot()->SetName(cXMLElement_adbklist);
+	xmllib::XMLObject::WriteAttribute(doc->GetRoot(), cXMLAttribute_version, (uint32_t)1);
+	
+	// Now add each node (and child nodes) to XML doc
+	mStoreRoot.WriteXML(doc.get(), doc->GetRoot(), true);
+	
+	// Write to stream
+	doc->Generate(fout);
 		}
-		catch (...)
-		{
-			CLOG_LOGCATCH(...);
-
-			clone->Close();
-			CLOG_LOGRETHROW;
-			throw;
-		}
-
-		clone->Close();
-	}
-
-	// Always end with blank line
-	dump << endl;
-}
 
 void CAdbkProtocol::ReadAddressBooks()
 {
-	cdstring list_name = mOfflineCWD + "adbklist";
-	cdifstream in(list_name);
-	if (in.fail())
+	cdstring list_name = mOfflineCWD + cAdbkListName;
+	
+	// XML parse the data
+	xmllib::XMLSAXSimple parser;
+	parser.ParseFile(list_name);
+
+	// See if we got any valid XML
+	if (parser.Document())
+	{
+		// Check root node
+		xmllib::XMLNode* root = parser.Document()->GetRoot();
+		if (!root->CompareFullName(cXMLElement_adbklist))
 		return;
 
-	// Read in each hierarchy
-	while(true)
-	{
-		// Get addressbook name
-		cdstring adbk_name;
-		getline(in, adbk_name);
+		// Now have store root read in all children
+		mStoreRoot.ReadXML(root, true);
 
-		// Check for end of list
-		if (adbk_name.empty())
-			break;
-
-		// Get flags
-		unsigned long flags;
-		in >> flags;
-		in.ignore();
-
-		if (flags)
-		{
-			// Add adress book to list
-			CRemoteAddressBook* adbk = new CRemoteAddressBook(this, adbk_name);
-			mAdbkList->push_back(adbk, false);
-			adbk->SwitchDisconnect(this);
-		}
-		else
-		{
-			// Add name only to list
-			cdstring* hier_name = new cdstring(adbk_name);
-			mAdbkList->push_back(hier_name, false);
-		}
+		// Always cache the disconnected state
+		mStoreRoot.TestDisconnectCache();
 	}
 }
 
 void CAdbkProtocol::RecoverAddressBooks()
 {
-	if (mAdbkList && mAdbkList->HasChildren())
-	{
-		for(CAdbkList::node_list::iterator niter = mAdbkList->GetChildren()->begin();
-			niter != mAdbkList->GetChildren()->end(); niter++)
-		{
-			if ((*niter)->IsSelectable())
-			{
-				CAddressBook* adbk = (*niter)->GetSelectData();
-				adbk->SwitchDisconnect(NULL);
-			}
-		}
-	}
 }
 
 void CAdbkProtocol::SynchroniseRemoteAll(bool fast)
 {
-	// Sync each address book set for nick-name resolution
-	if (mAdbkList && mAdbkList->HasChildren())
-	{
-		for(CAdbkList::node_list::iterator niter = mAdbkList->GetChildren()->begin();
-			niter != mAdbkList->GetChildren()->end(); niter++)
-		{
-			if ((*niter)->IsSelectable())
-			{
-				CAddressBook* adbk = (*niter)->GetSelectData();
-				if (adbk->IsAutoSync())
-					SynchroniseRemote(adbk, fast);
-			}
-		}
-	}
 }
 
 void CAdbkProtocol::SynchroniseRemote(CAddressBook* adbk, bool fast)
 {
-	// Only if possible
-	if (!CanDisconnect())
-		return;
-
-	// For each addressbook being synchronised do this:
-	//
-	// Clone this but force it to local
-	// Create a temp address book object and give it the local proto
-	// Sync address book from this proto to temp one
-
-	// Create local clone
-	auto_ptr<CAdbkProtocol> clone(new CAdbkProtocol(*this, true));
-	clone->SetSynchronising();
-
-	try
-	{
-		clone->Open();
-
-		// Create copy of address book
-		auto_ptr<CRemoteAddressBook> temp(new CRemoteAddressBook(static_cast<CRemoteAddressBook&>(*adbk)));
-
-		// Local address book is given local protocol
-		temp->SetProtocol(clone.get());
-
-		// Make sure local item exists
-		clone->TouchAdbk(temp.get());
-
-		// Now sync them both
-		SyncRemote(adbk, temp.get(), fast);
 	}
-	catch (...)
-	{
-		CLOG_LOGCATCH(...);
-
-		clone->Close();
-		CLOG_LOGRETHROW;
-		throw;
-	}
-
-	clone->Close();
-}
 
 void CAdbkProtocol::SyncRemote(CAddressBook* remote, CAddressBook* local, bool fast)
 {
-	// If fast then only sync new messages in remote store
-	// If uids then only sync specific messages in remote store
-
-	bool remote_loaded = remote->IsLoaded();
-	remote->SetFlags(CAddressBook::eSynchronising);
-
-	try
-	{
-		// Make sure remote has all addresses available
-		if (!remote_loaded)
-			remote->Read();
-		
-		// Empty out addresses from local
-		local->SetFlags(CAddressBook::eSynchronising);
-		local->Empty();
-		
-		// Copy all addresses
-		remote->CopyAll(local);
-	}
-	catch (...)
-	{
-		CLOG_LOGCATCH(...);
-
 	}
 
-	// Make sure remote is cleared
-	if (!remote_loaded)
-		remote->Clear();
-
-	remote->SetFlags(CAddressBook::eSynchronising, false);
-	local->SetFlags(CAddressBook::eSynchronising, false);
-}
-
-void CAdbkProtocol::ClearDisconnect(CAddressBook* adbk1)
+void CAdbkProtocol::ClearDisconnect(CAddressBook* adbk)
 {
-	CRemoteAddressBook* adbk = static_cast<CRemoteAddressBook*>(adbk1);
-
-	// The addressbook is either remote or local
-	if (adbk->GetProtocol()->IsDisconnected())
-	{
-		// Only bother if cache actually exists
-		if (!TestAdbk(adbk))
-			return;
-
-		// Don't record the delete/expunge operation!
-		static_cast<CLocalAdbkClient*>(mClient)->SetRecorder(NULL);
-		try
-		{
-			DeleteAdbk(adbk);
-			
-			// Remove cached flag
-			adbk->SetFlags(CAddressBook::eCachedAdbk, false);
-		}
-		catch (...)
-		{
-			CLOG_LOGCATCH(...);
-
-			static_cast<CLocalAdbkClient*>(mClient)->SetRecorder(mRecorder);
-			CLOG_LOGRETHROW;
-			throw;
-		}
-		static_cast<CLocalAdbkClient*>(mClient)->SetRecorder(mRecorder);
-	}
-	else
-	{
-		// Create local clone
-		auto_ptr<CAdbkProtocol> clone(new CAdbkProtocol(*this, true));
-		clone->SetSynchronising();
-
-		try
-		{
-			clone->Open();
-
-			// Create copy of address book
-			auto_ptr<CRemoteAddressBook> temp(new CRemoteAddressBook(*adbk));
-
-			// Local address book is given local protocol
-			temp->SetProtocol(clone.get());
-
-			// Only bother if local item exists
-			if (clone->TestAdbk(temp.get()))
-				clone->DeleteAdbk(temp.get());
-		}
-		catch (...)
-		{
-			CLOG_LOGCATCH(...);
-
-			clone->Close();
-			CLOG_LOGRETHROW;
-			throw;
-		}
-
-		clone->Close();
-	}
 }
 
 bool CAdbkProtocol::DoPlayback()

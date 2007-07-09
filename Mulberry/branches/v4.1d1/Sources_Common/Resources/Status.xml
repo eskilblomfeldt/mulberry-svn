@@ -104,5 +104,6 @@
 	<string id="Status::Calendar::Adding">Adding to calendar…</string>
 	<string id="Status::Calendar::Changing">Changing calendar…</string>
 	<string id="Status::Calendar::Removing">Removing from calendar…</string>
+	<string id="Status::Calendar::Scheduling">Scheduling…</string>
 
 </stringlist>

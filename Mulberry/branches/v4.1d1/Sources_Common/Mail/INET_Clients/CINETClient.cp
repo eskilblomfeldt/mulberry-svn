@@ -669,6 +669,7 @@ void CINETClient::Logon()
 	bool connection_up = false;
 	bool pre_auth = false;
 	bool auth_done = false;
+	bool redo_dns = true;
 
 	try
 	{
@@ -714,6 +715,7 @@ void CINETClient::Logon()
 			CLOG_LOGTHROW(CINETException, CINETException::err_BadResponse);
 			throw CINETException(CINETException::err_BadResponse);
 		}
+		redo_dns = false;
 
 		pre_auth = INETCompareResponse(cStarPREAUTH);
 
@@ -765,6 +767,10 @@ void CINETClient::Logon()
 		if (connection_up)
 			mStream->TCPCloseConnection();
 
+		// For connection failure lets always force the client to re-do its DNS lookup
+		if (redo_dns)
+			mStream->SetDescriptor(cdstring::null_str);
+
 		CLOG_LOGRETHROW;
 		throw;
 	}
@@ -781,6 +787,10 @@ void CINETClient::Logon()
 		// Disconnect if connected
 		if (connection_up)
 			mStream->TCPCloseConnection();
+
+		// For connection failure lets always force the client to re-do its DNS lookup
+		if (redo_dns)
+			mStream->SetDescriptor(cdstring::null_str);
 
 		CLOG_LOGRETHROW;
 		throw;

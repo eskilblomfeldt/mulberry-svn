@@ -28,6 +28,7 @@
 #include "prefsvector.h"
 
 class CAddress;
+class CCalendarAddress;
 class CMbox;
 namespace calstore
 {
@@ -125,6 +126,13 @@ public:
 	bool	UseSender() const
 		{ return mSender.second; }
 	const cdstring& GetSender(bool resolve = false) const;
+	
+	void	SetCalendar(const cdstring& calendar, bool use_calendar)
+		{ mCalendar = make_pair(calendar, use_calendar); }
+	bool	UseCalendar() const
+		{ return mCalendar.second; }
+	const cdstring& GetCalendar(bool resolve = false) const;
+	cdstring GetCalendarAddress() const;
 	
 	void	SetCopyTo(const cdstring& copy_to, bool use_copy_to)
 		{ mCopyTo = make_pair(copy_to, use_copy_to); }
@@ -224,6 +232,7 @@ private:
 	cdstrbool	mFrom;
 	cdstrbool	mReplyTo;
 	cdstrbool	mSender;
+	cdstrbool	mCalendar;
 	cdstrbool	mCopyTo;
 	bool		mCopyToNone;
 	bool		mCopyToChoose;
@@ -278,6 +287,7 @@ public:
 
 	CIdentity* GetIdentity(const cdstring& id) const;
 	CIdentity* GetIdentity(const CAddress& addr) const;
+	CIdentity* GetIdentity(const CCalendarAddress& addr) const;
 	unsigned long GetIndex(const cdstring& id) const;
 
 	const CIdentity* GetTiedMboxIdentity(const CMbox* mbox) const;

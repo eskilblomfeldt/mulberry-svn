@@ -21,6 +21,7 @@
 #define __CPREFERENCES__MULBERRY__
 
 #include "CCalendarAccount.h"
+#include "CCalendarStoreNode.h"
 #include "CConnectionManager.h"
 #include "CDayWeekViewTimeRange.h"
 #include "CFavouriteItem.h"
@@ -374,6 +375,7 @@ public:
 	CPreferenceValueMap<CAddressAccountList>	mAddressAccounts;					// List of address accounts
 	CPreferenceValueMap<CAddressAccount>		mLocalAdbkAccount;					// Local address account
 	CPreferenceValueMap<CAddressAccount>		mOSAdbkAccount;						// OS address account
+	CPreferenceValueMap<cdstrset>				mExpandedAdbks;						// Address books that are expanded in the display
 	CPreferenceValueMap<cdstrvect>				mAdbkOpenAtStartup;					// Open at startup list
 	CPreferenceValueMap<cdstrvect>				mAdbkNickName;						// Nick-name resolution
 	CPreferenceValueMap<cdstrvect>				mAdbkSearch;						// Search adbks
@@ -554,6 +556,12 @@ public:
 	bool	MapMailboxAlias(cdstring& name) const;							// Map mailbox name to alias
 
 	// Address book flags
+	void	RenameAddressBook(const cdstring& old_name, const cdstring& new_name);	// Rename addressbook
+	void	RenameAddressBookURL(const cdstring& old_name, const cdstring& new_name);	// Rename addressbook
+	void	RenameAddressBookFlag(const cdstring& old_name, const cdstring& new_name, CPreferenceValueMap<cdstrvect>& list);	// Changing address book flag
+	void	DeleteAddressBook(const cdstring& name);								// Delete address book
+	void	DeleteAddressBookURL(const cdstring& name);								// Delete address book
+	void	DeleteAddressBookFlag(const cdstring& name, CPreferenceValueMap<cdstrvect>& list);								// Delete address book
 	void	ChangeAddressBookOpenOnStart(CAddressBook* adbk, bool set);	// Changing address book flag
 	void	ChangeAddressBookLookup(CAddressBook* adbk, bool set);		// Changing address book flag
 	void	ChangeAddressBookSearch(CAddressBook* adbk, bool set);		// Changing address book flag

@@ -354,6 +354,8 @@ void CCalendarProtocol::CopyClient(const CINETProtocol& copy)
 	CCalendarClient* copy_it = static_cast<const CCalendarProtocol&>(copy).mClient;
 	if (dynamic_cast<CWebDAVCalendarClient*>(copy_it))
 		mClient = new CWebDAVCalendarClient(static_cast<const CWebDAVCalendarClient&>(*copy_it), this);
+	else if (dynamic_cast<CCalDAVCalendarClient*>(copy_it))
+		mClient = new CCalDAVCalendarClient(static_cast<const CCalDAVCalendarClient&>(*copy_it), this);
 	else if (dynamic_cast<CLocalCalendarClient*>(copy_it))
 		mClient = new CLocalCalendarClient(static_cast<const CLocalCalendarClient&>(*copy_it), this);
 	else
@@ -1079,6 +1081,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 		}
 		
 		// Step 3
+		cdstrset matching_components;
 		for(cdstrvect::const_iterator iter = component_keys.begin(); iter != component_keys.end(); iter++)
 		{
 			iCal::CICalendarComponent* cache_comp = cal.GetComponentByKey(*iter);
@@ -1174,14 +1177,16 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 			
 			// Step 3.5
 			if (!server_rurl.empty())
-				comps.erase(server_rurl);
+				matching_components.insert(server_rurl);
 		}
 		
 		// Step 4
 		cdstrvect rurls;
 		for(cdstrmap::const_iterator iter = comps.begin(); iter != comps.end(); iter++)
 		{
-			rurls.push_back((*iter).first);
+			cdstrset::const_iterator found = matching_components.find((*iter).first);
+			if (found == matching_components.end())
+				rurls.push_back((*iter).first);
 		}
 
 		// Read components from server into local cache as its a new one on the server
@@ -1544,6 +1549,80 @@ void CCalendarProtocol::MyRights(CCalendarStoreNode& node)
 	// Send command to server
 	// Calendar will take care of recovery
 	mClient->_MyRights(node);
+}
+
+void CCalendarProtocol::GetScheduleInboxOutbox(cdstring& inboxURI, cdstring& outboxURI)
+{
+	// Do nothing if not available
+	if (!GetHasScheduling())
+		return;
+
+	// Must block
+	cdmutex::lock_cdmutex _lock(_mutex);
+
+	// Verify its still active because mutex wait could have resulted in closure
+	if (!IsLoggedOn())
+		return;
+
+	// Send command to server
+	// Calendar will take care of recovery
+	mClient->_GetScheduleInboxOutbox(mStoreRoot, inboxURI, outboxURI);
+}
+
+void CCalendarProtocol::Schedule(const cdstring& outboxURI,
+								 const cdstring& originator,
+								 const cdstrvect& recipients,
+								 const iCal::CICalendar& cal,
+								 iCal::CITIPScheduleResultsList& results)
+{
+	// Do nothing if not available
+	if (!GetHasScheduling())
+		return;
+
+	// Must block
+	cdmutex::lock_cdmutex _lock(_mutex);
+
+	// Verify its still active because mutex wait could have resulted in closure
+	if (!IsLoggedOn())
+		return;
+
+	// Send command to server
+	// Calendar will take care of recovery
+	mClient->_Schedule(outboxURI, originator, recipients, cal, results);
+}
+
+void CCalendarProtocol::GetFreeBusyCalendars(cdstrvect& calendars)
+{
+	// Do nothing if not available
+	if (!GetHasScheduling())
+		return;
+	
+	// Must block
+	cdmutex::lock_cdmutex _lock(_mutex);
+	
+	// Verify its still active because mutex wait could have resulted in closure
+	if (!IsLoggedOn())
+		return;
+	
+	// Send command to server
+	mClient->_GetFreeBusyCalendars(calendars);
+}
+
+void CCalendarProtocol::SetFreeBusyCalendars(const cdstrvect& calendars)
+{
+	// Do nothing if not available
+	if (!GetHasScheduling())
+		return;
+	
+	// Must block
+	cdmutex::lock_cdmutex _lock(_mutex);
+	
+	// Verify its still active because mutex wait could have resulted in closure
+	if (!IsLoggedOn())
+		return;
+	
+	// Send command to server
+	mClient->_SetFreeBusyCalendars(calendars);
 }
 
 #pragma mark ____________________________Disconnected

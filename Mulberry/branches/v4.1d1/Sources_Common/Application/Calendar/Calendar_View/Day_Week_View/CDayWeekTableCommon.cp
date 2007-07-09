@@ -224,7 +224,7 @@ void CDayWeekTable::CacheCellDates()
 	mCellDates.push_back(cell_date);
 }
 
-void CDayWeekTable::AddEvents(iCal::CICalendarExpandedComponents& vevents)
+void CDayWeekTable::AddItems(iCal::CICalendarExpandedComponents& vevents, iCal::CICalendarComponentList& vfreebusys)
 {
 	// Add all day event first, then others
 	for(iCal::CICalendarExpandedComponents::iterator iter = vevents.begin(); iter != vevents.end(); iter++)
@@ -249,6 +249,11 @@ void CDayWeekTable::AddEvents(iCal::CICalendarExpandedComponents& vevents)
 	{
 		if (!(**iter).GetInstanceStart().IsDateOnly())
 			AddTimedEvent(*iter);
+	}
+	
+	for(iCal::CICalendarComponentList::iterator iter = vfreebusys.begin(); iter != vfreebusys.end(); iter++)
+	{
+		AddTimedFreeBusy(*iter);
 	}
 	
 	ColumnateEvents();

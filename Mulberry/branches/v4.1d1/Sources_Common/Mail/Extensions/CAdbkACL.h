@@ -22,6 +22,10 @@
 
 #include "CACL.h"
 
+#include "XMLDocument.h"
+#include "XMLName.h"
+#include "XMLNode.h"
+
 // Typedefs
 class CAdbkACL;
 typedef vector<CAdbkACL> CAdbkACLList;
@@ -39,12 +43,35 @@ public:
 		eAdbkACL_Write = 1L << 2,
 		eAdbkACL_Create = 1L << 3,
 		eAdbkACL_Delete = 1L << 4,
-		eAdbkACL_Admin = 1L << 5
+		eAdbkACL_Admin = 1L << 5,
+		eAdbkACL_All = 1L << 6
 	};
 
-	CAdbkACL() {}
+	enum EAdbkPrincipalType
+	{
+		ePrincipal_unknown = 0,
+		ePrincipal_href,
+		ePrincipal_all,
+		ePrincipal_authenticated,
+		ePrincipal_unauthenticated,
+		ePrincipal_property,
+		ePrincipal_self	
+	};
+
+	CAdbkACL()
+	{
+		mType = ePrincipal_unknown;
+		mInheritable = false;
+		mCanChange = true;
+	}
 	CAdbkACL(const CAdbkACL& copy)						// Copy construct
-		: CACL(copy) {}
+		: CACL(copy)
+	{
+		mType = copy.mType;
+		mInheritable = copy.mInheritable;
+		mCanChange = copy.mCanChange;
+		mPropName = copy.mPropName;
+	}
 
 	virtual 		~CAdbkACL() {}
 	
@@ -54,12 +81,70 @@ public:
 	int operator!=(const CAdbkACL& test) const			// Compare with same type
 		{ return !operator==(test); }
 
+	virtual const cdstring&	GetDisplayUID() const;
+
 	virtual cdstring	GetTextRights() const;		// Get full text form of rights
 	virtual cdstring	GetFullTextRights() const;	// Get full text form of rights
 
+	bool SamePrincipal(const CAdbkACL& acl) const;
+	EAdbkPrincipalType GetPrincipalType() const
+	{
+		return mType;
+	}
+	void SetPrincipalType(EAdbkPrincipalType type)
+	{
+		mType = type;
+	}
+	void SetPrincipalType(EAdbkPrincipalType type, const cdstring& txt)
+	{
+		mType = type;
+		SetUID(txt);
+	}
+	void SetPrincipalType(EAdbkPrincipalType type, const xmllib::XMLName& name)
+	{
+		mType = type;
+		mPropName = name;
+	}
+
+	const xmllib::XMLName& GetPropName() const
+	{
+		return mPropName;
+	}
+
+	bool IsInheritable() const
+	{
+		return mInheritable;
+	}
+	void SetInheritable(bool inheritable)
+	{
+		mInheritable = inheritable;
+	}
+
+	bool CanChange() const
+	{
+		return mCanChange;
+	}
+	void SetCanChange(bool can_change)
+	{
+		mCanChange = can_change;
+	}
+	
+	bool AllRights() const;
+
+	bool ParseACE(const xmllib::XMLNode* acenode);
+	void ParsePrivilege(const xmllib::XMLNode* parent, bool add);
+	void GenerateACE(xmllib::XMLDocument* xmldoc, xmllib::XMLNode* aclnode, bool can_use_inheritable = false) const;
+
 private:
+	EAdbkPrincipalType	mType;
+	bool				mInheritable;
+	bool				mCanChange;
+	xmllib::XMLName		mPropName;
+	
+
 	virtual void	ParseRights(const char* txt, SACLRight& rights);		// Parse string to specified rigths location
 
+			void	MapRight(const cdstring& right, bool add);
 };
 
 #endif

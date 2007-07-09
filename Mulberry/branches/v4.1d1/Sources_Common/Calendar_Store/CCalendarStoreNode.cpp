@@ -82,7 +82,7 @@ CCalendarStoreNode::CCalendarStoreNode(CCalendarProtocol* proto)
 }
 
 // This constructs an actual node
-CCalendarStoreNode::CCalendarStoreNode(CCalendarProtocol* proto, CCalendarStoreNode* parent, bool is_dir, const cdstring& name)
+CCalendarStoreNode::CCalendarStoreNode(CCalendarProtocol* proto, CCalendarStoreNode* parent, bool is_dir, bool is_inbox, bool is_outbox, const cdstring& name)
 {
 	mProtocol = proto;
 	mParent = parent;
@@ -90,6 +90,8 @@ CCalendarStoreNode::CCalendarStoreNode(CCalendarProtocol* proto, CCalendarStoreN
 	mWebcal = NULL;
 	mActiveCount = 0;
 	SetFlags(eIsDirectory, is_dir);
+	SetFlags(eIsInbox, is_inbox);
+	SetFlags(eIsOutbox, is_outbox);
 	mCalendarRef = iCal::cCalendarRef_Invalid;
 	mName = name;
 	mSize = ULONG_MAX;
@@ -146,6 +148,11 @@ cdstring CCalendarStoreNode::GetAccountName(bool multi) const
 void CCalendarStoreNode::CheckSize()
 {
 	GetProtocol()->SizeCalendar(*this);
+}
+
+bool CCalendarStoreNode::CanSchedule() const
+{
+	return mProtocol ? mProtocol->GetHasScheduling() : false;
 }
 
 void CCalendarStoreNode::SyncNow() const

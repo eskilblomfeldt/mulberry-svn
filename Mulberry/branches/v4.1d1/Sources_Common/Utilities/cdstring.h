@@ -439,6 +439,9 @@ public:
 	bool quote(const char* specials, bool force = false, bool inet = false);	// Add quotes if not already there
 	bool unquote();												// Remove quotes if there
 
+	void split(const char* tokens, cdstrvect& results, bool trim = true) const;			// Split into tokens
+	void join(const cdstrvect& items, const char* delim);		// Join list into single string
+
 	void FilterOutEscapeChars();								// Filter out C-style escape characters
 	void FilterInEscapeChars(const char* charset);				// Filter in C-style escape characters
 

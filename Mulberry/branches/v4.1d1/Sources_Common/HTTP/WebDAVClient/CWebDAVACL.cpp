@@ -33,10 +33,20 @@
 
 using namespace webdav; 
 
+CWebDAVACL::CWebDAVACL(CWebDAVSession* session, const cdstring& ruri, const CAdbkACLList* acls) :
+	CWebDAVRequestResponse(session, eRequest_ACL, ruri)
+{
+	mAdbkACLs = acls;
+	mCalACLs = NULL;
+
+	InitRequestData();
+}
+
 CWebDAVACL::CWebDAVACL(CWebDAVSession* session, const cdstring& ruri, const CCalendarACLList* acls) :
 	CWebDAVRequestResponse(session, eRequest_ACL, ruri)
 {
-	mACLs = acls;
+	mAdbkACLs = NULL;
+	mCalACLs = acls;
 
 	InitRequestData();
 }
@@ -86,7 +96,21 @@ void CWebDAVACL::GenerateXML(ostream& os)
 	}
 	
 	// Do for each ACL
-	for(CCalendarACLList::const_iterator iter = mACLs->begin(); iter != mACLs->end(); iter++)
+	if (mAdbkACLs != NULL)
+	{
+		for(CAdbkACLList::const_iterator iter = mAdbkACLs->begin(); iter != mAdbkACLs->end(); iter++)
+		{
+			// Cannot do if change not allowed
+			if (!(*iter).CanChange())
+				continue;
+			
+			// <DAV:ace> element
+			(*iter).GenerateACE(&xmldoc, acl, static_cast<const CWebDAVSession*>(GetSession())->HasDAVVersion(CWebDAVSession::eCyrusoftInheritable));
+		}
+	}
+	if (mCalACLs != NULL)
+	{
+		for(CCalendarACLList::const_iterator iter = mCalACLs->begin(); iter != mCalACLs->end(); iter++)
 	{
 		// Cannot do if change not allowed
 		if (!(*iter).CanChange())
@@ -94,6 +118,7 @@ void CWebDAVACL::GenerateXML(ostream& os)
 		
 		// <DAV:ace> element
 		(*iter).GenerateACE(&xmldoc, acl, static_cast<const CWebDAVSession*>(GetSession())->HasDAVVersion(CWebDAVSession::eCyrusoftInheritable));
+		}
 	}
 	
 	// Now we have the complete document, so write it out (no indentation)

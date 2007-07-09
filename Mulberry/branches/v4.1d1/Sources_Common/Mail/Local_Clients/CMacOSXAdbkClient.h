@@ -76,15 +76,22 @@ public:
 	// A D D R E S S B O O K S
 
 	// Operations on address books
+	virtual void	_ListAddressBooks(CAddressBook* root);
 	virtual void	_FindAllAdbks(const cdstring& path);		// Find all adbks below this path
 	virtual void	_CreateAdbk(const CAddressBook* adbk);		// Create adbk
-	virtual void	_TouchAdbk(const CAddressBook* adbk);		// Do touch
+	virtual bool	_TouchAdbk(const CAddressBook* adbk);		// Do touch
 	virtual bool	_TestAdbk(const CAddressBook* adbk);		// Do test
+	virtual void	_LockAdbk(const CAddressBook* adbk) {}
+	virtual void	_UnlockAdbk(const CAddressBook* adbk) {}
+	virtual bool	_AdbkChanged(const CAddressBook* adbk);
 	virtual void	_DeleteAdbk(const CAddressBook* adbk);		// Delete adbk
 	virtual void	_RenameAdbk(const CAddressBook* old_adbk,
 								const cdstring& new_adbk);		// Rename adbk
+	virtual void	_SizeAdbk(CAddressBook* adbk);
 
 	// Operations with addresses
+	virtual void	_ReadFullAddressBook(CAddressBook* adbk);		// Find all addresses in adbk
+	virtual void	_WriteFullAddressBook(CAddressBook* adbk);		// Write all addresses in adbk
 	virtual void	_FindAllAddresses(CAddressBook* adbk);			// Find all addresses in adbk
 	virtual void	_FetchAddress(CAddressBook* adbk,
 									const cdstrvect& names);		// Fetch named addresses

@@ -78,7 +78,7 @@ void CCalendarStoreTable::ResetTable()
 		AddNode(*iter, row, false);
 
 		// Listen to each protocol
-		calstore::CCalendarProtocol* proto = GetCellCalendarProtocol(exp_row);
+		calstore::CCalendarProtocol* proto = (*iter)->GetProtocol();
 		if (proto)
 			proto->Add_Listener(this);
 		
@@ -667,7 +667,7 @@ bool CCalendarStoreTable::OpenCalendar(TableIndexT row)
 	calstore::CCalendarStoreNode* node = GetCellNode(row);
 	
 	// Must be a real calendar
-	if (node->IsProtocol() || node->IsDirectory())
+	if (!node->IsViewableCalendar())
 		return false;
 	
 	// See if it already exists
@@ -762,11 +762,15 @@ void CCalendarStoreTable::OnDeleteCalendar()
 void CCalendarStoreTable::OnFreeBusyCalendar()
 {
 	// Send selected items
-	DoToSelection((DoToSelectionPP) &CCalendarStoreTable::FreeBusyCalendar);
+	calstore::CCalendarStoreFreeBusyList selected;
+	if (DoToSelection1((DoToSelection1PP) &CCalendarStoreTable::FreeBusyCalendar, &selected))
+	{
+		//CCalendarWindow::CreateFreeBusyWindow(selected);
+	}
 }
 
 // Send specified item
-bool CCalendarStoreTable::FreeBusyCalendar(TableIndexT row)
+bool CCalendarStoreTable::FreeBusyCalendar(TableIndexT row, calstore::CCalendarStoreFreeBusyList* list)
 {
 	// Get calendar for hit cell
 	calstore::CCalendarStoreNode* node = GetCellNode(row);
@@ -787,9 +791,11 @@ bool CCalendarStoreTable::FreeBusyCalendar(TableIndexT row)
 		tomorrow.OffsetDay(1);
 		
 		iCal::CICalendarPeriod period(today, tomorrow);
-		iCal::CICalendarPeriodList fb;
-		//cal->GetFreeBusy(period, fb);
+		calstore::CCalendarStoreFreeBusy items(node->GetShortName());
+		cal->GetFreeBusy(period, items.GetPeriods());
+		list->push_back(items);
 	}
+	
 		
 	return true;
 }
@@ -1100,17 +1106,24 @@ bool CCalendarStoreTable::TestSelectionServer(TableIndexT row)
 }
 
 // Test for selected calendars only
-bool CCalendarStoreTable::TestSelectionCalendar(TableIndexT row)
+bool CCalendarStoreTable::TestSelectionCalendarStoreNode(TableIndexT row)
 {
 	calstore::CCalendarStoreNode* node = GetCellNode(row, false);
 	return !node->IsProtocol();
 }
 
 // Test for selected calendars only
+bool CCalendarStoreTable::TestSelectionCanChangeCalendar(TableIndexT row)
+{
+	calstore::CCalendarStoreNode* node = GetCellNode(row, false);
+	return !node->IsProtocol() && !node->IsInbox() && !node->IsOutbox();
+}
+
+// Test for selected calendars only
 bool CCalendarStoreTable::TestSelectionRealCalendar(TableIndexT row)
 {
 	calstore::CCalendarStoreNode* node = GetCellNode(row, false);
-	return !node->IsProtocol() && !node->IsDirectory();
+	return node->IsViewableCalendar();
 }
 
 // Test for selected web calendars only

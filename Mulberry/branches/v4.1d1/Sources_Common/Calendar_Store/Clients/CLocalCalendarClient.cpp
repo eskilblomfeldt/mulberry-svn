@@ -209,7 +209,7 @@ void CLocalCalendarClient::ListCalendars(CCalendarStoreNode* root, const cdstrin
 			rpath.erase(rpath.length() - 4);
 
 		// Create the new node and add to parent
-		CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, _dir.is_dir(), rpath);
+		CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, _dir.is_dir(), false, false, rpath);
 		root->AddChild(node);
 
 		// Scan into directories
@@ -670,6 +670,33 @@ void CLocalCalendarClient::_ListRights(CCalendarStoreNode& node, CACL* acl)
 // Get current user's rights to calendar
 void CLocalCalendarClient::_MyRights(CCalendarStoreNode& node)
 {
+}
+
+#pragma mark ____________________________Schedule
+
+// Get Scheduling Inbox/Outbox URIs
+void CLocalCalendarClient::_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI)
+{
+}
+
+// Run scheduling request
+void CLocalCalendarClient::_Schedule(const cdstring& outboxURI,
+									 const cdstring& originator,
+									 const cdstrvect& recipients,
+									 const iCal::CICalendar& cal,
+									 iCal::CITIPScheduleResultsList& results)
+{
+	
+}
+
+void CLocalCalendarClient::_GetFreeBusyCalendars(cdstrvect& calendars)
+{
+	
+}
+
+void CLocalCalendarClient::_SetFreeBusyCalendars(const cdstrvect& calendars)
+{
+	
 }
 
 #pragma mark ____________________________Utils

@@ -142,16 +142,20 @@ void CDayWeekView::ResetDate()
 	dtend.SetDateOnly(false);
 	dtend.OffsetDay(num_days);
 	
-	// Get events in the range
+	// Get events/free-busy in the range
 	iCal::CICalendarExpandedComponents vevents;
+	iCal::CICalendarComponentList vfreebusy;
 	iCal::CICalendarPeriod period(dtstart, dtend);
 	
 	// Look for single calendar
 	if (IsSingleCalendar())
 	{
-		// Get events
+		// Get events and free-busy
 		if (GetCalendar() != NULL)
+		{
 			GetCalendar()->GetVEvents(period, vevents);
+			GetCalendar()->GetVFreeBusy(period, vfreebusy);
+		}
 	}
 
 	// Only do visible calendars
@@ -163,13 +167,14 @@ void CDayWeekView::ResetDate()
 			// Listen to the calendar in case it gets destroyed
 			(*iter)->Add_Listener(this);
 			
-			// Get events
+			// Get events and free-busy
 			(*iter)->GetVEvents(period, vevents);
+			(*iter)->GetVFreeBusy(period, vfreebusy);
 		}
 	}
 	
-	// Add events to table
-	static_cast<CDayWeekTable*>(GetTable())->AddEvents(vevents);
+	// Add events and free-busy to table
+	static_cast<CDayWeekTable*>(GetTable())->AddItems(vevents, vfreebusy);
 
 	// Broadcast change to listeners
 	Broadcast_Message(eBroadcast_ViewChanged, this);

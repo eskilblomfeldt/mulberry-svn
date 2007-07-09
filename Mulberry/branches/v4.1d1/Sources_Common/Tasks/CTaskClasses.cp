@@ -19,9 +19,6 @@
 #include "CAcceptCertDialog.h"
 #include "CActionManager.h"
 #include "CAddressBook.h"
-#if __dest_os == __mac_os || __dest_os == __mac_os_x
-#include "CAddressBookDoc.h"
-#endif
 #include "CAddressBookManager.h"
 #include "CAddressBookView.h"
 #include "CAddressBookWindow.h"
@@ -438,7 +435,7 @@ void CSearchOpenTargetTask::Work()
 CAddressBookPreviewTask::CAddressBookPreviewTask(CAddressBookView* view, CAddressBook* adbk)
 {
 	mView = view;
-	mAdbkRef = adbk->GetURL();	// Use URL rather than cached pointer
+	mAdbkRef = adbk->GetAccountName();
 }
 
 void CAddressBookPreviewTask::Work()
@@ -448,7 +445,7 @@ void CAddressBookPreviewTask::Work()
 	{
 		// Resolve to a real message
 		CAddressBook* adbk = CAddressBookManager::sAddressBookManager ?
-								CAddressBookManager::sAddressBookManager->FindAddressBook(mAdbkRef) :
+								const_cast<CAddressBook*>(CAddressBookManager::sAddressBookManager->GetNode(mAdbkRef)) :
 								NULL;
 		
 		// Tell view about it even if NULL as view will empty itself
@@ -492,14 +489,8 @@ void CAddressBookViewClosedTask::Work()
 void CCloseAddressBookWindowTask::Work()
 {
 	// Check that window still exists and delete it
-#if __dest_os == __mac_os || __dest_os == __mac_os_x
-	// On Mac OS we have to close the document not the window
-	if (CAddressBookWindow::WindowExists(mWindow) && mWindow->GetDocument())
-		mWindow->GetDocument()->Close();
-#else
 	if (CAddressBookWindow::WindowExists(mWindow))
 		FRAMEWORK_DELETE_WINDOW(mWindow)
-#endif
 }
 
 #pragma mark ____________________________CAddressViewChangedTask

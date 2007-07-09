@@ -20,13 +20,13 @@
 #include "CACAPClient.h"
 
 #include "CAdbkACL.h"
+#include "CAddressBook.h"
 #include "CCharSpecials.h"
 #include "CGeneralException.h"
 #include "CINETClientResponses.h"
 #include "CINETCommon.h"
 #include "CMailControl.h"
 #include "COptionsMap.h"
-#include "CRemoteAddressBook.h"
 #include "CRFC822.h"
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
@@ -342,6 +342,9 @@ void CACAPClient::_ProcessCapability()
 		while(*p == ' ') p++;
 	}
 
+	// ACAP always has ACLs
+	GetAdbkOwner()->SetHasACL(true);
+
 } // CACAPClient::_ProcessCapability
 
 // Handle failed capability response
@@ -545,6 +548,39 @@ void CACAPClient::_DeleteAttribute(const cdstring& entry, const cdstring& attrib
 // Operations on address books
 
 // Find all adbks below this path
+void CACAPClient::_ListAddressBooks(CAddressBook* root)
+{
+	StParserState parser(this, eParseFindAllAdbks);
+
+	// Send SEARCH message to server
+	// SEARCH "/addressbook/user/" DEPTH 0 RETURN ("addressbook.CommonName") NOT EQUAL "subdataset" NIL
+	INETStartSend("Status::IMSP::AddressBooks", "Error::IMSP::OSErrAddressBooks", "Error::IMSP::NoBadAddressBooks");
+	INETSendString(cCMD_SEARCH);
+	INETSendString(cSpace);
+	
+	// Special for CommuniGate
+	if (mImplementation == eCommunigate)
+	{
+		// Use "~/" instead of "user/"
+		cdstring default_name = cDATASET_ADBK;
+		default_name += "~/";
+		INETSendString(default_name, eQueueProcess);
+
+		// Most forcibly add default address book
+		cdstring adbk_name = "user/";
+		adbk_name += GetAccount()->GetAuthenticator().GetAuthenticator()->GetActualUID();
+		CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), false, true, adbk_name);
+		GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
+
+	}
+	else
+		INETSendString(cDATASET_ADBKUSER, eQueueProcess);
+	INETSendString(cSpace);
+	INETSendString(cASEARCH_ADBK);
+	INETFinishSend();
+}
+
+// Find all adbks below this path
 void CACAPClient::_FindAllAdbks(const cdstring& path)
 {
 	StParserState parser(this, eParseFindAllAdbks);
@@ -566,8 +602,8 @@ void CACAPClient::_FindAllAdbks(const cdstring& path)
 		// Most forcibly add default address book
 		cdstring adbk_name = "user/";
 		adbk_name += GetAccount()->GetAuthenticator().GetAuthenticator()->GetActualUID();
-		CRemoteAddressBook* adbk = new CRemoteAddressBook(GetAdbkOwner(), adbk_name);
-		GetAdbkOwner()->GetAdbkList()->push_back(adbk, false);
+		CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), false, true, adbk_name);
+		GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
 
 	}
 	else
@@ -603,6 +639,12 @@ void CACAPClient::_CreateAdbk(const CAddressBook* adbk)
 	INETFinishSend();
 }
 
+bool CACAPClient::_AdbkChanged(const CAddressBook* adbk)
+{
+	// No way to tell if there have been changes on the server, so return true to force entire sync
+	return true;
+}
+
 // Delete adbk
 void CACAPClient::_DeleteAdbk(const CAddressBook* adbk)
 {
@@ -631,7 +673,24 @@ void CACAPClient::_RenameAdbk(const CAddressBook* old_adbk, const cdstring& new_
 	StParserState parser(this, eParseRenameAdbk);
 }
 
+void CACAPClient::_SizeAdbk(CAddressBook* adbk)
+{
+	// Does nothing
+}
+
 // Operations with addresses
+
+// Find all addresses in adbk
+void CACAPClient::_ReadFullAddressBook(CAddressBook* adbk)
+{
+	_FindAllAddresses(adbk);
+}
+
+// Write all addresses in adbk
+void CACAPClient::_WriteFullAddressBook(CAddressBook* adbk)
+{
+	
+}
 
 // Find all addresses in adbk
 void CACAPClient::_FindAllAddresses(CAddressBook* adbk)
@@ -1595,8 +1654,8 @@ void CACAPClient::ACAPParseFindAllAdbks(char** txt)
 	if (adbk_cname.length())
 	{
 		// Add adress book to list
-		CRemoteAddressBook* adbk = new CRemoteAddressBook(GetAdbkOwner(), adbk_cname);
-		GetAdbkOwner()->GetAdbkList()->push_back(adbk, false);
+		CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), true, false, adbk_cname);
+		GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
 	}
 
 	// Update return pointer

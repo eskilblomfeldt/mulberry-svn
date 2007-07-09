@@ -191,6 +191,19 @@ extern const char*	cRequestMKCALENDAR;
 
 }
 
+namespace carddav 
+{
+
+// draft-carddav ¤ - CardDAV Request Methods
+
+extern const char*	cRequestMKADBK;
+
+// draft-carddav ¤ - Request Header fields (only the ones we need)
+
+	extern const char* cHeaderAddressBook;
+
+}
+
 namespace slide 
 {
 	extern const char* cHeaderCyrusoftInheritable;

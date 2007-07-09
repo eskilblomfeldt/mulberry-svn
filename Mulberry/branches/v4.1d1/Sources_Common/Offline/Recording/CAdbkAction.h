@@ -35,6 +35,7 @@ public:
 		eCreate,			// cdstring*
 		eDelete,			// cdstring*
 		eRename,			// cdstrpair*
+		eChange,			// cdstring*
 		
 		// Address actions
 		eStoreAddress,			// cdstrvect*

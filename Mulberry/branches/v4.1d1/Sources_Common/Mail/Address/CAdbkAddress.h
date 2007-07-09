@@ -66,6 +66,7 @@ public:
 		eName = 0,
 		eNickName,
 		eEmail,
+		eCalendar,
 		eCompany,
 		eAddress,
 		ePhoneWork,
@@ -104,14 +105,26 @@ public:
 		eOtherPhoneType
 	};
 
-	CAdbkAddress();
+	typedef multimap<EEmailType, cdstring>	emailmap;
+	typedef multimap<EAddressType, cdstring> addrmap;
+	typedef multimap<EPhoneType, cdstring> phonemap;
+
+	CAdbkAddress()
+	{
+		_init_CAdbkAddress();
+	}
 	CAdbkAddress(const CAddress &copy);					// Copy constructor
-	CAdbkAddress(const CAdbkAddress &copy);				// Copy constructor
+	CAdbkAddress(const CAdbkAddress &copy) :			// Copy constructor
+		CAddress(copy)
+	{
+		_copy_CAdbkAddress(copy);
+	}
 
 	explicit CAdbkAddress(const char* entry,
 				const char* addr,
 				const char* uname,
 				const char* uadl = NULL,
+				const char* ucalendar = NULL,
 				const char* ucompany = NULL,
 				const char* uaddress = NULL,
 				const char* uphonework = NULL,
@@ -120,8 +133,18 @@ public:
 				const char*	uurl = NULL,
 				const char* unotes = NULL);				// Construct from actual parameters
 
-	CAdbkAddress& operator=(const CAdbkAddress& copy);	// Assignment with same type
 	~CAdbkAddress();
+
+	CAdbkAddress& operator=(const CAdbkAddress& copy)	// Assignment with same type
+	{
+		if (this != &copy)
+		{
+			CAddress::operator=(copy);
+			_copy_CAdbkAddress(copy);
+		}
+
+		return *this;
+	}
 
 	int operator==(const CAdbkAddress& addr) const;					// Compare with another
 
@@ -134,36 +157,69 @@ public:
 	const cdstring&	GetEntry() const								// Get entry
 		{ return mEntry; }
 
-	void AddMailAddressToList(cdstrvect& list, bool full) const;	// Add email addresses to list
+	void AddMailAddressToList(cdstrvect& list, bool full) const;		// Add email addresses to list
+	void AddCalendarAddressToList(cdstrvect& list, bool full) const;	// Add calendar addresses to list
 
-	cdstrmultimap& GetEmails()										// Get email map
+	emailmap& GetEmails()												// Get email map
 		{ return mEmails; }
-	const cdstrmultimap& GetEmails() const							// Get email map
+	const emailmap& GetEmails() const									// Get email map
 		{ return mEmails; }
 
 	void SetEmail(const char* thePhone, EEmailType type, bool append = false);			// Set email
 	const cdstring&	GetEmail(EEmailType type) const;									// Get email
 
+	void SetPreferredEmail(EEmailType type)								// Set preferred email type
+	{
+		mPreferredEmail = type;
+	}
+	EEmailType	GetPreferredEmail() const								// Get preferred email type
+	{
+		return mPreferredEmail;
+	}
+
+	void SetCalendar(const char* theCalendar)						// Set calendar
+		{ mCalendar = theCalendar; }
+	const cdstring&	GetCalendar() const								// Get calendar
+		{ return mCalendar; }
+	
 	void SetCompany(const char* theCompany)							// Set company
 		{ mCompany = theCompany; }
 	const cdstring&	GetCompany() const								// Get company
 		{ return mCompany; }
 
-	cdstrmultimap& GetAddresses()									// Get addresse map
+	addrmap& GetAddresses()											// Get address map
 		{ return mAddresses; }
-	const cdstrmultimap& GetAddresses() const						// Get addresse map
+	const addrmap& GetAddresses() const								// Get address map
 		{ return mAddresses; }
 
 	void SetAddress(const char* theAddress, EAddressType type, bool append = false);		// Set address
 	const cdstring&	GetAddress(EAddressType type) const;									// Get address
 
-	cdstrmultimap& GetPhones()										// Get phone number map
+	void SetPreferredAddress(EAddressType type)								// Set preferred address type
+	{
+		mPreferredAddress = type;
+	}
+	EAddressType	GetPreferredAddress() const								// Get preferred address type
+	{
+		return mPreferredAddress;
+	}
+
+	phonemap& GetPhones()											// Get phone number map
 		{ return mPhones; }
-	const cdstrmultimap& GetPhones() const							// Get phone number map
+	const phonemap& GetPhones() const								// Get phone number map
 		{ return mPhones; }
 
 	void SetPhone(const char* thePhone, EPhoneType type, bool append = false);			// Set phone
 	const cdstring&	GetPhone(EPhoneType type) const;									// Get phone
+
+	void SetPreferredPhone(EPhoneType type)								// Set preferred phone type
+	{
+		mPreferredPhone = type;
+	}
+	EPhoneType	GetPreferredPhone() const								// Get preferred phone type
+	{
+		return mPreferredPhone;
+	}
 
 	void SetURL(const char* theURL)									// Set URL
 		{ mURL = theURL; }
@@ -179,22 +235,19 @@ public:
 
 private:
 	cdstring			mEntry;							// Entry name
-	cdstrmultimap		mEmails;						// Multiple email types
+	emailmap			mEmails;						// Multiple email types
+	EEmailType			mPreferredEmail;				// Preferred email type
+	cdstring			mCalendar;						// Calendar name
 	cdstring			mCompany;						// Company name
-	cdstrmultimap		mAddresses;						// Multiple address types
-	cdstrmultimap		mPhones;						// Multiple phone types
+	addrmap				mAddresses;						// Multiple address types
+	EAddressType		mPreferredAddress;				// Preferred address type
+	phonemap			mPhones;						// Multiple phone types
+	EPhoneType			mPreferredPhone;				// Preferred phone type
 	cdstring			mURL;							// URL
 	cdstring			mNotes;							// Notes
 
-	static bool			sInited;						// Done init
-	static cdstrvect	sEmailTypeLabels;				// Labels for types of email
-	static cdstrvect	sAddressTypeLabels;				// Labels for types of addresses
-	static cdstrvect	sPhoneTypeLabels;				// Labels for types of phones
-
-	static void					InitLabels();
-	static const cdstring&		GetEmailTypeLabel(EEmailType type);
-	static const cdstring&		GetAddressTypeLabel(EAddressType type);
-	static const cdstring&		GetPhoneTypeLabel(EPhoneType type);
+	void _init_CAdbkAddress();
+	void _copy_CAdbkAddress(const CAdbkAddress& copy);
 };
 
 #endif

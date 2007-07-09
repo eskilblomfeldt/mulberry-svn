@@ -97,6 +97,16 @@ protected:
 	virtual void	_ListRights(CCalendarStoreNode& node, CACL* acl);				// Get allowed rights for user
 	virtual void	_MyRights(CCalendarStoreNode& node);							// Get current user's rights to calendar
 
+	// Schedule related
+	virtual void	_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI);
+	virtual void	_Schedule(const cdstring& outboxURI,
+							  const cdstring& originator,
+							  const cdstrvect& recipients,
+							  const iCal::CICalendar& cal,
+							  iCal::CITIPScheduleResultsList& results);
+	virtual void	_GetFreeBusyCalendars(cdstrvect& calendars);
+	virtual void	_SetFreeBusyCalendars(const cdstrvect& calendars);
+
 protected:
 	// H A N D L E  E R R O R
 	virtual const char*	INETGetErrorDescriptor() const;			// Descriptor for object error context
@@ -130,6 +140,11 @@ protected:
 	void WriteFullCalendar_Lock(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 
 	cdstring GetETag(const cdstring& rurl, const cdstring& lock_token = cdstring::null_str);
+	cdstrvect GetHrefListProperty(const cdstring& rurl, const xmllib::XMLName& propname);
+	bool GetSelfProperties(const cdstring& rurl, const xmllib::XMLNameList& props, cdstrmap& results);
+	bool GetSelfHrefs(const cdstring& rurl, cdstrvect& results);
+	bool GetSelfPrincipalResource(const cdstring& rurl, cdstring& result);
+
 	cdstring LockResource(const cdstring& rurl, unsigned long timeout, bool lock_null = false);
 	void UnlockResource(const cdstring& rurl, const cdstring& lock_token);
 

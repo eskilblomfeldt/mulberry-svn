@@ -47,6 +47,8 @@
 #include "CCalDAVMakeCalendar.h"
 #include "CCalDAVMultigetReport.h"
 #include "CCalDAVReportParser.h"
+#include "CCalDAVSchedule.h"
+#include "CCalDAVScheduleParser.h"
 
 #include "CICalendar.h"
 #include "CICalendarSync.h"
@@ -61,9 +63,6 @@
 
 using namespace calstore; 
 
-// extra : at end of namespace
-//#define ORACLE_FIX_1	1
-
 // sub-collections
 //#define ORACLE_FIX_2	1
 
@@ -71,9 +70,11 @@ using namespace calstore;
 #define ORACLE_FIX_3	1
 
 // no multiget report
-//#define NO_MULTIGET_REPORT	1
+#define NO_MULTIGET_REPORT	1
 
 #define OLD_STYLE_CALENDAR_DATA	1
+
+#define NO_PRINCIPAL_REPORT	1
 
 CCalDAVCalendarClient::CCalDAVCalendarClient(CCalendarProtocol* owner) :
 	CWebDAVCalendarClient(owner)
@@ -97,6 +98,7 @@ CCalDAVCalendarClient::~CCalDAVCalendarClient()
 
 void CCalDAVCalendarClient::InitCalDAVClient()
 {
+	mCachedInboxOutbox = false;
 }
 
 // Create duplicate, empty connection
@@ -108,6 +110,41 @@ CINETClient* CCalDAVCalendarClient::CloneConnection()
 }
 
 #pragma mark ____________________________Protocol
+
+// For CalDAV we need to do this twice - once on the base URI passed in, and then,
+// if we know access control is supported, a second time on the principal resource
+// which we know must indicate caldav capability levels.
+bool CCalDAVCalendarClient::Initialise(const cdstring& host, const cdstring& base_uri)
+{
+	if (CWebDAVCalendarClient::Initialise(host, base_uri) && HasDAVACL())
+	{
+		bool no_preport = false;
+#ifdef NO_PRINCIPAL_REPORT
+		no_preport = (GetCalendarProtocol()->GetAccount()->GetName().find("nopreport") != cdstring::npos);
+#endif
+		if (no_preport)
+			return true;
+		else
+		{
+			cdstring puri;
+			if (GetSelfPrincipalResource(base_uri, puri))
+			{
+				return CWebDAVCalendarClient::Initialise(host, puri);
+			}
+		}
+	}
+	
+	return false;
+}
+
+// Check version of server
+void CCalDAVCalendarClient::_ProcessCapability()
+{
+	// Look for other capabilities
+	CWebDAVCalendarClient::_ProcessCapability();
+	GetCalendarProtocol()->SetHasScheduling(HasDAVVersion(eCALDAVsched));
+
+}
 
 void CCalDAVCalendarClient::_CreateCalendar(const CCalendarStoreNode& node)
 {
@@ -206,6 +243,8 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 		// Determine type of element
 		bool is_dir = false;
 		bool is_cal = false;
+		bool is_inbox = false;
+		bool is_outbox = false;
 		if ((*iter)->GetNodeProperties().count(http::webdav::cProperty_resourcetype.FullName()) != 0)
 		{
 			bool is_col = false;
@@ -223,14 +262,17 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 				// Look for calendar
 				if ((*iter)->CompareFullName(http::caldav::cProperty_caldavcalendar))
 					is_cal = true;
-				
-#ifdef ORACLE_FIX_1
-				// Oracle server has extra ':' at end of namespace
-
-				// Look for calendar
-				if ((*iter)->CompareFullName("urn:ietf:params:xml:ns:caldav:calendar"))
+				else if ((*iter)->CompareFullName(http::caldav::cProperty_scheduleinbox))
+				{
 					is_cal = true;
-#endif
+					is_inbox = true;
+				}
+				if ((*iter)->CompareFullName(http::caldav::cProperty_scheduleoutbox))
+				{
+					is_cal = true;
+					is_outbox = true;
+				}
+				
 			}
 			
 			// Only allow calendar if also a collection
@@ -244,7 +286,7 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 		if (is_dir || is_cal)
 		{
 			// Create the new node and add to parent
-			CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, is_dir, rpath);
+			CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, is_dir, is_inbox, is_outbox, rpath);
 			root->AddChild(node);
 			
 			// Cannot determine the size of the calendar collection without another PROPFIND, so ignore for now
@@ -310,13 +352,20 @@ void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& nod
 
 void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& node, const cdstrvect& hrefs, iCal::CICalendar& cal)
 {
+	bool no_report = false;
 #ifdef NO_MULTIGET_REPORT
+	no_report = (GetCalendarProtocol()->GetAccount()->GetName().find("noreport") != cdstring::npos);
+#endif
+	if (no_report)
+	{
 	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
 	{
 		// Read in the component
 		ReadCalendarComponent(*iter, cal);
 	}
-#else
+	}
+	else
+	{
 	// Don't bother with this if empty (actually spec requires at least one href)
 	if (hrefs.empty())
 		return;
@@ -350,7 +399,7 @@ void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& nod
 
 	http::caldav::CCalDAVReportParser parser(cal);
 	parser.ParseData(dout.GetData());
-#endif
+	}
 }
 
 void CCalDAVCalendarClient::GetCalendarComponents(const CCalendarStoreNode& node, const http::webdav::CWebDAVPropFindParser& parser, iCal::CICalendar& cal, cdstrmap& compinfo, bool last_path)
@@ -400,8 +449,6 @@ void CCalDAVCalendarClient::GetCalendarComponents(const CCalendarStoreNode& node
 
 iCal::CICalendarComponent* CCalDAVCalendarClient::ReadCalendarComponent(const cdstring& rurl, iCal::CICalendar& cal)
 {
-	iCal::CICalendarComponent* result = NULL;
-
 	// Create WebDAV GET
 	auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl));
 	http::CHTTPOutputDataString dout;
@@ -419,7 +466,7 @@ iCal::CICalendarComponent* CCalDAVCalendarClient::ReadCalendarComponent(const cd
 	default:
 		// Handle error and exit here
 		HandleHTTPError(request.get());
-		return result;
+		return NULL;
 	}
 
 	// Get last segment of RURL path
@@ -443,9 +490,7 @@ iCal::CICalendarComponent* CCalDAVCalendarClient::ReadCalendarComponent(const cd
 	// Read calendar component(s) from file
 	cdstring data = dout.GetData();
 	std::istrstream is(data.c_str());
-	result = cal.ParseComponent(is, last_path, etag);
-	
-	return result;
+	return cal.ParseComponent(is, last_path, etag);
 }
 
 void CCalDAVCalendarClient::_WriteFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
@@ -632,6 +677,130 @@ iCal::CICalendarComponent* CCalDAVCalendarClient::_ReadComponent(const CCalendar
 	return ReadCalendarComponent(rurl, cal);
 }
 
+#pragma mark ____________________________Schedule
+
+// Get Scheduling Inbox/Outbox URIs
+void CCalDAVCalendarClient::_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI)
+{
+	// Policy:
+	//
+	// Assume we've authenticated at least once so our principal is known and auth sent to the server with the requests.
+	//
+	// Determine the principal collections set for a suitable URI (/).
+	//
+	// Run a principal-match report for self returning the inbox/outbox URIs.
+	
+	// Only if scheduling supported
+	if (!HasDAVVersion(eCALDAVsched))
+		return;
+	
+	// Use cached values
+	if (mCachedInboxOutbox)
+	{
+		inboxURI = mCachedInbox;
+		outboxURI = mCachedOutbox;
+		return;
+	}
+
+	// Get <DAV:principal-collection-set> property on root URI
+
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Listing", "Error::Calendar::OSErrListCalendars", "Error::Calendar::NoBadListCalendars");
+
+	// Determine URL
+	cdstring rurl = GetRURL(&node);
+
+	cdstrvect hrefs = GetHrefListProperty(rurl, http::webdav::cProperty_principal_collection_set);
+	if (hrefs.empty())
+		return;
+	
+	// For each principal collection find one that matches self
+	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
+	{
+		cdstrmap result;
+		xmllib::XMLNameList props;
+		props.push_back(http::caldav::cProperty_scheduleinboxURL);
+		props.push_back(http::caldav::cProperty_scheduleoutboxURL);
+		if (GetSelfProperties(*iter, props, result))
+		{
+			 cdstrmap::const_iterator found = result.find(http::caldav::cProperty_scheduleinboxURL.FullName());
+			 if (found != result.end())
+			 	inboxURI = (*found).second;
+			 found = result.find(http::caldav::cProperty_scheduleoutboxURL.FullName());
+			 if (found != result.end())
+			 	outboxURI = (*found).second;
+			 mCachedInbox = inboxURI;
+			 mCachedOutbox = outboxURI;
+			 mCachedInboxOutbox = true;
+			 return;
+		}
+	}
+}
+
+// Run scheduling request
+void CCalDAVCalendarClient::_Schedule(const cdstring& outboxURI,
+									  const cdstring& originator,
+									  const cdstrvect& recipients,
+									  const iCal::CICalendar& cal,
+									  iCal::CITIPScheduleResultsList& results)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Scheduling", "Error::Calendar::OSErrScheduling", "Error::Calendar::NoBadScheduling", outboxURI);
+
+	// Now POST the resource
+
+	// Write calendar file to stream
+	std::ostrstream os;
+	cal.Generate(os);
+	os << ends;
+	cdstring data;
+	data.steal(os.str());
+
+	// Create CalDAV POST (Schedule)
+	auto_ptr<http::caldav::CCalDAVSchedule> request(new http::caldav::CCalDAVSchedule(this, outboxURI, originator, recipients));
+	http::CHTTPInputDataString din(data, "text/calendar; charset=utf-8");
+	http::CHTTPOutputDataString dout;
+	request->SetData(&din, &dout);
+
+	// Process it
+	RunSession(request.get());	
+	
+	// Check response status
+	switch(request->GetStatusCode())
+	{
+	case http::eStatus_OK:
+	case http::eStatus_Created:
+	case http::eStatus_NoContent:
+		// Do default action
+		break;
+	default:
+		// Handle error and exit here
+		HandleHTTPError(request.get());
+		return;
+	}
+
+	http::caldav::CCalDAVScheduleParser parser(results);
+	parser.ParseData(dout.GetData());
+}
+
+void CCalDAVCalendarClient::_GetFreeBusyCalendars(cdstrvect& calendars)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Scheduling", "Error::Calendar::OSErrScheduling", "Error::Calendar::NoBadScheduling");
+	
+	// Determine URL
+	cdstring rurl = mCachedInbox;
+	
+	calendars = GetHrefListProperty(rurl, http::caldav::cProperty_schedulefreebusyset);
+}
+
+void CCalDAVCalendarClient::_SetFreeBusyCalendars(const cdstrvect& calendars)
+{
+	
+}
+
+#pragma mark ____________________________Others
+
 void CCalDAVCalendarClient::AddComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component)
 {
 	// Create new resource via lock NULL
@@ -673,7 +842,7 @@ void CCalDAVCalendarClient::AddComponent(const CCalendarStoreNode& node, iCal::C
 #endif
 
 	// Now PUT the resource
-	WriteComponent(node, cal, component);
+	WriteComponent(node, cal, component, true);
 
 	// Now unlock
 #ifndef ORACLE_FIX_3
@@ -693,7 +862,7 @@ void CCalDAVCalendarClient::ChangeComponent(const CCalendarStoreNode& node, iCal
 #endif
 
 	// Now PUT the resource
-	WriteComponent(node, cal, component);
+	WriteComponent(node, cal, component, false);
 
 	// Now unlock
 #ifndef ORACLE_FIX_3
@@ -702,7 +871,7 @@ void CCalDAVCalendarClient::ChangeComponent(const CCalendarStoreNode& node, iCal
 #endif
 }
 
-void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component)
+void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component, bool new_item)
 {
 	// Determine URL
 	cdstring rurl = GetRURL(&node);
@@ -724,7 +893,7 @@ void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal:
 	http::CHTTPOutputDataString dout;
 	
 	// Use lock if present, otherwise ETag
-	request->SetData(&din, &dout);
+	request->SetData(&din, &dout, new_item);
 
 	// Process it
 	RunSession(request.get());	

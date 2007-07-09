@@ -20,6 +20,7 @@
 #include "CCalendarWindow.h"
 #include "CDayWeekView.h"
 #include "CEventPreview.h"
+#include "CFreeBusyView.h"
 #include "CMonthView.h"
 #include "CPreferences.h"
 #include "CToDoView.h"
@@ -50,6 +51,12 @@ void CCalendarView::SetCalendar(iCal::CICalendar* calendar)
 	
 	// Force reset of entire view
 	FullReset();
+}
+
+void CCalendarView::SetFreeBusy(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date)
+{
+	ResetView(NCalendarView::eViewFreeBusy, NULL);
+	static_cast<CFreeBusyView*>(mCurrentView)->SetFreeBusy(calref, id, organizer, attendees, date);
 }
 
 void CCalendarView::SetPreview(CEventPreview* preview)

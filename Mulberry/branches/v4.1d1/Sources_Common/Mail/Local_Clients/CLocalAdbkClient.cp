@@ -19,11 +19,10 @@
 
 #include "CLocalAdbkClient.h"
 
+#include "CAddressBook.h"
 #include "CGeneralException.h"
-#include "CLocalAdbkClient.h"
 #include "CINETCommon.h"
 #include "CLocalCommon.h"
-#include "CRemoteAddressBook.h"
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
 #include "CUnicodeStdLib.h"
@@ -193,6 +192,22 @@ void CLocalAdbkClient::_PostProcess()
 
 // Operations on address books
 
+void CLocalAdbkClient::_ListAddressBooks(CAddressBook* root)
+{
+	StINETClientAction action(this, "Status::IMSP::AddressBooks", "Error::IMSP::OSErrAddressBooks", "Error::IMSP::NoBadAddressBooks");
+	InitItemCtr();
+
+	// Node must be protocol or directory
+	if (!root->IsProtocol() && !root->IsDirectory())
+		return;
+
+	cdstring pattern = mCWD;
+	ListAddressBooks(root, pattern);
+	
+	// Always sort children after adding all of them
+	root->SortChildren();
+}
+
 // Find all adbks below this path
 void CLocalAdbkClient::_FindAllAdbks(const cdstring& path)
 {
@@ -275,7 +290,7 @@ void CLocalAdbkClient::_CreateAdbk(const CAddressBook* adbk)
 }
 
 // Do touch
-void CLocalAdbkClient::_TouchAdbk(const CAddressBook* adbk)
+bool CLocalAdbkClient::_TouchAdbk(const CAddressBook* adbk)
 {
 	// Check it exists and create if not
 	if (!_TestAdbk(adbk))
@@ -283,7 +298,10 @@ void CLocalAdbkClient::_TouchAdbk(const CAddressBook* adbk)
 		// Do this without recording
 		StValueChanger<CAdbkRecord*> value(mRecorder, NULL);
 		_CreateAdbk(adbk);
+		return true;
 	}
+	else
+		return false;
 }
 
 // Do test
@@ -295,6 +313,12 @@ bool CLocalAdbkClient::_TestAdbk(const CAddressBook* adbk)
 
 	// Check it exists and create if not
 	return fileexists(adbk_name);
+}
+
+bool CLocalAdbkClient::_AdbkChanged(const CAddressBook* adbk)
+{
+	// Nothing to do for local as this is only used when sync'ing with server
+	return false;
 }
 
 // Delete adbk
@@ -361,7 +385,48 @@ void CLocalAdbkClient::_RenameAdbk(const CAddressBook* old_adbk, const cdstring&
 	}
 }
 
+void CLocalAdbkClient::_SizeAdbk(CAddressBook* adbk)
+{
+	StINETClientAction action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
+
+	// Does it exist on disk?
+	if (_TestAdbk(adbk))
+	{
+		cdstring adbk_name;
+		GetFileName(adbk, adbk_name);
+
+		// Get sizes
+		unsigned long size = 0;
+		struct stat adbk_finfo;
+		if (::stat_utf8(adbk_name, &adbk_finfo))
+		{
+			int err_no = os_errno;
+			CLOG_LOGTHROW(CGeneralException, err_no);
+			throw CGeneralException(err_no);
+		}
+		else
+			size += adbk_finfo.st_size;
+
+		adbk->SetSize(size);
+	}
+	else
+		// Not cached => size = 0
+		adbk->SetSize(0);
+}
+
 // Operations with addresses
+
+// Find all addresses in adbk
+void CLocalAdbkClient::_ReadFullAddressBook(CAddressBook* adbk)
+{
+	_FindAllAddresses(adbk);
+}
+
+// Write all addresses in adbk
+void CLocalAdbkClient::_WriteFullAddressBook(CAddressBook* adbk)
+{
+	
+}
 
 // Find all addresses in adbk
 void CLocalAdbkClient::_FindAllAddresses(CAddressBook* adbk)
@@ -599,6 +664,59 @@ void CLocalAdbkClient::GetFileName(const char* adbk, cdstring& name)
 	name += ".mba";
 }
 
+void CLocalAdbkClient::ListAddressBooks(CAddressBook* root, const cdstring& path)
+{
+	// Directory scan
+	// Iterate over all .mba files/directories in directory
+	// but not ones that are hidden
+#if __dest_os == __mac_os || __dest_os == __mac_os_x
+	// Look for '.mba' at end only if disconnected
+	// No longer require file creator/type match
+	diriterator _dir(path, true, GetAdbkOwner()->IsDisconnected() ? ".mba" : NULL);
+#else
+	diriterator _dir(path, true, ".mba");
+#endif
+	_dir.set_return_hidden_files(false);
+	const char* fname = NULL;
+	while(_dir.next(&fname))
+	{
+		// Provide feedback
+		BumpItemCtr("Status::IMSP::AddressBookFind");
+
+		// Get the full path of the found item
+		cdstring fpath(path);
+		::addtopath(fpath, fname);
+
+		// Get the relative path which will be the name of the node.
+		// This is relative to the root path for this client.
+		cdstring rpath(fpath, mCWD.length());
+		
+		// Strip off trailing .mba
+		if (rpath.compare_end(".mba"))
+			rpath.erase(rpath.length() - 4);
+
+		// Provide feedback
+		BumpItemCtr("Status::IMSP::AddressBookFind");
+
+		// Add adress book to list
+		CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), root, !_dir.is_dir(), _dir.is_dir(), rpath);
+		root->AddChild(adbk);
+
+		// Scan into directories
+		if (_dir.is_dir())
+		{
+			// Use new node as the root
+			ListAddressBooks(adbk, fpath);
+			
+			// Always mark adbk as having been expanded
+			adbk->SetHasExpanded(true);
+			
+			// Always sort the children after adding all of them
+			adbk->SortChildren();
+		}
+	}
+}
+
 void CLocalAdbkClient::ScanDirectory(const char* path, const cdstring& pattern, bool first)
 {
 	// Create lists for directories and mailboxes
@@ -691,8 +809,8 @@ void CLocalAdbkClient::AddAdbk(const char* path_name)
 	cdstring adbk_name = &path_name[mCWD.length()];
 
 	// Add adress book to list
-	CRemoteAddressBook* adbk = new CRemoteAddressBook(GetAdbkOwner(), adbk_name);
-	GetAdbkOwner()->GetAdbkList()->push_back(adbk, false);
+	CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), true, false, adbk_name);
+	GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
 }
 
 // Scan address book for all addresses

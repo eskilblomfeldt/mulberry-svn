@@ -25,7 +25,6 @@
 #define __CADDRESSBOOK__MULBERRY__
 
 #include "CAdbkACL.h"
-#include "CAdbkList.h"
 #include "CAdbkAddress.h"
 #include "CAddressList.h"
 #include "CGroupList.h"
@@ -34,10 +33,24 @@
 
 #include "cdstring.h"
 #include "cdmutex.h"
+#include "ptrvector.h"
 
 // Classes
+namespace xmllib 
+{
+class XMLDocument;
+class XMLNode;
+};
+
+namespace vCard 
+{
+class CVCardAddressBook;
+};
 
 class CAdbkProtocol;
+
+class CAddressBook;
+typedef ptrvector<CAddressBook> CAddressBookList;
 
 class CAddressBook
 {
@@ -46,17 +59,18 @@ public:
 	{
 		// Adbk status
 		eNone = 					0,
-		eReadOnly =					1L << 1,
-		eOpen =						1L << 2,
-		eLoaded =					1L << 3,
-		eOpenOnStart =				1L << 4,
-		eLookup =					1L << 5,
-		eSearch =					1L << 6,
-		eAdd =						1L << 7,
-		eAutoSync =					1L << 8,
-		eDeleteOnClose =			1L << 9,
-		eLocalAdbk =				1L << 10,
-		eCachedAdbk =				1L << 11,
+		eIsProtocol =				1L << 0,
+		eIsDirectory =				1L << 1,
+		eIsAdbk =					1L << 2,
+		eHasExpanded =				1L << 3,
+		eReadOnly =					1L << 4,
+		eOpen =						1L << 5,
+		eOpenOnStart =				1L << 6,
+		eLookup =					1L << 7,
+		eSearch =					1L << 8,
+		eAdd =						1L << 9,
+		eAutoSync =					1L << 10,
+		eIsCached =					1L << 11,
 		eSynchronising =			1L << 12		// Addressbook is being synchronised
 		
 	};
@@ -65,21 +79,43 @@ public:
 
 	static cdmutex _mutex;										// Used for locks
 
-		CAddressBook()
-			{ InitAddressBook(); }
-		explicit CAddressBook(const char* name)
-			{ InitAddressBook(); mAdbkName = name; }
-		CAddressBook(const CAddressBook& copy);
+	// std::sort methods
+	static bool sort_by_name(const CAddressBook* s1, const CAddressBook* s2);
 
+		CAddressBook();
+		CAddressBook(CAdbkProtocol* proto);
+		CAddressBook(CAdbkProtocol* proto, CAddressBook* parent, bool is_adbk = true, bool is_dir = false, const cdstring& name = cdstring::null_str);
 	virtual ~CAddressBook();
 
 	// Getters
-	const cdstring& GetName() const
-		{ return mAdbkName; }
-	void SetName(const char* name);
+	CAdbkProtocol* GetProtocol() const
+	{
+		return mProtocol;
+	}
 
-	virtual cdstring GetAccountName() const = 0;
-	virtual cdstring GetURL(bool full = false) const = 0;
+	CAddressBook* GetParent() const
+	{
+		return mParent;
+	}
+
+	void AddChild(CAddressBook* child, bool sort = false);
+	void AddChildHierarchy(CAddressBook* child, bool sort = false);
+	void InsertChild(CAddressBook* child, uint32_t index, bool sort = false);
+	CAddressBookList* GetChildren() const
+	{
+		return mChildren;
+	}
+	void SortChildren();
+
+	cdstring GetAccountName(bool multi = true) const;
+	cdstring GetURL(bool full = false) const;
+
+	void SetName(const cdstring& name);							// Set name
+	const cdstring&	GetName() const								// Get full name
+		{ return mName; }
+	const char*	GetShortName() const							// Get short name
+		{ return mShortName; }
+	void	NewName(const cdstring& name);						// Tell this and children to adjust names
 
 	CAddressList* GetAddressList()
 		{ return &mAddresses; }
@@ -91,10 +127,37 @@ public:
 	EFlags	GetFlags() const								// Get flags
 		{ return (EFlags) mFlags.Get(); }
 
-	bool IsOpen()
+	bool IsProtocol() const
+	{
+		return mFlags.IsSet(eIsProtocol);
+	}
+
+	bool IsDirectory() const
+	{
+		return mFlags.IsSet(eIsDirectory);
+	}
+
+	bool IsAdbk() const
+	{
+		return mFlags.IsSet(eIsAdbk);
+	}
+
+	bool HasInferiors() const
+	{
+		return IsDirectory() && (mChildren != NULL) && (mChildren->size() != 0);
+	}
+
+	void SetHasExpanded(bool has_expanded)
+	{
+		mFlags.Set(eHasExpanded, has_expanded);
+	}
+	bool HasExpanded() const									// Has expanded children
+	{
+		return mFlags.IsSet(eHasExpanded);
+	}
+
+	bool IsOpen() const
 		{ return mFlags.IsSet(eOpen); }
-	bool IsLoaded()
-		{ return mFlags.IsSet(eLoaded); }
 	bool	IsOpenOnStart() const
 		{ return mFlags.IsSet(eOpenOnStart); }
 	bool	IsLookup() const
@@ -105,111 +168,167 @@ public:
 		{ return mFlags.IsSet(eAdd); }
 	bool	IsAutoSync() const
 		{ return mFlags.IsSet(eAutoSync);}
-	bool	IsLocalAdbk() const
-		{ return mFlags.IsSet(eLocalAdbk);}
 	bool	IsCachedAdbk() const
-		{ return mFlags.IsSet(eCachedAdbk);}
+		{ return mFlags.IsSet(eIsCached);}
 	bool	IsSynchronising() const
 		{ return mFlags.IsSet(eSynchronising);}
 
+	void SetSize(uint32_t size)
+	{
+		mSize = size;
+	}
+	uint32_t GetSize() const
+	{
+		return mSize;
+	}
+	void CheckSize();
+
+	uint32_t GetLastSync() const
+	{
+		return mLastSync;
+	}
+	void SyncNow() const;
+
+	bool IsCached() const;
+	void TestDisconnectCache();
+
+	CAddressBook* FindNode(cdstrvect& hierarchy, bool discover = false) const;
+	CAddressBook* FindNodeOrCreate(cdstrvect& hierarchy) const
+	{
+		return FindNode(hierarchy, true);
+	}
+
+	void RemoveFromParent();
+	void Clear();
+
+	uint32_t GetRow() const;
+	uint32_t CountDescendants() const;
+	uint32_t GetParentOffset() const;
+	const CAddressBook* GetSibling() const;
+	void GetInsertRows(uint32_t& parent_row, uint32_t& sibling_row) const;
+
+	// VCard stuff
+	const vCard::CVCardAddressBook* GetVCardAdbk() const
+	{
+		return mVCardAdbk;
+	}
+	vCard::CVCardAddressBook* GetVCardAdbk()
+	{
+		return mVCardAdbk;
+	}
+	void SetVCardAdbk(vCard::CVCardAddressBook* adbk)
+	{
+		mVCardAdbk = adbk;
+	}
+
+	// Operations on address books
+	void MoveAddressBook(const CAddressBook* dir, bool sibling);
+	void CopyAddressBook(CAddressBook* node);
+	void CopyAddressBookContents(CAddressBook* node);
+
 	// Opening/closing
-	virtual void	New();									// New visual address book on source
-	virtual void	Open();									// Open visual address book from source
-	virtual void	Read();									// Read in addresses
-	virtual void	Save();									// Save addresses
-	virtual void	Close();								// Close visual address book
-	virtual void	Clear();								// Clear addresses
+	void	Open();									// Open visual address book from source
+	void	Close();								// Close visual address book
+	void	ClearContents();						// Clear addresses
 
 	// Manipulation
-	virtual void	Rename(cdstring& new_name);				// Rename
-	virtual void	Delete();								// Delete
-	virtual void	Empty();								// Empty
+	void	Rename(cdstring& new_name);				// Rename
+	void	Delete();								// Delete
+	void	Empty();								// Empty
 
-	virtual void	CopyAll(CAddressBook* adbk);			// Copy addresses and groups to another address book
+	void	Synchronise(bool fast);					// Synchronise to local
+	void	ClearDisconnect();						// Clear disconnected cache
 
-	virtual void	Synchronise(bool fast);					// Synchronise to local
-	virtual void	ClearDisconnect();						// Clear disconnected cache
-	virtual void	SwitchDisconnect(CAdbkProtocol* local);	// Switch into disconnected mode
-
-	virtual CAdbkAddress* FindAddress(const char* name);
-	virtual CAdbkAddress* FindAddress(const CAddress* addr);
-	virtual CAdbkAddress* FindAddressEntry(const char* name);
-	virtual CGroup* FindGroup(const char* name);
-	virtual CGroup* FindGroupEntry(const char* name);
+	// Searching
+	CAdbkAddress* FindAddress(const char* name);
+	CAdbkAddress* FindAddress(const CAddress* addr);
+	CAdbkAddress* FindAddressEntry(const char* name);
+	CGroup* FindGroup(const char* name);
+	CGroup* FindGroupEntry(const char* name);
 
 	// Adding/removing items
-	virtual void	AddAddress(CAddress* addr, bool sorted = false);
-	virtual void	AddAddress(CAddressList* addrs, bool sorted = false);
-	virtual void	AddUniqueAddresses(CAddressList& add);							// Add unique addresses from list
-	virtual void	UpdateAddress(CAddress* addr, bool sorted = false);				// Address changed
-	virtual void	UpdateAddress(CAddressList* addrs, bool sorted = false) {}		// Address changed
-	virtual void	UpdateAddress(CAddressList* old_addrs, CAddressList* new_addrs, bool sorted = false);		// Address changed
-	virtual void	RemoveAddress(CAddress* addr);
-	virtual void	RemoveAddress(CAddressList* addrs)
-		{ if (IsLoaded()) mAddresses.RemoveAddress(addrs); }
+	void	AddAddress(CAddress* addr, bool sorted = false);
+	void	AddAddress(CAddressList* addrs, bool sorted = false);
+	void	AddUniqueAddresses(CAddressList& add);							// Add unique addresses from list
+	void	UpdateAddress(CAddress* addr, bool sorted = false);				// Address changed
+	void	UpdateAddress(CAddressList* addrs, bool sorted = false);		// Address changed
+	void	UpdateAddress(CAddressList* old_addrs, CAddressList* new_addrs, bool sorted = false);		// Address changed
+	void	RemoveAddress(CAddress* addr);
+	void	RemoveAddress(CAddressList* addrs);
 
-	virtual void	AddGroup(CGroup* grp, bool sorted = false);
-	virtual void	AddGroup(CGroupList* grps, bool sorted = false);
-	virtual void	AddUniqueGroups(CGroupList& add);								// Add unique groups from list
-	virtual void	UpdateGroup(CGroup* grp, bool sorted = false);					// Group changed
-	virtual void	UpdateGroup(CGroupList* grps, bool sorted = false) {}			// Group changed
-	virtual void	UpdateGroup(CGroupList* old_grps, CGroupList* new_grps, bool sorted = false);		// Address changed
-	virtual void	RemoveGroup(CGroup* grp);
-	virtual void	RemoveGroup(CGroupList* grps)
-		{ if (IsLoaded()) mGroups.RemoveGroup(grps); }
+	void	AddGroup(CGroup* grp, bool sorted = false);
+	void	AddGroup(CGroupList* grps, bool sorted = false);
+	void	AddUniqueGroups(CGroupList& add);								// Add unique groups from list
+	void	UpdateGroup(CGroup* grp, bool sorted = false);					// Group changed
+	void	UpdateGroup(CGroupList* grps, bool sorted = false);				// Group changed
+	void	UpdateGroup(CGroupList* old_grps, CGroupList* new_grps, bool sorted = false);		// Address changed
+	void	RemoveGroup(CGroup* grp);
+	void	RemoveGroup(CGroupList* grps);
 
-	virtual void	MakeUniqueEntry(CAdbkAddress* addr) const;	// Give this address a unique entry
+	void	MakeUniqueEntry(CAdbkAddress* addr) const;	// Give this address a unique entry
 
 	// Reading/writing
-	virtual void	ImportAddresses(char* txt);
-	virtual void	ImportAddress(char* txt, bool add,
+	void	ImportAddresses(char* txt);
+	void	ImportAddress(char* txt, bool add,
 									CAdbkAddress** addr,
 									CGroup** grp, bool add_entry = false);
-	virtual char*	ExportAddress(const CAdbkAddress* addr) const;
-	virtual char*	ExportGroup(const CGroup* grp) const;
+	char*	ExportAddress(const CAdbkAddress* addr) const;
+	char*	ExportGroup(const CGroup* grp) const;
 
 	// Lookup
-	virtual	bool	FindNickName(const char* nick_name,
-										CAdbkAddress*& addr);	// Find address from nick-name
+	bool	FindNickName(const char* nick_name,
+										CAdbkAddress*& addr,
+										bool cache_only = false);	// Find address from nick-name
 
-	virtual	bool	FindGroupName(const char* grp_name,
-										CGroup*& grp);			// Find group from group-name
+	bool	FindGroupName(const char* grp_name,
+										CGroup*& grp,
+										bool cache_only = false);			// Find group from group-name
 
-	virtual void	SearchAddress(const cdstring& name,
+	void	SearchAddress(const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
 									CAdbkAddress::EAddressField field,
 									CAddressList& addr_list);	// Do search
 
 	// ACLs
-	virtual void	SetMyRights(SACLRight rights)				// Set user's rights to this mailbox
+	void	SetMyRights(SACLRight rights)				// Set user's rights to this mailbox
 		{ mMyRights = rights; }
-	virtual SACLRight	GetMyRights() const
+	SACLRight	GetMyRights() const
 		{ return mMyRights; }
-	virtual void	CheckMyRights() = 0;					// Get user's rights from server
+	void	CheckMyRights();							// Get user's rights from server
 
-	virtual void	AddACL(const CAdbkACL* acl) = 0;			// Add ACL to list
-	virtual void	SetACL(CAdbkACL* acl) = 0;					// Set ACL on server
-	virtual void	DeleteACL(CAdbkACL* acl) = 0;				// Delete ACL on server
-	virtual CAdbkACLList*	GetACLs() const
+	void	AddACL(const CAdbkACL* acl);				// Add ACL to list
+	void	SetACL(CAdbkACL* acl);						// Set ACL on server
+	void	DeleteACL(CAdbkACL* acl);					// Delete ACL on server
+	CAdbkACLList*	GetACLs() const
 		{ return mACLs; }
-	virtual void	CheckACLs() = 0;						// Get ACLs from server
+	void	CheckACLs();								// Get ACLs from server
+
+	void WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* parent, bool is_root = false) const;
+	void ReadXML(const xmllib::XMLNode* node, bool is_root = false);
 
 protected:
-	cdstring			mAdbkName;		// Name of adbk
-	SBitFlags			mFlags;			// Flags state
+	CAdbkProtocol*		mProtocol;
+	CAddressBook*		mParent;
+	CAddressBookList*	mChildren;
+	SBitFlags			mFlags;						// Flags state
+	cdstring			mName;						// Full path name of item
+	const char*			mShortName;					// Pointer to the last part of the path name
+	uint32_t			mSize;						// Disk size
+	mutable uint32_t	mLastSync;					// Last sync time
 	CAddressList		mAddresses;
 	CGroupList			mGroups;
 	SACLRight			mMyRights;					// User's rights on this address book
 	CAdbkACLList*		mACLs;						// List of ACLs on this address book
 	unsigned long		mRefCount;					// Reference count of opens
+	vCard::CVCardAddressBook*	mVCardAdbk;					// The VCard address book
 
 			char SkipTerm(char** txt, cdstring& copy);
 
 			bool OpenCount();						// Determine whether to open based on ref count
 			bool CloseCount();						// Determine whether to close based on ref cunt
 
-private:
-	void	InitAddressBook();
+			void SetShortName();					// Set short name from full name
+			void ParentRenamed();				// Tell children to adjust names when parent moves
 };
 
 #endif

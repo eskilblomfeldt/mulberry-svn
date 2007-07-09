@@ -22,6 +22,7 @@
 #include "CIdentity.h"
 
 #include "char_stream.h"
+#include "CCalendarAddress.h"
 #include "CCalendarStoreNode.h"
 #include "CMbox.h"
 #include "CPreferences.h"
@@ -47,6 +48,7 @@ CIdentity::CIdentity()
 	mFrom.second = false;
 	mReplyTo.second = false;
 	mSender.second = false;
+	mCalendar.second = false;
 	mCopyTo.second = false;
 	mCopyToNone = false;
 	mCopyToChoose = false;
@@ -76,6 +78,7 @@ void CIdentity::_copy(const CIdentity& copy)
 	mFrom = copy.mFrom;
 	mReplyTo = copy.mReplyTo;
 	mSender = copy.mSender;
+	mCalendar = copy.mCalendar;
 	mCopyTo = copy.mCopyTo;
 	mCopyToNone = copy.mCopyToNone;
 	mCopyToChoose = copy.mCopyToChoose;
@@ -110,7 +113,8 @@ int CIdentity::operator==(const CIdentity& test) const
 			(mSMTPAccount == test.mSMTPAccount) &&
 			(mFrom == test.mFrom) &&
 			(mReplyTo == test.mReplyTo) &&
-			(mSender== test.mSender) &&
+			(mSender == test.mSender) &&
+			(mCalendar == test.mCalendar) &&
 			(mCopyTo == test.mCopyTo) &&
 			(mCopyToNone == test.mCopyToNone) &&
 			(mCopyToChoose == test.mCopyToChoose) &&
@@ -387,6 +391,11 @@ bool CIdentity::SetInfo(char_stream& txt, NumVersion vers_prefs)
 		txt.get(mSignOther, true);
 	}
 
+	if (::VersionTest(vers_prefs, VERS_4_1_0_A_1) >= 0)
+	{
+		MakePair(txt, mCalendar);
+	}	
+	
 	// Expansion items:
 	
 	mFuture.SetInfo(txt, vers_prefs);
@@ -486,6 +495,9 @@ cdstring CIdentity::GetInfo(void) const
 	item.quote();
 	item.ConvertFromOS();
 	all += item;
+
+	AddPair(all, mCalendar);
+	all += cSpace;
 
 	all += mFuture.GetInfo();
 
@@ -601,6 +613,33 @@ const cdstring& CIdentity::GetSender(bool resolve) const
 		return GetInheritedValue(&CIdentity::GetSender, &CIdentity::UseSender);
 	else
 		return mSender.first;
+}
+
+const cdstring& CIdentity::GetCalendar(bool resolve) const
+{
+	if (resolve)
+		return GetInheritedValue(&CIdentity::GetCalendar, &CIdentity::UseCalendar);
+	else
+		return mCalendar.first;
+}
+
+cdstring CIdentity::GetCalendarAddress() const
+{
+	cdstring result = GetCalendar(true);
+	if (!result.empty())
+		return result;
+	result = GetFrom(true);
+	if (!result.empty())
+	{
+		CAddress addr(result);
+		result = addr.GetName();
+		if (!result.empty())
+			result += " ";
+		result += "<";
+		result += addr.GetMailAddress();
+		result += ">";
+	}
+	return result;
 }
 
 const cdstring& CIdentity::GetCopyTo(bool resolve) const
@@ -870,6 +909,28 @@ CIdentity* CIdentityList::GetIdentity(const CAddress& addr) const
 			return const_cast<CIdentity*>(&(*iter));
 	}
 	
+	return NULL;
+	}
+	
+CIdentity* CIdentityList::GetIdentity(const CCalendarAddress& caladdr) const
+{
+	// Match the Calendar address first
+	const cdstring& comp = caladdr.GetAddress();
+	for(const_iterator iter = begin(); iter != end(); iter++)
+	{
+		cdstring test((*iter).GetCalendar(true));
+		CCalendarAddress testc(test);
+		if (testc.GetAddress().compare(comp, true) == 0)
+			return const_cast<CIdentity*>(&(*iter));
+	}
+	
+	// If calendar address is mailto, try to match a From address
+	if (comp.compare_start(cMailtoURLScheme))
+	{
+		cdstring temp(comp, ::strlen(cMailtoURLScheme));
+		CAddress addr(temp, caladdr.GetName());
+		return GetIdentity(addr);
+	}
 	return NULL;
 }
 

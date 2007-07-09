@@ -54,6 +54,7 @@ const char* cINETDescriptors[] =
 	 "HTTP Calendar",
 	 "WebDAV Calendar",
 	 "CalDAV Calendar",
+	 "CardDAV Calendar",
 	 NULL};
 
 const char* cTLSDescriptors[] =
@@ -145,6 +146,7 @@ bool CINETAccount::SupportsTLSType(ETLSType type) const
 	case eHTTPCalendar:
 	case eWebDAVCalendar:
 	case eCalDAVCalendar:
+	case eCardDAVAdbk:
 		return (type == eNoTLS) || (type == eSSL);
 	}
 }

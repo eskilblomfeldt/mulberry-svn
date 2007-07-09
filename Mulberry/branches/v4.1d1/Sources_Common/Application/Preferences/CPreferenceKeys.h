@@ -427,6 +427,7 @@ extern const char* cPrefsSection;
 		extern const char* cAddressAccountsKey_1_4;		// New format as of v1.4
 		extern const char* cAddressAccountsKey_2_0;		// New format as of v2.0
 		extern const char* cLocalAdbkAccount;			// New as of v2.0
+		extern const char* cExpandedAdbksKey;			// New as of v4.1
 		extern const char* cOSAdbkAccount;				// New as of v3.1b1
 		extern const char* cAdbkOpenAtStartup_1_3;		// Deprecated format as of v2.0b6
 		extern const char* cAdbkOpenAtStartup_2_0;		// New as of v2.0b6

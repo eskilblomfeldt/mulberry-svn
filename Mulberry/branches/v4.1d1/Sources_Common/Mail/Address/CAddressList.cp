@@ -22,6 +22,7 @@
 #include "CAddress.h"
 #include "CAdbkAddress.h"
 #include "CAddressComparators.h"
+#include "CCalendarAddress.h"
 #ifdef __MULBERRY
 #include "CMailControl.h"
 #endif
@@ -111,7 +112,7 @@ CAddressList::CAddressList(const char* txt, long txt_length, unsigned long capac
 	char* adl = NULL;
 	bool more = true;
 
-	// Check each character - need to balance "" & ()
+	// Check each character - need to balance "É" & (É)
 	while(more) {
 		switch (*p) {
 
@@ -559,6 +560,31 @@ void CAddressList::AddMailAddressToList(cdstrvect& list, bool full) const
 					list.push_back((*iter)->GetFullAddress());
 				else
 					list.push_back((*iter)->GetMailAddress());
+			}
+		}
+	}
+}
+
+// Add calendar addresses to list
+void CAddressList::AddCalendarAddressToList(cdstrvect& list, bool full) const
+{
+	for(const_iterator iter = begin(); iter != end(); iter++)
+	{
+		const CAdbkAddress* addr = dynamic_cast<const CAdbkAddress*>(*iter);
+		if (addr && (!addr->GetCalendar().empty() || !addr->GetMailAddress().empty()) ||
+			!(*iter)->GetMailAddress().empty())
+		{
+			if (addr != NULL)
+			{
+				addr->AddCalendarAddressToList(list, full);
+			}
+			else
+			{
+				CCalendarAddress caddr((*iter)->GetMailAddress(), (*iter)->GetName());
+				if (full)
+					list.push_back(caddr.GetFullAddress());
+				else
+					list.push_back(caddr.GetCalendarAddress());
 			}
 		}
 	}

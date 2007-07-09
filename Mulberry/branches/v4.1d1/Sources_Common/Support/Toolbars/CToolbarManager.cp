@@ -396,6 +396,7 @@ int sAllow_3PaneMailbox[] =
 int sAllow_3PaneContacts[] = 
 {
 	CToolbarManager::eToolbar_Draft,
+	CToolbarManager::eToolbar_Login,
 	CToolbarManager::eToolbar_NewAdbk,
 	CToolbarManager::eToolbar_OpenAdbk,
 	CToolbarManager::eToolbar_DeleteAdbk,
@@ -564,6 +565,7 @@ int sAllow_1PaneLetter[] =
 int sAllow_1PaneAdbkMgr[] = 
 {
 	CToolbarManager::eToolbar_Draft,
+	CToolbarManager::eToolbar_Login,
 	CToolbarManager::eToolbar_NewAdbk,
 	CToolbarManager::eToolbar_OpenAdbk,
 	CToolbarManager::eToolbar_DeleteAdbk,
@@ -677,6 +679,7 @@ int sDefault_3PaneContacts[] =
 {
 	CToolbarManager::eToolbar_Draft,
 	CToolbarManager::eToolbar_Separator,
+	CToolbarManager::eToolbar_Login,
 	CToolbarManager::eToolbar_NewAdbk,
 	CToolbarManager::eToolbar_OpenAdbk,
 	CToolbarManager::eToolbar_DeleteAdbk,
@@ -812,6 +815,7 @@ int sDefault_1PaneAdbkMgr[] =
 {
 	CToolbarManager::eToolbar_Draft,
 	CToolbarManager::eToolbar_Separator,
+	CToolbarManager::eToolbar_Login,
 	CToolbarManager::eToolbar_NewAdbk,
 	CToolbarManager::eToolbar_OpenAdbk,
 	CToolbarManager::eToolbar_DeleteAdbk,

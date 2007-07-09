@@ -44,14 +44,12 @@ void CWebDAVPut::SetData(CHTTPInputData* request_data, CHTTPOutputData* response
 	mRequestData = request_data;
 	mResponseData = response_data;
 
-#ifdef _APACHEBUG
 	// ETag should be '*' and we add If-None-Match header to ensure we do not overwrite something already there
 	if (new_item)
 	{
 		mETag = "*";
 		mETagMatch = false;
 	}
-#endif
 }
 
 void CWebDAVPut::SetData(CHTTPInputData* request_data, CHTTPOutputData* response_data, const cdstring& etag)

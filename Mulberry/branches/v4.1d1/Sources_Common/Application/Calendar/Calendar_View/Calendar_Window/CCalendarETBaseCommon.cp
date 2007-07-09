@@ -365,10 +365,9 @@ void CCalendarEventTableBase::OnInviteAttendees()
 	}
 
 	// Get mailto addressees for this component
-	cdstrvect https;
-	CAddressList addrs;
+	CCalendarAddressList addrs;
 	cdstring idname;
-	iCal::CITIPProcessor::GetRequestDetails(*vevents.front(), https, addrs, idname);
+	iCal::CITIPProcessor::GetRequestDetails(*vevents.front(), addrs, idname);
 	const CIdentity* id = CPreferences::sPrefs->mIdentities.GetValue().GetIdentity(idname);
 	
 	// Must have some addressees
@@ -379,5 +378,31 @@ void CCalendarEventTableBase::OnInviteAttendees()
 	
 	// Generate iTIP REQUEST component for this event
 	iCal::CITIPProcessor::SendRequest(&addrs, vevents.front(), id);
+}
+
+void CCalendarEventTableBase::OnProcessInvitation()
+{
+	// Get the unqiue original components
+	iCal::CICalendarComponentRecurs vevents;
+	GetSelectedMasterEvents(vevents);
+	
+	// MUST have only one selected item as iTIP requires that	
+	if (vevents.size() != 1)
+	{
+		return;
+	}
+
+	// Make sure we have an X-METHOD property
+	if (!vevents.front()->HasProperty(iCal::cICalProperty_X_PRIVATE_METHOD))
+	{
+		return;
+	}
+
+	// Handle iTIP component for this event
+	iCal::CITIPProcessor::ProcessCalDAVComponent(vevents.front());
+	
+	// Do direct call to ListenTo_Message as we cannot broadcast when this object could be deleted
+	// We need to do this just in case the selected item got deleted whilst processing
+	Broadcast_Message(eBroadcast_CalendarChanged, NULL);
 }
 

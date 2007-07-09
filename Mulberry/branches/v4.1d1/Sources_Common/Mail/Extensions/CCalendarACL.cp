@@ -22,7 +22,7 @@
 #include "CWebDAVDefinitions.h"
 #include "CXStringResources.h"
 
-const char CCalendarACLFlags[] = "lrwcda";
+const char CCalendarACLFlags[] = "frwscda";
 
 // CCalendarACL: contains specific ACL item for a address book
 
@@ -112,6 +112,30 @@ cdstring CCalendarACL::GetFullTextRights() const
 	return txt + GetTextRights();
 }
 
+void CCalendarACL::SetSmartUID(const cdstring& txt)
+{
+	if (txt == http::webdav::cProperty_all.Name())
+	{
+		SetPrincipalType(ePrincipal_all);
+	}
+	else if (txt == http::webdav::cProperty_authenticated.Name())
+	{
+		SetPrincipalType(ePrincipal_authenticated);
+	}
+	else if (txt == http::webdav::cProperty_unauthenticated.Name())
+	{
+		SetPrincipalType(ePrincipal_unauthenticated);
+	}
+	else if (txt == http::webdav::cProperty_self.Name())
+	{
+		SetPrincipalType(ePrincipal_self);
+	}
+	else
+	{
+		SetPrincipalType(ePrincipal_href, txt);
+	}
+}
+
 bool CCalendarACL::SamePrincipal(const CCalendarACL& acl) const
 {
 	if (mType != acl.mType)
@@ -137,9 +161,10 @@ bool CCalendarACL::SamePrincipal(const CCalendarACL& acl) const
 bool CCalendarACL::AllRights() const
 {
 	return HasRight(eCalACL_All) &&
-			HasRight(eCalACL_Lookup) &&
+			HasRight(eCalACL_ReadFreeBusy) &&
 			HasRight(eCalACL_Read) &&
 			HasRight(eCalACL_Write) &&
+			HasRight(eCalACL_Schedule) &&
 			HasRight(eCalACL_Create) &&
 			HasRight(eCalACL_Delete) &&
 			HasRight(eCalACL_Admin);
@@ -239,19 +264,22 @@ void CCalendarACL::MapRight(const cdstring& right, bool add)
 	
 	if (sMapRights.empty())
 	{
-		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_read.Name(), eCalACL_Lookup | eCalACL_Read));
+		sMapRights.insert(CMapRights::value_type(http::caldav::cProperty_privilege_readfreebusy.Name(), eCalACL_ReadFreeBusy));
+		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_read.Name(), eCalACL_Read | eCalACL_ReadFreeBusy));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_write.Name(), eCalACL_Write));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_write_properties.Name(), 0));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_write_content.Name(), eCalACL_Write));
+		sMapRights.insert(CMapRights::value_type(http::caldav::cProperty_privilege_schedule.Name(), eCalACL_Schedule));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_unlock.Name(), 0));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_read_acl.Name(), 0));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_read_current_user_privilege_set.Name(), 0));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_write_acl.Name(), eCalACL_Admin));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_bind.Name(), eCalACL_Create));
 		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_unbind.Name(), eCalACL_Delete));
-		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_all.Name(), eCalACL_Lookup |
+		sMapRights.insert(CMapRights::value_type(http::webdav::cProperty_privilege_all.Name(), eCalACL_ReadFreeBusy |
 																			eCalACL_Read |
 																			eCalACL_Write |
+																			eCalACL_Schedule |
 																			eCalACL_Create |
 																			eCalACL_Delete |
 																			eCalACL_Admin |
@@ -345,19 +373,24 @@ void CCalendarACL::GenerateACE(xmllib::XMLDocument* xmldoc, xmllib::XMLNode* acl
 	
 	// Special check for "DAV:all"
 	if (AllRights() ||
-		HasRight(CCalendarACL::eCalACL_Lookup) &&
 		HasRight(CCalendarACL::eCalACL_Read) &&
 		HasRight(CCalendarACL::eCalACL_Write) &&
+		HasRight(CCalendarACL::eCalACL_Schedule) &&
 		HasRight(CCalendarACL::eCalACL_Create) &&
 		HasRight(CCalendarACL::eCalACL_Delete) &&
 		HasRight(CCalendarACL::eCalACL_Admin))
 		new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::webdav::cProperty_privilege_all);
 	else
 	{
-		if (HasRight(CCalendarACL::eCalACL_Lookup) || HasRight(CCalendarACL::eCalACL_Read))
+		// DAV:read-free-busy is aggregated under DAV:read
+		if (HasRight(CCalendarACL::eCalACL_Read))
 			new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::webdav::cProperty_privilege_read);
+		else if (HasRight(CCalendarACL::eCalACL_ReadFreeBusy))
+			new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::caldav::cProperty_privilege_readfreebusy);
 		if (HasRight(CCalendarACL::eCalACL_Write))
 			new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::webdav::cProperty_privilege_write);
+		if (HasRight(CCalendarACL::eCalACL_Schedule))
+			new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::caldav::cProperty_privilege_schedule);
 		if (HasRight(CCalendarACL::eCalACL_Create))
 			new xmllib::XMLNode(xmldoc, new xmllib::XMLNode(xmldoc, grant, http::webdav::cProperty_privilege), http::webdav::cProperty_privilege_bind);
 		if (HasRight(CCalendarACL::eCalACL_Delete))

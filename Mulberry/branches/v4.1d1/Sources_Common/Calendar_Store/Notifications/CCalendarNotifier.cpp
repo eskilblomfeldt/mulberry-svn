@@ -122,10 +122,13 @@ CCalendarNotification* CCalendarNotifier::GenerateNotification(iCal::CICalendarV
 	{
 		iCal::CICalendarDateTime next;
 		alarm->GetNextTrigger(next);
-		return new CCalendarNotification(next, alarm);
+		
+		// Check that it is still pending as the trigger update may determine the alarm is too old
+		if (alarm->GetAlarmStatus() == iCal::eAlarm_Status_Pending)
+			return new CCalendarNotification(next, alarm);
 	}
-	else	
-		return NULL;
+	
+	return NULL;
 }
 
 void CCalendarNotifier::Poll()

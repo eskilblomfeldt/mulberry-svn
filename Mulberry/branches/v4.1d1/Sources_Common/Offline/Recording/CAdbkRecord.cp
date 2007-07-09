@@ -21,10 +21,12 @@
 
 #include "CLocalCommon.h"
 #include "CAdbkProtocol.h"
+#include "CAddressBook.h"
 #include "CLog.h"
-#include "CRemoteAddressBook.h"
 #include "CRFC822.h"
 #include "CUnicodeStdLib.h"
+
+#include "CVCardAddressBook.h"
 
 CAdbkRecord::CAdbkRecord()
 {
@@ -57,6 +59,15 @@ void CAdbkRecord::Rename(const CAddressBook* adbk, const cdstring& newname)
 		return;
 
 	push_back(new CAdbkAction(CAdbkAction::eRename, mCurrentID, adbk->GetName(), newname));
+}
+
+void CAdbkRecord::Change(const CAddressBook* adbk)
+{
+	// Only if allowed
+	if (!mRecord.IsSet(eChange))
+		return;
+
+	push_back(new CAdbkAction(CAdbkAction::eChange, mCurrentID, adbk->GetName()));
 }
 
 #pragma mark ____________________________Address actions
@@ -269,6 +280,10 @@ void CAdbkRecord::PlaybackItem(CAdbkAction& action)
 			Playback_Rename(action);
 			break;
 
+		case CAdbkAction::eChange:
+			Playback_Change(action);
+			break;
+
 		// Address actions
 		case CAdbkAction::eStoreAddress:
 			Playback_StoreAddress(action);
@@ -302,7 +317,7 @@ void CAdbkRecord::Playback_Create(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetName()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
 
 		// Create on server
 		mPlayRemote->CreateAdbk(adbk.get());
@@ -327,7 +342,7 @@ void CAdbkRecord::Playback_Delete(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetName()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
 
 		// Create on server
 		mPlayRemote->DeleteAdbk(adbk.get());
@@ -347,12 +362,60 @@ void CAdbkRecord::Playback_Delete(CAdbkAction& action)
 	}
 }
 
+void CAdbkRecord::Playback_Change(CAdbkAction& action)
+{
+	auto_ptr<CAddressBook> node;
+	auto_ptr<vCard::CVCardAddressBook> adbk;
+
+	try
+	{
+		// Create temp node and calendar
+		node.reset(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
+		adbk.reset(new vCard::CVCardAddressBook);
+		node->SetVCardAdbk(adbk.get());
+
+#if 0
+		// Read in calendar from local store
+		mPlayLocal->ReadFullAddressBook(*node.get());
+
+		// Write to server (will result in sync if required)
+		mPlayRemote->WriteFullAddressBook(*node.get());
+
+		// Write back to local store since changes have been propagated
+		mPlayLocal->WriteFullAddressBook(*node.get());
+#else
+		// Just opening the calendar will cause sync
+		mPlayRemote->OpenAdbk(node.get());
+#endif
+
+		// Clean-up
+		node->SetVCardAdbk(NULL);
+
+		if (mLog)
+			*mLog << "  Change Address Book: " << action.GetName() << " succeeded" << os_endl << flush;
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		if (mLog)
+			*mLog << "  Change Address Book: " << action.GetName() << " failed" << os_endl << flush;
+		
+		// Clean-up
+		if (node.get() != NULL)
+			node->SetVCardAdbk(NULL);
+
+		CLOG_LOGRETHROW;
+		throw;
+	}
+}
+
 void CAdbkRecord::Playback_Rename(CAdbkAction& action)
 {
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetNamePair().first));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetNamePair().first));
 
 		// Create on server
 		mPlayRemote->RenameAdbk(adbk.get(), action.GetNamePair().second);
@@ -391,10 +454,10 @@ void CAdbkRecord::Playback_StoreChangeAddress(CAdbkAction& action, bool store)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetList().front()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Get address from local object
-		local = mPlayLocal->FindAddressBook(action.GetList().front());
+		local = mPlayLocal->GetNode(action.GetList().front());
 
 		// Can only do if local exists
 		if (local)
@@ -469,7 +532,7 @@ void CAdbkRecord::Playback_DeleteAddress(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetList().front()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Create dummy addresses for delete
 		CAddressList addrs;
@@ -529,10 +592,10 @@ void CAdbkRecord::Playback_StoreChangeGroup(CAdbkAction& action, bool store)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetList().front()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Get address from local object
-		local = mPlayLocal->FindAddressBook(action.GetList().front());
+		local = mPlayLocal->GetNode(action.GetList().front());
 
 		// Can only do if local exists
 		if (local)
@@ -607,7 +670,7 @@ void CAdbkRecord::Playback_DeleteGroup(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CRemoteAddressBook> adbk(new CRemoteAddressBook(mPlayRemote, action.GetList().front()));
+		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Create dummy groups for delete
 		CGroupList grps;

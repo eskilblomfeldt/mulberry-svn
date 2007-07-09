@@ -112,7 +112,7 @@
 	<string id="Error::IMSP::OSErrDeleteAddress">while deleting an address.</string>
 	<string id="Error::IMSP::NoBadDeleteAddress">Could not delete an address:</string>
 	<string id="Error::IMSP::OSErrSetACLAddressBook">while setting access control list item for address book.</string>
-	<string id="Error::IMSP::NoBadSetACLAddressBook">Could not set access control list item for adress book:</string>
+	<string id="Error::IMSP::NoBadSetACLAddressBook">Could not set access control list item for address book:</string>
 	<string id="Error::IMSP::OSErrDeleteACLAddressBook">while deleting access control list item for address book.</string>
 	<string id="Error::IMSP::NoBadDeleteACLAddressBook">Could not delete access control list item for address book:</string>
 	<string id="Error::IMSP::OSErrGetACLAddressBook">while getting access control list for address book.</string>
@@ -158,6 +158,8 @@
 	<string id="Error::Calendar::NoBadChangeCalendar">Could not change calendar:</string>
 	<string id="Error::Calendar::OSErrRemoveFromCalendar">while removing from calendar.</string>
 	<string id="Error::Calendar::NoBadRemoveFromCalendar">Could not remove from calendar:</string>
+	<string id="Error::Calendar::OSErrScheduling">while scheduling.</string>
+	<string id="Error::Calendar::NoBadScheduling">Could not send scheduling request:</string>
 
 	<string id="Error::SMTP::OSErrOpen">while opening the SMTP server.</string>
 	<string id="Error::SMTP::NoBadOpen">Could not connect to SMTP server:</string>

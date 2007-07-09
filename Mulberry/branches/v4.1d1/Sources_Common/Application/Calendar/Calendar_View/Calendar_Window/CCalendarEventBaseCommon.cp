@@ -26,6 +26,7 @@
 #include "CCalendarStoreManager.h"
 #include "CICalendarLocale.h"
 #include "CICalendarUtils.h"
+#include "CICalendarVFreeBusy.h"
 #include "CITIPProcessor.h"
 
 #include <strstream>
@@ -52,6 +53,14 @@ bool CCalendarEventBase::IsNow() const
 
 void CCalendarEventBase::SetupTagText()
 {
+	if (IsEvent())
+		SetupTagTextEvent();
+	else if (IsFreeBusy())
+		SetupTagTextFreeBusy();
+}
+
+void CCalendarEventBase::SetupTagTextEvent()
+{
 	// Setup a help tag;
 	std::ostrstream ostr;
 	ostr << rsrc::GetString("EventTip::Summary") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetSummary();
@@ -71,6 +80,36 @@ void CCalendarEventBase::SetupTagText()
 	
 	// Always add calendar name
 	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetCalendar());
+	if (cal != NULL)
+		ostr << endl << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
+
+	ostr << ends;
+#if __dest_os == __mac_os || __dest_os == __mac_os_x
+
+	SetTagText(ostr.str());
+
+#elif __dest_os == __win32_os
+
+	mTooltipText = ostr.str();
+
+#elif __dest_os == __linux_os
+
+	SetHint(ostr.str());
+
+#endif
+	ostr.freeze(false);
+}
+
+void CCalendarEventBase::SetupTagTextFreeBusy()
+{
+	// Setup a help tag;
+	ostrstream ostr;
+	ostr << rsrc::GetString("EventTip::Summary") << rsrc::GetString("CDayWeekTable::BlockedBusy");
+	ostr << endl << rsrc::GetString("EventTip::Starts on") << mPeriod.GetStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+	ostr << endl << rsrc::GetString("EventTip::Ends on") <<  mPeriod.GetEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+	
+	// Always add calendar name
+	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVFreeBusy->GetCalendar());
 	if (cal != NULL)
 		ostr << endl << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
 

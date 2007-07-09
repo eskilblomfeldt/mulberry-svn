@@ -583,7 +583,7 @@ CCalendarStoreNode* CCalendarStoreManager::NewCalendar(CCalendarProtocol* proto,
 		return NULL;
 
 	// Create a new node
-	CCalendarStoreNode* node = new CCalendarStoreNode(proto, parent, directory, name);
+	CCalendarStoreNode* node = new CCalendarStoreNode(proto, parent, directory, false, false, name);
 	if (!remote_url.empty())
 		node->SetRemoteURL(remote_url);
 	parent->AddChild(node, true);
@@ -917,6 +917,8 @@ void CCalendarStoreManager::ActivateNode(CCalendarStoreNode* node)
 	// Create calendar
 	iCal::CICalendar* cal = new iCal::CICalendar;
 	mActiveCalendars.push_back(cal);
+	if (!node->IsInbox())
+		mReceivableCalendars.push_back(cal);
 	
 	// Give it to the node - this will activate the node
 	node->SetCalendar(cal);
@@ -969,6 +971,7 @@ void CCalendarStoreManager::DeactivateNode(CCalendarStoreNode* node)
 		
 		// Remove from active list
 		mActiveCalendars.erase(std::remove(mActiveCalendars.begin(), mActiveCalendars.end(), cal), mActiveCalendars.end());
+		mReceivableCalendars.erase(std::remove(mReceivableCalendars.begin(), mReceivableCalendars.end(), cal), mReceivableCalendars.end());
 		
 		// As a safety check also remove from subscribed list
 		mSubscribedCalendars.erase(std::remove(mSubscribedCalendars.begin(), mSubscribedCalendars.end(), cal), mSubscribedCalendars.end());
@@ -985,15 +988,15 @@ void CCalendarStoreManager::DeactivateNode(CCalendarStoreNode* node)
 iCal::CICalendar* CCalendarStoreManager::PickCalendar(const iCal::CICalendarComponent* comp) const
 {
 	// If one always return that one
-	if (mActiveCalendars.size() == 1)
-		return mActiveCalendars.front();
+	if (mReceivableCalendars.size() == 1)
+		return mReceivableCalendars.front();
 
 	iCal::CICalendar* result = NULL;
 
 	// Get list of active calendars
 	cdstrvect cals;
 	uint32_t cal_pos = 1;
-	for(iCal::CICalendarList::const_iterator iter = mActiveCalendars.begin(); iter != mActiveCalendars.end(); iter++,  cal_pos++)
+	for(iCal::CICalendarList::const_iterator iter = mReceivableCalendars.begin(); iter != mReceivableCalendars.end(); iter++,  cal_pos++)
 	{
 		const CCalendarStoreNode* node = GetNode(*iter);
 		cdstring name = node ? node->GetAccountName(HasMultipleProtocols()) : (*iter)->GetName();
@@ -1009,7 +1012,7 @@ iCal::CICalendar* CCalendarStoreManager::PickCalendar(const iCal::CICalendarComp
 	ulvector selected;
 	if (CTextListChoice::PoseDialog("CITIPProcessor::ChooseCalendarTitle", "CITIPProcessor::ChooseCalendar", NULL, false, true, false, false, cals, cdstring::null_str, selected))
 	{
-		result = mActiveCalendars.at(selected.front());
+		result = mReceivableCalendars.at(selected.front());
 	}
 	
 	// Just use the first one for now
@@ -1017,7 +1020,7 @@ iCal::CICalendar* CCalendarStoreManager::PickCalendar(const iCal::CICalendarComp
 }
 
 // Get identity associated with mailbox
-const CIdentity* CCalendarStoreManager::GetTiedIdentity(iCal::CICalendar* cal) const
+const CIdentity* CCalendarStoreManager::GetTiedIdentity(const iCal::CICalendar* cal) const
 {
 	// Get node associated with calendar
 	const CCalendarStoreNode* node = GetNode(cal);

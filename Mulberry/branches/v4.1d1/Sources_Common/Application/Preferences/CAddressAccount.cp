@@ -72,6 +72,7 @@ void CAddressAccount::_copy(const CAddressAccount& copy)
 	}
 	mDisconnected = copy.mDisconnected;
 	mExpanded = copy.mExpanded;
+	mBaseRURL = copy.mBaseRURL;
 	mFuture = copy.mFuture;
 }
 
@@ -105,7 +106,8 @@ int CAddressAccount::operator==(const CAddressAccount& comp) const
 		}
 	}
 
-	return result && (mDisconnected == comp.mDisconnected);
+	return result && (mDisconnected == comp.mDisconnected) &&
+			(mBaseRURL == comp.mBaseRURL);
 }
 
 void CAddressAccount::SetServerType(EINETServerType type)
@@ -127,6 +129,7 @@ void CAddressAccount::SetServerType(EINETServerType type)
 	{
 	case eIMSP:
 	case eACAP:
+	case eCardDAVAdbk:
 	default:
 		GetAuthenticator().ResetAuthenticatorType(CAuthenticator::ePlainText);
 		ldap = NULL;
@@ -208,6 +211,9 @@ cdstring CAddressAccount::GetInfo(void) const
 	}
 
 	info += mExpanded ? cValueBoolTrue : cValueBoolFalse;
+	info += cSpace;
+
+	info += mBaseRURL;
 
 	info += mFuture.GetInfo();
 	info += ')';
@@ -255,6 +261,11 @@ bool CAddressAccount::SetInfo(char_stream& txt, NumVersion vers_prefs)
 		// Look for expansion item
 		if (!txt.test_end_sexpression())
 			txt.get(mExpanded);
+
+		// Expansion items:
+		char* p = txt.get();
+		if (p)
+			mBaseRURL = p;
 
 		mFuture.SetInfo(txt, vers_prefs);
 		txt.end_sexpression();

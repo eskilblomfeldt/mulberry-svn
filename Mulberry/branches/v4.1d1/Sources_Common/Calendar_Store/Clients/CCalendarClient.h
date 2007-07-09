@@ -27,6 +27,7 @@
 #include "CINETClient.h"
 
 #include "CCalendarProtocol.h"
+#include "CITIPScheduleResults.h"
 
 #include "cdstring.h"
 
@@ -78,6 +79,16 @@ public:
 	virtual void	_GetACL(CCalendarStoreNode& node) = 0;							// Get all acls for calendar from server
 	virtual void	_ListRights(CCalendarStoreNode& node, CACL* acl) = 0;			// Get allowed rights for user
 	virtual void	_MyRights(CCalendarStoreNode& node) = 0;						// Get current user's rights to calendar
+
+	// Schedule related
+	virtual void	_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI) = 0;
+	virtual void	_Schedule(const cdstring& outboxURI,
+							  const cdstring& originator,
+							  const cdstrvect& recipients,
+							  const iCal::CICalendar& cal,
+							  iCal::CITIPScheduleResultsList& results) = 0;
+	virtual void	_GetFreeBusyCalendars(cdstrvect& calendars) = 0;
+	virtual void	_SetFreeBusyCalendars(const cdstrvect& calendars) = 0;
 
 protected:
 	CCalendarProtocol*	GetCalendarProtocol() const							// Return type-cast owner

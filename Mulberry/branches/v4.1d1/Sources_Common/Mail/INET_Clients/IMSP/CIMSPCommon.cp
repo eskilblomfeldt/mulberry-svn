@@ -62,6 +62,7 @@ const char* cADDRESS_ALIAS =			"alias";
 const char* cADDRESS_EMAIL =			"email";
 const char* cADDRESS_MEMBER =			"member";			// Simeon compat.
 const char* cADDRESS_MEMBERS =			"members";			// Simeon compat.
+const char* cADDRESS_CALENDAR =			"calendar-address";
 const char* cADDRESS_COMPANY =			"company";
 const char* cADDRESS_ADDRESS =			"address";
 const char* cADDRESS_CITY =				"city";				// Simeon compat.

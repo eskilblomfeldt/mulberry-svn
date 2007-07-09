@@ -47,9 +47,15 @@ private:
 public:
 	virtual CINETClient*	CloneConnection();			// Create duplicate, empty connection
 
+	virtual bool Initialise(const cdstring& host, const cdstring& base_uri);
+
 protected:
+	cdstring mCachedInbox;
+	cdstring mCachedOutbox;
+	bool mCachedInboxOutbox;
 
 	// P R O T O C O L
+	virtual void	_ProcessCapability();				// Handle capability response
 
 	// C A L E N D A R
 
@@ -68,6 +74,16 @@ protected:
 	virtual void _ReadComponents(const CCalendarStoreNode& node, iCal::CICalendar& cal, const cdstrvect& rurls);
 	virtual iCal::CICalendarComponent* _ReadComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const cdstring& rurl);
 
+	// Schedule related
+	virtual void	_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI);
+	virtual void	_Schedule(const cdstring& outboxURI,
+							  const cdstring& originator,
+							  const cdstrvect& recipients,
+							  const iCal::CICalendar& cal,
+							  iCal::CITIPScheduleResultsList& results);
+	virtual void	_GetFreeBusyCalendars(cdstrvect& calendars);
+	virtual void	_SetFreeBusyCalendars(const cdstrvect& calendars);
+
 	virtual void ListCalendars(CCalendarStoreNode* root, const http::webdav::CWebDAVPropFindParser& parser);
 
 	virtual void ReadCalendarComponents(const CCalendarStoreNode& node, const http::webdav::CWebDAVPropFindParser& parser, iCal::CICalendar& cal);
@@ -80,7 +96,7 @@ protected:
 
 	virtual void AddComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component);
 	virtual void ChangeComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component);
-	virtual void WriteComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component);
+	virtual void WriteComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component, bool new_item = false);
 
 	virtual void SizeCalendar_DAV(CCalendarStoreNode& node);
 	virtual void SizeCalendar_HTTP(CCalendarStoreNode& node);

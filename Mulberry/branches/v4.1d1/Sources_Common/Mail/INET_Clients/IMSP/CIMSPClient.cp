@@ -20,16 +20,21 @@
 #include "CIMSPClient.h"
 
 #include "CAdbkACL.h"
+#include "CAddressBook.h"
 #include "CCharSpecials.h"
 #include "CGeneralException.h"
 #include "CIMAPCommon.h"
 #include "CINETClientResponses.h"
 #include "CINETCommon.h"
 #include "CMailControl.h"
-#include "CRemoteAddressBook.h"
 #include "CRFC822.h"
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
+
+#include "CVCardMapper.h"
+
+#include "CVCardAddressBook.h"
+#include "CVCardVCard.h"
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #else
@@ -216,6 +221,9 @@ void CIMSPClient::_ProcessCapability()
 	mAuthPlainAllowed = mLastResponse.CheckUntagged(cIMAP_AUTHPLAIN, true);
 	mAuthAnonAllowed = mLastResponse.CheckUntagged(cIMAP_AUTHANON, true);
 	mSTARTTLSAllowed = mLastResponse.CheckUntagged(cSTARTTLS, true);
+	
+	// IMSP always has ACLs
+	GetAdbkOwner()->SetHasACL(true);
 }
 
 // Handle failed capability response
@@ -380,6 +388,20 @@ void CIMSPClient::_DeleteAttribute(const cdstring& entry, const cdstring& attrib
 
 // Operations on address books
 
+void CIMSPClient::_ListAddressBooks(CAddressBook* root)
+{
+	// Must add wildcard and quote value
+	cdstring qvalue = (root->IsProtocol() ? cdstring::null_str : root->GetName());
+	qvalue += cWILDCARD;
+
+	// Send ADDRESSBOOK message to server
+	INETStartSend("Status::IMSP::AddressBooks", "Error::IMSP::OSErrAddressBooks", "Error::IMSP::NoBadAddressBooks");
+	INETSendString(cADDRESSBOOK);
+	INETSendString(cSpace);
+	INETSendString(qvalue, eQueueProcess);
+	INETFinishSend();
+}
+
 // Find all adbks below this path
 void CIMSPClient::_FindAllAdbks(const cdstring& path)
 {
@@ -406,6 +428,12 @@ void CIMSPClient::_CreateAdbk(const CAddressBook* adbk)
 	INETFinishSend();
 }
 
+bool CIMSPClient::_AdbkChanged(const CAddressBook* adbk)
+{
+	// No way to tell if there have been changes on the server, so return true to force entire sync
+	return true;
+}
+
 // Delete adbk
 void CIMSPClient::_DeleteAdbk(const CAddressBook* adbk)
 {
@@ -430,7 +458,24 @@ void CIMSPClient::_RenameAdbk(const CAddressBook* old_adbk, const cdstring& new_
 	INETFinishSend();
 }
 
+void CIMSPClient::_SizeAdbk(CAddressBook* adbk)
+{
+	// Does nothing
+}
+
 // Operations with addresses
+
+// Find all addresses in adbk
+void CIMSPClient::_ReadFullAddressBook(CAddressBook* adbk)
+{
+	_FindAllAddresses(adbk);
+}
+
+// Write all addresses in adbk
+void CIMSPClient::_WriteFullAddressBook(CAddressBook* adbk)
+{
+	
+}
 
 // Find all addresses in adbk
 void CIMSPClient::_FindAllAddresses(CAddressBook* adbk)
@@ -614,6 +659,17 @@ void CIMSPClient::_StoreAddress(CAddressBook* adbk, const CAdbkAddress* addr)
 			INETSendString(temp, eQueueProcess);
 		}
 
+		// Calendar
+		temp = addr->GetCalendar();
+		temp.ConvertFromOS();
+		if (!temp.empty())
+		{
+			INETSendString(cSpace);
+			INETSendString(cADDRESS_CALENDAR);
+			INETSendString(cSpace);
+			INETSendString(temp, eQueueProcess);
+		}
+		
 		// Company
 		temp = addr->GetCompany();
 		temp.ConvertFromOS();
@@ -1368,18 +1424,9 @@ void CIMSPClient::IMSPParseAddressBook(char** txt)
 		throw CINETException(CINETException::err_BadParse);
 	}
 
-	if (noselect)
-	{
-		// Add name only to list
-		cdstring* hier_name = new cdstring(adbk_name);
-		GetAdbkOwner()->GetAdbkList()->push_back(hier_name, noinferiors);
-	}
-	else
-	{
 		// Add adress book to list
-		CRemoteAddressBook* adbk = new CRemoteAddressBook(GetAdbkOwner(), adbk_name);
-		GetAdbkOwner()->GetAdbkList()->push_back(adbk, noinferiors);
-	}
+	CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), !noselect, !noinferiors, adbk_name);
+	GetAdbkOwner()->GetStoreRoot()->AddChildHierarchy(adbk);
 	delete adbk_name;
 
 
@@ -1415,6 +1462,7 @@ void CIMSPClient::IMSPParseFetchAddress(char** txt)
 	char* alias = NULL;
 	char* email = NULL;
 	char* members = NULL;
+	char* calendar = NULL;
 	char* company = NULL;
 	char* address = NULL;
 	char* city = NULL;
@@ -1436,6 +1484,7 @@ void CIMSPClient::IMSPParseFetchAddress(char** txt)
 			eCodeAlias = 1,
 			eCodeEmail,
 			eCodeMembers,
+			eCodeCalendar,
 			eCodeCompany,
 			eCodeAddress,
 			eCodeCity,
@@ -1457,6 +1506,8 @@ void CIMSPClient::IMSPParseFetchAddress(char** txt)
 			code = eCodeMembers;
 		else if (::strcmpnocase(p, cADDRESS_MEMBERS) == 0)
 			code = eCodeMembers;
+		else if (::strcmpnocase(p, cADDRESS_CALENDAR) == 0)
+			code = eCodeCalendar;
 		else if (::strcmpnocase(p, cADDRESS_COMPANY) == 0)
 			code = eCodeCompany;
 		else if (::strcmpnocase(p, cADDRESS_ADDRESS) == 0)
@@ -1493,6 +1544,8 @@ void CIMSPClient::IMSPParseFetchAddress(char** txt)
 			email = value;
 		else if (code == eCodeMembers)
 			members = value;
+		else if (code == eCodeCalendar)
+			calendar = value;
 		else if (code == eCodeCompany)
 			company = value;
 		else if (code == eCodeAddress)
@@ -1587,11 +1640,15 @@ void CIMSPClient::IMSPParseFetchAddress(char** txt)
 		}
 
 		// Create address and add to address book or search list
-		CAdbkAddress* addr = new CAdbkAddress(name, email, name, alias, company, temp_addr, phone_work, phone_home, fax, urls, notes);
+		CAdbkAddress* addr = new CAdbkAddress(name, email, name, alias, calendar, company, temp_addr, phone_work, phone_home, fax, urls, notes);
 		if (mSearchMode)
 			mSearchResults->push_back(addr);
 		else if (mActionAdbk)
+		{
 			mActionAdbk->GetAddressList()->push_back(addr);
+			if (mActionAdbk->GetVCardAdbk() != NULL)
+				mActionAdbk->GetVCardAdbk()->AddCard(vcardstore::GenerateVCard(mActionAdbk->GetVCardAdbk()->GetRef(), addr));
+		}
 	}
 
 	// delete all strings

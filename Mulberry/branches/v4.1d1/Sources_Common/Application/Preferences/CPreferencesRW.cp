@@ -475,6 +475,7 @@ void CPreferences::WriteToMap(COptionsMap* theMap, bool dirty_only,
 				temp.WriteToMap(cOSAdbkAccount, theMap, dirty_only);							// >= v3.1b1
 			}
 
+			WRITETOMAP(mExpandedAdbks, cExpandedAdbksKey)					// >= v4.1
 			WRITETOMAP(mAdbkOpenAtStartup, cAdbkOpenAtStartup_2_0)			// >= v2.0b6
 			WRITETOMAP(mAdbkNickName, cAdbkNickName_2_0)					// >= v2.0b6
 			WRITETOMAP(mAdbkSearch, cAdbkSearch_2_0)						// >= v2.0b6
@@ -1645,6 +1646,8 @@ bool CPreferences::ReadFromMap(COptionsMap* theMap,
 			if (temp.GetValue().size())
 				mOSAdbkAccount.Value() = *temp.GetValue().front();
 		}
+
+		READFROMMAP(mExpandedAdbks, cExpandedAdbksKey)
 
 		if (!mAdbkOpenAtStartup.ReadFromMap(cAdbkOpenAtStartup_2_0, theMap, vers_prefs))
 		{

@@ -133,3 +133,10 @@ void CCalendarWindow::RefreshNode(calstore::CCalendarStoreNode* node)
 
 #endif
 }
+
+void CCalendarWindow::SetFreeBusy(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date)
+{
+	// Give calendar to view
+	GetCalendarView()->SetFreeBusy(calref, id, organizer, attendees, date);
+}
+

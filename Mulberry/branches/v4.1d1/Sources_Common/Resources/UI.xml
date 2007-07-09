@@ -23,6 +23,7 @@
 	<string id="UI::Preferences::AccountSMTPSendMail">SMTP Send Email</string>
 	<string id="UI::Preferences::AccountIMSPOptions">IMSP Options</string>
 	<string id="UI::Preferences::AccountACAPOptions">ACAP Options</string>
+	<string id="UI::Preferences::AccountCardDAVAddressBooks">CardDAV Address Books</string>
 	<string id="UI::Preferences::AccountIMSPAddressBooks">IMSP Address Books</string>
 	<string id="UI::Preferences::AccountACAPAddressBooks">ACAP Address Books</string>
 	<string id="UI::Preferences::AccountLDAPAddressSearch">LDAP Address Search</string>

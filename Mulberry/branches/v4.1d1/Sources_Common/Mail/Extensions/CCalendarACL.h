@@ -38,13 +38,14 @@ public:
 
 	enum ECalACL
 	{
-		eCalACL_Lookup = 1L << 0,
+		eCalACL_ReadFreeBusy = 1L << 0,
 		eCalACL_Read = 1L << 1,
 		eCalACL_Write = 1L << 2,
-		eCalACL_Create = 1L << 3,
-		eCalACL_Delete = 1L << 4,
-		eCalACL_Admin = 1L << 5,
-		eCalACL_All = 1L << 6
+		eCalACL_Schedule = 1L << 3,
+		eCalACL_Create = 1L << 4,
+		eCalACL_Delete = 1L << 5,
+		eCalACL_Admin = 1L << 6,
+		eCalACL_All = 1L << 7
 	};
 
 	enum ECalPrincipalType
@@ -98,13 +99,14 @@ public:
 	void SetPrincipalType(ECalPrincipalType type, const cdstring& txt)
 	{
 		mType = type;
-		SetUID(txt);
+		SetUID(txt.c_str());
 	}
 	void SetPrincipalType(ECalPrincipalType type, const xmllib::XMLName& name)
 	{
 		mType = type;
 		mPropName = name;
 	}
+	void SetSmartUID(const cdstring& txt);
 
 	const xmllib::XMLName& GetPropName() const
 	{

@@ -88,6 +88,16 @@ public:
 	virtual void	_ListRights(CCalendarStoreNode& node, CACL* acl);				// Get allowed rights for user
 	virtual void	_MyRights(CCalendarStoreNode& node);							// Get current user's rights to calendar
 
+	// Schedule related
+	virtual void	_GetScheduleInboxOutbox(const CCalendarStoreNode& node, cdstring& inboxURI, cdstring& outboxURI);
+	virtual void	_Schedule(const cdstring& outboxURI,
+							  const cdstring& originator,
+							  const cdstrvect& recipients,
+							  const iCal::CICalendar& cal,
+							  iCal::CITIPScheduleResultsList& results);
+	virtual void	_GetFreeBusyCalendars(cdstrvect& calendars);
+	virtual void	_SetFreeBusyCalendars(const cdstrvect& calendars);
+
 protected:
 	bool				mCaching;						// Use extra cache files
 	CCalendarRecord*	mRecorder;						// Recording object

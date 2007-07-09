@@ -55,7 +55,8 @@ public:
 		eHTTPCalendar,
 		eWebDAVCalendar,
 		eCalDAVCalendar,
-		eMax = eCalDAVCalendar
+		eCardDAVAdbk,
+		eMax = eCardDAVAdbk
 	};
 
 	enum ETLSType

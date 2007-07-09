@@ -19,9 +19,9 @@
 
 #include "CMacOSXAdbkClient.h"
 
+#include "CAddressBook.h"
 #include "CINETCommon.h"
 #include "CMachOFunctions.h"
-#include "CRemoteAddressBook.h"
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
 
@@ -178,6 +178,22 @@ void CMacOSXAdbkClient::_PostProcess()
 
 // Operations on address books
 
+void CMacOSXAdbkClient::_ListAddressBooks(CAddressBook* root)
+{
+	StINETClientAction action(this, "Status::IMSP::AddressBooks", "Error::IMSP::OSErrAddressBooks", "Error::IMSP::NoBadAddressBooks");
+	InitItemCtr();
+
+	// Provide feedback
+	BumpItemCtr("Status::IMSP::AddressBookFind");
+
+	// Use fake name
+	cdstring adbk_name = cDefaultAdbkName;
+
+	// Add adress book to list
+	CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), true, false, adbk_name);
+	GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
+}
+
 // Find all adbks below this path
 void CMacOSXAdbkClient::_FindAllAdbks(const cdstring& path)
 {
@@ -191,8 +207,8 @@ void CMacOSXAdbkClient::_FindAllAdbks(const cdstring& path)
 	cdstring adbk_name = cDefaultAdbkName;
 
 	// Add adress book to list
-	CRemoteAddressBook* adbk = new CRemoteAddressBook(GetAdbkOwner(), adbk_name);
-	GetAdbkOwner()->GetAdbkList()->push_back(adbk, false);
+	CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), true, false, adbk_name);
+	GetAdbkOwner()->GetStoreRoot()->AddChild(adbk);
 }
 
 // Create adbk
@@ -206,7 +222,7 @@ void CMacOSXAdbkClient::_CreateAdbk(const CAddressBook* adbk)
 }
 
 // Do touch
-void CMacOSXAdbkClient::_TouchAdbk(const CAddressBook* adbk)
+bool CMacOSXAdbkClient::_TouchAdbk(const CAddressBook* adbk)
 {
 	// Check it exists and create if not
 	if (!_TestAdbk(adbk))
@@ -214,7 +230,11 @@ void CMacOSXAdbkClient::_TouchAdbk(const CAddressBook* adbk)
 		// Not supported with OS X
 		CLOG_LOGTHROW(CINETException, CINETException::err_NoResponse);
 		throw CINETException(CINETException::err_NoResponse);
+		
+		return false;
 	}
+	else
+		return true;
 }
 
 // Do test
@@ -222,6 +242,12 @@ bool CMacOSXAdbkClient::_TestAdbk(const CAddressBook* adbk)
 {
 	// Name must match default name
 	return adbk->GetName() == cDefaultAdbkName;
+}
+
+bool CMacOSXAdbkClient::_AdbkChanged(const CAddressBook* adbk)
+{
+	// Nothing to do for local as this is only used when sync'ing with server
+	return false;
 }
 
 // Delete adbk
@@ -244,7 +270,24 @@ void CMacOSXAdbkClient::_RenameAdbk(const CAddressBook* old_adbk, const cdstring
 	throw CINETException(CINETException::err_NoResponse);
 }
 
+void CMacOSXAdbkClient::_SizeAdbk(CAddressBook* adbk)
+{
+	// Does nothing
+}
+
 // Operations with addresses
+
+// Find all addresses in adbk
+void CMacOSXAdbkClient::_ReadFullAddressBook(CAddressBook* adbk)
+{
+	_FindAllAddresses(adbk);
+}
+
+// Write all addresses in adbk
+void CMacOSXAdbkClient::_WriteFullAddressBook(CAddressBook* adbk)
+{
+	
+}
 
 // Find all addresses in adbk
 void CMacOSXAdbkClient::_FindAllAddresses(CAddressBook* adbk)

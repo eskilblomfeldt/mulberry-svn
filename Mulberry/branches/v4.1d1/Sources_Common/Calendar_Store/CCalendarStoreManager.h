@@ -120,6 +120,11 @@ public:
 		return mSubscribedCalendars;
 	}
 
+	const iCal::CICalendarList& GetReceivableCalendars() const
+	{
+		return mReceivableCalendars;
+	}
+	
 	const CCalendarStoreNode* GetNode(const iCal::CICalendar* cal) const;
 	const CCalendarStoreNode* GetNode(const cdstring& cal) const;
 	const CCalendarStoreNode* GetNodeByRemoteURL(const cdstring& url) const;
@@ -127,7 +132,7 @@ public:
 	uint32_t GetCalendarColour(const iCal::CICalendar* cal) const;
 	uint32_t GetCalendarColour(const CCalendarStoreNode* node) const;
 
-	const CIdentity* GetTiedIdentity(iCal::CICalendar* cal) const;
+	const CIdentity* GetTiedIdentity(const iCal::CICalendar* cal) const;
 
 	// Managing the store
 	CCalendarStoreNode* NewCalendar(CCalendarProtocol* proto, const cdstring& name, bool directory, const cdstring& remote_url = cdstring::null_str);
@@ -168,6 +173,7 @@ protected:
 	unsigned long				mProtoCount;
 	CCalendarStoreNode			mRoot;
 	iCal::CICalendarList		mActiveCalendars;
+	iCal::CICalendarList		mReceivableCalendars;
 	iCal::CICalendarList		mSubscribedCalendars;
 	
 	uint32_t GetColourFromIndex(uint32_t index) const;

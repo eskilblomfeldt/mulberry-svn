@@ -28,6 +28,7 @@
 
 #include "CCalendarAccount.h"
 #include "CCalendarStoreNode.h"
+#include "CITIPScheduleResults.h"
 
 #include "ptrvector.h"
 
@@ -41,6 +42,7 @@ namespace iCal
 {
 class CICalendar;
 class CICalendarComponent;
+class CICalendarPeriod;
 };
 
 class CCalendarAccount;
@@ -58,7 +60,8 @@ public:
 	enum EMboxFlags
 	{
 		eHasACL					= 1L << 16,
-		eACLDisabled			= 1L << 17
+		eACLDisabled			= 1L << 17,
+		eHasScheduling			= 1L << 18
 	};
 
 	// Messages for broadcast
@@ -104,7 +107,7 @@ public:
 	}
 	bool IsACLCalendar() const
 	{
-		return IsWebDAVCalendar() || IsComponentCalendar();
+		return GetHasACL();
 	}
 
 	char GetDirDelim() const
@@ -198,6 +201,20 @@ public:
 	void GetACL(CCalendarStoreNode& node);							// Get all acls for mailbox from server
 	void ListRights(CCalendarStoreNode& node, CACL* acl);			// Get allowed rights for user
 	void MyRights(CCalendarStoreNode& node);						// Get current user's rights to mailbox
+
+	// Scheduling support
+	void SetHasScheduling(bool has_schedule)
+		{ mFlags.Set(eHasScheduling, has_schedule); }
+	bool GetHasScheduling() const
+		{ return mFlags.IsSet(eHasScheduling); }
+	void GetScheduleInboxOutbox(cdstring& inboxURI, cdstring& outboxURI);
+	void Schedule(const cdstring& outboxURI,
+				  const cdstring& originator,
+				  const cdstrvect& recipients,
+				  const iCal::CICalendar& cal,
+				  iCal::CITIPScheduleResultsList& results);
+	void GetFreeBusyCalendars(cdstrvect& calendars);
+	void SetFreeBusyCalendars(const cdstrvect& calendars);
 
 protected:
 	CCalendarClient*		mClient;							// Its client

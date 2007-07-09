@@ -67,7 +67,9 @@ public:
 		eHasExpanded =				1L << 2,
 		eIsSubscribed =				1L << 3,
 		eIsActive =					1L << 4,
-		eIsCached =					1L << 5
+		eIsCached =					1L << 5,
+		eIsInbox =					1L << 6,
+		eIsOutbox =					1L << 7
 	};
 
 	// std::sort methods
@@ -75,7 +77,7 @@ public:
 
 	CCalendarStoreNode();
 	CCalendarStoreNode(CCalendarProtocol* proto);
-	CCalendarStoreNode(CCalendarProtocol* proto, CCalendarStoreNode* parent, bool is_dir = false, const cdstring& name = cdstring::null_str);
+	CCalendarStoreNode(CCalendarProtocol* proto, CCalendarStoreNode* parent, bool is_dir = false, bool is_inbox = false, bool is_outbox = false, const cdstring& name = cdstring::null_str);
 	virtual ~CCalendarStoreNode();
 
 	virtual void ListenTo_Message(long msg, void* param);
@@ -122,6 +124,28 @@ public:
 	bool IsDirectory() const
 	{
 		return mFlags.IsSet(eIsDirectory);
+	}
+
+	bool IsInbox() const
+	{
+		return mFlags.IsSet(eIsInbox);
+	}
+
+	bool IsOutbox() const
+	{
+		return mFlags.IsSet(eIsOutbox);
+	}
+	
+	bool CanSchedule() const;
+
+	bool IsViewableCalendar() const
+	{
+		return !IsProtocol() && !IsDirectory() && !IsOutbox();
+	}
+	
+	bool IsStandardCalendar() const
+	{
+		return !IsProtocol() && !IsDirectory() && !IsOutbox() && !IsInbox();
 	}
 
 	bool HasInferiors() const

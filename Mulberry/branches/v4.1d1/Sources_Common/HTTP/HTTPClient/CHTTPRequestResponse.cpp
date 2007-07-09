@@ -32,12 +32,13 @@
 using namespace http; 
 using namespace webdav; 
 using namespace caldav; 
+using namespace carddav; 
 
 const char* cMethodMap[] = 
 {
 	cRequestOPTIONS, cRequestGET, cRequestHEAD, cRequestPOST, cRequestPUT, cRequestDELETE, cRequestTRACE, cRequestCONNECT,
 	cRequestMKCOL, cRequestMOVE, cRequestCOPY, cRequestPROPFIND, cRequestPROPPATCH, cRequestLOCK, cRequestUNLOCK,
-	cRequestREPORT, cRequestACL, cRequestMKCALENDAR
+	cRequestREPORT, cRequestACL, cRequestMKCALENDAR, cRequestMKADBK
 };
 
 CHTTPRequestResponse::CHTTPRequestResponse(const CHTTPSession* session, ERequestMethod method, const cdstring& ruri) :

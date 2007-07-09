@@ -24,49 +24,462 @@
 #include "CAddressBook.h"
 
 #include "CAddressBookManager.h"
+#include "CAdbkProtocol.h"
 #include "CCharSpecials.h"
+#include "CLog.h"
 #include "CMailControl.h"
 #include "CPreferences.h"
 #include "CStringUtils.h"
 
+#include "CVCardStoreXML.h"					// Share XML defintions with calendar store
+#include "CVCardMapper.h"
+
+#include "CVCardAddressBook.h"
+#include "CVCardVCard.h"
+
 #include <strstream>
+
+#include "XMLDocument.h"
+#include "XMLNode.h"
+#include "XMLObject.h"
+
+using namespace vcardstore;
 
 cdmutex CAddressBook::_mutex;										// Used for locks
 
-// Copy constructor
-CAddressBook::CAddressBook(const CAddressBook& copy)
+// This constructs the address book manager root
+CAddressBook::CAddressBook()
 {
-	InitAddressBook();
-	
-	mAdbkName = copy.mAdbkName;
-	mFlags = copy.mFlags;
+	mProtocol = NULL;
+	mParent = NULL;
+	mChildren = new CAddressBookList;				// Root must always have list
+	mChildren->set_delete_data(false);
+	SetFlags(eIsProtocol, true);
+	SetFlags(eIsDirectory, true);
+	SetFlags(eHasExpanded, true);
+	mShortName = mName.c_str();
+	mSize = ULONG_MAX;
+	mLastSync = 0;
+	mACLs = NULL;
+	mRefCount = 0;
+	mVCardAdbk = NULL;
+}
+
+// This constructs the root of a protocol
+CAddressBook::CAddressBook(CAdbkProtocol* proto)
+{
+	mProtocol = proto;
+	mParent = &CAddressBookManager::sAddressBookManager->GetRoot();
+	mChildren = NULL;
+	SetFlags(eIsProtocol, true);
+	SetFlags(eIsDirectory, true);
+	SetFlags(eHasExpanded, true);
+	mName = proto->GetAccountName();
+	mShortName = mName.c_str();
+	mSize = ULONG_MAX;
+	mLastSync = 0;
+	mACLs = NULL;
+	mVCardAdbk = NULL;
+}
+
+// This constructs an actual node
+CAddressBook::CAddressBook(CAdbkProtocol* proto, CAddressBook* parent, bool is_adbk, bool is_dir, const cdstring& name)
+{
+	mProtocol = proto;
+	mParent = parent;
+	mChildren = NULL;				// Root must always have list
+	SetFlags(eIsAdbk, is_adbk);
+	SetFlags(eIsDirectory, is_dir);
+	mName = name;
+	mSize = ULONG_MAX;
+	mLastSync = 0;
+	mACLs = NULL;
+	mRefCount = 0;
+	mVCardAdbk = NULL;
+
+	SetShortName();
 }
 
 // Destructor
 CAddressBook::~CAddressBook()
 {
-	CAddressBookManager::sAddressBookManager->SyncAddressBook(this, false);
+	// Do not sync the store root
+	if (mProtocol != NULL)
+		CAddressBookManager::sAddressBookManager->SyncAddressBook(this, false);
 
+	// Deactivate/delete all children
+	Clear();
+	ClearContents();
+	
+	delete mACLs;
 	mACLs = NULL;
 }
 
-// Initialization
-void CAddressBook::InitAddressBook()
+cdstring CAddressBook::GetAccountName(bool multi) const
 {
-	mACLs = NULL;
-	mRefCount = 0;
+	cdstring name;
+	if (multi)
+	{
+		name = mProtocol->GetAccountName();
+		name += cMailAccountSeparator;
+	}
+	name += GetName();
+	return name;
+}
+
+void CAddressBook::CheckSize()
+{
+	GetProtocol()->SizeAdbk(this);
+}
+
+void CAddressBook::SyncNow() const
+{
+	time_t now = ::time(NULL);
+	mLastSync = ::mktime(::gmtime(&now));
+}
+
+bool CAddressBook::IsCached() const
+{
+	// Cached if not disconnected or known to have 
+	return !GetProtocol()->IsDisconnected() || mFlags.IsSet(eIsCached);
+}
+
+cdstring CAddressBook::GetURL(bool full) const
+{
+	cdstring ruri = GetName();
+	ruri.EncodeURL(GetProtocol()->GetDirDelim());
+
+	cdstring result = mProtocol->GetURL(full);
+	result += "/";
+	result += ruri;
+	return result;
+}
+
+void CAddressBook::AddChild(CAddressBook* child, bool sort)
+{
+	// Create if required
+	if (mChildren == NULL)
+		mChildren = new CAddressBookList;
+	mChildren->push_back(child);
+	child->mParent = this;
+	
+	// Setting a child means it has been expanded
+	SetFlags(eHasExpanded, true);
+	
+	// Do sort if requested
+	if (sort)
+		SortChildren();
+}
+
+void CAddressBook::AddChildHierarchy(CAddressBook* child, bool sort)
+{
+	// Only do this if its the protocol root
+	if (mParent != &CAddressBookManager::sAddressBookManager->GetRoot())
+		return;
+
+	// Break the name down into components
+	cdstrvect names;
+	const char* start = child->GetName().c_str();
+	const char* end = ::strchr(start, mProtocol->GetDirDelim());
+	while(end != NULL)
+	{
+		names.push_back(cdstring(start, end - start));
+		start = end + 1;
+		end = ::strchr(start, mProtocol->GetDirDelim());
+	}
+
+	// Find each path component
+	CAddressBook* parent = this;
+	cdstring path;
+	for(cdstrvect::const_iterator iter1 = names.begin(); iter1 != names.end(); iter1++)
+	{
+		// Get path component
+		if (!path.empty())
+			path += mProtocol->GetDirDelim();
+		path += *iter1;
+		
+		// Find the node
+		bool found = false;
+		for(CAddressBookList::iterator iter2 = parent->GetChildren()->begin(); iter2 != parent->GetChildren()->end(); iter2++)
+		{
+			if ((*iter2)->GetName() == path)
+			{
+				parent = *iter2;
+				found = true;
+				break;
+			}
+		}
+		
+		// If not found, create a directory and make it the new parent
+		if (!found)
+		{
+			CAddressBook* adbk = new CAddressBook(mProtocol, parent, false, true, path);
+			parent->AddChild(adbk, sort);
+			parent = adbk;
+		}
+	}
+
+	// Now add to actual parent
+	parent->AddChild(child, sort);
+}
+
+void CAddressBook::InsertChild(CAddressBook* child, uint32_t index, bool sort)
+{
+	// Do ordinary add if no children or insert at end
+	if ((mChildren == NULL) || (index >= mChildren->size()))
+		AddChild(child, sort);
+	else
+	{
+		mChildren->insert(mChildren->begin() + index, child);
+		child->mParent = this;
+		
+		// Do sort if requested
+		if (sort)
+			SortChildren();
+	}
+}
+
+void CAddressBook::SortChildren()
+{
+	if (mChildren == NULL)
+		return;
+	
+	std::sort(mChildren->begin(), mChildren->end(), sort_by_name);
+}
+
+bool CAddressBook::sort_by_name(const CAddressBook* s1, const CAddressBook* s2)
+{
+	return ::strcmpnocase(s1->GetShortName(), s2->GetShortName()) < 0;
+}
+
+CAddressBook* CAddressBook::FindNode(cdstrvect& hierarchy, bool discover) const
+{
+	// Find top-level item matching last item in hierarchy
+	if (mChildren)
+	{
+		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
+		{
+			if (hierarchy.back() == (*iter)->GetShortName())
+			{
+				hierarchy.pop_back();
+				if (hierarchy.empty())
+					return *iter;
+				else
+				{
+					// May need discovery
+					if (discover && (*iter)->IsDirectory() && !(*iter)->HasExpanded())
+						GetProtocol()->LoadSubList(*iter, false);					
+					return (*iter)->FindNode(hierarchy, discover);
+				}
+			}
+		}
+	}
+	
+	return NULL;
+}
+
+// Remove node from parent withtout deleting the node
+void CAddressBook::RemoveFromParent()
+{
+	if (mParent)
+	{
+		CAddressBookList* list = mParent->GetChildren();
+		CAddressBookList::iterator found = ::find(list->begin(), list->end(), this);
+		if (found != list->end())
+		{
+			// NULL it out so that the node is not deleted, then erase
+			*found = NULL;
+			list->erase(found);
+		}
+		
+		mParent = NULL;
+	}
+}
+
+void CAddressBook::Clear()
+{
+	if (mChildren != NULL)
+	{
+		// Erase children
+		delete mChildren;
+		mChildren = NULL;
+	}
+}
+
+uint32_t CAddressBook::GetRow() const
+{
+	// Look for sibling
+	uint32_t row = GetParentOffset();
+	const CAddressBook* parent = mParent;
+	while(parent != NULL)
+	{
+		row += parent->GetParentOffset();
+		parent = parent->mParent;
+	}
+	
+	return row;
+}
+
+uint32_t CAddressBook::CountDescendants() const
+{
+	uint32_t result = 0;
+	if (mChildren != NULL)
+	{
+		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
+			result += (*iter)->CountDescendants() + 1;
+	}
+	
+	return result;
+}
+
+uint32_t CAddressBook::GetParentOffset() const
+{
+	uint32_t result = 0;
+	if ((mParent != NULL) && mParent->HasInferiors())
+	{
+		result++;
+		for(CAddressBookList::iterator iter = mParent->GetChildren()->begin(); iter != mParent->GetChildren()->end(); iter++)
+		{
+			if (*iter == this)
+				break;
+			
+			result += (*iter)->CountDescendants() + 1;
+		}
+	}
+	
+	return result;
+}
+
+const CAddressBook* CAddressBook::GetSibling() const
+{
+	const CAddressBook* result = NULL;
+	if ((mParent != NULL) && mParent->HasInferiors())
+	{
+		for(CAddressBookList::iterator iter = mParent->GetChildren()->begin(); iter != mParent->GetChildren()->end(); iter++)
+		{
+			if (*iter == this)
+				break;
+			
+			result = *iter;
+		}
+	}
+	
+	return result;
+}
+
+void CAddressBook::GetInsertRows(uint32_t& parent_row, uint32_t& sibling_row) const
+{
+	// Get parent's row
+	parent_row = (mParent ? mParent->GetRow() : 0);
+
+	// Now get the sibling row
+	uint32_t parent_offset = GetParentOffset();
+	if ((parent_offset != 0) && (GetSibling() != NULL))
+	{
+		sibling_row = parent_row + parent_offset - GetSibling()->CountDescendants() - 1;
+	}
+	else
+		sibling_row = 0;
+}
+
+// Set pointer to short name
+void CAddressBook::SetShortName()
+{
+	// Determine last directory break
+	const char* p = NULL;
+	if ((GetProtocol()->GetDirDelim() != 0) && ((p = ::strrchr(mName.c_str(), mProtocol->GetDirDelim())) != NULL))
+		mShortName = ++p;
+	else
+		mShortName = mName.c_str();
+}
+
+// Tell this and children to adjust names
+void CAddressBook::NewName(const cdstring& name)
+{
+	// Adjust this one
+	SetName(name);
+	
+	// Now iterate over children doing rename
+	if (mChildren != NULL)
+	{
+		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
+		{
+			(*iter)->ParentRenamed();
+		}
+	}
+}
+
+// Tell children to adjust names when parent moves
+void CAddressBook::ParentRenamed()
+{
+	// Must have a parent
+	if (mParent == NULL)
+		return;
+
+	// Adjust this node
+	cdstring new_name;
+	new_name = mParent->GetName();
+	if (GetProtocol()->GetDirDelim())
+		new_name += GetProtocol()->GetDirDelim();
+	new_name += GetShortName();
+	SetName(new_name);
+	
+	// Now iterate over children doing rename
+	if (mChildren != NULL)
+	{
+		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
+		{
+			(*iter)->ParentRenamed();
+		}
+	}
+}
+
+void CAddressBook::MoveAddressBook(const CAddressBook* dir, bool sibling)
+{
+#ifdef TODO
+#endif
+}
+
+// Copy this address book into another one
+void CAddressBook::CopyAddressBook(CAddressBook* node)
+{
+#ifdef TODO
+#endif
+}
+
+// Copy this address book's items into another one
+void CAddressBook::CopyAddressBookContents(CAddressBook* node)
+{
+#ifdef TODO
+#endif
+}
+
+// Switch into disconnected mode
+void CAddressBook::TestDisconnectCache()
+{
+	if (mChildren != NULL)
+	{
+		// Test each child recursively
+		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
+			(*iter)->TestDisconnectCache();
+	}
+
+	// See if it exists locally
+	if (IsAdbk())
+		SetFlags(eIsCached, mProtocol->TestAdbk(this));
 }
 
 #pragma mark ____________________________Opening/Closing
 
-void CAddressBook::SetName(const char* name)
+void CAddressBook::SetName(const cdstring& name)
 {
 	// Remove from manager's cache
-	if (mAdbkName.length())
+	if (mName.length())
 		CAddressBookManager::sAddressBookManager->SyncAddressBook(this, false);
 
-	mAdbkName = name;
-	CAddressBookManager::sAddressBookManager->RefreshAddressBook(this);
+	mName = name;
+	SetShortName();
+	//CAddressBookManager::sAddressBookManager->RefreshAddressBook(this);
 
 	// Add to manager's cache
 	CAddressBookManager::sAddressBookManager->SyncAddressBook(this, true);
@@ -92,31 +505,39 @@ bool CAddressBook::CloseCount()
 	return --mRefCount == 0;
 }
 
-// New visual address book on source
-void CAddressBook::New()
-{
-	SetFlags(eOpen);
-}
-
 // Open visual address book from source
 void CAddressBook::Open()
 {
+	// Bump reference count and open only if not already done
+	if (!OpenCount())
+		return;
+
+	try
+	{
+		// NB We might have a vCard adbk if we've done searches whilst the address book is closed.
+		// If that is the case we want to discard everything and start from scratch.
+		if (mVCardAdbk != NULL)
+			mVCardAdbk->Clear();
+		else
+			mVCardAdbk = new vCard::CVCardAddressBook();
+
+		// Must remove any cached address lookups
+		mAddresses.clear();
+		mGroups.clear();
+
+		// Now open
+		mProtocol->OpenAdbk(this);
+
+		// Mark as open
 	SetFlags(eOpen);
-
-	// Remove any cached addresses
-	//mAddresses.erase_all();
-	//mGroups.erase_all();
-}
-
-// Read in addresses
-void CAddressBook::Read()
-{
-	SetFlags(eLoaded);
-}
-
-// Save addresses
-void CAddressBook::Save()
-{
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+		
+		delete mVCardAdbk;
+		mVCardAdbk = NULL;
+	}
 }
 
 // Close visual address book
@@ -126,25 +547,35 @@ void CAddressBook::Close()
 	if (!IsOpen())
 		return;
 
+	// Bump reference count and close only if not open elsewhere
+	if (!CloseCount())
+		return;
+
+	mProtocol->CloseAdbk(this);
+
 	// Clean up the UI
 	CMailControl::AddressBookClosed(this);
 
 	SetFlags(eOpen, false);
-	SetFlags(eLoaded, false);
 	
-	Clear();
+	ClearContents();
+
+	delete mVCardAdbk;
+	mVCardAdbk = NULL;
 }
 
 // Rename address book
 void CAddressBook::Rename(cdstring& new_name)
 {
+	mProtocol->RenameAdbk(this, new_name);
+
 	// Remove from manager's cache
 	CAddressBookManager::sAddressBookManager->SyncAddressBook(this, false);
 	CPreferences::sPrefs->ChangeAddressBookOpenOnStart(this, false);
 	CPreferences::sPrefs->ChangeAddressBookLookup(this, false);
 	CPreferences::sPrefs->ChangeAddressBookSearch(this, false);
 
-	mAdbkName = new_name;
+	mName = new_name;
 
 	// Add to manager's cache
 	CAddressBookManager::sAddressBookManager->SyncAddressBook(this, true);
@@ -154,10 +585,12 @@ void CAddressBook::Rename(cdstring& new_name)
 }
 
 // Clear addresses
-void CAddressBook::Clear()
+void CAddressBook::ClearContents()
 {
 	mAddresses.clear();
 	mGroups.clear();
+	if (mVCardAdbk != NULL)
+		mVCardAdbk->Clear();
 }
 
 // Delete address book
@@ -171,14 +604,38 @@ void CAddressBook::Delete()
 	CPreferences::sPrefs->ChangeAddressBookOpenOnStart(this, false);
 	CPreferences::sPrefs->ChangeAddressBookLookup(this, false);
 	CPreferences::sPrefs->ChangeAddressBookSearch(this, false);
+
+	// Now delete on server
+	mProtocol->DeleteAdbk(this);
+
+	// Remove from manager
+	//CAddressBookManager::sAddressBookManager->RemoveAddressBook(this);
 }
 
 // Empty address book
 void CAddressBook::Empty()
 {
-	Clear();
+	// Delete and recreate
+	mProtocol->DeleteAdbk(this);
+	mProtocol->CreateAdbk(this);
+	
+	ClearContents();
 }
 
+// Synchronise to local
+void CAddressBook::Synchronise(bool fast)
+{
+	// Tell protocol to synchronise it
+	mProtocol->SynchroniseRemote(this, fast);
+}
+
+// Clear disconnected cache
+void CAddressBook::ClearDisconnect()
+{
+	mProtocol->ClearDisconnect(this);
+}
+
+#ifdef _TODO
 // Copy addresses and groups to another address book
 void CAddressBook::CopyAll(CAddressBook* adbk)
 {
@@ -200,17 +657,34 @@ void CAddressBook::CopyAll(CAddressBook* adbk)
 // Synchronise to local
 void CAddressBook::Synchronise(bool fast)
 {
+	// Tell protocol to synchronise it
+	mProtocol->SynchroniseRemote(this, fast);
 }
 
 // Clear disconnected cache
 void CAddressBook::ClearDisconnect()
 {
+	mProtocol->ClearDisconnect(this);
 }
 
 // Switch into disconnected mode
 void CAddressBook::SwitchDisconnect(CAdbkProtocol* local)
 {
+	// See if going into disconnected mode (i.e. local != NULL)
+	if (local)
+	{
+		// Set local flag
+		SetFlags(CAddressBook::eLocalAdbk);
+
+		// See if it exists locally
+		if (local->TestAdbk(this))
+			SetFlags(CAddressBook::eCachedAdbk);
+	}
+	else
+		// Remove disconnected flags
+		SetFlags(static_cast<CAddressBook::EFlags>(CAddressBook::eLocalAdbk | CAddressBook::eCachedAdbk), false);
 }
+#endif
 
 CAdbkAddress* CAddressBook::FindAddress(const char* name)
 {
@@ -277,16 +751,32 @@ void CAddressBook::AddAddress(CAddress* addr, bool sorted)
 // Add addresses to list or delete them
 void CAddressBook::AddAddress(CAddressList* addrs, bool sorted)
 {
+	// Always update the internal cache and map the address to a vCard
 	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 	{
-		if (IsLoaded())
+		if (IsOpen())
 		{
+			// Update internal cache
 			if (sorted)
 				mAddresses.push_back_sorted(*iter);
 			else
 				mAddresses.push_back(*iter);
+			
+			// Map to vCard
+			auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), true));
+			GetVCardAdbk()->AddNewVCard(vcard.release());
 		}
-		else
+	}
+
+	mProtocol->AddAddress(this, addrs);
+
+	// Do change notification
+	CMailControl::AddressAdded(this, addrs);
+
+	// Awlays delete data if not needed
+	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
+	{
+		if (!IsOpen())
 			delete *iter;
 	}
 }
@@ -294,41 +784,20 @@ void CAddressBook::AddAddress(CAddressList* addrs, bool sorted)
 // Add unique addresses from list
 void CAddressBook::AddUniqueAddresses(CAddressList& add)
 {
-	unsigned long count = 0;
 	CAddressList unique;
+	unique.set_delete_data(false);
 
 	// Count unique items first
 	for(CAddressList::iterator iter = add.begin(); iter != add.end(); iter++)
 	{
 		if (!mAddresses.IsDuplicate(*iter))
-		{
-			unique.push_back(*iter);
-			count++;
-		}
+			unique.push_back(new CAdbkAddress(**iter));
 	}
-
-	// Add unique
-	if (count)
-	{
-		// Get current size of list
-		size_t old_size = mAddresses.size();
-
-		// Insert total number of blanks addresses
-		mAddresses.insert(mAddresses.begin() + old_size, count, NULL);
-
-		// Set to fill in from start of new items
-		CAddressList::iterator pos = mAddresses.begin() + old_size;
 
 		// Add unique items
-		for(CAddressList::iterator iter = unique.begin(); iter != unique.end(); iter++)
-
-			// Copy from unique list
-			*pos++ = new CAdbkAddress(**iter);
+	if (unique.size())
+		AddAddress(&unique);
 	}
-
-	// Do not delete addresses twice
-	unique.clear_without_delete();
-}
 
 void CAddressBook::UpdateAddress(CAddress* addr, bool sorted)
 {
@@ -338,9 +807,33 @@ void CAddressBook::UpdateAddress(CAddress* addr, bool sorted)
 	UpdateAddress(&addrs, sorted);
 }
 
+void CAddressBook::UpdateAddress(CAddressList* addrs, bool sorted)
+{
+	// Always map the address to a vCard
+	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
+	{
+		// Remove existing
+		GetVCardAdbk()->RemoveCardByKey(static_cast<const CAdbkAddress*>(*iter)->GetEntry());
+
+		// Map to vCard (using existing entry/UID)
+		auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), false));
+		GetVCardAdbk()->AddNewVCard(vcard.release());
+	}
+	
+	// Change it
+	mProtocol->ChangeAddress(this, addrs);
+
+	// Do change notification
+	CMailControl::AddressChanged(this, addrs);
+}
+
 // Address changed
 void CAddressBook::UpdateAddress(CAddressList* old_addrs, CAddressList* new_addrs, bool sorted)
 {
+	// This is strange: the protocol needs to have the old address data in order to do the actual delete,
+	// since it keys off the data and not the pointer. The internal address book uses the pointer of the
+	// original item (now the new item). So we must get the use of old_addr and new_addr correct.
+	
 	// Switch pointer to old items to pointers to new items
 	for(CAddressList::iterator iter = old_addrs->begin(); iter != old_addrs->end(); iter++)
 	{
@@ -373,6 +866,28 @@ void CAddressBook::RemoveAddress(CAddress* addr)
 	RemoveAddress(&addrs);
 }
 
+void CAddressBook::RemoveAddress(CAddressList* addrs)
+{
+	mProtocol->RemoveAddress(this, addrs);
+
+	if (IsOpen())
+	{
+		// Always update the vCards
+		for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
+		{
+			// Remove the vCard
+			GetVCardAdbk()->RemoveCardByKey(static_cast<const CAdbkAddress*>(*iter)->GetEntry());
+		}
+		
+		mAddresses.RemoveAddress(addrs);
+	}
+
+	mProtocol->RemovalOfAddress(this);
+
+	// Do change notification
+	CMailControl::AddressRemoved(this, addrs);
+}
+
 void CAddressBook::AddGroup(CGroup* grp, bool sorted)
 {
 	CGroupList grps;
@@ -384,9 +899,11 @@ void CAddressBook::AddGroup(CGroup* grp, bool sorted)
 // Add group to group list.
 void CAddressBook::AddGroup(CGroupList* grps, bool sorted)
 {
+	mProtocol->AddGroup(this, grps);
+
 	for(CGroupList::const_iterator iter = grps->begin(); iter != grps->end(); iter++)
 	{
-		if (IsLoaded())
+		if (IsOpen())
 		{
 			if (sorted)
 				mGroups.push_back_sorted(*iter);
@@ -396,59 +913,27 @@ void CAddressBook::AddGroup(CGroupList* grps, bool sorted)
 		else
 			delete *iter;
 	}
+
+	// Do change notification
+	CMailControl::GroupAdded(this, grps);
 }
 
 // Add unique groups from list
 void CAddressBook::AddUniqueGroups(CGroupList& add)
 {
-	unsigned long count = 0;
 	CGroupList unique;
-	CGroupList duplicate;
+	unique.set_delete_data(false);
 
 	// Count unique items first
-	for(CGroupList::const_iterator iter1 = add.begin(); iter1 != add.end(); iter1++)
+	for(CGroupList::const_iterator iter = add.begin(); iter != add.end(); iter++)
 	{
-		if (!mGroups.IsDuplicate(*iter1))
-		{
-			unique.push_back(*iter1);
-			count++;
-		}
-		else
-			duplicate.push_back(*iter1);
+		if (!mGroups.IsDuplicate(*iter))
+			unique.push_back(new CGroup(**iter));
 	}
-
-	// Get current size of list
-	size_t old_size = mGroups.size();
-
-	// Insert total number of blank groups
-	mGroups.insert(mGroups.begin() + old_size, count, nil);
-
-	// Set to fill in from start of new items
-	CGroupList::iterator pos = mGroups.begin() + old_size;
 
 	// Add unique items
-	for(CGroupList::iterator iter2 = unique.begin(); iter2 != unique.end(); iter2++)
-
-		// Copy from unique list
-		*pos++ = new CGroup(**iter2);
-
-	// Merge duplicate items
-	for(CGroupList::iterator iter3 = duplicate.begin(); iter3 != duplicate.end(); iter3++)
-	{
-		for(CGroupList::iterator iter4 = mGroups.begin(); iter4 != mGroups.end(); iter4++)
-		{
-			if (**iter4 == **iter3)
-			{
-				// Merge with existing
-				(*iter4)->Merge(*iter3);
-				break;
-			}
-		}
-	}
-
-	// Do not delete itesms twice
-	unique.clear_without_delete();
-	duplicate.clear_without_delete();
+	if (unique.size())
+		AddGroup(&unique);
 }
 
 void CAddressBook::UpdateGroup(CGroup* grp, bool sorted)
@@ -457,6 +942,15 @@ void CAddressBook::UpdateGroup(CGroup* grp, bool sorted)
 	grps.set_delete_data(false);
 	grps.push_back(grp);
 	UpdateGroup(&grps, sorted);
+}
+
+void CAddressBook::UpdateGroup(CGroupList* grps, bool sorted)
+{
+	// Remove it then add it
+	mProtocol->ChangeGroup(this, grps);
+
+	// Do change notification
+	CMailControl::GroupChanged(this, grps);
 }
 
 // Address changed
@@ -486,6 +980,18 @@ void CAddressBook::RemoveGroup(CGroup* grp)
 	grps.set_delete_data(false);
 	grps.push_back(grp);
 	RemoveGroup(&grps);
+}
+
+void CAddressBook::RemoveGroup(CGroupList* grps)
+{
+	mProtocol->RemoveGroup(this, grps);
+	if (IsOpen())
+		mGroups.RemoveGroup(grps);
+
+	mProtocol->RemovalOfAddress(this);
+
+	// Do change notification
+	CMailControl::GroupRemoved(this, grps);
 }
 
 // Give this address a unique entry
@@ -557,6 +1063,7 @@ void CAddressBook::ImportAddress(char* txt, bool add, CAdbkAddress** raddr, CGro
 	cdstring name;
 	cdstring whole_name;
 	cdstring eaddr;
+	cdstring calendar;
 	cdstring company;
 	cdstring address;
 	cdstring phone_work;
@@ -717,7 +1224,7 @@ void CAddressBook::ImportAddress(char* txt, bool add, CAdbkAddress** raddr, CGro
 		}
 
 
-		CAdbkAddress* addr = new CAdbkAddress(NULL, eaddr, whole_name, adl, company, address,
+		CAdbkAddress* addr = new CAdbkAddress(NULL, eaddr, whole_name, adl, calendar, company, address,
 													phone_work, phone_home, fax, url, notes);
 		if (add_entry)
 			addr->SetEntry(whole_name);
@@ -897,40 +1404,77 @@ char* CAddressBook::ExportGroup(const CGroup* grp) const
 #pragma mark ____________________________Lookup
 
 // Find nick-name
-bool CAddressBook::FindNickName(const char* nick_name, CAdbkAddress*& addr)
+bool CAddressBook::FindNickName(const char* nick_name, CAdbkAddress*& addr, bool cache_only)
 {
+	bool result = false;
+
 	// Try to get nick-name from list
 	for(CAddressList::const_iterator iter = mAddresses.begin(); iter != mAddresses.end(); iter++)
 	{
 		if (::strcmpnocase(nick_name, (*iter)->GetADL())==0)
 		{
 			addr = dynamic_cast<CAdbkAddress*>(*iter);
-			return true;
+			result = true;
+			break;
 		}
 	}
 
-	return false;
+	// Do remote lookup if not open
+	if (!cache_only && !result && !IsOpen())
+	{
+		// Need to create vCard address book for cached data
+		mVCardAdbk = new vCard::CVCardAddressBook();
+		
+		// Lookup
+		mProtocol->ResolveAddress(this, nick_name, addr);
+
+		// Resolveb from cache again
+		result = CAddressBook::FindNickName(nick_name, addr, true);
+	}
+
+	return result;
 }
 
 // Find group nick-name
-bool CAddressBook::FindGroupName(const char* grp_name, CGroup*& grp)
+bool CAddressBook::FindGroupName(const char* grp_name, CGroup*& grp, bool cache_only)
 {
+	bool result = false;
+
 	// Try to get nick-name from list
 	for(CGroupList::const_iterator iter = mGroups.begin(); iter != mGroups.end(); iter++)
 	{
 		if (::strcmpnocase(grp_name, (*iter)->GetNickName())==0)
 		{
 			grp = *iter;
-			return true;
+			result = true;
+			break;
 		}
 	}
 
-	return false;
+	// Do remote lookup if not open
+	if (!cache_only && !result && !IsOpen())
+	{
+		// Need to create vCard address book for cached data
+		mVCardAdbk = new vCard::CVCardAddressBook();
+		
+		// Lookup
+		mProtocol->ResolveGroup(this, grp_name, grp);
+
+		// Resolveb from cache again
+		result = CAddressBook::FindGroupName(grp_name, grp, true);
+	}
+
+	return result;
 }
 
 // Do search
 void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field, CAddressList& addr_list)
 {
+	// Do remote lookup only if not open
+	if (!IsOpen())
+		mProtocol->SearchAddress(this, name, match, field, addr_list);
+	else
+	{
 	cdstring matchit(name);
 	CAdbkAddress::ExpandMatch(match, matchit);
 
@@ -950,5 +1494,254 @@ void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMat
 		if (result)
 			// Add copy to list
 			addr_list.push_back(new CAdbkAddress(*addr));
+		}
+	}
+}
+
+
+#pragma mark ____________________________ACLs
+
+// Get user's rights from server
+void CAddressBook::CheckMyRights()
+{
+	// Check for valid protocol & state
+	if (!mProtocol->IsACLAdbk() || mProtocol->IsDisconnected())
+		return;
+
+	mProtocol->MyRights(this);
+}
+
+// Add ACL to list
+void CAddressBook::AddACL(const CAdbkACL* acl)
+{
+	// Check for valid protocol & state
+	if (!mProtocol->IsACLAdbk() || mProtocol->IsDisconnected())
+		return;
+
+	// Create list if it does not exist
+	if (!mACLs)
+		mACLs = new CAdbkACLList;
+
+	// Add
+	mACLs->push_back(*acl);
+}
+
+// Set ACL on server
+void CAddressBook::SetACL(CAdbkACL* acl)
+{
+	// Check for valid protocol & state
+	if (!mProtocol->IsACLAdbk() || mProtocol->IsDisconnected())
+		return;
+
+	// Try to set on server
+	try
+	{
+		mProtocol->SetACL(this, acl);
+
+		// Create list if it does not exist
+		if (!mACLs)
+			mACLs = new CAdbkACLList;
+
+		// Search for existing ACL
+		CAdbkACLList::iterator found = ::find(mACLs->begin(), mACLs->end(), *acl);
+
+		// Add if not found
+		if (found == mACLs->end())
+			mACLs->push_back(*acl);
+		else
+			// Replace existing
+			*found = *acl;
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Silent failure
+	}
+}
+
+// Set ACL on server
+void CAddressBook::DeleteACL(CAdbkACL* acl)
+{
+	// Check for valid protocol & state
+	if (!mProtocol->IsACLAdbk() || mProtocol->IsDisconnected())
+		return;
+
+	// Try to delete on server
+	try
+	{
+		mProtocol->DeleteACL(this, acl);
+
+		// Search for existing ACL
+		CAdbkACLList::iterator found = ::find(mACLs->begin(), mACLs->end(), *acl);
+
+		// Remove it
+		if (found != mACLs->end())
+			mACLs->erase(found);
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Silent failure
+	}
+}
+
+// Get ACLs from server
+void CAddressBook::CheckACLs()
+{
+	// Check for valid protocol & state
+	if (!mProtocol->IsACLAdbk() || mProtocol->IsDisconnected())
+		return;
+
+	// Save existing list in case of failure
+	CAdbkACLList* save = (mACLs ? new CAdbkACLList(*mACLs) : NULL);
+
+	try
+	{
+		// Delete everything in existing list
+		if (mACLs)
+			mACLs->clear();
+
+		mProtocol->GetACL(this);
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Replace failed list with old one
+		if (save)
+			*mACLs = *save;
+		delete save;
+
+		// Throw up
+		CLOG_LOGRETHROW;
+		throw;
+	}
+
+	delete save;
+}
+
+#pragma mark ____________________________XML
+
+void CAddressBook::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* parent, bool is_root) const
+{
+	xmllib::XMLNode* xmlnode = NULL;
+	
+	// root node just write children
+	if (!is_root)
+	{
+		// Create new node
+		xmlnode = new xmllib::XMLNode(doc, parent, cXMLElement_adbknode);
+
+		// Set adbk attribute
+		if (IsAdbk())
+		{
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_adbk, IsAdbk());
+		}
+
+		// Set directory attribute
+		if (IsDirectory())
+		{
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_directory, IsDirectory());
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_has_expanded, HasExpanded());
+		}
+
+		// Set name child node
+		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
+		
+		// Set last sync child node
+		if (mLastSync != 0)
+			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_lastsync, mLastSync);
+	}
+	else
+		xmlnode = parent;
+
+	// Do children if they exist
+	if (GetChildren() != NULL)
+	{
+		for(CAddressBookList::const_iterator iter = GetChildren()->begin(); iter != GetChildren()->end(); iter++)
+		{
+			(*iter)->WriteXML(doc, xmlnode);
+		}
+	}
+}
+
+void CAddressBook::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
+{
+	if (is_root)
+	{
+		// Get has expanded
+		bool has_expanded = false;
+		if (xmlnode->AttributeValue(cXMLAttribute_has_expanded, has_expanded))
+		{
+			SetHasExpanded(has_expanded);
+		}
+	}
+	else
+	{
+		// Must have right type of node
+		if (!xmlnode->CompareFullName(cXMLElement_adbknode))
+			return;
+		
+		// Check attributes
+		bool temp = false;
+		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_adbk, temp))
+		{
+			SetFlags(eIsAdbk, temp);
+		}
+		temp = false;
+		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_directory, temp))
+		{
+			SetFlags(eIsDirectory, temp);
+			if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_has_expanded, temp))
+				SetHasExpanded(temp);
+		}
+
+		// Must have a name
+		cdstring name;
+		if (!xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_name, name))
+			return;
+
+		// Get full path of name (do not include root store node name in path)
+		cdstring new_name;
+		if (!GetParent()->IsProtocol())
+		{
+			new_name = GetParent()->GetName();
+			if (GetProtocol()->GetDirDelim() != 0)
+				new_name += GetProtocol()->GetDirDelim();
+		}
+		new_name += name;
+		SetName(new_name);
+
+		// Get last sync
+		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_lastsync, mLastSync);
+	}
+
+	// Scan into directories
+	if (IsDirectory())
+	{
+		for(xmllib::XMLNodeList::const_iterator iter = xmlnode->Children().begin(); iter != xmlnode->Children().end(); iter++)
+		{
+			// Check child name
+			xmllib::XMLNode* child = *iter;
+			if (child->CompareFullName(cXMLElement_adbknode))
+			{
+				// Create new cal store node
+				CAddressBook* node = new CAddressBook(GetProtocol(), this);
+				
+				// Parse it
+				node->ReadXML(child);
+				
+				// Add it to this one
+				AddChild(node);
+			}
+		}
+		
+		// Always mark node as having been expanded
+		SetHasExpanded(true);
+		
+		// Always sort the children after adding all of them
+		SortChildren();
 	}
 }

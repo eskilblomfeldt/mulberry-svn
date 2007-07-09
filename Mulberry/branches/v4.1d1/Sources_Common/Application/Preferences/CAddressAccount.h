@@ -70,6 +70,15 @@ public:
 	void SetExpanded(bool expanded)
 		{ mExpanded = expanded; }
 	
+	const cdstring& GetBaseRURL() const
+	{
+		return mBaseRURL;
+	}
+	void SetBaseRURL(const cdstring& rurl)
+	{
+		mBaseRURL = rurl;
+	}
+
 	const cdstring& GetLDAPRoot(void) const
 		{ return ldap->mRoot; }
 	void SetLDAPRoot(const cdstring& root)
@@ -112,6 +121,7 @@ private:
 	SAddressAccountLDAP*	ldap;
 	bool					mDisconnected;
 	bool					mExpanded;
+	cdstring				mBaseRURL;
 	CFutureItems			mFuture;
 	
 	void _copy(const CAddressAccount& copy);

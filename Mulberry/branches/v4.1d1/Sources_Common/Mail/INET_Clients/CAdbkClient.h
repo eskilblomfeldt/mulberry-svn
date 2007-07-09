@@ -50,15 +50,23 @@ public:
 	virtual ~CAdbkClient() { mActionAdbk = NULL; mSearchResults = NULL; }
 
 	// Operations on address books
+	virtual void	_ListAddressBooks(CAddressBook* root) = 0;
 	virtual void	_FindAllAdbks(const cdstring& path) = 0;		// Find all adbks below this path
+
 	virtual void	_CreateAdbk(const CAddressBook* adbk) = 0;		// Create adbk
-	virtual void	_TouchAdbk(const CAddressBook* adbk) = 0;		// Do touch
+	virtual bool	_TouchAdbk(const CAddressBook* adbk) = 0;		// Do touch
 	virtual bool	_TestAdbk(const CAddressBook* adbk) = 0;		// Do test
+	virtual void	_LockAdbk(const CAddressBook* adbk) = 0;
+	virtual void	_UnlockAdbk(const CAddressBook* adbk) = 0;
+	virtual bool	_AdbkChanged(const CAddressBook* adbk) = 0;
 	virtual void	_DeleteAdbk(const CAddressBook* adbk) = 0;		// Delete adbk
 	virtual void	_RenameAdbk(const CAddressBook* old_adbk,
 								const cdstring& new_adbk) = 0;		// Rename adbk
+	virtual void	_SizeAdbk(CAddressBook* adbk) = 0;
 
 	// Operations with addresses
+	virtual void	_ReadFullAddressBook(CAddressBook* adbk) = 0;		// Find all addresses in adbk
+	virtual void	_WriteFullAddressBook(CAddressBook* adbk) = 0;		// Write all addresses in adbk
 	virtual void	_FindAllAddresses(CAddressBook* adbk) = 0;			// Find all addresses in adbk
 	virtual void	_FetchAddress(CAddressBook* adbk,
 									const cdstrvect& names) = 0;		// Fetch named addresses

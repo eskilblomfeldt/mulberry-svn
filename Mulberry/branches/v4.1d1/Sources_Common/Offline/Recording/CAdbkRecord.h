@@ -45,6 +45,7 @@ public:
 		eCreate = 1 << 0,
 		eDelete = 1 << 1,
 		eRename = 1 << 2,
+		eChange = 1 << 3,
 	
 		// Address actions
 		eStoreAddress = 1 << 7,
@@ -55,7 +56,7 @@ public:
 		eDeleteGroup = 1 << 12,
 		
 		// Combined options
-		eAdbkAllowed = eCreate | eDelete | eRename,
+		eAdbkAllowed = eCreate | eDelete | eRename | eChange,
 		eAddressAllowed = eStoreAddress | eChangeAddress | eDeleteAddress | eStoreGroup | eChangeGroup | eDeleteGroup
 	};
 	
@@ -71,6 +72,7 @@ public:
 	void Create(const CAddressBook* adbk);
 	void Delete(const CAddressBook* adbk);
 	void Rename(const CAddressBook* adbk, const cdstring& newname);
+	void Change(const CAddressBook* adbk);
 
 	// Address actions
 	void StoreAddress(const CAddressBook* adbk, const CAddressList* addrs);
@@ -105,6 +107,7 @@ private:
 	void Playback_Create(CAdbkAction& item);
 	void Playback_Delete(CAdbkAction& item);
 	void Playback_Rename(CAdbkAction& item);
+	void Playback_Change(CAdbkAction& item);
 
 	void Playback_StoreAddress(CAdbkAction& item);
 	void Playback_ChangeAddress(CAdbkAction& item);

@@ -803,6 +803,54 @@ bool cdstring::unquote()
 	return false;
 }
 
+// Split into tokens
+void cdstring::split(const char* tokens, cdstrvect& results, bool trim) const
+{
+	cdstring::size_type start = 0;
+	cdstring::size_type end = cdstring::npos;
+	end = find_first_of(tokens);
+	while(end != cdstring::npos)
+	{
+		cdstring temp;
+		temp.assign(*this, start, end - start);
+		if (trim)
+			temp.trimspace();
+		results.push_back(temp);
+		start = find_first_not_of(tokens, end);
+		if (start == cdstring::npos)
+			break;
+		end = find_first_of(tokens, start);
+	}
+	
+	if (start != cdstring::npos)
+	{
+		cdstring temp;
+		temp.assign(*this, start, cdstring::npos);
+		if (trim)
+			temp.trimspace();
+		results.push_back(temp);
+	}
+}
+
+// Join list into single string
+void cdstring::join(const cdstrvect& items, const char* delim)
+{
+	ostrstream sout;
+	bool first = true;
+	for(cdstrvect::const_iterator iter = items.begin(); iter != items.end(); iter++)
+	{
+		if (first)
+			first = false;
+		else
+			sout << delim;
+		sout << *iter;
+	}
+	sout << ends;
+	
+	// Grab the string
+	steal(sout.str());
+}
+
 // Filter out C-style escape chars '\'
 void cdstring::FilterOutEscapeChars()
 {

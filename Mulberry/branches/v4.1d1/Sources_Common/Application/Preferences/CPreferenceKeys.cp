@@ -447,6 +447,7 @@ const char* cPrefsSection = "Preferences";
 		const char* cAddressAccountsKey_2_0 = "Address Books v2_0";			// New format as of v2.0
 		const char* cLocalAdbkAccount = "Local Address Books";				// New format as of v2.0
 		const char* cOSAdbkAccount = "OS Address Books "OS_PART;			// New format as of v3.1
+		const char* cExpandedAdbksKey = "Expanded Address Books";			// New as of v4.1
 		const char* cAdbkOpenAtStartup_1_3 = "Open Address Books";			// Deprecated format as of v2.0b6
 		const char* cAdbkOpenAtStartup_2_0 = "Open Address Books v2_0";		// New as of v2.0b6
 		const char* cAdbkNickName_1_3 = "Lookup Address Books";				// Deprecated format as of v2.0b6

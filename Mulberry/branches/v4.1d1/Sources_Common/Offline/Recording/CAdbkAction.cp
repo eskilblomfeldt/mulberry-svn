@@ -28,6 +28,7 @@ const char* cAdbkActionDescriptors[] =
 	 "Create",
 	 "Delete",
 	 "Rename",
+	 "Change",
 	 "Store Address",
 	 "Change Address",
 	 "Delete Address",
@@ -47,6 +48,7 @@ void CAdbkAction::_copy(const CAdbkAction& copy)
 	{
 	case eCreate:
 	case eDelete:
+	case eChange:
 		mData = static_cast<void*>(new cdstring(copy.GetName()));
 		break;
 	case eRename:
@@ -72,6 +74,7 @@ void CAdbkAction::_tidy()
 	{
 	case eCreate:
 	case eDelete:
+	case eChange:
 		delete &GetName();
 		break;
 	case eRename:
@@ -104,6 +107,7 @@ void CAdbkAction::WriteToStream(ostream& out, bool text) const
 	{
 	case eCreate:
 	case eDelete:
+	case eChange:
 		out << GetName() << endl;
 		break;
 	case eRename:
@@ -145,6 +149,7 @@ void CAdbkAction::ReadFromStream(istream& in, unsigned long vers)
 	{
 	case eCreate:
 	case eDelete:
+	case eChange:
 		mData = static_cast<void*>(new cdstring);
 		getline(in, const_cast<cdstring&>(GetName()));
 		break;

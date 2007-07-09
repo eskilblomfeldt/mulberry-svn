@@ -65,6 +65,7 @@ extern const char* cADDRESS_ALIAS;
 extern const char* cADDRESS_EMAIL;
 extern const char* cADDRESS_MEMBER;				// Simeon compat.
 extern const char* cADDRESS_MEMBERS;			// Simeon compat.
+extern const char* cADDRESS_CALENDAR;
 extern const char* cADDRESS_COMPANY;
 extern const char* cADDRESS_ADDRESS;
 extern const char* cADDRESS_CITY;				// Simeon compat.
