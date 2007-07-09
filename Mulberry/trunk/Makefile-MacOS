@@ -57,7 +57,7 @@ updatelibraries:
 updatemulberry:
 	(cd ${MULBERRY_HOME}; svn update)
 
-init: ppsrc librariessrc mulberrysrc patchpp
+init: ppsrc librariessrc otherlibs mulberrysrc patchpp
 
 buildplugins:
 	@for PLUGIN in $(BUILD_PLUGINS); do \
