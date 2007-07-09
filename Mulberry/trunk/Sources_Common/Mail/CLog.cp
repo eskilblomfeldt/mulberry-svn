@@ -231,6 +231,20 @@ void CLog::FlushLogs()
 	}
 }
 
+// Flush all logfiles
+void CLog::ClearLogs()
+{
+	if (sLoggingActive)
+		DeactivateLogging();
+	bool old_overwrite = sOverwrite;
+	sOverwrite = true;
+	ActivateLogging();
+	DeactivateLogging();
+	sOverwrite = old_overwrite;
+	if (sLoggingActive)
+		ActivateLogging();
+}
+
 // Close all logfiles
 void CLog::StopLogging()
 {

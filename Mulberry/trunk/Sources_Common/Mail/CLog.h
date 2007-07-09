@@ -67,6 +67,7 @@ public:
 	static void StartLogging();								// Create all logfiles if required
 	static void ChangeLogging(const SLogOptions& options);	// Change logging options
 	static void FlushLogs();								// Flush logs now
+	static void ClearLogs();								// Clear logs now
 	static void StopLogging();								// Close all logfiles
 
 	static void ActivateLogging();							// Suspend logging without changing prefs
