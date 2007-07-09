@@ -8,6 +8,12 @@ SVN_MULBERRY := ${SVN_ROOT}/mulberry
 SVN_LIBRARIES := ${SVN_ROOT}/repos
 SVN_POWERPLANT := https://open-powerplant.svn.sourceforge.net/svnroot/open-powerplant/trunk
 
+# Plugins to build
+BUILD_PLUGINS := PluginLibrary CommunicatorAdbkIO CRAM-MD5 DIGEST-MD5 \
+			Eudora4AdbkIO EudoraAdbkIO GPG GSSAPI Kerberos \
+			NetscapeAdbkIO OEAdbkIO PGP PineAdbkIO QuickmailAdbkIO \
+			QuickmailProAdbkIO SMIME SSL vCardAdbkIO
+
 libraries:
 	mkdir ${LIBRARIES_HOME}
 
@@ -48,9 +54,19 @@ updatemulberry:
 
 init: ppsrc librariessrc mulberrysrc patchpp
 
-build:
-	(cd ${MULBERRY_HOME}/MacOS; \
-	 osascript BuildAllXcode)
+buildplugins:
+	@for PLUGIN in $(BUILD_PLUGINS); do \
+		echo "-->Building $$PLUGIN"; \
+		xcodebuild -project Mulberry/Plug-ins/$$PLUGIN/$$PLUGIN.xcodeproj; \
+		echo "" ;\
+	done
+
+buildapp:
+	echo "-->Building Mulberry"
+	xcodebuild -project Mulberry/MacOS/MulberryXcode.xcodeproj -alltargets
+	
+build: buildplugins buildapp
+	echo "Built Mulberry"
 
 update: updatelibraries updatemulberry
 
