@@ -284,9 +284,7 @@ void CTLSSocket::TLSStartConnection(bool tls)
 		mCipher = cdstring::null_str;
 
 		// Create context
-		int test = ::SSL_get_ex_data_X509_STORE_CTX_idx();
 		m_ctx = ::SSL_CTX_new(tls ? ::TLSv1_client_method() : ::SSLv23_client_method());
-		test = ::SSL_get_ex_data_X509_STORE_CTX_idx();
 		if (!m_ctx)
 		{
 			CLOG_LOGTHROW(CTCPException, CTCPException::err_TCPSSLError);
