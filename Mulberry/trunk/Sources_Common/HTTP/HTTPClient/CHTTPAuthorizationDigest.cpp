@@ -39,6 +39,17 @@ void CHTTPAuthorizationDigest::GenerateAuthorization(ostream& os, const CHTTPReq
 	const_cast<CHTTPAuthorizationDigest*>(this)->GenerateResponse(request);
 	
 	// Generate header
+	if (mQop.empty())
+	{
+		os << cHeaderAuthorization << cHeaderDelimiter << "Digest "
+		<< "username=\"" << mUser << "\"," << net_endl
+		<< " realm=\"" << mRealm << "\"," << net_endl
+		<< " nonce=\"" << mNonce << "\"," << net_endl
+		<< " uri=\"" << request->GetRURI() << "\"," << net_endl
+		<< " response=\"" << mResponse << "\"";
+	}
+	else
+	{
 	os << cHeaderAuthorization << cHeaderDelimiter << "Digest "
 		<< "username=\"" << mUser << "\"," << net_endl
 		<< " realm=\"" << mRealm << "\"," << net_endl
@@ -48,7 +59,10 @@ void CHTTPAuthorizationDigest::GenerateAuthorization(ostream& os, const CHTTPReq
 		<< " nc=" << mNC << "," << net_endl
 		<< " cnonce=\"" << mCnonce << "\"," << net_endl
 		<< " response=\"" << mResponse << "\"";
+	}
 	
+	if (mAlgorithm.length() != 0)
+		os << "," << net_endl << " algorithm=\"" << mAlgorithm << "\"";
 	if (mOpaque.length() != 0)
 		os << "," << net_endl << " opaque=\"" << mOpaque << "\"";
 	
