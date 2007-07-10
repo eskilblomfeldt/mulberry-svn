@@ -1428,7 +1428,7 @@
 		AF419EC90AEA753B00E19592 /* vCardAdbkIO.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = vCardAdbkIO.xcodeproj; path = "../Plug-ins/vCardAdbkIO/vCardAdbkIO.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AF52ED870AE2F8F600A75C72 /* LTableSelState.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LTableSelState.cp; sourceTree = "<group>"; };
 		AF52ED880AE2F8F600A75C72 /* LTableSelState.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LTableSelState.h; sourceTree = "<group>"; };
-		AF52EDD50AE322FA00A75C72 /* FSpCompat.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = FSpCompat.c; path = MoreFiles/Sources/FSpCompat.c; sourceTree = Mac_OS_Libraries; };
+		AF52EDD50AE322FA00A75C72 /* FSpCompat.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = FSpCompat.c; sourceTree = "<group>"; };
 		AF52EF1D0AE32EB200A75C72 /* 0bb21872.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 0bb21872.0; sourceTree = "<group>"; };
 		AF52EF1E0AE32EB200A75C72 /* 0c364b2d.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 0c364b2d.0; sourceTree = "<group>"; };
 		AF52EF1F0AE32EB200A75C72 /* 0e82f83a.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = 0e82f83a.0; sourceTree = "<group>"; };
@@ -1931,7 +1931,7 @@
 		AFCDD62F0AE164F300E30447 /* UScrap.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UScrap.h; sourceTree = "<group>"; };
 		AFCDD6300AE164F300E30447 /* UScreenPort.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UScreenPort.cp; sourceTree = "<group>"; };
 		AFCDD6310AE164F300E30447 /* UScreenPort.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UScreenPort.h; sourceTree = "<group>"; };
-		AFCDD6320AE164F300E30447 /* USessionPrinting.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = USessionPrinting.cp; path = "PowerPlant/Utility Classes/USessionPrinting.cp"; sourceTree = PowerPlant; };
+		AFCDD6320AE164F300E30447 /* USessionPrinting.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = USessionPrinting.cp; sourceTree = "<group>"; };
 		AFCDD6330AE164F300E30447 /* UTBAccessors.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UTBAccessors.h; sourceTree = "<group>"; };
 		AFCDD6340AE164F300E30447 /* UTextEdit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = UTextEdit.h; sourceTree = "<group>"; };
 		AFCDD6350AE164F300E30447 /* UTextTraits.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UTextTraits.cp; sourceTree = "<group>"; };
@@ -2018,17 +2018,17 @@
 		AFCDD9410AE1726B00E30447 /* SysCFXMLNode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysCFXMLNode.h; sourceTree = "<group>"; };
 		AFCDD9420AE1726B00E30447 /* SysCFXMLTree.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = SysCFXMLTree.cp; sourceTree = "<group>"; };
 		AFCDD9430AE1726B00E30447 /* SysCFXMLTree.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = SysCFXMLTree.h; sourceTree = "<group>"; };
-		AFCDDA780AE173C700E30447 /* DirectoryCopy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = DirectoryCopy.h; path = MoreFiles/CHeaders/DirectoryCopy.h; sourceTree = Mac_OS_Libraries; };
-		AFCDDA790AE173C700E30447 /* FileCopy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FileCopy.h; path = MoreFiles/CHeaders/FileCopy.h; sourceTree = Mac_OS_Libraries; };
-		AFCDDA7A0AE173C700E30447 /* FSpCompat.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FSpCompat.h; path = MoreFiles/CHeaders/FSpCompat.h; sourceTree = Mac_OS_Libraries; };
-		AFCDDA7B0AE173C700E30447 /* FullPath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = FullPath.h; path = MoreFiles/CHeaders/FullPath.h; sourceTree = Mac_OS_Libraries; };
-		AFCDDA7C0AE173C700E30447 /* IterateDirectory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = IterateDirectory.h; path = MoreFiles/CHeaders/IterateDirectory.h; sourceTree = Mac_OS_Libraries; };
+		AFCDDA780AE173C700E30447 /* DirectoryCopy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DirectoryCopy.h; sourceTree = "<group>"; };
+		AFCDDA790AE173C700E30447 /* FileCopy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FileCopy.h; sourceTree = "<group>"; };
+		AFCDDA7A0AE173C700E30447 /* FSpCompat.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FSpCompat.h; sourceTree = "<group>"; };
+		AFCDDA7B0AE173C700E30447 /* FullPath.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FullPath.h; sourceTree = "<group>"; };
+		AFCDDA7C0AE173C700E30447 /* IterateDirectory.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = IterateDirectory.h; sourceTree = "<group>"; };
 		AFCDDA7D0AE173C700E30447 /* MoreDesktopMgr.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MoreDesktopMgr.h; sourceTree = "<group>"; };
 		AFCDDA7E0AE173C700E30447 /* MoreFiles.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MoreFiles.h; sourceTree = "<group>"; };
 		AFCDDA7F0AE173C700E30447 /* MoreFilesExtras.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MoreFilesExtras.h; sourceTree = "<group>"; };
 		AFCDDA800AE173C700E30447 /* Search.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Search.h; sourceTree = "<group>"; };
 		AFCDDA810AE173C700E30447 /* MoreFilesReadMe */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = MoreFilesReadMe; sourceTree = "<group>"; };
-		AFCDDA860AE173C700E30447 /* FullPath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = FullPath.c; path = MoreFiles/Sources/FullPath.c; sourceTree = Mac_OS_Libraries; };
+		AFCDDA860AE173C700E30447 /* FullPath.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = FullPath.c; sourceTree = "<group>"; };
 		AFCDDA8A0AE173C700E30447 /* Optimization.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Optimization.h; sourceTree = "<group>"; };
 		AFCDDA8B0AE173C700E30447 /* OptimizationEnd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OptimizationEnd.h; sourceTree = "<group>"; };
 		AFCDDA9C0AE1751700E30447 /* MoreFilesX.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = MoreFilesX.c; sourceTree = "<group>"; };
@@ -3656,7 +3656,6 @@
 				20286C2AFDCF999611CA2CEA /* Sources */,
 				20286C2CFDCF999611CA2CEA /* Resources */,
 				AF52EF1B0AE32EB200A75C72 /* Plug-ins */,
-				AFCDE58D0AE1AF8B00E30447 /* Extras */,
 				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
 				195DF8CFFE9D517E11CA2CBB /* Products */,
 				AFD93B620AE5AA3D007F506F /* Plug-in Projects */,
@@ -4684,6 +4683,7 @@
 				AFCDD62F0AE164F300E30447 /* UScrap.h */,
 				AFCDD6300AE164F300E30447 /* UScreenPort.cp */,
 				AFCDD6310AE164F300E30447 /* UScreenPort.h */,
+				AFCDD6320AE164F300E30447 /* USessionPrinting.cp */,
 				AFCDD6330AE164F300E30447 /* UTBAccessors.h */,
 				AFCDD6340AE164F300E30447 /* UTextEdit.h */,
 				AFCDD6350AE164F300E30447 /* UTextTraits.cp */,
@@ -7443,14 +7443,6 @@
 			path = Sources/PPOverride;
 			sourceTree = SOURCE_ROOT;
 		};
-		AFCDE58D0AE1AF8B00E30447 /* Extras */ = {
-			isa = PBXGroup;
-			children = (
-				AFCDD6320AE164F300E30447 /* USessionPrinting.cp */,
-			);
-			name = Extras;
-			sourceTree = "<group>";
-		};
 		AFD93B550AE5AA10007F506F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -8844,7 +8836,6 @@
 				INFOPLIST_FILE = Packaging/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../ClientLibs/Libraries/XMLLib\"";
@@ -8889,7 +8880,6 @@
 				INFOPLIST_FILE = Packaging/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../ClientLibs/Libraries/XMLLib\"";
@@ -8917,7 +8907,6 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../ClientLibs/Libraries/XMLLib\"";
