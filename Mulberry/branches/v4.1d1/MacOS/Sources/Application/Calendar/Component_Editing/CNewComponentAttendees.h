@@ -59,7 +59,8 @@ protected:
 		eTable_ID = 'TABL',
 		eNewBtn_ID = 'NEWB',
 		eChangeBtn_ID = 'CHNB',
-		eDeleteBtn_ID = 'DELB'
+		eDeleteBtn_ID = 'DELB',
+		eAvailabilityBtn_ID = 'AVAI'
 	};
 
 	// UI Objects
@@ -71,6 +72,7 @@ protected:
 	LPushButton*		mNewBtn;
 	LPushButton*		mChangeBtn;
 	LPushButton*		mDeleteBtn;
+	LPushButton*		mAvailabilityBtn;
 
 	bool							mHasOrganizer;
 	bool							mOrganizerIsMe;
@@ -92,6 +94,7 @@ protected:
 			void		OnNew();
 			void		OnChange();
 			void		OnDelete();
+			void		OnAvailability();
 };
 
 #endif

@@ -33,7 +33,6 @@
 #include "CEditAddressDialog.h"
 #include "CErrorHandler.h"
 #include "CGroup.h"
-#include "CLocalAddressBook.h"
 #include "CMessage.h"
 #include "CPreferences.h"
 #include "CReplyChooseDialog.h"
@@ -932,7 +931,7 @@ void CAddressTable::AddAddressesFromList(CAddressList* addrs)
 		// Bring first item into view
 		ShowFirstSelection();
 		SetUpdateCommandStatus(true);
-		mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+		mDirty = false;
 	}
 }
 
@@ -950,7 +949,7 @@ void CAddressTable::ChangeAddressesFromList(CAddressList* old_addrs, CAddressLis
 	ResetTable();
 
 	SetUpdateCommandStatus(true);
-	mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+	mDirty = false;
 }
 
 // Delete from list
@@ -967,7 +966,7 @@ void CAddressTable::RemoveAddressesFromList(CAddressList* addrs)
 	ResetTable();
 
 	SetUpdateCommandStatus(true);
-	mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+	mDirty = false;
 }
 
 // Add selected addresses to list

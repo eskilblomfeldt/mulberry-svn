@@ -21,7 +21,8 @@
 #define __CADBKPROPDIALOG__MULBERRY__
 
 #include "CPropDialog.h"
-#include "CAdbkList.h"
+
+#include "CAddressBook.h"
 
 // Constants
 
@@ -48,7 +49,7 @@ public:
 					CAdbkPropDialog(LStream *inStream);
 	virtual 		~CAdbkPropDialog();
 
-	void	SetAdbkList(CFlatAdbkList* adbk_list);								// Set mbox list
+	void	SetAdbkList(CAddressBookList* adbk_list);								// Set mbox list
 
 protected:
 	virtual void	FinishCreateSelf(void);									// Do odds & ends
@@ -57,7 +58,7 @@ protected:
 	virtual void	DoPanelInit(void);										// About to display a panel
 
 private:
-	CFlatAdbkList*	mAdbkList;											// List of selected adbks
+	CAddressBookList*	mAdbkList;											// List of selected adbks
 };
 
 #endif

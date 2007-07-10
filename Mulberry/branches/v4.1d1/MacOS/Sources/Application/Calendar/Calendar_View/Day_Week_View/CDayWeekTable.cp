@@ -22,9 +22,11 @@
 #include "CGUtils.h"
 #include "CPreferences.h"
 #include "CTableColumnSelector.h"
+#include "CXStringResources.h"
 
 #include "CICalendarComponentExpanded.h"
 #include "CICalendarLocale.h"
+#include "CICalendarVFreeBusy.h"
 
 #include <LTableMultiGeometry.h>
 
@@ -654,6 +656,82 @@ void CDayWeekTable::AddTimedEvent(iCal::CICalendarComponentExpandedShared& veven
 	}
 }
 
+void CDayWeekTable::AddTimedFreeBusy(iCal::CICalendarComponent* vfreebusy)
+{
+	// Get the actual VFREEBUSY item
+	iCal::CICalendarVFreeBusy* fb = dynamic_cast<iCal::CICalendarVFreeBusy*>(vfreebusy);
+	if ((fb == NULL) || (fb->GetBusyTime() == NULL))
+		return;
+	
+	// Now look at each period
+	CDayEvent* prev_event = NULL;
+	for(iCal::CICalendarFreeBusyList::const_iterator iter1 = fb->GetBusyTime()->begin(); iter1 != fb->GetBusyTime()->end(); iter1++)
+	{
+		// Must be busy item
+		if ((*iter1).GetType() == iCal::CICalendarFreeBusy::eFree)
+			continue;
+
+		iCal::CICalendarDateTime dtstart((*iter1).GetPeriod().GetStart());
+		iCal::CICalendarDateTime dtend((*iter1).GetPeriod().GetEnd());
+
+		// Iterate over each cell and see if event should be in it
+		STableCell cell(cFirstTimedRow, 0);
+		bool starts_in_first_column = false;
+		bool ends_in_last_column = false;
+		for(cell.col = 2; cell.col <= mCols; cell.col++)
+		{
+			const iCal::CICalendarDateTime& cell_start = GetTimedStartDate(cell);
+			const iCal::CICalendarDateTime& cell_end = GetTimedEndDate(cell);
+
+			// First check that event actually spans this day
+			if ((dtend <= cell_start) || (dtstart >= cell_end))
+				continue;
+			
+			starts_in_first_column = ((*iter1).GetPeriod().GetStart() >= cell_start);
+			ends_in_last_column = ((*iter1).GetPeriod().GetEnd() <= cell_end);
+
+			Rect start_cellFrameQD;
+			HIRect start_cellFrame;
+			GetLocalCellRectAlways(cell, start_cellFrameQD);
+			CGUtils::QDToHIRect(start_cellFrameQD, start_cellFrame);
+
+			// Create new day event
+			CDayEvent* event = CDayEvent::Create(this, start_cellFrame);
+			event->Add_Listener(this);
+			
+			// For non-all day event that starts in this row, prepend its time to the title
+			cdstring summary;
+			if (starts_in_first_column && CPreferences::sPrefs->mDisplayTime.GetValue())
+			{
+				summary = (*iter1).GetPeriod().GetStart().GetAdjustedTime(mTimezone).GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+				summary += " ";
+				summary += rsrc::GetString("CDayWeekTable::Busy");
+			}
+			else
+				summary = rsrc::GetString("CDayWeekTable::Busy");
+		
+			// Now set event details
+			event->SetDetails(fb, (*iter1).GetPeriod(), this, summary.c_str(), false, starts_in_first_column, ends_in_last_column, false);
+			event->SetColumnSpan(1);
+
+			// Now link to previous one
+			if (prev_event)
+			{
+				event->SetPreviousLink(prev_event);
+				prev_event->SetNextLink(event);
+			}
+			prev_event = event;
+
+			// Add to list
+			mTimedEvents[cell.col - 2].push_back(event);
+			
+			// Now show it
+			PositionTimedEvent(event, cell, cell_start.GetPosixTime());
+			event->SetVisible(true);
+		}
+	}
+}
+
 void CDayWeekTable::PositionAllDayEvent(CDayEvent* event, const STableCell& cell, size_t offset)
 {
 	if ((event == NULL) || !IsValidCell(cell))
@@ -676,9 +754,8 @@ void CDayWeekTable::PositionTimedEvent(CDayEvent* event, const STableCell& cell,
 	if ((event == NULL) || !IsValidCell(cell))
 		return;
 	
-	const iCal::CICalendarComponentExpandedShared& vevent = event->GetVEvent();
-	int64_t start_secs = vevent->GetInstanceStart().GetPosixTime();
-	int64_t end_secs = vevent->GetInstanceEnd().GetPosixTime();
+	int64_t start_secs = event->GetInstancePeriod().GetStart().GetPosixTime();
+	int64_t end_secs = event->GetInstancePeriod().GetEnd().GetPosixTime();
 	
 	int64_t hours_in_column = (mRows - 1LL) / 2LL;
 	int64_t bottom_secs = top_secs + hours_in_column * 60LL * 60LL;
@@ -765,8 +842,8 @@ void CDayWeekTable::ColumnateEvents()
 		uint32_t col = 0;
 		for(CDayEventList::const_iterator iter = list.begin(); iter != list.end(); iter++)
 		{
-			data.push_back(SEventInfo(*iter, true, col++, (*iter)->GetVEvent()->GetInstanceStart().GetPosixTime()));
-			data.push_back(SEventInfo(*iter, false, col++, (*iter)->GetVEvent()->GetInstanceEnd().GetPosixTime()));
+			data.push_back(SEventInfo(*iter, true, col++, (*iter)->GetInstancePeriod().GetStart().GetPosixTime()));
+			data.push_back(SEventInfo(*iter, false, col++, (*iter)->GetInstancePeriod().GetEnd().GetPosixTime()));
 		}
 		
 		// Sort by posix time
@@ -901,8 +978,8 @@ void CDayWeekTable::ColumnateEvents()
 						if ((*iter2).mStarts)
 						{
 							CDayEvent* event2 = (*iter2).mEvent;
-							if ((event2->GetVEvent()->GetInstanceStart() != event->GetVEvent()->GetInstanceStart()) ||
-								(event2->GetVEvent()->GetInstanceEnd() != event->GetVEvent()->GetInstanceEnd()))
+							if ((event2->GetInstancePeriod().GetStart() != event->GetInstancePeriod().GetStart()) ||
+								(event2->GetInstancePeriod().GetEnd() != event->GetInstancePeriod().GetEnd()))
 							{
 								break;
 							}

@@ -65,6 +65,9 @@ void CEditAddressDialog::FinishCreateSelf(void)
 	// Do email address
 	mEmail = (CTextFieldX*) FindPaneByID(paneid_EditAddressEmail);
 
+	// Do calendar
+	mCalendar = (CTextFieldX*) FindPaneByID(paneid_EditAddressCalendar);
+	
 	// Do company
 	mCompany = (CTextFieldX*) FindPaneByID(paneid_EditAddressCompany);
 
@@ -97,6 +100,8 @@ void CEditAddressDialog::SetFields(const CAdbkAddress* addr, bool allow_edit)
 
 	mEmail->SetText(addr->GetEmail(CAdbkAddress::eDefaultEmailType));
 
+	mCalendar->SetText(addr->GetCalendar());
+
 	mCompany->SetText(addr->GetCompany());
 
 	mAddress->SetText(addr->GetAddress(CAdbkAddress::eDefaultAddressType));
@@ -118,6 +123,7 @@ void CEditAddressDialog::SetFields(const CAdbkAddress* addr, bool allow_edit)
 		mFullName->SetReadOnly(true);
 		mNickName->SetReadOnly(true);
 		mEmail->SetReadOnly(true);
+		mCalendar->SetReadOnly(true);
 		mCompany->SetReadOnly(true);
 		mAddress->SetReadOnly(true);
 		mURL->SetReadOnly(true);
@@ -159,6 +165,13 @@ bool CEditAddressDialog::GetFields(CAdbkAddress* addr)
 	if (test_addr != txt)
 	{
 		addr->SetEmail(txt, CAdbkAddress::eDefaultEmailType);
+		done_edit = true;
+	}
+
+	txt = mCalendar->GetText();
+	if (addr->GetCalendar() != txt)
+	{
+		addr->SetCalendar(txt);
 		done_edit = true;
 	}
 

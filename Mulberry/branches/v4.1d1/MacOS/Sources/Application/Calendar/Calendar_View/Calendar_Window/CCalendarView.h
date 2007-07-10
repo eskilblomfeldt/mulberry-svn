@@ -23,7 +23,15 @@
 #include "CDayWeekViewTimeRange.h"
 #include "CCalendarViewTypes.h"
 
+#include "CICalendarPeriod.h"
+
+#include "CCalendarStoreFreeBusy.h"
+
 #include "cdmutexprotect.h"
+
+#include "CICalendar.h"
+#include "CICalendarPeriod.h"
+#include "CICalendarProperty.h"
 
 namespace iCal
 {
@@ -101,6 +109,8 @@ public:
 	}
 	void SetCalendar(iCal::CICalendar* calendar);
 
+	void SetFreeBusy(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date);
+
 	CEventPreview*	GetPreview() const
 		{ return mPreview; }
 	void SetPreview(CEventPreview* preview);
@@ -131,6 +141,8 @@ protected:
 	uint32_t						mDayWeekScale;
 	NCalendarView::ESummaryType		mSummaryType;
 	NCalendarView::ESummaryRanges	mSummaryRange;
+	CDayWeekViewTimeRange::ERanges	mFreeBusyRange;
+	uint32_t						mFreeBusyScale;
 	bool							mSingleCalendar;
 	iCal::CICalendar*				mCalendar;
 	

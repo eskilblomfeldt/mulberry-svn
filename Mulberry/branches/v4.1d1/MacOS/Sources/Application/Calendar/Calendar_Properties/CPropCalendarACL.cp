@@ -64,9 +64,10 @@ void CPropCalendarACL::FinishCreateSelf(void)
 	// Get items
 	mCalendarPopup = (LPopupButton*) FindPaneByID(paneid_CalendarACLCalendarPopup);
 
-	mLookupMark = (LIconControl*) FindPaneByID(paneid_CalendarACLLookupMark);
+	mReadFreeBusyMark = (LIconControl*) FindPaneByID(paneid_CalendarACLReadFreeBusyMark);
 	mReadMark = (LIconControl*) FindPaneByID(paneid_CalendarACLReadMark);
 	mWriteMark = (LIconControl*) FindPaneByID(paneid_CalendarACLWriteMark);
+	mScheduleMark = (LIconControl*) FindPaneByID(paneid_CalendarACLScheduleMark);
 	mCreateMark = (LIconControl*) FindPaneByID(paneid_CalendarACLCreateMark);
 	mDeleteMark = (LIconControl*) FindPaneByID(paneid_CalendarACLDeleteMark);
 	mAdminMark = (LIconControl*) FindPaneByID(paneid_CalendarACLAdminMark);
@@ -184,12 +185,14 @@ void CPropCalendarACL::SetCal(calstore::CCalendarStoreNode* cal)
 // Set indicators from rights
 void CPropCalendarACL::SetMyRights(SACLRight rights)
 {
-	mLookupMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Lookup) ? ICNx_ACLSet : ICNx_ACLUnset);
-	mLookupMark->Refresh();
+	mReadFreeBusyMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_ReadFreeBusy) ? ICNx_ACLSet : ICNx_ACLUnset);
+	mReadFreeBusyMark->Refresh();
 	mReadMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Read) ? ICNx_ACLSet : ICNx_ACLUnset);
 	mReadMark->Refresh();
 	mWriteMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Write) ? ICNx_ACLSet : ICNx_ACLUnset);
 	mWriteMark->Refresh();
+	mScheduleMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Schedule) ? ICNx_ACLSet : ICNx_ACLUnset);
+	mScheduleMark->Refresh();
 	mCreateMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Create) ? ICNx_ACLSet : ICNx_ACLUnset);
 	mCreateMark->Refresh();
 	mDeleteMark->SetResourceID(rights.HasRight(CCalendarACL::eCalACL_Delete) ? ICNx_ACLSet : ICNx_ACLUnset);

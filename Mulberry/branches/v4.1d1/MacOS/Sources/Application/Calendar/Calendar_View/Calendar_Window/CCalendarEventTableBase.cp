@@ -26,6 +26,7 @@
 #include "CXStringResources.h"
 
 #include "CCalendarStoreManager.h"
+#include "CCalendarStoreNode.h"
 
 #include "CICalendarVEvent.h"
 #include "CITIPProcessor.h"
@@ -84,6 +85,10 @@ Boolean CCalendarEventTableBase::ObeyCommand(CommandT inCommand,void *ioParam)
 		OnInviteAttendees();
 		break;
 
+	case cmd_ProcessInvitation:
+		OnProcessInvitation();
+		break;
+		
 	default:
 		cmdHandled = CCalendarTableBase::ObeyCommand(inCommand, ioParam);
 		break;
@@ -158,6 +163,37 @@ void CCalendarEventTableBase::FindCommandStatus(
 				// See whether iTIP processing is needed for any ATTENDEEs in the component
 				if (iCal::CITIPProcessor::NeedsITIPRequest(**iter))
 					enabled = true;
+			}
+
+			outEnabled = enabled;
+		}
+		else
+			outEnabled = false;
+		break;
+
+	case cmd_ProcessInvitation:
+		// Can only send one at a time
+		if (mSelectedEvents.size() == 1)
+		{
+			// Look at all events
+			bool enabled = true;
+			
+			// Get the unqiue original components
+			iCal::CICalendarComponentRecurs vevents;
+			GetSelectedMasterEvents(vevents);
+			
+			// Edit each one
+			for(iCal::CICalendarComponentRecurs::const_iterator iter = vevents.begin(); iter != vevents.end(); iter++)
+			{
+				// See if event is in an Inbox
+				iCal::CICalendarRef calref = static_cast<iCal::CICalendarVEvent*>(*iter)->GetCalendar();
+				iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(calref);
+				const calstore::CCalendarStoreNode* node = calstore::CCalendarStoreManager::sCalendarStoreManager->GetNode(cal);
+				if ((cal == NULL) || cal->IsReadOnly() || (node == NULL) || !(node->IsInbox() || node->CanSchedule()))
+				{
+					enabled = false;
+					break;
+				}
 			}
 
 			outEnabled = enabled;

@@ -26,6 +26,10 @@
 #include "CWindowStatus.h"
 #include "CHelpTags.h"
 
+#include "CICalendar.h"
+#include "CICalendarPeriod.h"
+#include "CICalendarProperty.h"
+
 #include "cdmutexprotect.h"
 
 // Panes
@@ -66,6 +70,7 @@ public:
 	virtual 		~CCalendarWindow();
 
 	static void MakeWindow(calstore::CCalendarStoreNode* node);
+	static void CreateFreeBusyWindow(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date);
 	static void CreateSubscribedWindow();
 	static void CloseAllWindows();
 
@@ -111,6 +116,7 @@ protected:
 			void 	SetNode(calstore::CCalendarStoreNode* node);
 			void 	DeleteNode(calstore::CCalendarStoreNode* node);
 			void 	RefreshNode(calstore::CCalendarStoreNode* node);
+			void 	SetFreeBusy(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date);
 
 			void	ShowPreview(bool preview);
 };

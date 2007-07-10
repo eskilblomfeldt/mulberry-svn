@@ -74,6 +74,7 @@ class CMessageList;
 class CSplitterView;
 class CTextDisplay;
 class CFormattedTextDisplay;
+class CWebKitControl;
 
 class CMessageView : public CBaseView,
 						public LListener,
@@ -174,6 +175,8 @@ private:
 
 	LView*			mTextPane;							// Pane containing bottom splitter
 	CFormattedTextDisplay*	mText;						// The text
+	CWebKitControl*	mHTML;								// HTML text
+
 	LPopupButton*	mParseLevel;						// User selected parse level justin
 	LBevelButton*	mFontIncreaseBtn;					// Font increase button
 	LBevelButton*	mFontDecreaseBtn;					// Font decrease button

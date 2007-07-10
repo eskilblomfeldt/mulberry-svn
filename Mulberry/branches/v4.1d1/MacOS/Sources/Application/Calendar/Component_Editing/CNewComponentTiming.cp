@@ -353,6 +353,12 @@ void CNewComponentTiming::GetEvent(iCal::CICalendarVEvent& vevent)
 		vevent.EditRecurrenceSet(recurs);
 }
 
+void CNewComponentTiming::GetPeriod(iCal::CICalendarPeriod& period)
+{
+	// Do timing panel
+	static_cast<CNewEventTiming*>(mTimingPanel)->GetPeriod(period);
+}
+
 void CNewComponentTiming::GetToDo(iCal::CICalendarVToDo& vtodo)
 {
 	// Do timing panel

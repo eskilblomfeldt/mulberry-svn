@@ -320,14 +320,9 @@ HCmdButtonAttachment::SpendTime(
 bool
 HCmdButtonAttachment::IsCommandKeyPressed()
 {
-	// get the state of the keyboard
-	
-	KeyMap	theKeyMap;
-	::GetKeys(theKeyMap);
-	
 	// see if the command key is held down
 	
-	if (((UInt8*)theKeyMap)[6] & 0x80) {
+	if (::GetCurrentKeyModifiers() & cmdKey) {
 	
 		// if so, make sure we don't draw until mDelay has passed
 		

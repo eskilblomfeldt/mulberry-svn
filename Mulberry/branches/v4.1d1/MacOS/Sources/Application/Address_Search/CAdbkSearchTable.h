@@ -22,7 +22,7 @@
 
 #include "CHierarchyTableDrag.h"
 
-#include "CAdbkList.h"
+#include "CAddressBook.h"
 #include "CAddressBookManager.h"
 #include "cdstring.h"
 

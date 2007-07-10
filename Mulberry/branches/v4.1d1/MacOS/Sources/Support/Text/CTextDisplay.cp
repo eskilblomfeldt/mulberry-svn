@@ -727,14 +727,14 @@ void CTextDisplay::FindLine(SInt32 offset, SInt32* start, SInt32* end) const
 	unsigned long line = OffsetToLine(offset);
 	if (start != NULL)
 	{
-		if ((mLineCount == 0) || (GetTextLength() == 0))
+		if ((mLineCount == 0) || (GetTextLength() == 0) || (line == 0))
 			*start = 0;
 		else
 			*start = mLineBreaks[line - 1];
 	}
 	if (end != NULL)
 	{
-		if ((mLineCount == 0) || (GetTextLength() == 0))
+		if ((mLineCount == 0) || (GetTextLength() == 0) || (line == 0))
 			*end = 0;
 		else if (line < mLineCount - 1)
 			*end = mLineBreaks[line];

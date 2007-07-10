@@ -31,7 +31,7 @@
 class	CStaticText;
 class	LCheckBox;
 class	LPopupButton;
-class	CAddressDisplay;
+class	CCalendarAddressDisplay;
 
 class CNewAttendeeDialog : public LDialogBox
 {
@@ -56,12 +56,12 @@ protected:
 	};
 
 	// UI Objects
-	CAddressDisplay*	mNames;
-	LPopupButton*		mRolePopup;
-	LPopupButton*		mStatusPopup;
-	LCheckBox*			mRSVP;
-	bool				mITIPSent;
-	bool				mNewItem;
+	CCalendarAddressDisplay*	mNames;
+	LPopupButton*				mRolePopup;
+	LPopupButton*				mStatusPopup;
+	LCheckBox*					mRSVP;
+	bool						mITIPSent;
+	bool						mNewItem;
 
 	virtual void FinishCreateSelf(void);					// Do odds & ends
 

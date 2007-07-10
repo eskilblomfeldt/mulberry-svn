@@ -64,9 +64,10 @@ public:
 
 	void				ScaleRows(uint32_t scale);
 
-	void				AddEvents(iCal::CICalendarExpandedComponents& vevents);
+	void				AddItems(iCal::CICalendarExpandedComponents& vevents, iCal::CICalendarComponentList& vfreebusys);
 	void				AddAllDayEvent(iCal::CICalendarComponentExpandedShared& vevent);
 	void				AddTimedEvent(iCal::CICalendarComponentExpandedShared& vevent);
+	void				AddTimedFreeBusy(iCal::CICalendarComponent* vfreebusy);
 
 	const iCal::CICalendarDateTime&	GetCellStartDate(const STableCell& cell) const;
 	const iCal::CICalendarDateTime&	GetCellEndDate(const STableCell& cell) const;

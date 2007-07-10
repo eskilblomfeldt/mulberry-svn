@@ -29,6 +29,7 @@ const	PaneIDT		paneid_EditAddress = 9001;
 const	PaneIDT		paneid_EditAddressNickName = 'NICK';
 const	PaneIDT		paneid_EditAddressFullName = 'FULL';
 const	PaneIDT		paneid_EditAddressEmail = 'ADDR';
+const	PaneIDT		paneid_EditAddressCalendar = 'CALA';
 const	PaneIDT		paneid_EditAddressCompany = 'COMP';
 const	PaneIDT		paneid_EditAddressAddress = 'MADD';
 const	PaneIDT		paneid_EditAddressPhoneWork = 'WORK';
@@ -50,6 +51,7 @@ private:
 	CTextFieldX*		mNickName;
 	CTextFieldX*		mFullName;
 	CTextFieldX*		mEmail;
+	CTextFieldX*		mCalendar;
 	CTextFieldX*		mCompany;
 	CTextDisplay*		mAddress;
 	CTextDisplay*		mURL;

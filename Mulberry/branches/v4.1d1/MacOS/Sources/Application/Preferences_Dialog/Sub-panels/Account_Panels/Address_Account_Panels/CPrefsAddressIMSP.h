@@ -29,6 +29,8 @@
 const	PaneIDT		paneid_PrefsAddressIMSP = 5024;
 const	PaneIDT		paneid_AddressIMSPLoginAtStart = 'LOGO';
 const	PaneIDT		paneid_AddressIMSPDisconnected = 'DISC';
+const	PaneIDT		paneid_AddressIMSPBaseRURLText = 'RTXT';
+const	PaneIDT		paneid_AddressIMSPBaseRURL = 'RURL';
 
 // Mesages
 const	MessageT	msg_AddressIMSPDisconnected = 'DISC';
@@ -37,6 +39,7 @@ const	MessageT	msg_AddressIMSPDisconnected = 'DISC';
 const	ResIDT		RidL_CPrefsAddressIMSPBtns = 5024;
 
 // Classes
+class CTextFieldX;
 class LCheckBox;
 
 class	CPrefsAddressIMSP : public CPrefsTabSubPanel
@@ -44,6 +47,7 @@ class	CPrefsAddressIMSP : public CPrefsTabSubPanel
 private:
 	LCheckBox*		mLogonAtStartup;
 	LCheckBox*		mDisconnected;
+	CTextFieldX*	mBaseRURL;
 
 public:
 	enum { class_ID = 'Aisa' };

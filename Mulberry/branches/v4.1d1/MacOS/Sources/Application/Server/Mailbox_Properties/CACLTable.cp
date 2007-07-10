@@ -108,47 +108,47 @@ void CACLTable::DrawCell(const STableCell &inCell, const Rect &inLocalRect)
 
 	case 2:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Lookup : (mAdbk ? (long)CAdbkACL::eAdbkACL_Lookup : (long)CCalendarACL::eCalACL_Lookup)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Lookup : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Lookup : (ResIDT)CCalendarACL::eCalACL_ReadFreeBusy)) ? icon_on : icon_off;
 		break;
 
 	case 3:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Read : (mAdbk ? (long)CAdbkACL::eAdbkACL_Read : (long)CCalendarACL::eCalACL_Read)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Read : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Read : (ResIDT)CCalendarACL::eCalACL_Read)) ? icon_on : icon_off;
 		break;
 
 	case 4:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Seen : (mAdbk ? (long)CAdbkACL::eAdbkACL_Write : (long)CCalendarACL::eCalACL_Write)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Seen : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Write : (ResIDT)CCalendarACL::eCalACL_Write)) ? icon_on : icon_off;
 		break;
 
 	case 5:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Write : (mAdbk ? (long)CAdbkACL::eAdbkACL_Create : (long)CCalendarACL::eCalACL_Create)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Write : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Create : (ResIDT)CCalendarACL::eCalACL_Schedule)) ? icon_on : icon_off;
 		break;
 
 	case 6:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Insert : (mAdbk ? (long)CAdbkACL::eAdbkACL_Delete : (long)CCalendarACL::eCalACL_Delete)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Insert : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Delete : (ResIDT)CCalendarACL::eCalACL_Create)) ? icon_on : icon_off;
 		break;
 
 	case 7:
 		// Determine icon
-		icon = rights.HasRight(mMbox ? (long)CMboxACL::eMboxACL_Post : (mAdbk ? (long)CAdbkACL::eAdbkACL_Admin : (long)CCalendarACL::eCalACL_Admin)) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Post : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Admin : (ResIDT)CCalendarACL::eCalACL_Delete)) ? icon_on : icon_off;
 		break;
 
 	case 8:
 		// Determine icon
-		icon = rights.HasRight(CMboxACL::eMboxACL_Create) ? icon_on : icon_off;
+		icon = rights.HasRight(mMbox ? (ResIDT)CMboxACL::eMboxACL_Create : (ResIDT)CCalendarACL::eCalACL_Admin) ? icon_on : icon_off;
 		break;
 
 	case 9:
 		// Determine icon
-		icon = rights.HasRight(CMboxACL::eMboxACL_Delete) ? icon_on : icon_off;
+		icon = rights.HasRight((ResIDT)CMboxACL::eMboxACL_Delete) ? icon_on : icon_off;
 		break;
 
 	case 10:
 		// Determine icon
-		icon = rights.HasRight(CMboxACL::eMboxACL_Admin) ? icon_on : icon_off;
+		icon = rights.HasRight((ResIDT)CMboxACL::eMboxACL_Admin) ? icon_on : icon_off;
 		break;
 
 	default:
@@ -214,39 +214,39 @@ void CACLTable::ClickCell(const STableCell &inCell, const SMouseDownEvent &inMou
 	switch(inCell.col)
 	{
 	case 2:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Lookup : (mAdbk ? (long)CAdbkACL::eAdbkACL_Lookup : (long)CCalendarACL::eCalACL_Lookup));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Lookup : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Lookup : (ResIDT)CCalendarACL::eCalACL_ReadFreeBusy));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 3:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Read : (mAdbk ? (long)CAdbkACL::eAdbkACL_Read : (long)CCalendarACL::eCalACL_Read));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Read : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Read : (ResIDT)CCalendarACL::eCalACL_Read));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 4:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Seen : (mAdbk ? (long)CAdbkACL::eAdbkACL_Write : (long)CCalendarACL::eCalACL_Write));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Seen : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Write : (ResIDT)CCalendarACL::eCalACL_Write));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 5:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Write : (mAdbk ? (long)CAdbkACL::eAdbkACL_Create : (long)CCalendarACL::eCalACL_Create));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Write : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Create : (ResIDT)CCalendarACL::eCalACL_Schedule));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 6:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Insert : (mAdbk ? (long)CAdbkACL::eAdbkACL_Delete : (long)CCalendarACL::eCalACL_Delete));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Insert : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Delete : (ResIDT)CCalendarACL::eCalACL_Create));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 7:
-		right = (mMbox ? (long)CMboxACL::eMboxACL_Post : (mAdbk ? (long)CAdbkACL::eAdbkACL_Admin : (long)CCalendarACL::eCalACL_Admin));
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Post : (mAdbk ? (ResIDT)CAdbkACL::eAdbkACL_Admin : (ResIDT)CCalendarACL::eCalACL_Delete));
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 8:
-		right = CMboxACL::eMboxACL_Create;
+		right = (mMbox ? (ResIDT)CMboxACL::eMboxACL_Create : (ResIDT)CCalendarACL::eCalACL_Admin);
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 9:
-		right = CMboxACL::eMboxACL_Delete;
+		right = (ResIDT)CMboxACL::eMboxACL_Delete;
 		set = rights.HasRight(right) ? false : true;
 		break;
 	case 10:
-		right = CMboxACL::eMboxACL_Admin;
+		right = (ResIDT)CMboxACL::eMboxACL_Admin;
 		set = rights.HasRight(right) ? false : true;
 		break;
 	default:
@@ -279,7 +279,7 @@ void CACLTable::SetList(CCalendarACLList* aList, bool read_write)
 	// Create columns
 	if (!mCols)
 	{
-		InsertCols(7, 1, nil, 0, false);
+		InsertCols(8, 1, nil, 0, false);
 		AdaptToNewSurroundings();
 	}
 
@@ -354,13 +354,21 @@ void CACLTable::AdaptToNewSurroundings(void)
 		// Remaining columns have fixed width
 		SetColWidth(19, 2, 10);
 	}
-	else if (mAdbk || mCalendar)
+	else if (mAdbk)
 	{
 		// Name column has variable width
 		SetColWidth(mFrameSize.width - 114, 1, 1);
 
 		// Remaining columns have fixed width
 		SetColWidth(19, 2, 7);
+	}
+	else if (mCalendar)
+	{
+		// Name column has variable width
+		SetColWidth(mFrameSize.width - 133, 1, 1);
+		
+		// Remaining columns have fixed width
+		SetColWidth(19, 2, 8);
 	}
 
 }

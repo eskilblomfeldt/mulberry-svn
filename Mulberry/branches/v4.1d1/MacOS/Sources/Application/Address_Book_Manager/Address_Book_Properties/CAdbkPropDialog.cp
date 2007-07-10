@@ -20,13 +20,11 @@
 #include "CAdbkPropDialog.h"
 
 #include "CAddressBook.h"
-#include "CAdbkList.h"
 #include "CAdbkProtocol.h"
 #include "CMulberryApp.h"
 #include "CMulberryCommon.h"
 #include "CPropAdbkACL.h"
 #include "CPropAdbkGeneral.h"
-#include "CRemoteAddressBook.h"
 
 #include "MyCFString.h"
 
@@ -83,7 +81,7 @@ void CAdbkPropDialog::DoPanelInit(void)
 }
 
 // Set input panel
-void CAdbkPropDialog::SetAdbkList(CFlatAdbkList* adbk_list)
+void CAdbkPropDialog::SetAdbkList(CAddressBookList* adbk_list)
 {
 	mAdbkList = adbk_list;
 
@@ -102,9 +100,9 @@ void CAdbkPropDialog::SetAdbkList(CFlatAdbkList* adbk_list)
 	SetCFDescriptor(temp);
 
 	// Disable unwanted prefs panels
-	CRemoteAddressBook* radbk = dynamic_cast<CRemoteAddressBook*>(mAdbkList->front());
-	bool logged_in = radbk && radbk->GetProtocol()->IsLoggedOn();
-	if (!logged_in || !radbk->GetProtocol()->UsingACLs())
+	CAddressBook* adbk = mAdbkList->front();
+	bool logged_in = adbk->GetProtocol()->IsLoggedOn();
+	if (!logged_in || !adbk->GetProtocol()->UsingACLs())
 	{
 		LPane* btn = FindPaneByID(paneid_AdbkPropACLBtn);
 		btn->Disable();

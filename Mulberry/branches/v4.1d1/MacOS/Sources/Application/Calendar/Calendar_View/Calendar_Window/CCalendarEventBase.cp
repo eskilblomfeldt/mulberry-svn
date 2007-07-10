@@ -30,6 +30,7 @@
 
 #include "CCalendarStoreManager.h"
 #include "CICalendarUtils.h"
+#include "CICalendarVFreeBusy.h"
 #include "CITIPProcessor.h"
 
 #include "MyCFString.h"
@@ -42,6 +43,7 @@
 CCalendarEventBase::CCalendarEventBase(const SPaneInfo	&inPaneInfo) :
 	LPane(inPaneInfo)
 {
+	mVFreeBusy = NULL;
 	mTable = NULL;
 	mAllDay = true;
 	mStartsInCol = true;
@@ -131,6 +133,32 @@ void CCalendarEventBase::SetDetails(iCal::CICalendarComponentExpandedShared& eve
 	}
 }
 
+void CCalendarEventBase::SetDetails(iCal::CICalendarVFreeBusy* freebusy, const iCal::CICalendarPeriod& period, CCalendarTableBase* table, const char* title, bool all_day, bool start_col, bool end_col, bool horiz)
+{
+	mVFreeBusy = freebusy;
+	mPeriod = period;
+	mTable = table;
+
+	mTitle = MyCFString(title, kCFStringEncodingUTF8);
+	mAllDay = all_day;
+	mStartsInCol = start_col;
+	mEndsInCol = end_col;
+	mHoriz = horiz;
+	mIsCancelled = false;
+	mHasAlarm = false;
+	mAttendeeState = iCal::CITIPProcessor::GetAttendeeState(*mVFreeBusy);
+
+	// Setup a help tag
+	SetupTagText();
+	
+	// Determine colour
+	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVFreeBusy->GetCalendar());
+	if (cal)
+	{
+		mColour = calstore::CCalendarStoreManager::sCalendarStoreManager->GetCalendarColour(cal);
+	}
+}
+
 // Click
 void CCalendarEventBase::ClickSelf(const SMouseDownEvent &inMouseDown)
 {
@@ -174,7 +202,7 @@ void CCalendarEventBase::DrawSelf()
 
 	// Draw title
 	rect.origin.x += 3.0;
-	rect.size.width -= 3.0;
+	rect.size.width -= (mHoriz && mAllDay || IsFreeBusy()) ? 6.0 : 3.0;
 	Rect box;
 	CGUtils::HIToQDRect(rect, box);
 	if (box.bottom - box.top < 16)
@@ -183,11 +211,11 @@ void CCalendarEventBase::DrawSelf()
 		box.top -= height_adjust;
 		box.bottom = box.top + 16;
 	}
-	::CGContextSetGrayFillColor(inContext, mIsSelected ? 1.0 : 0.0, 1.0);
+	::CGContextSetGrayFillColor(inContext, mIsSelected && !IsFreeBusy() ? 1.0 : 0.0, 1.0);
 	MyCFString trunc(mTitle, kCFStringEncodingUTF8);
 	if (mHoriz)
 		::TruncateThemeText(trunc, kThemeSmallSystemFont, kThemeStateActive, rect.size.width, truncEnd, NULL);
-	::DrawThemeTextBox(trunc, kThemeSmallSystemFont, kThemeStateActive, !mHoriz, &box, mHoriz && mAllDay ? teJustCenter : teJustLeft, inContext);
+	::DrawThemeTextBox(trunc, kThemeSmallSystemFont, kThemeStateActive, !mHoriz, &box, (mHoriz && mAllDay || IsFreeBusy()) ? teJustCenter : teJustLeft, inContext);
 	
 	// Strike out text if status is cancelled
 	if (mIsCancelled)
@@ -299,16 +327,23 @@ void CCalendarEventBase::DrawHorizFrame(CGUtils::CGContextFromQD& inContext, HIR
 	float red = CGUtils::GetCGRed(mColour);
 	float green = CGUtils::GetCGGreen(mColour);
 	float blue = CGUtils::GetCGBlue(mColour);
+	float line_factor = IsFreeBusy() ? 1.0 : 0.6;
 	if (mIsSelected)
 	{
 		CGUtils::UnflattenColours(red, green, blue);
-		::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * 0.6, green * 0.6, blue * 0.6, 1.0);
+		if (IsFreeBusy())
+			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+		else
+			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
 	else
 	{
-		::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * 0.6, green * 0.6, blue * 0.6, 1.0);
+		if (IsFreeBusy())
+			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+		else
+			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
 	
 	::CGContextAddPath(inContext, path);
@@ -396,6 +431,9 @@ void CCalendarEventBase::DrawVertFrame(CGUtils::CGContextFromQD& inContext, HIRe
 
 	rect = ::CGRectInset(rect, 1.0, 1.0);
 
+	if (IsFreeBusy())
+		rect = ::CGRectInset(rect, 3.0, 3.0);
+	
 	float h_radius = rect.size.height >= 16 ? cRoundRadius : rect.size.height / 2.0;
 	float w_radius = rect.size.width >= 16 ? cRoundRadius : rect.size.width / 2.0;
 	float radius = std::min(h_radius, w_radius);
@@ -461,20 +499,33 @@ void CCalendarEventBase::DrawVertFrame(CGUtils::CGContextFromQD& inContext, HIRe
 	float red = CGUtils::GetCGRed(mColour);
 	float green = CGUtils::GetCGGreen(mColour);
 	float blue = CGUtils::GetCGBlue(mColour);
+	float line_factor = IsFreeBusy() ? 1.0 : 0.6;
 	if (mIsSelected)
 	{
 		CGUtils::UnflattenColours(red, green, blue);
-		::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * 0.6, green * 0.6, blue * 0.6, 1.0);
+		if (IsFreeBusy())
+			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+		else
+			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
 	else
 	{
-		::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * 0.6, green * 0.6, blue * 0.6, 1.0);
+		if (IsFreeBusy())
+			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+		else
+			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
+	
+	if (IsFreeBusy())
+		::CGContextSetLineWidth(inContext, 5.0);
 	
 	::CGContextAddPath(inContext, path);
 	::CGContextDrawPath(inContext, kCGPathFillStroke);
+
+	if (IsFreeBusy())
+		::CGContextSetLineWidth(inContext, 1.0);
 
 	// Check for now marker
 	if (mIsNow)

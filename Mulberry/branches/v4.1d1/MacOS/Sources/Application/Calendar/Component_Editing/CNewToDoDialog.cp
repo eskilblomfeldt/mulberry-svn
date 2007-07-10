@@ -326,6 +326,13 @@ cdstring CNewToDoDialog::GetCurrentSummary() const
 	return mSummary->GetText();
 }
 
+iCal::CICalendarRef CNewToDoDialog::GetCurrentCalendar() const
+{
+	iCal::CICalendarRef newcal;
+	mCalendar->GetCalendar(newcal);
+	return newcal;
+}
+
 void CNewToDoDialog::OnOK()
 {
 	bool result = true;

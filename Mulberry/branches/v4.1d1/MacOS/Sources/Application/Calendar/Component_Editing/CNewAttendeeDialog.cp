@@ -19,7 +19,7 @@
 
 #include "CNewAttendeeDialog.h"
 
-#include "CAddressDisplay.h"
+#include "CCalendarAddressDisplay.h"
 #include "CAddressList.h"
 #include "CBalloonDialog.h"
 #include "CMulberryApp.h"
@@ -65,7 +65,7 @@ void CNewAttendeeDialog::FinishCreateSelf(void)
 	LDialogBox::FinishCreateSelf();
 
 	// Get items
-	mNames = dynamic_cast<CAddressDisplay*>(FindPaneByID(eName_ID));
+	mNames = dynamic_cast<CCalendarAddressDisplay*>(FindPaneByID(eName_ID));
 	mRolePopup = dynamic_cast<LPopupButton*>(FindPaneByID(eRole_ID));
 	mRolePopup->SetValue(iCal::ePartRole_Required + 1);
 	mStatusPopup = dynamic_cast<LPopupButton*>(FindPaneByID(eStatus_ID));
@@ -112,23 +112,19 @@ void CNewAttendeeDialog::SetDetails(const iCal::CICalendarProperty& prop)
 	if (value != NULL)
 	{
 		// Get email address
-		cdstring temp = value->GetValue();
-		if (temp.compare_start("mailto:"))
-		{
-			temp.erase(0, 7);
+		cdstring temp = "<";
+		temp += value->GetValue();
+		temp += ">";
 
-			// Get CN
-			if (prop.HasAttribute(iCal::cICalAttribute_CN))
+		// Get CN
+		if (prop.HasAttribute(iCal::cICalAttribute_CN))
+		{
+			cdstring cntxt = prop.GetAttributeValue(iCal::cICalAttribute_CN);
+			if (cntxt.length() > 0)
 			{
-				cdstring cntxt = prop.GetAttributeValue(iCal::cICalAttribute_CN);
-				if (cntxt.length() > 0)
-				{
-					cntxt += " <";
-					cntxt += temp;
-					cntxt += ">";
-					temp = cntxt;
-				}
-				
+				cntxt += " ";
+				cntxt += temp;
+				temp = cntxt;
 			}
 		}
 		
@@ -218,16 +214,15 @@ void CNewAttendeeDialog::GetDetails(iCal::CICalendarProperty& prop)
 // Get the details
 void CNewAttendeeDialog::GetDetails(iCal::CICalendarPropertyList& proplist)
 {
-	auto_ptr<CAddressList> addrs(mNames->GetAddresses());
+	auto_ptr<CCalendarAddressList> addrs(mNames->GetAddresses());
 
-	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
+	for(CCalendarAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 	{
-		// Convert name into mailto
-		cdstring mailto = cMailtoURLScheme;
-		mailto += (*iter)->GetMailAddress();
+		// Get calendar user address
+		cdstring addr = (*iter)->GetCalendarAddress();
 
 		// Create a new property
-		iCal::CICalendarProperty newprop(iCal::cICalProperty_ATTENDEE, mailto, iCal::CICalendarValue::eValueType_CalAddress);
+		iCal::CICalendarProperty newprop(iCal::cICalProperty_ATTENDEE, addr, iCal::CICalendarValue::eValueType_CalAddress);
 
 		// Add attributes
 		{

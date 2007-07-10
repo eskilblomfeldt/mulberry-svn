@@ -72,6 +72,7 @@ void CNewACLDialog::FinishCreateSelf(void)
 	mSeenBtn = (LBevelButton*) FindPaneByID(paneid_NewACLSeenBtn);
 	mWriteBtn = (LBevelButton*) FindPaneByID(paneid_NewACLWriteBtn);
 	mInsertBtn = (LBevelButton*) FindPaneByID(paneid_NewACLInsertBtn);
+	mScheduleBtn = (LBevelButton*) FindPaneByID(paneid_NewACLScheduleBtn);
 	mPostBtn = (LBevelButton*) FindPaneByID(paneid_NewACLPostBtn);
 	mCreateBtn = (LBevelButton*) FindPaneByID(paneid_NewACLCreateBtn);
 	mDeleteBtn = (LBevelButton*) FindPaneByID(paneid_NewACLDeleteBtn);
@@ -97,10 +98,15 @@ void CNewACLDialog::SetDetails(bool mbox, bool adbk, bool cal)
 	mCalendar = cal;
 
 	// Remove unwanted buttons
-	if (!mMbox)
+	if (mMbox)
+	{
+		mScheduleBtn->Hide();
+	}
+	if (mAdbk)
 	{
 		mSeenBtn->Hide();
 		mInsertBtn->Hide();
+		mScheduleBtn->Hide();
 		mPostBtn->Hide();
 
 		// Move others
@@ -108,6 +114,19 @@ void CNewACLDialog::SetDetails(bool mbox, bool adbk, bool cal)
 		mCreateBtn->MoveBy(-3*cAdbkStyleBtnMove, 0, false);
 		mDeleteBtn->MoveBy(-3*cAdbkStyleBtnMove, 0, false);
 		mAdminBtn->MoveBy(-3*cAdbkStyleBtnMove, 0, false);
+	}
+	if (mCalendar)
+	{
+		mSeenBtn->Hide();
+		mInsertBtn->Hide();
+		mPostBtn->Hide();
+		
+		// Move others
+		mWriteBtn->MoveBy(-cAdbkStyleBtnMove, 0, false);
+		mScheduleBtn->MoveBy(-cAdbkStyleBtnMove, 0, false);
+		mCreateBtn->MoveBy(-2*cAdbkStyleBtnMove, 0, false);
+		mDeleteBtn->MoveBy(-2*cAdbkStyleBtnMove, 0, false);
+		mAdminBtn->MoveBy(-2*cAdbkStyleBtnMove, 0, false);
 	}
 
 	// Force style popup to proper type
@@ -122,18 +141,6 @@ void CNewACLDialog::ListenToMessage(
 	switch (inMessage) {
 		case msg_ACLStylePopup:
 			DoStylePopup(*(long*) ioParam);
-			break;
-
-		case msg_ACLLookupBtn:
-		case msg_ACLReadBtn:
-		case msg_ACLSeenBtn:
-		case msg_ACLWriteBtn:
-		case msg_ACLInsertBtn:
-		case msg_ACLPostBtn:
-		case msg_ACLCreateBtn:
-		case msg_ACLDeleteBtn:
-		case msg_ACLAdminBtn:
-			// Do nothing!
 			break;
 
 		default:
@@ -168,9 +175,10 @@ void CNewACLDialog::SetACL(SACLRight rights)
 	}
 	else
 	{
-		mLookupBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Lookup));
+		mLookupBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_ReadFreeBusy));
 		mReadBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Read));
 		mWriteBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Write));
+		mScheduleBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Schedule));
 		mCreateBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Create));
 		mDeleteBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Delete));
 		mAdminBtn->SetValue(rights.HasRight(CCalendarACL::eCalACL_Admin));
@@ -226,11 +234,13 @@ SACLRight CNewACLDialog::GetRights(void)
 	{
 		// Get ACL state from buttons
 		if (mLookupBtn->GetValue() == 1)
-			rights.SetRight(CCalendarACL::eCalACL_Lookup, true);
+			rights.SetRight(CCalendarACL::eCalACL_ReadFreeBusy, true);
 		if (mReadBtn->GetValue() == 1)
 			rights.SetRight(CCalendarACL::eCalACL_Read, true);
 		if (mWriteBtn->GetValue() == 1)
 			rights.SetRight(CCalendarACL::eCalACL_Write, true);
+		if (mScheduleBtn->GetValue() == 1)
+			rights.SetRight(CCalendarACL::eCalACL_Schedule, true);
 		if (mCreateBtn->GetValue() == 1)
 			rights.SetRight(CCalendarACL::eCalACL_Create, true);
 		if (mDeleteBtn->GetValue() == 1)
@@ -320,7 +330,7 @@ CCalendarACLList* CNewACLDialog::GetDetailsCal(void)
 	{
 		// Make new ACL
 		CCalendarACL acl;
-		acl.SetUID(s);
+		acl.SetSmartUID(s);
 		acl.SetRights(rights);
 
 		// Add to list

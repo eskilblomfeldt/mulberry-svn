@@ -123,6 +123,7 @@ void CDayWeekPrintout::SetDetails(const iCal::CICalendarDateTime& date, CDayWeek
 	
 	// Get events in the range
 	iCal::CICalendarExpandedComponents vevents;
+	iCal::CICalendarComponentList vfreebusy;
 	iCal::CICalendarPeriod period(dtstart, dtend);
 	
 	// Only do visible calendars
@@ -132,9 +133,10 @@ void CDayWeekPrintout::SetDetails(const iCal::CICalendarDateTime& date, CDayWeek
 		for(iCal::CICalendarList::const_iterator iter = cals.begin(); iter != cals.end(); iter++)
 		{
 			(*iter)->GetVEvents(period, vevents);
+			(*iter)->GetVFreeBusy(period, vfreebusy);
 		}
 	}
 	
 	// Add events to table
-	mTable->AddEvents(vevents);
+	mTable->AddItems(vevents, vfreebusy);
 }

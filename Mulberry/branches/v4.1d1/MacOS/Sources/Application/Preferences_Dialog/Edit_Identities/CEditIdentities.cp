@@ -45,7 +45,8 @@ enum
 	tabt_Sender,
 	tabt_Options,
 	tabt_Outgoing,
-	tabt_Security
+	tabt_Security,
+	tabt_Calendar
 };
 
 enum
@@ -112,7 +113,7 @@ void CEditIdentities::FinishCreateSelf(void)
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddress);
 		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_From - 1);
-		panel->SetAddressType(true, false, false, false, false, false);
+		panel->SetAddressType(true, false, false, false, false, false, false);
 		mFromEnabled = true;
 	}
 	if (CAdminLock::sAdminLock.mLockIdentityReplyTo)
@@ -123,8 +124,8 @@ void CEditIdentities::FinishCreateSelf(void)
 	else
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddress);
-		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_ReplyTo - (mFromEnabled ? 0 : 1) - 1);
-		panel->SetAddressType(false, true, false, false, false, false);
+		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_ReplyTo - removed - 1);
+		panel->SetAddressType(false, true, false, false, false, false, false);
 		mReplyToEnabled = true;
 	}
 	if (CAdminLock::sAdminLock.mLockIdentitySender)
@@ -135,8 +136,8 @@ void CEditIdentities::FinishCreateSelf(void)
 	else
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddress);
-		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_Sender - (mFromEnabled ? 0 : 1) - (mReplyToEnabled ? 0 : 1) - 1);
-		panel->SetAddressType(false, false, true, false, false, false);
+		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_Sender - removed - 1);
+		panel->SetAddressType(false, false, true, false, false, false, false);
 		mSenderEnabled = true;
 	}
 	mTabs->AddPanel(paneid_EditIdentityOptions);
@@ -145,6 +146,18 @@ void CEditIdentities::FinishCreateSelf(void)
 		mTabs->AddPanel(paneid_EditIdentitySecurity);
 	else
 		mTabs->RemoveTabButtonAt(tabt_Security - removed++);
+	if (CAdminLock::sAdminLock.mLockIdentityFrom)
+	{
+		mTabs->RemoveTabButtonAt(tabt_Calendar - removed++);
+		mCalendarEnabled = false;
+	}
+	else
+	{
+		mTabs->AddPanel(paneid_EditIdentityAddress);
+		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(tabt_Calendar - removed - 1);
+		panel->SetAddressType(false, false, false, false, false, false, true);
+		mCalendarEnabled = true;
+	}
 
 	StartListening();
 

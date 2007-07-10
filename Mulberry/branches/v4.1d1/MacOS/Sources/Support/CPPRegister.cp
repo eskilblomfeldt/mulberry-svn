@@ -53,6 +53,7 @@
 #include "CBounceActionDialog.h"
 #include "CBrowseMailboxDialog.h"
 #include "CCacheMessageDialog.h"
+#include "CCalendarAddressDisplay.h"
 #include "CCalendarPaneOptions.h"
 #include "CCalendarPopup.h"
 #include "CCalendarPropDialog.h"
@@ -106,6 +107,10 @@
 #include "CFormattedTextDisplay.h"
 #include "CForwardActionDialog.h"
 #include "CForwardOptionsDialog.h"
+#include "CFreeBusyPrintout.h"
+#include "CFreeBusyView.h"
+#include "CFreeBusyTable.h"
+#include "CFreeBusyTitleTable.h"
 #include "CGetPassphraseDialog.h"
 #include "CGetStringDialog.h"
 #include "CGroupPreview.h"
@@ -322,6 +327,8 @@
 #include "CVacationActionDialog.h"
 #include "CViewCertDialog.h"
 #include "CVisualProgress.h"
+#include "CWebKitControl.h"
+#include "CWebKitControlImp.h"
 #include "CWindowOptionsDialog.h"
 #include "CYearPopup.h"
 #include "CYearPrintout.h"
@@ -433,6 +440,7 @@ void RegisterClasses(void)
 	RegisterClass_(CBounceActionDialog);
 	RegisterClass_(CBrowseMailboxDialog);
 	RegisterClass_(CCacheMessageDialog);
+	RegisterClass_(CCalendarAddressDisplay);
 	RegisterClass_(CCalendarPaneOptions);
 	RegisterClass_(CCalendarPopup);
 	RegisterClass_(CCalendarPropDialog);
@@ -486,6 +494,10 @@ void RegisterClasses(void)
 	RegisterClass_(CFormattedTextDisplay);
 	RegisterClass_(CForwardActionDialog);
 	RegisterClass_(CForwardOptionsDialog);
+	RegisterClass_(CFreeBusyPrintout);
+	RegisterClass_(CFreeBusyView);
+	RegisterClass_(CFreeBusyTable);
+	RegisterClass_(CFreeBusyTitleTable);
 	RegisterClass_(CGetPassphraseDialog);
 	RegisterClass_(CGetStringDialog);
 	RegisterClass_(CGroupPreview);
@@ -703,6 +715,7 @@ void RegisterClasses(void)
 	RegisterClass_(CUserPswdDialog);
 	RegisterClass_(CVacationActionDialog);
 	RegisterClass_(CViewCertDialog);
+	RegisterClass_(CWebKitControl);
 	RegisterClass_(CWindowOptionsDialog);
 	RegisterClass_(CYearPopup);
 	RegisterClass_(CYearPrintout);
@@ -727,6 +740,8 @@ void RegisterClasses(void)
 	RegisterClass_(C3PanePreview);
 	RegisterClass_(C3PaneWindow);
 	RegisterClass_(HCmdButtonAttachment);
+
+	RegisterClassID_(CWebKitControlImp,		 CWebKitControl::imp_class_ID);
 
 	// Derived attachments
 	RegisterClass_(CHelpAttach);

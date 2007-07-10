@@ -200,11 +200,8 @@ bool CChangePswdDialog::PromptPasswordChange(const CINETAccount* acct,
 		}
 		else if (hitMessage == msg_Nothing)
 		{
-			bool current_caps_lock;
-			KeyMap km;
-			::GetKeys(km);			// Get keyboard state
 			// Check for caps lock
-			current_caps_lock = ((((unsigned char*) km)[0x39>>3] >> (0x39 & 7) ) & 1);
+			bool current_caps_lock = ::GetCurrentKeyModifiers() & alphaLock;
 			if (current_caps_lock != caps_lock)
 			{
 				((CChangePswdDialog*) theHandler.GetDialog())->CapsLockChange(current_caps_lock);

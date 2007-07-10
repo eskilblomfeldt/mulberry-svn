@@ -38,7 +38,7 @@ public:
 	virtual void	SetTwister(LDisclosureTriangle* twister)
 						{ mTwister = twister; }
 
-	virtual CAddressList*	GetAddresses();
+	virtual CAddressList*	GetAddresses(bool qualify = true);
 
 	static void		AllowResolve(bool allow)
 						{ sResolve = allow; }
@@ -62,7 +62,7 @@ private:
 	bool						mResolving;
 	static bool	sResolve;
 
-			void	ResolveAddresses();
+			void	ResolveAddresses(bool qualify = true);
 			void	ExpandAddress();
 			bool	ExpandAddressText(cdstring& expand, cdstrvect& results);
 };

@@ -146,7 +146,7 @@ void CAddressDisplay::DontBeTarget(void)
 	CAddressText::DontBeTarget();
 }
 
-CAddressList* CAddressDisplay::GetAddresses()
+CAddressList* CAddressDisplay::GetAddresses(bool qualify)
 {
 	// Always resolve addresses if still active
 	if (!mResolving && IsActive())
@@ -154,7 +154,7 @@ CAddressList* CAddressDisplay::GetAddresses()
 		try
 		{
 			StValueChanger<bool> _change(mResolving, true);
-			ResolveAddresses();
+			ResolveAddresses(qualify);
 		}
 		catch(...)
 		{
@@ -169,7 +169,7 @@ CAddressList* CAddressDisplay::GetAddresses()
 	return new CAddressList(txt, txt.length());
 }
 
-void CAddressDisplay::ResolveAddresses(void)
+void CAddressDisplay::ResolveAddresses(bool qualify)
 {
 	// Resolve addresses
 	cdstring orig_text;
@@ -219,7 +219,8 @@ void CAddressDisplay::ResolveAddresses(void)
 		}
 
 		// Qualify remainder
-		list->QualifyAddresses(CPreferences::sPrefs->mMailDomain.GetValue());
+		if (qualify)
+			list->QualifyAddresses(CPreferences::sPrefs->mMailDomain.GetValue());
 		bool twist = (list->size() > 1);
 
 		{

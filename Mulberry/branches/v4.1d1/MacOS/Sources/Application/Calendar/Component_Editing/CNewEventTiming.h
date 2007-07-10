@@ -46,6 +46,7 @@ public:
 
 	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
+			void    GetPeriod(iCal::CICalendarPeriod& period);
 
 	virtual void	SetReadOnly(bool read_only);
 

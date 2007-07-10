@@ -58,6 +58,7 @@ public:
 	virtual void		ListenTo_Message(long msg, void* param);
 	virtual void		ListenToMessage(MessageT inMessage, void *ioParam);
 
+	iCal::CICalendarRef GetCurrentCalendar() const;
 			cdstring	GetCurrentSummary() const;
 
 protected:

@@ -169,7 +169,6 @@ const	ResIDT		ICNx_AdbkSearchAddress = 9011;
 const	ResIDT		ICNx_AdbkAddress = 9011;
 const	ResIDT		ICNx_AdbkGroup = 9012;
 const	ResIDT		ICNx_AddressBook = 9013;
-const	ResIDT		ICNx_AddressBookCached = 9015;
 const	ResIDT		ICNx_AddressBookUncached = 9016;
 
 const	ResIDT		ICNx_AdbkSearched = 9551;

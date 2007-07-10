@@ -23,7 +23,7 @@
 #include "CHierarchyTableDrag.h"
 #include "CListener.h"
 
-#include "CAdbkList.h"
+#include "CAddressBook.h"
 #include "cdstring.h"
 
 // Consts
@@ -43,7 +43,6 @@ class CAddressBook;
 class CAddressBookManager;
 class CAddressBookWindow;
 class CKeyModifiers;
-class CRemoteAddressBook;
 
 class CAdbkManagerTable : public CHierarchyTableDrag, public CListener
 {
@@ -54,13 +53,11 @@ private:
 	CAddressBookManager*	mManager;				// Manager controlling window
 	CAdbkManagerView*		mTableView;				// Owner view
 	bool					mListChanging;			// In the process of changing the list
-	vector<void*>			mData;					// data
+	vector<CAddressBook*>	mData;					// data
 	short					mHierarchyCol;			// Column containing names
-	bool					mHasOthers;				// Indicates 'Other' item exists
 	bool					mDropFirst;				// Indicates first item in drop
 	bool					mDropSort;				// Drop with sort
 	CAddressBook*			mDropAdbk;				// Address book to drop into
-	CRemoteAddressBook*		mDropRemoteAdbk;		// Remote address book opened
 	CAddressBookWindow*		mDropAdbkWnd;			// Address book window dropped onto
 	bool					mAddressAdded;			// Indicates address added
 	bool					mGroupAdded;			// Indicates group added
@@ -89,6 +86,7 @@ public:
 	virtual void		ListenTo_Message(long msg, void* param);	// Respond to list changes
 
 private:
+	bool TestSelectionServer(TableIndexT row);						// Test for selected servers only
 	bool TestSelectionAdbk(TableIndexT row);						// Test for selected adbk
 	bool TestSelectionAdbkDisconnected(TableIndexT row);			// Test for selected adbk
 	bool TestSelectionAdbkClearDisconnected(TableIndexT row);		// Test for selected adbk
@@ -117,7 +115,9 @@ public:
 	virtual void		ExpandRow(TableIndexT inWideOpenRow);
 	virtual void		DeepExpandRow(TableIndexT inWideOpenRow);
 
-	virtual void		ProcessExpansion(TableIndexT inWideOpenRow, bool expand);
+			void		ProcessExpansion(TableIndexT inWideOpenRow, bool expand);
+			void		ExpandRestore(TableIndexT worow);
+			void		ExpandAction(TableIndexT worow, bool deep);
 
 	void	SetManager(CAddressBookManager* manager);			// Set the mail server
 
@@ -144,18 +144,12 @@ protected:
 	bool	RenameAddressBook(TableIndexT row);						// Rename a specified address book
 
 	void	OnDeleteAddressBook();
-	bool	DeleteAddressBook(TableIndexT row);						// Delete a specified address book
 
 	void	OnSearchAddressBook();									// Search address books
 
-	void	OnLoginAddressBook();
-	bool	LoginAddressBook(TableIndexT row);						// Logon to servers
-
-	void	OnLogoutAddressBook();
-	bool	LogoutAddressBook(TableIndexT row);						// Logoff servers
+	void	OnLogin();
 
 	void	OnRefreshAddressBook();
-	bool	RefreshAddressBook(TableIndexT row);					// Refresh server list
 
 	void	OnSynchroniseAddressBook();
 	bool	SynchroniseAddressBook(TableIndexT row);				// Synchronise address book
@@ -164,22 +158,18 @@ protected:
 	bool	ClearDisconnectAddressBook(TableIndexT row);			// ClearDisconnected address book
 
 private:
-	bool	IsCellAdbk(TableIndexT row);							// Check for adbk
-	CAdbkList::node_type*	GetCellNode(TableIndexT row);			// Get the selected node
-	CAddressBook*	GetCellAdbk(TableIndexT row);					// Get the selected adbk
-	CAdbkProtocol*	GetCellAdbkProtocol(TableIndexT row);			// Get the selected adbk protocol
-
-	ResIDT	GetPlotIcon(const CAdbkList::node_type* node,
+	ResIDT	GetPlotIcon(const CAddressBook* adbk,
 									CAdbkProtocol* proto);			// Get appropriate icon id
-	void	SetTextStyle(const CAdbkList::node_type* node,
+	void	SetTextStyle(const CAddressBook* adbk,
 							CAdbkProtocol* proto, bool& strike);	// Get appropriate text style
-	bool 	UsesBackgroundColor(const CAdbkList::node_type* node) const;
-	const RGBColor& GetBackgroundColor(const CAdbkList::node_type* node) const;
+	bool 	UsesBackgroundColor(const STableCell &inCell) const;
+	const RGBColor& GetBackgroundColor(const STableCell &inCell) const;
 
-	void*	GetCellData(TableIndexT woRow);							// Get the selected adbk
+	CAddressBook*	GetCellNode(TableIndexT row, bool worow = false) const;			// Get the selected node
+	CAdbkProtocol*	GetCellAdbkProtocol(TableIndexT row) const;					// Get the selected adbk protocol
 
 	bool	AddSelectionToList(TableIndexT row,
-										CFlatAdbkList* list);		// Add selected address books to list
+										CAddressBookList* list);		// Add selected address books to list
 
 public:
 	virtual void	ResetTable();								// Reset the table
@@ -188,18 +178,26 @@ public:
 									SInt32 inTopDelta,
 									Boolean inRefresh);				// Keep titles in sync
 
-	virtual void	AddNode(const CAdbkList::node_type* node,
+			void	AddNode(CAddressBook* adbk,
 							TableIndexT& row, bool child, bool refresh = false);	// Add a node to the list
-	virtual void	AddChildren(const CAdbkList::node_type* node,
+			void	AddChildren(const CAddressBook* adbk,
 							TableIndexT& parent_row, bool refresh = false);			// Add child nodes to the list
-	virtual void	RemoveChildren(TableIndexT& parent_row, bool refresh = false);	// Remove child nodes from the list
+			void	RemoveChildren(TableIndexT& parent_row, bool refresh = false);	// Remove child nodes from the list
 	virtual void	RemoveRows(UInt32 inHowMany, TableIndexT inFromRow, Boolean inRefresh);
 
 			void	AddProtocol(CAdbkProtocol* proto);
+			void	InsertProtocol(CAdbkProtocol* proto);
 			void	RemoveProtocol(CAdbkProtocol* proto);
 			void	ClearProtocol(CAdbkProtocol* proto);
 			void	RefreshProtocol(CAdbkProtocol* proto);
-			void	LogoffProtocol(CAdbkProtocol* proto);
+			void	SwitchProtocol(CAdbkProtocol* proto);
+
+			void	InsertNode(CAddressBook* node);					// Insert a node to the list
+			void	DeleteNode(CAddressBook* node);					// Delete a node from the list
+			void	RefreshNode(CAddressBook* node);				// Refresh a node from the list
+
+			void	ClearSubList(CAddressBook* node);
+			void	RefreshSubList(CAddressBook* node);
 
 // Drag methods
 protected:

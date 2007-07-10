@@ -1775,15 +1775,8 @@ void CMailboxTable::DoDragSendData(
 
 		// Check message size first
 #if 0	// Will crash if GA alert shown during D&D
-		if (((CMessage*) inItemRef)->CheckSizeWarning())
-		{
-			bool dontshow = false;
-			short answer = CErrorHandler::PutCautionAlertRsrc(true, "Alerts::Message::WarnSize", 0, &dontshow);
-			if (dontshow)
-				CPreferences::sPrefs->mDoSizeWarn.SetValue(false);
-			if (answer == CErrorHandler::Cancel)
-				return false;
-		}
+		if (!CMailControl::CheckSizeWarning(((CMessage*) inItemRef)), true)
+			return false;
 #endif
 
 		// Read in message first

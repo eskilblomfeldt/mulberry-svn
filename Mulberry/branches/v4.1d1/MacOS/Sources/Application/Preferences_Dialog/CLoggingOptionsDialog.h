@@ -46,6 +46,7 @@ const	PaneIDT		paneid_LoggingOptionsAppDir = 'ADIR';
 const	PaneIDT		paneid_LoggingOptionsUserDir = 'UDIR';
 
 const MessageT		msg_LoggingOptionsFlush = 'FLSH';
+const MessageT		msg_LoggingOptionsClear = 'CLEA';
 
 // Resources
 const	ResIDT		RidL_CLoggingOptionsDialog = 5500;

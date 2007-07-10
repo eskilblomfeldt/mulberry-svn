@@ -58,6 +58,7 @@ void CPropCalendarOptions::FinishCreateSelf(void)
 
 	// Get items
 	mSubscribe = (LCheckBox*) FindPaneByID(paneid_CalendarOptionsSubscribe);
+	mFreeBusySet = (LCheckBox*) FindPaneByID(paneid_CalendarOptionsFreeBusySet);
 	mTieIdentity = (LCheckBox*) FindPaneByID(paneid_CalendarOptionsTieIdentity);
 	mIdentityPopup = (CIdentityPopup*) FindPaneByID(paneid_CalendarOptionsIdentityPopup);
 	mIdentityPopup->Reset(CPreferences::sPrefs->mIdentities.GetValue());
@@ -79,6 +80,16 @@ void CPropCalendarOptions::ListenToMessage(
 			for(calstore::CCalendarStoreNodeList::iterator iter = mCalList->begin(); iter != mCalList->end(); iter++)
 			{
 				calstore::CCalendarStoreManager::sCalendarStoreManager->SubscribeNode(*iter, !(*iter)->IsSubscribed());
+			}
+		}
+			break;
+			
+	case msg_COFreeBusySet:
+		{
+			// Iterate over all Calendars
+			for(calstore::CCalendarStoreNodeList::iterator iter = mCalList->begin(); iter != mCalList->end(); iter++)
+			{
+				//calstore::CCalendarStoreManager::sCalendarStoreManager->SubscribeNode(*iter, !(*iter)->IsSubscribed());
 			}
 		}
 		break;
@@ -151,6 +162,7 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 
 	int first_type = -1;
 	int subscribe = 0;
+	int freebusyset = 0;
 	int multiple_tied = 0;
 	bool first = true;
 	bool all_directory = true;
@@ -162,6 +174,9 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 		// Only valid id not a directory
 		if (!node->IsDirectory() && node->IsSubscribed())
 			subscribe++;
+
+		if (node->IsStandardCalendar() && node->GetProtocol()->IsComponentCalendar())
+			freebusyset++;
 
 		CIdentity* id = const_cast<CIdentity*>(CPreferences::sPrefs->mTiedCalendars.GetValue().GetTiedCalIdentity(*iter));
 		if (first)
@@ -197,6 +212,9 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 	{
 		mSubscribe->Disable();
 	}
+	
+	if (freebusyset == 0)
+		mFreeBusySet->Disable();
 
 	if (multiple_tied)
 	{

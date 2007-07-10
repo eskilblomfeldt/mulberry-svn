@@ -53,6 +53,7 @@
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
 #include "CWaitCursor.h"
+#include "CWebKitControl.h"
 #include "C3PaneMailboxToolbar.h"
 #include "C3PaneWindow.h"
 
@@ -70,6 +71,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <strstream>
+
+//#define USE_HTML
 
 // __________________________________________________________________________________________________
 // C L A S S __ C M E S S A G E W I N D O W
@@ -236,12 +239,19 @@ void CMessageView::FinishCreateSelf()
 	// Make text edit the target
 	mText = (CFormattedTextDisplay*) FindPaneByID(paneid_MessageText);
 	SetLatentSub(mText);
-	//::WEFeatureFlag(weFUndo, weBitClear, mText->GetWEReference());
 	mText->SetTextTraits(CPreferences::sPrefs->mDisplayTextTraits.GetValue().traits);
 	mText->SetSpacesPerTab(CPreferences::sPrefs->spaces_per_tab.GetValue());
 	mText->SetTabSelectAll(false);
 	mText->SetFindAllowed(true);
 	mText->Add_Listener(this);
+
+	mHTML = (CWebKitControl*) FindPaneByID(paneid_MessageHTML);
+#ifdef USE_HTML
+	mHTML->Hide();
+	mHTML->Disable();
+#else
+	delete mHTML;
+#endif
 
 	// Allow extended keyboard actions
 	mText->AddAttachment(new CSpaceBarAttachment(this, mText));
@@ -1544,6 +1554,10 @@ void CMessageView::SetSecretPane(const CMessageCryptoInfo& info)
 			{
 				mTextPane->ResizeFrameBy(0, -moveby, false);
 				mTextPane->MoveBy(0, moveby, true);
+#ifdef USE_HTML
+				mHTML->ResizeFrameBy(0, -moveby, false);
+				mHTML->MoveBy(0, moveby, true);
+#endif
 			}
 			mSecurePane->ResizeFrameBy(0, moveby, true);
 		}
@@ -1554,6 +1568,10 @@ void CMessageView::SetSecretPane(const CMessageCryptoInfo& info)
 			{
 				mTextPane->ResizeFrameBy(0, moveby, false);
 				mTextPane->MoveBy(0, -moveby, true);
+#ifdef USE_HTML
+				mHTML->ResizeFrameBy(0, moveby, false);
+				mHTML->MoveBy(0, -moveby, true);
+#endif
 			}
 		}
 
@@ -1670,10 +1688,22 @@ void CMessageView::ResetText()
 		// Set selection at start
 		mText->SetSelectionRange(0, 0);
 
-//		if ((actual_content == eContentSubEnriched) || (actual_content == eContentSubHTML))
-//			mText->WEAllowStyles(true);
-//		else
-//			mText->WEAllowStyles(false);
+#ifdef USE_HTML
+		if ((actual_content == eContentSubHTML) && (actual_view == eViewFormatted))
+		{
+			mHTML->Show();
+			mHTML->Enable();
+			mTextPane->Hide();
+			cdustring data(mUTF16Text.get());
+			mHTML->SetData(data.ToUTF8());
+		}
+		else
+		{
+			mHTML->Hide();
+			mHTML->Disable();
+			mTextPane->Show();
+		}
+#endif
 	}
 
 	// Finally force redraw with text scrolled to top
@@ -2482,6 +2512,10 @@ void CMessageView::ShowSecretPane(bool show)
 		// Shrink/move text pane
 		mTextPane->ResizeFrameBy(0, -moveby, false);
 		mTextPane->MoveBy(0, moveby, false);
+#ifdef USE_HTML
+		mHTML->ResizeFrameBy(0, -moveby, false);
+		mHTML->MoveBy(0, moveby, false);
+#endif
 
 		// Show parts after all other changes
 		mSecurePane->Show();
@@ -2494,6 +2528,10 @@ void CMessageView::ShowSecretPane(bool show)
 		// Expand/move splitter
 		mTextPane->ResizeFrameBy(0, moveby, false);
 		mTextPane->MoveBy(0, -moveby, false);
+#ifdef USE_HTML
+		mHTML->ResizeFrameBy(0, moveby, false);
+		mHTML->MoveBy(0, -moveby, false);
+#endif
 	}
 
 	mShowSecure = show;

@@ -28,10 +28,13 @@
 
 // Panes
 const	PaneIDT		paneid_CreateAdbkDialog = 9513;
+const	PaneIDT		paneid_CrMkAdbk = 'CALS';
+const	PaneIDT		paneid_CrMkCol = 'CADR';
 const	PaneIDT		paneid_CrAdbk = 'NAME';
 const	PaneIDT		paneid_CrAdbkType = 'TYPE';
-const	PaneIDT		paneid_CrAdbkPersonal = 'PERS';
-const	PaneIDT		paneid_CrAdbkGlobal = 'GLOB';
+const	PaneIDT		paneid_CrAdbkFullPath = 'FULL';
+const	PaneIDT		paneid_CrAdbkUseDirectory = 'CDIR';
+const	PaneIDT		paneid_CrAdbkHierarchy = 'HIER';
 const	PaneIDT		paneid_CrAdbkMover = 'MOVE';
 const	PaneIDT		paneid_CrAdbkAccountBox = 'ACCB';
 const	PaneIDT		paneid_CrAdbkAccount = 'ACCT';
@@ -42,6 +45,10 @@ const	PaneIDT		paneid_CrAdbkUseSearch = 'SRCH';
 
 // Mesages
 const	MessageT	msg_CrAdbkAccountPopup = 'ACCP';
+const	MessageT	msg_CrAdbkMkAdbk = 'CALS';
+const	MessageT	msg_CrAdbkMkCol = 'CADR';
+const	MessageT	msg_CrAdbkSetFullPath = 7000;
+const	MessageT	msg_CrAdbkSetUseDirectory = 7001;
 
 // Resources
 const	ResIDT		RidL_CCreateAdbkDialogBtns = 9513;
@@ -56,10 +63,12 @@ class	CStaticText;
 class	CCreateAdbkDialog : public LDialogBox
 {
 private:
+	LRadioButton*		mMkAdbk;
+	LRadioButton*		mMkCol;
 	CTextFieldX*		mAdbkName;
-	LPane*				mTypeGroup;
-	LRadioButton*		mPersonal;
-	LRadioButton*		mGlobal;
+	LRadioButton*		mFullPath;
+	LRadioButton*		mUseDirectory;
+	CStaticText*		mHierarchy;
 	LView*				mMover;
 	LView*				mAccountBox;
 	CStaticText*		mAccount;
@@ -68,17 +77,16 @@ private:
 	LCheckBox*			mUseNicknames;
 	LCheckBox*			mUseSearch;
 
-	bool				mHasLocal;
-	bool				mHasRemote;
-
 public:
 	enum { class_ID = 'CrAb' };
 
 	struct SCreateAdbk
 	{
 		cdstring	name;
-		bool		personal;
+		cdstring	parent;
 		cdstring	account;
+		bool		directory;
+		bool		use_wd;
 		bool		open_on_startup;
 		bool		use_nicknames;
 		bool		use_search;
@@ -94,8 +102,6 @@ public:
 
 protected:
 	virtual void	FinishCreateSelf(void);					// Do odds & ends
-
-			void	OnChangeAccount(long index);
 
 	void SetDetails(SCreateAdbk* create);
 	void GetDetails(SCreateAdbk* result);

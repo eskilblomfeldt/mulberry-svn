@@ -155,7 +155,7 @@ Boolean CCalendarStoreTable::ObeyCommand(CommandT inCommand,void *ioParam)
 	case cmd_ToolbarDetailsBtn:
 		if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionServer))
 			OnServerProperties();
-		else if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendar))
+		else if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendarStoreNode))
 			OnCalendarProperties();
 		break;
 
@@ -229,7 +229,7 @@ void CCalendarStoreTable::FindCommandStatus(
 	}
 	case cmd_FileExport:
 	{
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendar);
+		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
 		LStr255 txt(STRx_Standards, str_ExportCalendar);
 		::PLstrcpy(outName, txt);
 		break;
@@ -275,7 +275,7 @@ void CCalendarStoreTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = node->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
+					outMark = node->GetProtocol()->IsLoggedOn() ? checkMark : noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 2.2 (as above)
@@ -295,7 +295,7 @@ void CCalendarStoreTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = !node->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
+					outMark = !node->GetProtocol()->IsDisconnected() ? checkMark : noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 3.2 (as above)
@@ -326,7 +326,7 @@ void CCalendarStoreTable::FindCommandStatus(
 	case cmd_FreeBusyCalendar:
 	case cmd_SendCalendar:
 		// Only if calendar selection;
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendar);
+		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
 		break;
 
 	case cmd_RefreshCalendarList:
@@ -458,7 +458,7 @@ void CCalendarStoreTable::ClickCell(const STableCell& inCell, const SMouseDownEv
 		calstore::CCalendarStoreNode* node = GetCellNode(inCell.row);
 
 		// Check for actual calendars
-		if (!inMouseDown.delaySelect && !node->IsProtocol() && !node->IsDirectory())
+		if (!inMouseDown.delaySelect && node->IsViewableCalendar())
 		{
 			switch(col_info.column_type)
 			{
@@ -618,7 +618,7 @@ void CCalendarStoreTable::DrawCell(const STableCell &inCell, const Rect &inLocal
 		iconRect.top = iconRect.bottom - 16;
 
 		// Do status flag
-		if (!node->IsProtocol() && !node->IsDirectory())
+		if (node->IsViewableCalendar())
 		{
 			if (node->IsCached())
 			{
@@ -693,7 +693,15 @@ ResIDT CCalendarStoreTable::GetPlotIcon(const calstore::CCalendarStoreNode* node
 	}
 	else
 	{
-		return node->IsCached() ? 1807 : 1817;
+		if (node->IsCached())
+			if (node->IsInbox())
+				return 1823;
+			else if (node->IsOutbox())
+				return 1824;
+			else
+				return 1807;
+		else
+			return 1817;
 	}
 }
 
@@ -912,6 +920,9 @@ bool CCalendarStoreTable::ValidDragSelection() const
 			
 			got_server = 1;
 		}
+		else if (node->IsInbox() || node->IsOutbox())
+			// Cannot operate on Inbox/Outbox
+			got_calendar = 2;
 		else
 			got_calendar = 1;
 
@@ -941,7 +952,7 @@ void CCalendarStoreTable::AddCellToDrag(CDragIt* theDragTask, const STableCell& 
 		data = node->GetProtocol();
 		flavor = cDragCalServerType;
 	}
-	else
+	else if (!node->IsInbox() && !node->IsOutbox())
 	{
 		// Dragging mailbox
 		data = node;
@@ -1046,17 +1057,17 @@ bool CCalendarStoreTable::IsDropCell(DragReference inDragRef, STableCell theCell
 		case cDragCalendarItemType:
 		{
 			// Drop into valid calendars only
-			return !node->IsProtocol() && !node->IsDirectory();
+			return node->IsViewableCalendar();
 		}
 		case cDragCalServerType:
 			// Servers always moved
 			return false;
 		case cDragCalendarType:
 		{
-			if (node->IsProtocol())
+			if (node->IsProtocol() || node->IsInbox() || node->IsOutbox())
 				return false;
 			else
-				// Allow drop into any calendar (directory = move, mbox = copy)
+				// Allow drop into any calendar (directory = move, calendar = copy)
 				return true;
 		}
 		default:
@@ -1166,7 +1177,7 @@ void CCalendarStoreTable::DropDataIntoCell(FlavorType theFlavor, char* drag_data
 
 		// Get drop cell type
 		calstore::CCalendarStoreNode* node = GetCellNode(theCell.row);
-		if (!node->IsProtocol())
+		if (!node->IsProtocol() && !node->IsInbox() && !node->IsOutbox())
 		{
 			CDragCalendarIntoCalendarTask* task = dynamic_cast<CDragCalendarIntoCalendarTask*>(CDragTask::GetCurrentDragTask());
 			if (task == NULL)

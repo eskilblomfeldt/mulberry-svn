@@ -32,12 +32,13 @@
 const	PaneIDT		paneid_PropCalendarACL = 1845;
 const	PaneIDT		paneid_CalendarACLCalendarPopup = 'CALE';
 const	PaneIDT		paneid_CalendarACLTable = 'TABL';
-const	PaneIDT		paneid_CalendarACLLookupMark = 'IND1';
+const	PaneIDT		paneid_CalendarACLReadFreeBusyMark = 'IND1';
 const	PaneIDT		paneid_CalendarACLReadMark = 'IND2';
 const	PaneIDT		paneid_CalendarACLWriteMark = 'IND3';
-const	PaneIDT		paneid_CalendarACLCreateMark = 'IND4';
-const	PaneIDT		paneid_CalendarACLDeleteMark = 'IND5';
-const	PaneIDT		paneid_CalendarACLAdminMark = 'IND6';
+const	PaneIDT		paneid_CalendarACLScheduleMark = 'IND4';
+const	PaneIDT		paneid_CalendarACLCreateMark = 'IND5';
+const	PaneIDT		paneid_CalendarACLDeleteMark = 'IND6';
+const	PaneIDT		paneid_CalendarACLAdminMark = 'IND7';
 const	PaneIDT		paneid_CalendarACLNewUserBtn = 'NEWU';
 const	PaneIDT		paneid_CalendarACLDeleteUserBtn = 'DELU';
 const	PaneIDT		paneid_CalendarACLStylePopup = 'STYL';
@@ -91,9 +92,10 @@ protected:
 	
 private:
 	LPopupButton*	mCalendarPopup;
-	LIconControl*	mLookupMark;
+	LIconControl*	mReadFreeBusyMark;
 	LIconControl*	mReadMark;
 	LIconControl*	mWriteMark;
+	LIconControl*	mScheduleMark;
 	LIconControl*	mCreateMark;
 	LIconControl*	mDeleteMark;
 	LIconControl*	mAdminMark;

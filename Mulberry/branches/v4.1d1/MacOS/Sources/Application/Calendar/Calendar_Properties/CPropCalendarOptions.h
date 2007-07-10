@@ -28,6 +28,7 @@
 const	PaneIDT		paneid_PropCalendarOptions = 1841;
 const	PaneIDT		paneid_CalendarOptionsState = 'ICON';
 const	PaneIDT		paneid_CalendarOptionsSubscribe = 'SUBS';
+const	PaneIDT		paneid_CalendarOptionsFreeBusySet = 'FREE';
 const	PaneIDT		paneid_CalendarOptionsTieIdentity = 'IDAC';
 const	PaneIDT		paneid_CalendarOptionsIdentityPopup = 'IDEN';
 
@@ -36,6 +37,7 @@ const ResIDT	RidL_CPropCalendarOptionsBtns = 1841;
 
 // Mesages
 const	MessageT	msg_COSubscribe = 'SUBS';
+const	MessageT	msg_COFreeBusySet = 'FREE';
 const	MessageT	msg_COTieIdentity = 'IDAC';
 const	MessageT	msg_COIdentityPopup = 'IDEN';
 
@@ -51,6 +53,7 @@ class CPropCalendarOptions : public CCalendarPropPanel,
 private:
 	LIconControl*		mIconState;
 	LCheckBox*			mSubscribe;
+	LCheckBox*			mFreeBusySet;
 	LCheckBox*			mTieIdentity;
 	CIdentityPopup*		mIdentityPopup;
 

@@ -52,6 +52,7 @@ public:
 
 	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
+	virtual void	GetPeriod(iCal::CICalendarPeriod& period);
 
 	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);

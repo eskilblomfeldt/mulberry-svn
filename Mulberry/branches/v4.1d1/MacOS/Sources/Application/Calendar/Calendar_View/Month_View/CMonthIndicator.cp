@@ -287,12 +287,12 @@ void CMonthIndicator::DrawCellScreen(const STableCell &inCell, const Rect &inLoc
 	SInt16 just;
 	if (inCell.row == 1)
 	{
-		// Draw a circle around the number if not priting
+		// Draw a circle around the number if not printing
 		::CGContextBeginPath(inContext);
 		::CGContextAddArc(inContext, adjustedRect.origin.x + adjustedRect.size.width / 2.0, adjustedRect.origin.y + adjustedRect.size.width / 2.0, adjustedRect.size.width / 2.0, 0.0, 2.0 * pi, 0);
+		::CGContextClosePath(inContext);
 		::CGContextSetRGBFillColor(inContext, 0.75, 0.5, 0.25, 1.0);
 		::CGContextFillPath(inContext);
-		::CGContextClosePath(inContext);
 
 		uint32_t day_of_week = (inCell.col - 1 + CPreferences::sPrefs->mWeekStartDay.GetValue()) % 7;
 		temp = MyCFString(iCal::CICalendarLocale::GetDay(day_of_week, iCal::CICalendarLocale::eAbbreviated), kCFStringEncodingUTF8);

@@ -78,6 +78,9 @@ void CTimezonePopup::NoFloating()
 	MenuRef menu = GetMacMenuH();
 	::DeleteMenuItems(menu, eNoTimezone, 1);
 	mNoFloating = true;
+	
+	// Always start with the current user default
+	SetTimezone(iCal::CICalendarManager::sICalendarManager->GetDefaultTimezone());
 }
 
 void CTimezonePopup::SetTimezone(const iCal::CICalendarTimezone& tz)

@@ -24,7 +24,6 @@
 #include "CAddressBookManager.h"
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
-#include "CRemoteAddressBook.h"
 #include "CResources.h"
 #include "CTextFieldX.h"
 
@@ -104,7 +103,7 @@ void CPropAdbkGeneral::ListenToMessage(
 }
 
 // Set adbk list
-void CPropAdbkGeneral::SetAdbkList(CFlatAdbkList* adbk_list)
+void CPropAdbkGeneral::SetAdbkList(CAddressBookList* adbk_list)
 {
 	// Save list
 	mAdbkList = adbk_list;
@@ -117,16 +116,16 @@ void CPropAdbkGeneral::SetAdbkList(CFlatAdbkList* adbk_list)
 // Set mbox list
 void CPropAdbkGeneral::SetAddressBook(CAddressBook* adbk)
 {
-	CRemoteAddressBook* radbk = dynamic_cast<CRemoteAddressBook*>(adbk);
-
 	// Do icon state
-	if (radbk && radbk->GetProtocol()->CanDisconnect())
-		mIconState->SetResourceID(radbk->GetProtocol()->IsDisconnected() ? icnx_MailboxStateDisconnected : icnx_MailboxStateRemote);
+	if (adbk && adbk->GetProtocol()->CanDisconnect())
+		mIconState->SetResourceID(adbk->GetProtocol()->IsDisconnected() ? icnx_MailboxStateDisconnected : icnx_MailboxStateRemote);
+#ifdef _TODO
 	else if (adbk->IsLocalAdbk())
 	{
 		mIconState->SetResourceID(icnx_MailboxStateLocal);
 		mAutoSync->Disable();
 	}
+#endif
 	else
 	{
 		mIconState->SetResourceID(icnx_MailboxStateRemote);
@@ -136,16 +135,7 @@ void CPropAdbkGeneral::SetAddressBook(CAddressBook* adbk)
 	// Copy text to edit fields
 	mName->SetText(adbk->GetName());
 
-	if (!radbk)
-	{
-		cdstring temp;
-		temp.FromResource("UI::AdbkProps::StateLocal");
-		mServer->SetText(temp);
-	}
-	else
-	{
-		mServer->SetText(radbk->GetProtocol()->GetDescriptor());
-	}
+	mServer->SetText(adbk->GetProtocol()->GetDescriptor());
 
 	if (adbk->IsOpen())
 	{
@@ -173,7 +163,7 @@ void CPropAdbkGeneral::ApplyChanges(void)
 void CPropAdbkGeneral::OnCheckOpenAtStart(bool set)
 {
 	// Iterate over all adbks
-	for(CFlatAdbkList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
+	for(CAddressBookList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
 	{
 		(*iter)->SetFlags(CAddressBook::eOpenOnStart, set);
 		CAddressBookManager::sAddressBookManager->SyncAddressBook(*iter, set);
@@ -186,7 +176,7 @@ void CPropAdbkGeneral::OnCheckOpenAtStart(bool set)
 void CPropAdbkGeneral::OnCheckNickName(bool set)
 {
 	// Iterate over all adbks
-	for(CFlatAdbkList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
+	for(CAddressBookList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
 	{
 		(*iter)->SetFlags(CAddressBook::eLookup, set);
 		CAddressBookManager::sAddressBookManager->SyncAddressBook(*iter, set);
@@ -199,7 +189,7 @@ void CPropAdbkGeneral::OnCheckNickName(bool set)
 void CPropAdbkGeneral::OnCheckSearch(bool set)
 {
 	// Iterate over all adbks
-	for(CFlatAdbkList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
+	for(CAddressBookList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
 	{
 		(*iter)->SetFlags(CAddressBook::eSearch, set);
 		CAddressBookManager::sAddressBookManager->SyncAddressBook(*iter, set);
@@ -212,7 +202,7 @@ void CPropAdbkGeneral::OnCheckSearch(bool set)
 void CPropAdbkGeneral::OnCheckAutoSync(bool set)
 {
 	// Iterate over all adbks
-	for(CFlatAdbkList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
+	for(CAddressBookList::iterator iter = mAdbkList->begin(); iter != mAdbkList->end(); iter++)
 	{
 		(*iter)->SetFlags(CAddressBook::eAutoSync, set);
 		CAddressBookManager::sAddressBookManager->SyncAddressBook(*iter, set);

@@ -75,9 +75,12 @@ void CLoggingOptionsDialog::ListenToMessage(
 {
 	switch (inMessage)
 	{
-	case msg_LoggingOptionsFlush:
-		CLog::FlushLogs();
-		break;
+		case msg_LoggingOptionsFlush:
+			CLog::FlushLogs();
+			break;
+		case msg_LoggingOptionsClear:
+			CLog::ClearLogs();
+			break;
 	}
 }
 // Set options in dialog

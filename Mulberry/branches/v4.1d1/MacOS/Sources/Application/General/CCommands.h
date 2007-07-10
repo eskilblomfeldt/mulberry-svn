@@ -393,8 +393,6 @@ const	CommandT	cmd_RenameAddressBook = 9002;
 const	CommandT	cmd_ImportAddressBook = 9003;
 const	CommandT	cmd_ExportAddressBook = 9004;
 const	CommandT	cmd_DeleteAddressBook = 9005;
-const	CommandT	cmd_LogonAddressBook = 9006;
-const	CommandT	cmd_LogoffAddressBook = 9007;
 const	CommandT	cmd_RefreshAddressBook = 9008;
 const	CommandT	cmd_SearchAddressBook = 9009;
 const	CommandT	cmd_AddressBookManager = 9010;
@@ -434,6 +432,8 @@ const	CommandT	cmd_CompletedToDo = 9605;
 const	CommandT	cmd_GotoToday = 9606;
 const	CommandT	cmd_GotoDate = 9607;
 const	CommandT	cmd_InviteAttendees = 9608;
+const	CommandT	cmd_ProcessInvitation = 9609;
+
 
 // Messages
 

@@ -57,17 +57,17 @@ void CEditIdentityOutgoing::FinishCreateSelf(void)
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddressOutgoing);
 		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(0);
-		panel->SetAddressType(false, false, false, true, false, false);
+		panel->SetAddressType(false, false, false, true, false, false, false);
 	}
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddressOutgoing);
 		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(1);
-		panel->SetAddressType(false, false, false, false, true, false);
+		panel->SetAddressType(false, false, false, false, true, false, false);
 	}
 	{
 		mTabs->AddPanel(paneid_EditIdentityAddressOutgoing);
 		CEditIdentityAddress* panel = (CEditIdentityAddress*) mTabs->GetPanel(2);
-		panel->SetAddressType(false, false, false, false, false, true);
+		panel->SetAddressType(false, false, false, false, false, true, false);
 	}
 	mTabs->AddPanel(paneid_EditIdentityDSN);
 	mTabs->SetDisplayPanel(1);

@@ -83,6 +83,7 @@ private:
 	bool				mFromEnabled;
 	bool				mReplyToEnabled;
 	bool				mSenderEnabled;
+	bool				mCalendarEnabled;
 };
 
 #endif

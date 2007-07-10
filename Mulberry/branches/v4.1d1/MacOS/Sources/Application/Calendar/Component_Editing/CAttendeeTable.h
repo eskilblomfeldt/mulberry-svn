@@ -45,6 +45,8 @@ public:
 								const STableCell		&inCell,
 								const SMouseDownEvent	&inMouseDown);
 
+	virtual	void		GetTooltipText(cdstring& txt, const STableCell &inCell);				// Get text for current tooltip cell
+
 	virtual void		SelectionChanged();
 
 			void		ResetTable(const iCal::CICalendarPropertyList* items);

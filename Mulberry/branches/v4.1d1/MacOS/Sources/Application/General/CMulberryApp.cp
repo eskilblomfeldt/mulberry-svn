@@ -33,7 +33,6 @@
 #include "CActionManager.h"
 #include "CAdbkManagerWindow.h"
 #include "CAdbkSearchWindow.h"
-#include "CAddressBookDoc.h"
 #include "CAddressBookWindow.h"
 #include "CAdminLock.h"
 #include "CApplyRulesMenu.h"
@@ -51,7 +50,6 @@
 #include "CHelpMenuAttachment.h"
 #include "CICSupport.h"
 #include "CLetterWindow.h"
-#include "CLocalAddressBook.h"
 #include "CMacroEditDialog.h"
 #include "CMailAccountManager.h"
 #include "CMulberryAE.h"
@@ -422,16 +420,14 @@ void CMulberryApp::DoQuit(SInt32 inSaveOption)
 	// Look for locked quit
 	else if (CAdminLock::sAdminLock.mNoQuit)
 	{
-		// Look for option key
-		KeyMap km;
-		::GetKeys(km);			// Get keyboard state
 		// Check for option key
-		bool optionKey = (( ((unsigned char*) km)[0x3A>>3] >> (0x3A & 7) ) & 1);
-		bool shiftKey = (( ((unsigned char*) km)[0x38>>3] >> (0x38 & 7) ) & 1);
-		bool cmdKey = (( ((unsigned char*) km)[0x37>>3] >> (0x37 & 7) ) & 1);
+		UInt32 modifiers = ::GetCurrentKeyModifiers();
+		bool option_key = modifiers & optionKey;
+		bool shift_key = modifiers & shiftKey;
+		bool cmd_key = modifiers & cmdKey;
 
 		// See if allowed to quit by existing docs
-		if ((!optionKey || !shiftKey || !cmdKey) && AttemptQuit(inSaveOption))
+		if ((!option_key || !shift_key || !cmd_key) && AttemptQuit(inSaveOption))
 		{
 			// First close it
 			CloseDown();
@@ -606,13 +602,11 @@ void CMulberryApp::InitConnection(CPreferences& prefs)
 		// Check for disconnect request via keyboard
 
 		// Look for option key
-		KeyMap km;
-		::GetKeys(km);			// Get keyboard state
-		bool cmdKey = (( ((unsigned char*) km)[0x37>>3] >> (0x37 & 7) ) & 1);
+		bool cmd_key = ::GetCurrentKeyModifiers() & cmdKey;
 		
 		// Possible disconnect prompt
 		if (!prefs.mDisconnected.GetValue() && prefs.mPromptDisconnected.GetValue() && CTCPSocket::WillDial() ||
-			cmdKey)
+			cmd_key)
 		{
 			CErrorDialog::EDialogResult result = CErrorDialog::PoseDialog(CErrorDialog::eErrDialog_Caution,
 																			"ErrorDialog::Btn::Disconnected",
@@ -791,13 +785,12 @@ void CMulberryApp::StartAddressBooks()
 		new CAddressBookManager;
 
 		// Force manager to update all accounts
-		CAddressBookManager::sAddressBookManager->StartLocal();
-		CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+		CAddressBookManager::sAddressBookManager->SyncAccounts();
 	}
 	else
 	{
 		// Force manager to update all accounts
-		CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+		CAddressBookManager::sAddressBookManager->SyncAccounts();
 	}
 }
 
@@ -981,14 +974,11 @@ Boolean CMulberryApp::ObeyCommand(CommandT inCommand,void *ioParam)
 
 		case cmd_Preferences:
 			{
-				// Look for option key
-				KeyMap km;
-				::GetKeys(km);			// Get keyboard state
 				// Check for option key
-				bool optionKey = (( ((unsigned char*) km)[0x3A>>3] >> (0x3A & 7) ) & 1);
+				bool option_key = ::GetCurrentKeyModifiers() & optionKey;
 
 				// If option key and logging allowed then do log prefs
-				if (optionKey && CAdminLock::sAdminLock.mAllowLogging)
+				if (option_key && CAdminLock::sAdminLock.mAllowLogging)
 				{
 					CLog::DoLoggingOptions();
 				}
@@ -1033,10 +1023,7 @@ Boolean CMulberryApp::ObeyCommand(CommandT inCommand,void *ioParam)
 			break;
 
 		case cmd_NewAddressBook:
-			// Do local new if only local address books
-			if (CAddressBookManager::sAddressBookManager->GetProtocolList().empty())
-				MakeNewAddressBookDoc();
-			else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+			if (CPreferences::sPrefs->mUse3Pane.GetValue())
 			{
 				// Show three pane window and force to contacts tab
 				if (C3PaneWindow::s3PaneWindow)
@@ -1045,7 +1032,7 @@ Boolean CMulberryApp::ObeyCommand(CommandT inCommand,void *ioParam)
 					C3PaneWindow::s3PaneWindow->SetViewType(N3Pane::eView_Contacts);
 				}
 			}
-			else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+			else
 			{
 				// Show address book manager
 				CAdbkManagerWindow::CreateAdbkManagerWindow();
@@ -1053,10 +1040,7 @@ Boolean CMulberryApp::ObeyCommand(CommandT inCommand,void *ioParam)
 			break;
 
 		case cmd_OpenAddressBook:
-			// Do local open if only local address books
-			if (CAddressBookManager::sAddressBookManager->GetProtocolList().empty())
-				ChooseAddressBookDoc();
-			else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+			if (CPreferences::sPrefs->mUse3Pane.GetValue())
 			{
 				// Show three pane window and force to contacts tab
 				if (C3PaneWindow::s3PaneWindow)
@@ -1065,7 +1049,7 @@ Boolean CMulberryApp::ObeyCommand(CommandT inCommand,void *ioParam)
 					C3PaneWindow::s3PaneWindow->SetViewType(N3Pane::eView_Contacts);
 				}
 			}
-			else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+			else
 			{
 				// Show address book manager
 				CAdbkManagerWindow::CreateAdbkManagerWindow();
@@ -1822,7 +1806,7 @@ bool CMulberryApp::DoMyPreferences()
 
 				// Sync address books
 				if (!stopped_adbk && CAddressBookManager::sAddressBookManager)
-					CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+					CAddressBookManager::sAddressBookManager->SyncAccounts();
 
 				// Sync calendars
 				if (!stopped_cal && calstore::CCalendarStoreManager::sCalendarStoreManager)
@@ -2189,55 +2173,6 @@ void CMulberryApp::OpenDocument(PPx::FSObject* inMacFSSpec)
 		}
 		break;
 
-	case kAddressBookDocType:
-		// Make sure prefs exists - force if not
-		if (!mPrefsLoaded) StartUp();
-
-		if (CAdminLock::sAdminLock.mNoLocalAdbks)
-		{
-			::SysBeep(1);
-			break;
-		}
-
-		// Only open if not quitting
-		if (mState != programState_Quitting)
-		{
-			// Check for existing file
-			CAddressBook* adbk = (CAddressBook*) CAddressBookManager::sAddressBookManager->CheckLocalOpen(inMacFSSpec);
-
-			// Does window already exist?
-			if (adbk)
-			{
-				CAddressBookWindow* theWindow = CAddressBookWindow::FindWindow(adbk);
-
-				if (theWindow)
-					// Found existing window so select
-					FRAMEWORK_WINDOW_TO_TOP(theWindow)
-
-				adbk = NULL;
-			}
-			else
-			{
-				try
-				{
-					// Create address book
-					adbk = new CLocalAddressBook(inMacFSSpec);
-
-					// Open it
-					adbk->Open();
-				}
-				catch (...)
-				{
-					CLOG_LOGCATCH(...);
-
-					// Remove from manager
-					if (adbk)
-						adbk->Close();
-					delete adbk;
-				}
-			}
-		}
-		break;
 	}
 
 } // CMulberryApp::OpenDocument
@@ -2266,39 +2201,6 @@ void CMulberryApp::ChooseLetterDoc()
 		OpenDocument(&fspec);
 
 } // CMulberryApp::ChooseLetterDoc
-
-// Create address book doc
-void CMulberryApp::MakeNewAddressBookDoc()
-{
-	CLocalAddressBook* adbk = NULL;
-	try
-	{
-		// Create address book
-		adbk = new CLocalAddressBook(NULL);
-
-		// New it
-		adbk->New();
-	}
-	catch (...)
-	{
-		CLOG_LOGCATCH(...);
-
-		// Remove from manager
-		if (adbk)
-			adbk->Close();
-		delete adbk;
-	}
-}
-
-// Choose an address book document
-void CMulberryApp::ChooseAddressBookDoc()
-{
-	// Send AE for recording
-	PPx::FSObject fspec;
-	if (PP_StandardDialogs::AskOpenOneFile(kAddressBookDocType, fspec, kNavDefaultNavDlogOptions | kNavAllowPreviews | kNavAllFilesInPopup))
-		OpenDocument(&fspec);
-
-} // CMulberryApp::ChooseAddressBookDoc
 
 //	Respond to an AppleEvent
 void CMulberryApp::HandleAppleEvent(

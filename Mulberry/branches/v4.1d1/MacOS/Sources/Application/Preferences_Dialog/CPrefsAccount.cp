@@ -280,6 +280,7 @@ void CPrefsAccount::InitAccountMenu(void)
 		{
 		case CINETAccount::eIMSP:
 		case CINETAccount::eACAP:
+		case CINETAccount::eCardDAVAdbk:
 		default:
 			::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName(), false, cicn_AdbkAccount);
 			break;
@@ -362,6 +363,7 @@ void CPrefsAccount::DoNewAccount(void)
 					acct_list = (CINETAccountList*) &mCopyPrefs->mRemoteAccounts.GetValue();
 					break;
 
+				case menu_AccountCardDAVAdbk:
 				case menu_AccountIMSPAdbk:
 				case menu_AccountACAPAdbk:
 				case menu_AccountLDAPSearch:
@@ -449,12 +451,17 @@ void CPrefsAccount::DoNewAccount(void)
 					insert_icon = cicn_RemoteAccount;
 					break;
 
+				case menu_AccountCardDAVAdbk:
 				case menu_AccountIMSPAdbk:
 				case menu_AccountACAPAdbk:
 				case menu_AccountLDAPSearch:
 					acct = new CAddressAccount;
 					switch(acct_type)
 					{
+					case menu_AccountCardDAVAdbk:
+						acct->SetServerType(CINETAccount::eCardDAVAdbk);
+						insert_icon = cicn_AdbkAccount;
+						break;
 					case menu_AccountIMSPAdbk:
 						acct->SetServerType(CINETAccount::eIMSP);
 						insert_icon = cicn_AdbkAccount;
@@ -835,6 +842,9 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			case CINETAccount::eLDAP:
 				copyStr.FromResource("UI::Preferences::AccountLDAPAddressSearch");
 				break;
+			case CINETAccount::eCardDAVAdbk:
+				copyStr.FromResource("UI::Preferences::AccountCardDAVAddressBooks");
+				break;
 			}
 		}
 		else if (typeid(*account) == typeid(CManageSIEVEAccount))
@@ -1061,6 +1071,7 @@ void CPrefsAccount::SetPanel(const CINETAccount* account)
 		{
 		case CINETAccount::eIMSP:
 		case CINETAccount::eACAP:
+		case CINETAccount::eCardDAVAdbk:
 			panel = paneid_PrefsAdbkAccount;
 			break;
 		case CINETAccount::eLDAP:

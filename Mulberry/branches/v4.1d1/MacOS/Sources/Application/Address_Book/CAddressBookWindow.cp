@@ -20,12 +20,13 @@
 #include "CAddressBookWindow.h"
 
 #include "CAddressBook.h"
-#include "CAddressBookDoc.h"
 #include "CAddressView.h"
 #include "CCommands.h"
 #include "CContextMenu.h"
 #include "CGroupTable.h"
 #include "CLog.h"
+#include "CMulberryApp.h"
+#include "CMulberryCommon.h"
 #include "CPreferences.h"
 #include "CSplitterView.h"
 #include "CToolbarView.h"
@@ -73,8 +74,6 @@ CAddressBookWindow::~CAddressBookWindow()
 // Common init
 void CAddressBookWindow::InitAddressBookWindow(void)
 {
-	mDocument = NULL;
-
 	mPreviewVisible = true;
 
 	{
@@ -128,7 +127,7 @@ bool CAddressBookWindow::OpenWindow(CAddressBook* adbk)
 	// Does window already exist?
 	CAddressBookWindow* theWindow = CAddressBookWindow::FindWindow(adbk);
 
-	if (theWindow)
+	if (theWindow != NULL)
 	{
 		// Found existing window so make visible and select
 		FRAMEWORK_WINDOW_TO_TOP(theWindow)
@@ -137,23 +136,24 @@ bool CAddressBookWindow::OpenWindow(CAddressBook* adbk)
 	}
 	else
 	{
-		CAddressBookDoc* doc = NULL;
 		try
 		{
-			doc = new CAddressBookDoc(adbk, NULL);
+			// Create window for our document
+			theWindow = (CAddressBookWindow*) CAddressBookWindow::CreateWindow(paneid_AddressBookWindow, CMulberryApp::sApp);
 			MyCFString name(adbk->GetAccountName(), kCFStringEncodingUTF8);
-			doc->GetWindow()->SetCFDescriptor(name);
-			doc->GetWindow()->Show();
+			theWindow->SetCFDescriptor(name);
+			theWindow->SetAddressBook(adbk);
+		
+			// Now reset the address book display
+			theWindow->ResetAddressBook();
+			theWindow->Show();
 		}
 		catch (...)
 		{
 			CLOG_LOGCATCH(...);
-
-			delete doc;
-			doc = NULL;
 		}
 		
-		return doc != NULL;
+		return theWindow != NULL;
 	}
 }
 

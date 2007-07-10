@@ -50,6 +50,7 @@ void CAddressPersonalPanel::FinishCreateSelf(void)
 	mFullName = (CTextFieldX*) FindPaneByID(paneid_AddressPersonalFullName);
 	mNickName = (CTextFieldX*) FindPaneByID(paneid_AddressPersonalNickName);
 	mEmail = (CTextFieldX*) FindPaneByID(paneid_AddressPersonalEmail);
+	mCalendar = (CTextFieldX*) FindPaneByID(paneid_AddressPersonalCalendar);
 	mCompany = (CTextFieldX*) FindPaneByID(paneid_AddressPersonalCompany);
 }
 
@@ -74,6 +75,10 @@ void CAddressPersonalPanel::SetFields(const CAdbkAddress* addr)
 	if (addr)
 		txt = addr->GetEmail(CAdbkAddress::eDefaultEmailType);
 	mEmail->SetText(txt);
+	
+	if (addr)
+		txt = addr->GetCalendar();
+	mCalendar->SetText(txt);
 
 	if (addr)
 		txt = addr->GetCompany();
@@ -114,6 +119,13 @@ bool CAddressPersonalPanel::GetFields(CAdbkAddress* addr)
 	if (test_addr != txt)
 	{
 		addr->SetEmail(txt, CAdbkAddress::eDefaultEmailType);
+		done_edit = true;
+	}
+
+	txt = mCalendar->GetText();
+	if (addr->GetCalendar() != txt)
+	{
+		addr->SetCalendar(txt);
 		done_edit = true;
 	}
 

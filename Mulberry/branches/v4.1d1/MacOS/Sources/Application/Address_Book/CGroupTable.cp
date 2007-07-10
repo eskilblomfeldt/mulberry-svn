@@ -36,7 +36,6 @@
 #include "CGroup.h"
 #include "CGroupList.h"
 #include "CGroupTableAction.h"
-#include "CLocalAddressBook.h"
 #include "CMessage.h"
 #include "CPreferences.h"
 #include "CReplyChooseDialog.h"
@@ -1204,7 +1203,7 @@ void CGroupTable::AddGroupsFromList(CGroupList* grps)
 	mTableView->UpdateCaptions();
 
 	SetUpdateCommandStatus(true);
-	mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+	mDirty = false;
 }
 
 // Change from list
@@ -1219,7 +1218,7 @@ void CGroupTable::ChangeGroupsFromList(CGroupList* old_grps, CGroupList* new_grp
 	mTableView->UpdateCaptions();
 
 	SetUpdateCommandStatus(true);
-	mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+	mDirty = false;
 }
 
 // Delete from list
@@ -1237,7 +1236,7 @@ void CGroupTable::RemoveGroupsFromList(CGroupList* grps)
 	mTableView->UpdateCaptions();
 
 	SetUpdateCommandStatus(true);
-	mDirty = dynamic_cast<CLocalAddressBook*>(mAdbk);
+	mDirty = false;
 }
 
 // Delete from list

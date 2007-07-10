@@ -49,6 +49,7 @@ CCalendarWindow::CCalendarWindow(LStream *inStream) :
 	CHelpTagWindow(this)
 {
 	mPreviewVisible = true;
+	mNode = NULL;
 
 	// Add to list
 	{
@@ -91,6 +92,33 @@ void CCalendarWindow::MakeWindow(calstore::CCalendarStoreNode* node)
 		// Create the message window
 		newWindow = (CCalendarWindow*) CreateWindow(paneid_CalendarWindow, CMulberryApp::sApp);
 		newWindow->SetNode(node);
+		newWindow->Show();
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Only delete if it still exists
+		if (WindowExists(newWindow))
+			FRAMEWORK_DELETE_WINDOW(newWindow)
+
+		// Should throw out of here
+		CLOG_LOGRETHROW;
+		throw;
+	}
+}
+
+// Create a free busy window
+void CCalendarWindow::CreateFreeBusyWindow(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date)
+{
+	// Look for existing window with this node
+	
+	CCalendarWindow* newWindow = NULL;
+	try
+	{
+		// Create the message window
+		newWindow = (CCalendarWindow*) CreateWindow(paneid_CalendarWindow, CMulberryApp::sApp);
+		newWindow->SetFreeBusy(calref, id, organizer, attendees, date);
 		newWindow->Show();
 	}
 	catch (...)

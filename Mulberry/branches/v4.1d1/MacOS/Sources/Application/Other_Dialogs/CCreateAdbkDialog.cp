@@ -42,16 +42,12 @@
 // Default constructor
 CCreateAdbkDialog::CCreateAdbkDialog()
 {
-	mHasLocal = false;
-	mHasRemote = false;
 }
 
 // Constructor from stream
 CCreateAdbkDialog::CCreateAdbkDialog(LStream *inStream)
 		: LDialogBox(inStream)
 {
-	mHasLocal = false;
-	mHasRemote = false;
 }
 
 // Default destructor
@@ -68,12 +64,14 @@ void CCreateAdbkDialog::FinishCreateSelf(void)
 	LDialogBox::FinishCreateSelf();
 
 	// Get name
+	mMkAdbk = dynamic_cast<LRadioButton*>(FindPaneByID(paneid_CrMkAdbk));
+	mMkCol = dynamic_cast<LRadioButton*>(FindPaneByID(paneid_CrMkCol));
 	mAdbkName = (CTextFieldX*) FindPaneByID(paneid_CrAdbk);
 
 	// Get type items
-	mTypeGroup = FindPaneByID(paneid_CrAdbkType);
-	mPersonal = (LRadioButton*) FindPaneByID(paneid_CrAdbkPersonal);
-	mGlobal = (LRadioButton*) FindPaneByID(paneid_CrAdbkGlobal);
+	mFullPath = dynamic_cast<LRadioButton*>(FindPaneByID(paneid_CrAdbkFullPath));
+	mUseDirectory = dynamic_cast<LRadioButton*>(FindPaneByID(paneid_CrAdbkUseDirectory));
+	mHierarchy = dynamic_cast<CStaticText*>(FindPaneByID(paneid_CrAdbkHierarchy));
 
 	mMover = (LView*) FindPaneByID(paneid_CrAdbkMover);
 
@@ -104,39 +102,37 @@ void CCreateAdbkDialog::ListenToMessage(
 {
 	switch (inMessage)
 	{
-	case msg_CrAdbkAccountPopup:
-		OnChangeAccount(*((long*) ioParam));
+	case msg_CrAdbkMkAdbk:
+		if (*((long*) ioParam))
+		{
+			mOpenOnStartup->Enable();
+			mUseNicknames->Enable();
+			mUseSearch->Enable();
+		}
+		break;
+
+	case msg_CrAdbkMkCol:
+		if (*((long*) ioParam))
+		{
+			mOpenOnStartup->Disable();
+			mUseNicknames->Disable();
+			mUseSearch->Disable();
+		}
+		break;
+
+	case msg_CrAdbkSetFullPath:
+		if (*((long*) ioParam))
+			mHierarchy->Disable();
+		break;
+
+	case msg_CrAdbkSetUseDirectory:
+		if (*((long*) ioParam))
+			mHierarchy->Enable();
 		break;
 
 	default:
 		LDialogBox::ListenToMessage(inMessage, ioParam);
 		break;
-	}
-}
-
-// Account popup changed
-void CCreateAdbkDialog::OnChangeAccount(long index)
-{
-	// Enable personal only for IMSP/ACAP accounts
-	if (mHasLocal && (index == 1))
-		mTypeGroup->Disable();
-	else
-	{
-		mTypeGroup->Enable();
-		
-		cdstring protoname = ::GetPopupMenuItemTextUTF8(mAccountPopup);
-		CAdbkProtocol* proto = CAddressBookManager::sAddressBookManager->GetProtocol(protoname);
-
-		cdstring default_name = proto->GetUserPrefix();
-		default_name += proto->GetAccount()->GetAuthenticator().GetAuthenticator()->GetActualUID();
-		bool personal_allowed = !default_name.empty();
-
-		if (!personal_allowed)
-		{
-			mPersonal->Disable();
-			mGlobal->SetValue(1);
-		}
-
 	}
 }
 
@@ -147,46 +143,39 @@ void CCreateAdbkDialog::SetDetails(SCreateAdbk* create)
 	if (create->account.empty())
 	{
 		mAccountBox->Hide();
-		
-		// Make sure subscribe option is properly setup
-		OnChangeAccount(1);
 	}
 	else
 	{
 		mAccountPopup->Hide();
 		mAccount->SetText(create->account);
-		
-		// Disable items if the one selected is the local account
-		if ((create->account == CPreferences::sPrefs->mLocalAdbkAccount.GetValue().GetName()) ||
-			(create->account == CPreferences::sPrefs->mOSAdbkAccount.GetValue().GetName()))
-			mTypeGroup->Disable();
 	}
+
+	mHierarchy->SetText(create->parent);
 
 	mOpenOnStartup->SetValue(create->open_on_startup);
 	mUseNicknames->SetValue(create->use_nicknames);
 	mUseSearch->SetValue(create->use_search);
 	
-	// Hide type items if only local
-	if (mHasLocal && !mHasRemote)
-	{
-		SPoint32 pt1;
-		mTypeGroup->GetFrameLocation(pt1);
-		SPoint32 pt2;
-		mMover->GetFrameLocation(pt2);
-		int resizeby = pt1.v - pt2.v;
+	if (create->use_wd && !create->parent.empty())
+		mUseDirectory->SetValue(1);
+	else
+		mFullPath->SetValue(1);
 
-		mTypeGroup->Hide();
-		
-		ResizeWindowBy(0, resizeby);
+	if (create->parent.empty())
+	{
+		mUseDirectory->Disable();
+		mHierarchy->Disable();
 	}
 }
 
 // Get the details
 void CCreateAdbkDialog::GetDetails(SCreateAdbk* result)
 {
+	result->directory = (mMkCol->GetValue() == 1);
 	result->name = mAdbkName->GetText();
 
-	result->personal = (mPersonal->GetValue() == 1);
+	result->use_wd = (mFullPath->GetValue() != 1);
+
 	result->open_on_startup = (mOpenOnStartup->GetValue() == 1);
 	result->use_nicknames = (mUseNicknames->GetValue() == 1);
 	result->use_search = (mUseSearch->GetValue() == 1);
@@ -213,7 +202,6 @@ void CCreateAdbkDialog::InitAccountMenu(void)
 		if (UEnvironment::GetOSVersion() >= 0x01020)
 			::AppendItemToMenu(menuH, menu_pos++, CPreferences::sPrefs->mOSAdbkAccount.GetValue().GetName());
 		::AppendItemToMenu(menuH, menu_pos++, CPreferences::sPrefs->mLocalAdbkAccount.GetValue().GetName());
-		mHasLocal = true;
 	}
 	
 	// Add each adbk account (only IMSP/ACAP)
@@ -222,12 +210,12 @@ void CCreateAdbkDialog::InitAccountMenu(void)
 	{
 		// Only if IMSP/ACAP
 		if (((*iter)->GetServerType() != CINETAccount::eIMSP) &&
-			((*iter)->GetServerType() != CINETAccount::eACAP))
+			((*iter)->GetServerType() != CINETAccount::eACAP) &&
+			((*iter)->GetServerType() != CINETAccount::eCardDAVAdbk))
 			continue;
 
 		// Add to menu
 		::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName());
-		mHasRemote = true;
 		
 		// Disable if not logged in
 		if (!CAddressBookManager::sAddressBookManager->GetProtocol((*iter)->GetName())->IsLoggedOn())
@@ -249,7 +237,7 @@ bool CCreateAdbkDialog::PoseDialog(SCreateAdbk* details)
 	{
 		// Create the dialog
 		CBalloonDialog	theHandler(paneid_CreateAdbkDialog, CMulberryApp::sApp);
-		CCreateAdbkDialog* dlog = (CCreateAdbkDialog*) theHandler.GetDialog();
+		CCreateAdbkDialog* dlog = static_cast<CCreateAdbkDialog*>(theHandler.GetDialog());
 		dlog->SetDetails(details);
 
 		theHandler.StartDialog();

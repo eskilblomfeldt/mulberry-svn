@@ -1286,7 +1286,7 @@ bool CFileTable::ViewPart(TableIndexT row)
 
 	// Check part size first (only if its not on disk already)
 	if ((fattach == NULL) && !CMailControl::CheckSizeWarning(attach))
-			return false;
+		return false;
 
 	// View chosen part if cached
 	if (!attach->IsNotCached())

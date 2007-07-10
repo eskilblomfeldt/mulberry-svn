@@ -40,20 +40,11 @@ const	PaneIDT		paneid_NewACLPostBtn = 'BTN6';
 const	PaneIDT		paneid_NewACLCreateBtn = 'BTN7';
 const	PaneIDT		paneid_NewACLDeleteBtn = 'BTN8';
 const	PaneIDT		paneid_NewACLAdminBtn = 'BTN9';
+const	PaneIDT		paneid_NewACLScheduleBtn = 'BTNA';
 const	PaneIDT		paneid_NewACLStylePopup = 'STYL';
 
 // Resources
 const	ResIDT		RidL_CNewACLDialogBtns = 4100;
-
-const	MessageT	msg_ACLLookupBtn = 4130;
-const	MessageT	msg_ACLReadBtn = 4131;
-const	MessageT	msg_ACLSeenBtn = 4132;
-const	MessageT	msg_ACLWriteBtn = 4133;
-const	MessageT	msg_ACLInsertBtn = 4134;
-const	MessageT	msg_ACLPostBtn = 4135;
-const	MessageT	msg_ACLCreateBtn = 4136;
-const	MessageT	msg_ACLDeleteBtn = 4137;
-const	MessageT	msg_ACLAdminBtn = 4138;
 
 // Classes
 class CACLStylePopup;
@@ -84,6 +75,7 @@ private:
 	LBevelButton*	mSeenBtn;
 	LBevelButton*	mWriteBtn;
 	LBevelButton*	mInsertBtn;
+	LBevelButton*	mScheduleBtn;
 	LBevelButton*	mPostBtn;
 	LBevelButton*	mCreateBtn;
 	LBevelButton*	mDeleteBtn;

@@ -78,6 +78,7 @@ const	PaneIDT		paneid_MessageSecure = 'SECP';
 const	PaneIDT		paneid_MessageSecureInfo = 'SECR';
 const	PaneIDT		paneid_MessageScroller = 'STXT';
 const	PaneIDT		paneid_MessageText = 'MTXT';
+const	PaneIDT		paneid_MessageHTML = 'HTML';
 const	PaneIDT		paneid_MessageSplit = 'SPLT';
 
 const	PaneIDT		paneid_MessagePrintout = 2500;
@@ -161,6 +162,7 @@ class CAddressList;
 class CAttachment;
 class CBodyTable;
 class CFormattedTextDisplay;
+class CWebKitControl;
 class CMbox;
 class CMessage;
 class CMessageCryptoInfo;
@@ -255,6 +257,7 @@ private:
 
 	LView*			mTextPane;							// Pane containing bottom splitter
 	CFormattedTextDisplay*	mText;						// The text
+	CWebKitControl*	mHTML;								// HTML text
 
 	bool			mRedisplayBlock;					// Prevent redisplay
 	bool			mAllowDeleted;						// Allow deleted while constructing

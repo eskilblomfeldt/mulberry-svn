@@ -23,6 +23,7 @@
 #include "CHierarchyTableDrag.h"
 #include "CListener.h"
 
+#include "CCalendarStoreFreeBusy.h"
 #include "CCalendarStoreNode.h"
 
 #include "cdstring.h"
@@ -134,7 +135,8 @@ protected:
 			void		OnDeleteCalendar();
 			void		OnRefreshList();
 			void		OnFreeBusyCalendar();
-			bool		FreeBusyCalendar(TableIndexT row);
+			bool		FreeBusyCalendar(TableIndexT row,
+											calstore::CCalendarStoreFreeBusyList* list);
 			void		OnSendCalendar();
 			bool		SendCalendar(TableIndexT row);
 
@@ -164,7 +166,8 @@ protected:
 			void	RefreshSubList(calstore::CCalendarStoreNode* node);
 
 			bool	TestSelectionServer(TableIndexT row);					// Test for selected servers only
-			bool	TestSelectionCalendar(TableIndexT row);					// Test for selected calendars only
+			bool	TestSelectionCalendarStoreNode(TableIndexT row);		// Test for non-protocol node
+			bool	TestSelectionCanChangeCalendar(TableIndexT row);		// Test editable calendar store node
 			bool	TestSelectionRealCalendar(TableIndexT row);				// Test for selected real (not directory) calendars only
 			bool	TestSelectionWebCalendar(TableIndexT row);				// Test for selected web calendars only
 			bool	TestSelectionUploadWebCalendar(TableIndexT row);		// Test for selected uploadable web calendars only

@@ -78,6 +78,7 @@ void CNewEventDialog::FinishCreateSelf()
 	mSummary->AddListener(this);
 	mCalendar = dynamic_cast<CCalendarPopup*>(FindPaneByID(eCalendar_ID));
 	mStatus = dynamic_cast<LPopupButton*>(FindPaneByID(eStatus_ID));
+	mAvailability = dynamic_cast<LCheckBox*>(FindPaneByID(eAvailability_ID));
 
 	mTabs = dynamic_cast<LTabsControl*>(FindPaneByID(eTabs_ID));
 	mTabView = dynamic_cast<LView*>(FindPaneByID(eTabView_ID));
@@ -197,6 +198,8 @@ void CNewEventDialog::SetEvent(iCal::CICalendarVEvent& vevent)
 
 	mStatus->SetValue(vevent.GetStatus() + 1);
 
+	mAvailability->SetValue(vevent.GetTransparent());
+
 	// Set in each panel
 	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
 	{
@@ -221,6 +224,8 @@ void CNewEventDialog::GetEvent(iCal::CICalendarVEvent& vevent)
 	vevent.EditSummary(mSummary->GetText());
 	
 	vevent.EditStatus(static_cast<iCal::EStatus_VEvent>(mStatus->GetValue() - 1));
+	
+	vevent.EditTransparent(mAvailability->GetValue() == 1);
 
 	// Get from each panel
 	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
@@ -254,6 +259,7 @@ void CNewEventDialog::SetReadOnly(bool read_only)
 	mSummary->SetReadOnly(mReadOnly);
 	mCalendar->SetEnabled(!mReadOnly);
 	mStatus->SetEnabled(!mReadOnly);
+	mAvailability->SetEnabled(!mReadOnly);
 
 	// Set in each panel
 	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
@@ -265,6 +271,19 @@ void CNewEventDialog::SetReadOnly(bool read_only)
 cdstring CNewEventDialog::GetCurrentSummary() const
 {
 	return mSummary->GetText();
+}
+
+iCal::CICalendarRef CNewEventDialog::GetCurrentCalendar() const
+{
+	iCal::CICalendarRef newcal;
+	mCalendar->GetCalendar(newcal);
+	return newcal;
+}
+
+void CNewEventDialog::GetCurrentPeriod(iCal::CICalendarPeriod& period) const
+{
+	CNewComponentTiming* timing = static_cast<CNewComponentTiming*>(mPanels.front());
+	timing->GetPeriod(period);
 }
 
 void CNewEventDialog::OnOK()

@@ -157,7 +157,7 @@ void CPrefsAccountAuth::UpdateData(void* data)
 	
 	account->SetUseTLSClientCert(mUseTLSClientCert->GetValue());
 
-	if (::CountMenuItems(mTLSClientCert->GetMacMenuH()))
+	if (account->GetUseTLSClientCert() && ::CountMenuItems(mTLSClientCert->GetMacMenuH()))
 		account->SetTLSClientCert(mCertFingerprints.at(mTLSClientCert->GetValue() - 1));
 	else
 		account->SetTLSClientCert(cdstring::null_str);

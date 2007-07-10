@@ -22,6 +22,7 @@
 #include "CAdbkIOPlugin.h"
 #include "CAdbkProtocol.h"
 #include "CAdbkManagerTable.h"
+#include "CAddressBook.h"
 #include "CAddressBookToolbar.h"
 #include "CAddressBookWindow.h"
 #include "CAddressTable.h"
@@ -32,7 +33,6 @@
 #include "CPluginManager.h"
 #include "CPreferences.h"
 #include "CReplyChooseDialog.h"
-#include "CRemoteAddressBook.h"
 #include "CSplitterView.h"
 #include "CStaticText.h"
 #include "CTaskClasses.h"
@@ -253,15 +253,13 @@ void CAddressBookView::FindCommandStatus(
 			break;
 
 		case cmd_SynchroniseAddressBook:
-			outEnabled = dynamic_cast<CRemoteAddressBook*>(mAdbk) &&
-							static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->CanDisconnect() &&
-							!static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->IsDisconnected();
+			outEnabled = (mAdbk != NULL) && mAdbk->GetProtocol()->CanDisconnect() &&
+							mAdbk->GetProtocol()->IsDisconnected();
 			break;
 
 		case cmd_ClearDisconnectAddressBook:
-			outEnabled = dynamic_cast<CRemoteAddressBook*>(mAdbk) &&
-							static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->CanDisconnect() &&
-							!static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->IsDisconnected();
+			outEnabled = (mAdbk != NULL) && mAdbk->GetProtocol()->CanDisconnect() &&
+							!mAdbk->GetProtocol()->IsDisconnected();
 			break;
 
 		default:

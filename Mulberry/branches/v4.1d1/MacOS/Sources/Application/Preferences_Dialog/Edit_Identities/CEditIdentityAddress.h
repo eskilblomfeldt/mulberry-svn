@@ -75,6 +75,7 @@ private:
 	bool				mTo;
 	bool				mCC;
 	bool				mBcc;
+	bool				mCalendar;
 
 public:
 	enum { class_ID = 'Iead' };
@@ -88,7 +89,7 @@ protected:
 	virtual void	FinishCreateSelf(void);					// Do odds & ends
 
 public:
-	virtual void	SetAddressType(bool from, bool reply_to, bool sender, bool to, bool cc, bool bcc);
+	virtual void	SetAddressType(bool from, bool reply_to, bool sender, bool to, bool cc, bool bcc, bool calendar);
 	virtual void	ListenToMessage(MessageT inMessage, void *ioParam);
 
 	virtual void	ToggleICDisplay(bool IC_on);	// Toggle display of IC

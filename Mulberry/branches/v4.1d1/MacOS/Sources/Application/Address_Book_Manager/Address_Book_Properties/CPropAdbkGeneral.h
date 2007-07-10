@@ -80,7 +80,7 @@ public:
 
 	virtual void	ListenToMessage(MessageT inMessage, void *ioParam);
 
-	virtual void	SetAdbkList(CFlatAdbkList* adbk_list);		// Set adbk list
+	virtual void	SetAdbkList(CAddressBookList* adbk_list);		// Set adbk list
 	virtual void	ApplyChanges(void);							// Force update of mboxes
 
 protected:

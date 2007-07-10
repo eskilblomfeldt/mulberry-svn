@@ -67,6 +67,7 @@ protected:
 	virtual void	OnDuplicateEvent();
 	virtual void	OnDeleteEvent();
 	virtual void	OnInviteAttendees();
+	virtual void	OnProcessInvitation();
 	
 			void	GetSelectedEvents(iCal::CICalendarExpandedComponents& items);
 			void	GetSelectedMasterEvents(iCal::CICalendarComponentRecurs& vevents);

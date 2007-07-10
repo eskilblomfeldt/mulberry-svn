@@ -27,6 +27,7 @@ const	PaneIDT		paneid_AddressPersonal = 1735;
 const	PaneIDT		paneid_AddressPersonalNickName = 'NICK';
 const	PaneIDT		paneid_AddressPersonalFullName = 'FULL';
 const	PaneIDT		paneid_AddressPersonalEmail = 'ADDR';
+const	PaneIDT		paneid_AddressPersonalCalendar = 'CALA';
 const	PaneIDT		paneid_AddressPersonalCompany = 'COMP';
 
 // Messages
@@ -48,6 +49,7 @@ protected:
 	CTextFieldX*		mFullName;
 	CTextFieldX*		mNickName;
 	CTextFieldX*		mEmail;
+	CTextFieldX*		mCalendar;
 	CTextFieldX*		mCompany;
 
 	virtual void	FinishCreateSelf();					// Do odds & ends

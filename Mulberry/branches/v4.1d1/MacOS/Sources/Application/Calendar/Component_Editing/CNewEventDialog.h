@@ -57,7 +57,9 @@ public:
 	virtual void		ListenTo_Message(long msg, void* param);
 	virtual void		ListenToMessage(MessageT inMessage, void *ioParam);
 
-			cdstring	GetCurrentSummary() const;
+	iCal::CICalendarRef GetCurrentCalendar() const;
+	cdstring	GetCurrentSummary() const;
+	void		GetCurrentPeriod(iCal::CICalendarPeriod& period) const;
 
 protected:
 	enum
@@ -65,6 +67,7 @@ protected:
 		eSummary_ID = 'SUMM',
 		eCalendar_ID = 'CALP',
 		eStatus_ID = 'STAT',
+		eAvailability_ID = 'AVAI',
 
 		eTabs_ID = 'TABS',
 		eTabView_ID = 'VIEW',
@@ -77,6 +80,7 @@ protected:
 	CTextFieldX*			mSummary;
 	CCalendarPopup*			mCalendar;
 	LPopupButton*			mStatus;
+	LCheckBox*				mAvailability;
 
 	LTabsControl*			mTabs;
 	LView*					mTabView;

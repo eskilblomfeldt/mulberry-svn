@@ -53,6 +53,7 @@ void CAttendeeTable::FinishCreateSelf(void)
 	SetAllowDrag(false);
 	
 	InitTable();
+	EnableTooltips();
 }
 
 void CAttendeeTable::DrawCell(const STableCell &inCell, const Rect &inLocalRect)
@@ -117,6 +118,14 @@ void CAttendeeTable::ClickCell(const STableCell &inCell, const SMouseDownEvent &
 	{
 		BroadcastMessage(GetPaneID() + 1, (void*) this);
 	}
+}
+
+// Get text for current tooltip cell
+void CAttendeeTable::GetTooltipText(cdstring& txt, const STableCell &inCell)
+{
+	// Get data for row
+	const iCal::CICalendarProperty& prop = mAttendees->at(inCell.row - 1);
+	txt = iCal::CITIPProcessor::GetAttendeeFullDescriptor(prop);
 }
 
 void CAttendeeTable::InitTable()

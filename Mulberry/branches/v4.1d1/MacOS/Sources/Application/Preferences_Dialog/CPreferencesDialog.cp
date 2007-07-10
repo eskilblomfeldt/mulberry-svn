@@ -1207,14 +1207,11 @@ bool CPreferencesDialog::PrefsRemoteSaveAs(void)
 // Do save default file
 void CPreferencesDialog::PrefsRemoteSaveDefault(void)
 {
-	// Look for option key
-	KeyMap km;
-	::GetKeys(km);			// Get keyboard state
 	// Check for option key
-	bool optionKey = (( ((unsigned char*) km)[0x3A>>3] >> (0x3A & 7) ) & 1);
+	bool option_key = ::GetCurrentKeyModifiers() & optionKey;
 
 	// Do delete of default set first if requested
-	if (optionKey)
+	if (option_key)
 	{
 		// Must be logged in to server
 		if (CMulberryApp::sApp->BeginRemote(GetNewPrefs()))

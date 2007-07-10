@@ -24,7 +24,6 @@
 #include "CListener.h"
 
 #include "CAdbkACL.h"
-#include "CAdbkList.h"
 
 // Constants
 
@@ -71,7 +70,7 @@ public:
 	virtual void	ListenTo_Message(long msg, void* param);
 
 	virtual void	ListenToMessage(MessageT inMessage, void *ioParam);
-	virtual void	SetAdbkList(CFlatAdbkList* adbk_list);		// Set adbk list
+	virtual void	SetAdbkList(CAddressBookList* adbk_list);		// Set adbk list
 	virtual void	DoChangeACL(CAdbkACL::EAdbkACL acl, bool set);	// User clicked a button
 	virtual void	ApplyChanges(void);						// Force update of adbks
 

@@ -22,6 +22,7 @@
 #include "CCommands.h"
 #include "CDayWeekView.h"
 #include "CEventPreview.h"
+#include "CFreeBusyView.h"
 #include "CMonthView.h"
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
@@ -55,6 +56,8 @@ CCalendarView::CCalendarView(LStream* inStream) :
 	mDayWeekScale = 0;
 	mSummaryType = NCalendarView::eList;
 	mSummaryRange = NCalendarView::eThisWeek;
+	mFreeBusyRange = CDayWeekViewTimeRange::e24Hrs;
+	mFreeBusyScale = 0;
 	mSingleCalendar = false;
 	mCalendar = NULL;
 	mCalendarsView = NULL;
@@ -338,6 +341,10 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 			mSummaryType = static_cast<CSummaryView*>(mCurrentView)->GetType();
 			mSummaryRange = static_cast<CSummaryView*>(mCurrentView)->GetRange();
 			break;
+		case NCalendarView::eViewFreeBusy:
+			mFreeBusyRange = static_cast<CFreeBusyView*>(mCurrentView)->GetRange();
+			mFreeBusyScale = static_cast<CFreeBusyView*>(mCurrentView)->GetScale();
+			break;
 		default:;
 		}
 		
@@ -399,6 +406,12 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 		mViewContainer->ExpandSubPane(mCurrentView, true, true);
 		static_cast<CSummaryView*>(mCurrentView)->SetType(mSummaryType);
 		static_cast<CSummaryView*>(mCurrentView)->SetRange(mSummaryRange);
+		break;
+	case NCalendarView::eViewFreeBusy:
+		mCurrentView = static_cast<CFreeBusyView*>(UReanimator::CreateView(CFreeBusyView::pane_ID, mViewContainer, this));
+		mViewContainer->ExpandSubPane(mCurrentView, true, true);
+		static_cast<CFreeBusyView*>(mCurrentView)->SetRange(mFreeBusyRange);
+		static_cast<CFreeBusyView*>(mCurrentView)->SetScale(mFreeBusyScale);
 		break;
 	}
 	
@@ -523,6 +536,7 @@ void CCalendarView::ResetState(bool force)
 		OnWeekBtn();
 		break;
 	case NCalendarView::eViewMonth:
+	default:
 		OnMonthBtn();
 		break;
 	case NCalendarView::eViewYear:

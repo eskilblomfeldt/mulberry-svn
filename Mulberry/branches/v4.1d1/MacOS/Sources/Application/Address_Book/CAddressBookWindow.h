@@ -55,14 +55,11 @@ enum {
 
 // Classes
 class CAddressBook;
-class CAddressBookDoc;
 class CAddressBookView;
 class CSplitterView;
 
 class CAddressBookWindow : public CTableViewWindow
 {
-	friend class CAddressBookDoc;
-
 public:
 	typedef vector<CAddressBookWindow*>	CAddressBookWindowList;
 	static cdmutexprotect<CAddressBookWindowList> sAddressBookWindows;	// List of windows (protected for multi-thread access)
@@ -78,11 +75,6 @@ public:
 
 	CAddressBookView*	GetAddressBookView()
 		{ return static_cast<CAddressBookView*>(GetTableView()); }
-
-	void				SetDocument(CAddressBookDoc* doc)
-		{ mDocument = doc; }
-	CAddressBookDoc*	GetDocument() const
-		{ return mDocument; }
 
 	virtual CToolbarView* GetToolbarView()
 		{ return mToolbarView; }
@@ -105,7 +97,6 @@ public:
 											Str255 outName);
 
 protected:
-	CAddressBookDoc*	mDocument;
 	CToolbarView*		mToolbarView;
 	CSplitterView*		mSplitter;
 	bool				mPreviewVisible;

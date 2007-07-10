@@ -205,6 +205,37 @@ void CNewEventTiming::GetEvent(iCal::CICalendarVEvent& vevent)
 	}
 }
 
+void CNewEventTiming::GetPeriod(iCal::CICalendarPeriod& period)
+{
+	// Do timing
+	bool all_day = (mAllDay->GetValue() == 1);
+	if (mUseDuration->GetValue() == 1)
+	{
+		iCal::CICalendarDateTime dtstart;
+		mStartDateTimeZone->GetDateTimeZone(dtstart, all_day);
+		
+		iCal::CICalendarDuration duration;
+		mDuration->GetDuration(duration, all_day);
+		
+		period = iCal::CICalendarPeriod(dtstart, duration);
+	}
+	else
+	{
+		iCal::CICalendarDateTime dtstart;
+		mStartDateTimeZone->GetDateTimeZone(dtstart, all_day);
+		
+		iCal::CICalendarDateTime dtend;
+		mEndDateTimeZone->GetDateTimeZone(dtend, all_day);
+		
+		// If all day event, the end display is the inclusive end, but iCal uses non-inclusive
+		// so we must adjust by one day
+		if (all_day)
+			dtend.OffsetDay(1);
+		
+		period = iCal::CICalendarPeriod(dtstart, dtend);
+	}
+}
+
 void CNewEventTiming::SyncEnd()
 {
 	bool all_day = (mAllDay->GetValue() == 1);

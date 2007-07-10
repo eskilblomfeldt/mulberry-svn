@@ -21,6 +21,7 @@
 
 #include "CAddressAccount.h"
 #include "CAdminLock.h"
+#include "CTextFieldX.h"
 
 #include <LCheckBox.h>
 
@@ -54,6 +55,7 @@ void CPrefsAddressIMSP::FinishCreateSelf(void)
 	// Get controls
 	mLogonAtStartup = (LCheckBox*) FindPaneByID(paneid_AddressIMSPLoginAtStart);
 	mDisconnected = (LCheckBox*) FindPaneByID(paneid_AddressIMSPDisconnected);
+	mBaseRURL = (CTextFieldX*) FindPaneByID(paneid_AddressIMSPBaseRURL);
 	
 	// Disable certain items
 	if (CAdminLock::sAdminLock.mNoDisconnect)
@@ -68,6 +70,13 @@ void CPrefsAddressIMSP::SetData(void* data)
 	// Copy info
 	mLogonAtStartup->SetValue(account->GetLogonAtStart());
 	mDisconnected->SetValue(account->GetDisconnected());
+	if (account->GetServerType() == CINETAccount::eCardDAVAdbk)
+		mBaseRURL->SetText(account->GetBaseRURL());
+	else
+	{
+		FindPaneByID(paneid_AddressIMSPBaseRURLText)->Hide();
+		mBaseRURL->Hide();
+	}
 }
 
 // Force update of prefs
@@ -78,4 +87,6 @@ void CPrefsAddressIMSP::UpdateData(void* data)
 	// Copy info from panel into prefs
 	account->SetLoginAtStart(mLogonAtStartup->GetValue()==1);
 	account->SetDisconnected(mDisconnected->GetValue()==1);
+	if (account->GetServerType() == CINETAccount::eCardDAVAdbk)
+		account->SetBaseRURL(mBaseRURL->GetText());
 }
