@@ -446,8 +446,8 @@ void CAdbkProtocol::Close()
 	if (IsNotOpen())
 		return;
 
-		try
-		{
+	try
+	{
 		// Logoff if required
 		if (IsLoggedOn())
 			Logoff();
@@ -462,10 +462,10 @@ void CAdbkProtocol::Close()
 		
 		// Clean any free connections in cache
 		CleanConnections();
-		}
-		catch (...)
-		{
-			CLOG_LOGCATCH(...);
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
 
 		// Clean up and throw up
 		mMPState = eINETNotOpen;
@@ -474,10 +474,10 @@ void CAdbkProtocol::Close()
 		// Clean any free connections in cache
 		CleanConnections();
 
-			CLOG_LOGRETHROW;
-			throw;
-		}
+		CLOG_LOGRETHROW;
+		throw;
 	}
+}
 
 // Logon to server
 void CAdbkProtocol::Logon()
@@ -504,7 +504,7 @@ void CAdbkProtocol::Logon()
 			// Only bother if it contains something
 			if (!auth->GetPswd().empty())
 				SetCachedPswd(auth->GetUID(), auth->GetPswd());
-}
+		}
 
 		// Make copy of current authenticator
 		SetAuthenticatorUniqueness(GetAccount()->GetAuthenticator().GetUniqueness());
@@ -702,7 +702,7 @@ void CAdbkProtocol::LoadSubList(CAddressBook* adbk, bool deep)
 	if (mCacheClient != NULL)
 	{
 		DumpAddressBooks();
-}
+	}
 
 	SyncSubList(adbk);
 
@@ -722,46 +722,46 @@ void CAdbkProtocol::SyncSubList(CAddressBook* adbk)
 	// Synf if real address book
 	if (adbk->IsAdbk())
 	{
-			// Get adbk URL
-			cdstring adbk_url = adbk->GetURL();
+		// Get adbk URL
+		cdstring adbk_url = adbk->GetURL();
 
-			// Match in open at start list
-			cdstrvect::const_iterator found = ::find(CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().begin(),
-													 CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().end(),
-													 adbk_url);
+		// Match in open at start list
+		cdstrvect::const_iterator found = ::find(CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().begin(),
+												 CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().end(),
+												 adbk_url);
 
-			if (found != CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().end())
-			{
-				adbk->SetFlags(CAddressBook::eOpenOnStart, true);
+		if (found != CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().end())
+		{
+			adbk->SetFlags(CAddressBook::eOpenOnStart, true);
 
-				// Open it if its not already open
-				if (!adbk->IsOpen())
-					CActionManager::OpenAddressBook(adbk, true);
-			}
+			// Open it if its not already open
+			if (!adbk->IsOpen())
+				CActionManager::OpenAddressBook(adbk, true);
+		}
 
-			// Match in nick name list
-			found = ::find(CPreferences::sPrefs->mAdbkNickName.GetValue().begin(),
-							CPreferences::sPrefs->mAdbkNickName.GetValue().end(), adbk_url);
+		// Match in nick name list
+		found = ::find(CPreferences::sPrefs->mAdbkNickName.GetValue().begin(),
+						CPreferences::sPrefs->mAdbkNickName.GetValue().end(), adbk_url);
 
-			if (found != CPreferences::sPrefs->mAdbkNickName.GetValue().end())
-				adbk->SetFlags(CAddressBook::eLookup, true);
+		if (found != CPreferences::sPrefs->mAdbkNickName.GetValue().end())
+			adbk->SetFlags(CAddressBook::eLookup, true);
 
-			// Match in search list
-			found = ::find(CPreferences::sPrefs->mAdbkSearch.GetValue().begin(),
-							CPreferences::sPrefs->mAdbkSearch.GetValue().end(),  adbk_url);
+		// Match in search list
+		found = ::find(CPreferences::sPrefs->mAdbkSearch.GetValue().begin(),
+						CPreferences::sPrefs->mAdbkSearch.GetValue().end(),  adbk_url);
 
-			if (found != CPreferences::sPrefs->mAdbkSearch.GetValue().end())
-				adbk->SetFlags(CAddressBook::eSearch, true);
+		if (found != CPreferences::sPrefs->mAdbkSearch.GetValue().end())
+			adbk->SetFlags(CAddressBook::eSearch, true);
 
-			// Match in auto sync list
-			found = ::find(CPreferences::sPrefs->mAdbkAutoSync.GetValue().begin(),
-							CPreferences::sPrefs->mAdbkAutoSync.GetValue().end(),  adbk_url);
+		// Match in auto sync list
+		found = ::find(CPreferences::sPrefs->mAdbkAutoSync.GetValue().begin(),
+						CPreferences::sPrefs->mAdbkAutoSync.GetValue().end(),  adbk_url);
 
-			if (found != CPreferences::sPrefs->mAdbkAutoSync.GetValue().end())
-				adbk->SetFlags(CAddressBook::eAutoSync, true);
+		if (found != CPreferences::sPrefs->mAdbkAutoSync.GetValue().end())
+			adbk->SetFlags(CAddressBook::eAutoSync, true);
 
-			// Force update of manager
-			CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, true);
+		// Force update of manager
+		CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, true);
 	}
 
 	// Look at each child
@@ -794,8 +794,8 @@ void CAdbkProtocol::ListChanged()
 	if (mCacheClient != NULL)
 	{
 		DumpAddressBooks();
-			}
-		}
+	}
+}
 
 CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
 {
@@ -819,7 +819,7 @@ CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
 	names.pop_back();
 	
 	return names.empty() ? const_cast<CAddressBook*>(&mStoreRoot) : mStoreRoot.FindNode(names);
-	}
+}
 
 CAddressBook* CAdbkProtocol::GetParentNode(const cdstring& adbk) const
 {
@@ -843,7 +843,7 @@ void CAdbkProtocol::CreateAdbk(CAddressBook* adbk)
 {
 	// Don't do on server if cache is primary
 	if (!mCacheIsPrimary)
-	mClient->_CreateAdbk(adbk);
+		mClient->_CreateAdbk(adbk);
 
 	// Always keep disconnected cache in sync with server
 	if (mCacheClient != NULL)
@@ -862,7 +862,7 @@ void CAdbkProtocol::TouchAdbk(CAddressBook* adbk)
 {
 	// Don't do on server if cache is primary
 	if (!mCacheIsPrimary)
-	mClient->_TouchAdbk(adbk);
+		mClient->_TouchAdbk(adbk);
 
 	// Always keep disconnected cache in sync with server
 	if (mCacheClient != NULL)
@@ -889,7 +889,7 @@ void CAdbkProtocol::DeleteAdbk(CAddressBook* adbk)
 {
 	// Don't do on server if cache is primary
 	if (!mCacheIsPrimary)
-	mClient->_DeleteAdbk(adbk);
+		mClient->_DeleteAdbk(adbk);
 
 	// Always keep disconnected cache in sync with server
 	if (mCacheClient != NULL)
@@ -914,7 +914,7 @@ void CAdbkProtocol::RenameAdbk(CAddressBook* adbk, const char* adbk_new)
 	// Rename it on the server
 	// Don't do on server if cache is primary
 	if (!mCacheIsPrimary)
-	mClient->_RenameAdbk(adbk, adbk_new);
+		mClient->_RenameAdbk(adbk, adbk_new);
 
 	// Always keep disconnected cache in sync with server
 	if (mCacheClient != NULL)
@@ -1134,8 +1134,8 @@ void CAdbkProtocol::AddAddress(CAddressBook* adbk, CAddressList* addrs)
 	{
 		adbk->GetVCardAdbk()->ClearRecording();
 		adbk->GetVCardAdbk()->SetDirty(false);
-}
-
+	}
+	
 	// Always keep disconnected cache in sync with server
 	if (adbk->IsOpen() && (mCacheClient != NULL))
 	{
@@ -1158,8 +1158,8 @@ void CAdbkProtocol::AddGroup(CAddressBook* adbk, CGroupList* grps)
 	{
 		adbk->GetVCardAdbk()->ClearRecording();
 		adbk->GetVCardAdbk()->SetDirty(false);
-}
-
+	}
+	
 	// Always keep disconnected cache in sync with server
 	if (adbk->IsOpen() && (mCacheClient != NULL))
 	{
@@ -1390,7 +1390,7 @@ void CAdbkProtocol::DumpAddressBooks()
 	
 	// Write to stream
 	doc->Generate(fout);
-		}
+}
 
 void CAdbkProtocol::ReadAddressBooks()
 {
@@ -1406,8 +1406,8 @@ void CAdbkProtocol::ReadAddressBooks()
 		// Check root node
 		xmllib::XMLNode* root = parser.Document()->GetRoot();
 		if (!root->CompareFullName(cXMLElement_adbklist))
-		return;
-
+			return;
+		
 		// Now have store root read in all children
 		mStoreRoot.ReadXML(root, true);
 
@@ -1426,11 +1426,11 @@ void CAdbkProtocol::SynchroniseRemoteAll(bool fast)
 
 void CAdbkProtocol::SynchroniseRemote(CAddressBook* adbk, bool fast)
 {
-	}
+}
 
 void CAdbkProtocol::SyncRemote(CAddressBook* remote, CAddressBook* local, bool fast)
 {
-	}
+}
 
 void CAdbkProtocol::ClearDisconnect(CAddressBook* adbk)
 {

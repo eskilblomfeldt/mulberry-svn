@@ -214,8 +214,8 @@ void CAdbkManagerTable::DoSingleClick(unsigned long row, const CKeyModifiers& mo
 	if (fullview.GetSingleClick() &&
 		(fullview.GetSingleClickModifiers() == mods))
 		DoFullView();
-	}
-	
+}
+
 // Handle double click
 void CAdbkManagerTable::DoDoubleClick(unsigned long row, const CKeyModifiers& mods)
 {
@@ -235,8 +235,8 @@ void CAdbkManagerTable::DoDoubleClick(unsigned long row, const CKeyModifiers& mo
 void CAdbkManagerTable::DoPreview()
 {
 	PreviewAddressBook();
-	}
-	
+}
+
 void CAdbkManagerTable::DoPreview(CAddressBook* adbk)
 {
 	PreviewAddressBook(adbk);
@@ -509,14 +509,14 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 	create.use_nicknames = true;
 	create.use_search = true;
 
-		CAdbkProtocol* proto = NULL;
+	CAdbkProtocol* proto = NULL;
 	CAddressBook* node = NULL;
 	CAddressBook* result = NULL;
 	bool insert_delim = false;
 
 	// Determine initial creation type
-		if (IsSelectionValid())
-		{
+	if (IsSelectionValid())
+	{
 		TableIndexT row = GetFirstSelectedRow();
 		TableIndexT woRow = mCollapsableTree->GetWideOpenIndex(row);
 
@@ -549,7 +549,7 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 			// Force generic create
 			create.use_wd = false;
 		}
-			}
+	}
 
 	try
 	{
@@ -577,7 +577,7 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 
 			CAddressBook* adbk = NULL;
 
-				// Create address book
+			// Create address book
 			adbk = mManager->NewAddressBook(proto, new_name, create.directory);
 
 			if (adbk && !create.directory)
@@ -595,19 +595,19 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 			}
 			
 			result = adbk;
-				}
-			}
-			catch (...)
-			{
-				CLOG_LOGCATCH(...);
 		}
 	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+	}
+}
 
 // Open address book
 void CAdbkManagerTable::OnOpenAddressBook(void)
 {
-		// Display each selected address book
-		DoToSelection((DoToSelectionPP) &CAdbkManagerTable::OpenAddressBook);
+	// Display each selected address book
+	DoToSelection((DoToSelectionPP) &CAdbkManagerTable::OpenAddressBook);
 }
 
 // Display a specified address book
@@ -620,7 +620,7 @@ bool CAdbkManagerTable::OpenAddressBook(TableIndexT row)
 	if (!adbk->IsAdbk())
 		return false;
 	
-		// Open it
+	// Open it
 	return CAddressBookWindow::OpenWindow(adbk);
 }
 
@@ -697,14 +697,14 @@ void CAdbkManagerTable::OnDeleteAddressBook(void)
 				// Delete all mboxes in reverse
 				for(CAddressBookList::reverse_iterator riter = selected.rbegin(); riter != selected.rend(); riter++)
 					mManager->DeleteAddressBook(*riter);
-	}
-}
+			}
+		}
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 	}
-	}
+}
 
 // Search address books
 void CAdbkManagerTable::OnSearchAddressBook(void)
@@ -1028,7 +1028,7 @@ void CAdbkManagerTable::RefreshNode(CAddressBook* adbk)
 	// Find its wide-open row location
 	uint32_t woRow = adbk->GetRow();
 	TableIndexT exp_row = GetExposedIndex(woRow);
-		if (exp_row)
+	if (exp_row)
 		RefreshRow(exp_row);
 }
 
@@ -1138,7 +1138,7 @@ void CAdbkManagerTable::ProcessExpansion(UInt32 inWideOpenRow, bool expand)
 	{
 		CPreferences::sPrefs->mExpandedAdbks.Value().insert(adbk->IsProtocol() ? adbk->GetName() : adbk->GetAccountName());
 	}
-				else
+	else
 	{
 		CPreferences::sPrefs->mExpandedAdbks.Value().erase(adbk->IsProtocol() ? adbk->GetName() : adbk->GetAccountName());
 	}
@@ -1161,8 +1161,8 @@ void CAdbkManagerTable::ExpandRestore(TableIndexT worow)
 		TableIndexT exp_row = GetExposedIndex(worow);
 		if (exp_row)
 			RefreshRow(exp_row);
-			}
-		}
+	}
+}
 
 void CAdbkManagerTable::ExpandAction(TableIndexT worow, bool deep)
 {

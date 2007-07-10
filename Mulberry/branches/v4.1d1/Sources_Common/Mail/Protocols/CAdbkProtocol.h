@@ -197,7 +197,7 @@ public:
 		{ mFlags.Set(eHasACL, has_acl); }
 	bool GetHasACL() const
 		{ return mFlags.IsSet(eHasACL); }
-			void SetACLDisabled(bool disabled)
+	void SetACLDisabled(bool disabled)
 		{ mFlags.Set((EFlags) eACLDisabled, disabled); }
 	bool GetACLDisabled() const
 		{ return mFlags.IsSet(eACLDisabled); }
@@ -205,10 +205,10 @@ public:
 		{ return GetHasACL() && !GetACLDisabled(); }
 
 	// ACL commands
-			void SetACL(CAddressBook* adbk, CACL* acl);			// Set acl on server
-			void DeleteACL(CAddressBook* adbk, CACL* acl);		// Delete acl on server
-			void GetACL(CAddressBook* adbk);					// Get all acls for mailbox from server
-			void MyRights(CAddressBook* adbk);					// Get current user's rights to mailbox
+	void SetACL(CAddressBook* adbk, CACL* acl);			// Set acl on server
+	void DeleteACL(CAddressBook* adbk, CACL* acl);		// Delete acl on server
+	void GetACL(CAddressBook* adbk);					// Get all acls for mailbox from server
+	void MyRights(CAddressBook* adbk);					// Get current user's rights to mailbox
 
 protected:
 	CAdbkClient*		mClient;							// Its client

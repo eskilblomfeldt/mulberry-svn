@@ -130,8 +130,8 @@ CAddressBookWindow* CAddressBookView::GetAddressBookWindow(void) const
 // Check that close is allowed
 bool CAddressBookView::TestClose()
 {
-		// Can always close remote
-		return true;
+	// Can always close remote
+	return true;
 }
 
 // Close it
@@ -300,8 +300,8 @@ void CAddressBookView::SetAddressBook(CAddressBook* adbk)
 	if (adbk)
 	{
 		GetAddressBook()->Open();
-		
-	// Start listening to new address book's protocol
+			
+		// Start listening to new address book's protocol
 		GetAddressBook()->GetProtocol()->Add_Listener(this);
 	}
 

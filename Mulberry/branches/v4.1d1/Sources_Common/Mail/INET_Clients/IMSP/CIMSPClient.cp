@@ -1424,7 +1424,7 @@ void CIMSPClient::IMSPParseAddressBook(char** txt)
 		throw CINETException(CINETException::err_BadParse);
 	}
 
-		// Add adress book to list
+	// Add adress book to list
 	CAddressBook* adbk = new CAddressBook(GetAdbkOwner(), GetAdbkOwner()->GetStoreRoot(), !noselect, !noinferiors, adbk_name);
 	GetAdbkOwner()->GetStoreRoot()->AddChildHierarchy(adbk);
 	delete adbk_name;

@@ -402,7 +402,7 @@ void CAddressBookManager::SyncLookups()
 			// Not supported at the moment
 			break;
 		}
-	}
+	}	
 }
 
 // Start remote protocol
@@ -557,7 +557,7 @@ void CAddressBookManager::MoveProtocol(long old_index, long new_index)
 
 		// Add to protos list
 		mProtos.push_back(proto);
-}
+	}
 
 	// Adjust indices to remove local/web
 	old_index -= proto_offset;
@@ -570,7 +570,7 @@ void CAddressBookManager::MoveProtocol(long old_index, long new_index)
 	accts.erase(accts.begin() + old_index);
 	if (new_index < (long) mProtos.size() - 1 - proto_offset)
 		accts.insert(accts.begin() + new_index, acct);
-		else
+	else
 		accts.push_back(acct);
 	CPreferences::sPrefs->mAddressAccounts.SetDirty();
 
@@ -586,16 +586,16 @@ const CAddressBook* CAddressBookManager::GetNode(const cdstring& adbk) const
 		result = (*iter)->GetNode(adbk);
 		if (result != NULL)
 			return result;
-}
-
-	return NULL;
 	}
+	
+	return NULL;
+}
 
 // Managing the store
 CAddressBook* CAddressBookManager::NewAddressBook(CAdbkProtocol* proto, const cdstring& name, bool directory)
 {
 	if ((proto == NULL) || name.empty())
-	return NULL;
+		return NULL;
 
 	// Create account name
 	cdstring acct_name = proto->GetAccountName();
@@ -622,7 +622,7 @@ CAddressBook* CAddressBookManager::NewAddressBook(CAdbkProtocol* proto, const cd
 		// Write out an empty calendar with the appropriate name
 		if (!directory)
 		{
-}
+		}
 
 		// Now insert into parent
 		Broadcast_Message(eBroadcast_InsertNode, node);
@@ -681,8 +681,8 @@ void CAddressBookManager::RenameAddressBook(CAddressBook* node, const cdstring& 
 				
 				// Now read the calendar data
 				node->GetProtocol()->ReadFullCalendar(*node, *cal);
-}
-
+			}
+			
 			// Change the name in the calendar
 			cal->EditName(node->GetShortName());
 			
@@ -703,14 +703,14 @@ void CAddressBookManager::RenameAddressBook(CAddressBook* node, const cdstring& 
 			if (opened.get() != NULL)
 			{
 				node->SetCalendar(NULL);
-		}
-		
+			}
+			
 			CLOG_LOGRETHROW;
 			throw;
 		}
 #endif
 	}
-
+	
 	// Now adjust node position
 	
 	// First remove it from any listeners whilst it is still linked in to parent
@@ -724,7 +724,7 @@ void CAddressBookManager::RenameAddressBook(CAddressBook* node, const cdstring& 
 	{
 		parent_node->AddChild(node, true);
 		Broadcast_Message(eBroadcast_InsertNode, node);
-}
+	}
 
 	// Make sure protocol list is in sync after rename
 	node->GetProtocol()->ListChanged();
@@ -777,8 +777,8 @@ void CAddressBookManager::SyncAddressBook(CAddressBook* adbk, bool add)
 			CAddressBookList::iterator found = ::find(mAdbkSearch.begin(), mAdbkSearch.end(), adbk);
 			if (found == mAdbkSearch.end())
 				mAdbkSearch.push_back(adbk);
-				}
-			}
+		}
+	}
 	else
 	{
 		// Remove from caches

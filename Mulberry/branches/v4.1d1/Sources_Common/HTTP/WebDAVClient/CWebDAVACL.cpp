@@ -111,13 +111,13 @@ void CWebDAVACL::GenerateXML(ostream& os)
 	if (mCalACLs != NULL)
 	{
 		for(CCalendarACLList::const_iterator iter = mCalACLs->begin(); iter != mCalACLs->end(); iter++)
-	{
-		// Cannot do if change not allowed
-		if (!(*iter).CanChange())
-			continue;
-		
-		// <DAV:ace> element
-		(*iter).GenerateACE(&xmldoc, acl, static_cast<const CWebDAVSession*>(GetSession())->HasDAVVersion(CWebDAVSession::eCyrusoftInheritable));
+		{
+			// Cannot do if change not allowed
+			if (!(*iter).CanChange())
+				continue;
+			
+			// <DAV:ace> element
+			(*iter).GenerateACE(&xmldoc, acl, static_cast<const CWebDAVSession*>(GetSession())->HasDAVVersion(CWebDAVSession::eCyrusoftInheritable));
 		}
 	}
 	

@@ -910,8 +910,8 @@ CIdentity* CIdentityList::GetIdentity(const CAddress& addr) const
 	}
 	
 	return NULL;
-	}
-	
+}
+
 CIdentity* CIdentityList::GetIdentity(const CCalendarAddress& caladdr) const
 {
 	// Match the Calendar address first

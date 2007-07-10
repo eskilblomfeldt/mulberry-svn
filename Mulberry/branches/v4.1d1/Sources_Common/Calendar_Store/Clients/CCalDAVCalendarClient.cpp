@@ -358,47 +358,47 @@ void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& nod
 #endif
 	if (no_report)
 	{
-	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
-	{
-		// Read in the component
-		ReadCalendarComponent(*iter, cal);
-	}
+		for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
+		{
+			// Read in the component
+			ReadCalendarComponent(*iter, cal);
+		}
 	}
 	else
 	{
-	// Don't bother with this if empty (actually spec requires at least one href)
-	if (hrefs.empty())
-		return;
+		// Don't bother with this if empty (actually spec requires at least one href)
+		if (hrefs.empty())
+			return;
 
-	// Run the calendar-multiget report
-	cdstring rurl = GetRURL(&node);
+		// Run the calendar-multiget report
+		cdstring rurl = GetRURL(&node);
 
-	// Create WebDAV REPORT
-	bool old_style = false;
+		// Create WebDAV REPORT
+		bool old_style = false;
 #ifdef OLD_STYLE_CALENDAR_DATA
-	old_style = (GetCalendarProtocol()->GetAccount()->GetName().find("oldstyle") != cdstring::npos);
+		old_style = (GetCalendarProtocol()->GetAccount()->GetName().find("oldstyle") != cdstring::npos);
 #endif
-	auto_ptr<http::caldav::CCalDAVMultigetReport> request(new http::caldav::CCalDAVMultigetReport(this, rurl, hrefs, old_style));
-	http::CHTTPOutputDataString dout;
-	request->SetOutput(&dout);
+		auto_ptr<http::caldav::CCalDAVMultigetReport> request(new http::caldav::CCalDAVMultigetReport(this, rurl, hrefs, old_style));
+		http::CHTTPOutputDataString dout;
+		request->SetOutput(&dout);
 
-	// Process it
-	RunSession(request.get());
+		// Process it
+		RunSession(request.get());
 
-	// Check response status
-	switch(request->GetStatusCode())
-	{
-	case http::webdav::eStatus_MultiStatus:
-		// Do default action
-		break;
-	default:
-		// Handle error and exit here
-		HandleHTTPError(request.get());
-		return;
-	}
+		// Check response status
+		switch(request->GetStatusCode())
+		{
+		case http::webdav::eStatus_MultiStatus:
+			// Do default action
+			break;
+		default:
+			// Handle error and exit here
+			HandleHTTPError(request.get());
+			return;
+		}
 
-	http::caldav::CCalDAVReportParser parser(cal);
-	parser.ParseData(dout.GetData());
+		http::caldav::CCalDAVReportParser parser(cal);
+		parser.ParseData(dout.GetData());
 	}
 }
 

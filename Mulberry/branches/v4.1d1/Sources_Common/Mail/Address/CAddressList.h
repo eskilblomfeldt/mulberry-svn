@@ -69,7 +69,7 @@ public:
 	void	AddMailAddressToList(cdstrvect& list,					// Add email addresses to list
 								 bool full) const;
 	void	AddCalendarAddressToList(cdstrvect& list,				// Add calendar addresses to list
-									bool full) const;
+								 bool full) const;
 	void	WriteToStream(ostream& stream) const;					// Write to stream
 
 private:

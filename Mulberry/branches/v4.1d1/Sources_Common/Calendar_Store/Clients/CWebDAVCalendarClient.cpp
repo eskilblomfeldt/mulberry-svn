@@ -1551,7 +1551,7 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 					// Display error so user knows why the prompt occurs again - but not the first time
 					// as we might have a digest re-auth.
 					if (!first_time)
-					DisplayHTTPError(request);
+						DisplayHTTPError(request);
 				}
 
 				// Get authorization object (prompt the user) and redo the request

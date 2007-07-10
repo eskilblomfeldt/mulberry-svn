@@ -273,8 +273,8 @@ void CAdbkAddress::AddCalendarAddressToList(cdstrvect& list, bool full) const
 		result += cMailtoURLScheme;
 		result += GetMailAddress();
 		result += ">";
-}
-
+	}
+	
 	list.push_back(result);
 }
 

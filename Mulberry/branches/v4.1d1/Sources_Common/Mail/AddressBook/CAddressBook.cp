@@ -529,7 +529,7 @@ void CAddressBook::Open()
 		mProtocol->OpenAdbk(this);
 
 		// Mark as open
-	SetFlags(eOpen);
+		SetFlags(eOpen);
 	}
 	catch (...)
 	{
@@ -794,10 +794,10 @@ void CAddressBook::AddUniqueAddresses(CAddressList& add)
 			unique.push_back(new CAdbkAddress(**iter));
 	}
 
-		// Add unique items
+	// Add unique items
 	if (unique.size())
 		AddAddress(&unique);
-	}
+}
 
 void CAddressBook::UpdateAddress(CAddress* addr, bool sorted)
 {
@@ -1475,25 +1475,25 @@ void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMat
 		mProtocol->SearchAddress(this, name, match, field, addr_list);
 	else
 	{
-	cdstring matchit(name);
-	CAdbkAddress::ExpandMatch(match, matchit);
+		cdstring matchit(name);
+		CAdbkAddress::ExpandMatch(match, matchit);
 
-	// Iterate over all single addresses
-	for(CAddressList::const_iterator iter = mAddresses.begin(); iter != mAddresses.end(); iter++)
-	{
-		bool result = false;
+		// Iterate over all single addresses
+		for(CAddressList::const_iterator iter = mAddresses.begin(); iter != mAddresses.end(); iter++)
+		{
+			bool result = false;
 
-		CAdbkAddress* addr = dynamic_cast<CAdbkAddress*>(*iter);
-		if (!addr)
-			continue;
-			
-		// Do comparison of specific field
-		result = addr->Search(matchit, field);
+			CAdbkAddress* addr = dynamic_cast<CAdbkAddress*>(*iter);
+			if (!addr)
+				continue;
+				
+			// Do comparison of specific field
+			result = addr->Search(matchit, field);
 
-		// Check for matching item
-		if (result)
-			// Add copy to list
-			addr_list.push_back(new CAdbkAddress(*addr));
+			// Check for matching item
+			if (result)
+				// Add copy to list
+				addr_list.push_back(new CAdbkAddress(*addr));
 		}
 	}
 }

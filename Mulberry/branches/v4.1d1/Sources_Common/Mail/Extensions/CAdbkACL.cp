@@ -31,7 +31,7 @@ CAdbkACL& CAdbkACL::operator=(const CAdbkACL& copy)
 {
 	if (this != &copy)
 	{
-	CACL::operator=(copy);
+		CACL::operator=(copy);
 		mType = copy.mType;
 		mCanChange = copy.mCanChange;
 		mPropName = copy.mPropName;

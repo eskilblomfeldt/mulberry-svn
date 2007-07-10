@@ -50,7 +50,7 @@ void CHTTPAuthorizationDigest::GenerateAuthorization(ostream& os, const CHTTPReq
 	}
 	else
 	{
-	os << cHeaderAuthorization << cHeaderDelimiter << "Digest "
+		os << cHeaderAuthorization << cHeaderDelimiter << "Digest "
 		<< "username=\"" << mUser << "\"," << net_endl
 		<< " realm=\"" << mRealm << "\"," << net_endl
 		<< " nonce=\"" << mNonce << "\"," << net_endl
