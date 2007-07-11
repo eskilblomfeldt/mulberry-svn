@@ -37,6 +37,7 @@ otherlibs: libraries
 librariessrc: libraries
 	(cd ${LIBRARIES_HOME}; \
 	 svn checkout ${SVN_LIBRARIES}/CICalendar/trunk CICalendar; \
+	 svn checkout ${SVN_LIBRARIES}/vCard/trunk vCard; \
 	 svn checkout ${SVN_LIBRARIES}/XMLLib/trunk XMLLib)
 
 mulberrysrc:
@@ -52,6 +53,7 @@ updatepp:
 updatelibraries:
 	(cd ${LIBRARIES_HOME}; \
 	 cd CICalendar; svn update; \
+	 cd ../vCard; svn update; \
 	 cd ../XMLLib; svn update)
 
 updatemulberry:
