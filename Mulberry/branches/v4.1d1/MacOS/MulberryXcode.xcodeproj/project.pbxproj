@@ -9,6 +9,60 @@
 /* Begin PBXBuildFile section */
 		8D0C4E8D0486CD37000505A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
 		8D0C4E920486CD37000505A6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		AF25512C0C432558001AAE53 /* CFreeBusyPrintout.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */; };
+		AF25512E0C432559001AAE53 /* CFreeBusyTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551260C432558001AAE53 /* CFreeBusyTable.cp */; };
+		AF2551300C432559001AAE53 /* CFreeBusyTitleTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551280C432558001AAE53 /* CFreeBusyTitleTable.cp */; };
+		AF2551320C432559001AAE53 /* CFreeBusyView.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF25512A0C432558001AAE53 /* CFreeBusyView.cp */; };
+		AF25513B0C4325B1001AAE53 /* CCalendarStoreFreeBusy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551390C4325B1001AAE53 /* CCalendarStoreFreeBusy.cpp */; };
+		AF2551410C4325FA001AAE53 /* CCalDAVSchedule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25513D0C4325FA001AAE53 /* CCalDAVSchedule.cpp */; };
+		AF2551430C4325FA001AAE53 /* CCalDAVScheduleParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25513F0C4325FA001AAE53 /* CCalDAVScheduleParser.cpp */; };
+		AF25514E0C432636001AAE53 /* CCardDAVMakeAdbk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551460C432636001AAE53 /* CCardDAVMakeAdbk.cpp */; };
+		AF2551500C432636001AAE53 /* CCardDAVMultigetReport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551480C432636001AAE53 /* CCardDAVMultigetReport.cpp */; };
+		AF2551520C432636001AAE53 /* CCardDAVQueryReport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25514A0C432636001AAE53 /* CCardDAVQueryReport.cpp */; };
+		AF2551540C432636001AAE53 /* CCardDAVReportParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25514C0C432636001AAE53 /* CCardDAVReportParser.cpp */; };
+		AF2551580C432686001AAE53 /* CWebDAVPrincipalMatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551560C432686001AAE53 /* CWebDAVPrincipalMatch.cpp */; };
+		AF2551660C4326C8001AAE53 /* CCardDAVVCardClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25515C0C4326C8001AAE53 /* CCardDAVVCardClient.cpp */; };
+		AF2551680C4326C8001AAE53 /* CLocalVCardClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25515E0C4326C8001AAE53 /* CLocalVCardClient.cpp */; };
+		AF25516A0C4326C8001AAE53 /* CWebDAVVCardClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551600C4326C8001AAE53 /* CWebDAVVCardClient.cpp */; };
+		AF25516C0C4326C8001AAE53 /* CVCardMapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551620C4326C8001AAE53 /* CVCardMapper.cpp */; };
+		AF25516E0C4326C8001AAE53 /* CVCardStoreXML.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551640C4326C8001AAE53 /* CVCardStoreXML.cpp */; };
+		AF2551A60C4326F0001AAE53 /* CVCardAddress.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551730C4326EF001AAE53 /* CVCardAddress.cpp */; };
+		AF2551A80C4326F0001AAE53 /* CVCardAddressBook.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551750C4326EF001AAE53 /* CVCardAddressBook.cpp */; };
+		AF2551AB0C4326F0001AAE53 /* CVCardAddressValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551780C4326EF001AAE53 /* CVCardAddressValue.cpp */; };
+		AF2551AD0C4326F0001AAE53 /* CVCardAttribute.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25517A0C4326EF001AAE53 /* CVCardAttribute.cpp */; };
+		AF2551AF0C4326F0001AAE53 /* CVCardComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25517C0C4326EF001AAE53 /* CVCardComponent.cpp */; };
+		AF2551B10C4326F0001AAE53 /* CVCardComponentBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25517E0C4326EF001AAE53 /* CVCardComponentBase.cpp */; };
+		AF2551B30C4326F0001AAE53 /* CVCardComponentDB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551800C4326EF001AAE53 /* CVCardComponentDB.cpp */; };
+		AF2551B50C4326F0001AAE53 /* CVCardComponentRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551820C4326EF001AAE53 /* CVCardComponentRecord.cpp */; };
+		AF2551B70C4326F0001AAE53 /* CVCardDateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551840C4326EF001AAE53 /* CVCardDateTime.cpp */; };
+		AF2551B90C4326F0001AAE53 /* CVCardDateTimeValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551860C4326EF001AAE53 /* CVCardDateTimeValue.cpp */; };
+		AF2551BB0C4326F0001AAE53 /* CVCardDefinitions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551880C4326EF001AAE53 /* CVCardDefinitions.cpp */; };
+		AF2551BD0C4326F0001AAE53 /* CVCardDummyValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25518A0C4326EF001AAE53 /* CVCardDummyValue.cpp */; };
+		AF2551BF0C4326F0001AAE53 /* CVCardLocale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25518C0C4326EF001AAE53 /* CVCardLocale.cpp */; };
+		AF2551C10C4326F0001AAE53 /* CVCardMultiValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25518E0C4326EF001AAE53 /* CVCardMultiValue.cpp */; };
+		AF2551C30C4326F0001AAE53 /* CVCardN.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551900C4326EF001AAE53 /* CVCardN.cpp */; };
+		AF2551C50C4326F0001AAE53 /* CVCardNValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551920C4326EF001AAE53 /* CVCardNValue.cpp */; };
+		AF2551C70C4326F0001AAE53 /* CVCardPlainTextValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551940C4326EF001AAE53 /* CVCardPlainTextValue.cpp */; };
+		AF2551C90C4326F0001AAE53 /* CVCardProperty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551960C4326EF001AAE53 /* CVCardProperty.cpp */; };
+		AF2551CB0C4326F0001AAE53 /* CVCardSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551980C4326EF001AAE53 /* CVCardSync.cpp */; };
+		AF2551CD0C4326F0001AAE53 /* CVCardTextValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25519A0C4326EF001AAE53 /* CVCardTextValue.cpp */; };
+		AF2551CF0C4326F0001AAE53 /* CVCardURIValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25519C0C4326EF001AAE53 /* CVCardURIValue.cpp */; };
+		AF2551D10C4326F0001AAE53 /* CVCardUTCOffsetValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF25519E0C4326EF001AAE53 /* CVCardUTCOffsetValue.cpp */; };
+		AF2551D30C4326F0001AAE53 /* CVCardUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551A00C4326EF001AAE53 /* CVCardUtils.cpp */; };
+		AF2551D50C4326F0001AAE53 /* CVCardValue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551A20C4326EF001AAE53 /* CVCardValue.cpp */; };
+		AF2551D70C4326F0001AAE53 /* CVCardVCard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551A40C4326EF001AAE53 /* CVCardVCard.cpp */; };
+		AF2551DB0C43272D001AAE53 /* CKSC_5601_1992.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551D90C43272D001AAE53 /* CKSC_5601_1992.cp */; };
+		AF2551DF0C432753001AAE53 /* CIMAPUTF7.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551DD0C432752001AAE53 /* CIMAPUTF7.cp */; };
+		AF2551E50C432809001AAE53 /* CITIPScheduleResults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551E30C432809001AAE53 /* CITIPScheduleResults.cpp */; };
+		AF2551EE0C432843001AAE53 /* CWebKitControl.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551E80C432843001AAE53 /* CWebKitControl.cp */; };
+		AF2551F00C432843001AAE53 /* CWebKitControlImp.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551EA0C432843001AAE53 /* CWebKitControlImp.cp */; };
+		AF2551F30C432843001AAE53 /* CWebKitUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = AF2551ED0C432843001AAE53 /* CWebKitUtils.m */; };
+		AF2551F60C4328A7001AAE53 /* CCalendarAddressDisplay.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551F40C4328A7001AAE53 /* CCalendarAddressDisplay.cp */; };
+		AF2551FA0C4328E9001AAE53 /* CCalendarAddress.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551F80C4328E9001AAE53 /* CCalendarAddress.cp */; };
+		AF2555010C43DAC7001AAE53 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF2554580C43DAC7001AAE53 /* Cocoa.framework */; };
+		AF2555020C43DAC7001AAE53 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF2554590C43DAC7001AAE53 /* WebKit.framework */; };
+		AF2555070C442299001AAE53 /* CFreeBusyTableCommon.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2555050C442298001AAE53 /* CFreeBusyTableCommon.cp */; };
+		AF2555080C442299001AAE53 /* CFreeBusyViewCommon.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2555060C442298001AAE53 /* CFreeBusyViewCommon.cp */; };
 		AF2ADE160AE464E90078C306 /* libcrypto.0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */; };
 		AF2ADE170AE464E90078C306 /* libssl.0.9.7.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */; };
 		AF3750A60AE1DC5D00C56E20 /* ATSUTextConversion.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF37509F0AE1DC5D00C56E20 /* ATSUTextConversion.cp */; };
@@ -771,7 +825,6 @@
 		AFCDE3260AE176E300E30447 /* CAdbkSearchTitleTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE860AE176DC00E30447 /* CAdbkSearchTitleTable.cp */; };
 		AFCDE3270AE176E300E30447 /* CAdbkSearchTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE880AE176DC00E30447 /* CAdbkSearchTable.cp */; };
 		AFCDE3280AE176E300E30447 /* CAdbkServerPopup.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE8A0AE176DC00E30447 /* CAdbkServerPopup.cp */; };
-		AFCDE3290AE176E300E30447 /* CAddressBookDoc.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE8D0AE176DC00E30447 /* CAddressBookDoc.cp */; };
 		AFCDE32A0AE176E300E30447 /* CAddressBookWindow.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE8F0AE176DC00E30447 /* CAddressBookWindow.cp */; };
 		AFCDE32B0AE176E300E30447 /* CAddressBookView.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE910AE176DC00E30447 /* CAddressBookView.cp */; };
 		AFCDE32C0AE176E300E30447 /* CAddressBookViewCommon.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDE920AE176DC00E30447 /* CAddressBookViewCommon.cp */; };
@@ -923,8 +976,6 @@
 		AFCDE3C30AE176E400E30447 /* CMIMESupport.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFCD0AE176DE00E30447 /* CMIMESupport.cp */; };
 		AFCDE3C40AE176E400E30447 /* CMIMETypes.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFCF0AE176DE00E30447 /* CMIMETypes.cp */; };
 		AFCDE3C50AE176E400E30447 /* CAddressBook.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFD20AE176DE00E30447 /* CAddressBook.cp */; };
-		AFCDE3C60AE176E400E30447 /* CLocalAddressBook.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFD40AE176DE00E30447 /* CLocalAddressBook.cp */; };
-		AFCDE3C70AE176E400E30447 /* CRemoteAddressBook.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFD60AE176DE00E30447 /* CRemoteAddressBook.cp */; };
 		AFCDE3C80AE176E400E30447 /* CAddress.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFD80AE176DE00E30447 /* CAddress.cp */; };
 		AFCDE3C90AE176E400E30447 /* CAdbkAddress.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFDA0AE176DE00E30447 /* CAdbkAddress.cp */; };
 		AFCDE3CA0AE176E400E30447 /* CAddressList.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDFDC0AE176DE00E30447 /* CAddressList.cp */; };
@@ -1391,6 +1442,111 @@
 		4A9504CAFFE6A41611CA0CBA /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		508344B209E5C41E0093A071 /* Mulberry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mulberry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D0C4E960486CD37000505A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.plist; path = Packaging/Info.plist; sourceTree = SOURCE_ROOT; };
+		AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyPrintout.cp; sourceTree = "<group>"; };
+		AF2551250C432558001AAE53 /* CFreeBusyPrintout.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CFreeBusyPrintout.h; sourceTree = "<group>"; };
+		AF2551260C432558001AAE53 /* CFreeBusyTable.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyTable.cp; sourceTree = "<group>"; };
+		AF2551270C432558001AAE53 /* CFreeBusyTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CFreeBusyTable.h; sourceTree = "<group>"; };
+		AF2551280C432558001AAE53 /* CFreeBusyTitleTable.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyTitleTable.cp; sourceTree = "<group>"; };
+		AF2551290C432558001AAE53 /* CFreeBusyTitleTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CFreeBusyTitleTable.h; sourceTree = "<group>"; };
+		AF25512A0C432558001AAE53 /* CFreeBusyView.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyView.cp; sourceTree = "<group>"; };
+		AF25512B0C432558001AAE53 /* CFreeBusyView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CFreeBusyView.h; sourceTree = "<group>"; };
+		AF2551390C4325B1001AAE53 /* CCalendarStoreFreeBusy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarStoreFreeBusy.cpp; path = ../Sources_Common/Calendar_Store/CCalendarStoreFreeBusy.cpp; sourceTree = SOURCE_ROOT; };
+		AF25513A0C4325B1001AAE53 /* CCalendarStoreFreeBusy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarStoreFreeBusy.h; path = ../Sources_Common/Calendar_Store/CCalendarStoreFreeBusy.h; sourceTree = SOURCE_ROOT; };
+		AF25513D0C4325FA001AAE53 /* CCalDAVSchedule.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalDAVSchedule.cpp; path = ../Sources_Common/HTTP/CalDAVClient/CCalDAVSchedule.cpp; sourceTree = SOURCE_ROOT; };
+		AF25513E0C4325FA001AAE53 /* CCalDAVSchedule.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalDAVSchedule.h; path = ../Sources_Common/HTTP/CalDAVClient/CCalDAVSchedule.h; sourceTree = SOURCE_ROOT; };
+		AF25513F0C4325FA001AAE53 /* CCalDAVScheduleParser.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalDAVScheduleParser.cpp; path = ../Sources_Common/HTTP/CalDAVClient/CCalDAVScheduleParser.cpp; sourceTree = SOURCE_ROOT; };
+		AF2551400C4325FA001AAE53 /* CCalDAVScheduleParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalDAVScheduleParser.h; path = ../Sources_Common/HTTP/CalDAVClient/CCalDAVScheduleParser.h; sourceTree = SOURCE_ROOT; };
+		AF2551460C432636001AAE53 /* CCardDAVMakeAdbk.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CCardDAVMakeAdbk.cpp; sourceTree = "<group>"; };
+		AF2551470C432636001AAE53 /* CCardDAVMakeAdbk.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CCardDAVMakeAdbk.h; sourceTree = "<group>"; };
+		AF2551480C432636001AAE53 /* CCardDAVMultigetReport.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CCardDAVMultigetReport.cpp; sourceTree = "<group>"; };
+		AF2551490C432636001AAE53 /* CCardDAVMultigetReport.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CCardDAVMultigetReport.h; sourceTree = "<group>"; };
+		AF25514A0C432636001AAE53 /* CCardDAVQueryReport.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CCardDAVQueryReport.cpp; sourceTree = "<group>"; };
+		AF25514B0C432636001AAE53 /* CCardDAVQueryReport.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CCardDAVQueryReport.h; sourceTree = "<group>"; };
+		AF25514C0C432636001AAE53 /* CCardDAVReportParser.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CCardDAVReportParser.cpp; sourceTree = "<group>"; };
+		AF25514D0C432636001AAE53 /* CCardDAVReportParser.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CCardDAVReportParser.h; sourceTree = "<group>"; };
+		AF2551560C432686001AAE53 /* CWebDAVPrincipalMatch.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CWebDAVPrincipalMatch.cpp; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVPrincipalMatch.cpp; sourceTree = SOURCE_ROOT; };
+		AF2551570C432686001AAE53 /* CWebDAVPrincipalMatch.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CWebDAVPrincipalMatch.h; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVPrincipalMatch.h; sourceTree = SOURCE_ROOT; };
+		AF25515C0C4326C8001AAE53 /* CCardDAVVCardClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CCardDAVVCardClient.cpp; sourceTree = "<group>"; };
+		AF25515D0C4326C8001AAE53 /* CCardDAVVCardClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CCardDAVVCardClient.h; sourceTree = "<group>"; };
+		AF25515E0C4326C8001AAE53 /* CLocalVCardClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CLocalVCardClient.cpp; sourceTree = "<group>"; };
+		AF25515F0C4326C8001AAE53 /* CLocalVCardClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CLocalVCardClient.h; sourceTree = "<group>"; };
+		AF2551600C4326C8001AAE53 /* CWebDAVVCardClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CWebDAVVCardClient.cpp; sourceTree = "<group>"; };
+		AF2551610C4326C8001AAE53 /* CWebDAVVCardClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWebDAVVCardClient.h; sourceTree = "<group>"; };
+		AF2551620C4326C8001AAE53 /* CVCardMapper.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CVCardMapper.cpp; sourceTree = "<group>"; };
+		AF2551630C4326C8001AAE53 /* CVCardMapper.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CVCardMapper.h; sourceTree = "<group>"; };
+		AF2551640C4326C8001AAE53 /* CVCardStoreXML.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CVCardStoreXML.cpp; sourceTree = "<group>"; };
+		AF2551650C4326C8001AAE53 /* CVCardStoreXML.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CVCardStoreXML.h; sourceTree = "<group>"; };
+		AF2551730C4326EF001AAE53 /* CVCardAddress.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardAddress.cpp; path = Source/CVCardAddress.cpp; sourceTree = "<group>"; };
+		AF2551740C4326EF001AAE53 /* CVCardAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardAddress.h; path = Source/CVCardAddress.h; sourceTree = "<group>"; };
+		AF2551750C4326EF001AAE53 /* CVCardAddressBook.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardAddressBook.cpp; path = Source/CVCardAddressBook.cpp; sourceTree = "<group>"; };
+		AF2551760C4326EF001AAE53 /* CVCardAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardAddressBook.h; path = Source/CVCardAddressBook.h; sourceTree = "<group>"; };
+		AF2551770C4326EF001AAE53 /* CVCardAddressBookRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardAddressBookRef.h; path = Source/CVCardAddressBookRef.h; sourceTree = "<group>"; };
+		AF2551780C4326EF001AAE53 /* CVCardAddressValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardAddressValue.cpp; path = Source/CVCardAddressValue.cpp; sourceTree = "<group>"; };
+		AF2551790C4326EF001AAE53 /* CVCardAddressValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardAddressValue.h; path = Source/CVCardAddressValue.h; sourceTree = "<group>"; };
+		AF25517A0C4326EF001AAE53 /* CVCardAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardAttribute.cpp; path = Source/CVCardAttribute.cpp; sourceTree = "<group>"; };
+		AF25517B0C4326EF001AAE53 /* CVCardAttribute.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardAttribute.h; path = Source/CVCardAttribute.h; sourceTree = "<group>"; };
+		AF25517C0C4326EF001AAE53 /* CVCardComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardComponent.cpp; path = Source/CVCardComponent.cpp; sourceTree = "<group>"; };
+		AF25517D0C4326EF001AAE53 /* CVCardComponent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardComponent.h; path = Source/CVCardComponent.h; sourceTree = "<group>"; };
+		AF25517E0C4326EF001AAE53 /* CVCardComponentBase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardComponentBase.cpp; path = Source/CVCardComponentBase.cpp; sourceTree = "<group>"; };
+		AF25517F0C4326EF001AAE53 /* CVCardComponentBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardComponentBase.h; path = Source/CVCardComponentBase.h; sourceTree = "<group>"; };
+		AF2551800C4326EF001AAE53 /* CVCardComponentDB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardComponentDB.cpp; path = Source/CVCardComponentDB.cpp; sourceTree = "<group>"; };
+		AF2551810C4326EF001AAE53 /* CVCardComponentDB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardComponentDB.h; path = Source/CVCardComponentDB.h; sourceTree = "<group>"; };
+		AF2551820C4326EF001AAE53 /* CVCardComponentRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardComponentRecord.cpp; path = Source/CVCardComponentRecord.cpp; sourceTree = "<group>"; };
+		AF2551830C4326EF001AAE53 /* CVCardComponentRecord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardComponentRecord.h; path = Source/CVCardComponentRecord.h; sourceTree = "<group>"; };
+		AF2551840C4326EF001AAE53 /* CVCardDateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardDateTime.cpp; path = Source/CVCardDateTime.cpp; sourceTree = "<group>"; };
+		AF2551850C4326EF001AAE53 /* CVCardDateTime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardDateTime.h; path = Source/CVCardDateTime.h; sourceTree = "<group>"; };
+		AF2551860C4326EF001AAE53 /* CVCardDateTimeValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardDateTimeValue.cpp; path = Source/CVCardDateTimeValue.cpp; sourceTree = "<group>"; };
+		AF2551870C4326EF001AAE53 /* CVCardDateTimeValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardDateTimeValue.h; path = Source/CVCardDateTimeValue.h; sourceTree = "<group>"; };
+		AF2551880C4326EF001AAE53 /* CVCardDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardDefinitions.cpp; path = Source/CVCardDefinitions.cpp; sourceTree = "<group>"; };
+		AF2551890C4326EF001AAE53 /* CVCardDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardDefinitions.h; path = Source/CVCardDefinitions.h; sourceTree = "<group>"; };
+		AF25518A0C4326EF001AAE53 /* CVCardDummyValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardDummyValue.cpp; path = Source/CVCardDummyValue.cpp; sourceTree = "<group>"; };
+		AF25518B0C4326EF001AAE53 /* CVCardDummyValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardDummyValue.h; path = Source/CVCardDummyValue.h; sourceTree = "<group>"; };
+		AF25518C0C4326EF001AAE53 /* CVCardLocale.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardLocale.cpp; path = Source/CVCardLocale.cpp; sourceTree = "<group>"; };
+		AF25518D0C4326EF001AAE53 /* CVCardLocale.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardLocale.h; path = Source/CVCardLocale.h; sourceTree = "<group>"; };
+		AF25518E0C4326EF001AAE53 /* CVCardMultiValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardMultiValue.cpp; path = Source/CVCardMultiValue.cpp; sourceTree = "<group>"; };
+		AF25518F0C4326EF001AAE53 /* CVCardMultiValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardMultiValue.h; path = Source/CVCardMultiValue.h; sourceTree = "<group>"; };
+		AF2551900C4326EF001AAE53 /* CVCardN.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardN.cpp; path = Source/CVCardN.cpp; sourceTree = "<group>"; };
+		AF2551910C4326EF001AAE53 /* CVCardN.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardN.h; path = Source/CVCardN.h; sourceTree = "<group>"; };
+		AF2551920C4326EF001AAE53 /* CVCardNValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardNValue.cpp; path = Source/CVCardNValue.cpp; sourceTree = "<group>"; };
+		AF2551930C4326EF001AAE53 /* CVCardNValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardNValue.h; path = Source/CVCardNValue.h; sourceTree = "<group>"; };
+		AF2551940C4326EF001AAE53 /* CVCardPlainTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardPlainTextValue.cpp; path = Source/CVCardPlainTextValue.cpp; sourceTree = "<group>"; };
+		AF2551950C4326EF001AAE53 /* CVCardPlainTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardPlainTextValue.h; path = Source/CVCardPlainTextValue.h; sourceTree = "<group>"; };
+		AF2551960C4326EF001AAE53 /* CVCardProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardProperty.cpp; path = Source/CVCardProperty.cpp; sourceTree = "<group>"; };
+		AF2551970C4326EF001AAE53 /* CVCardProperty.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardProperty.h; path = Source/CVCardProperty.h; sourceTree = "<group>"; };
+		AF2551980C4326EF001AAE53 /* CVCardSync.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardSync.cpp; path = Source/CVCardSync.cpp; sourceTree = "<group>"; };
+		AF2551990C4326EF001AAE53 /* CVCardSync.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardSync.h; path = Source/CVCardSync.h; sourceTree = "<group>"; };
+		AF25519A0C4326EF001AAE53 /* CVCardTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardTextValue.cpp; path = Source/CVCardTextValue.cpp; sourceTree = "<group>"; };
+		AF25519B0C4326EF001AAE53 /* CVCardTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardTextValue.h; path = Source/CVCardTextValue.h; sourceTree = "<group>"; };
+		AF25519C0C4326EF001AAE53 /* CVCardURIValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardURIValue.cpp; path = Source/CVCardURIValue.cpp; sourceTree = "<group>"; };
+		AF25519D0C4326EF001AAE53 /* CVCardURIValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardURIValue.h; path = Source/CVCardURIValue.h; sourceTree = "<group>"; };
+		AF25519E0C4326EF001AAE53 /* CVCardUTCOffsetValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardUTCOffsetValue.cpp; path = Source/CVCardUTCOffsetValue.cpp; sourceTree = "<group>"; };
+		AF25519F0C4326EF001AAE53 /* CVCardUTCOffsetValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardUTCOffsetValue.h; path = Source/CVCardUTCOffsetValue.h; sourceTree = "<group>"; };
+		AF2551A00C4326EF001AAE53 /* CVCardUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardUtils.cpp; path = Source/CVCardUtils.cpp; sourceTree = "<group>"; };
+		AF2551A10C4326EF001AAE53 /* CVCardUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardUtils.h; path = Source/CVCardUtils.h; sourceTree = "<group>"; };
+		AF2551A20C4326EF001AAE53 /* CVCardValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardValue.cpp; path = Source/CVCardValue.cpp; sourceTree = "<group>"; };
+		AF2551A30C4326EF001AAE53 /* CVCardValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardValue.h; path = Source/CVCardValue.h; sourceTree = "<group>"; };
+		AF2551A40C4326EF001AAE53 /* CVCardVCard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CVCardVCard.cpp; path = Source/CVCardVCard.cpp; sourceTree = "<group>"; };
+		AF2551A50C4326EF001AAE53 /* CVCardVCard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CVCardVCard.h; path = Source/CVCardVCard.h; sourceTree = "<group>"; };
+		AF2551D90C43272D001AAE53 /* CKSC_5601_1992.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CKSC_5601_1992.cp; path = ../Sources_Common/i18n/Charsets/Converters/TwoByte/CKSC_5601_1992.cp; sourceTree = SOURCE_ROOT; };
+		AF2551DA0C43272D001AAE53 /* CKSC_5601_1992.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CKSC_5601_1992.h; path = ../Sources_Common/i18n/Charsets/Converters/TwoByte/CKSC_5601_1992.h; sourceTree = SOURCE_ROOT; };
+		AF2551DD0C432752001AAE53 /* CIMAPUTF7.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CIMAPUTF7.cp; path = ../Sources_Common/i18n/Charsets/Converters/Unicode/CIMAPUTF7.cp; sourceTree = SOURCE_ROOT; };
+		AF2551DE0C432752001AAE53 /* CIMAPUTF7.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CIMAPUTF7.h; path = ../Sources_Common/i18n/Charsets/Converters/Unicode/CIMAPUTF7.h; sourceTree = SOURCE_ROOT; };
+		AF2551E30C432809001AAE53 /* CITIPScheduleResults.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CITIPScheduleResults.cpp; sourceTree = "<group>"; };
+		AF2551E40C432809001AAE53 /* CITIPScheduleResults.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CITIPScheduleResults.h; sourceTree = "<group>"; };
+		AF2551E80C432843001AAE53 /* CWebKitControl.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CWebKitControl.cp; sourceTree = "<group>"; };
+		AF2551E90C432843001AAE53 /* CWebKitControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWebKitControl.h; sourceTree = "<group>"; };
+		AF2551EA0C432843001AAE53 /* CWebKitControlImp.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CWebKitControlImp.cp; sourceTree = "<group>"; };
+		AF2551EB0C432843001AAE53 /* CWebKitControlImp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWebKitControlImp.h; sourceTree = "<group>"; };
+		AF2551EC0C432843001AAE53 /* CWebKitUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWebKitUtils.h; sourceTree = "<group>"; };
+		AF2551ED0C432843001AAE53 /* CWebKitUtils.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CWebKitUtils.m; sourceTree = "<group>"; };
+		AF2551F40C4328A7001AAE53 /* CCalendarAddressDisplay.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarAddressDisplay.cp; path = Sources/Application/Calendar/Component_Editing/CCalendarAddressDisplay.cp; sourceTree = "<group>"; };
+		AF2551F50C4328A7001AAE53 /* CCalendarAddressDisplay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarAddressDisplay.h; path = Sources/Application/Calendar/Component_Editing/CCalendarAddressDisplay.h; sourceTree = "<group>"; };
+		AF2551F80C4328E9001AAE53 /* CCalendarAddress.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarAddress.cp; path = ../Sources_Common/Mail/Address/CCalendarAddress.cp; sourceTree = SOURCE_ROOT; };
+		AF2551F90C4328E9001AAE53 /* CCalendarAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarAddress.h; path = ../Sources_Common/Mail/Address/CCalendarAddress.h; sourceTree = SOURCE_ROOT; };
+		AF2554580C43DAC7001AAE53 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		AF2554590C43DAC7001AAE53 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		AF2555050C442298001AAE53 /* CFreeBusyTableCommon.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CFreeBusyTableCommon.cp; path = ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/CFreeBusyTableCommon.cp; sourceTree = SOURCE_ROOT; };
+		AF2555060C442298001AAE53 /* CFreeBusyViewCommon.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CFreeBusyViewCommon.cp; path = ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/CFreeBusyViewCommon.cp; sourceTree = SOURCE_ROOT; };
 		AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libcrypto.0.9.7.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/libcrypto.0.9.7.dylib; sourceTree = "<absolute>"; };
 		AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libssl.0.9.7.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/libssl.0.9.7.dylib; sourceTree = "<absolute>"; };
 		AF37509F0AE1DC5D00C56E20 /* ATSUTextConversion.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ATSUTextConversion.cp; sourceTree = "<group>"; };
@@ -2896,8 +3052,6 @@
 		AFCDDE880AE176DC00E30447 /* CAdbkSearchTable.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAdbkSearchTable.cp; path = Sources/Application/Address_Search/CAdbkSearchTable.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDE890AE176DC00E30447 /* CAdbkServerPopup.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAdbkServerPopup.h; path = Sources/Application/Address_Search/CAdbkServerPopup.h; sourceTree = SOURCE_ROOT; };
 		AFCDDE8A0AE176DC00E30447 /* CAdbkServerPopup.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAdbkServerPopup.cp; path = Sources/Application/Address_Search/CAdbkServerPopup.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDE8C0AE176DC00E30447 /* CAddressBookDoc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAddressBookDoc.h; path = Sources/Application/Address_Book/CAddressBookDoc.h; sourceTree = SOURCE_ROOT; };
-		AFCDDE8D0AE176DC00E30447 /* CAddressBookDoc.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressBookDoc.cp; path = Sources/Application/Address_Book/CAddressBookDoc.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDE8E0AE176DC00E30447 /* CAddressBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAddressBookWindow.h; path = Sources/Application/Address_Book/CAddressBookWindow.h; sourceTree = SOURCE_ROOT; };
 		AFCDDE8F0AE176DC00E30447 /* CAddressBookWindow.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressBookWindow.cp; path = Sources/Application/Address_Book/CAddressBookWindow.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDE900AE176DC00E30447 /* CAddressBookView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAddressBookView.h; path = Sources/Application/Address_Book/CAddressBookView.h; sourceTree = SOURCE_ROOT; };
@@ -3203,10 +3357,6 @@
 		AFCDDFCF0AE176DE00E30447 /* CMIMETypes.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CMIMETypes.cp; path = ../Sources_Common/Mail/Attachments/CMIMETypes.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDFD10AE176DE00E30447 /* CAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAddressBook.h; path = ../Sources_Common/Mail/AddressBook/CAddressBook.h; sourceTree = SOURCE_ROOT; };
 		AFCDDFD20AE176DE00E30447 /* CAddressBook.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressBook.cp; path = ../Sources_Common/Mail/AddressBook/CAddressBook.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDFD30AE176DE00E30447 /* CLocalAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CLocalAddressBook.h; path = ../Sources_Common/Mail/AddressBook/CLocalAddressBook.h; sourceTree = SOURCE_ROOT; };
-		AFCDDFD40AE176DE00E30447 /* CLocalAddressBook.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CLocalAddressBook.cp; path = ../Sources_Common/Mail/AddressBook/CLocalAddressBook.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDFD50AE176DE00E30447 /* CRemoteAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CRemoteAddressBook.h; path = ../Sources_Common/Mail/AddressBook/CRemoteAddressBook.h; sourceTree = SOURCE_ROOT; };
-		AFCDDFD60AE176DE00E30447 /* CRemoteAddressBook.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CRemoteAddressBook.cp; path = ../Sources_Common/Mail/AddressBook/CRemoteAddressBook.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDFD70AE176DE00E30447 /* CAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAddress.h; path = ../Sources_Common/Mail/Address/CAddress.h; sourceTree = SOURCE_ROOT; };
 		AFCDDFD80AE176DE00E30447 /* CAddress.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CAddress.cp; path = ../Sources_Common/Mail/Address/CAddress.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDFD90AE176DE00E30447 /* CAdbkAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CAdbkAddress.h; path = ../Sources_Common/Mail/Address/CAdbkAddress.h; sourceTree = SOURCE_ROOT; };
@@ -3636,6 +3786,8 @@
 				AF3753C00AE28C6200C56E20 /* QuickTime.framework in Frameworks */,
 				AF2ADE160AE464E90078C306 /* libcrypto.0.9.7.dylib in Frameworks */,
 				AF2ADE170AE464E90078C306 /* libssl.0.9.7.dylib in Frameworks */,
+				AF2555010C43DAC7001AAE53 /* Cocoa.framework in Frameworks */,
+				AF2555020C43DAC7001AAE53 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3673,6 +3825,7 @@
 				AFCDE48E0AE1788300E30447 /* framework.h */,
 				AFCDDAC80AE1769900E30447 /* Application */,
 				AFCDDB030AE176D800E30447 /* Formatting */,
+				AF2551E70C432843001AAE53 /* HTML */,
 				AFCDDB2A0AE176D800E30447 /* Automation */,
 				AFCDDB2F0AE176D800E30447 /* Plug-ins */,
 				AFCDDB750AE176D900E30447 /* Speech */,
@@ -3709,8 +3862,10 @@
 				AFCDDFB00AE176DE00E30447 /* Filtering */,
 				AFCDDFBD0AE176DE00E30447 /* Attachments */,
 				AFCDDFD00AE176DE00E30447 /* Address */,
-				AFCDDFE50AE176DE00E30447 /* Source */,
+				AFCDDFE50AE176DE00E30447 /* iCalendar */,
 				AFCDE0400AE176DF00E30447 /* Calendar_Store */,
+				AF2551720C4326EF001AAE53 /* vCard */,
+				AF25515A0C4326C8001AAE53 /* VCard_Store */,
 				AFCDE05C0AE176DF00E30447 /* HTTP */,
 				AFCDE09C0AE176DF00E30447 /* Extensions */,
 				AFCDE0B10AE176DF00E30447 /* Network */,
@@ -3762,10 +3917,145 @@
 				AF3753BF0AE28C6200C56E20 /* QuickTime.framework */,
 				AF3750B30AE1DD1B00C56E20 /* AddressBook.framework */,
 				AF3750B70AE1DD3900C56E20 /* LDAP.framework */,
+				AF2554580C43DAC7001AAE53 /* Cocoa.framework */,
+				AF2554590C43DAC7001AAE53 /* WebKit.framework */,
 				AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */,
 				AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */,
 			);
 			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		AF2551230C432558001AAE53 /* Free_Busy_View */ = {
+			isa = PBXGroup;
+			children = (
+				AF2551250C432558001AAE53 /* CFreeBusyPrintout.h */,
+				AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */,
+				AF2551270C432558001AAE53 /* CFreeBusyTable.h */,
+				AF2551260C432558001AAE53 /* CFreeBusyTable.cp */,
+				AF2555050C442298001AAE53 /* CFreeBusyTableCommon.cp */,
+				AF2551290C432558001AAE53 /* CFreeBusyTitleTable.h */,
+				AF2551280C432558001AAE53 /* CFreeBusyTitleTable.cp */,
+				AF25512B0C432558001AAE53 /* CFreeBusyView.h */,
+				AF25512A0C432558001AAE53 /* CFreeBusyView.cp */,
+				AF2555060C442298001AAE53 /* CFreeBusyViewCommon.cp */,
+			);
+			name = Free_Busy_View;
+			path = Sources/Application/Calendar/Calendar_View/Free_Busy_View;
+			sourceTree = "<group>";
+		};
+		AF2551450C432636001AAE53 /* CardDAVClient */ = {
+			isa = PBXGroup;
+			children = (
+				AF2551470C432636001AAE53 /* CCardDAVMakeAdbk.h */,
+				AF2551460C432636001AAE53 /* CCardDAVMakeAdbk.cpp */,
+				AF2551490C432636001AAE53 /* CCardDAVMultigetReport.h */,
+				AF2551480C432636001AAE53 /* CCardDAVMultigetReport.cpp */,
+				AF25514B0C432636001AAE53 /* CCardDAVQueryReport.h */,
+				AF25514A0C432636001AAE53 /* CCardDAVQueryReport.cpp */,
+				AF25514D0C432636001AAE53 /* CCardDAVReportParser.h */,
+				AF25514C0C432636001AAE53 /* CCardDAVReportParser.cpp */,
+			);
+			name = CardDAVClient;
+			path = ../Sources_Common/HTTP/CardDAVClient;
+			sourceTree = SOURCE_ROOT;
+		};
+		AF25515A0C4326C8001AAE53 /* VCard_Store */ = {
+			isa = PBXGroup;
+			children = (
+				AF2551650C4326C8001AAE53 /* CVCardStoreXML.h */,
+				AF2551640C4326C8001AAE53 /* CVCardStoreXML.cpp */,
+				AF2551630C4326C8001AAE53 /* CVCardMapper.h */,
+				AF2551620C4326C8001AAE53 /* CVCardMapper.cpp */,
+				AF25515B0C4326C8001AAE53 /* Clients */,
+			);
+			name = VCard_Store;
+			path = ../Sources_Common/VCard_Store;
+			sourceTree = SOURCE_ROOT;
+		};
+		AF25515B0C4326C8001AAE53 /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				AF25515F0C4326C8001AAE53 /* CLocalVCardClient.h */,
+				AF25515E0C4326C8001AAE53 /* CLocalVCardClient.cpp */,
+				AF2551610C4326C8001AAE53 /* CWebDAVVCardClient.h */,
+				AF2551600C4326C8001AAE53 /* CWebDAVVCardClient.cpp */,
+				AF25515D0C4326C8001AAE53 /* CCardDAVVCardClient.h */,
+				AF25515C0C4326C8001AAE53 /* CCardDAVVCardClient.cpp */,
+			);
+			path = Clients;
+			sourceTree = "<group>";
+		};
+		AF2551720C4326EF001AAE53 /* vCard */ = {
+			isa = PBXGroup;
+			children = (
+				AF2551730C4326EF001AAE53 /* CVCardAddress.cpp */,
+				AF2551740C4326EF001AAE53 /* CVCardAddress.h */,
+				AF2551750C4326EF001AAE53 /* CVCardAddressBook.cpp */,
+				AF2551760C4326EF001AAE53 /* CVCardAddressBook.h */,
+				AF2551770C4326EF001AAE53 /* CVCardAddressBookRef.h */,
+				AF2551780C4326EF001AAE53 /* CVCardAddressValue.cpp */,
+				AF2551790C4326EF001AAE53 /* CVCardAddressValue.h */,
+				AF25517A0C4326EF001AAE53 /* CVCardAttribute.cpp */,
+				AF25517B0C4326EF001AAE53 /* CVCardAttribute.h */,
+				AF25517C0C4326EF001AAE53 /* CVCardComponent.cpp */,
+				AF25517D0C4326EF001AAE53 /* CVCardComponent.h */,
+				AF25517E0C4326EF001AAE53 /* CVCardComponentBase.cpp */,
+				AF25517F0C4326EF001AAE53 /* CVCardComponentBase.h */,
+				AF2551800C4326EF001AAE53 /* CVCardComponentDB.cpp */,
+				AF2551810C4326EF001AAE53 /* CVCardComponentDB.h */,
+				AF2551820C4326EF001AAE53 /* CVCardComponentRecord.cpp */,
+				AF2551830C4326EF001AAE53 /* CVCardComponentRecord.h */,
+				AF2551840C4326EF001AAE53 /* CVCardDateTime.cpp */,
+				AF2551850C4326EF001AAE53 /* CVCardDateTime.h */,
+				AF2551860C4326EF001AAE53 /* CVCardDateTimeValue.cpp */,
+				AF2551870C4326EF001AAE53 /* CVCardDateTimeValue.h */,
+				AF2551880C4326EF001AAE53 /* CVCardDefinitions.cpp */,
+				AF2551890C4326EF001AAE53 /* CVCardDefinitions.h */,
+				AF25518A0C4326EF001AAE53 /* CVCardDummyValue.cpp */,
+				AF25518B0C4326EF001AAE53 /* CVCardDummyValue.h */,
+				AF25518C0C4326EF001AAE53 /* CVCardLocale.cpp */,
+				AF25518D0C4326EF001AAE53 /* CVCardLocale.h */,
+				AF25518E0C4326EF001AAE53 /* CVCardMultiValue.cpp */,
+				AF25518F0C4326EF001AAE53 /* CVCardMultiValue.h */,
+				AF2551900C4326EF001AAE53 /* CVCardN.cpp */,
+				AF2551910C4326EF001AAE53 /* CVCardN.h */,
+				AF2551920C4326EF001AAE53 /* CVCardNValue.cpp */,
+				AF2551930C4326EF001AAE53 /* CVCardNValue.h */,
+				AF2551940C4326EF001AAE53 /* CVCardPlainTextValue.cpp */,
+				AF2551950C4326EF001AAE53 /* CVCardPlainTextValue.h */,
+				AF2551960C4326EF001AAE53 /* CVCardProperty.cpp */,
+				AF2551970C4326EF001AAE53 /* CVCardProperty.h */,
+				AF2551980C4326EF001AAE53 /* CVCardSync.cpp */,
+				AF2551990C4326EF001AAE53 /* CVCardSync.h */,
+				AF25519A0C4326EF001AAE53 /* CVCardTextValue.cpp */,
+				AF25519B0C4326EF001AAE53 /* CVCardTextValue.h */,
+				AF25519C0C4326EF001AAE53 /* CVCardURIValue.cpp */,
+				AF25519D0C4326EF001AAE53 /* CVCardURIValue.h */,
+				AF25519E0C4326EF001AAE53 /* CVCardUTCOffsetValue.cpp */,
+				AF25519F0C4326EF001AAE53 /* CVCardUTCOffsetValue.h */,
+				AF2551A00C4326EF001AAE53 /* CVCardUtils.cpp */,
+				AF2551A10C4326EF001AAE53 /* CVCardUtils.h */,
+				AF2551A20C4326EF001AAE53 /* CVCardValue.cpp */,
+				AF2551A30C4326EF001AAE53 /* CVCardValue.h */,
+				AF2551A40C4326EF001AAE53 /* CVCardVCard.cpp */,
+				AF2551A50C4326EF001AAE53 /* CVCardVCard.h */,
+			);
+			name = vCard;
+			path = ../../Libraries/vCard;
+			sourceTree = SOURCE_ROOT;
+		};
+		AF2551E70C432843001AAE53 /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				AF2551E90C432843001AAE53 /* CWebKitControl.h */,
+				AF2551E80C432843001AAE53 /* CWebKitControl.cp */,
+				AF2551EB0C432843001AAE53 /* CWebKitControlImp.h */,
+				AF2551EA0C432843001AAE53 /* CWebKitControlImp.cp */,
+				AF2551EC0C432843001AAE53 /* CWebKitUtils.h */,
+				AF2551ED0C432843001AAE53 /* CWebKitUtils.m */,
+			);
+			name = HTML;
+			path = Sources/HTML;
 			sourceTree = "<group>";
 		};
 		AF37509E0AE1DC5D00C56E20 /* More ATSUI */ = {
@@ -5760,6 +6050,7 @@
 				AFCDDD260AE176DB00E30447 /* Day Week View */,
 				AFCDDD330AE176DB00E30447 /* Summary View */,
 				AFCDDD400AE176DB00E30447 /* ToDo View */,
+				AF2551230C432558001AAE53 /* Free_Busy_View */,
 				AFCDDD4A0AE176DB00E30447 /* Event/ToDo Preview */,
 			);
 			name = "Calendar View";
@@ -5935,6 +6226,8 @@
 				AFCDDD5F0AE176DB00E30447 /* CAttendeeTable.cp */,
 				AFCDDD600AE176DB00E30447 /* CNewAttendeeDialog.h */,
 				AFCDDD610AE176DB00E30447 /* CNewAttendeeDialog.cp */,
+				AF2551F50C4328A7001AAE53 /* CCalendarAddressDisplay.h */,
+				AF2551F40C4328A7001AAE53 /* CCalendarAddressDisplay.cp */,
 				AFCDDD620AE176DB00E30447 /* CNewEventDialog.h */,
 				AFCDDD630AE176DB00E30447 /* CNewEventDialog.cp */,
 				AFCDDD640AE176DB00E30447 /* CNewEventTiming.h */,
@@ -6373,8 +6666,6 @@
 		AFCDDE8B0AE176DC00E30447 /* Address Book */ = {
 			isa = PBXGroup;
 			children = (
-				AFCDDE8C0AE176DC00E30447 /* CAddressBookDoc.h */,
-				AFCDDE8D0AE176DC00E30447 /* CAddressBookDoc.cp */,
 				AFCDDE8E0AE176DC00E30447 /* CAddressBookWindow.h */,
 				AFCDDE8F0AE176DC00E30447 /* CAddressBookWindow.cp */,
 				AFCDDE900AE176DC00E30447 /* CAddressBookView.h */,
@@ -6785,14 +7076,12 @@
 			children = (
 				AFCDDFD10AE176DE00E30447 /* CAddressBook.h */,
 				AFCDDFD20AE176DE00E30447 /* CAddressBook.cp */,
-				AFCDDFD30AE176DE00E30447 /* CLocalAddressBook.h */,
-				AFCDDFD40AE176DE00E30447 /* CLocalAddressBook.cp */,
-				AFCDDFD50AE176DE00E30447 /* CRemoteAddressBook.h */,
-				AFCDDFD60AE176DE00E30447 /* CRemoteAddressBook.cp */,
 				AFCDDFD70AE176DE00E30447 /* CAddress.h */,
 				AFCDDFD80AE176DE00E30447 /* CAddress.cp */,
 				AFCDDFD90AE176DE00E30447 /* CAdbkAddress.h */,
 				AFCDDFDA0AE176DE00E30447 /* CAdbkAddress.cp */,
+				AF2551F90C4328E9001AAE53 /* CCalendarAddress.h */,
+				AF2551F80C4328E9001AAE53 /* CCalendarAddress.cp */,
 				AFCDDFDB0AE176DE00E30447 /* CAddressList.h */,
 				AFCDDFDC0AE176DE00E30447 /* CAddressList.cp */,
 				AFCDDFDD0AE176DE00E30447 /* CAddressComparators.h */,
@@ -6807,13 +7096,15 @@
 			name = Address;
 			sourceTree = "<group>";
 		};
-		AFCDDFE50AE176DE00E30447 /* Source */ = {
+		AFCDDFE50AE176DE00E30447 /* iCalendar */ = {
 			isa = PBXGroup;
 			children = (
 				AFCDDFE60AE176DE00E30447 /* CICalendarManager.h */,
 				AFCDDFE70AE176DE00E30447 /* CICalendarManager.cpp */,
 				AFCDDFE80AE176DE00E30447 /* CITIPProcessor.h */,
 				AFCDDFE90AE176DE00E30447 /* CITIPProcessor.cpp */,
+				AF2551E40C432809001AAE53 /* CITIPScheduleResults.h */,
+				AF2551E30C432809001AAE53 /* CITIPScheduleResults.cpp */,
 				AFCDDFEA0AE176DE00E30447 /* CICalendarComponentBase.h */,
 				AFCDDFEB0AE176DE00E30447 /* CICalendarComponentBase.cpp */,
 				AFCDDFEC0AE176DE00E30447 /* CICalendar.h */,
@@ -6901,7 +7192,7 @@
 				AFCDE03E0AE176DF00E30447 /* CICalendarRecurrence.h */,
 				AFCDE03F0AE176DF00E30447 /* CICalendarRecurrence.cpp */,
 			);
-			name = Source;
+			name = iCalendar;
 			path = ../../Libraries/CICalendar/Source;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -6916,6 +7207,8 @@
 				AFCDE0460AE176DF00E30447 /* CCalendarStoreWebcal.cpp */,
 				AFCDE0470AE176DF00E30447 /* CCalendarStoreXML.h */,
 				AFCDE0480AE176DF00E30447 /* CCalendarStoreXML.cpp */,
+				AF25513A0C4325B1001AAE53 /* CCalendarStoreFreeBusy.h */,
+				AF2551390C4325B1001AAE53 /* CCalendarStoreFreeBusy.cpp */,
 				AFCDE04E0AE176DF00E30447 /* Protocols */,
 				AFCDE0510AE176DF00E30447 /* Clients */,
 				AFCDE0490AE176DF00E30447 /* Notifications */,
@@ -6966,6 +7259,7 @@
 				AFCDE05D0AE176DF00E30447 /* HTTP Client */,
 				AFCDE0700AE176DF00E30447 /* WebDAV Client */,
 				AFCDE0950AE176DF00E30447 /* CalDAV Client */,
+				AF2551450C432636001AAE53 /* CardDAVClient */,
 			);
 			name = HTTP;
 			sourceTree = "<group>";
@@ -7034,6 +7328,8 @@
 				AFCDE0920AE176DF00E30447 /* CWebDAVMultiResponseParser.cpp */,
 				AFCDE0930AE176DF00E30447 /* CWebDAVPropFindParser.h */,
 				AFCDE0940AE176DF00E30447 /* CWebDAVPropFindParser.cpp */,
+				AF2551570C432686001AAE53 /* CWebDAVPrincipalMatch.h */,
+				AF2551560C432686001AAE53 /* CWebDAVPrincipalMatch.cpp */,
 			);
 			name = "WebDAV Client";
 			sourceTree = "<group>";
@@ -7047,6 +7343,10 @@
 				AFCDE0990AE176DF00E30447 /* CCalDAVMultigetReport.cpp */,
 				AFCDE09A0AE176DF00E30447 /* CCalDAVReportParser.h */,
 				AFCDE09B0AE176DF00E30447 /* CCalDAVReportParser.cpp */,
+				AF25513E0C4325FA001AAE53 /* CCalDAVSchedule.h */,
+				AF25513D0C4325FA001AAE53 /* CCalDAVSchedule.cpp */,
+				AF2551400C4325FA001AAE53 /* CCalDAVScheduleParser.h */,
+				AF25513F0C4325FA001AAE53 /* CCalDAVScheduleParser.cpp */,
 			);
 			name = "CalDAV Client";
 			sourceTree = "<group>";
@@ -7218,8 +7518,8 @@
 		AFCDE0EB0AE176DF00E30447 /* i18n */ = {
 			isa = PBXGroup;
 			children = (
-				AFCDE1200AE176E000E30447 /* IDN */,
 				AFCDE0EC0AE176DF00E30447 /* Charsets */,
+				AFCDE1200AE176E000E30447 /* IDN */,
 			);
 			name = i18n;
 			sourceTree = "<group>";
@@ -7275,6 +7575,8 @@
 				AFCDE1030AE176DF00E30447 /* CJIS_0208.cp */,
 				AFCDE1040AE176DF00E30447 /* CKSC_5601_1987.h */,
 				AFCDE1050AE176DF00E30447 /* CKSC_5601_1987.cp */,
+				AF2551DA0C43272D001AAE53 /* CKSC_5601_1992.h */,
+				AF2551D90C43272D001AAE53 /* CKSC_5601_1992.cp */,
 				AFCDE1060AE176DF00E30447 /* CMacJapanese.h */,
 				AFCDE1070AE176DF00E30447 /* CMacJapanese.cp */,
 				AFCDE1080AE176DF00E30447 /* CMacKorean.h */,
@@ -7313,6 +7615,8 @@
 				AFCDE11D0AE176E000E30447 /* CUTF8.cp */,
 				AFCDE11E0AE176E000E30447 /* CUTF16.h */,
 				AFCDE11F0AE176E000E30447 /* CUTF16.cp */,
+				AF2551DE0C432752001AAE53 /* CIMAPUTF7.h */,
+				AF2551DD0C432752001AAE53 /* CIMAPUTF7.cp */,
 			);
 			name = Unicode;
 			sourceTree = "<group>";
@@ -8452,7 +8756,6 @@
 				AFCDE3260AE176E300E30447 /* CAdbkSearchTitleTable.cp in Sources */,
 				AFCDE3270AE176E300E30447 /* CAdbkSearchTable.cp in Sources */,
 				AFCDE3280AE176E300E30447 /* CAdbkServerPopup.cp in Sources */,
-				AFCDE3290AE176E300E30447 /* CAddressBookDoc.cp in Sources */,
 				AFCDE32A0AE176E300E30447 /* CAddressBookWindow.cp in Sources */,
 				AFCDE32B0AE176E300E30447 /* CAddressBookView.cp in Sources */,
 				AFCDE32C0AE176E300E30447 /* CAddressBookViewCommon.cp in Sources */,
@@ -8604,8 +8907,6 @@
 				AFCDE3C30AE176E400E30447 /* CMIMESupport.cp in Sources */,
 				AFCDE3C40AE176E400E30447 /* CMIMETypes.cp in Sources */,
 				AFCDE3C50AE176E400E30447 /* CAddressBook.cp in Sources */,
-				AFCDE3C60AE176E400E30447 /* CLocalAddressBook.cp in Sources */,
-				AFCDE3C70AE176E400E30447 /* CRemoteAddressBook.cp in Sources */,
 				AFCDE3C80AE176E400E30447 /* CAddress.cp in Sources */,
 				AFCDE3C90AE176E400E30447 /* CAdbkAddress.cp in Sources */,
 				AFCDE3CA0AE176E400E30447 /* CAddressList.cp in Sources */,
@@ -8803,6 +9104,58 @@
 				AF8269520C1B2C9300B18EED /* XMLSAXSimple.cp in Sources */,
 				AFDD77620C4074B800DE5877 /* LAMUnicodeEditTextImp.cp in Sources */,
 				AFDD77640C4074B800DE5877 /* LUnicodeEditText.cp in Sources */,
+				AF25512C0C432558001AAE53 /* CFreeBusyPrintout.cp in Sources */,
+				AF25512E0C432559001AAE53 /* CFreeBusyTable.cp in Sources */,
+				AF2551300C432559001AAE53 /* CFreeBusyTitleTable.cp in Sources */,
+				AF2551320C432559001AAE53 /* CFreeBusyView.cp in Sources */,
+				AF25513B0C4325B1001AAE53 /* CCalendarStoreFreeBusy.cpp in Sources */,
+				AF2551410C4325FA001AAE53 /* CCalDAVSchedule.cpp in Sources */,
+				AF2551430C4325FA001AAE53 /* CCalDAVScheduleParser.cpp in Sources */,
+				AF25514E0C432636001AAE53 /* CCardDAVMakeAdbk.cpp in Sources */,
+				AF2551500C432636001AAE53 /* CCardDAVMultigetReport.cpp in Sources */,
+				AF2551520C432636001AAE53 /* CCardDAVQueryReport.cpp in Sources */,
+				AF2551540C432636001AAE53 /* CCardDAVReportParser.cpp in Sources */,
+				AF2551580C432686001AAE53 /* CWebDAVPrincipalMatch.cpp in Sources */,
+				AF2551660C4326C8001AAE53 /* CCardDAVVCardClient.cpp in Sources */,
+				AF2551680C4326C8001AAE53 /* CLocalVCardClient.cpp in Sources */,
+				AF25516A0C4326C8001AAE53 /* CWebDAVVCardClient.cpp in Sources */,
+				AF25516C0C4326C8001AAE53 /* CVCardMapper.cpp in Sources */,
+				AF25516E0C4326C8001AAE53 /* CVCardStoreXML.cpp in Sources */,
+				AF2551A60C4326F0001AAE53 /* CVCardAddress.cpp in Sources */,
+				AF2551A80C4326F0001AAE53 /* CVCardAddressBook.cpp in Sources */,
+				AF2551AB0C4326F0001AAE53 /* CVCardAddressValue.cpp in Sources */,
+				AF2551AD0C4326F0001AAE53 /* CVCardAttribute.cpp in Sources */,
+				AF2551AF0C4326F0001AAE53 /* CVCardComponent.cpp in Sources */,
+				AF2551B10C4326F0001AAE53 /* CVCardComponentBase.cpp in Sources */,
+				AF2551B30C4326F0001AAE53 /* CVCardComponentDB.cpp in Sources */,
+				AF2551B50C4326F0001AAE53 /* CVCardComponentRecord.cpp in Sources */,
+				AF2551B70C4326F0001AAE53 /* CVCardDateTime.cpp in Sources */,
+				AF2551B90C4326F0001AAE53 /* CVCardDateTimeValue.cpp in Sources */,
+				AF2551BB0C4326F0001AAE53 /* CVCardDefinitions.cpp in Sources */,
+				AF2551BD0C4326F0001AAE53 /* CVCardDummyValue.cpp in Sources */,
+				AF2551BF0C4326F0001AAE53 /* CVCardLocale.cpp in Sources */,
+				AF2551C10C4326F0001AAE53 /* CVCardMultiValue.cpp in Sources */,
+				AF2551C30C4326F0001AAE53 /* CVCardN.cpp in Sources */,
+				AF2551C50C4326F0001AAE53 /* CVCardNValue.cpp in Sources */,
+				AF2551C70C4326F0001AAE53 /* CVCardPlainTextValue.cpp in Sources */,
+				AF2551C90C4326F0001AAE53 /* CVCardProperty.cpp in Sources */,
+				AF2551CB0C4326F0001AAE53 /* CVCardSync.cpp in Sources */,
+				AF2551CD0C4326F0001AAE53 /* CVCardTextValue.cpp in Sources */,
+				AF2551CF0C4326F0001AAE53 /* CVCardURIValue.cpp in Sources */,
+				AF2551D10C4326F0001AAE53 /* CVCardUTCOffsetValue.cpp in Sources */,
+				AF2551D30C4326F0001AAE53 /* CVCardUtils.cpp in Sources */,
+				AF2551D50C4326F0001AAE53 /* CVCardValue.cpp in Sources */,
+				AF2551D70C4326F0001AAE53 /* CVCardVCard.cpp in Sources */,
+				AF2551DB0C43272D001AAE53 /* CKSC_5601_1992.cp in Sources */,
+				AF2551DF0C432753001AAE53 /* CIMAPUTF7.cp in Sources */,
+				AF2551E50C432809001AAE53 /* CITIPScheduleResults.cpp in Sources */,
+				AF2551EE0C432843001AAE53 /* CWebKitControl.cp in Sources */,
+				AF2551F00C432843001AAE53 /* CWebKitControlImp.cp in Sources */,
+				AF2551F30C432843001AAE53 /* CWebKitUtils.m in Sources */,
+				AF2551F60C4328A7001AAE53 /* CCalendarAddressDisplay.cp in Sources */,
+				AF2551FA0C4328E9001AAE53 /* CCalendarAddress.cp in Sources */,
+				AF2555070C442299001AAE53 /* CFreeBusyTableCommon.cp in Sources */,
+				AF2555080C442299001AAE53 /* CFreeBusyViewCommon.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
