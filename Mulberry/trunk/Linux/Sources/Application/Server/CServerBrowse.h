@@ -44,6 +44,7 @@ struct SCreateMailbox;
 class CServerBrowse : public CHierarchyTableDrag,
 						public CListener
 {
+	friend class CServerTable;
 public:
 
 	enum IconResIDT
