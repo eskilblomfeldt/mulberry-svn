@@ -61,7 +61,10 @@ void strlower(char* s1)
 
 	if (s1)
 		while(*s1)
-			*s1++ = tolower(*s1);
+		{
+			*s1 = tolower(*s1);
+			s1++;
+		}
 #else
 	if (s1--)
 		while(*++s1)
@@ -76,7 +79,10 @@ void strupper(char* s1)
 
 	if (s1)
 		while(*s1)
-			*s1++ = toupper(*s1);
+		{
+			*s1 = toupper(*s1);
+			s1++;
+		}
 #else
 	if (s1--)
 		while(*++s1)
