@@ -483,7 +483,7 @@ long CKerberosPluginDLL::ProcessFirstData(SAuthPluginData* info)
 
 	memcpy(mSession, creds.session, sizeof(des_cblock));
 #if __dest_os == __linux_os
-	::des_key_sched(&mSession, &mSchedule[0]);
+	::des_key_sched(&mSession[0], &mSchedule[0]);
 #else
 	::des_key_sched(&mSession[0], &mSchedule[0]);
 #endif

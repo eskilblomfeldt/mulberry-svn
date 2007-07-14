@@ -13,10 +13,13 @@ include ../include/stl.mak
 
 BIN = .obj
 
-KRBHOME = ${DEV_ROOT}/tools/krb4-1.0.1
-KRBINCS = -I${KRBHOME}/include
-KRBLDFLAGS = -L${KRBHOME}/lib/krb -L${KRBHOME}/lib/des
-KRBLIBS = -lkrb -ldes
+#KRBHOME = ${DEV_ROOT}/tools/krb4-1.0.1
+#KRBINCS = -I${KRBHOME}/include
+#KRBLDFLAGS = -L${KRBHOME}/lib/krb -L${KRBHOME}/lib/des
+#KRBLIBS = -lkrb -ldes
+
+KRBINCS = -I/usr/include/kerberosIV
+KRBLIBS = -lkrb4 -ldes425
 
 CINCS = \
 -I../Common \
