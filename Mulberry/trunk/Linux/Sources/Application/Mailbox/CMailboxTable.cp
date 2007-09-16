@@ -1451,12 +1451,14 @@ bool CMailboxTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		if (data)
 		{
 			// Copy to global after lock
-			CMessage** pAddr = reinterpret_cast<CMessage**>(data);
-			*((int*) pAddr) = msgs.size();
-			pAddr += sizeof(int);
+			unsigned char* ptr = data;
+			*((int*) ptr) = msgs.size();
+			ptr += sizeof(int);
 			for(CMessageList::iterator iter = msgs.begin(); iter != msgs.end(); iter++)
-				*pAddr++ = *iter;
-			
+			{
+				*((CMessage**) ptr) = *iter;
+				ptr += sizeof(CMessage*);
+			}
 			seldata->SetData(type, data, dataLength);
 			rendered = true;
 		}

@@ -739,10 +739,10 @@ bool CServerTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		unsigned char* data = new unsigned char[dataLength];
 		if (data)
 		{
-			int* i = reinterpret_cast<int*>(data);
-			*i = count;
-			i++;
-			void** vdata = reinterpret_cast<void**>(i);
+			unsigned char* ptr = data;
+			*((int*) ptr) = count;
+			ptr += sizeof(int);
+			void** vdata = reinterpret_cast<void**>(ptr);
 			for(ulvector::const_iterator iter = rows.begin(); iter != rows.end(); iter++)
 			{
 				TableIndexT woRow = GetWideOpenIndex(*iter + TABLE_ROW_ADJUST);
@@ -1324,7 +1324,6 @@ bool CServerTable::DropDataAtCell(Atom theFlavor, unsigned char* drag_data,
 				new_index = CMailAccountManager::sMailAccountManager->GetProtocolIndex(above) + 1;
 		}
 
-		//int count = *((int*) drag_data)++;
 		int count = *((int*)drag_data);
 		drag_data += sizeof(int);
 
@@ -1356,7 +1355,6 @@ bool CServerTable::DropDataAtCell(Atom theFlavor, unsigned char* drag_data,
 	}
 	else if (theFlavor == CMulberryApp::sFlavorWDList)
 	{
-		//int count = *((int*) drag_data)++;
 		int count = *(int*)(drag_data);
 		drag_data += sizeof(int);
 
@@ -1400,7 +1398,6 @@ bool CServerTable::DropDataAtCell(Atom theFlavor, unsigned char* drag_data,
 
 	else if (theFlavor == CMulberryApp::sFlavorMboxList)
 	{
-		//int count = *((int*) drag_data)++;
 		int count = *(int*)drag_data;
 		drag_data += sizeof(int);
 		for(int i = 0; i < count; i++)

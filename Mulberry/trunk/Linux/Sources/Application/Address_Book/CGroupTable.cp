@@ -1217,11 +1217,14 @@ bool CGroupTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		if (data)
 		{
 			// Copy to global after lock
-			CGroup** pGrp = reinterpret_cast<CGroup**>(data);
-			*((unsigned long*) pGrp) = grps.size();
-			pGrp += sizeof(unsigned long);
+			unsigned char* ptr = data;
+			*((unsigned long*) ptr) = grps.size();
+			ptr += sizeof(unsigned long);
 			for(CGroupList::iterator iter = grps.begin(); iter != grps.end(); iter++)
-				*pGrp++ = *iter;
+			{
+				*((CGroup**) ptr) = *iter;
+				ptr += sizeof(CGroup*);
+			}
 
 			seldata->SetData(type, data, dataLength);
 			rendered = true;
@@ -1245,11 +1248,14 @@ bool CGroupTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		if (data)
 		{
 			// Copy to global after lock
-			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
-			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long);
+			unsigned char* ptr = data;
+			*((unsigned long*) ptr) = addrs.size();
+			ptr += sizeof(unsigned long);
 			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
-				*pAddr++ = *iter;
+			{
+				*((CAddress**) ptr) = *iter;
+				ptr += sizeof(CAddress*);
+			}
 
 			seldata->SetData(type, data, dataLength);
 			rendered = true;

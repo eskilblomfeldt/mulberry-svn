@@ -890,10 +890,10 @@ bool CCalendarStoreTable::RenderSelectionData(CMulSelectionData* seldata, Atom t
 		unsigned char* data = new unsigned char[dataLength];
 		if (data)
 		{
-			int* i = reinterpret_cast<int*>(data);
-			*i = count;
-			i++;
-			void** vdata = reinterpret_cast<void**>(i);
+			unsigned char* ptr = data;
+			*((int*) ptr) = count;
+			ptr += sizeof(int);
+			void** vdata = reinterpret_cast<void**>(ptr);
 			for(ulvector::const_iterator iter = rows.begin(); iter != rows.end(); iter++)
 			{
 				calstore::CCalendarStoreNode* node = GetCellNode(*iter);

@@ -1565,11 +1565,14 @@ bool CFileTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		if (data)
 		{
 			// Copy to global after lock
-			CAttachment** pAddr = reinterpret_cast<CAttachment**>(data);
-			*((int*) pAddr) = atchs.size();
-			pAddr += sizeof(int);
+			unsigned char* ptr = data;
+			*((int*) ptr) = atchs.size();
+			ptr += sizeof(int);
 			for(CAttachmentList::iterator iter = atchs.begin(); iter != atchs.end(); iter++)
-				*pAddr++ = *iter;
+			{
+				*((CAttachment**) ptr) = *iter;
+				ptr += sizeof(CAttachment*);
+			}
 			
 			seldata->SetData(type, data, dataLength);
 			rendered = true;
