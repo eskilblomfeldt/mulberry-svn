@@ -267,8 +267,8 @@ void CTableDragAndDrop::HandleDNDDrop(const JPoint& pt,
 										const JXWidget* source)
 {
 
-  // Clear existing cell hilight
-  ClearDropCell(mDropCell);
+	// Clear existing cell hilight
+	ClearDropCell(mDropCell);
 
 	// Cache the action for reference
 	JXDNDManager* dndMgr = GetDNDManager();
@@ -291,15 +291,13 @@ void CTableDragAndDrop::HandleDNDDrop(const JPoint& pt,
 				if (mDropCell)
 				{
 					STableCell dropCell;
-					JPoint imagePt;
-					LocalToImagePoint(pt, imagePt);
-					if (GetCellHitBy(imagePt, dropCell) && IsDropCell(mCurrentDropFlavors, dropCell))
+					if (GetCellHitBy(pt, dropCell) && IsDropCell(mCurrentDropFlavors, dropCell))
 					{
 						if (mDropCursor)
 						{
 							// Check if close to edge of cell and drop cursor allowed
 							JRect rowRect;
-							GetLocalCellRect(dropCell, rowRect);
+							GetImageCellBounds(dropCell, rowRect);
 							
 							if ((pt.y < rowRect.top + 2) || (pt.y > rowRect.bottom - 2))
 								dropCell.row = 0;
@@ -321,19 +319,16 @@ void CTableDragAndDrop::HandleDNDDrop(const JPoint& pt,
 				{
 					// Get the hit cell
 					STableCell	hitCell;
-					JPoint imagePt;
-					LocalToImagePoint(pt, imagePt);
-					GetCellHitBy(imagePt, hitCell);
+					GetCellHitBy(pt, hitCell);
 
 					JRect rowRect;
-					GetLocalCellRect(hitCell, rowRect);
+					GetImageCellBounds(hitCell, rowRect);
 
 					JPoint offset = pt;
 					offset += JPoint(0, rowRect.height()/2);
 
 					// Get the hit cell
-					LocalToImagePoint(offset, imagePt);
-					GetCellHitBy(imagePt, hitCell);
+					GetCellHitBy(offset, hitCell);
 					
 					if (mRows == 0)
 						hitCell.row = 1;
@@ -376,9 +371,6 @@ void CTableDragAndDrop::HandleDNDDrop(const JPoint& pt,
 
 void CTableDragAndDrop::HandleDNDHere(const JPoint& pt, const JXWidget* source)
 {
-	JPoint	imagePt;
-	LocalToImagePoint(pt, imagePt);
-
 	bool hilite = false;
 	STableCell lastDrop = mLastDropCell;
 	STableCell lastCursor = mLastDropCursor;
@@ -387,7 +379,7 @@ void CTableDragAndDrop::HandleDNDHere(const JPoint& pt, const JXWidget* source)
 	{
 		// Get the hit cell
 		STableCell	hitCell;
-		GetCellHitBy(imagePt, hitCell);
+		GetCellHitBy(pt, hitCell);
 		mLastHitCell = hitCell;
 
 		// Must be able to drop
@@ -397,7 +389,7 @@ void CTableDragAndDrop::HandleDNDHere(const JPoint& pt, const JXWidget* source)
 		{
 			// Check if close to edge of cell and drop cursor allowed
 			JRect rowRect;
-			GetLocalCellRect(hitCell, rowRect);
+			GetImageCellBounds(hitCell, rowRect);
 			
 			if ((pt.y < rowRect.top + 2) || (pt.y > rowRect.bottom - 2))
 				hitCell.SetCell(0, 0);
@@ -415,16 +407,16 @@ void CTableDragAndDrop::HandleDNDHere(const JPoint& pt, const JXWidget* source)
 	{
 		// Get the hit cell
 		STableCell	hitCell;
-		GetCellHitBy(imagePt, hitCell);
+		GetCellHitBy(pt, hitCell);
 
 		JRect rowRect;
-		GetLocalCellRect(hitCell, rowRect);
+		GetImageCellBounds(hitCell, rowRect);
 
-		JPoint offset = imagePt;
+		JPoint offset = pt;
 		offset += JPoint(0, rowRect.height()/2);
 
 		// Get the hit cell
-		GetCellHitBy(imagePt, hitCell);
+		GetCellHitBy(offset, hitCell);
 		
 		if (!hilite)
 		{
@@ -547,8 +539,7 @@ void CTableDragAndDrop::DrawDropCell(const STableCell& cell)
 	{
 		// Get row rect
 		JRect rowRect;
-		GetLocalCellRect(mLastDropCell, rowRect);
-
+		GetImageCellBounds(mLastDropCell, rowRect);
  		p->RectInside(rowRect);	
 	}
 
@@ -557,8 +548,7 @@ void CTableDragAndDrop::DrawDropCell(const STableCell& cell)
 	{
 		// Get row rect
 		JRect rowRect;
-		GetLocalCellRect(cell, rowRect);
-
+		GetImageCellBounds(cell, rowRect);
 		p->RectInside(rowRect);	
 	}
 
@@ -593,14 +583,14 @@ void CTableDragAndDrop::DrawDropCursor(const STableCell& cell)
 		JRect rowRect;
 		if (mLastDropCursor <= GetItemCount())
 		{
-			GetLocalRowRect(mLastDropCursor.row, rowRect);
+			GetImageCellBounds(mLastDropCursor.row, rowRect);
 			rowRect.bottom = rowRect.top + 2;
 		}
 		else
 		{
 			STableCell temp = mLastDropCursor;
 			temp.row--;
-			GetLocalRowRect(temp.row, rowRect);
+			GetImageCellBounds(temp.row, rowRect);
 			rowRect.top = rowRect.bottom - 2;
 		}
 
@@ -615,14 +605,14 @@ void CTableDragAndDrop::DrawDropCursor(const STableCell& cell)
 		JRect rowRect;
 		if (cell.row <= GetItemCount())
 		{
-			GetLocalRowRect(cell.row, rowRect);
+			GetImageCellBounds(cell.row, rowRect);
 			rowRect.bottom = rowRect.top + 2;
 		}
 		else
 		{
 			STableCell temp = cell;
 			temp.row--;
-			GetLocalRowRect(temp.row, rowRect);
+			GetImageCellBounds(temp.row, rowRect);
 			rowRect.top = rowRect.bottom - 2;
 		}
 

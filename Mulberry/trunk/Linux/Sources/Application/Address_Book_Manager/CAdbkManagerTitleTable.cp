@@ -93,9 +93,7 @@ void CAdbkManagerTitleTable::OnRButtonDown(const JPoint& point,
 											 const JXKeyModifiers& modifiers)
 {
 	STableCell	hitCell;
-	JPoint		imagePt;
-	LocalToImagePoint(point, imagePt);
-	if (!GetCellHitBy(imagePt, hitCell))
+	if (!GetCellHitBy(point, hitCell))
 	{
 		CTitleTableView::OnRButtonDown(point, buttonStates, modifiers);
 		return;

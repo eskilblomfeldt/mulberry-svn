@@ -63,10 +63,8 @@ void CServerTitleTable::OnRButtonDown(const JPoint& point,
 	sClickColumn = 0;
 
 	// Find column clicked
-	JPoint imagePt;
-	LocalToImagePoint(point, imagePt);
 	STableCell cell;
-	if (GetCellHitBy(imagePt, cell))
+	if (GetCellHitBy(point, cell))
 		sClickColumn = cell.col;
 	
 	if (sClickColumn > 0) {

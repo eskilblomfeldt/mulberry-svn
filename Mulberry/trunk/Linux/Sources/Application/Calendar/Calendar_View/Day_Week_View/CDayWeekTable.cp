@@ -126,10 +126,7 @@ void CDayWeekTable::Receive(JBroadcaster* sender, const Message& message)
 				if (cmd == CCommand::eCalendarNewEvent)
 				{
 					STableCell	hitCell;
-					JPoint		imagePt;
-					LocalToImagePoint(mContextPoint, imagePt);
-
-					if (GetCellHitBy(imagePt, hitCell))
+					if (GetCellHitBy(mContextPoint, hitCell))
 					{
 						// Broadcast double-click if in day area
 						if (hitCell.col > 1)
@@ -172,10 +169,8 @@ void CDayWeekTable::HandleMouseDown(const JPoint& pt, const JXMouseButton button
 
 iCal::CICalendarDateTime CDayWeekTable::GetClickDateTime(const JPoint& localPt) const
 {
-	JPoint imagePt;
-	LocalToImagePoint(localPt, imagePt);
 	STableCell hitCell;
-	if (GetCellHitBy(imagePt, hitCell))
+	if (GetCellHitBy(localPt, hitCell))
 	{
 		if (hitCell.row == cAllDayRow)
 		{
@@ -195,7 +190,7 @@ iCal::CICalendarDateTime CDayWeekTable::GetClickDateTime(const JPoint& localPt) 
 			uint32_t top_secs = mStartHour * 60 * 60;
 			uint32_t bot_secs = mEndHour * 60 * 60;
 
-			uint32_t click_secs = top_secs + (bot_secs - top_secs) * (imagePt.y - cellTop) / (cellBottom - cellTop);
+			uint32_t click_secs = top_secs + (bot_secs - top_secs) * (localPt.y - cellTop) / (cellBottom - cellTop);
 
 			// Round to nearest 15 minute (900 second) interval
 			click_secs = ((click_secs + 450) / 900) * 900;
