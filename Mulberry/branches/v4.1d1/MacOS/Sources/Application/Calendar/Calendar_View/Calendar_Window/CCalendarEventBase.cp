@@ -40,6 +40,10 @@
 /**
 	Default constructor */
 
+const float body_transparency = 0.75;
+const float line_transparency = 1.0;
+const float text_transparency = 0.9;
+
 CCalendarEventBase::CCalendarEventBase(const SPaneInfo	&inPaneInfo) :
 	LPane(inPaneInfo)
 {
@@ -84,7 +88,12 @@ void CCalendarEventBase::Select(bool select)
 		mIsSelected = select;
 
 		// Force immediate redraw
-		Draw(NULL);
+		Rect	refreshRect;
+
+		if (CalcPortExposedRect(refreshRect)) {
+			StRegion update = refreshRect;
+			mTable->Draw(update);
+		}
 	}
 }
 
@@ -211,7 +220,21 @@ void CCalendarEventBase::DrawSelf()
 		box.top -= height_adjust;
 		box.bottom = box.top + 16;
 	}
-	::CGContextSetGrayFillColor(inContext, mIsSelected && !IsFreeBusy() ? 1.0 : 0.0, 1.0);
+
+	// Use white colour for selected item
+	float red = CGUtils::GetCGRed(mColour);
+	float green = CGUtils::GetCGGreen(mColour);
+	float blue = CGUtils::GetCGBlue(mColour);
+	if (mIsSelected)
+	{
+		::CGContextSetGrayFillColor(inContext, (red + green + blue > 2.5) ? 0.0 : 1.0, 1.0);
+	}
+	else
+	{
+		CGUtils::DarkenColours(red, green, blue);
+		::CGContextSetRGBFillColor(inContext, red, green, blue, text_transparency);
+	}
+
 	MyCFString trunc(mTitle, kCFStringEncodingUTF8);
 	if (mHoriz)
 		::TruncateThemeText(trunc, kThemeSmallSystemFont, kThemeStateActive, rect.size.width, truncEnd, NULL);
@@ -235,9 +258,9 @@ void CCalendarEventBase::DrawSelf()
 			::CGContextMoveToPoint(inContext, rect.origin.x + rect.size.width, rect.origin.y);
 			::CGContextAddLineToPoint(inContext, rect.origin.x, rect.origin.y + rect.size.height);
 		}
-		::CGContextSetGrayStrokeColor(inContext, 0.0, 1.0);
+
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 }
 
@@ -260,26 +283,29 @@ void CCalendarEventBase::DrawHorizFrame(CGUtils::CGContextFromQD& inContext, HIR
 		rect.size.width -= 2;
 	else
 		rect.size.width -= 1;
+	rect.size.height -= 1;
 	
 	CGMutablePathRef path = ::CGPathCreateMutable();
 		
 	// Draw left end (rounded if starts, flat otherwise)
+	::CGPathMoveToPoint(path, NULL, rect.origin.x + rect.size.width / 2.0, rect.origin.y + rect.size.height);
 	if (mStartsInCol)
 	{
 		if (mAllDay)
 		{
-			::CGPathMoveToPoint(path, NULL, rect.origin.x + rect.size.height / 2.0, rect.origin.y + rect.size.height);
-			::CGPathAddArc(path, NULL, rect.origin.x + rect.size.height/ 2.0, rect.origin.y + rect.size.height/ 2.0, rect.size.height/ 2.0, pi / 2.0, 1.5 * pi, 0);
+			::CGPathAddArcToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height, rect.origin.x, rect.origin.y + rect.size.height / 2.0, rect.size.height/ 2.0);
+			::CGPathAddArcToPoint(path, NULL, rect.origin.x, rect.origin.y, rect.origin.x + rect.size.width / 2.0, rect.origin.y, rect.size.height/ 2.0);
 		}
 		else
 		{
-			::CGPathMoveToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height);
+			::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height);
 			::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y);
+			::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width / 2.0, rect.origin.y);
 		}
 	}
 	else
 	{
-		::CGPathMoveToPoint(path, NULL, rect.origin.x + rect.size.height / 2.0, rect.origin.y + rect.size.height);
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.height / 2.0, rect.origin.y + rect.size.height);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.height / 6.0, rect.origin.y +  rect.size.height * 5.0 / 6.0);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height * 4.0 / 6.0);
@@ -287,21 +313,23 @@ void CCalendarEventBase::DrawHorizFrame(CGUtils::CGContextFromQD& inContext, HIR
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height * 2.0 / 6.0);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.height / 6.0, rect.origin.y + rect.size.height / 6.0);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y);
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width / 2.0, rect.origin.y);
 	}
-
-	// Draw top line
-	if (mAllDay)
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width - rect.size.height / 2.0, rect.origin.y);
-	else
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y);
 
 	// Draw right end (rounded if starts, flat otherwise)
 	if (mEndsInCol)
 	{
 		if (mAllDay)
-			::CGPathAddArc(path, NULL, rect.origin.x + rect.size.width - rect.size.height/ 2.0, rect.origin.y + rect.size.height/ 2.0, rect.size.height/ 2.0, 1.5 * pi, pi / 2.0, 0);
+		{
+			::CGPathAddArcToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height / 2.0, rect.size.height/ 2.0);
+			::CGPathAddArcToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height, rect.origin.x + rect.size.width / 2.0, rect.origin.y + rect.size.height, rect.size.height/ 2.0);
+		}
 		else
+		{
+			::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y);
 			::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height);
+			::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width / 2.0, rect.origin.y + rect.size.height);
+		}
 	}
 	else
 	{
@@ -312,13 +340,8 @@ void CCalendarEventBase::DrawHorizFrame(CGUtils::CGContextFromQD& inContext, HIR
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width - rect.size.height / 6.0, rect.origin.y + rect.size.height * 4.0 / 6.0);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height * 5.0 / 6.0);
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width - rect.size.height / 6.0, rect.origin.y + rect.size.height);
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width / 2.0, rect.origin.y + rect.size.height);
 	}
-
-	// Draw bottom line
-	if (mAllDay)
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.height / 2.0, rect.origin.y + rect.size.height);
-	else
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height);
 	
 	// Close path
 	::CGPathCloseSubpath(path);
@@ -327,32 +350,39 @@ void CCalendarEventBase::DrawHorizFrame(CGUtils::CGContextFromQD& inContext, HIR
 	float red = CGUtils::GetCGRed(mColour);
 	float green = CGUtils::GetCGGreen(mColour);
 	float blue = CGUtils::GetCGBlue(mColour);
-	float line_factor = IsFreeBusy() ? 1.0 : 0.6;
+	float line_factor = IsFreeBusy() ? 1.0 : 1.0;
 	if (mIsSelected)
 	{
-		CGUtils::UnflattenColours(red, green, blue);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 		if (IsFreeBusy())
 			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
 		else
 			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
 	else
 	{
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, line_transparency);
+		CGUtils::LightenColours(red, green, blue);
 		if (IsFreeBusy())
-			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+			::CGContextSetGrayFillColor(inContext, 1.0, body_transparency);
 		else
-			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
+			::CGContextSetRGBFillColor(inContext, red, green, blue, body_transparency);
 	}
 	
+	::CGContextSetLineWidth(inContext, 0.75);
+	if (!mAllDay)
+		::CGContextSetShouldAntialias(inContext, false);
+
 	::CGContextAddPath(inContext, path);
 	::CGContextDrawPath(inContext, kCGPathFillStroke);
+	::CGContextSetShouldAntialias(inContext, true);
 	
+	::CGContextSetLineWidth(inContext, 1.0);
+
 	// Check for now marker
 	if (!mAllDay && mIsNow)
 	{
-		::CGContextSetRGBStrokeColor(inContext, 0.95, 0.0, 0.0, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, 0.95, 0.0, 0.0, mIsSelected ? 1.0 : line_transparency);
 		::CGContextAddPath(inContext, path);
 		::CGContextStrokePath(inContext);
 	}
@@ -440,57 +470,46 @@ void CCalendarEventBase::DrawVertFrame(CGUtils::CGContextFromQD& inContext, HIRe
 
 	CGMutablePathRef path = ::CGPathCreateMutable();
 	
+	::CGPathMoveToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height / 2.0);
 	if (mStartsInCol)
 	{
-		// Top-left corner
-		::CGPathMoveToPoint(path, NULL, rect.origin.x, rect.origin.y + radius);
-		::CGPathAddArc(path, NULL, rect.origin.x + radius, rect.origin.y + radius, radius, pi, 1.5 * pi, 0);
-		
-		// Top line
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width - radius, rect.origin.y);
-
-		// Top-right corner
-		::CGPathAddArc(path, NULL, rect.origin.x + rect.size.width - radius, rect.origin.y + radius, radius, 1.5 * pi, 0.0, 0);
+		// Top-left, top-right corners
+		::CGPathAddArcToPoint(path, NULL, rect.origin.x, rect.origin.y, rect.origin.x + rect.size.width / 2.0, rect.origin.y, radius);
+		::CGPathAddArcToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height / 2.0, radius);
 	}
 	else
 	{
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + radius);
+
 		// Draw jagged top edge
-		::CGPathMoveToPoint(path, NULL, rect.origin.x, rect.origin.y + radius);
 		uint32_t ctr = 0;
 		for(float x_pos = rect.origin.x; x_pos < rect.origin.x + rect.size.width; x_pos += cJaggedEdgeHeight, ctr++)
 			::CGPathAddLineToPoint(path, NULL, x_pos, rect.origin.y + ((ctr % 2 == 0) ? 0.0 : cJaggedEdgeHeight));
 		
 		// Draw last segment
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + ((ctr % 2 == 1) ? 0.0 : cJaggedEdgeHeight));
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height / 2.0);
 	}
-
-	// Right line
-	::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height - radius);
 
 	if (mEndsInCol)
 	{
-		// Bottom-right corner
-		::CGPathAddArc(path, NULL, rect.origin.x + rect.size.width - radius, rect.origin.y + rect.size.height - radius, radius, 0.0, pi / 2.0, 0);
-		
-		// Bottom line
-		::CGPathAddLineToPoint(path, NULL, rect.origin.x + radius, rect.origin.y + rect.size.height);
-
-		// Bottom-left corner
-		::CGPathAddArc(path, NULL, rect.origin.x + radius, rect.origin.y + rect.size.height - radius, radius, pi / 2.0, pi, 0);
+		// Bottom-right, bottom-left corners
+		::CGPathAddArcToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height, rect.origin.x + rect.size.width / 2.0, rect.origin.y + rect.size.height, radius);
+		::CGPathAddArcToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height, rect.origin.x, rect.origin.y + rect.size.height / 2.0, radius);
 	}
 	else
 	{
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x + rect.size.width, rect.origin.y + rect.size.height - radius);
+
 		// Draw jagged bottom edge
 		uint32_t ctr = 0;
 		for(float x_pos = rect.origin.x + rect.size.width; x_pos > rect.origin.x; x_pos -= cJaggedEdgeHeight, ctr++)
 			::CGPathAddLineToPoint(path, NULL, x_pos, rect.origin.y + rect.size.height - ((ctr % 2 == 1) ? 0.0 : cJaggedEdgeHeight));
 		
-		// Draw last segment
+		// Draw last segments
 		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height - ((ctr % 2 == 0) ? 0.0 : cJaggedEdgeHeight));
+		::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + rect.size.height / 2.0);
 	}
-
-	// Left line
-	::CGPathAddLineToPoint(path, NULL, rect.origin.x, rect.origin.y + radius);
 
 	// Close the path
 	::CGPathCloseSubpath(path);
@@ -499,38 +518,39 @@ void CCalendarEventBase::DrawVertFrame(CGUtils::CGContextFromQD& inContext, HIRe
 	float red = CGUtils::GetCGRed(mColour);
 	float green = CGUtils::GetCGGreen(mColour);
 	float blue = CGUtils::GetCGBlue(mColour);
-	float line_factor = IsFreeBusy() ? 1.0 : 0.6;
+	float line_factor = IsFreeBusy() ? 1.0 : 1.0;
 	if (mIsSelected)
 	{
-		CGUtils::UnflattenColours(red, green, blue);
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 		if (IsFreeBusy())
 			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
 		else
 			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
 	}
 	else
 	{
+		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, line_transparency);
+		CGUtils::LightenColours(red, green, blue);
 		if (IsFreeBusy())
-			::CGContextSetGrayFillColor(inContext, 1.0, 1.0);
+			::CGContextSetGrayFillColor(inContext, 1.0, body_transparency);
 		else
-			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
-		::CGContextSetRGBStrokeColor(inContext, red * line_factor, green * line_factor, blue * line_factor, 1.0);
+			::CGContextSetRGBFillColor(inContext, red, green, blue, body_transparency);
 	}
 	
 	if (IsFreeBusy())
 		::CGContextSetLineWidth(inContext, 5.0);
+	else
+		::CGContextSetLineWidth(inContext, 0.5);
 	
 	::CGContextAddPath(inContext, path);
 	::CGContextDrawPath(inContext, kCGPathFillStroke);
 
-	if (IsFreeBusy())
-		::CGContextSetLineWidth(inContext, 1.0);
+	::CGContextSetLineWidth(inContext, 1.0);
 
 	// Check for now marker
 	if (mIsNow)
 	{
-		::CGContextSetRGBStrokeColor(inContext, 0.95, 0.0, 0.0, 1.0);
+		::CGContextSetRGBStrokeColor(inContext, 0.95, 0.0, 0.0, mIsSelected ? 1.0 : line_transparency);
 		::CGContextAddPath(inContext, path);
 		::CGContextStrokePath(inContext);
 	}

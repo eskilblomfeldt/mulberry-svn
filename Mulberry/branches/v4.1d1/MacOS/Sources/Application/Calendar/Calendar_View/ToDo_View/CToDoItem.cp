@@ -37,6 +37,10 @@ const float cCheckboxWidth = 16.0;
 const float cCheckboxHeight = 12.0;
 const float cTextTopOffset = 2.0;
 
+const float body_transparency = 1.0;
+const float line_transparency = 1.0;
+const float text_transparency = 1.0;
+
 // ---------------------------------------------------------------------------
 //	CToDoItem														  [public]
 /**
@@ -337,9 +341,9 @@ void CToDoItem::ApplyForeAndBackColors() const
 	float red = CGUtils::GetCGRed(mColour);
 	float green = CGUtils::GetCGGreen(mColour);
 	float blue = CGUtils::GetCGBlue(mColour);
-	if (mIsSelected)
+	if (!mIsSelected)
 	{
-		CGUtils::UnflattenColours(red, green, blue);
+		CGUtils::LightenColours(red, green, blue, true);
 	}
 
 	RGBColor back = CGUtils::GetQDColor(red, green, blue);
@@ -365,12 +369,12 @@ void CToDoItem::DrawSelf()
 		float blue = CGUtils::GetCGBlue(mColour);
 		if (mIsSelected)
 		{
-			CGUtils::UnflattenColours(red, green, blue);
 			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
 		}
 		else
 		{
-			::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+			CGUtils::LightenColours(red, green, blue, true);
+			::CGContextSetRGBFillColor(inContext, red, green, blue, body_transparency);
 		}
 		
 		::CGContextFillRect(inContext, rect);
@@ -392,7 +396,18 @@ void CToDoItem::DrawSelf()
 		box.left += cCheckboxLeftOffset + cCheckboxWidth;
 	box.top += cTextTopOffset;
 	box.bottom = box.top + cItemHeight / 2.0;
-	::CGContextSetGrayFillColor(inContext, mIsSelected ? 1.0 : 0.0, 1.0);
+	float red = CGUtils::GetCGRed(mColour);
+	float green = CGUtils::GetCGGreen(mColour);
+	float blue = CGUtils::GetCGBlue(mColour);
+	if (mIsSelected)
+	{
+		::CGContextSetGrayFillColor(inContext, (red + green + blue > 2.5) ? 0.0 : 1.0, 1.0);
+	}
+	else
+	{
+		CGUtils::DarkenColours(red, green, blue);
+		::CGContextSetRGBFillColor(inContext, red, green, blue, text_transparency);
+	}
 	MyCFString trunc1(mSummary, kCFStringEncodingUTF8);
 	::TruncateThemeText(trunc1, kThemeSmallSystemFont, kThemeStateActive, box.right - box.left, truncEnd, NULL);
 	::DrawThemeTextBox(trunc1, kThemeSmallSystemFont, kThemeStateActive, false, &box, (mType == eToDo) ? teJustLeft : teJustCenter, inContext);

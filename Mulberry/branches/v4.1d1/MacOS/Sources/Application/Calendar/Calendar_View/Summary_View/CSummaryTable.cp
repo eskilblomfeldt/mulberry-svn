@@ -41,6 +41,10 @@ const uint32_t cLinkWidth = 4;
 const uint32_t cLinkVOffset = 4;
 const uint32_t cLinkHeight = 16;
 
+const float body_transparency = 0.75;
+const float line_transparency = 1.0;
+const float text_transparency = 0.9;
+
 // ---------------------------------------------------------------------------
 //	CSummaryTable														  [public]
 /**
@@ -216,11 +220,13 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 	float green = CGUtils::GetCGGreen(event->mColour);
 	float blue = CGUtils::GetCGBlue(event->mColour);
 	if (CellIsSelected(inCell) && mDrawSelection)
-		CGUtils::UnflattenColours(red, green, blue);
+		;
+	else
+		CGUtils::LightenColours(red, green, blue);
 
 	if (!link)
 	{
-		::CGContextSetRGBFillColor(inContext, red, green, blue, 1.0);
+		::CGContextSetRGBFillColor(inContext, red, green, blue, (CellIsSelected(inCell) && mDrawSelection) ? 1.0 : body_transparency);
 		::CGContextFillRect(inContext, adjustedRect);
 	}
 
@@ -232,7 +238,7 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y + adjustedRect.size.height);
 		::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 
 		// Right-side only for last column
 		if (inCell.col == mCols)
@@ -242,7 +248,7 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 			::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
 			::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 			::CGContextStrokePath(inContext);
-			::CGContextClosePath(inContext);
+			//::CGContextClosePath(inContext);
 		}
 
 		// Top-side always
@@ -252,7 +258,7 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 			::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y);
 			::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 			::CGContextStrokePath(inContext);
-			::CGContextClosePath(inContext);
+			//::CGContextClosePath(inContext);
 		}
 
 		// Bottom-side only for last row
@@ -263,7 +269,7 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 			::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
 			::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 			::CGContextStrokePath(inContext);
-			::CGContextClosePath(inContext);
+			//::CGContextClosePath(inContext);
 		}
 	}
 	
@@ -300,7 +306,7 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 		}
 		::CGContextSetGrayStrokeColor(inContext, 0.0, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 		
 	}
 		break;
@@ -329,11 +335,11 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 	// Turn on aliasing for text
 	::CGContextSetShouldAntialias(inContext, true);
 
-	::CGContextSetGrayFillColor(inContext, 0.0, 1.0);
+	::CGContextSetGrayFillColor(inContext, (CellIsSelected(inCell) && mDrawSelection) ? 1.0 : 0.0, 1.0);
 	if (draw_txt)
 	{
 		Rect box = inLocalQDRect;
-		box.bottom -= mTextDescent;
+		box.bottom = box.bottom - mTextDescent - 2;
 		::DrawClippedStringUTF8(inContext, text, box, eDrawString_Left);
 	}
 
@@ -346,9 +352,9 @@ void CSummaryTable::DrawCell(const STableCell &inCell, const Rect& inLocalQDRect
 		::CGContextBeginPath(inContext);
 		::CGContextMoveToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y + adjustedRect.size.height / 2);
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height / 2);
-		::CGContextSetGrayStrokeColor(inContext, 0.0, 1.0);
+		::CGContextSetGrayStrokeColor(inContext, (CellIsSelected(inCell) && mDrawSelection) ? 1.0 : 0.0, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 		
 		// Turn on aliasing for text
 		::CGContextSetShouldAntialias(inContext, true);

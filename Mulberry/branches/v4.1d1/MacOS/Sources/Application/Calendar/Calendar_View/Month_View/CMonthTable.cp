@@ -32,6 +32,9 @@
 const uint32_t cEventOffset = 18;
 const uint32_t cEventHeight = 16;
 
+const float line_gray = 0.75;
+const float line_gray_lighter = 0.875;
+
 // ---------------------------------------------------------------------------
 //	CMonthTable														  [public]
 /**
@@ -119,7 +122,7 @@ void CMonthTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect)
 	// Draw frame (no aliasing for lines)
 	::CGContextSetShouldAntialias(inContext, false);
 	
-	::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
+	::CGContextSetGrayStrokeColor(inContext, line_gray, 1.0);
 	::CGContextStrokeRect(inContext, adjustedRect);
 	
 	// Turn on aliasing for text

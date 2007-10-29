@@ -102,7 +102,7 @@ void CSummaryTitleTable::DrawCell(const STableCell& inCell, const Rect &inLocalQ
 			::CGContextAddRect(inContext, adjustedRect);
 			::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 			::CGContextStrokePath(inContext);
-			::CGContextClosePath(inContext);
+			//::CGContextClosePath(inContext);
 			
 			// Turn on aliasing for text
 			::CGContextSetShouldAntialias(inContext, true);

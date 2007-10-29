@@ -22,6 +22,9 @@
 namespace CGUtils
 {
 
+	const float flatten_factor = 2.25;
+	const float unflatten_factor = 2.25;
+
 									// QD <--> CG Geometry Converters
 	void	QDToHIPoint(
 					const Point&	inQDPoint,
@@ -55,25 +58,29 @@ namespace CGUtils
 	{
 		return (colour & 0x000000FF) / 255.0;
 	}
+	void LightenColours(float& red, float& green, float& blue, bool lighter = false);
+	void DarkenColours(float& red, float& green, float& blue);
+	void RGB2HSV(const float& r, const float& g, const float& b, float& h, float& s, float& v);
+	void HSV2RGB(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 	inline void		FlattenColours(float& red, float& green, float& blue)
 	{
-		red = (red + 1.0) / 2.5;
-		green = (green + 1.0) / 2.5;
-		blue = (blue + 1.0) / 2.5;
+		red = (red + flatten_factor) / (1.0 + flatten_factor);
+		green = (green + flatten_factor) / (1.0 + flatten_factor);
+		blue = (blue + flatten_factor) / (1.0 + flatten_factor);
 	}
 	inline void		UnflattenColours(float& red, float& green, float& blue)
 	{
-		red = 2.5 * red - 1.0;
+		red = unflatten_factor * red - 1.0;
 		if (red > 1.0)
 			red = 1.0;
 		else if (red < 0.0)
 			red = 0.0;
-		green = 2.5 * green - 1.0;
+		green = unflatten_factor * green - 1.0;
 		if (green > 1.0)
 			green = 1.0;
 		else if (green < 0.0)
 			green = 0.0;
-		blue = 2.5 * blue - 1.0;
+		blue = unflatten_factor * blue - 1.0;
 		if (blue > 1.0)
 			blue = 1.0;
 		else if (blue < 0.0)

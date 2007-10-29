@@ -41,6 +41,9 @@ const uint32_t cFirstTimedRow = 2;
 const uint32_t cEventOffset = 16;
 const uint32_t cEventMargin = 4;
 
+const float line_gray = 0.75;
+const float line_gray_lighter = 0.875;
+
 // ---------------------------------------------------------------------------
 //	CDayWeekTable														  [public]
 /**
@@ -210,9 +213,9 @@ void CDayWeekTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect
 	::CGContextBeginPath(inContext);
 	::CGContextMoveToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y);
 	::CGContextAddLineToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y + adjustedRect.size.height);
-	::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
+	::CGContextSetGrayStrokeColor(inContext, line_gray, 1.0);
 	::CGContextStrokePath(inContext);
-	::CGContextClosePath(inContext);
+	//::CGContextClosePath(inContext);
 
 	// Right-side only for last column
 	if (inCell.col == mCols)
@@ -220,9 +223,9 @@ void CDayWeekTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect
 		::CGContextBeginPath(inContext);
 		::CGContextMoveToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y);
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
-		::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
+		::CGContextSetGrayStrokeColor(inContext, line_gray, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 
 	// Top-side always (lighter line above half-hour row)
@@ -232,9 +235,9 @@ void CDayWeekTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect
 		::CGContextBeginPath(inContext);
 		::CGContextMoveToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y);
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y);
-		::CGContextSetGrayStrokeColor(inContext, (inCell.row % 2 == 1) && (inCell.row != 1) ? 0.75 : 0.5, 1.0);
+		::CGContextSetGrayStrokeColor(inContext, (inCell.row % 2 == 1) && (inCell.row != 1) ? line_gray_lighter : line_gray, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 
 	// Bottom-side always
@@ -243,9 +246,9 @@ void CDayWeekTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect
 		::CGContextBeginPath(inContext);
 		::CGContextMoveToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y + adjustedRect.size.height);
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
-		::CGContextSetGrayStrokeColor(inContext, (inCell.row % 2 == 1) && (inCell.row != 1) ? 0.75 : 0.5, 1.0);
+		::CGContextSetGrayStrokeColor(inContext, (inCell.row % 2 == 1) && (inCell.row != 1) ? line_gray_lighter : line_gray, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 	
 	// Turn on aliasing for text
@@ -367,7 +370,7 @@ void CDayWeekTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRect
 		::CGContextAddLineToPoint(inContext, inLocalRect.origin.x + inLocalRect.size.width, hi_pt.y);
 		::CGContextSetRGBStrokeColor(inContext, 0.95, 0.0, 0.0, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 }
 

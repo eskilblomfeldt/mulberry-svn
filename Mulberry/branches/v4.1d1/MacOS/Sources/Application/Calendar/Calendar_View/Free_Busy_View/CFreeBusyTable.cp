@@ -137,9 +137,9 @@ void CFreeBusyTable::DrawRow(TableIndexT row, const Rect& inLocalQDRect)
 		itemRect.size.width -= 2;
 
 		// Red for busy, green for free, blue for tentative, grey for unavailable
-		float red = 0.5;
-		float green = 0.5;
-		float blue = 0.5;
+		float red = 0.0;
+		float green = 0.0;
+		float blue = 0.0;
 		switch((*iter).first)
 		{
 		case iCal::CICalendarFreeBusy::eFree:
@@ -149,15 +149,15 @@ void CFreeBusyTable::DrawRow(TableIndexT row, const Rect& inLocalQDRect)
 			blue = 1.0;
 			break;
 		case iCal::CICalendarFreeBusy::eBusyUnavailable:
-			red = 0.75;
-			green = 0.75;
-			blue = 0.75;
+			red = 0.25;
+			green = 0.25;
+			blue = 0.25;
 			break;
 		case iCal::CICalendarFreeBusy::eBusy:
 			red = 1.0;
 			break;
 		}
-		CGUtils::UnflattenColours(red, green, blue);
+		CGUtils::LightenColours(red, green, blue);
 
 		// Draw it
 		::CGContextBeginPath(inContext);
@@ -192,7 +192,7 @@ void CFreeBusyTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRec
 	::CGContextAddLineToPoint(inContext, adjustedRect.origin.x, adjustedRect.origin.y + adjustedRect.size.height);
 	::CGContextSetGrayStrokeColor(inContext, (inCell.col > 2) ? 0.75 : 0.5, 1.0);
 	::CGContextStrokePath(inContext);
-	::CGContextClosePath(inContext);
+	//::CGContextClosePath(inContext);
 
 	// Right-side only for last column
 	if (inCell.col == mCols)
@@ -202,7 +202,7 @@ void CFreeBusyTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRec
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
 		::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 
 	// Top-side always (lighter line above half-hour row)
@@ -211,7 +211,7 @@ void CFreeBusyTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRec
 	::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y);
 	::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 	::CGContextStrokePath(inContext);
-	::CGContextClosePath(inContext);
+	//::CGContextClosePath(inContext);
 
 	// Bottom-side for last row
 	if (inCell.row == mRows)
@@ -221,7 +221,7 @@ void CFreeBusyTable::DrawCell(const STableCell &inCell, const Rect &inLocalQDRec
 		::CGContextAddLineToPoint(inContext, adjustedRect.origin.x + adjustedRect.size.width, adjustedRect.origin.y + adjustedRect.size.height);
 		::CGContextSetGrayStrokeColor(inContext, 0.5, 1.0);
 		::CGContextStrokePath(inContext);
-		::CGContextClosePath(inContext);
+		//::CGContextClosePath(inContext);
 	}
 	
 	// Turn on aliasing for text
