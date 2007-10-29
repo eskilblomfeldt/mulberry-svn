@@ -205,7 +205,9 @@ public:
 	}
 
 	const cdstring& GetResponseHeader(const cdstring& hdr) const;
-
+	
+	cdstrvect& GetResponseHeaders(const cdstring& hdr, cdstrvect& hdrs) const;
+	
 	void DoRequestSync();
 
 	bool IsRedirect() const;

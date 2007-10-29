@@ -329,6 +329,17 @@ const cdstring& CHTTPRequestResponse::GetResponseHeader(const cdstring& hdr) con
 		return cdstring::null_str;
 }
 
+cdstrvect& CHTTPRequestResponse::GetResponseHeaders(const cdstring& hdr, cdstrvect& hdrs) const
+{
+	if (mHeaders.count(hdr))
+	{
+		for(cdstrmultimapcasei::const_iterator iter = mHeaders.lower_bound(hdr); iter != mHeaders.upper_bound(hdr); iter++)
+			hdrs.push_back((*iter).second);
+	}
+
+	return hdrs;
+}
+
 bool CHTTPRequestResponse::IsRedirect() const
 {
 	// Only some methods can do redirect

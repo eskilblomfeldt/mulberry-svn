@@ -40,7 +40,7 @@ public:
 		mStale = false;
 		mClientCount = 0;
 	}
-	CHTTPAuthorizationDigest(const cdstring& user, const cdstring& pswd, const cdstring& www_authenticate)
+	CHTTPAuthorizationDigest(const cdstring& user, const cdstring& pswd, const cdstrvect& www_authenticate)
 	{
 		mUser = user;
 		mPswd = pswd;
@@ -50,7 +50,7 @@ public:
 	}
 	virtual ~CHTTPAuthorizationDigest() {}
 
-	void SetDetails(const cdstring& user, const cdstring& pswd, const cdstring& www_authenticate)
+	void SetDetails(const cdstring& user, const cdstring& pswd, const cdstrvect& www_authenticate)
 	{
 		mUser = user;
 		mPswd = pswd;
@@ -75,7 +75,7 @@ private:
 	cdstring		mCnonce;
 	cdstring		mResponse;
 
-	void ParseAuthenticateHeader(const cdstring& auth);
+	void ParseAuthenticateHeader(const cdstrvect& hdrs);
 	void GenerateResponse(const CHTTPRequestResponse* request);
 };
 

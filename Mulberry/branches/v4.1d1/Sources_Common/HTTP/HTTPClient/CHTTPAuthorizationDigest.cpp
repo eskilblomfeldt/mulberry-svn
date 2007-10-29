@@ -69,63 +69,68 @@ void CHTTPAuthorizationDigest::GenerateAuthorization(ostream& os, const CHTTPReq
 	os << net_endl;
 }
 
-void CHTTPAuthorizationDigest::ParseAuthenticateHeader(const cdstring& auth)
+void CHTTPAuthorizationDigest::ParseAuthenticateHeader(const cdstrvect& hdrs)
 {
-	// Strip any space
-	cdstring temp(auth);
-	char* p = temp.c_str_mod();
-	
-	// Must have digest token
-	if (::stradvtokcmp(&p, "Digest") != 0)
-		return;
-	
-	// Get each name/value pair
-	while(true)
+	for(cdstrvect::const_iterator iter = hdrs.begin(); iter != hdrs.end(); iter++)
 	{
-		char* name = ::strgettokenstr(&p, SPACE_TAB "=");
-		if ((name == NULL) || (*p == 0))
-			return;
+		// Strip any space
+		cdstring temp(*iter);
+		char* p = temp.c_str_mod();
 		
-		char* value = ::strgettokenstr(&p, SPACE_TAB ",");
-		if (value == NULL)
-			return;
+		// Must have digest token
+		if (::stradvtokcmp(&p, "Digest") != 0)
+			continue;
 		
-		if (::strcmpnocase(name, "realm") == 0)
+		// Get each name/value pair
+		while(true)
 		{
-			mRealm = value;
-		}
-		else if (::strcmpnocase(name, "domain") == 0)
-		{
-			mDomain = value;
-		}
-		else if (::strcmpnocase(name, "nonce") == 0)
-		{
-			mNonce = value;
-		}
-		else if (::strcmpnocase(name, "opaque") == 0)
-		{
-			mOpaque = value;
-		}
-		else if (::strcmpnocase(name, "stale") == 0)
-		{
-			mStale = (::strcmpnocase(value, "false") != 0);
-		}
-		else if (::strcmpnocase(name, "algorithm") == 0)
-		{
-			mAlgorithm = value;
-		}
-		else if (::strcmpnocase(name, "qop") == 0)
-		{
-			mQop = value;
-		}
-		else
-		{
-			// Unknown token - ignore
+			char* name = ::strgettokenstr(&p, SPACE_TAB "=");
+			if ((name == NULL) || (*p == 0))
+				return;
+			
+			char* value = ::strgettokenstr(&p, SPACE_TAB ",");
+			if (value == NULL)
+				return;
+			
+			if (::strcmpnocase(name, "realm") == 0)
+			{
+				mRealm = value;
+			}
+			else if (::strcmpnocase(name, "domain") == 0)
+			{
+				mDomain = value;
+			}
+			else if (::strcmpnocase(name, "nonce") == 0)
+			{
+				mNonce = value;
+			}
+			else if (::strcmpnocase(name, "opaque") == 0)
+			{
+				mOpaque = value;
+			}
+			else if (::strcmpnocase(name, "stale") == 0)
+			{
+				mStale = (::strcmpnocase(value, "false") != 0);
+			}
+			else if (::strcmpnocase(name, "algorithm") == 0)
+			{
+				mAlgorithm = value;
+			}
+			else if (::strcmpnocase(name, "qop") == 0)
+			{
+				mQop = value;
+			}
+			else
+			{
+				// Unknown token - ignore
+			}
+			
+			// Punt over comma
+			while((*p != 0) && (*p == ','))
+				p++;
 		}
 		
-		// Punt over comma
-		while((*p != 0) && (*p == ','))
-			p++;
+		break;
 	}
 }
 
