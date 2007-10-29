@@ -197,8 +197,33 @@ void CCalDAVCalendarClient::_CreateCalendar(const CCalendarStoreNode& node)
 
 bool CCalDAVCalendarClient::_CalendarChanged(const CCalendarStoreNode& node, iCal::CICalendar& cal)
 {
-	// For CalDAV we always have to do a component sync
-	return true;
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Checking", "Error::Calendar::OSErrCheckCalendar", "Error::Calendar::NoBadCheckCalendar", node.GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(&node);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current CTag
+	cdstring ctag = GetProperty(rurl, lock_token, http::calendarserver::cProperty_getctag);
+	
+	// Changed if ctags are different
+	return ctag.empty() || (ctag != cal.GetETag());
+}
+
+void CCalDAVCalendarClient::_UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Checking", "Error::Calendar::OSErrCheckCalendar", "Error::Calendar::NoBadCheckCalendar", node.GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(&node);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current CTag
+	cdstring ctag = GetProperty(rurl, lock_token, http::calendarserver::cProperty_getctag);
+	
+	cal.SetETag(ctag);
 }
 
 void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::webdav::CWebDAVPropFindParser& parser)

@@ -217,6 +217,7 @@ protected:
 	CAddressBook		mStoreRoot;
 	char				mDirDelim;							// Directory delimiter
 	bool				mSyncingList;
+	bool				mListedFromCache;
 
 	CAdbkRecord*		mRecorder;							// Recorder for mail ops
 
@@ -226,7 +227,7 @@ protected:
 
 	// Offline
 			void DumpAddressBooks();
-			void ReadAddressBooks();
+			bool ReadAddressBooks(bool only_if_current=false);
 			void RecoverAddressBooks();
 	
 			void SynchroniseRemote(CAddressBook* adbk, bool fast);

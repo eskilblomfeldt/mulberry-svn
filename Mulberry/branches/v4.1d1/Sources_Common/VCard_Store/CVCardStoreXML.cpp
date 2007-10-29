@@ -40,7 +40,8 @@ namespace vcardstore
 /*
 
 	<!ELEMENT addressbooklist	(addressbooknode*) >
-	<!ATTLIST addressbooklist	version			CDATA	#REQUIRED >
+	<!ATTLIST addressbooklist	version			CDATA	#REQUIRED
+							    datestamp       CDATA   "" >
 
 	<!ELEMENT addressbooknode	(name, last-sync?, webcal?, addressbooknode*) >
 	<!ATTLIST addressbooknode	adbk			(true|false) "false"
@@ -56,6 +57,7 @@ namespace vcardstore
 
 const xmllib::XMLName cXMLElement_adbklist("addressbooklist");
 const char* cXMLAttribute_version = "version";
+const char* cXMLAttribute_datestamp = "datestamp";
 
 const xmllib::XMLName cXMLElement_adbknode("addressbooknode");
 const char* cXMLAttribute_adbk = "adbk";

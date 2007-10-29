@@ -61,6 +61,7 @@ protected:
 
 	virtual void _CreateCalendar(const CCalendarStoreNode& node);
 	virtual bool _CalendarChanged(const CCalendarStoreNode& node, iCal::CICalendar& cal);
+	virtual void _UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 
 	virtual void _ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 	virtual void _WriteFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);

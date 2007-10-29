@@ -194,4 +194,11 @@ const char*	cNamespace = "http://jakarta.apache.org/slide/";
 	const xmllib::XMLName	cNonInheritable_comp("non-inheritable", cNamespace);
 }
 
+namespace calendarserver
+{
+const char*	cNamespace = "http://calendarserver.org/ns/";
+
+	const xmllib::XMLName	cProperty_getctag("getctag", cNamespace);
+}
+
 }

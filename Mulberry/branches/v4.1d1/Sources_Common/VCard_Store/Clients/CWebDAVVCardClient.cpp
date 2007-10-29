@@ -27,6 +27,7 @@
 #include "CAddressAccount.h"
 #include "CAdbkProtocol.h"
 #include "CGeneralException.h"
+#include "CPasswordManager.h"
 #include "CStatusWindow.h"
 #include "CStreamFilter.h"
 #include "CStreamUtils.h"
@@ -1311,6 +1312,18 @@ void CWebDAVVCardClient::DoSession(CHTTPRequestResponse* request)
 			CloseConnection();
 			return;
 		}
+		
+		// Recache user id & password after successful logon
+		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+		{
+			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+			// Only bother if it contains something
+			if (!auth->GetPswd().empty())
+			{
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
+		}
 	}
 	
 	// Do the request if present
@@ -1338,7 +1351,8 @@ void CWebDAVVCardClient::DoSession(CHTTPRequestResponse* request)
 				}
 
 				// Get authorization object (prompt the user) and redo the request
-				mAuthorization = GetAuthorization(first_time, request->GetResponseHeader(cHeaderWWWAuthenticate));
+				cdstrvect hdrs;
+				mAuthorization = GetAuthorization(first_time, request->GetResponseHeaders(cHeaderWWWAuthenticate, hdrs));
 				
 				// Check for auth cancellation
 				if (mAuthorization == (CHTTPAuthorization*) -1)
@@ -1356,6 +1370,18 @@ void CWebDAVVCardClient::DoSession(CHTTPRequestResponse* request)
 				}
 			}
 			
+			// Recache user id & password after successful logon
+			if (!first_time && GetAccount()->GetAuthenticator().RequiresUserPswd())
+			{
+				CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+				// Only bother if it contains something
+				if (!auth->GetPswd().empty())
+				{
+					CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+				}
+			}
+
 			// If we get here we are complete with auth loop
 			break;
 		}
@@ -1395,7 +1421,7 @@ void CWebDAVVCardClient::SetServerCapability(const cdstring& txt)
 	mCapability = txt;
 }
 
-CHTTPAuthorization* CWebDAVVCardClient::GetAuthorization(bool first_time, const cdstring& www_authenticate)
+CHTTPAuthorization* CWebDAVVCardClient::GetAuthorization(bool first_time, const cdstrvect& www_authenticate)
 {
 	// Loop while trying to authentciate
 	CAuthenticator* acct_auth = GetAccount()->GetAuthenticator().GetAuthenticator();

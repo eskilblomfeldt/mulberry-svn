@@ -31,12 +31,15 @@
 #include "CCalendarStoreXML.h"
 #include "CConnectionManager.h"
 #include "CLocalCalendarClient.h"
+#include "CPasswordManager.h"
 #include "CPreferences.h"
 #include "CWebDAVCalendarClient.h"
 
 #include "cdfstream.h"
 
 #include "CICalendarSync.h"
+#include "CICalendarDateTime.h"
+#include "CICalendarDuration.h"
 
 #include "XMLDocument.h"
 #include "XMLNode.h"
@@ -59,6 +62,7 @@ CCalendarProtocol::CCalendarProtocol(CINETAccount* acct) :
 	mCacheClient = NULL;
 	mCacheIsPrimary = false;
 	mSyncingList = false;
+	mListedFromCache = false;
 
 	// Only WebDAV servers can disconnect
 	switch(GetAccountType())
@@ -481,7 +485,10 @@ void CCalendarProtocol::Logon()
 
 			// Only bother if it contains something
 			if (!auth->GetPswd().empty())
+			{
 				CCalendarProtocol::SetCachedPswd(auth->GetUID(), auth->GetPswd());
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
 		}
 
 		// Make copy of current authenticator
@@ -568,14 +575,20 @@ void CCalendarProtocol::LoadList()
 		ReadCalendars();
 	else
 	{
-		// Now get new list
-		mClient->_ListCalendars(&mStoreRoot);
-
-		// Always keep disconnected cache list in sync with server
-		if (mCacheClient != NULL)
+		// First try the disconnected cache - but only use if current
+		if (mListedFromCache || ((mCacheClient == NULL) || !ReadCalendars(true)))
 		{
-			DumpCalendars();
+			// Now get new list
+			mClient->_ListCalendars(&mStoreRoot);
+
+			// Always keep disconnected cache list in sync with server
+			if (mCacheClient != NULL)
+			{
+				DumpCalendars();
+			}
 		}
+		else
+			mListedFromCache = true;
 	}
 
 	// Tell listeners we have added calendar store nodes
@@ -1005,7 +1018,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 		// 2. Look at record DB and:
 		//  2.1 Add new components to server and cache info
 		//  2.2 Remove deleted components from server and cached server info if still present on server
-		//  2.3 Cache info for changed items for later sync
+		//  2.3 Cache info for changed items for later sync (or change them immediately if the server has not changed
 		//
 		// 3. Scan list of local components
 		//  3.1 If in added set, ignore it
@@ -1019,12 +1032,20 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 		//
 		// 4. Copy remaining items in server set to local cache - they are new items
 		//
+		// We only need to do steps 3 & 4 if the data on the server is known to have changed.
+		//
 		
 		// Now do it...
 
 		// Step 1
 		cdstrmap comps;
-		mClient->_GetComponentInfo(node, cal, comps);
+		bool server_changed = mClient->_CalendarChanged(node, cal);
+		if (server_changed)
+			mClient->_GetComponentInfo(node, cal, comps);
+		else
+		{
+			mCacheClient->_ReadFullCalendar(node, cal);
+		}
 		
 		// Step 2
 		cdstrmap cache_added;
@@ -1062,142 +1083,157 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 
 			// Step 2.3
 			else if ((*iter).second.GetAction() == iCal::CICalendarComponentRecord::eChanged)
-				cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+			{
+				if (server_changed)
+					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+				else
+				{
+					// Change it on the server
+					const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
+					mClient->_ChangeComponent(node, cal, *comp);
+					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+				}
+			}
 		}
 		
 		
 		// Now do sync
-		
-		// Get component info from cache
-		iCal::CICalendarComponentDBList dbs;
-		cal.GetAllDBs(dbs);
-		cdstrvect component_keys;
-		for(iCal::CICalendarComponentDBList::const_iterator iter1 = dbs.begin(); iter1 != dbs.end(); iter1++)
+		if (server_changed)
 		{
-			for(iCal::CICalendarComponentDB::const_iterator iter2 = (*iter1)->begin(); iter2 != (*iter1)->end(); iter2++)
+			// Get component info from cache
+			iCal::CICalendarComponentDBList dbs;
+			cal.GetAllDBs(dbs);
+			cdstrvect component_keys;
+			for(iCal::CICalendarComponentDBList::const_iterator iter1 = dbs.begin(); iter1 != dbs.end(); iter1++)
 			{
-				component_keys.push_back((*iter2).second->GetMapKey());
-			}
-		}
-		
-		// Step 3
-		cdstrset matching_components;
-		for(cdstrvect::const_iterator iter = component_keys.begin(); iter != component_keys.end(); iter++)
-		{
-			iCal::CICalendarComponent* cache_comp = cal.GetComponentByKey(*iter);
-			if (cache_comp == NULL)
-				continue;
-
-			// Get this components RURL
-			cdstring cache_rurl = cache_comp->GetRURL();
-			cdstring cache_etag = cache_comp->GetETag();
-			
-			// Get the server info
-			cdstring server_rurl;
-			cdstring server_etag;
-			cdstrmap::const_iterator found = comps.find(cache_rurl);
-			if (found != comps.end())
-			{
-				server_rurl = (*found).first;
-				server_etag = (*found).second;
-			}
-
-			// Step 3.1
-			if (cache_added.count(cache_rurl) != 0)
-				continue;
-			
-			// Step 3.2
-			else if (cache_changed.count(cache_rurl) != 0)
-			{
-				// Step 3.2.1
-				if (cache_etag == server_etag)
+				for(iCal::CICalendarComponentDB::const_iterator iter2 = (*iter1)->begin(); iter2 != (*iter1)->end(); iter2++)
 				{
-					// Write changed cache component to server
-					mClient->_ChangeComponent(node, cal, *cache_comp);
+					component_keys.push_back((*iter2).second->GetMapKey());
 				}
-				
-				// Step 3.2.2
-				else
-				{
-					// Do iCal SEQ etc comparison
-					
-					// First read in component from server into temp calendar
-					iCal::CICalendar tempcal;
-					iCal::CICalendarComponent* server_comp = mClient->_ReadComponent(node, tempcal, server_rurl);
-					if (server_comp != NULL)
-					{
-						int result = iCal::CICalendarSync::CompareComponentVersions(server_comp, cache_comp);
-						
-						if (result == 1)
-						{
-							// Cache is newer than server - cache overwrites to server
-							mClient->_ChangeComponent(node, cal, *cache_comp);
-						}
-						else if (result == -1)
-						{
-							// Cache is older than server - server overwrites cache
+			}
+			
+			// Step 3
+			cdstrset matching_components;
+			for(cdstrvect::const_iterator iter = component_keys.begin(); iter != component_keys.end(); iter++)
+			{
+				iCal::CICalendarComponent* cache_comp = cal.GetComponentByKey(*iter);
+				if (cache_comp == NULL)
+					continue;
 
-							// Remove the cached component first
-							cal.RemoveComponentByKey(cache_comp->GetMapKey());
-							cache_comp = NULL;
+				// Get this components RURL
+				cdstring cache_rurl = cache_comp->GetRURL();
+				cdstring cache_etag = cache_comp->GetETag();
+				
+				// Get the server info
+				cdstring server_rurl;
+				cdstring server_etag;
+				cdstrmap::const_iterator found = comps.find(cache_rurl);
+				if (found != comps.end())
+				{
+					server_rurl = (*found).first;
+					server_etag = (*found).second;
+				}
+
+				// Step 3.1
+				if (cache_added.count(cache_rurl) != 0)
+					continue;
+				
+				// Step 3.2
+				else if (cache_changed.count(cache_rurl) != 0)
+				{
+					// Step 3.2.1
+					if (cache_etag == server_etag)
+					{
+						// Write changed cache component to server
+						mClient->_ChangeComponent(node, cal, *cache_comp);
+					}
+					
+					// Step 3.2.2
+					else
+					{
+						// Do iCal SEQ etc comparison
+						
+						// First read in component from server into temp calendar
+						iCal::CICalendar tempcal;
+						iCal::CICalendarComponent* server_comp = mClient->_ReadComponent(node, tempcal, server_rurl);
+						if (server_comp != NULL)
+						{
+							int result = iCal::CICalendarSync::CompareComponentVersions(server_comp, cache_comp);
 							
-							// Copy component from server into local cache effectively replacing old one
-							iCal::CICalendarComponent* new_comp = server_comp->clone();
-							new_comp->SetCalendar(cal.GetRef());
-							cal.AddComponent(new_comp);
+							if (result == 1)
+							{
+								// Cache is newer than server - cache overwrites to server
+								mClient->_ChangeComponent(node, cal, *cache_comp);
+							}
+							else if (result == -1)
+							{
+								// Cache is older than server - server overwrites cache
+
+								// Remove the cached component first
+								cal.RemoveComponentByKey(cache_comp->GetMapKey());
+								cache_comp = NULL;
+								
+								// Copy component from server into local cache effectively replacing old one
+								iCal::CICalendarComponent* new_comp = server_comp->clone();
+								new_comp->SetCalendar(cal.GetRef());
+								cal.AddComponent(new_comp);
+							}
 						}
 					}
 				}
-			}
-			
-			// Step 3.3
-			else if (!server_rurl.empty())
-			{
-				// Step 3.3.1
-				if (cache_etag != server_etag)
+				
+				// Step 3.3
+				else if (!server_rurl.empty())
 				{
-					// Copy from server to cache overwriting cache value
-					
-					// Remove the cached component first
+					// Step 3.3.1
+					if (cache_etag != server_etag)
+					{
+						// Copy from server to cache overwriting cache value
+						
+						// Remove the cached component first
+						cal.RemoveComponentByKey(cache_comp->GetMapKey());
+						cache_comp = NULL;
+						
+						// Read component from server into local cache effectively replacing old one
+						mClient->_ReadComponent(node, cal, server_rurl);
+					}
+				}
+				
+				// Step 3.4
+				else
+				{
+					// comp is deleted in this call
 					cal.RemoveComponentByKey(cache_comp->GetMapKey());
 					cache_comp = NULL;
-					
-					// Read component from server into local cache effectively replacing old one
-					mClient->_ReadComponent(node, cal, server_rurl);
 				}
+				
+				// Step 3.5
+				if (!server_rurl.empty())
+					matching_components.insert(server_rurl);
 			}
 			
-			// Step 3.4
-			else
+			// Step 4
+			cdstrvect rurls;
+			for(cdstrmap::const_iterator iter = comps.begin(); iter != comps.end(); iter++)
 			{
-				// comp is deleted in this call
-				cal.RemoveComponentByKey(cache_comp->GetMapKey());
-				cache_comp = NULL;
+				cdstrset::const_iterator found = matching_components.find((*iter).first);
+				if (found == matching_components.end())
+					rurls.push_back((*iter).first);
 			}
-			
-			// Step 3.5
-			if (!server_rurl.empty())
-				matching_components.insert(server_rurl);
-		}
-		
-		// Step 4
-		cdstrvect rurls;
-		for(cdstrmap::const_iterator iter = comps.begin(); iter != comps.end(); iter++)
-		{
-			cdstrset::const_iterator found = matching_components.find((*iter).first);
-			if (found == matching_components.end())
-				rurls.push_back((*iter).first);
-		}
 
-		// Read components from server into local cache as its a new one on the server
-		if (rurls.size() != 0)
-			mClient->_ReadComponents(node, cal, rurls);
+			// Read components from server into local cache as its a new one on the server
+			if (rurls.size() != 0)
+				mClient->_ReadComponents(node, cal, rurls);
+		}
 
 		// Clear out cache recording
 		cal.ClearRecording();
 		
+		// Get the current server sync token
+		mClient->_UpdateSyncToken(node, cal);
+
 		// Now write back cache
-		if (mCacheClient->_TouchCalendar(node))
+		if (!mCacheClient->_TouchCalendar(node))
 			DumpCalendars();
 		mCacheClient->_WriteFullCalendar(node, cal);
 	}
@@ -1741,6 +1777,11 @@ void CCalendarProtocol::DumpCalendars()
 	doc->GetRoot()->SetName(cXMLElement_calendarlist);
 	xmllib::XMLObject::WriteAttribute(doc->GetRoot(), cXMLAttribute_version, (uint32_t)1);
 	
+	// Store the current date
+	iCal::CICalendarDateTime dt = iCal::CICalendarDateTime::GetNowUTC();
+	dt.SetDateOnly(true);
+	xmllib::XMLObject::WriteAttribute(doc->GetRoot(), cXMLAttribute_datestamp, dt.GetText());
+	
 	// Now add each node (and child nodes) to XML doc
 	mStoreRoot.WriteXML(doc.get(), doc->GetRoot(), true);
 	
@@ -1749,8 +1790,9 @@ void CCalendarProtocol::DumpCalendars()
 	
 }
 
-void CCalendarProtocol::ReadCalendars()
+bool CCalendarProtocol::ReadCalendars(bool only_if_current)
 {
+	bool is_current = false;
 	cdstring list_name = mOfflineCWD + cCalendarListName;
 	
 	// XML parse the data
@@ -1763,12 +1805,32 @@ void CCalendarProtocol::ReadCalendars()
 		// Check root node
 		xmllib::XMLNode* root = parser.Document()->GetRoot();
 		if (!root->CompareFullName(cXMLElement_calendarlist))
-			return;
+			return is_current;
 		
-		// Now have store root read in all children
-		mStoreRoot.ReadXML(root, true);
+		// Get the datestamp
+		cdstring dtstamp;
+		if (xmllib::XMLObject::ReadAttribute(root, cXMLAttribute_datestamp, dtstamp))
+		{
+			iCal::CICalendarDateTime dtnow = iCal::CICalendarDateTime::GetNowUTC();
+			dtnow.SetDateOnly(true);
 
-		// Always cache the disconnected state
-		mStoreRoot.TestDisconnectCache();
+			iCal::CICalendarDateTime dt;
+			dt.Parse(dtstamp);
+			
+			iCal::CICalendarDuration diff = dtnow - dt;
+			is_current = (diff.GetTotalSeconds() <= 48 * 60 * 60);
+		}
+
+		if (!only_if_current || is_current)
+		{
+			// Now have store root read in all children
+			mStoreRoot.ReadXML(root, true);
+
+			// Always cache the disconnected state
+			if (IsDisconnected() || mCacheIsPrimary)
+				mStoreRoot.TestDisconnectCache();
+		}
 	}
+	
+	return is_current;
 }

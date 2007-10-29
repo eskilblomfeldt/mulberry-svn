@@ -129,7 +129,7 @@ protected:
 	virtual void SetServerDescriptor(const cdstring& txt);
 	virtual void SetServerCapability(const cdstring& txt);
 
-	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstring& www_authenticate);
+	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstrvect& www_authenticate);
 			bool CheckCurrentAuthorization() const;
 	virtual void DoRequest(CHTTPRequestResponse* request);
 	virtual void WriteRequestData(CHTTPRequestResponse* request);

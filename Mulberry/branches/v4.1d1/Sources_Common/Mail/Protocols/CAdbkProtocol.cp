@@ -33,7 +33,11 @@
 #include "CMacOSXAdbkClient.h"
 #endif
 #endif
+#include "CPasswordManager.h"
 #include "CPreferences.h"
+
+#include "CICalendarDateTime.h"
+#include "CICalendarDuration.h"
 
 #include "CCardDAVVCardClient.h"
 
@@ -64,6 +68,7 @@ CAdbkProtocol::CAdbkProtocol(CINETAccount* account)
 	mCacheClient = NULL;
 	mCacheIsPrimary = false;
 	mSyncingList = false;
+	mListedFromCache = false;
 
 	// Only IMSP/ACAP/CardDAV servers can disconnect
 	switch(GetAccountType())
@@ -503,7 +508,10 @@ void CAdbkProtocol::Logon()
 
 			// Only bother if it contains something
 			if (!auth->GetPswd().empty())
+			{
 				SetCachedPswd(auth->GetUID(), auth->GetPswd());
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
 		}
 
 		// Make copy of current authenticator
@@ -606,13 +614,19 @@ void CAdbkProtocol::LoadList()
 		ReadAddressBooks();
 	else
 	{
-		mClient->_ListAddressBooks(&mStoreRoot);
-
-		// Always keep disconnected cache list in sync with server
-		if (mCacheClient != NULL)
+		// First try the disconnected cache - but only use if current
+		if (mListedFromCache || ((mCacheClient == NULL) || !ReadAddressBooks(true)))
 		{
-			DumpAddressBooks();
+			mClient->_ListAddressBooks(&mStoreRoot);
+
+			// Always keep disconnected cache list in sync with server
+			if (mCacheClient != NULL)
+			{
+				DumpAddressBooks();
+			}
 		}
+		else
+			mListedFromCache = true;
 
 		// Look for default address book if remote
 		if (!IsOffline())
@@ -1385,6 +1399,11 @@ void CAdbkProtocol::DumpAddressBooks()
 	doc->GetRoot()->SetName(cXMLElement_adbklist);
 	xmllib::XMLObject::WriteAttribute(doc->GetRoot(), cXMLAttribute_version, (uint32_t)1);
 	
+	// Store the current date
+	iCal::CICalendarDateTime dt = iCal::CICalendarDateTime::GetNowUTC();
+	dt.SetDateOnly(true);
+	xmllib::XMLObject::WriteAttribute(doc->GetRoot(), cXMLAttribute_datestamp, dt.GetText());
+	
 	// Now add each node (and child nodes) to XML doc
 	mStoreRoot.WriteXML(doc.get(), doc->GetRoot(), true);
 	
@@ -1392,8 +1411,9 @@ void CAdbkProtocol::DumpAddressBooks()
 	doc->Generate(fout);
 }
 
-void CAdbkProtocol::ReadAddressBooks()
+bool CAdbkProtocol::ReadAddressBooks(bool only_if_current)
 {
+	bool is_current = false;
 	cdstring list_name = mOfflineCWD + cAdbkListName;
 	
 	// XML parse the data
@@ -1406,14 +1426,34 @@ void CAdbkProtocol::ReadAddressBooks()
 		// Check root node
 		xmllib::XMLNode* root = parser.Document()->GetRoot();
 		if (!root->CompareFullName(cXMLElement_adbklist))
-			return;
-		
-		// Now have store root read in all children
-		mStoreRoot.ReadXML(root, true);
+			return is_current;
 
-		// Always cache the disconnected state
-		mStoreRoot.TestDisconnectCache();
+		// Get the datestamp
+		cdstring dtstamp;
+		if (xmllib::XMLObject::ReadAttribute(root, cXMLAttribute_datestamp, dtstamp))
+		{
+			iCal::CICalendarDateTime dtnow = iCal::CICalendarDateTime::GetNowUTC();
+			dtnow.SetDateOnly(true);
+
+			iCal::CICalendarDateTime dt;
+			dt.Parse(dtstamp);
+			
+			iCal::CICalendarDuration diff = dtnow - dt;
+			is_current = (diff.GetTotalSeconds() <= 48 * 60 * 60);
+		}
+
+		if (!only_if_current || is_current)
+		{
+			// Now have store root read in all children
+			mStoreRoot.ReadXML(root, true);
+
+			// Always cache the disconnected state
+			if (IsDisconnected() || mCacheIsPrimary)
+				mStoreRoot.TestDisconnectCache();
+		}
 	}
+	
+	return is_current;
 }
 
 void CAdbkProtocol::RecoverAddressBooks()

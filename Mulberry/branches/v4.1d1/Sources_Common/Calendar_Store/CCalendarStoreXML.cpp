@@ -40,7 +40,8 @@ namespace calstore
 /*
 
 	<!ELEMENT calendarlist	(calendarnode*) >
-	<!ATTLIST calendarlist	version			CDATA	#REQUIRED >
+	<!ATTLIST calendarlist	version			CDATA	#REQUIRED
+							datestamp       CDATA   "">
 
 	<!ELEMENT calendarnode	(name, last-sync?, webcal?, calendarnode*) >
 	<!ATTLIST calendarnode	directory		(true|false) "false"
@@ -68,6 +69,7 @@ namespace calstore
 
 const xmllib::XMLName cXMLElement_calendarlist("calendarlist");
 const char* cXMLAttribute_version = "version";
+const char* cXMLAttribute_datestamp = "datestamp";
 
 const xmllib::XMLName cXMLElement_calendarnode("calendarnode");
 const char* cXMLAttribute_directory = "directory";

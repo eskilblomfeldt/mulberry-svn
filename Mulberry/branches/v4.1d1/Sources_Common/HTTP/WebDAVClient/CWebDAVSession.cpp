@@ -80,7 +80,8 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 			}
 
 			// Get authorization object (prompt the user) and redo the request
-			mAuthorization = GetAuthorization(first_time, request->GetResponseHeader(cHeaderWWWAuthenticate));
+			cdstrvect hdrs;
+			mAuthorization = GetAuthorization(first_time, request->GetResponseHeaders(cHeaderWWWAuthenticate, hdrs));
 			
 			// Check for auth cancellation
 			if (mAuthorization == (CHTTPAuthorization*) -1)

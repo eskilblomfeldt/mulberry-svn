@@ -195,6 +195,13 @@ extern const char*	cNamespace;
 	extern const xmllib::XMLName	cNonInheritable_comp;
 }
 
+namespace calendarserver
+{
+extern const char*	cNamespace;
+
+	extern const xmllib::XMLName	cProperty_getctag;
+}
+
 }	// namespace http
 
 #endif	// CWebDAVRequest_H

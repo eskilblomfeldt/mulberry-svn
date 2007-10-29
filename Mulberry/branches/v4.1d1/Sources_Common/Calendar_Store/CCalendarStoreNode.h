@@ -263,7 +263,7 @@ protected:
 	cdstring				mName;						// Full path name of item
 	const char*				mShortName;					// Pointer to the last part of the path name
 	uint32_t				mSize;						// Disk size
-	mutable uint32_t		mLastSync;					// Lasy sync time
+	mutable uint32_t		mLastSync;					// Last sync time
 	SACLRight				mMyRights;					// User's rights on this mailbox
 	CCalendarACLList*		mACLs;						// List of ACLs on this mailbox
 	

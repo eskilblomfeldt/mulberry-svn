@@ -59,6 +59,7 @@ public:
 	virtual void _UnlockCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal) = 0;
 	virtual bool _CheckCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal) = 0;
 	virtual bool _CalendarChanged(const CCalendarStoreNode& node, iCal::CICalendar& cal) = 0;
+	virtual void _UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal) = 0;
 	virtual void _SizeCalendar(CCalendarStoreNode& node) = 0;
 
 	virtual void _ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal) = 0;

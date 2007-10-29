@@ -898,11 +898,11 @@ void CLocalVCardClient::Append(CAddressBook* adbk, const CAddressList* addrs, co
 	}
 	
 	// Write cache file
-	if (IsCaching())
-	{
-		cdofstream cos(cpath);
-		adbk->GetVCardAdbk()->GenerateCache(cos);
-	}
+	//if (IsCaching())
+	//{
+	//	cdofstream cos(cpath);
+	//	adbk->GetVCardAdbk()->GenerateCache(cos);
+	//}
 }
 
 #pragma mark ____________________________Utils

@@ -30,6 +30,7 @@ namespace vcardstore {
 
 extern const xmllib::XMLName cXMLElement_adbklist;
 extern const char*			 cXMLAttribute_version;
+extern const char*			 cXMLAttribute_datestamp;
 extern const char*			 cXMLAttribute_has_expanded;
 
 extern const xmllib::XMLName cXMLElement_adbknode;

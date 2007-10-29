@@ -223,6 +223,7 @@ protected:
 	CCalendarStoreNode		mStoreRoot;
 	char					mDirDelim;				// Directory delimiter
 	bool					mSyncingList;
+	bool					mListedFromCache;
 
 	CCalendarRecord*		mRecorder;							// Recorder for mail ops
 
@@ -230,7 +231,7 @@ protected:
 
 	// Offline
 			void DumpCalendars();
-			void ReadCalendars();
+			bool ReadCalendars(bool only_if_current=false);
 			void RecoverCalendars();
 	
 			void SynchroniseRemote(CCalendarStoreNode& node, bool fast);

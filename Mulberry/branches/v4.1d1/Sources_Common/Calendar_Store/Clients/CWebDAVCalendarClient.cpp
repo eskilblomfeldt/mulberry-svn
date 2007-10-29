@@ -28,6 +28,7 @@
 #include "CCalendarStoreNode.h"
 //#include "CDisplayItem.h"
 #include "CGeneralException.h"
+#include "CPasswordManager.h"
 #include "CStatusWindow.h"
 #include "CStreamFilter.h"
 #include "CStreamUtils.h"
@@ -565,6 +566,21 @@ bool CWebDAVCalendarClient::_CalendarChanged(const CCalendarStoreNode& node, iCa
 	
 	// Changed if etags are different
 	return etag != cal.GetETag();
+}
+
+void CWebDAVCalendarClient::_UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Checking", "Error::Calendar::OSErrCheckCalendar", "Error::Calendar::NoBadCheckCalendar", node.GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(&node);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current ETag
+	cdstring etag = GetETag(rurl, lock_token);
+	
+	cal.SetETag(etag);
 }
 
 void CWebDAVCalendarClient::_SizeCalendar(CCalendarStoreNode& node)
@@ -1122,11 +1138,22 @@ void CWebDAVCalendarClient::_SetFreeBusyCalendars(const cdstrvect& calendars)
 
 cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lock_token)
 {
+	cdstring result = GetProperty(rurl, lock_token, http::webdav::cProperty_getetag);
+
+	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+	if (!result.empty() && !result.isquoted())
+		result.quote(true);
+
+	return result;
+}
+
+cdstring CWebDAVCalendarClient::GetProperty(const cdstring& rurl, const cdstring& lock_token, const xmllib::XMLName& property)
+{
 	cdstring result;
 
 	// Create WebDAV propfind
 	xmllib::XMLNameList props;
-	props.push_back(http::webdav::cProperty_getetag);
+	props.push_back(property);
 	auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
 	http::CHTTPOutputDataString dout;
 	request->SetOutput(&dout);
@@ -1141,6 +1168,8 @@ cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lo
 		parser.ParseData(dout.GetData());
 
 		// Look at each propfind result and determine type of calendar
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
 		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
 		{
 			// Get child element name (decode URL)
@@ -1148,15 +1177,11 @@ cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lo
 			name.DecodeURL();
 		
 			// Must match rurl
-			if (name.compare_end(rurl))
+			if (name.compare_end(decoded_rurl))
 			{
-				if ((*iter)->GetTextProperties().count(http::webdav::cProperty_getetag.FullName()) != 0)
+				if ((*iter)->GetTextProperties().count(property.FullName()) != 0)
 				{
-					result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_getetag.FullName())).second;
-					
-					// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
-					if (!result.isquoted())
-						result.quote(true);
+					result = (*(*iter)->GetTextProperties().find(property.FullName())).second;
 					break;
 				}
 			}
@@ -1165,7 +1190,6 @@ cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lo
 	else
 	{
 		HandleHTTPError(request.get());
-		return result;
 	}
 
 	return result;
@@ -1192,6 +1216,8 @@ cdstrvect CWebDAVCalendarClient::GetHrefListProperty(const cdstring& rurl, const
 		parser.ParseData(dout.GetData());
 
 		// Look at each propfind result and extract any Hrefs
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
 		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
 		{
 			// Get child element name (decode URL)
@@ -1199,7 +1225,7 @@ cdstrvect CWebDAVCalendarClient::GetHrefListProperty(const cdstring& rurl, const
 			name.DecodeURL();
 		
 			// Must match rurl
-			if (name.compare_end(rurl))
+			if (name.compare_end(decoded_rurl))
 			{
 				if ((*iter1)->GetNodeProperties().count(propname.FullName()) != 0)
 				{
@@ -1241,13 +1267,15 @@ bool CWebDAVCalendarClient::GetSelfProperties(const cdstring& rurl, const xmllib
 		parser.ParseData(dout.GetData());
 
 		// Look at each principal-match result and return first one that is appropriate
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
 		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
 		{
 			// Get child element name (decode URL)
 			cdstring name((*iter1)->GetResource());
 			name.DecodeURL();
-			if ((parser.Results().size() > 1) && (name.find("/users/") == cdstring::npos))
-				continue;
+			//if ((parser.Results().size() > 1) && (name.find("/users/") == cdstring::npos))
+			//	continue;
 		
 			for(xmllib::XMLNameList::const_iterator iter2 = props.begin(); iter2 != props.end(); iter2++)
 			{
@@ -1262,6 +1290,9 @@ bool CWebDAVCalendarClient::GetSelfProperties(const cdstring& rurl, const xmllib
 					}
 				}
 			}
+			
+			// We'll take the first one, whatever that is
+			break;
 		}
 	}
 	else
@@ -1527,6 +1558,18 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 			CloseConnection();
 			return;
 		}
+		
+		// Recache user id & password after successful logon
+		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+		{
+			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+			// Only bother if it contains something
+			if (!auth->GetPswd().empty())
+			{
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
+		}
 	}
 	
 	// Do the request if present
@@ -1555,7 +1598,8 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 				}
 
 				// Get authorization object (prompt the user) and redo the request
-				mAuthorization = GetAuthorization(first_time, request->GetResponseHeader(cHeaderWWWAuthenticate));
+				cdstrvect hdrs;
+				mAuthorization = GetAuthorization(first_time, request->GetResponseHeaders(cHeaderWWWAuthenticate, hdrs));
 				
 				// Check for auth cancellation
 				if (mAuthorization == (CHTTPAuthorization*) -1)
@@ -1573,6 +1617,18 @@ void CWebDAVCalendarClient::DoSession(CHTTPRequestResponse* request)
 				}
 			}
 			
+			// Recache user id & password after successful logon
+			if (!first_time && GetAccount()->GetAuthenticator().RequiresUserPswd())
+			{
+				CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+				// Only bother if it contains something
+				if (!auth->GetPswd().empty())
+				{
+					CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+				}
+			}
+
 			// If we get here we are complete with auth loop
 			break;
 		}
@@ -1612,7 +1668,7 @@ void CWebDAVCalendarClient::SetServerCapability(const cdstring& txt)
 	mCapability = txt;
 }
 
-CHTTPAuthorization* CWebDAVCalendarClient::GetAuthorization(bool first_time, const cdstring& www_authenticate)
+CHTTPAuthorization* CWebDAVCalendarClient::GetAuthorization(bool first_time, const cdstrvect& www_authenticate)
 {
 	// Loop while trying to authentciate
 	CAuthenticator* acct_auth = GetAccount()->GetAuthenticator().GetAuthenticator();

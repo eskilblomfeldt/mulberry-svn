@@ -47,6 +47,7 @@ CWebDAVPropFindParser::CWebDAVPropFindParser()
 		sSimpleProperties.insert("DAV:getcontenttype");
 		sSimpleProperties.insert("DAV:getetag");
 		sSimpleProperties.insert("DAV:getlastmodified");
+		sSimpleProperties.insert("http://calendarserver.org/ns/getctag");
 	}
 }
 

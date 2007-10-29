@@ -908,7 +908,7 @@ void CCalendarStoreNode::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* par
 		// Set name child node
 		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
 		
-		// Set last sync child node
+		// Set sync child nodes
 		if (mLastSync != 0)
 			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_lastsync, mLastSync);
 		
@@ -973,7 +973,7 @@ void CCalendarStoreNode::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 		new_name += name;
 		SetName(new_name);
 
-		// Get last sync
+		// Get sync details
 		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_lastsync, mLastSync);
 
 		// Look for webcal node

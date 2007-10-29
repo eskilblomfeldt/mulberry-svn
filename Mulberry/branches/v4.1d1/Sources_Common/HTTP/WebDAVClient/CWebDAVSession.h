@@ -88,7 +88,7 @@ protected:
 	bool			mInitialised;
 	unsigned long	mVersion;
 
-	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstring& www_authenticate) = 0;
+	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstrvect& www_authenticate) = 0;
 	virtual void SetServerType(unsigned long type) = 0;
 	virtual void SetServerDescriptor(const cdstring& txt) = 0;
 	virtual void SetServerCapability(const cdstring& txt) = 0;

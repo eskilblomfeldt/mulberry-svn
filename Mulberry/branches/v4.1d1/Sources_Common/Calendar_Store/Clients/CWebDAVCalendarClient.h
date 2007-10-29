@@ -76,6 +76,7 @@ protected:
 	virtual void _UnlockCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 	virtual bool _CheckCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 	virtual bool _CalendarChanged(const CCalendarStoreNode& node, iCal::CICalendar& cal);
+	virtual void _UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 	virtual void _SizeCalendar(CCalendarStoreNode& node);
 
 	virtual void _ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
@@ -120,7 +121,7 @@ protected:
 	virtual void SetServerDescriptor(const cdstring& txt);
 	virtual void SetServerCapability(const cdstring& txt);
 
-	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstring& www_authenticate);
+	virtual CHTTPAuthorization* GetAuthorization(bool first_time, const cdstrvect& www_authenticate);
 			bool CheckCurrentAuthorization() const;
 	virtual void DoRequest(CHTTPRequestResponse* request);
 	virtual void WriteRequestData(CHTTPRequestResponse* request);
@@ -140,6 +141,7 @@ protected:
 	void WriteFullCalendar_Lock(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 
 	cdstring GetETag(const cdstring& rurl, const cdstring& lock_token = cdstring::null_str);
+	cdstring GetProperty(const cdstring& rurl, const cdstring& lock_token, const xmllib::XMLName& property);
 	cdstrvect GetHrefListProperty(const cdstring& rurl, const xmllib::XMLName& propname);
 	bool GetSelfProperties(const cdstring& rurl, const xmllib::XMLNameList& props, cdstrmap& results);
 	bool GetSelfHrefs(const cdstring& rurl, cdstrvect& results);
