@@ -53,6 +53,7 @@
 #include "CMacroEditDialog.h"
 #include "CMailAccountManager.h"
 #include "CMulberryAE.h"
+#include "CMulberryCocoaApp.h"
 #include "COptionsProtocol.h"
 #include "CPeriodicCheck.h"
 #include "CPluginManager.h"
@@ -153,6 +154,8 @@ struct	sigaction {
 
 int main()
 {
+
+	InitializeCocoa();
 
 #ifdef DATA_VIEWER
 	DataViewLibInit();				// View opaque types in source debugger
