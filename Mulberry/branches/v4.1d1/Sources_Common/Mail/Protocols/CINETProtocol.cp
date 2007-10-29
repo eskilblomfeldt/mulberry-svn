@@ -27,6 +27,7 @@
 #include "CMailAccount.h"
 #include "CMailControl.h"
 #include "CMulberryApp.h"
+#include "CPasswordManager.h"
 #include "CPreferences.h"
 #include "CURL.h"
 
@@ -431,7 +432,10 @@ void CINETProtocol::Logon()
 
 			// Only bother if it contains something
 			if (!auth->GetPswd().empty())
+			{
 				CINETProtocol::SetCachedPswd(auth->GetUID(), auth->GetPswd());
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
 		}
 
 		// Make copy of current authenticator

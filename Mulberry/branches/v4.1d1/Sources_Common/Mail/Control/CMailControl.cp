@@ -49,6 +49,7 @@
 #include "CMulberryApp.h"
 #include "CMulberryCommon.h"
 #include "CNewMailTask.h"
+#include "CPasswordManager.h"
 #include "CPreferences.h"
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #include "CResources.h"
@@ -875,6 +876,15 @@ bool CMailControl::DoUserIDPassword(CAuthenticatorUserPswd* auth,
 	if (CPreferences::sPrefs->mRemoteCachePswd.GetValue() && first_save_user && !CINETProtocol::GetCachedPswd(auth->GetUID()).empty())
 	{
 		auth->SetPswd(CINETProtocol::GetCachedPswd(auth->GetUID()));
+		return true;
+	}
+
+	// Try password manager
+	cdstring savedpswd;
+	if (first_save_user && CPasswordManager::GetManager()->GetPassword(acct, savedpswd))
+	{
+		auth->SetPswd(savedpswd);
+		return true;
 	}
 	else
 	{

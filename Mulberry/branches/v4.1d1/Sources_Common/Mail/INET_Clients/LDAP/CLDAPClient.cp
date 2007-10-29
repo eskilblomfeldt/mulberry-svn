@@ -25,6 +25,7 @@
 #include "CINETProtocol.h"
 #include "CMailControl.h"
 #include "CMulberryApp.h"
+#include "CPasswordManager.h"
 #include "CStatusWindow.h"
 #include "CStringUtils.h"
 #include "CTaskClasses.h"
@@ -442,7 +443,10 @@ void CLDAPClient::Lookup(const cdstring& item, CAdbkAddress::EAddressMatch match
 
 			// Only bother if it contains something
 			if (!auth->GetPswd().empty())
+			{
 				CINETProtocol::SetCachedPswd(auth->GetUID(), auth->GetPswd());
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
 		}
 
 		// Set status

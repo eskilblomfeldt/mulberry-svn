@@ -207,8 +207,8 @@ void CPluginManager::LookforPlugins(void)
 					AddAdbkIOPluginUI(static_cast<CAdbkIOPlugin*>(actual_plugin));
 					break;
 				case CPlugin::ePluginSpelling:
-					// Only allow Spellex plugin with this version
-					if (!HasSpelling() && actual_plugin->GetName().compare_start("Spellex"))
+					// Only allow CocoaSpeller plugin with this version
+					if (!HasSpelling() && actual_plugin->GetName().compare_start("CocoaSpeller"))
 						mSpellingPlugin = static_cast<CSpellPlugin*>(actual_plugin);
 					break;
 				case CPlugin::ePluginSecurity:
