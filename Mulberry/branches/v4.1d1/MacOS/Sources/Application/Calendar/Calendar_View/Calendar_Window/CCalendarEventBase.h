@@ -142,6 +142,7 @@ protected:
 	CCalendarEventBase*		mNextLink;
 	uint32_t				mColour;
 	iCal::CICalendarPeriod	mPeriod;
+	bool					mIsInbox;
 
 	virtual void		FinishCreateSelf();
 	
