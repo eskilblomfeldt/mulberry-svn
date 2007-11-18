@@ -108,7 +108,7 @@ void LightenColours(float& red, float& green, float& blue, bool lighter)
 	float v = 0.0F;
 	
 	RGB2HSV(red, green, blue, h, s, v);
-	s = lighter ? 0.45F : 0.6F;
+	s = (lighter ? 0.45F : 0.6F) * s;
 	v = lighter ? 0.95F : 0.9F;
 	
 	HSV2RGB(h, s, v, red, green, blue);
