@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8D0C4E8D0486CD37000505A6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */; };
 		8D0C4E920486CD37000505A6 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20286C33FDCF999611CA2CEA /* Carbon.framework */; };
+		AF17ACFB0CCC550500205B17 /* CocoaSpeller.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF17ACEF0CCC54D300205B17 /* CocoaSpeller.bundle */; };
+		AF17AD190CCC579D00205B17 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF17AD180CCC579D00205B17 /* AppKit.framework */; };
+		AF17AE450CCC585C00205B17 /* CMulberryCocoaApp.m in Sources */ = {isa = PBXBuildFile; fileRef = AF17AE440CCC585C00205B17 /* CMulberryCocoaApp.m */; };
 		AF25512C0C432558001AAE53 /* CFreeBusyPrintout.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */; };
 		AF25512E0C432559001AAE53 /* CFreeBusyTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551260C432558001AAE53 /* CFreeBusyTable.cp */; };
 		AF2551300C432559001AAE53 /* CFreeBusyTitleTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF2551280C432558001AAE53 /* CFreeBusyTitleTable.cp */; };
@@ -156,6 +159,8 @@
 		AF82694D0C1B2C9300B18EED /* XMLObject.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693A0C1B2C9300B18EED /* XMLObject.cp */; };
 		AF8269500C1B2C9300B18EED /* XMLParserSAX.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693D0C1B2C9300B18EED /* XMLParserSAX.cp */; };
 		AF8269520C1B2C9300B18EED /* XMLSAXSimple.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */; };
+		AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */; };
+		AFC798200CCAE69000E62F0F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC7981F0CCAE69000E62F0F /* Security.framework */; };
 		AFCDD2D30AE1647A00E30447 /* os_dep.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDD2D20AE1647A00E30447 /* os_dep.cp */; };
 		AFCDD6780AE164F300E30447 /* LMutexSemaphore.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDD36B0AE164EE00E30447 /* LMutexSemaphore.cp */; };
 		AFCDD67A0AE164F300E30447 /* LSemaphore.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDD36F0AE164EE00E30447 /* LSemaphore.cp */; };
@@ -1298,6 +1303,13 @@
 			remoteGlobalIDString = AF4199450AE9A55A00E19592;
 			remoteInfo = "vCard MachO";
 		};
+		AFC79A500CCBEB4C00E62F0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AF4196C70AE6F4E000E19592;
+			remoteInfo = "CocoaSpeller MachO";
+		};
 		AFD93B5B0AE5AA10007F506F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AFD93B540AE5AA10007F506F /* CRAM-MD5.xcodeproj */;
@@ -1328,6 +1340,7 @@
 			dstPath = "Plug-ins";
 			dstSubfolderSpec = 1;
 			files = (
+				AF17ACFB0CCC550500205B17 /* CocoaSpeller.bundle in CopyFiles */,
 				AFDD772C0C4068FC00DE5877 /* CommunicatorAdbkIO.bundle in CopyFiles */,
 				AFDD772D0C4068FC00DE5877 /* CRAM-MD5.bundle in CopyFiles */,
 				AFDD772E0C4068FC00DE5877 /* DIGEST-MD5.bundle in CopyFiles */,
@@ -1442,6 +1455,10 @@
 		4A9504CAFFE6A41611CA0CBA /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		508344B209E5C41E0093A071 /* Mulberry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mulberry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D0C4E960486CD37000505A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.plist; path = Packaging/Info.plist; sourceTree = SOURCE_ROOT; };
+		AF17ACEF0CCC54D300205B17 /* CocoaSpeller.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CocoaSpeller.bundle; path = "../Plug-ins/CocoaSpeller/build/Debug/CocoaSpeller.bundle"; sourceTree = SOURCE_ROOT; };
+		AF17AD180CCC579D00205B17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		AF17AE430CCC585C00205B17 /* CMulberryCocoaApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMulberryCocoaApp.h; path = General/CMulberryCocoaApp.h; sourceTree = "<group>"; };
+		AF17AE440CCC585C00205B17 /* CMulberryCocoaApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMulberryCocoaApp.m; path = General/CMulberryCocoaApp.m; sourceTree = "<group>"; };
 		AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyPrintout.cp; sourceTree = "<group>"; };
 		AF2551250C432558001AAE53 /* CFreeBusyPrintout.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CFreeBusyPrintout.h; sourceTree = "<group>"; };
 		AF2551260C432558001AAE53 /* CFreeBusyTable.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyTable.cp; sourceTree = "<group>"; };
@@ -1670,6 +1687,10 @@
 		AF82693E0C1B2C9300B18EED /* XMLParserSAX.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLParserSAX.h; path = ../../Libraries/XMLLib/Source/XMLParserSAX.h; sourceTree = "<group>"; };
 		AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSAXSimple.cp; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.cp; sourceTree = "<group>"; };
 		AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLSAXSimple.h; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.h; sourceTree = "<group>"; };
+		AFC798190CCADCAF00E62F0F /* CPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPasswordManager.h; path = ../Sources_Common/Mail/Control/CPasswordManager.h; sourceTree = SOURCE_ROOT; };
+		AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPasswordManager.cp; path = ../Sources_Common/Mail/Control/CPasswordManager.cp; sourceTree = SOURCE_ROOT; };
+		AFC7981F0CCAE69000E62F0F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaSpeller.xcodeproj; path = "../Plug-ins/CocoaSpeller/CocoaSpeller.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AFCDD2D10AE1647A00E30447 /* os_dep.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = os_dep.h; path = ../Sources_Common/os_dep.h; sourceTree = SOURCE_ROOT; };
 		AFCDD2D20AE1647A00E30447 /* os_dep.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = os_dep.cp; path = ../Sources_Common/os_dep.cp; sourceTree = SOURCE_ROOT; };
 		AFCDD2E10AE164ED00E30447 /* !PP_Notes_225.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = "!PP_Notes_225.txt"; sourceTree = "<group>"; };
@@ -3788,6 +3809,8 @@
 				AF2ADE170AE464E90078C306 /* libssl.0.9.7.dylib in Frameworks */,
 				AF2555010C43DAC7001AAE53 /* Cocoa.framework in Frameworks */,
 				AF2555020C43DAC7001AAE53 /* WebKit.framework in Frameworks */,
+				AFC798200CCAE69000E62F0F /* Security.framework in Frameworks */,
+				AF17AD190CCC579D00205B17 /* AppKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3917,7 +3940,9 @@
 				AF3753BF0AE28C6200C56E20 /* QuickTime.framework */,
 				AF3750B30AE1DD1B00C56E20 /* AddressBook.framework */,
 				AF3750B70AE1DD3900C56E20 /* LDAP.framework */,
+				AFC7981F0CCAE69000E62F0F /* Security.framework */,
 				AF2554580C43DAC7001AAE53 /* Cocoa.framework */,
+				AF17AD180CCC579D00205B17 /* AppKit.framework */,
 				AF2554590C43DAC7001AAE53 /* WebKit.framework */,
 				AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */,
 				AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */,
@@ -4196,6 +4221,7 @@
 		AF52EF1B0AE32EB200A75C72 /* Plug-ins */ = {
 			isa = PBXGroup;
 			children = (
+				AF17ACEF0CCC54D300205B17 /* CocoaSpeller.bundle */,
 				AFDD768A0C4066C400DE5877 /* CommunicatorAdbkIO.bundle */,
 				AFDD768F0C4066E700DE5877 /* CRAM-MD5.bundle */,
 				AFDD769A0C40670900DE5877 /* DIGEST-MD5.bundle */,
@@ -4324,6 +4350,14 @@
 				AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */,
 			);
 			name = XMLLib;
+			sourceTree = "<group>";
+		};
+		AFC79A4D0CCBEB4C00E62F0F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AFC79A510CCBEB4C00E62F0F /* CocoaSpeller.bundle */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		AFCDD2E00AE164ED00E30447 /* PowerPlant */ = {
@@ -5231,6 +5265,8 @@
 				AFCDDAEA0AE1769900E30447 /* CDisconnectListPanel.cp */,
 				AFCDDAEB0AE1769900E30447 /* CWindowsMenu.h */,
 				AFCDDAEC0AE1769900E30447 /* CWindowsMenu.cp */,
+				AF17AE430CCC585C00205B17 /* CMulberryCocoaApp.h */,
+				AF17AE440CCC585C00205B17 /* CMulberryCocoaApp.m */,
 			);
 			name = Application;
 			path = Sources/Application;
@@ -6910,6 +6946,8 @@
 				AFCDDF600AE176DD00E30447 /* CAddressBookManager.cp */,
 				AFCDDF610AE176DD00E30447 /* CAttachmentManager.h */,
 				AFCDDF620AE176DD00E30447 /* CAttachmentManager.cp */,
+				AFC798190CCADCAF00E62F0F /* CPasswordManager.h */,
+				AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -7759,6 +7797,7 @@
 			isa = PBXGroup;
 			children = (
 				AF419E9F0AEA750800E19592 /* PluginLibrary.xcodeproj */,
+				AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */,
 				AF419E460AEA72AE00E19592 /* CommunicatorAdbkIO.xcodeproj */,
 				AFD93B540AE5AA10007F506F /* CRAM-MD5.xcodeproj */,
 				AFD93B660AE5AB45007F506F /* DIGEST-MD5.xcodeproj */,
@@ -7827,10 +7866,15 @@
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "MulberryXcode" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 20286C29FDCF999611CA2CEA /* MulberryXcode */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = AFC79A4D0CCBEB4C00E62F0F /* Products */;
+					ProjectRef = AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */;
+				},
 				{
 					ProductGroup = AF419E470AEA72AE00E19592 /* Products */;
 					ProjectRef = AF419E460AEA72AE00E19592 /* CommunicatorAdbkIO.xcodeproj */;
@@ -7904,6 +7948,7 @@
 					ProjectRef = AF419EC90AEA753B00E19592 /* vCardAdbkIO.xcodeproj */;
 				},
 			);
+			projectRoot = "";
 			targets = (
 				8D0C4E890486CD37000505A6 /* MulberryXcode */,
 			);
@@ -8014,6 +8059,13 @@
 			fileType = wrapper.cfbundle;
 			path = vCardAdbkIO.bundle;
 			remoteRef = AF419EE20AEA753C00E19592 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AFC79A510CCBEB4C00E62F0F /* CocoaSpeller.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CocoaSpeller.bundle;
+			remoteRef = AFC79A500CCBEB4C00E62F0F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		AFD93B5C0AE5AA10007F506F /* CRAM-MD5.bundle */ = {
@@ -9156,6 +9208,8 @@
 				AF2551FA0C4328E9001AAE53 /* CCalendarAddress.cp in Sources */,
 				AF2555070C442299001AAE53 /* CFreeBusyTableCommon.cp in Sources */,
 				AF2555080C442299001AAE53 /* CFreeBusyViewCommon.cp in Sources */,
+				AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */,
+				AF17AE450CCC585C00205B17 /* CMulberryCocoaApp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
