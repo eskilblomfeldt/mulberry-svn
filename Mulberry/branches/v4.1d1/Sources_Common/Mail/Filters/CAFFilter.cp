@@ -777,30 +777,30 @@ void CAFFilter::CreateHeader()
 		DTRefNum = dtpb.ioDTRefNum;
 
 	// Header
-	mIndex.header.magicNum = mSingle ? cAppleFile_AS : cAppleFile_AD;
-	mIndex.header.versionNum = cAppleFile_Version2;
+	mIndex.header.magicNum = htonl(mSingle ? cAppleFile_AS : cAppleFile_AD);
+	mIndex.header.versionNum = htonl(cAppleFile_Version2);
 	for(short i = 0; i < 16; i++)
 		mIndex.header.filler[i] = 0;
-	mIndex.header.numEntries = mSingle ? cAppleFile_ASEntries : cAppleFile_ADEntries;
+	mIndex.header.numEntries = htonl(mSingle ? cAppleFile_ASEntries : cAppleFile_ADEntries);
 	offset = mSingle ? cAppleFile_ASIndexSize : cAppleFile_ADIndexSize;
 
 	// Real name
-	mIndex.entries[cAppleFile_RealNameIndex].entryID = cAppleFile_ASRealName;
-	mIndex.entries[cAppleFile_RealNameIndex].entryOffset = offset;
-	mIndex.entries[cAppleFile_RealNameIndex].entryLen = spec.name[0];
-	offset += mIndex.entries[0].entryLen;
+	mIndex.entries[cAppleFile_RealNameIndex].entryID = htonl(cAppleFile_ASRealName);
+	mIndex.entries[cAppleFile_RealNameIndex].entryOffset = htonl(offset);
+	mIndex.entries[cAppleFile_RealNameIndex].entryLen = htonl(spec.name[0]);
+	offset += ntohl(mIndex.entries[0].entryLen);
 
 	// Finder info
-	mIndex.entries[cAppleFile_FinderInfoIndex].entryID = cAppleFile_ASFinderInfo;
-	mIndex.entries[cAppleFile_FinderInfoIndex].entryOffset = offset;
-	mIndex.entries[cAppleFile_FinderInfoIndex].entryLen = sizeof(FInfo) + sizeof(FXInfo);
-	offset += mIndex.entries[1].entryLen;
+	mIndex.entries[cAppleFile_FinderInfoIndex].entryID = htonl(cAppleFile_ASFinderInfo);
+	mIndex.entries[cAppleFile_FinderInfoIndex].entryOffset = htonl(offset);
+	mIndex.entries[cAppleFile_FinderInfoIndex].entryLen = htonl(sizeof(FInfo) + sizeof(FXInfo));
+	offset += ntohl(mIndex.entries[1].entryLen);
 
 	// File dates
-	mIndex.entries[cAppleFile_FileDatesIndex].entryID = cAppleFile_ASFileDates;
-	mIndex.entries[cAppleFile_FileDatesIndex].entryOffset = offset;
-	mIndex.entries[cAppleFile_FileDatesIndex].entryLen = 16;
-	offset += mIndex.entries[2].entryLen;
+	mIndex.entries[cAppleFile_FileDatesIndex].entryID = htonl(cAppleFile_ASFileDates);
+	mIndex.entries[cAppleFile_FileDatesIndex].entryOffset = htonl(offset);
+	mIndex.entries[cAppleFile_FileDatesIndex].entryLen = htonl(16);
+	offset += ntohl(mIndex.entries[2].entryLen);
 
 	// Get comment
 	Str255 comment;
@@ -820,27 +820,27 @@ void CAFFilter::CreateHeader()
 		*comment = 0;
 
 	// Set comment
-	mIndex.entries[cAppleFile_CommentIndex].entryID = cAppleFile_ASComment;
-	mIndex.entries[cAppleFile_CommentIndex].entryOffset = offset;
-	mIndex.entries[cAppleFile_CommentIndex].entryLen = *comment;
-	offset += mIndex.entries[3].entryLen;
+	mIndex.entries[cAppleFile_CommentIndex].entryID = htonl(cAppleFile_ASComment);
+	mIndex.entries[cAppleFile_CommentIndex].entryOffset = htonl(offset);
+	mIndex.entries[cAppleFile_CommentIndex].entryLen = htonl(*comment);
+	offset += ntohl(mIndex.entries[3].entryLen);
 
 	mHeaderBufferLen = offset;
 
 	// Resource fork
-	mIndex.entries[cAppleFile_RsrcForkIndex].entryID = cAppleFile_ASResource;
-	mIndex.entries[cAppleFile_RsrcForkIndex].entryOffset = offset;
-	mIndex.entries[cAppleFile_RsrcForkIndex].entryLen = cpb.hFileInfo.ioFlRLgLen;
-	offset += mIndex.entries[4].entryLen;
+	mIndex.entries[cAppleFile_RsrcForkIndex].entryID = htonl(cAppleFile_ASResource);
+	mIndex.entries[cAppleFile_RsrcForkIndex].entryOffset = htonl(offset);
+	mIndex.entries[cAppleFile_RsrcForkIndex].entryLen = htonl(cpb.hFileInfo.ioFlRLgLen);
+	offset += ntohl(mIndex.entries[4].entryLen);
 
 	// Only add data for AppleSingle
 	if (mSingle)
 	{
 		// Data fork
-		mIndex.entries[cAppleFile_DataForkIndex].entryID = cAppleFile_ASData;
-		mIndex.entries[cAppleFile_DataForkIndex].entryOffset = offset;
-		mIndex.entries[cAppleFile_DataForkIndex].entryLen = cpb.hFileInfo.ioFlLgLen;
-		offset += mIndex.entries[5].entryLen;
+		mIndex.entries[cAppleFile_DataForkIndex].entryID = htonl(cAppleFile_ASData);
+		mIndex.entries[cAppleFile_DataForkIndex].entryOffset = htonl(offset);
+		mIndex.entries[cAppleFile_DataForkIndex].entryLen = htonl(cpb.hFileInfo.ioFlLgLen);
+		offset += ntohl(mIndex.entries[5].entryLen);
 	}
 
 	// Total number of encoded bytes to be sent
@@ -893,19 +893,19 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_RealNameIndex].entryID = htonl(cAppleFile_ASRealName);
 	mIndex.entries[cAppleFile_RealNameIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_RealNameIndex].entryLen = htonl(mFileStream->GetFileName().GetLength());
-	offset += mIndex.entries[0].entryLen;
+	offset += ntohl(mIndex.entries[0].entryLen);
 
 	// Finder info
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryID = htonl(cAppleFile_ASFinderInfo);
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryLen = htonl(sizeof(FInfo) + sizeof(FXInfo));
-	offset += mIndex.entries[1].entryLen;
+	offset += ntohl(mIndex.entries[1].entryLen);
 
 	// File dates
 	mIndex.entries[cAppleFile_FileDatesIndex].entryID = htonl(cAppleFile_ASFileDates);
 	mIndex.entries[cAppleFile_FileDatesIndex].entryOffset =htonl(offset);
 	mIndex.entries[cAppleFile_FileDatesIndex].entryLen = htonl(16);
-	offset += mIndex.entries[2].entryLen;
+	offset += ntohl(mIndex.entries[2].entryLen);
 
 	// Get comment
 	Str255 comment;
@@ -915,7 +915,7 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_CommentIndex].entryID = htonl(cAppleFile_ASComment);
 	mIndex.entries[cAppleFile_CommentIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_CommentIndex].entryLen = htonl(*comment);
-	offset += mIndex.entries[3].entryLen;
+	offset += ntohl(mIndex.entries[3].entryLen);
 
 	mHeaderBufferLen = offset;
 
@@ -923,7 +923,7 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryID = htonl(cAppleFile_ASResource);
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryLen = 0;
-	offset += mIndex.entries[4].entryLen;
+	offset += ntohl(mIndex.entries[4].entryLen);
 
 	// Only add data for AppleSingle
 	if (mSingle)
@@ -932,7 +932,7 @@ void CAFFilter::CreateHeader()
 		mIndex.entries[cAppleFile_DataForkIndex].entryID = htonl(cAppleFile_ASData);
 		mIndex.entries[cAppleFile_DataForkIndex].entryOffset = htonl(offset);
 		mIndex.entries[cAppleFile_DataForkIndex].entryLen = htonl(mFileStream->GetLength());
-		offset += mIndex.entries[5].entryLen;
+		offset += ntohl(mIndex.entries[5].entryLen);
 	}
 
 	// Total number of encoded bytes to be sent
@@ -991,19 +991,19 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_RealNameIndex].entryID = htonl(cAppleFile_ASRealName);
 	mIndex.entries[cAppleFile_RealNameIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_RealNameIndex].entryLen = htonl(mFileStream->GetFileName().length());
-	offset += mIndex.entries[0].entryLen;
+	offset += ntohl(mIndex.entries[0].entryLen);
 
 	// Finder info
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryID = htonl(cAppleFile_ASFinderInfo);
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_FinderInfoIndex].entryLen = htonl(sizeof(FInfo) + sizeof(FXInfo));
-	offset += mIndex.entries[1].entryLen;
+	offset += ntohl(mIndex.entries[1].entryLen);
 
 	// File dates
 	mIndex.entries[cAppleFile_FileDatesIndex].entryID = htonl(cAppleFile_ASFileDates);
 	mIndex.entries[cAppleFile_FileDatesIndex].entryOffset =htonl(offset);
 	mIndex.entries[cAppleFile_FileDatesIndex].entryLen = htonl(16);
-	offset += mIndex.entries[2].entryLen;
+	offset += ntohl(mIndex.entries[2].entryLen);
 
 	// Get comment
 	char comment[256];
@@ -1013,7 +1013,7 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_CommentIndex].entryID = htonl(cAppleFile_ASComment);
 	mIndex.entries[cAppleFile_CommentIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_CommentIndex].entryLen = htonl(*comment);
-	offset += mIndex.entries[3].entryLen;
+	offset += ntohl(mIndex.entries[3].entryLen);
 
 	mHeaderBufferLen = offset;
 
@@ -1021,7 +1021,7 @@ void CAFFilter::CreateHeader()
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryID = htonl(cAppleFile_ASResource);
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryOffset = htonl(offset);
 	mIndex.entries[cAppleFile_RsrcForkIndex].entryLen = 0;
-	offset += mIndex.entries[4].entryLen;
+	offset += ntohl(mIndex.entries[4].entryLen);
 
 	// Only add data for AppleSingle
 	if (mSingle)
@@ -1030,7 +1030,7 @@ void CAFFilter::CreateHeader()
 		mIndex.entries[cAppleFile_DataForkIndex].entryID = htonl(cAppleFile_ASData);
 		mIndex.entries[cAppleFile_DataForkIndex].entryOffset = htonl(offset);
 		mIndex.entries[cAppleFile_DataForkIndex].entryLen = htonl(mFileStream->GetLength());
-		offset += mIndex.entries[5].entryLen;
+		offset += ntohl(mIndex.entries[5].entryLen);
 	}
 
 	// Total number of encoded bytes to be sent
