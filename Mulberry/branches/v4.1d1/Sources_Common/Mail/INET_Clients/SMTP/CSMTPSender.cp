@@ -32,6 +32,7 @@
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #include "CMulberryCommon.h"
 #endif
+#include "CPasswordManager.h"
 #include "CPluginManager.h"
 #include "CRFC822.h"
 #include "CSecurityPlugin.h"
@@ -1442,6 +1443,18 @@ bool CSMTPSender::SMTPDoAuthentication()
 		{
 			SMTPAuthenticate();
 			done = true;
+
+			// Recache user id & password after successful logon
+			if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+			{
+				CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+
+				// Only bother if it contains something
+				if (!auth->GetPswd().empty())
+				{
+					CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+				}
+			}
 		}
 		catch (CSMTPException& ex)
 		{
