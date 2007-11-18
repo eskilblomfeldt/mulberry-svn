@@ -119,11 +119,10 @@ void GetSecurityDetails(const CINETAccount* acct, cdstring& server, cdstring& an
 		break;
 	}
 }
-#endif
 
-bool CPasswordManager::GetPassword(const CINETAccount* acct, cdstring& pswd)
+bool GetPasswordWithItem(const CINETAccount* acct, cdstring& pswd, SecKeychainItemRef* item);
+bool GetPasswordWithItem(const CINETAccount* acct, cdstring& pswd, SecKeychainItemRef* item)
 {
-#if __dest_os == __mac_os_x
 	cdstring server;
 	cdstring aname;
 	UInt16 port = 0;
@@ -134,7 +133,7 @@ bool CPasswordManager::GetPassword(const CINETAccount* acct, cdstring& pswd)
 	UInt32 dataLen = 0;
 	void* data = NULL;
 	OSStatus err = ::SecKeychainFindInternetPassword(NULL, server.length(), server.c_str(), 0, NULL, aname.length(), aname.c_str(),
-												     0, NULL, port, protocol, authenticationType, &dataLen, &data, NULL);
+												     0, NULL, port, protocol, authenticationType, &dataLen, &data, item);
 	if (err == noErr)
 	{
 		pswd.assign((const char*)data, dataLen);
@@ -143,6 +142,13 @@ bool CPasswordManager::GetPassword(const CINETAccount* acct, cdstring& pswd)
 	}
 	else
 		return false;
+}
+#endif
+
+bool CPasswordManager::GetPassword(const CINETAccount* acct, cdstring& pswd)
+{
+#if __dest_os == __mac_os_x
+	return GetPasswordWithItem(acct, pswd, NULL);
 #else
 	return false;
 #endif
@@ -153,8 +159,13 @@ void CPasswordManager::AddPassword(const CINETAccount* acct, const cdstring& psw
 #if __dest_os == __mac_os_x
 	// First verify its not already set
 	cdstring current_pswd;
-	if (GetPassword(acct, current_pswd) && (current_pswd == pswd))
+	SecKeychainItemRef item = NULL;
+	if (GetPasswordWithItem(acct, current_pswd, &item) && (current_pswd == pswd))
+	{
+		if (item != NULL)
+			::CFRelease(item);
 		return;
+	}
 	
 	cdstring server;
 	cdstring aname;
@@ -163,17 +174,18 @@ void CPasswordManager::AddPassword(const CINETAccount* acct, const cdstring& psw
 	SecAuthenticationType authenticationType = kSecAuthenticationTypeDefault;
 	GetSecurityDetails(acct, server, aname, port, protocol, authenticationType);
 
-	SecKeychainItemRef item = NULL;
-	OSStatus err = ::SecKeychainAddInternetPassword(NULL, server.length(), server.c_str(), 0, NULL, aname.length(), aname.c_str(),
-												  0, NULL, port, protocol, authenticationType, pswd.length(), pswd.c_str(), &item);
-												  
-	if (err == errSecDuplicateItem)
+	OSStatus err = noErr;
+	if (item == NULL)
 	{
-		err = ::SecKeychainItemModifyAttributesAndData (item, NULL, pswd.length(), pswd.c_str());
+		err = ::SecKeychainAddInternetPassword(NULL, server.length(), server.c_str(), 0, NULL, aname.length(), aname.c_str(),
+												  0, NULL, port, protocol, authenticationType, pswd.length(), pswd.c_str(), NULL);
+	}
+	else
+	{
+		err = ::SecKeychainItemModifyAttributesAndData(item, NULL, pswd.length(), pswd.c_str());
+		::CFRelease(item);
 	}
 	
-	if (item != NULL)
-		::CFRelease(item);
 #else
 #endif
 }
