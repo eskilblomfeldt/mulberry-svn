@@ -45,6 +45,9 @@
 #include <dlfcn.h>
 #endif
 
+#include "cdstring.h"
+#include "cdustring.h"
+
 CDLLLoader::~CDLLLoader()
 {
 	// Unload it if this object loaded it

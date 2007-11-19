@@ -144,7 +144,6 @@ cdstring::cdstring(const unsigned long num)
 	_allocate(buf);
 }
 
-#if __dest_os == __mac_os || __dest_os == __mac_os_x || __dest_os == __linux_os
 // Construct from number
 cdstring::cdstring(const int32_t num)
 {
@@ -161,7 +160,6 @@ cdstring::cdstring(const uint32_t num)
 	::snprintf(buf, 256, "%lu", num);
 	_allocate(buf);
 }
-#endif
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #if defined(__MULBERRY) || defined(__MULBERRY_CONFIGURE)
@@ -241,6 +239,35 @@ CString cdstring::win_str() const
 #endif
 }
 
+#else
+#ifdef _UNICODE
+
+cdstring::cdstring(const TCHAR* str)
+{
+	_init();
+	*this = cdustring(str).ToUTF8();
+}
+
+// Assignment with CString
+cdstring& cdstring::operator=(const TCHAR* str)
+{
+	*this = cdustring(str).ToUTF8();
+	return *this;
+}
+
+// Append CString
+cdstring& cdstring::operator+=(const TCHAR* str)
+{
+	*this += cdustring(str).ToUTF8();
+	return *this;
+}
+
+// Return Windows TCHAR string
+cdustring cdstring::win_str() const
+{
+	return cdustring(*this);
+}
+#endif
 #endif
 
 // Convert number to string
@@ -261,7 +288,6 @@ cdstring& cdstring::operator=(const unsigned long num)
 	return *this;
 }
 
-#if __dest_os == __mac_os || __dest_os == __mac_os_x || __dest_os == __linux_os
 // Convert number to string
 cdstring& cdstring::operator=(const int32_t num)
 {
@@ -278,7 +304,6 @@ cdstring& cdstring::operator=(const uint32_t num)
 	_allocate(buf);
 	return *this;
 }
-#endif
 
 // Convert rectangle to string
 cdstring& cdstring::operator=(const Rect& rc)
@@ -425,7 +450,7 @@ cdstring::size_type cdstring::find(const char* s, size_type pos, size_type n, bo
 			{
 				if (casei)
 				{
-					if (!std::tolower(*s1) != std::tolower(*p1))
+					if (!tolower(*s1) != tolower(*p1))
 						goto loop;
 				}
 				else
@@ -448,12 +473,12 @@ cdstring::size_type cdstring::find(char c, size_type pos, bool casei) const
 	if (pos < sz)
 	{
 		const char* e = beg + sz;
-		char cl = std::tolower(c);
+		char cl = tolower(c);
 		for (const char* xpos = beg + pos; xpos < e; ++xpos)
 		{
 			if (casei)
 			{
-				if (cl == std::tolower(*xpos))
+				if (cl == tolower(*xpos))
 					return static_cast<size_type>(xpos - beg);
 			}
 			else
@@ -486,7 +511,7 @@ cdstring::size_type cdstring::rfind(const char* s, size_type pos, size_type n, b
 			{
 				if (casei)
 				{
-					if (std::tolower(*s1) != std::tolower(*p1))
+					if (tolower(*s1) != tolower(*p1))
 						goto loop;
 				}
 				else
@@ -511,12 +536,12 @@ cdstring::size_type cdstring::rfind(char c, size_type pos, bool casei) const
 		if (pos > sz - 1)
 			pos = sz - 1;
 		const char* xpos = beg + pos;
-		char cl = std::tolower(c);
+		char cl = tolower(c);
 		do
 		{
 			if (casei)
 			{
-				if (cl == std::tolower(*xpos))
+				if (cl == tolower(*xpos))
 					return static_cast<size_type>(xpos - beg);
 			}
 			else
@@ -669,8 +694,8 @@ int cdstring::compare(size_type pos1, size_type n1, const char* s, size_type n2,
 
 	if (pos1 > sz)
 		return 1;
-	size_type len = std::min(sz - pos1 , n1);
-	size_type rlen = std::min(len, n2);
+	size_type len = min(sz - pos1 , n1);
+	size_type rlen = min(len, n2);
 	int result = casei ? ::strncmpnocase(p + pos1, s, rlen) : std::strncmp(p + pos1, s, rlen);
 	if (result == 0)
 	{

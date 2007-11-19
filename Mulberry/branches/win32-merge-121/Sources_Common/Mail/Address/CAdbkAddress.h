@@ -36,7 +36,7 @@ public:
 			mData(data) {}
 
 		bool operator() (const CAddress* item) const
-			{ return dynamic_cast<const CAdbkAddress*>(item) && mData ? (static_cast<const CAdbkAddress*>(item)->GetEntry() == mData->GetEntry()) : false; }
+			{ return (dynamic_cast<const CAdbkAddress*>(item) && mData) ? (static_cast<const CAdbkAddress*>(item)->GetEntry() == mData->GetEntry()) : false; }
 	private:
 		const CAdbkAddress* mData;
 	};

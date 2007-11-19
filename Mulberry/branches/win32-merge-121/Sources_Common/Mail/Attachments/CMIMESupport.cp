@@ -342,7 +342,7 @@ cdstring CMIMESupport::GenerateMultipartBoundary(const CAttachment* attach, EEnd
 #endif
 				cdstring boundary;
 				rstr.md5(boundary);
-				boundary[20UL] = 0;
+				boundary[(cdstring::size_type)20] = 0;
 				txt += boundary;
 			}
 			txt += CONTENT_MULTIPART_BOUNDARY;

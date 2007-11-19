@@ -42,7 +42,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include __stat_header
+
+#ifndef __VCPP__
 #include <unistd.h>
+#endif
 
 #define CHECK_STREAM(x) \
 	{ if ((x).fail()) { int err_no = os_errno; CLOG_LOGTHROW(CGeneralException, err_no); throw CGeneralException(err_no); } }

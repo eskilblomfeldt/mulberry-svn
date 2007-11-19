@@ -129,11 +129,11 @@ void CWebDAVCalendarClient::Reset()
 	mBaseRURL = GetCalendarProtocol()->GetCalendarAccount()->GetBaseRURL();
 	if (mBaseRURL.empty())
 		mBaseRURL = "/";
-	else if (mBaseRURL[mBaseRURL.length() - 1] != '/')
+	else if (mBaseRURL[(cdstring::size_type)(mBaseRURL.length() - 1)] != '/')
 		mBaseRURL += "/";
 	
 	// Must always start with /
-	if (mBaseRURL[0UL] != '/')
+	if (mBaseRURL[(cdstring::size_type)0] != '/')
 	{
 		cdstring temp(mBaseRURL);
 		mBaseRURL = "/";
@@ -1651,7 +1651,7 @@ cdstring CWebDAVCalendarClient::GetRURL(const cdstring& name, bool directory, bo
 	rurl += temp;
 	if (directory)
 	{
-		if (rurl[rurl.length() - 1] != '/')
+		if (rurl[(cdstring::size_type)(rurl.length() - 1)] != '/')
 			rurl += "/";
 	}
 	else

@@ -126,7 +126,7 @@ bool COptionsMap::ReadValue(const cdstring& key, cdstrvect& value, NumVersion ve
 		value.clear();
 
 		// Look for new style s-expression
-		if ((all[0UL] == '(') &&
+		if ((all[(cdstring::size_type)0] == '(') &&
 			(all[all.length() - 1] == ')'))
 		{
 			all.ConvertToOS();
@@ -353,7 +353,7 @@ bool COptionsMap::ReadValue(const cdstring& key, char& value, NumVersion vers_pr
 		if (str_value.empty())
 			value = 0;
 		else
-			value = str_value[0UL];
+			value = str_value[(cdstring::size_type)0];
 	}
 	return result;
 }

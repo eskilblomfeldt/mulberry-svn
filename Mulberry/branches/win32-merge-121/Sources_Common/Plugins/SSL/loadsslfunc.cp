@@ -20,9 +20,9 @@
 //#define USE_CMS
 #endif
 
-#if __dest_os == __win32_os
-#define USE_CMS
-#endif
+//#if __dest_os == __win32_os
+//#define USE_CMS
+//#endif
 
 #include <openssl/asn1.h>
 #include <openssl/bio.h>

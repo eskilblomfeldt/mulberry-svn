@@ -68,7 +68,7 @@
 #endif
 
 #include __stat_header
-#if __GNUC__
+#if defined(__GNUC__) || defined(__VCPP__)
 #define BIO_FP_BINARY	0
 #endif
 

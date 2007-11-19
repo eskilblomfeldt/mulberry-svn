@@ -1431,7 +1431,7 @@ void CMbox::DoInitialSearch()
 	}
 	
 	// Catch NO/BAD response and ignore the error
-	catch(CINETClient::CINETException& ex)
+	catch(CINETClient::CINETException& /*ex*/)
 	{
 		CLOG_LOGCATCH(CINETException&);
 
@@ -2382,7 +2382,7 @@ void CMbox::CacheMessage(unsigned long msg_num,	unsigned long count)
 	if (count)
 		num_to_cache = count;
 	else if (num_cached < lo_tide)
-		num_to_cache = ::max(increment, lo_tide - num_cached);
+		num_to_cache = max(increment, lo_tide - num_cached);
 	else
 		num_to_cache = increment;
 

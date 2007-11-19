@@ -84,7 +84,7 @@ public:
 	int release();				// release lock
 	bool try_lock();			// try lock but don't wait
 	bool is_locked() const		// is it locked
-		{ return _count; }
+		{ return _count != 0; }
 	bool is_locked_by_current_thread() const;		// is it locked by the current thread
 
 	static void yield(CBusyContext* busy);		// yield while waiting for mutex lock to be released by another thread
@@ -150,9 +150,9 @@ public:
 	bool try_read_lock();		// try read lock but don't wait
 	bool try_write_lock();		// try write lock but don't wait
 	bool is_read_locked() const		// is it locked
-		{ return _read_tids.size(); }
+		{ return _read_tids.size() != 0; }
 	bool is_write_locked() const		// is it locked
-		{ return _write_count; }
+		{ return _write_count != 0; }
 
 private:
 	unsigned long _write_count;

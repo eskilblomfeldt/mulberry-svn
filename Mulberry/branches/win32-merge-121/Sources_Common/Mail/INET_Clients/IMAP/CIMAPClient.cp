@@ -577,7 +577,7 @@ void CIMAPClient::_Deselect(CMbox* mbox)
 			}
 		}
 	}
-	catch(CINETException& ex)
+	catch(CINETException& /*ex*/)
 	{
 		CLOG_LOGCATCH(CINETException&);
 
@@ -655,7 +655,7 @@ void CIMAPClient::_CheckMbox(CMbox* mbox, bool fast)
 				INETSendString(cSTATUS_CHECK);
 				INETFinishSend();
 			}
-			catch(CINETException& ex)
+			catch(CINETException& /*ex*/)
 			{
 				CLOG_LOGCATCH(CINETException&);
 

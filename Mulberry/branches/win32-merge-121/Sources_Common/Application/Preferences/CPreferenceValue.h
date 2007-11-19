@@ -42,12 +42,12 @@ struct SPrefsACL
 		{ mRights = copy.mRights; return *this; }
 
 	bool IsDirty() const
-		{ return (mRights & ePrefsACL_Dirty != 0); }
+		{ return ((mRights & ePrefsACL_Dirty) != 0); }
 	void SetDirty(bool dirty)
 		{ mRights = (dirty ? (mRights | ePrefsACL_Dirty) : (mRights & ~ePrefsACL_Dirty)); }
 
 	bool IsReadOnly() const
-		{ return (mRights & ePrefsACL_ReadOnly != 0); }
+		{ return ((mRights & ePrefsACL_ReadOnly) != 0); }
 	void SetReadOnly(bool read_only)
 		{ mRights = (read_only ? (mRights | ePrefsACL_Dirty) : (mRights & ~ePrefsACL_Dirty)); }
 };

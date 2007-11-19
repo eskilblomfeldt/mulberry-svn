@@ -318,9 +318,9 @@ bool CIdentity::SetInfo(char_stream& txt, NumVersion vers_prefs)
 		// Special hack: ':' prefix means inherit from default
 		cdstring acct;
 		txt.get(acct, true);
-		if (acct[0UL] == ':')
+		if (acct[(cdstring::size_type)0] == ':')
 		{
-			mSMTPAccount.first = &acct[1UL];
+			mSMTPAccount.first = &acct[(cdstring::size_type)1];
 			mSMTPAccount.second = false;
 		}
 		else

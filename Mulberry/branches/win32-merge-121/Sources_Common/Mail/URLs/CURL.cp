@@ -176,7 +176,7 @@ void CURL::Parse(const cdstring& url, bool decode)
 	}
 	
 	// Special if it starts with a / its a relative http url
-	else if (temp[0UL] == '/')
+	else if (temp[(cdstring::size_type)0] == '/')
 	{
 		mSchemeType = eHTTP;
 		punt_size = 0;

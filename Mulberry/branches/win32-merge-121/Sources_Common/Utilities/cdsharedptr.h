@@ -39,7 +39,7 @@ public:
 		}
 	}
 	
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(__VCPP__)
 	template<typename P> cdsharedptr(const cdsharedptr<P>& copy) :
 		_ptr(copy._ptr), _ref(copy._ref)
 	{

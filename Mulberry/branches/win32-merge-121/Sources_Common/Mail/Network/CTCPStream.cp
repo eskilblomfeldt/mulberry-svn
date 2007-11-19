@@ -119,7 +119,7 @@ CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
 #elif __dest_os == __linux_os
 			setstate(badbit);
 #else
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__VCPP__)
 			setstate(badbit);
 #else
 			state() |= badbit;
@@ -138,7 +138,7 @@ CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
 #elif __dest_os == __linux_os
 		setstate(err);
 #else
-#ifdef __GNUC__
+#if defined(__GNUC__) || defined(__VCPP__)
 		try
 		{
 			setstate(err);

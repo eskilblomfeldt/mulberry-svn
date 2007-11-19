@@ -34,9 +34,9 @@
 
 #include "openssl_.h"
 
-#if __dest_os == __win32_os
-#define USE_CMS
-#endif
+//#if __dest_os == __win32_os
+//#define USE_CMS
+//#endif
 
 #ifdef USE_CMS
 #include <openssl/cms.h>

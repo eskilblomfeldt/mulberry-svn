@@ -38,7 +38,7 @@ public:
 			mData(data) {}
 
 		bool operator() (const CGroup* item) const
-			{ return item && mData ? (item->GetEntry() == mData->GetEntry()) : false; }
+			{ return (item && mData) ? (item->GetEntry() == mData->GetEntry()) : false; }
 	private:
 		const CGroup* mData;
 	};

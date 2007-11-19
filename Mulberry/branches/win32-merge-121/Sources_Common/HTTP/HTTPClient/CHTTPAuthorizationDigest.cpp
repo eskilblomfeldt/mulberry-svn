@@ -148,8 +148,8 @@ void _KD(unsigned char* digest, char* k, char* s)
 	_H(digest, p.get(), ::strlen(p.get()));
 }
 
-void _HEX(char*, unsigned char*);
-void _HEX(char* digest_hex, unsigned char* digest)
+void _TOHEX(char*, unsigned char*);
+void _TOHEX(char* digest_hex, unsigned char* digest)
 {
 	for(int i = 0; i < 16; i++)
 	{
@@ -208,7 +208,7 @@ void CHTTPAuthorizationDigest::GenerateResponse(const CHTTPRequestResponse* requ
 	}
 	cdstring HA1;
 	HA1.reserve(32);
-	_HEX(HA1, digest);
+	_TOHEX(HA1, digest);
 	
 	// Determine HA2
 	cdstring A2;
@@ -223,7 +223,7 @@ void CHTTPAuthorizationDigest::GenerateResponse(const CHTTPRequestResponse* requ
 	_H(digest, A2, A2.length());
 	cdstring HA2;
 	HA2.reserve(32);
-	_HEX(HA2, digest);
+	_TOHEX(HA2, digest);
 	
 	// Now do KD...
 	cdstring sval;
@@ -243,5 +243,5 @@ void CHTTPAuthorizationDigest::GenerateResponse(const CHTTPRequestResponse* requ
 	_KD(digest, HA1, sval);
 	mResponse.clear();
 	mResponse.reserve(32);
-	_HEX(mResponse, digest);
+	_TOHEX(mResponse, digest);
 }
