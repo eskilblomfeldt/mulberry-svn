@@ -7523,6 +7523,7 @@
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "MulberryXcode" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 20286C29FDCF999611CA2CEA /* MulberryXcode */;
 			projectDirPath = "";
@@ -7600,6 +7601,7 @@
 					ProjectRef = AF419EC90AEA753B00E19592 /* vCardAdbkIO.xcodeproj */;
 				},
 			);
+			projectRoot = "";
 			targets = (
 				8D0C4E890486CD37000505A6 /* MulberryXcode */,
 			);
