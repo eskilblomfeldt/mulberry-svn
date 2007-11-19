@@ -59,6 +59,26 @@
 #error __dest_os
 #endif
 
+// How to include stat.h
+#if __dest_os == __mac_os
+#define OSSTAT stat
+#define OSSTATSTRUCT stat
+#define __stat_header <stat.h>
+#elif __dest_os == __win32_os
+#define OSSTAT _stat
+#define OSSTATSTRUCT _stat
+#define S_IRWXU	0x0e00
+#define S_ISDIR(m)	(((m)&(S_IFMT)) == (S_IFDIR))
+#define S_ISREG(m)	(((m)&(S_IFMT)) == (S_IFREG))
+#define __stat_header <sys/stat.h>
+#elif __dest_os == __linux_os || __dest_os == __mac_os_x
+#define OSSTAT stat
+#define OSSTATSTRUCT stat
+#define __stat_header <sys/stat.h>
+#else
+#error __dest_os
+#endif
+
 // unichar_t support
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 typedef unsigned short unichar_t;

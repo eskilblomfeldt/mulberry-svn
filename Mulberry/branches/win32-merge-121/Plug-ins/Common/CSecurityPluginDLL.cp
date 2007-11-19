@@ -45,7 +45,8 @@
 #endif
 #if __dest_os == __win32_os
 #include <fcntl.h>
-#include <stat.h>
+#include <io.h>
+#include <sys/stat.h>
 typedef size_t ssize_t;
 #endif
 #if __dest_os == __linux_os
@@ -549,7 +550,7 @@ int CSecurityPluginDLL::mkstemp(fspec ftemp, bool open_fd)
 		// Locate temp directory and create full path
 		cdstring tmp;
 		tmp.reserve(1024);
-		::GetTempPath(1024, tmp.c_str_mod());
+		::GetTempPathA(1024, tmp.c_str_mod());
 		if (tmp[tmp.length() -1] != '\\')
 			tmp += '\\';
 		tmp += temp_name;

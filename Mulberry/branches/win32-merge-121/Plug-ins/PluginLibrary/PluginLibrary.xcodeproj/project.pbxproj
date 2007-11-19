@@ -439,10 +439,12 @@
 		AFBD93F00AD9BC9400DD4C86 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AFBD93F10AD9BC9400DD4C86 /* Build configuration list for PBXProject "PluginLibrary" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AFBD93EE0AD9BC9400DD4C86;
 			productRefGroup = AFBD93FC0AD9BC9400DD4C86 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AFBD93FA0AD9BC9400DD4C86 /* PluginLibrary MachO */,
 			);
