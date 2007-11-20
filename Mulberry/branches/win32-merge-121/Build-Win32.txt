@@ -1,0 +1,25 @@
+1. USING ECLIPSE AS SUBVERSION TOOL.
+
+Download/Install JRE 6 from Sun.
+Download/Install Eclipse 3.3 C++ edition from eclipse.org.
+Launch Eclipse.
+Create a new 'mulberry-open' folder and use that as the Eclipse workspace.
+In Eclipse go to Find and Install.
+Create a new repository location for 'http://subclipse.tigris.org/update_1.2.x'.
+Install subclipse 1.4 (do not install the option packages if it reports errors with other missing packages).
+Go to Eclipse's Window/Preferences and navigate to SVN preferences.
+Switch to using 'JavaSVN'.
+Turn off 'Build Automatically' in the Project menu.
+In Eclipse open the SVN Repository Exploring Perspective.
+Add a new repository for 'http://svn.mulberrymail.com/mulberry'.
+Checkouty 'Mulberry/trunk' as a project into 'mulberry-open'.
+Create a 'Libraries' folder in the 'mulberry-open' folder.
+Add a new repository for 'http://svn.mulberrymail.com/repos'.
+Checkout 'CICalendar/trunk' as a project into 'mulberry-open/Libraries'.
+Checkout 'XMLLib/trunk' as a project into 'mulberry-open/Libraries'.
+
+2. BUILDING MULBERRY WITH VISUAL STUDIO.
+
+Get and install Visual Studio 2005 standard edition (at a minimum).
+Open mulberry-open/Mulberry/Win32/Mulberry.sln in Visual Studio.
+Run the 'Build Solution' command from the 'Build' menu.
