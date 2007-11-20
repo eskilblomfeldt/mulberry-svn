@@ -84,7 +84,9 @@ void CSSLPlugin::InitSSL()
 		// Most load the plugin and keep it loaded
 		LoadPlugin();
 
-		//sSSLLoader = new CDLLLoader(mConn);
+#ifdef __dest_os == __win32_os
+		sSSLLoader = new CDLLLoader(mConn);
+#endif
 
 		// Init TLS library
 #if __dest_os == __linux_os
