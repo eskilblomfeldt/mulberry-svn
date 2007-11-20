@@ -21,7 +21,9 @@
 #define __TEMPLS__MULBERRY__
 
 #include <map.h>
+#if __GNUC__ == 4
 #include <multimap.h>
+#endif
 #include <set.h>
 #include <vector.h>
 
