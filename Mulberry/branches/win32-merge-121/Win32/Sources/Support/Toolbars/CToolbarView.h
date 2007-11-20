@@ -38,7 +38,7 @@ class CToolbarView : public CControlBar, public CWndAligner, public CListener
 	friend class CToolbar;
 
 public:
-	typedef svector<CToolbarView*> CToolbarViewList;
+	typedef vector<CToolbarView*> CToolbarViewList;
 	static CToolbarViewList sToolbarViews;
 
 	enum
@@ -80,7 +80,7 @@ protected:
 		unsigned long		mGroupID;
 		unsigned long		mActiveIndex;
 		bool				mIsVisible;
-		svector<CToolbar*>	mToolbars;
+		vector<CToolbar*>	mToolbars;
 	};
 	typedef ptrvector<SToolbarGroup> SToolbarGroups;
 	SToolbarGroups			mGroups;

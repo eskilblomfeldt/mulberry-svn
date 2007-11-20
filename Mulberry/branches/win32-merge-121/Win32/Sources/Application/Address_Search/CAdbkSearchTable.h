@@ -89,7 +89,7 @@ protected:
 
 private:
 	CAdbkSearchWindow* 		mWindow;
-	svector<void*>			mData;					// data
+	vector<void*>			mData;					// data
 	int						mLastParent;			// last parent row
 	CColumnInfoArray*		mColumnInfo;
 

@@ -23,8 +23,6 @@
 
 #include <WIN_LCollapsableTree.h>
 
-#include "svector.h"
-
 struct SHierarchyNode {
 	SHierarchyNode	*parent;
 	SHierarchyNode	*firstChild;
@@ -36,7 +34,7 @@ struct SHierarchyNode {
 	Boolean			expanded;
 };
 
-typedef svector<SHierarchyNode*> CNodeVector;
+typedef vector<SHierarchyNode*> CNodeVector;
 
 // ---------------------------------------------------------------------------
 

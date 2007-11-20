@@ -81,7 +81,7 @@ class CLetterWindow : public CWnd,
 	};
 
 public:
-	typedef svector<CLetterWindow*>	CLetterWindowList;
+	typedef vector<CLetterWindow*>	CLetterWindowList;
 	static cdmutexprotect<CLetterWindowList> sLetterWindows;				// List of windows (protected for multi-thread access)
 	static CMultiDocTemplate* sLetterDocTemplate;
 

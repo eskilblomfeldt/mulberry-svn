@@ -72,7 +72,7 @@ public:
 protected:
 	CCalendarStoreView*						mTableView;
 	bool									mListChanging;			// In the process of changing the list
-	svector<calstore::CCalendarStoreNode*>	mData;					// data
+	vector<calstore::CCalendarStoreNode*>	mData;					// data
 
 	virtual	bool	HandleKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);						// Handle key down
 	virtual void	LClickCell(const STableCell& inCell, UINT nFlags);							// Clicked item

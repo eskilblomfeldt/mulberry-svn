@@ -22,12 +22,10 @@
 
 #include "CPopupButton.h"
 
-#include "svector.h"
-
 // Classes
 class CFontElement;
 
-typedef svector<CFontElement*> CFontList;
+typedef vector<CFontElement*> CFontList;
 
 class CFontPopup : public CPopupButton
 {

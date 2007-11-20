@@ -32,9 +32,6 @@
 CNodeVectorTree::CNodeVectorTree()
 {
 	mExposedNodes = 0;
-
-	// Use buffered vector
-	mHierarchyArray.set_keep_small(false);	// Allocate memory in increments of page size
 }
 
 

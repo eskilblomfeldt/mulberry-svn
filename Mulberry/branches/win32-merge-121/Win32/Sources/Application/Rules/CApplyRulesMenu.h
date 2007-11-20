@@ -22,7 +22,6 @@
 
 #include "CListener.h"
 
-#include "svector.h"
 #include "templs.h"
 
 // Classes

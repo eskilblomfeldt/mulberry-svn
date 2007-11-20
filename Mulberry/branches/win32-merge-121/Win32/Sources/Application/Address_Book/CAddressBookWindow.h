@@ -43,7 +43,7 @@ class CAddressBookWindow : public CTableViewWindow
 
 public:
 	static CAddressBookDocTemplate* sAddressBookDocTemplate;
-	typedef svector<CAddressBookWindow*>	CAddressBookWindowList;
+	typedef vector<CAddressBookWindow*>	CAddressBookWindowList;
 	static cdmutexprotect<CAddressBookWindowList> sAddressBookWindows;	// List of windows (protected for multi-thread access)
 
 

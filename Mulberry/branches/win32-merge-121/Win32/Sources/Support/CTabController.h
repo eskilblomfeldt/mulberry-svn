@@ -22,8 +22,6 @@
 #ifndef __CTABCONTROLLER__MULBERRY__
 #define __CTABCONTROLLER__MULBERRY__
 
-#include "svector.h"
-
 class CTabPanel;
 
 class CTabController : public CTabCtrl
@@ -52,7 +50,7 @@ public:
 		{ return mCurrentPanel; }
 
 protected:
-	typedef svector<CTabPanel*> CTabPanelList;
+	typedef vector<CTabPanel*> CTabPanelList;
 	CTabPanelList mPanels;
 	CTabPanel* mCurrentPanel;
 	

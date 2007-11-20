@@ -58,7 +58,7 @@ CToolbarView::~CToolbarView()
 	// Always delete the toolbars
 	for(SToolbarGroups::const_iterator iter1 = mGroups.begin(); iter1 != mGroups.end(); iter1++)
 	{
-		for(svector<CToolbar*>::iterator iter2 = (*iter1)->mToolbars.begin(); iter2 != (*iter1)->mToolbars.end(); iter2++)
+		for(vector<CToolbar*>::iterator iter2 = (*iter1)->mToolbars.begin(); iter2 != (*iter1)->mToolbars.end(); iter2++)
 			delete *iter2;
 		(*iter1)->mToolbars.clear();
 	}
@@ -285,7 +285,7 @@ CToolbarView::SToolbarGroup* CToolbarView::FindGroup(CToolbar* tb, unsigned long
 	for(SToolbarGroups::const_iterator iter1 = mGroups.begin(); iter1 != mGroups.end(); iter1++)
 	{
 		index = 0;
-		for(svector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
+		for(vector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
 				iter2 != (*iter1)->mToolbars.end(); iter2++, index++)
 		{
 			if (*iter2 == tb)
@@ -303,12 +303,12 @@ void CToolbarView::AdjustSize()
 	GetClientRect(client);
 	
 	// Get visible toolbars and minimum widths
-	svector<CToolbar*> tbs;
+	vector<CToolbar*> tbs;
 	unsigned long sidebyside_width = 0;
 	for(SToolbarGroups::const_iterator iter1 = mGroups.begin(); iter1 != mGroups.end(); iter1++)
 	{
 		unsigned long index = 0;
-		for(svector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
+		for(vector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
 				iter2 != (*iter1)->mToolbars.end(); iter2++, index++)
 		{
 			// Only bother if group is visible and this is the active one
@@ -324,7 +324,7 @@ void CToolbarView::AdjustSize()
 	}
 
 	// Determine toolbar processing order
-	svector<CToolbar*> tbrs;
+	vector<CToolbar*> tbrs;
 	bool sidebyside = false;
 	if (tbs.size() == 1)
 		// Single bar all the way across
@@ -401,7 +401,7 @@ void CToolbarView::UpdateToolbars()
 
 	for(SToolbarGroups::const_iterator iter1 = mGroups.begin(); iter1 != mGroups.end(); iter1++)
 	{
-		for(svector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
+		for(vector<CToolbar*>::const_iterator iter2 = (*iter1)->mToolbars.begin();
 				iter2 != (*iter1)->mToolbars.end(); iter2++)
 		{
 			// Change state of each toolbar

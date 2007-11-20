@@ -36,7 +36,7 @@ class CServerWindow : public CTableViewWindow
 	DECLARE_DYNCREATE(CServerWindow)
 
 public:
-	typedef svector<CServerWindow*>	CServerWindowList;
+	typedef vector<CServerWindow*>	CServerWindowList;
 	static cdmutexprotect<CServerWindowList> sServerWindows;	// List of windows (protected for multi-thread access)
 	static CMultiDocTemplate*	sServerDocTemplate;
 

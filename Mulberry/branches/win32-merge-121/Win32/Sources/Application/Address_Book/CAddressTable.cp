@@ -402,7 +402,6 @@ void CAddressTable::DoDeleteEntry(void)
 {
 	// Create list to hold deleted items
 	CAddressList* addrs = new CAddressList();
-	addrs->set_keep_small(false);
 
 	// Add each selected address
 	DoToSelection1((DoToSelection1PP) &CAddressTable::AddEntryToList, addrs);

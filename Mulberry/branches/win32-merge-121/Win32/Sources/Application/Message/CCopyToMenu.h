@@ -22,7 +22,6 @@
 
 #include "CListener.h"
 
-#include "svector.h"
 #include "templs.h"
 #include "cdstring.h"
 
@@ -66,7 +65,7 @@ public:
 	static SInt16		FindPopupMboxPos(bool copy_to, const char* name);
 
 private:
-	typedef svector<CMenu*> CMenuList;
+	typedef vector<CMenu*> CMenuList;
 
 	static CMenu		sCopyToMenu;
 	static CMenu		sAppendToMenu;

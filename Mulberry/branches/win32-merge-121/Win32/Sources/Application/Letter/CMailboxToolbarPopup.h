@@ -62,7 +62,7 @@ public:
 	virtual void	SetupCurrentMenuItem(bool check);						// Check items before doing popup
 
 private:
-	typedef svector<CMailboxToolbarPopup*> CMailboxToolbarPopupList;
+	typedef vector<CMailboxToolbarPopup*> CMailboxToolbarPopupList;
 	static CMailboxToolbarPopupList	sMailboxToolbarPopupMenus;
 
 	bool			mCopyTo;											// Copy to or append to?

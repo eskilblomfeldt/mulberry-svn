@@ -44,7 +44,7 @@ struct SReplyElement
 	EReplyTo	reply_type;
 };
 
-typedef svector<SReplyElement> CReplyList;
+typedef vector<SReplyElement> CReplyList;
 
 class CReplyChooseTable : public CTable
 {

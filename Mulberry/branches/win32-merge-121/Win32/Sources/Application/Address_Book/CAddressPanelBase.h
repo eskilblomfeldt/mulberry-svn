@@ -53,6 +53,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
-typedef svector<CAddressPanelBase*> CAddressPanelList;
+typedef vector<CAddressPanelBase*> CAddressPanelList;
 
 #endif

@@ -48,7 +48,7 @@ public:
 	virtual	bool	HandleChar(UINT nChar, UINT nRepCnt, UINT nFlags);			// Handle character
 
 protected:
-	typedef svector<CCommander*> CCommanders;
+	typedef vector<CCommander*> CCommanders;
 	
 	CCommander* 		mSuperCommander;
 	CCommanders			mSubCommanders;

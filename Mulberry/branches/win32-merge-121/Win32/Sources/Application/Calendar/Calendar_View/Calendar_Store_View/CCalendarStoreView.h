@@ -38,7 +38,7 @@ class CCalendarStoreWindow;
 class	CCalendarStoreView : public CTableView
 {
 public:
-	typedef svector<CCalendarStoreView*>	CCalendarStoreViewList;
+	typedef vector<CCalendarStoreView*>	CCalendarStoreViewList;
 	static cdmutexprotect<CCalendarStoreViewList> sCalendarStoreViews;	// List of windows (protected for multi-thread access)
 
 						CCalendarStoreView();

@@ -33,12 +33,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // CSDIFrame
 
-svector<CWnd*> CSDIFrame::sModalWnd;
+vector<CWnd*> CSDIFrame::sModalWnd;
 CWnd* CSDIFrame::sTaskbarParent = NULL;
 int CSDIFrame::sTaskbarCount = 0;
 HMENU CSDIFrame::sWindowsMenu = NULL;
-svector<CWnd*> CSDIFrame::sWindowList;
-svector<CWnd*> CSDIFrame::sWindowZList;
+vector<CWnd*> CSDIFrame::sWindowList;
+vector<CWnd*> CSDIFrame::sWindowZList;
 bool CSDIFrame::sWindowZListActive = false;
 CWnd* CSDIFrame::sTopWindow = NULL;
 
@@ -272,7 +272,7 @@ void CSDIFrame::RemoveWindow(CWnd* aWnd)
 {
 	// Find position in list
 	sWindowZList.erase(std::remove(sWindowZList.begin(), sWindowZList.end(), aWnd), sWindowZList.end());
-	svector<CWnd*>::iterator found = ::find(sWindowList.begin(), sWindowList.end(), aWnd);
+	vector<CWnd*>::iterator found = ::find(sWindowList.begin(), sWindowList.end(), aWnd);
 	if (found != sWindowList.end())
 	{
 		int pos = found - sWindowList.begin();
@@ -306,7 +306,7 @@ void CSDIFrame::UpdateWindows()
 
 	// Refresh entire list
 	int pos = 0;
-	for(svector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++, pos++)
+	for(vector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++, pos++)
 	{
 		cdstring title = CUnicodeUtils::GetWindowTextUTF8(*iter);
 		if (title.empty())
@@ -320,7 +320,7 @@ void CSDIFrame::UpdateWindows()
 void CSDIFrame::AddWindowsToMenu(CMenu* pPopupMenu)
 {
 	int pos = IDM_WINDOWS_First;
-	for(svector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++, pos++)
+	for(vector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++, pos++)
 	{
 		cdstring title = CUnicodeUtils::GetWindowTextUTF8(*iter);
 		if (title.empty())
@@ -342,14 +342,14 @@ void CSDIFrame::MinimiseAll(bool minimise)
 		if (minimise)
 		{
 			sWindowZListActive = true;
-			for(svector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++)
+			for(vector<CWnd*>::const_iterator iter = sWindowList.begin(); iter != sWindowList.end(); iter++)
 				(*iter)->ShowWindow(SW_HIDE);
 		}
 		else
 		{
 			sWindowZListActive = false;
 			StValueChanger<bool> _change(sWindowZListActive, true);
-			for(svector<CWnd*>::const_iterator iter = sWindowZList.begin(); iter != sWindowZList.end(); iter++)
+			for(vector<CWnd*>::const_iterator iter = sWindowZList.begin(); iter != sWindowZList.end(); iter++)
 				(*iter)->ShowWindow(SW_SHOW);
 		}
 	}

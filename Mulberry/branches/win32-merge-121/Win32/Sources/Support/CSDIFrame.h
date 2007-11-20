@@ -24,8 +24,6 @@
 
 #include "CHelpFrame.h"
 
-#include "svector.h"
-
 class CSDIFrame : public CHelpFrame
 {
 public:
@@ -81,12 +79,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
-	static svector<CWnd*> sModalWnd;
+	static vector<CWnd*> sModalWnd;
 	static CWnd* sTaskbarParent;
 	static int sTaskbarCount;
 	static HMENU sWindowsMenu;
-	static svector<CWnd*> sWindowList;
-	static svector<CWnd*> sWindowZList;
+	static vector<CWnd*> sWindowList;
+	static vector<CWnd*> sWindowZList;
 	static bool sWindowZListActive;
 	static CWnd* sTopWindow;
 	bool mOnce;

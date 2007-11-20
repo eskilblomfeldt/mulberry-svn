@@ -150,7 +150,7 @@ private:
 	CAdbkManagerView*		mTableView;				// Owner view
 	bool					mListChanging;			// In the process of changing the list
 	CColumnInfoArray*		mColumnInfo;
-	svector<void*>			mData;					// data
+	vector<void*>			mData;					// data
 	bool					mHasOthers;				// Indicates 'Other' item exists
 
 	bool TestSelectionAdbk(TableIndexT row);						// Test for selected adbk

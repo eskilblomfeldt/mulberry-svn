@@ -39,7 +39,7 @@ class CMboxList;
 class CSearchCriteria;
 class CSearchItem;
 
-typedef svector<CSearchCriteria*> CSearchCriteriaList;
+typedef vector<CSearchCriteria*> CSearchCriteriaList;
 
 class CSearchWindow : public CView, public CSearchBase, public CWndAligner
 {

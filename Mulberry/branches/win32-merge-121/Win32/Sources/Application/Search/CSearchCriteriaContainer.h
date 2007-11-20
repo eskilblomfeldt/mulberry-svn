@@ -32,7 +32,7 @@ class CSearchCriteria;
 class CSearchItem;
 
 class CCriteriaBase;
-typedef svector<CCriteriaBase*> CCriteriaBaseList;
+typedef vector<CCriteriaBase*> CCriteriaBaseList;
 
 class CSearchCriteriaContainer : public CWnd, public CBroadcaster, public CListener, public CWndAligner
 {

@@ -38,7 +38,7 @@ class CServerView : public CTableView
 	friend class CServerWindow;
 
 public:
-	typedef svector<CServerView*>	CServerViewList;
+	typedef vector<CServerView*>	CServerViewList;
 	static cdmutexprotect<CServerViewList> sServerViews;	// List of windows (protected for multi-thread access)
 
 	enum { class_ID = 'SeVi' };

@@ -29,7 +29,7 @@
 
 // Classes
 class CCriteriaBase;
-typedef svector<CCriteriaBase*> CCriteriaBaseList;
+typedef vector<CCriteriaBase*> CCriteriaBaseList;
 
 class CCriteriaBase : public CStatic, public CWndAligner
 {

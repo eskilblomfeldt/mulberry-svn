@@ -45,7 +45,7 @@ class CCalendarWindow : public CView,
 	DECLARE_DYNCREATE(CCalendarWindow)
 
 public:
-	typedef svector<CCalendarWindow*>	CCalendarWindowList;
+	typedef vector<CCalendarWindow*>	CCalendarWindowList;
 	static cdmutexprotect<CCalendarWindowList> sCalendarWindows;	// List of windows (protected for multi-thread access)
 	static CMultiDocTemplate*		sCalendarDocTemplate;
 

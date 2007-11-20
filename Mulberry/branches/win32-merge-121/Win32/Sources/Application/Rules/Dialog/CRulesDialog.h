@@ -38,7 +38,7 @@
 
 class CFilterItem;
 class CCriteriaBase;
-typedef svector<CCriteriaBase*> CCriteriaBaseList;
+typedef vector<CCriteriaBase*> CCriteriaBaseList;
 
 
 class CRulesDialog : public CHelpDialog, public CSearchBase, public CWndAligner

@@ -22,8 +22,6 @@
 #ifndef __CSUBPANELCONTROLLER__MULBERRY__
 #define __CSUBPANELCONTROLLER__MULBERRY__
 
-#include "svector.h"
-
 class CTabPanel;
 
 class CSubPanelController : public CWnd
@@ -55,7 +53,7 @@ public:
 	virtual void	SetPanel(long index);						// Force update of display panel
 
 protected:
-	typedef svector<CTabPanel*> CTabPanelList;
+	typedef vector<CTabPanel*> CTabPanelList;
 	CTabPanelList mPanels;
 	CTabPanel* mCurrentPanel;
 	long mCurrentIndex;

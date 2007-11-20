@@ -38,7 +38,7 @@ class CIconButton;
 class CCommander;
 typedef ptrvector<CButton> CButtonArray;
 typedef ptrvector<CWnd> CWndArray;
-typedef svector<CCommander*> CCommanderArray;
+typedef vector<CCommander*> CCommanderArray;
 class CToolbarButton;
 class CToolbarView;
 
@@ -93,7 +93,7 @@ protected:
 		CommandT cmd;
 	};
 
-	typedef svector<CToolbar*> CToolbarList;
+	typedef vector<CToolbar*> CToolbarList;
 
 	static CToolbarList	sToolbars;
 
@@ -116,7 +116,7 @@ protected:
 		CWnd*							mWnd;
 		CToolbarItem::CToolbarItemInfo	mDetails;
 	};
-	typedef svector<SItemSpec> CItemArray;
+	typedef vector<SItemSpec> CItemArray;
 
 	CItemArray mItemList;
 

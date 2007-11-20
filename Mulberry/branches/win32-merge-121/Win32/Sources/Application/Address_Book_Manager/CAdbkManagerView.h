@@ -39,7 +39,7 @@ class CAdbkManagerView : public CTableView
 	friend class CAdbkManagerWindow;
 
 public:
-	typedef svector<CAdbkManagerView*>	CAdbkManagerViewList;
+	typedef vector<CAdbkManagerView*>	CAdbkManagerViewList;
 	static cdmutexprotect<CAdbkManagerViewList>	sAdbkManagerViews;
 
 					CAdbkManagerView();
