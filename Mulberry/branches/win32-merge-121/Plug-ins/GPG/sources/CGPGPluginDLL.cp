@@ -35,7 +35,9 @@
 #include "CGPGPluginDLL.h"
 #include "CPluginInfo.h"
 #include "CStringUtils.h"
+#if __dest_os == __win32_os
 #include "CUnicodeStdLib.h"
+#endif
 
 #include <stdarg.h>
 #include <string.h>
