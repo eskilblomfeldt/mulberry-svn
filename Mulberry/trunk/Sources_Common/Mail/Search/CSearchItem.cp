@@ -767,7 +767,7 @@ cdstring CSearchItem::GenerateDate(bool expand_me) const
 		case eThisYear:
 			{
 				// Just write out numeric value
-				cdstring temp = date;
+				cdstring temp = (unsigned long)date;
 				return temp;
 			}
 		default:;
@@ -781,7 +781,7 @@ cdstring CSearchItem::GenerateDate(bool expand_me) const
 		case eWithinYears:
 			{
 				// Just write out numeric value
-				cdstring temp = date;
+				cdstring temp = (long)date;
 				return temp;
 			}
 		default:;

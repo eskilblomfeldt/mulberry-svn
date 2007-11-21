@@ -36,10 +36,14 @@
 #include <string.h>
 #include "cdstring.h"
 
-#include "openssl_.h"
-
 #if __dest_os == __win32_os
-#define USE_CMS
+//#define USE_CMS
+#include <openssl/err.h>
+#include <openssl/pem.h>
+#include <openssl/ssl.h>
+#include <openssl/x509v3.h>
+#else
+#include "openssl_.h"
 #endif
 
 #ifdef USE_CMS

@@ -33,7 +33,9 @@
 #include "CSMTPSendThread.h"
 #include "CSMTPWindow.h"
 
+#ifndef __VCPP__
 #include <unistd.h>
+#endif
 
 CSMTPAccountManager* CSMTPAccountManager::sSMTPAccountManager = NULL;
 

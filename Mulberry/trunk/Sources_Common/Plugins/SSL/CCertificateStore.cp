@@ -139,12 +139,12 @@ const CCertificate* CCertificateStore::FindCertificate(const cdstring& key, CCer
 		// 1 fingerprint :	starts with $
 		// 2 subject :		starts with cn=
 		// 3 email :		whatever is left
-		if (key[0UL] == '#')
+		if (key[(cdstring::size_type)0] == '#')
 		{
 			test = 0;
 			use_key = key.c_str() + 1;
 		}
-		else if (key[0UL] == '$')
+		else if (key[(cdstring::size_type)0] == '$')
 		{
 			test = 1;
 			use_key = key.c_str() + 1;
@@ -235,12 +235,12 @@ void CCertificateStore::FindCertificates(const cdstring& key, CCertificateList& 
 		// 1 fingerprint :	starts with $
 		// 2 subject :		starts with cn=
 		// 3 email :		whatever is left
-		if (key[0UL] == '#')
+		if (key[(cdstring::size_type)0] == '#')
 		{
 			test = 0;
 			use_key = key.c_str() + 1;
 		}
-		else if (key[0UL] == '$')
+		else if (key[(cdstring::size_type)0] == '$')
 		{
 			test = 1;
 			use_key = key.c_str() + 1;

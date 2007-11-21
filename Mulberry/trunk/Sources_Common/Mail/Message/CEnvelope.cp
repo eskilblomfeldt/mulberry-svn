@@ -659,7 +659,7 @@ void CEnvelope::WriteAddressListToStream(ostream& out, const CAddressList* list)
 void CEnvelope::ReadCacheFromStream(istream& in, unsigned long vers)
 {
 	// Write out envelope information first
-	::ReadHost(in, mDate);
+	::ReadHost(in, (long&)mDate);
 	::ReadHost(in, mZone);
 	in.ignore();
 	::Read1522(in, mSubject);

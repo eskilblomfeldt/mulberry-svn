@@ -50,11 +50,6 @@ void CCalendarAccount::_copy(const CCalendarAccount& copy)
 
 CCalendarAccount::~CCalendarAccount()
 {
-	switch(mServerType)
-	{
-	default:
-		break;
-	}
 }
 
 // Compare with same type
@@ -69,13 +64,6 @@ int CCalendarAccount::operator==(const CCalendarAccount& comp) const
 
 void CCalendarAccount::SetServerType(EINETServerType type)
 {
-	// Delete existing
-	switch(mServerType)
-	{
-	default:
-		break;
-	}
-
 	// Add new
 	mServerType = type;
 	switch(mServerType)

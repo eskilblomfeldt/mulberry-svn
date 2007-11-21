@@ -67,13 +67,15 @@ void CMatchItem::SetSingleMatch(EMatchItem item)
 bool CMatchItem::NeedsSelection() const
 {
 	// Count number of true items in selected range
-	return ::count(mBitsSet.begin() + eSelected_First, mBitsSet.begin() + eSelected_Last + 1, true);
+	bool val = true;
+	return ::count(mBitsSet.begin() + eSelected_First, mBitsSet.begin() + eSelected_Last + 1, val);
 }
 
 CSearchItem* CMatchItem::ConstructSearch(const CMessageList* msgs) const
 {
 	// If nothing selected return
-	size_t bitsset = ::count(mBitsSet.begin(), mBitsSet.end(), true);
+	bool val = true;
+	size_t bitsset = ::count(mBitsSet.begin(), mBitsSet.end(), val);
 	bitsset += mSearchSet.size();
 	if (!bitsset)
 		return NULL;

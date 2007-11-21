@@ -50,14 +50,6 @@
 
 #include <typeinfo>
 
-#if __dest_os == __win32_os
-// BUG in Metrowerks Compiler - need this specialization
-inline void allocator<CServerBrowse::SServerBrowseData>::deallocate(CServerBrowse::SServerBrowseData* p, size_t)
-{
-	delete p;
-}
-#endif
-
 #pragma mark ____________________________Message Handling
 
 void CServerBrowse::ListenTo_Message(long msg, void* param)
@@ -1668,7 +1660,7 @@ void CServerBrowse::RemoveServer(CMboxProtocol* proto)
 					single = protos.at(1);
 
 				// Adjust index to last remaining server
-				index = ::min(index, (mShowFavourites ? CMailAccountManager::sMailAccountManager->FetchServerOffset() : 0) + 1);
+				index = min(index, (mShowFavourites ? CMailAccountManager::sMailAccountManager->FetchServerOffset() : 0) + 1);
 
 				// Remove this and all children
 				RemoveRows(1, index, true);
@@ -1818,7 +1810,7 @@ void CServerBrowse::RemoveWD(CMboxList* list)
 					flatten = hiers.at(2);
 
 				// Get its index (modified after delete) and remove its hierarchy
-				index = ::min(index, FetchIndexOf(flatten));
+				index = min(index, FetchIndexOf(flatten));
 				RemoveRows(1, index, false);
 
 				// Determine parent of flattened list

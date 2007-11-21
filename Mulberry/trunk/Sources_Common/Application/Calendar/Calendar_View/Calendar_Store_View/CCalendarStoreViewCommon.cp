@@ -38,12 +38,7 @@ bool CCalendarStoreView::ViewExists(const CCalendarStoreView* wnd)
 
 void CCalendarStoreView::ListenTo_Message(long msg, void* param)
 {
-	switch(msg)
-	{
-	default:
-		CTableView::ListenTo_Message(msg, param);
-		break;
-	}
+	CTableView::ListenTo_Message(msg, param);
 }
 
 void CCalendarStoreView::SetCalendarView(CCalendarView* view)

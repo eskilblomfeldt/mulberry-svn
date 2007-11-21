@@ -102,7 +102,7 @@ void filterbuf::write(const char_type* s, std::streamsize n)
 	}
 	if (mBOut)
 	{
-		mBOutWritten = ::min((unsigned long) n, mBOutSize);
+		mBOutWritten = min((unsigned long) n, mBOutSize);
 		::memcpy(mBOut, s, mBOutWritten);
 	}
 }

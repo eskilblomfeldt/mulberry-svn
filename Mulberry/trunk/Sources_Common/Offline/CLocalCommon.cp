@@ -128,7 +128,7 @@ bool ConvertPath(cdstring& path, bool to_relative)
 #if __dest_os == __win32_os
 int __mkdir(const char* path, int mode)
 {
-	int temp = mkdir_utf8(path, mode);
+	int temp = mkdir_utf8(path);
 	os_errno = ::GetLastError();
 	return temp;
 }
@@ -688,7 +688,7 @@ void hash_encode_name(std::ostrstream& out, const char* name, unsigned long n)
 	
 	// Get maximum length of filename less extension and hash bytes
 	const unsigned long cMaxFname = cMaxFnameLen - 8;
-	n = ::min(n, cMaxFname);
+	n = min(n, cMaxFname);
 	
 	// Output maximum filename length
 	while(n--)

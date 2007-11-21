@@ -191,7 +191,7 @@ bool CURLClickElement::Act(CDisplayFormatter *display)
 
 bool CURLClickElement::IsAnchor() const
 {
-	return mScheme.empty() && (mAddress[0UL] == '#');
+	return mScheme.empty() && (mAddress[(cdstring::size_type)0] == '#');
 }
 
 #pragma mark ____________________________CAnchorClickElement

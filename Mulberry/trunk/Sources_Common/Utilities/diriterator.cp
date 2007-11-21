@@ -31,6 +31,9 @@
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #include "MoreFilesX.h"
+#endif
+
+#if __dest_os == __mac_os || __dest_os == __mac_os_x || __dest_os == __win32_os
 
 #include "cdustring.h"
 #endif

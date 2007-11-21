@@ -45,12 +45,35 @@
 #define LDAP_VERSION LDAP_VERSION2
 #endif
 
+#ifdef __VCPP__
+#define LDAP_UNICODE 0
+#include <winldap.h>
+#define LDAP_CONST const
+#define LDIF_PUT_VALUE 1
+#define ber_len_t size_t
+int
+ldif_parse_line(
+    LDAP_CONST char	*line,
+    char	**typep,
+    char	**valuep,
+    ber_len_t *vlenp
+);
+char *
+ldif_getline( char **next );
+char *
+ldif_put(
+	int type,
+	LDAP_CONST char *name,
+	LDAP_CONST char *val,
+	ber_len_t vlen );
+#else
 #define NEEDPROTOS
 #include <lber.h>
 #if __dest_os == __mac_os_x
 #include "ldif.h"
 #else
 #include <ldif.h>
+#endif
 #endif
 #include <string.h>
 
@@ -532,7 +555,7 @@ long CCommAdbkIOPluginDLL::ExportGroup(SAdbkIOPluginGroup* grp)
 		// split into email and name
 		const char *q = ::strrchr(*p, ' ');
 		cdstring email = (q ? q + 1 : *p);
-		if (email[0UL] == '<')
+		if (email[(cdstring::size_type)0] == '<')
 			email = cdstring(&email.c_str()[1], email.length() - 2);
 		cdstring name = (q ? cdstring(*p, q - *p) : cdstring::null_str);
 		name.unquote();

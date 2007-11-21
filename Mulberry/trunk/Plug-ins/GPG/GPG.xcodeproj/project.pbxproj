@@ -140,10 +140,12 @@
 		AF8AAE4A0AE5C83600A94FD4 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF8AAE4B0AE5C83600A94FD4 /* Build configuration list for PBXProject "GPG" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF8AAE480AE5C83600A94FD4;
 			productRefGroup = AF8AAE580AE5C83600A94FD4 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF8AAE540AE5C83600A94FD4 /* GPG MachO */,
 			);

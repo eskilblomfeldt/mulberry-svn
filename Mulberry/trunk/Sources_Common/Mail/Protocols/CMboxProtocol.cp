@@ -46,7 +46,9 @@
 #include "CURL.h"
 
 #include __stat_header
+#ifndef __VCPP__
 #include <unistd.h>
+#endif
 
 #include <algorithm>
 #include <stdio.h>
@@ -2100,7 +2102,7 @@ long CMboxProtocol::CheckMbox(CMbox* mbox, bool fast)
 		if (CPreferences::sPrefs->mUnseenNew.GetValue() && CPreferences::sPrefs->mRecentNew.GetValue())
 		{
 			// Use check recent flag
-			num_new = ::min(new_unseen - old_unseen, mbox->GetCheckRecent());
+			num_new = min(new_unseen - old_unseen, mbox->GetCheckRecent());
 			mbox->SetCheckRecent(0);
 		}
 		else if (CPreferences::sPrefs->mUnseenNew.GetValue())
@@ -2116,7 +2118,7 @@ long CMboxProtocol::CheckMbox(CMbox* mbox, bool fast)
 	{
 		// Use user determined concept of 'new' messages
 		if (CPreferences::sPrefs->mUnseenNew.GetValue() && CPreferences::sPrefs->mRecentNew.GetValue())
-			num_new = ::min(new_unseen - old_unseen, new_recent - old_recent);
+			num_new = min(new_unseen - old_unseen, new_recent - old_recent);
 		else if (CPreferences::sPrefs->mUnseenNew.GetValue())
 			num_new = new_unseen - old_unseen;
 		else if (CPreferences::sPrefs->mRecentNew.GetValue())

@@ -179,10 +179,10 @@ bool CVCard::Read(istream& in)
 					return false;
 				
 				// Look for fold
-				if (line.length() && isspace(line[0UL]))
+				if (line.length() && isspace(line[(cdstring::size_type)0]))
 				{
 					// Add to existing line
-					unfoldedline += &line[1UL];
+					unfoldedline += &line[(cdstring::size_type)1];
 					
 					// Continue with loop
 					continue;

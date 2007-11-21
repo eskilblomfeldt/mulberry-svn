@@ -1063,7 +1063,7 @@ void CMailboxTable::ScrollForNewMessages()
 	// Check whether pin item is at limit
 	TableIndexT can_move_select = (ascending ? pin_select - visible_top : visible_bottom - pin_select);
 	TableIndexT can_move_unseen = (ascending ? pin_unseen - visible_top : visible_bottom - pin_unseen);
-	TableIndexT can_move = ::min(can_move_select, can_move_unseen);
+	TableIndexT can_move = min(can_move_select, can_move_unseen);
 	
 	// If no move allowed then exit
 	if (can_move == 0)

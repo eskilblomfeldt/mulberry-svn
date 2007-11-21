@@ -523,7 +523,7 @@ bool CPreferences::Valid(bool showAlert)
 		if (mRUseHiCache.mValue)
 		{
 			if (!mRAutoCacheIncrement.mValue && (mRHiCache.mValue <= mRCacheIncrement.mValue))
-				mRHiCache.mValue = 2*::max(mRCacheIncrement.mValue, 20L);
+				mRHiCache.mValue = 2*max(mRCacheIncrement.mValue, 20L);
 			else if (mRAutoCacheIncrement.mValue && (mRHiCache.mValue < 40L))
 				mRHiCache.mValue = 40;
 		}
@@ -534,7 +534,7 @@ bool CPreferences::Valid(bool showAlert)
 		if (mLUseHiCache.mValue)
 		{
 			if (!mLAutoCacheIncrement.mValue && (mLHiCache.mValue <= mLCacheIncrement.mValue))
-				mLHiCache.mValue = 2*::max(mLCacheIncrement.mValue, 20L);
+				mLHiCache.mValue = 2*max(mLCacheIncrement.mValue, 20L);
 			else if (mLAutoCacheIncrement.mValue && (mLHiCache.mValue < 40L))
 				mLHiCache.mValue = 40;
 		}

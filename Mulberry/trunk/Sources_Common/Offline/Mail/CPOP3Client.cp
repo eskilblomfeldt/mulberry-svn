@@ -1068,7 +1068,7 @@ void CPOP3Client::DoUIDL(ulvector& uidls)
 			uidls.push_back(hash);
 		}
 	}
-	catch (CINETException& ex)
+	catch (CINETException& /*ex*/)
 	{
 		CLOG_LOGCATCH(CINETException&);
 

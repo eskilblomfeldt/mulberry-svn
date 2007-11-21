@@ -55,8 +55,14 @@
 #define TEMPLATEFILE	"ldaptemplates.conf"
 #endif
 
+#ifdef __VCPP__
+#define LDAP_UNICODE 0
+#include <winldap.h>
+#define LDAPS_PORT	LDAP_SSL_PORT
+#else
 #include <lber.h>
 #include <ldap.h>
+#endif
 
 const char* cLDAPcn = "cn";
 const char* cLDAPpostalAddress = "postalAddress";
@@ -106,6 +112,7 @@ CLDAPClient::~CLDAPClient()
 
 void CLDAPClient::Lookup(const cdstring& item, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field, CAddressList& addr_list)
 {
+#if __dest_os != __win32_os
 	LDAP* ld = NULL;
 	LDAPMessage* res = NULL;
 	LDAPMessage* e = NULL;
@@ -710,11 +717,13 @@ void CLDAPClient::Lookup(const cdstring& item, CAdbkAddress::EAddressMatch match
 		CLOG_LOGRETHROW;
 		throw;
 	}
+#endif
 }
 
 // Handle LDAP error
 bool CLDAPClient::HandleResult(int code)
 {
+#if __dest_os != __win32_os
 	switch(code)
 	{
 	// We handle this
@@ -742,6 +751,9 @@ bool CLDAPClient::HandleResult(int code)
 			return false;
 		}
 	}
+#else
+	return true;
+#endif
 }
 
 void CLDAPClient::SetStatus(const char* rsrcid)

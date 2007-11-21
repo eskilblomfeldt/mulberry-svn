@@ -229,7 +229,7 @@ void CLocalMessage::ReadCacheFromStream(istream& in, unsigned long vers)
 	if (!GetEnvelope())
 		SetEnvelope(new CEnvelope);
 	GetEnvelope()->ReadCacheFromStream(in, vers);
-	::ReadHost(in, mCache->mInternalDate);
+	::ReadHost(in, (long&)mCache->mInternalDate);
 	::ReadHost(in, mCache->mInternalZone);
 	in.ignore();
 

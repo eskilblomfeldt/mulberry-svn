@@ -745,7 +745,7 @@ void CINETClient::Logon()
 		else
 			auth_done = true;
 	}
-	catch(unsigned long num)
+	catch(unsigned long /*num*/)
 	{
 		CLOG_LOGCATCH(unsigned long num);
 

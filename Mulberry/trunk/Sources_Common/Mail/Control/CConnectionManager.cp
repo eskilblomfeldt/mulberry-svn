@@ -35,10 +35,12 @@
 #include "char_stream.h"
 
 #include __stat_header
+
 #include <unistd.h>
 
 #if __dest_os == __win32_os
-#include <sysenv_api.h>
+#include <direct.h>
+//#include <sysenv_api.h>
 #include <ShFolder.h>
 #elif __dest_os == __linux_os
 #include <jDirUtil.h>
@@ -335,7 +337,7 @@ CConnectionManager::CConnectionManager()
 			{
 				::chkdir(mUserCWD);
 			}
-			catch(CGeneralException& ex)
+			catch(CGeneralException& /*ex*/)
 			{
 				CLOG_LOGCATCH(CGeneralException& ex);
 			}

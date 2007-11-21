@@ -341,7 +341,7 @@ ECharsetCode CCharsetManager::LookForEuro(ECharsetCode host, const char* data, u
 	if (data && *data && length)
 	{
 		// Determine local code for euro
-		char euro = 0;
+		unsigned char euro = 0;
 		ECharsetCode new_host = host;
 		switch(host)
 		{

@@ -1578,7 +1578,7 @@ CNewAddressBookWindowState::CNewAddressBookWindowState()
 	ResetColumns();
 
 	mSort = cSortAddressLastName;
-	mAddressSize = lround(0x10000000 * 0.5);
+	mAddressSize = (long)(0x10000000 * 0.5);
 	mGroupSize = 0;
 	mAddressShow = true;
 	mGroupShow = true;

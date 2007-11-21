@@ -22,6 +22,7 @@
 #include "CStringUtils.h"
 
 #include <strstream>
+#include <math.h>
 
 CParserEnriched::CParserEnriched(const unichar_t* st, CFormatList* format, bool use_styles)
 {

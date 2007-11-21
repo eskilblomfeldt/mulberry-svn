@@ -23,7 +23,7 @@
 
 #include "CUnicodeStdLib.h"
 
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__VCPP__)
 #include <mslconfig>
 #else
 #define MSL_FAKE_STLPORT

@@ -31,7 +31,9 @@
 #include "CURL.h"
 
 #include __stat_header
+#ifndef __VCPP__
 #include <unistd.h>
+#endif
 
 // __________________________________________________________________________________________________
 // C L A S S __ C I N E T P R O T O C O L
