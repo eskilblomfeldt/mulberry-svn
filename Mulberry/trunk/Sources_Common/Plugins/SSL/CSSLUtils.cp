@@ -30,7 +30,7 @@
 #include <openssl/pkcs12.h>
 #include <openssl/x509.h>
 
-using namespace NSSL;
+namespace NSSL {
 
 // Specialisations
 
@@ -84,7 +84,7 @@ template<> void StSSLObject<X509>::delete_obj()
 
 // Error strings
 
-void NSSL::ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
+void ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
 {
 	unsigned long l;
 	const char* file;
@@ -110,7 +110,7 @@ void NSSL::ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
 }
 
 // Passphrase callback
-int NSSL::PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
+int PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
 {
 	// Ask user for passphrase
 	cdstring passphrase;
@@ -125,4 +125,6 @@ int NSSL::PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
 	::strncpy(out, passphrase.c_str(), 1024);
 	
 	return result;
+}
+
 }
