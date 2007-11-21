@@ -43,7 +43,7 @@ class CACLTable : public CTableDragAndDrop
 	};
 
 public:
-		CACLTable::CACLTable(JXScrollbarSet* scrollbarSet, 
+		CACLTable(JXScrollbarSet* scrollbarSet, 
 						JXContainer* enclosure,
 						const HSizingOption hSizing, 
 						const VSizingOption vSizing,
