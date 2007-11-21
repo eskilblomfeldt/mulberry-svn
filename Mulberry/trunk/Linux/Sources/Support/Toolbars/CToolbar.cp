@@ -763,7 +763,7 @@ void CToolbar::Receive(JBroadcaster* sender, const Message& message)
 	else if(message.Is(JXTextMenu::kItemSelected))
 	{
 		JXTextMenu* popup = dynamic_cast<JXTextMenu*>(sender);
-		unsigned long item_index = GetItemIndex(popup->GetEnclosure());
+		unsigned long item_index = GetItemIndex((JXWidget*)popup->GetEnclosure());
 		unsigned long cmd = (item_index < mItemList.size()) ? mItemList[item_index].mDetails.GetItem()->GetCommand() : 0;
 		const JXTextMenu::ItemSelected* ms = dynamic_cast<const JXTextMenu::ItemSelected*>(&message);
 		if (GetCommander())
