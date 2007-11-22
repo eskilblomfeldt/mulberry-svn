@@ -1,25 +1,65 @@
-1. USING ECLIPSE AS SUBVERSION TOOL.
+1. PRE-REQUISITES
+Get and install Visual Studio 2005 standard edition (at a minimum).
+If your Visual Studio tool does not have an assembler, get http://nasm.sourceforge.net/.
+You will need perl installed to build openssl.
+A Subversion tool will also be required. Instructions below show how to use Eclipse for subversion access.
+
+2. USING ECLIPSE AS SUBVERSION TOOL.
 
 Download/Install JRE 6 from Sun.
 Download/Install Eclipse 3.3 C++ edition from eclipse.org.
 Launch Eclipse.
-Create a new 'mulberry-open' folder and use that as the Eclipse workspace.
+Create a new 'mulberry-open' folder on disk somewhere and use that as the Eclipse workspace.
 In Eclipse go to Find and Install.
-Create a new repository location for 'http://subclipse.tigris.org/update_1.2.x'.
+Create a new location for 'http://subclipse.tigris.org/update_1.2.x'.
 Install subclipse 1.4 (do not install the option packages if it reports errors with other missing packages).
 Go to Eclipse's Window/Preferences and navigate to SVN preferences.
 Switch to using 'JavaSVN'.
 Turn off 'Build Automatically' in the Project menu.
 In Eclipse open the SVN Repository Exploring Perspective.
 Add a new repository for 'http://svn.mulberrymail.com/mulberry'.
-Checkouty 'Mulberry/trunk' as a project into 'mulberry-open'.
+Checkout 'Mulberry/trunk' as a project into 'mulberry-open'.
 Create a 'Libraries' folder in the 'mulberry-open' folder.
 Add a new repository for 'http://svn.mulberrymail.com/repos'.
-Checkout 'CICalendar/trunk' as a project into 'mulberry-open/Libraries'.
-Checkout 'XMLLib/trunk' as a project into 'mulberry-open/Libraries'.
+Checkout 'CICalendar/trunk' as a project into 'mulberry-open\Libraries'.
+Checkout 'XMLLib/trunk' as a project into 'mulberry-open\Libraries'.
 
-2. BUILDING MULBERRY WITH VISUAL STUDIO.
+3. OpenSSL
 
-Get and install Visual Studio 2005 standard edition (at a minimum).
-Open mulberry-open/Mulberry/Win32/Mulberry.sln in Visual Studio.
+Download the latest openssl-0.9.7 release (note 0.9.7 NOT 0.9.8).
+Extract to an 'openssl' directory in 'mulberry-open\Libraries'.
+At a command prompt in the 'openssl' directory do:
+
+  perl Configure VC-WIN32
+
+Then do:
+
+  ms\do_nasm or ms\do_masm or ms\do_ms depending on what assembler you have
+
+Copy 'openssl\ms\nt.mak' to 'openssl\ms\nt-static.mak'.
+Edit 'nt-static.mak' and do:
+
+- Change \MD to \MT in CFLAG.
+- Change 'OUT_D=out32' to 'OUT_D=out32s'.
+- Change 'TMP_D=tmp32' to 'TMP_D=tmp32s'.
+
+Copy 'openssl\ms\nt-static.mak' to 'openssl\ms\nt-debug.mak'.
+Edit 'nt-debug.mak' and do:
+
+- Change \MT to \MDd in CFLAG.
+- Change 'OUT_D=out32s' to 'OUT_D=out32d'.
+- Change 'TMP_D=tmp32s' to 'TMP_D=tmp32d'.
+
+Run Visual Studio and open a Command Prompt.
+Navigate to 'mulberry-open\Libraries\openssl'.
+Do 'nmake -f ms\nt-debug.mak'.
+Do 'nmake -f ms\nt-static.mak'.
+(NB The nmake may error out because it cannot do the mkdir commands that you will see it attempt.
+If that happens just manually execute the four mkdir commands and try the nmake command again.)
+Both the nmakes will likely take a while to complete.
+
+4. BUILDING MULBERRY WITH VISUAL STUDIO.
+
+Open 'mulberry-open\Mulberry\Win32\Mulberry.sln' in Visual Studio.
 Run the 'Build Solution' command from the 'Build' menu.
+That will build the Debug variant of all plugins and the Mulberry app.
