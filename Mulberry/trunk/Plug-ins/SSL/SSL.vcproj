@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32\Sources\VCPP&quot;;&quot;F:\VCProjects\openssl-0.9.7l\inc32&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32\Sources\VCPP&quot;;&quot;$(ProjectDir)..\..\..\Libraries\openssl\inc32&quot;"
 				PreprocessorDefinitions="__VCPP__"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -65,7 +65,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/Def:&quot;SSL.def&quot;"
-				AdditionalDependencies="F:\VCProjects\openssl-0.9.7l\out32d\libeay32.lib F:\VCProjects\openssl-0.9.7l\out32d\ssleay32.lib WSOCK32.lib"
+				AdditionalDependencies="$(ProjectDir)..\..\..\Libraries\openssl\out32d\libeay32.lib $(ProjectDir)..\..\..\Libraries\openssl\out32d\ssleay32.lib WSOCK32.lib"
 				LinkIncremental="2"
 				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
@@ -123,7 +123,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32v2\Sources\VCPP&quot;;&quot;F:\VCProjects\openssl-0.9.7l\inc32&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32\Sources\VCPP&quot;;&quot;$(ProjectDir)..\..\..\Libraries\openssl\inc32&quot;"
 				PreprocessorDefinitions="__VCPP__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -146,7 +146,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/Def:&quot;SSL.def&quot;"
-				AdditionalDependencies="F:\VCProjects\openssl-0.9.7l\out32\libeay32.lib F:\VCProjects\openssl-0.9.7l\out32\ssleay32.lib WSOCK32.lib"
+				AdditionalDependencies="$(ProjectDir)..\..\..\Libraries\openssl\out32\libeay32.lib $(ProjectDir)..\..\..\Libraries\openssl\out32\ssleay32.lib WSOCK32.lib"
 				LinkIncremental="1"
 				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"

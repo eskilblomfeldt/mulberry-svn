@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\..\Win32v2\Sources\VCPP&quot;;&quot;$(ProjectDir)..\..\..\Plug-ins\CRAM-MD5\sources\md5&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32\Sources\VCPP&quot;;&quot;$(ProjectDir)..\CRAM-MD5\sources\md5&quot;"
 				PreprocessorDefinitions="__VCPP__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"

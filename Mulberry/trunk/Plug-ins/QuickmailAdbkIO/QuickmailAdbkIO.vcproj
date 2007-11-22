@@ -93,7 +93,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cp "
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -121,7 +121,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)sources\md5&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32v2\Sources\VCPP&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)sources&quot;;&quot;$(ProjectDir)sources\md5&quot;;&quot;$(ProjectDir)..\Common&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\OneByte&quot;;&quot;$(ProjectDir)..\..\Sources_Common\i18n\Charsets\Converters\Unicode&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Mail\URLs&quot;;&quot;$(ProjectDir)..\..\Sources_Common\Utilities&quot;;&quot;$(ProjectDir)..\..\Win32\Sources\VCPP&quot;"
 				PreprocessorDefinitions="__VCPP__"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="&quot;$(ProjectDir)..\PluginLibrary\PluginLib\$(ConfigurationName)\PluginLib.lib&quot;"
+				AdditionalDependencies="&quot;$(ProjectDir)..\PluginLibrary\$(ConfigurationName)\PluginLib.lib&quot;"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -174,7 +174,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="cp "
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
