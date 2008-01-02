@@ -764,7 +764,7 @@ void CAddressBook::AddAddress(CAddressList* addrs, bool sorted)
 			
 			// Map to vCard
 			auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), true));
-			GetVCardAdbk()->AddNewVCard(vcard.release());
+			GetVCardAdbk()->AddNewVCard(vcard.release(), true);
 		}
 	}
 
@@ -812,12 +812,8 @@ void CAddressBook::UpdateAddress(CAddressList* addrs, bool sorted)
 	// Always map the address to a vCard
 	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 	{
-		// Remove existing
-		GetVCardAdbk()->RemoveCardByKey(static_cast<const CAdbkAddress*>(*iter)->GetEntry());
-
-		// Map to vCard (using existing entry/UID)
-		auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), false));
-		GetVCardAdbk()->AddNewVCard(vcard.release());
+		// Change the existing vcard
+		vcardstore::ChangeVCard(GetVCardAdbk(), static_cast<CAdbkAddress*>(*iter));
 	}
 	
 	// Change it

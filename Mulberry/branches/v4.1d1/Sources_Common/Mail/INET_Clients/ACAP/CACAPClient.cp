@@ -645,6 +645,11 @@ bool CACAPClient::_AdbkChanged(const CAddressBook* adbk)
 	return true;
 }
 
+void CACAPClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// No way to tell if there have been changes on the server, so return true to force entire sync
+}
+
 // Delete adbk
 void CACAPClient::_DeleteAdbk(const CAddressBook* adbk)
 {

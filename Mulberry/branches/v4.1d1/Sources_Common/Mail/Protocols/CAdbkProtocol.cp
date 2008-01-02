@@ -652,15 +652,17 @@ void CAdbkProtocol::LoadList()
 			if (!has_default)
 			{
 				// Add adress book to list
-				CAddressBook* adbk = new CAddressBook(this, &mStoreRoot, true, false, default_name);
+				CAddressBook* adbk = NULL;
 				
 				// Policy:
 				//   IMSP: create a dummy entry in default address book then delete it
 				//   ACAP: just create the default address book
+				//   CardDAV: look for one address book only and use that
 				switch(GetAccountType())
 				{
 				case CINETAccount::eIMSP:
 				{
+					adbk = new CAddressBook(this, &mStoreRoot, true, false, default_name);
 					mStoreRoot.AddChild(adbk);
 
 					// Now force real creation of address book by storing fake address
@@ -671,22 +673,42 @@ void CAdbkProtocol::LoadList()
 					break;
 				}
 				case CINETAccount::eACAP:
+					adbk = new CAddressBook(this, &mStoreRoot, true, false, default_name);
 					CreateAdbk(adbk);
 					mStoreRoot.AddChild(adbk);
+					break;
+				case CINETAccount::eCardDAVAdbk:
+					for(CAddressBookList::const_iterator niter = mStoreRoot.GetChildren()->begin();
+						niter != mStoreRoot.GetChildren()->end(); niter++)
+					{
+						if ((*niter)->IsAdbk())
+						{
+							if (adbk)
+							{
+								adbk = NULL;
+								break;
+							}
+							else
+								adbk = *niter;
+						}
+					}
 					break;
 				default:;
 				}
 
 				// Make sure address book is added to open on startup, nick-names and searching
-				adbk->SetFlags(CAddressBook::eOpenOnStart, true);
-				adbk->SetFlags(CAddressBook::eLookup, true);
-				adbk->SetFlags(CAddressBook::eSearch, true);
+				if (adbk)
+				{
+					adbk->SetFlags(CAddressBook::eOpenOnStart, true);
+					adbk->SetFlags(CAddressBook::eLookup, true);
+					adbk->SetFlags(CAddressBook::eSearch, true);
 
-				// Change prefs list
-				CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, true);
-				CPreferences::sPrefs->ChangeAddressBookOpenOnStart(adbk, true);
-				CPreferences::sPrefs->ChangeAddressBookLookup(adbk, true);
-				CPreferences::sPrefs->ChangeAddressBookSearch(adbk, true);
+					// Change prefs list
+					CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, true);
+					CPreferences::sPrefs->ChangeAddressBookOpenOnStart(adbk, true);
+					CPreferences::sPrefs->ChangeAddressBookLookup(adbk, true);
+					CPreferences::sPrefs->ChangeAddressBookSearch(adbk, true);
+				}
 			}
 		}
 	}
@@ -1064,7 +1086,243 @@ void CAdbkProtocol::SyncFullFromServer(CAddressBook* adbk)
 
 void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 {
-#ifdef TODO
+#if 0
+	// We need to do this as a proper transaction with locking
+	try
+	{
+		// Policy:
+		//
+		// 1. Get list of current items on server
+		//
+		// 2. Look at record DB and:
+		//  2.1 Add new components to server and cache info
+		//  2.2 Remove deleted components from server and cached server info if still present on server
+		//  2.3 Cache info for changed items for later sync (or change them immediately if the server has not changed
+		//
+		// 3. Scan list of local components
+		//  3.1 If in added set, ignore it
+		//  3.2 If in changed set
+		//   3.2.1 If server etag is unchanged then change component on server
+		//   3.2.2 Otherwise determine whether server or cached component wins and use that
+		//  3.3 If on server
+		//   3.3.1 If server etag has changed copy server comnponent to cache
+		//  3.4 Remove from local cache - its been removed from the server
+		//  3.5 Remove from server set
+		//
+		// 4. Copy remaining items in server set to local cache - they are new items
+		//
+		// We only need to do steps 3 & 4 if the data on the server is known to have changed.
+		//
+		
+		// Now do it...
+
+		// Step 1
+		cdstrmap comps;
+		bool server_changed = mClient->_AdbkChanged(adbk);
+		if (server_changed)
+			mClient->_GetComponentInfo(adbk, vadbk, comps);
+		else
+		{
+			mCacheClient->_ReadFullAddressBook(adbk);
+		}
+		
+		// Step 2
+		cdstrmap cache_added;
+		cdstrmap cache_changed;
+		for(vcard::CVCardComponentRecordDB::const_iterator iter = adbk->GetRecording().begin(); iter != adbk->GetRecording().end(); iter++)
+		{
+			// Step 2.1
+			if ((*iter).second.GetAction() == vcard::CVCardComponentRecord::eAdded)
+			{
+				// Add component to server
+				const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
+				if (comp != NULL)
+				{
+					// Add component to server
+					mClient->_AddComponent(node, cal, *comp);
+
+					// Add to added cache
+					cache_added.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+				}
+			}
+			
+			// Step 2.2
+			else if ((*iter).second.GetAction() == iCal::CICalendarComponentRecord::eRemoved)
+			{
+				// Is it still present on the server
+				if (comps.count((*iter).second.GetRURL()) != 0)
+				{
+					// Remove component from server
+					mClient->_RemoveComponent(node, cal, (*iter).second.GetRURL());
+					
+					// Remove from server component info
+					comps.erase((*iter).second.GetRURL());
+				}
+			}
+
+			// Step 2.3
+			else if ((*iter).second.GetAction() == iCal::CICalendarComponentRecord::eChanged)
+			{
+				if (server_changed)
+					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+				else
+				{
+					// Change it on the server
+					const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
+					mClient->_ChangeComponent(node, cal, *comp);
+					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
+				}
+			}
+		}
+		
+		
+		// Now do sync
+		if (server_changed)
+		{
+			// Get component info from cache
+			iCal::CICalendarComponentDBList dbs;
+			cal.GetAllDBs(dbs);
+			cdstrvect component_keys;
+			for(iCal::CICalendarComponentDBList::const_iterator iter1 = dbs.begin(); iter1 != dbs.end(); iter1++)
+			{
+				for(iCal::CICalendarComponentDB::const_iterator iter2 = (*iter1)->begin(); iter2 != (*iter1)->end(); iter2++)
+				{
+					component_keys.push_back((*iter2).second->GetMapKey());
+				}
+			}
+			
+			// Step 3
+			cdstrset matching_components;
+			for(cdstrvect::const_iterator iter = component_keys.begin(); iter != component_keys.end(); iter++)
+			{
+				iCal::CICalendarComponent* cache_comp = cal.GetComponentByKey(*iter);
+				if (cache_comp == NULL)
+					continue;
+
+				// Get this components RURL
+				cdstring cache_rurl = cache_comp->GetRURL();
+				cdstring cache_etag = cache_comp->GetETag();
+				
+				// Get the server info
+				cdstring server_rurl;
+				cdstring server_etag;
+				cdstrmap::const_iterator found = comps.find(cache_rurl);
+				if (found != comps.end())
+				{
+					server_rurl = (*found).first;
+					server_etag = (*found).second;
+				}
+
+				// Step 3.1
+				if (cache_added.count(cache_rurl) != 0)
+					continue;
+				
+				// Step 3.2
+				else if (cache_changed.count(cache_rurl) != 0)
+				{
+					// Step 3.2.1
+					if (cache_etag == server_etag)
+					{
+						// Write changed cache component to server
+						mClient->_ChangeComponent(node, cal, *cache_comp);
+					}
+					
+					// Step 3.2.2
+					else
+					{
+						// Do iCal SEQ etc comparison
+						
+						// First read in component from server into temp calendar
+						iCal::CICalendar tempcal;
+						iCal::CICalendarComponent* server_comp = mClient->_ReadComponent(node, tempcal, server_rurl);
+						if (server_comp != NULL)
+						{
+							int result = iCal::CICalendarSync::CompareComponentVersions(server_comp, cache_comp);
+							
+							if (result == 1)
+							{
+								// Cache is newer than server - cache overwrites to server
+								mClient->_ChangeComponent(node, cal, *cache_comp);
+							}
+							else if (result == -1)
+							{
+								// Cache is older than server - server overwrites cache
+
+								// Remove the cached component first
+								cal.RemoveComponentByKey(cache_comp->GetMapKey());
+								cache_comp = NULL;
+								
+								// Copy component from server into local cache effectively replacing old one
+								iCal::CICalendarComponent* new_comp = server_comp->clone();
+								new_comp->SetCalendar(cal.GetRef());
+								cal.AddComponent(new_comp);
+							}
+						}
+					}
+				}
+				
+				// Step 3.3
+				else if (!server_rurl.empty())
+				{
+					// Step 3.3.1
+					if (cache_etag != server_etag)
+					{
+						// Copy from server to cache overwriting cache value
+						
+						// Remove the cached component first
+						cal.RemoveComponentByKey(cache_comp->GetMapKey());
+						cache_comp = NULL;
+						
+						// Read component from server into local cache effectively replacing old one
+						mClient->_ReadComponent(node, cal, server_rurl);
+					}
+				}
+				
+				// Step 3.4
+				else
+				{
+					// comp is deleted in this call
+					cal.RemoveComponentByKey(cache_comp->GetMapKey());
+					cache_comp = NULL;
+				}
+				
+				// Step 3.5
+				if (!server_rurl.empty())
+					matching_components.insert(server_rurl);
+			}
+			
+			// Step 4
+			cdstrvect rurls;
+			for(cdstrmap::const_iterator iter = comps.begin(); iter != comps.end(); iter++)
+			{
+				cdstrset::const_iterator found = matching_components.find((*iter).first);
+				if (found == matching_components.end())
+					rurls.push_back((*iter).first);
+			}
+
+			// Read components from server into local cache as its a new one on the server
+			if (rurls.size() != 0)
+				mClient->_ReadComponents(node, cal, rurls);
+		}
+
+		// Clear out cache recording
+		cal.ClearRecording();
+		
+		// Get the current server sync token
+		mClient->_UpdateSyncToken(node, cal);
+
+		// Now write back cache
+		if (!mCacheClient->_TouchCalendar(node))
+			DumpCalendars();
+		mCacheClient->_WriteFullCalendar(node, cal);
+	}
+	catch(...)
+	{
+		CLOG_LOGCATCH(...);
+
+		CLOG_LOGRETHROW;
+		throw;
+	}
 #endif
 }
 

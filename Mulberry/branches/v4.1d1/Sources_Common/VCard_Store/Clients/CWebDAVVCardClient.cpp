@@ -580,6 +580,22 @@ bool CWebDAVVCardClient::_AdbkChanged(const CAddressBook* adbk)
 	return etag != adbk->GetVCardAdbk()->GetETag();
 }
 
+void CWebDAVVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(adbk);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current ETag
+	cdstring etag = GetETag(rurl, lock_token);
+	
+	// Change the stored etag
+	const_cast<CAddressBook*>(adbk)->GetVCardAdbk()->SetETag(etag);
+}
+
 void CWebDAVVCardClient::_SizeAdbk(CAddressBook* adbk)
 {
 	// Start UI action
@@ -1075,11 +1091,22 @@ void CWebDAVVCardClient::_MyRights(CAddressBook* adbk)
 
 cdstring CWebDAVVCardClient::GetETag(const cdstring& rurl, const cdstring& lock_token)
 {
+	cdstring result = GetProperty(rurl, lock_token, http::webdav::cProperty_getetag);
+
+	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+	if (!result.empty() && !result.isquoted())
+		result.quote(true);
+
+	return result;
+}
+
+cdstring CWebDAVVCardClient::GetProperty(const cdstring& rurl, const cdstring& lock_token, const xmllib::XMLName& property)
+{
 	cdstring result;
 
 	// Create WebDAV propfind
 	xmllib::XMLNameList props;
-	props.push_back(http::webdav::cProperty_getetag);
+	props.push_back(property);
 	auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
 	http::CHTTPOutputDataString dout;
 	request->SetOutput(&dout);
@@ -1094,6 +1121,8 @@ cdstring CWebDAVVCardClient::GetETag(const cdstring& rurl, const cdstring& lock_
 		parser.ParseData(dout.GetData());
 
 		// Look at each propfind result and determine type of calendar
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
 		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
 		{
 			// Get child element name (decode URL)
@@ -1101,15 +1130,11 @@ cdstring CWebDAVVCardClient::GetETag(const cdstring& rurl, const cdstring& lock_
 			name.DecodeURL();
 		
 			// Must match rurl
-			if (name.compare_end(rurl))
+			if (name.compare_end(decoded_rurl))
 			{
-				if ((*iter)->GetTextProperties().count(http::webdav::cProperty_getetag.FullName()) != 0)
+				if ((*iter)->GetTextProperties().count(property.FullName()) != 0)
 				{
-					result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_getetag.FullName())).second;
-					
-					// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
-					if (!result.isquoted())
-						result.quote(true);
+					result = (*(*iter)->GetTextProperties().find(property.FullName())).second;
 					break;
 				}
 			}
@@ -1118,7 +1143,6 @@ cdstring CWebDAVVCardClient::GetETag(const cdstring& rurl, const cdstring& lock_
 	else
 	{
 		HandleHTTPError(request.get());
-		return result;
 	}
 
 	return result;

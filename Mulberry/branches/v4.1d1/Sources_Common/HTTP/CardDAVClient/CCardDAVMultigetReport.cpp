@@ -61,19 +61,19 @@ void CCardDAVMultigetReport::GenerateXML(std::ostream& os, const cdstrvect& href
 
 	// Structure of document is:
 	//
-	// <CardDAV:adbk-multiget>
+	// <CardDAV:addressbook-multiget>
 	//   <DAV:prop>
 	//     <DAV:getetag>
+	//     <CardDAV:address-data/>
 	//   </DAV:prop>
-	//   <CardDAV:adbk-data/>
 	//   <DAV:href>...</DAV:href>
 	//   ...
-	// </CardDAV:adbk-multiget>
+	// </CardDAV:addressbook-multiget>
 	
 	// Create document and get the root
 	xmllib::XMLDocument xmldoc;
 
-	// <CardDAV:adbk-multiget> element
+	// <CardDAV:addressbook-multiget> element
 	xmllib::XMLNode* multiget = xmldoc.GetRoot();
 	xmllib::XMLNamespace dav_namespc(webdav::cNamespace, "D");
 	xmllib::XMLNamespace carddav_namespc(carddav::cNamespace, "C");
@@ -87,8 +87,8 @@ void CCardDAVMultigetReport::GenerateXML(std::ostream& os, const cdstrvect& href
 	// <DAV:getetag> element
 	new xmllib::XMLNode(&xmldoc, prop, cProperty_getetag.Name(), dav_namespc);
 	
-	// <CardDAV:adbk-data> element
-	new xmllib::XMLNode(&xmldoc, multiget, cElement_adbkdata.Name(), carddav_namespc);
+	// <CardDAV:address-data> element
+	new xmllib::XMLNode(&xmldoc, prop, cElement_adbkdata.Name(), carddav_namespc);
 	
 	// Do for each href
 	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)

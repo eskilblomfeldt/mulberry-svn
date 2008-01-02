@@ -54,11 +54,16 @@ void vcardstore::MapFromVCards(CAddressBook* adbk)
 	for(vCard::CVCardComponentDB::const_iterator iter1 = vadbk->GetVCards().begin(); iter1 != vadbk->GetVCards().end(); iter1++)
 	{
 		const vCard::CVCardVCard* vcard = static_cast<const vCard::CVCardVCard*>((*iter1).second);
-		MapFromVCard(adbk, *vcard);
+		MapFromVCard(adbk->GetAddressList(), *vcard);
 	}
 }
 
 void vcardstore::MapFromVCard(CAddressBook* adbk, const vCard::CVCardVCard& vcard)
+{
+	MapFromVCard(adbk->GetAddressList(), vcard);
+}
+
+void vcardstore::MapFromVCard(CAddressList* addrs, const vCard::CVCardVCard& vcard)
 {
 	// Map to an address
 	auto_ptr<CAdbkAddress> addr(new CAdbkAddress());
@@ -196,7 +201,7 @@ void vcardstore::MapFromVCard(CAddressBook* adbk, const vCard::CVCardVCard& vcar
 	}
 
 	// Now add address
-	adbk->GetAddressList()->push_back(addr.release());
+	addrs->push_back(addr.release());
 }
 
 // Map from internal address/group format to VCards
@@ -221,6 +226,33 @@ vCard::CVCardVCard* vcardstore::GenerateVCard(const vCard::CVCardAddressBookRef&
 	else
 		vcard->SetUID(addr->GetEntry());
 	
+	UpdateVCard(vcard, addr);
+
+	return vcard;
+}
+
+void vcardstore::ChangeVCard(vCard::CVCardAddressBook* adbk, const CAdbkAddress* addr)
+{
+	vCard::CVCardVCard* vcard = adbk->GetCardByKey(addr->GetEntry());
+	if (vcard != NULL)
+		UpdateVCard(vcard, addr);
+}
+
+void vcardstore::UpdateVCard(vCard::CVCardVCard* vcard, const CAdbkAddress* addr)
+{
+	// Remove all the ones we can change
+	vcard->RemoveProperties(vCard::cVCardProperty_FN);
+	vcard->RemoveProperties(vCard::cVCardProperty_N);
+	vcard->RemoveProperties(vCard::cVCardProperty_NICKNAME);
+	vcard->RemoveProperties(vCard::cVCardProperty_EMAIL);
+	vcard->RemoveProperties(vCard::cVCardProperty_ADR);
+	vcard->RemoveProperties(vCard::cVCardProperty_TEL);
+	vcard->RemoveProperties(vCard::cVCardProperty_CALENDAR_ADDRESS);
+	vcard->RemoveProperties(vCard::cVCardProperty_ORG);
+	vcard->RemoveProperties(vCard::cVCardProperty_URL);
+	vcard->RemoveProperties(vCard::cVCardProperty_NOTE);
+	
+	// Now set them
 	vcard->AddProperty(vCard::CVCardProperty(vCard::cVCardProperty_FN, addr->GetName()));
 	vcard->AddProperty(vCard::CVCardProperty(vCard::cVCardProperty_N, vCard::CVCardN(addr->GetName())));
 	if (!addr->GetADL().empty())
@@ -364,6 +396,4 @@ vCard::CVCardVCard* vcardstore::GenerateVCard(const vCard::CVCardAddressBookRef&
 		vcard->AddProperty(vCard::CVCardProperty(vCard::cVCardProperty_URL, addr->GetURL(), vCard::CVCardValue::eValueType_URI));
 	if (!addr->GetNotes().empty())
 		vcard->AddProperty(vCard::CVCardProperty(vCard::cVCardProperty_NOTE, addr->GetNotes()));
-	
-	return vcard;
 }

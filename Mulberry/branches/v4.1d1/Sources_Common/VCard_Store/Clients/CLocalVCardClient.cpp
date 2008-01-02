@@ -553,6 +553,11 @@ bool CLocalVCardClient::_AdbkChanged(const CAddressBook* adbk)
 	return false;
 }
 
+void CLocalVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// Nothing to do for local as this is only used when sync'ing with server
+}
+
 // Operations with addresses
 
 // Find all addresses in adbk

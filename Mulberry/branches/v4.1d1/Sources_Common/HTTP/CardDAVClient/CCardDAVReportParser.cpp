@@ -39,10 +39,27 @@ using namespace webdav;
 using namespace carddav; 
 using namespace xmllib; 
 
+CCardDAVReportParser::CCardDAVReportParser(vCard::CVCardAddressBook& vadbk)
+{
+	mVAdbk = &vadbk;
+	mAdbk = NULL;
+	mAddrs = NULL;
+	mAddItems = false;
+}
+
 CCardDAVReportParser::CCardDAVReportParser(vCard::CVCardAddressBook& vadbk, CAddressBook* adbk, bool add)
 {
 	mVAdbk = &vadbk;
 	mAdbk = adbk;
+	mAddrs = NULL;
+	mAddItems = add;
+}
+
+CCardDAVReportParser::CCardDAVReportParser(vCard::CVCardAddressBook& vadbk, CAddressList* addrs, bool add)
+{
+	mVAdbk = &vadbk;
+	mAdbk = NULL;
+	mAddrs = addrs;
 	mAddItems = add;
 }
 
@@ -70,18 +87,12 @@ void CCardDAVReportParser::ParseResponse(const xmllib::XMLNode* response)
 		// Is it propstat
 		else if ((*iter)->CompareFullName(cElement_propstat))
 		{
-			ParsePropStat(*iter, etag);
-		}
-		
-		// Is it adbk-data
-		else if ((*iter)->CompareFullName(cElement_adbkdata))
-		{
-			ParseAdbkData(*iter, href, etag);
+			ParsePropStat(*iter, href, etag);
 		}
 	}
 }
 
-void CCardDAVReportParser::ParsePropStat(const xmllib::XMLNode* response, cdstring& etag)
+void CCardDAVReportParser::ParsePropStat(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag)
 {
 	// Scan the propstat node the status - we only process OK status
 
@@ -109,7 +120,7 @@ void CCardDAVReportParser::ParsePropStat(const xmllib::XMLNode* response, cdstri
 			{
 				if ((*iter)->CompareFullName(webdav::cElement_prop))
 				{
-					ParseProp(*iter, etag);
+					ParseProp(*iter, href, etag);
 				}
 			}
 			return;
@@ -117,16 +128,16 @@ void CCardDAVReportParser::ParsePropStat(const xmllib::XMLNode* response, cdstri
 	}
 }
 
-void CCardDAVReportParser::ParseProp(const xmllib::XMLNode* response, cdstring& etag)
+void CCardDAVReportParser::ParseProp(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag)
 {
 	// Scan the prop node - each child is processed
 	for(XMLNodeList::const_iterator iter = response->Children().begin(); iter != response->Children().end(); iter++)
 	{
-		ParsePropElement(*iter, etag);
+		ParsePropElement(*iter, href, etag);
 	}
 }
 
-void CCardDAVReportParser::ParsePropElement(const xmllib::XMLNode* response, cdstring& etag)
+void CCardDAVReportParser::ParsePropElement(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag)
 {
 	// Here we need to detect the type of element and dispatch accordingly
 	
@@ -142,6 +153,12 @@ void CCardDAVReportParser::ParsePropElement(const xmllib::XMLNode* response, cds
 	{
 		etag = response->Data();
 	}
+		
+	// Is it adbk-data
+	else if (response->CompareFullName(cElement_adbkdata))
+	{
+		ParseAdbkData(response, href, etag);
+	}
 }
 
 void CCardDAVReportParser::ParseAdbkData(const xmllib::XMLNode* response, const cdstring& href, const cdstring& etag)
@@ -154,6 +171,11 @@ void CCardDAVReportParser::ParseAdbkData(const xmllib::XMLNode* response, const 
 	// Read adbk component(s) from file
 	std::istrstream is(response->Data().c_str());
 	vCard::CVCardVCard* vcard = mVAdbk->ParseComponent(is, last_path, etag);
-	if ((mAdbk != NULL) && mAddItems)
-		vcardstore::MapFromVCard(mAdbk, *vcard);
+	if ((vcard != NULL) && mAddItems)
+	{
+		if (mAdbk != NULL)
+			vcardstore::MapFromVCard(mAdbk, *vcard);
+		else if (mAddrs != NULL)
+			vcardstore::MapFromVCard(mAddrs, *vcard);
+	}
 }

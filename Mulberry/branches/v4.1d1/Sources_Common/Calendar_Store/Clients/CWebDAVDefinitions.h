@@ -45,6 +45,10 @@ extern const xmllib::XMLName	cElement_propfind;
 extern const xmllib::XMLName	cElement_prop;
 extern const xmllib::XMLName	cElement_propstat;
 
+extern const xmllib::XMLName	cElement_propertyupdate;
+extern const xmllib::XMLName	cElement_set;
+extern const xmllib::XMLName	cElement_remove;
+
 extern const xmllib::XMLName	cProperty_getcontentlength;
 extern const xmllib::XMLName	cProperty_getcontenttype;
 extern const xmllib::XMLName	cProperty_resourcetype;
@@ -93,6 +97,10 @@ extern const xmllib::XMLName	cProperty_privilege;
 
 extern const xmllib::XMLName	cElement_principal_match;
 
+// Extended MKCOL
+extern const xmllib::XMLName	cElement_mkcol;
+extern const xmllib::XMLName	cElement_mkcol_response;
+
 }
 
 namespace caldav 
@@ -108,7 +116,6 @@ extern const xmllib::XMLName	cElement_calendarmultiget;
 extern const xmllib::XMLName	cElement_freebusyquery;
 
 	extern const xmllib::XMLName	cElement_calendardata;
-		extern const xmllib::XMLName	cAttribute_returncontenttype;
 
 	extern const xmllib::XMLName	cElement_comp;
 		extern const xmllib::XMLName	cAttribute_name;
@@ -125,7 +132,7 @@ extern const xmllib::XMLName	cElement_freebusyquery;
 	extern const xmllib::XMLName	cElement_propfilter;
 	extern const xmllib::XMLName	cElement_paramfilter;
 
-	extern const xmllib::XMLName	cElement_isdefined;
+	extern const xmllib::XMLName	cElement_isnotdefined;
 	extern const xmllib::XMLName	cElement_textmatch;
 		extern const xmllib::XMLName	cAttribute_caseless;
 	extern const xmllib::XMLName	cElement_timerange;
@@ -166,7 +173,6 @@ extern const xmllib::XMLName	cElement_adbkquery;
 extern const xmllib::XMLName	cElement_adbkmultiget;
 
 	extern const xmllib::XMLName	cElement_adbkdata;
-		extern const xmllib::XMLName	cAttribute_returncontenttype;
 
 	extern const xmllib::XMLName	cElement_allprop;
 	extern const xmllib::XMLName	cElement_prop;
@@ -178,12 +184,19 @@ extern const xmllib::XMLName	cElement_adbkmultiget;
 	extern const xmllib::XMLName	cElement_propfilter;
 	extern const xmllib::XMLName	cElement_paramfilter;
 
-	extern const xmllib::XMLName	cElement_isdefined;
+	extern const xmllib::XMLName	cElement_isnotdefined;
 	extern const xmllib::XMLName	cElement_textmatch;
-		extern const xmllib::XMLName	cAttribute_caseless;
+		extern const xmllib::XMLName	cAttribute_collation;
+		extern const xmllib::XMLName	cAttribute_negate_condition;
+		extern const xmllib::XMLName	cAttribute_matchtype;
 
 	extern const xmllib::XMLName	cAttributeValue_yes;
 	extern const xmllib::XMLName	cAttributeValue_no;
+
+	extern const xmllib::XMLName	cAttributeValue_matchtype_starts;
+	extern const xmllib::XMLName	cAttributeValue_matchtype_ends;
+	extern const xmllib::XMLName	cAttributeValue_matchtype_contains;
+	extern const xmllib::XMLName	cAttributeValue_matchtype_is;
 
 }
 

@@ -434,6 +434,11 @@ bool CIMSPClient::_AdbkChanged(const CAddressBook* adbk)
 	return true;
 }
 
+void CIMSPClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// No way to tell if there have been changes on the server, so return true to force entire sync
+}
+
 // Delete adbk
 void CIMSPClient::_DeleteAdbk(const CAddressBook* adbk)
 {

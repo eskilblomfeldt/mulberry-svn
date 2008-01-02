@@ -37,6 +37,7 @@ namespace vCard
 }
 
 class CAddressBook;
+class CAddressList;
 
 namespace http {
 
@@ -45,23 +46,26 @@ namespace carddav {
 class CCardDAVReportParser: public CWebDAVMultiResponseParser
 {
 public:
-	CCardDAVReportParser(vCard::CVCardAddressBook& vadbk, CAddressBook* adbk = NULL, bool add = false);
+	CCardDAVReportParser(vCard::CVCardAddressBook& vadbk);
+	CCardDAVReportParser(vCard::CVCardAddressBook& vadbk, CAddressBook* adbk, bool add = false);
+	CCardDAVReportParser(vCard::CVCardAddressBook& vadbk, CAddressList* addrs, bool add = false);
 	virtual ~CCardDAVReportParser();
 	
 	
 protected:
 	vCard::CVCardAddressBook*	mVAdbk;
 	CAddressBook*				mAdbk;
+	CAddressList*				mAddrs;
 	bool						mAddItems;
 
 	// Parse the response element down to the properties
 
 	virtual void ParseResponse(const xmllib::XMLNode* response);
-	virtual void ParsePropStat(const xmllib::XMLNode* response, cdstring& etag);
-	virtual void ParseProp(const xmllib::XMLNode* response, cdstring& etag);
+	virtual void ParsePropStat(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag);
+	virtual void ParseProp(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag);
 	
 	// Parsing of property elements
-	virtual void ParsePropElement(const xmllib::XMLNode* response, cdstring& etag);
+	virtual void ParsePropElement(const xmllib::XMLNode* response, const cdstring& href, cdstring& etag);
 	
 	// Calendar data
 	virtual void ParseAdbkData(const xmllib::XMLNode* response, const cdstring& href, const cdstring& etag);

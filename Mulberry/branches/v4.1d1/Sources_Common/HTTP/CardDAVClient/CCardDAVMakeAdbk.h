@@ -24,7 +24,7 @@
 #ifndef CCardDAVMakeAdbk_H
 #define CCardDAVMakeAdbk_H
 
-#include "CWebDAVRequestResponse.h"
+#include "CWebDAVMakeCollection.h"
 
 using namespace http; 
 using namespace webdav; 
@@ -33,11 +33,17 @@ namespace http {
 
 namespace carddav {
 
-class CCardDAVMakeAdbk: public CWebDAVRequestResponse
+class CCardDAVMakeAdbk: public CWebDAVMakeCollection
 {
 public:
 	CCardDAVMakeAdbk(CWebDAVSession* session, const cdstring& ruri);
 	virtual ~CCardDAVMakeAdbk();
+
+
+protected:
+	void	InitRequestData();
+	
+	void	GenerateXML(std::ostream& os);
 
 };
 

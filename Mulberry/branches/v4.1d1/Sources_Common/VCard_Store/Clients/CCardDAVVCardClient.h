@@ -57,6 +57,7 @@ protected:
 
 	virtual void _CreateAdbk(const CAddressBook* adbk);
 	virtual bool _AdbkChanged(const CAddressBook* adbk);
+	virtual void _UpdateSyncToken(const CAddressBook* adbk);
 
 	virtual void _ReadFullAddressBook(CAddressBook* adbk);			// Find all addresses in adbk
 	virtual void _WriteFullAddressBook(CAddressBook* adbk);			// Write all addresses in adbk

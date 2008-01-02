@@ -321,6 +321,12 @@ bool CLocalAdbkClient::_AdbkChanged(const CAddressBook* adbk)
 	return false;
 }
 
+void CLocalAdbkClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// Nothing to do for local as this is only used when sync'ing with server
+}
+
+
 // Delete adbk
 void CLocalAdbkClient::_DeleteAdbk(const CAddressBook* adbk)
 {

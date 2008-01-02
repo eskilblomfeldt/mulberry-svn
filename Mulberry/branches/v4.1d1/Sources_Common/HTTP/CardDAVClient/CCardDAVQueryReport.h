@@ -36,13 +36,13 @@ namespace carddav {
 class CCardDAVQueryReport: public CWebDAVReport
 {
 public:
-	CCardDAVQueryReport(CWebDAVSession* session, const cdstring& ruri, const cdstring& search_prop, const cdstring& search_text);
+	CCardDAVQueryReport(CWebDAVSession* session, const cdstring& ruri, const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type);
 	virtual ~CCardDAVQueryReport();
 
 protected:
-	void	InitRequestData(const cdstring& search_prop, const cdstring& search_text);
+	void	InitRequestData(const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type);
 	
-	void	GenerateXML(std::ostream& os, const cdstring& search_prop, const cdstring& search_text);
+	void	GenerateXML(std::ostream& os, const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type);
 };
 
 }	// namespace carddav

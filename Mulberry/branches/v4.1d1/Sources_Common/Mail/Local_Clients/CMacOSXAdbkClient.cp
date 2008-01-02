@@ -250,6 +250,11 @@ bool CMacOSXAdbkClient::_AdbkChanged(const CAddressBook* adbk)
 	return false;
 }
 
+void CMacOSXAdbkClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// Nothing to do for local as this is only used when sync'ing with server
+}
+
 // Delete adbk
 void CMacOSXAdbkClient::_DeleteAdbk(const CAddressBook* adbk)
 {

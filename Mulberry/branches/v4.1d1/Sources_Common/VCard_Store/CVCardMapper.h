@@ -28,10 +28,12 @@
 
 class CAdbkAddress;
 class CAddressBook;
+class CAddressList;
 
 namespace vCard 
 {
 	class CVCardVCard;
+	class CVCardAddressBook;
 };
 
 namespace vcardstore
@@ -39,8 +41,11 @@ namespace vcardstore
 
 	void MapFromVCards(CAddressBook* adbk);
 	void MapFromVCard(CAddressBook* adbk, const vCard::CVCardVCard& vcard);
+	void MapFromVCard(CAddressList* addrs, const vCard::CVCardVCard& vcard);
 	void MapToVCards(CAddressBook* adbk);
 	vCard::CVCardVCard* GenerateVCard(const vCard::CVCardAddressBookRef& adbk, const CAdbkAddress* addr, bool is_new = false);
+	void ChangeVCard(vCard::CVCardAddressBook* adbk, const CAdbkAddress* addr);
+	void UpdateVCard(vCard::CVCardVCard* vcard, const CAdbkAddress* addr);
 
 }	// namespace vcardstore
 

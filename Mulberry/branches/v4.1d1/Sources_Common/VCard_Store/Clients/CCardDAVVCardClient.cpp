@@ -68,9 +68,6 @@ using namespace vcardstore;
 // no locking
 #define ORACLE_FIX_3	1
 
-// no multiget report
-//#define NO_MULTIGET_REPORT	1
-
 CCardDAVVCardClient::CCardDAVVCardClient(CAdbkProtocol* owner) :
 	CWebDAVVCardClient(owner)
 {
@@ -146,6 +143,7 @@ void CCardDAVVCardClient::_CreateAdbk(const CAddressBook* adbk)
 		{
 		case http::eStatus_OK:
 		case http::eStatus_Created:
+		case http::webdav::eStatus_MultiStatus:
 			break;
 		default:
 			HandleHTTPError(request.get());
@@ -156,8 +154,33 @@ void CCardDAVVCardClient::_CreateAdbk(const CAddressBook* adbk)
 
 bool CCardDAVVCardClient::_AdbkChanged(const CAddressBook* adbk)
 {
-	// For CardDAV we always have to do a component sync
-	return true;
+	// Start UI action
+	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(adbk);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current CTag
+	cdstring ctag = GetProperty(rurl, lock_token, http::calendarserver::cProperty_getctag);
+	
+	// Changed if ctags are different
+	return ctag.empty() || (ctag != adbk->GetVCardAdbk()->GetETag());
+}
+
+void CCardDAVVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
+
+	// Determine URL and lock
+	cdstring rurl = GetRURL(adbk);
+	cdstring lock_token = GetLockToken(rurl);
+
+	// Get current CTag
+	cdstring ctag = GetProperty(rurl, lock_token, http::calendarserver::cProperty_getctag);
+	
+	const_cast<CAddressBook*>(adbk)->GetVCardAdbk()->SetETag(ctag);
 }
 
 void CCardDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webdav::CWebDAVPropFindParser& parser)
@@ -301,13 +324,6 @@ void CCardDAVVCardClient::ReadAddressBookComponents(CAddressBook* adbk, const ht
 
 void CCardDAVVCardClient::ReadAddressBookComponents(CAddressBook* adbk, const cdstrvect& hrefs, vCard::CVCardAddressBook& vadbk)
 {
-#ifdef NO_MULTIGET_REPORT
-	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
-	{
-		// Read in the component
-		ReadAddressBookComponent(*iter, vadbk);
-	}
-#else
 	// Don't bother with this if empty (actually spec requires at least one href)
 	if (hrefs.empty())
 		return;
@@ -337,7 +353,6 @@ void CCardDAVVCardClient::ReadAddressBookComponents(CAddressBook* adbk, const cd
 
 	http::carddav::CCardDAVReportParser parser(*adbk->GetVCardAdbk());
 	parser.ParseData(dout.GetData());
-#endif
 }
 
 void CCardDAVVCardClient::GetAddressBookComponents(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const http::webdav::CWebDAVPropFindParser& parser, cdstrmap& compinfo, bool last_path)
@@ -754,11 +769,15 @@ void CCardDAVVCardClient::_StoreAddress(CAddressBook* adbk, const CAddressList* 
 
 	// Address book may or may not be open
 	bool is_open = (adbk->GetVCardAdbk() != NULL);
-	auto_ptr<vCard::CVCardAddressBook> vadbk;
+	vCard::CVCardAddressBook* vadbk = NULL;
+	auto_ptr<vCard::CVCardAddressBook> vadbk_auto;
 	if (adbk->GetVCardAdbk())
-		vadbk.reset(adbk->GetVCardAdbk());
+		vadbk = adbk->GetVCardAdbk();
 	else
-		vadbk.reset(new vCard::CVCardAddressBook());
+	{
+		vadbk = new vCard::CVCardAddressBook();
+		vadbk_auto.reset(vadbk);
+	}
 	
 
 	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
@@ -849,7 +868,7 @@ void CCardDAVVCardClient::_ResolveAddress(CAddressBook* adbk, const char* nick_n
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchAnywhere, CAdbkAddress::eNickName, NULL, NULL);
+		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, CAdbkAddress::eNickName, NULL, NULL);
 	}
 	catch (...)
 	{
@@ -870,7 +889,25 @@ void CCardDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 									CAdbkAddress::EAddressField field,
 									CAddressList& addr_list)
 {
-	// We do not do this for now
+	// vCard address book must exist
+	vCard::CVCardAddressBook* vadbk = adbk->GetVCardAdbk();
+	if (vadbk == NULL)
+		return;
+
+	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
+
+	// Cache actionable address book - addresses actually go into list provided
+	mActionAdbk = adbk;
+
+	try
+	{
+		// Fetch all addresses
+		SearchAddressBook(adbk, name, match, field, &addr_list, NULL);
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+	}
 }
 
 void CCardDAVVCardClient::SizeAddressBook_DAV(CAddressBook* adbk)
@@ -985,11 +1022,28 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 		break;
 	}
 
+	cdstring match_type;
+	switch(match)
+	{
+	case CAdbkAddress::eMatchExactly:
+		match_type = http::carddav::cAttributeValue_matchtype_is.Name();
+		break;
+	case CAdbkAddress::eMatchAtStart:
+		match_type = http::carddav::cAttributeValue_matchtype_starts.Name();
+		break;
+	case CAdbkAddress::eMatchAtEnd:
+		match_type = http::carddav::cAttributeValue_matchtype_ends.Name();
+		break;
+	case CAdbkAddress::eMatchAnywhere:
+		match_type = http::carddav::cAttributeValue_matchtype_contains.Name();
+		break;
+	}
+
 	// Run the adbk-multiget report
 	cdstring rurl = GetRURL(adbk);
 
 	// Create WebDAV REPORT
-	auto_ptr<http::carddav::CCardDAVQueryReport> request(new http::carddav::CCardDAVQueryReport(this, rurl, prop_name, name));
+	auto_ptr<http::carddav::CCardDAVQueryReport> request(new http::carddav::CCardDAVQueryReport(this, rurl, prop_name, name, match_type));
 	http::CHTTPOutputDataString dout;
 	request->SetOutput(&dout);
 
@@ -1008,7 +1062,8 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 		return;
 	}
 
-	http::carddav::CCardDAVReportParser parser(*adbk->GetVCardAdbk(), adbk, true);
+	vCard::CVCardAddressBook temp;
+	http::carddav::CCardDAVReportParser parser(temp, addr_list, true);
 	parser.ParseData(dout.GetData());
 }
 

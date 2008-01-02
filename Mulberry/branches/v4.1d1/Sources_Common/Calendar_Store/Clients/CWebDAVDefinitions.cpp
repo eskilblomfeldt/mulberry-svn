@@ -43,7 +43,11 @@ const xmllib::XMLName	cElement_propfind("propfind", cNamespace);
 const xmllib::XMLName	cElement_prop("prop", cNamespace);
 const xmllib::XMLName	cElement_propstat("propstat", cNamespace);
 
-const xmllib::XMLName cProperty_getcontentlength("getcontentlength", cNamespace);
+const xmllib::XMLName	cElement_propertyupdate("propertyupdate", cNamespace);
+const xmllib::XMLName	cElement_set("set", cNamespace);
+const xmllib::XMLName	cElement_remove("remove", cNamespace);
+
+const xmllib::XMLName	cProperty_getcontentlength("getcontentlength", cNamespace);
 const xmllib::XMLName	cProperty_getcontenttype("getcontenttype", cNamespace);
 const xmllib::XMLName	cProperty_resourcetype("resourcetype", cNamespace);
 const xmllib::XMLName	cProperty_collection("collection", cNamespace);
@@ -87,6 +91,10 @@ const xmllib::XMLName	cProperty_privilege("privilege", cNamespace);
 
 const xmllib::XMLName	cElement_principal_match("principal-match", cNamespace);
 
+// Extended MKCOL
+const xmllib::XMLName	cElement_mkcol("mkcol", cNamespace);
+const xmllib::XMLName	cElement_mkcol_response("mkcol-response", cNamespace);
+
 }
 
 namespace caldav 
@@ -101,7 +109,6 @@ const xmllib::XMLName	cElement_calendarmultiget("calendar-multiget", cNamespace)
 const xmllib::XMLName	cElement_freebusyquery("free-busy-query", cNamespace);
 
 	const xmllib::XMLName	cElement_calendardata("calendar-data", cNamespace);
-		const xmllib::XMLName	cAttribute_returncontenttype("return-content-type", cNamespace);
 
 	const xmllib::XMLName	cElement_comp("comp", cNamespace);
 		const xmllib::XMLName	cAttribute_name("name", cNamespace);
@@ -118,7 +125,7 @@ const xmllib::XMLName	cElement_freebusyquery("free-busy-query", cNamespace);
 	const xmllib::XMLName	cElement_propfilter("prop-filter", cNamespace);
 	const xmllib::XMLName	cElement_paramfilter("param-filter", cNamespace);
 
-	const xmllib::XMLName	cElement_isdefined("is-defined", cNamespace);
+	const xmllib::XMLName	cElement_isnotdefined("is-not-defined", cNamespace);
 	const xmllib::XMLName	cElement_textmatch("text-match", cNamespace);
 		const xmllib::XMLName	cAttribute_caseless("caseless", cNamespace);
 	const xmllib::XMLName	cElement_timerange("time-range", cNamespace);
@@ -153,13 +160,12 @@ namespace carddav
 {
 
 const char*	cNamespace = "urn:ietf:params:xml:ns:carddav";
-const xmllib::XMLName	cProperty_carddavadbk("adbk", cNamespace);
+const xmllib::XMLName	cProperty_carddavadbk("addressbook", cNamespace);
 
-const xmllib::XMLName	cElement_adbkquery("adbk-query", cNamespace);
-const xmllib::XMLName	cElement_adbkmultiget("adbk-multiget", cNamespace);
+const xmllib::XMLName	cElement_adbkquery("addressbook-query", cNamespace);
+const xmllib::XMLName	cElement_adbkmultiget("addressbook-multiget", cNamespace);
 
-	const xmllib::XMLName	cElement_adbkdata("adbk-data", cNamespace);
-		const xmllib::XMLName	cAttribute_returncontenttype("return-content-type", cNamespace);
+	const xmllib::XMLName	cElement_adbkdata("address-data", cNamespace);
 
 	const xmllib::XMLName	cElement_allprop("allprop", cNamespace);
 	const xmllib::XMLName	cElement_prop("prop", cNamespace);
@@ -167,22 +173,22 @@ const xmllib::XMLName	cElement_adbkmultiget("adbk-multiget", cNamespace);
 		const xmllib::XMLName	cAttribute_novalue("novalue", cNamespace);
 
 	const xmllib::XMLName	cElement_filter("filter", cNamespace);
-	const xmllib::XMLName	cElement_compfilter("comp-filter", cNamespace);
 	const xmllib::XMLName	cElement_propfilter("prop-filter", cNamespace);
 	const xmllib::XMLName	cElement_paramfilter("param-filter", cNamespace);
 
-	const xmllib::XMLName	cElement_isdefined("is-defined", cNamespace);
+	const xmllib::XMLName	cElement_isnotdefined("is-not-defined", cNamespace);
 	const xmllib::XMLName	cElement_textmatch("text-match", cNamespace);
-		const xmllib::XMLName	cAttribute_caseless("caseless", cNamespace);
+		const xmllib::XMLName	cAttribute_collation("collation", cNamespace);
+		const xmllib::XMLName	cAttribute_negate_condition("negate-condition", cNamespace);
 		const xmllib::XMLName	cAttribute_matchtype("match-type", cNamespace);
 
-	const xmllib::XMLName	cAttributeValue_yes("caseless_yes", cNamespace);
-	const xmllib::XMLName	cAttributeValue_no("caseless_no", cNamespace);
+	const xmllib::XMLName	cAttributeValue_yes("yes", cNamespace);
+	const xmllib::XMLName	cAttributeValue_no("no", cNamespace);
 
 	const xmllib::XMLName	cAttributeValue_matchtype_starts("starts-with", cNamespace);
 	const xmllib::XMLName	cAttributeValue_matchtype_ends("ends-with", cNamespace);
 	const xmllib::XMLName	cAttributeValue_matchtype_contains("contains", cNamespace);
-	const xmllib::XMLName	cAttributeValue_matchtype_is("is", cNamespace);
+	const xmllib::XMLName	cAttributeValue_matchtype_is("equals", cNamespace);
 
 }
 

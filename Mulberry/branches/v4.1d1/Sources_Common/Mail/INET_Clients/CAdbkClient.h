@@ -59,6 +59,7 @@ public:
 	virtual void	_LockAdbk(const CAddressBook* adbk) = 0;
 	virtual void	_UnlockAdbk(const CAddressBook* adbk) = 0;
 	virtual bool	_AdbkChanged(const CAddressBook* adbk) = 0;
+	virtual void	_UpdateSyncToken(const CAddressBook* adbk) = 0;
 	virtual void	_DeleteAdbk(const CAddressBook* adbk) = 0;		// Delete adbk
 	virtual void	_RenameAdbk(const CAddressBook* old_adbk,
 								const cdstring& new_adbk) = 0;		// Rename adbk
