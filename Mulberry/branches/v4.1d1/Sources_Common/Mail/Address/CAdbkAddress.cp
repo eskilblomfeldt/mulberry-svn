@@ -133,56 +133,62 @@ void CAdbkAddress::ExpandMatch(EAddressMatch match, cdstring& str)
 }
 
 // Compare specific field
-bool CAdbkAddress::Search(const cdstring& text, EAddressField field) const
+bool CAdbkAddress::Search(const cdstring& text, const CAddressFields& fields) const
 {
 	bool result = false;
 
-	switch(field)
+	for(CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
 	{
-	case CAdbkAddress::eName:
-		result = GetName().PatternMatch(text);
-		break;
-	case CAdbkAddress::eNickName:
-		result = GetADL().PatternMatch(text);
-		break;
-	case CAdbkAddress::eEmail:
-		result = GetMailAddress().PatternMatch(text);
-		if (!result)
+		switch(*iter)
 		{
-			for(emailmap::const_iterator iter = GetEmails().begin(); !result && (iter != GetEmails().end()); iter++)
+		case CAdbkAddress::eName:
+			result = GetName().PatternMatch(text);
+			break;
+		case CAdbkAddress::eNickName:
+			result = GetADL().PatternMatch(text);
+			break;
+		case CAdbkAddress::eEmail:
+			result = GetMailAddress().PatternMatch(text);
+			if (!result)
+			{
+				for(emailmap::const_iterator iter = GetEmails().begin(); !result && (iter != GetEmails().end()); iter++)
+					result = (*iter).second.PatternMatch(text);
+			}
+			break;
+		case CAdbkAddress::eCalendar:
+			result = GetCalendar().PatternMatch(text);
+			break;
+		case CAdbkAddress::eCompany:
+			result = GetCompany().PatternMatch(text);
+			break;
+		case CAdbkAddress::eAddress:
+			for(addrmap::const_iterator iter = GetAddresses().begin(); !result && (iter != GetAddresses().end()); iter++)
 				result = (*iter).second.PatternMatch(text);
+			break;
+		case CAdbkAddress::ePhoneWork:
+			result = GetPhone(eWorkPhoneType).PatternMatch(text);
+			break;
+		case CAdbkAddress::ePhoneHome:
+			result = GetPhone(eHomePhoneType).PatternMatch(text);
+			break;
+		case CAdbkAddress::eFax:
+			result = GetPhone(eFaxType).PatternMatch(text) ||
+						GetPhone(eHomeFaxType).PatternMatch(text) ||
+						GetPhone(eWorkFaxType).PatternMatch(text);
+			break;
+		case CAdbkAddress::eURL:
+			result = GetURL().PatternMatch(text);
+			break;
+		case CAdbkAddress::eNotes:
+			result = GetNotes().PatternMatch(text);
+			break;
+		default:;
 		}
-		break;
-	case CAdbkAddress::eCalendar:
-		result = GetCalendar().PatternMatch(text);
-		break;
-	case CAdbkAddress::eCompany:
-		result = GetCompany().PatternMatch(text);
-		break;
-	case CAdbkAddress::eAddress:
-		for(addrmap::const_iterator iter = GetAddresses().begin(); !result && (iter != GetAddresses().end()); iter++)
-			result = (*iter).second.PatternMatch(text);
-		break;
-	case CAdbkAddress::ePhoneWork:
-		result = GetPhone(eWorkPhoneType).PatternMatch(text);
-		break;
-	case CAdbkAddress::ePhoneHome:
-		result = GetPhone(eHomePhoneType).PatternMatch(text);
-		break;
-	case CAdbkAddress::eFax:
-		result = GetPhone(eFaxType).PatternMatch(text) ||
-					GetPhone(eHomeFaxType).PatternMatch(text) ||
-					GetPhone(eWorkFaxType).PatternMatch(text);
-		break;
-	case CAdbkAddress::eURL:
-		result = GetURL().PatternMatch(text);
-		break;
-	case CAdbkAddress::eNotes:
-		result = GetNotes().PatternMatch(text);
-		break;
-	default:;
+		
+		if (result)
+			break;
 	}
-	
+
 	return result;
 }
 

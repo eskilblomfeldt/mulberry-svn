@@ -937,7 +937,7 @@ void CWebDAVVCardClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name
 void CWebDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	// We do not do this for now
@@ -1455,7 +1455,7 @@ CHTTPAuthorization* CWebDAVVCardClient::GetAuthorization(bool first_time, const 
 	
 	// Loop while waiting for successful login with optional user prompt
 	if (CMailControl::PromptUser(acct_auth, GetAccount(), GetAccount()->IsSecure(),
-									false, false, false, false, false, true, first_time))
+									false, false, false, true, false, false, first_time))
 	{
 		// Restart busy cursor after prompt
 		if (paused)

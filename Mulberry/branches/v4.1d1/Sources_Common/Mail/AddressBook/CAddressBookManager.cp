@@ -912,6 +912,15 @@ void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAdd
 // Do search
 void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field, CAddressList& results)
 {
+	// Search
+	CAdbkAddress::CAddressFields fields;
+	fields.push_back(field);
+	SearchAddress(name, match, fields, results);
+}
+
+// Do search
+void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, const CAdbkAddress::CAddressFields& fields, CAddressList& results)
+{
 	// Look through all address books
 	for(CAddressBookList::const_iterator iter = mAdbkSearch.begin(); iter != mAdbkSearch.end(); iter++)
 	{
@@ -921,7 +930,7 @@ void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAdd
 			continue;
 #endif
 
-		(*iter)->SearchAddress(name, match, field, results);
+		(*iter)->SearchAddress(name, match, fields, results);
 	}
 }
 
@@ -1194,7 +1203,9 @@ void CAddressBookManager::CaptureAddress(CAddressList& addrs)
 			
 			// See if it exists
 			CAddressList found;
-			adbk->SearchAddress(email, CAdbkAddress::eMatchExactly, CAdbkAddress::eEmail, found);
+			CAdbkAddress::CAddressFields fields;
+			fields.push_back(CAdbkAddress::eEmail);
+			adbk->SearchAddress(email, CAdbkAddress::eMatchExactly, fields, found);
 			
 			// If its empty then do capture
 			if (found.empty())

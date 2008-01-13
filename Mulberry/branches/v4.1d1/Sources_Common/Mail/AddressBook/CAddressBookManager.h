@@ -146,6 +146,10 @@ public:
 						CAdbkAddress::EAddressMatch match,
 						CAdbkAddress::EAddressField field,
 						CAddressList& results);							// Do search
+	void SearchAddress(const cdstring& name,
+						CAdbkAddress::EAddressMatch match,
+						const CAdbkAddress::CAddressFields& fields,
+						CAddressList& results);							// Do search
 	void SearchAddress(EAddrLookup method,
 						bool expanding,
 						const cdstring& item,

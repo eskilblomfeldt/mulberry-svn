@@ -437,7 +437,9 @@ void CMacOSXAdbkClient::_ResolveAddress(CAddressBook* adbk, const char* nick_nam
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, CAdbkAddress::eNickName, NULL, NULL, true, false);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eNickName);
+		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, fields, NULL, NULL, true, false);
 	}
 	catch (...)
 	{
@@ -456,7 +458,9 @@ void CMacOSXAdbkClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name,
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, CAdbkAddress::eName, NULL, NULL, false, true);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eName);
+		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, fields, NULL, NULL, false, true);
 	}
 	catch (...)
 	{
@@ -468,7 +472,7 @@ void CMacOSXAdbkClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name,
 void CMacOSXAdbkClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
@@ -479,7 +483,7 @@ void CMacOSXAdbkClient::_SearchAddress(CAddressBook* adbk,
 	try
 	{
 		// Fetch all addresses
-		SearchAddressBook(adbk, name, match, field, &addr_list, NULL, true, false);
+		SearchAddressBook(adbk, name, match, fields, &addr_list, NULL, true, false);
 	}
 	catch (...)
 	{
@@ -541,7 +545,7 @@ void CMacOSXAdbkClient::ScanAddressBook(CAddressBook* adbk)
 }
 
 // Scan address book for matching addresses
-void CMacOSXAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field,
+void CMacOSXAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, CAdbkAddress::EAddressMatch match, const CAdbkAddress::CAddressFields& fields,
 											CAddressList* addr_list, CGroupList* grp_list, bool addresses, bool groups)
 {
 	InitItemCtr();
@@ -573,72 +577,104 @@ void CMacOSXAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& na
 	if (addresses)
 	{
 		// Create a search element
-		ABSearchElementRef find = NULL;
-		switch(field)
+		TCFArray<ABSearchElementRef> array(0, &kCFTypeArrayCallBacks);
+		for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
 		{
-		case CAdbkAddress::eName:
-		default:
+			switch(*iter)
 			{
-				ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABFirstNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-				ABSearchElementRef find2 = ::ABPersonCreateSearchElement(kABLastNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-				TCFArray<ABSearchElementRef> array(2, &kCFTypeArrayCallBacks);
-				array.Append(find1);
-				array.Append(find2);
-				::CFRelease(find1);
-				::CFRelease(find2);
-				find = ::ABSearchElementCreateWithConjunction(kABSearchOr, array);
-			}	
-			break;
-		case CAdbkAddress::eNickName:
-			find = ::ABPersonCreateSearchElement(kABNicknameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::eEmail:
-			find = ::ABPersonCreateSearchElement(kABEmailProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::eCompany:
-			find = ::ABPersonCreateSearchElement(kABOrganizationProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::eAddress:
-			find = ::ABPersonCreateSearchElement(kABAddressProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::ePhoneWork:
-			find = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneWorkLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::ePhoneHome:
-			find = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneHomeLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::eFax:
-			{
-				ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneHomeFAXLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-				ABSearchElementRef find2 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneWorkFAXLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-				TCFArray<ABSearchElementRef> array(2, &kCFTypeArrayCallBacks);
-				array.Append(find1);
-				array.Append(find2);
-				::CFRelease(find1);
-				::CFRelease(find2);
-				find = ::ABSearchElementCreateWithConjunction(kABSearchOr, array);
-			}	
-			break;
-		case CAdbkAddress::eURL:
-			find = ::ABPersonCreateSearchElement(kABHomePageProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
-		case CAdbkAddress::eNotes:
-			find = ::ABPersonCreateSearchElement(kABNoteProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
+			case CAdbkAddress::eName:
+			default:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABFirstNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					ABSearchElementRef find2 = ::ABPersonCreateSearchElement(kABLastNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					array.Append(find2);
+					::CFRelease(find1);
+					::CFRelease(find2);
+				}	
+				break;
+			case CAdbkAddress::eNickName:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABNicknameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::eEmail:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABEmailProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::eCompany:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABOrganizationProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::eAddress:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABAddressProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::ePhoneWork:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneWorkLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::ePhoneHome:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneHomeLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::eFax:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneHomeFAXLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					ABSearchElementRef find2 = ::ABPersonCreateSearchElement(kABPhoneProperty, kABPhoneWorkFAXLabel, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					array.Append(find2);
+					::CFRelease(find1);
+					::CFRelease(find2);
+				}	
+				break;
+			case CAdbkAddress::eURL:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABHomePageProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			case CAdbkAddress::eNotes:
+				{
+					ABSearchElementRef find1 = ::ABPersonCreateSearchElement(kABNoteProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+					array.Append(find1);
+					::CFRelease(find1);
+					break;
+				}
+			}
 		}
+		ABSearchElementRef find = ::ABSearchElementCreateWithConjunction(kABSearchOr, array);
 
 		// Run a search
-		CFArrayRef array = ::ABCopyArrayOfMatchingRecords(ab, find);
+		CFArrayRef results = ::ABCopyArrayOfMatchingRecords(ab, find);
 		::CFRelease(find);
 		
 		// How many records matched?
-		CFIndex count = ::CFArrayGetCount(array);
+		CFIndex count = ::CFArrayGetCount(results);
 		for(CFIndex i = 0; i < count; i++)
 		{
 			// Parse into an address
-			ParseAddress((ABRecordRef) ::CFArrayGetValueAtIndex(array,i));
+			ParseAddress((ABRecordRef) ::CFArrayGetValueAtIndex(results,i));
 		}
-		::CFRelease(array);
+		::CFRelease(results);
 	}
 	
 	// Do group search if required
@@ -646,26 +682,31 @@ void CMacOSXAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& na
 	{
 		// Create a search element
 		ABSearchElementRef find = NULL;
-		switch(field)
+		for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
 		{
-		case CAdbkAddress::eName:
-		default:
-			find = ::ABGroupCreateSearchElement(kABGroupNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
-			break;
+			switch(*iter)
+			{
+			case CAdbkAddress::eName:
+			default:
+				find = ::ABGroupCreateSearchElement(kABGroupNameProperty, NULL, NULL, MyCFString(name, kCFStringEncodingUTF8), comp);
+				break;
+			}
+			if (find)
+				break;
 		}
-
+		
 		// Run a search
-		CFArrayRef array = ::ABCopyArrayOfMatchingRecords(ab, find);
+		CFArrayRef results = ::ABCopyArrayOfMatchingRecords(ab, find);
 		::CFRelease(find);
 		
 		// How many records matched?
-		CFIndex count = ::CFArrayGetCount(array);
+		CFIndex count = ::CFArrayGetCount(results);
 		for(CFIndex i = 0; i < count; i++)
 		{
 			// Parse into an address
-			ParseGroup((ABRecordRef) ::CFArrayGetValueAtIndex(array,i));
+			ParseGroup((ABRecordRef) ::CFArrayGetValueAtIndex(results, i));
 		}
-		::CFRelease(array);
+		::CFRelease(results);
 	}
 }
 

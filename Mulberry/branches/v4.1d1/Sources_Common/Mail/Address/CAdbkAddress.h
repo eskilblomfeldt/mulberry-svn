@@ -105,6 +105,7 @@ public:
 		eOtherPhoneType
 	};
 
+	typedef vector<EAddressField> CAddressFields;
 	typedef multimap<EEmailType, cdstring>	emailmap;
 	typedef multimap<EAddressType, cdstring> addrmap;
 	typedef multimap<EPhoneType, cdstring> phonemap;
@@ -150,7 +151,7 @@ public:
 
 	static void ExpandMatch(EAddressMatch match, cdstring& str);
 
-	bool Search(const cdstring& text, CAdbkAddress::EAddressField field) const;	// Compare specific field
+	bool Search(const cdstring& text, const CAdbkAddress::CAddressFields& fields) const;	// Compare specific fields
 
 	void SetEntry(const char* theEntry)								// Set entry
 		{ mEntry = theEntry; }

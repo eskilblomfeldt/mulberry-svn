@@ -821,7 +821,7 @@ void CLocalVCardClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name,
 void CLocalVCardClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
@@ -835,7 +835,7 @@ void CLocalVCardClient::_SearchAddress(CAddressBook* adbk,
 		CAdbkAddress::ExpandMatch(match, matchit);
 
 		// Fetch all addresses
-		//SearchAddressBook(adbk, matchit, field, &addr_list, NULL);
+		//SearchAddressBook(adbk, matchit, fields, &addr_list, NULL);
 	}
 	catch (...)
 	{

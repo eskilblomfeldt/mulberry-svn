@@ -87,7 +87,7 @@ protected:
 	virtual void	_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list);	// Do search
 
 	virtual bool _CanUseComponents() const;
@@ -116,10 +116,10 @@ protected:
 	virtual void SizeAddressBook_DAV(CAddressBook* adbk);
 	virtual void SizeAddressBook_HTTP(CAddressBook* adbk);
 
-			void SearchAddressBook(CAddressBook* adbk,
+			void SearchAddressBook (CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList* addr_list,
 									CGroupList* grp_list);
 

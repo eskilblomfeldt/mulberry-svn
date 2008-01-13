@@ -1531,10 +1531,10 @@ void CAdbkProtocol::ResolveGroup(CAddressBook* adbk, const char* nick_name, CGro
 void CAdbkProtocol::SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
-	mClient->_SearchAddress(adbk, name, match, field, addr_list);
+	mClient->_SearchAddress(adbk, name, match, fields, addr_list);
 }
 
 #pragma mark ____________________________ACLs

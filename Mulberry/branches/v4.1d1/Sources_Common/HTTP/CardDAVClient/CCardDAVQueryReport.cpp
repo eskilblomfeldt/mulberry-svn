@@ -33,10 +33,10 @@
 using namespace webdav; 
 using namespace carddav; 
 
-CCardDAVQueryReport::CCardDAVQueryReport(CWebDAVSession* session, const cdstring& ruri, const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type) :
+CCardDAVQueryReport::CCardDAVQueryReport(CWebDAVSession* session, const cdstring& ruri, const cdstrvect& search_props, const cdstring& search_text, const cdstring& match_type) :
 	CWebDAVReport(session, ruri)
 {
-	InitRequestData(search_prop, search_text, match_type);
+	InitRequestData(search_props, search_text, match_type);
 }
 
 
@@ -45,17 +45,17 @@ CCardDAVQueryReport::~CCardDAVQueryReport()
 }
 
 
-void CCardDAVQueryReport::InitRequestData(const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type)
+void CCardDAVQueryReport::InitRequestData(const cdstrvect& search_props, const cdstring& search_text, const cdstring& match_type)
 {
 	// Write XML info to a string
 	std::ostrstream os;
-	GenerateXML(os, search_prop, search_text, match_type);
+	GenerateXML(os, search_props, search_text, match_type);
 	os << ends;
 	
 	mRequestData = new CHTTPInputDataString(os.str(), "text/xml; charset=utf-8");
 }
 
-void CCardDAVQueryReport::GenerateXML(std::ostream& os, const cdstring& search_prop, const cdstring& search_text, const cdstring& match_type)
+void CCardDAVQueryReport::GenerateXML(std::ostream& os, const cdstrvect& search_props, const cdstring& search_text, const cdstring& match_type)
 {
 	using namespace xmllib;
 
@@ -70,6 +70,7 @@ void CCardDAVQueryReport::GenerateXML(std::ostream& os, const cdstring& search_p
 	//	   <C:prop-filter name="...">
 	//	     <C:text-match match-type="...">...</C:text-match>
 	//	   </C:prop-filter>
+	//     ...
 	//	 </C:filter>
 	//   ...
 	// </CardDAV:adbk-query>
@@ -97,13 +98,16 @@ void CCardDAVQueryReport::GenerateXML(std::ostream& os, const cdstring& search_p
 	// <CardDAV:filter> element
 	xmllib::XMLNode* filter = new xmllib::XMLNode(&xmldoc, query, cElement_filter.Name(), carddav_namespc);
 	
-	// <CardDAV:prop-filter name="..."> element
-	xmllib::XMLNode* prop_filter = new xmllib::XMLNode(&xmldoc, filter, cElement_propfilter.Name(), carddav_namespc);
-	prop_filter->AddAttribute(cAttribute_name.Name(), search_prop);
+	for(cdstrvect::const_iterator iter = search_props.begin(); iter != search_props.end(); iter++)
+	{
+		// <CardDAV:prop-filter name="..."> element
+		xmllib::XMLNode* prop_filter = new xmllib::XMLNode(&xmldoc, filter, cElement_propfilter.Name(), carddav_namespc);
+		prop_filter->AddAttribute(cAttribute_name.Name(), *iter);
 
-	// <C:text-match match-type="...">...</C:text-match>
-	xmllib::XMLNode* text_match = new xmllib::XMLNode(&xmldoc, prop_filter, cElement_textmatch.Name(), carddav_namespc, search_text);
-	text_match->AddAttribute(cAttribute_matchtype.Name(), match_type);
+		// <C:text-match match-type="...">...</C:text-match>
+		xmllib::XMLNode* text_match = new xmllib::XMLNode(&xmldoc, prop_filter, cElement_textmatch.Name(), carddav_namespc, search_text);
+		text_match->AddAttribute(cAttribute_matchtype.Name(), match_type);
+	}
 
 	// Now we have the complete document, so write it out (no indentation)
 	xmldoc.Generate(os, false);

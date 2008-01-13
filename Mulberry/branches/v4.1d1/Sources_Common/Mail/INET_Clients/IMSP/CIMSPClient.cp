@@ -1018,7 +1018,7 @@ void CIMSPClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name, CGrou
 void CIMSPClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	// Reset item counter for feedback
@@ -1030,42 +1030,6 @@ void CIMSPClient::_SearchAddress(CAddressBook* adbk,
 		mSearchMode = true;
 		mSearchResults = &addr_list;
 
-		cdstring criteria;
-		switch(field)
-		{
-		case CAdbkAddress::eName:
-			criteria = cADDRESS_NAME;
-			break;
-		case CAdbkAddress::eNickName:
-			criteria = cADDRESS_ALIAS;
-			break;
-		case CAdbkAddress::eEmail:
-			criteria = cADDRESS_EMAIL;
-			break;
-		case CAdbkAddress::eCompany:
-			criteria = cADDRESS_COMPANY;
-			break;
-		case CAdbkAddress::eAddress:
-			criteria = cADDRESS_ADDRESS;
-			break;
-		case CAdbkAddress::ePhoneWork:
-			criteria = cADDRESS_PHONE_WORK;
-			break;
-		case CAdbkAddress::ePhoneHome:
-			criteria = cADDRESS_PHONE_HOME;
-			break;
-		case CAdbkAddress::eFax:
-			criteria = cADDRESS_FAX;
-			break;
-		case CAdbkAddress::eURL:
-			criteria = cADDRESS_URLS;
-			break;
-		case CAdbkAddress::eNotes:
-			criteria = cADDRESS_NOTES;
-			break;
-		default:;
-		}
-
 		cdstring lookup(name);
 		CAdbkAddress::ExpandMatch(match, lookup);
 		lookup.ConvertFromOS();
@@ -1075,10 +1039,49 @@ void CIMSPClient::_SearchAddress(CAddressBook* adbk,
 		INETSendString(cSEARCHADDRESS);
 		INETSendString(cSpace);
 		INETSendString(adbk->GetName(), eQueueProcess);
-		INETSendString(cSpace);
-		INETSendString(criteria);
-		INETSendString(cSpace);
-		INETSendString(lookup, eQueueProcess);
+		for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
+		{
+			cdstring criteria;
+			switch(*iter)
+			{
+			case CAdbkAddress::eName:
+				criteria = cADDRESS_NAME;
+				break;
+			case CAdbkAddress::eNickName:
+				criteria = cADDRESS_ALIAS;
+				break;
+			case CAdbkAddress::eEmail:
+				criteria = cADDRESS_EMAIL;
+				break;
+			case CAdbkAddress::eCompany:
+				criteria = cADDRESS_COMPANY;
+				break;
+			case CAdbkAddress::eAddress:
+				criteria = cADDRESS_ADDRESS;
+				break;
+			case CAdbkAddress::ePhoneWork:
+				criteria = cADDRESS_PHONE_WORK;
+				break;
+			case CAdbkAddress::ePhoneHome:
+				criteria = cADDRESS_PHONE_HOME;
+				break;
+			case CAdbkAddress::eFax:
+				criteria = cADDRESS_FAX;
+				break;
+			case CAdbkAddress::eURL:
+				criteria = cADDRESS_URLS;
+				break;
+			case CAdbkAddress::eNotes:
+				criteria = cADDRESS_NOTES;
+				break;
+			default:;
+			}
+
+			INETSendString(cSpace);
+			INETSendString(criteria);
+			INETSendString(cSpace);
+			INETSendString(lookup, eQueueProcess);
+		}
 		INETFinishSend();
 
 		// Reset item counter for feedback

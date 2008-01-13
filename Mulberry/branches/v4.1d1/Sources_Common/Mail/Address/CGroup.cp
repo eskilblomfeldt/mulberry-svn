@@ -89,19 +89,25 @@ int CGroup::operator==(const CGroup& grp) const
 }
 
 // Compare specific field
-bool CGroup::Search(const cdstring& text, CAdbkAddress::EAddressField field) const
+bool CGroup::Search(const cdstring& text, const CAdbkAddress::CAddressFields& fields) const
 {
 	bool result = false;
 
-	switch(field)
+	for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
 	{
-	case CAdbkAddress::eName:
-		result = GetName().PatternMatch(text);
-		break;
-	case CAdbkAddress::eNickName:
-		result = GetNickName().PatternMatch(text);
-		break;
-	default:;
+		switch(*iter)
+		{
+		case CAdbkAddress::eName:
+			result = GetName().PatternMatch(text);
+			break;
+		case CAdbkAddress::eNickName:
+			result = GetNickName().PatternMatch(text);
+			break;
+		default:;
+		}
+		
+		if (result)
+			break;
 	}
 	
 	return result;

@@ -868,7 +868,9 @@ void CCardDAVVCardClient::_ResolveAddress(CAddressBook* adbk, const char* nick_n
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, CAdbkAddress::eNickName, NULL, NULL);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eNickName);
+		SearchAddressBook(adbk, nick_name, CAdbkAddress::eMatchExactly, fields, NULL, NULL);
 	}
 	catch (...)
 	{
@@ -886,7 +888,7 @@ void CCardDAVVCardClient::_ResolveGroup(CAddressBook* adbk, const char* nick_nam
 void CCardDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	// vCard address book must exist
@@ -902,7 +904,7 @@ void CCardDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 	try
 	{
 		// Fetch all addresses
-		SearchAddressBook(adbk, name, match, field, &addr_list, NULL);
+		SearchAddressBook(adbk, name, match, fields, &addr_list, NULL);
 	}
 	catch (...)
 	{
@@ -983,43 +985,46 @@ void CCardDAVVCardClient::SizeAddressBook_HTTP(CAddressBook* adbk)
 	adbk->SetSize(request->GetContentLength());
 }
 
-void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field,
+void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, CAdbkAddress::EAddressMatch match, const CAdbkAddress::CAddressFields& fields,
 											CAddressList* addr_list, CGroupList* grp_list)
 {
 	// Map adbk field to vCard property
-	cdstring prop_name;
-	switch(field)
+	cdstrvect prop_names;
+	for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
 	{
-	case CAdbkAddress::eName:
-		prop_name = vCard::cVCardProperty_FN;
-		break;
-	case CAdbkAddress::eNickName:
-		prop_name = vCard::cVCardProperty_NICKNAME;
-		break;
-	case CAdbkAddress::eEmail:
-		prop_name = vCard::cVCardProperty_EMAIL;
-		break;
-	case CAdbkAddress::eCompany:
-		prop_name = vCard::cVCardProperty_ORG;
-		break;
-	case CAdbkAddress::eAddress:
-		prop_name = vCard::cVCardProperty_ADR;
-		break;
-	case CAdbkAddress::ePhoneWork:
-		prop_name = vCard::cVCardProperty_TEL;
-		break;
-	case CAdbkAddress::ePhoneHome:
-		prop_name = vCard::cVCardProperty_TEL;
-		break;
-	case CAdbkAddress::eFax:
-		prop_name = vCard::cVCardProperty_TEL;
-		break;
-	case CAdbkAddress::eURL:
-		prop_name = vCard::cVCardProperty_URL;
-		break;
-	case CAdbkAddress::eNotes:
-		prop_name = vCard::cVCardProperty_NOTE;
-		break;
+		switch(*iter)
+		{
+		case CAdbkAddress::eName:
+			prop_names.push_back(vCard::cVCardProperty_FN);
+			break;
+		case CAdbkAddress::eNickName:
+			prop_names.push_back(vCard::cVCardProperty_NICKNAME);
+			break;
+		case CAdbkAddress::eEmail:
+			prop_names.push_back(vCard::cVCardProperty_EMAIL);
+			break;
+		case CAdbkAddress::eCompany:
+			prop_names.push_back(vCard::cVCardProperty_ORG);
+			break;
+		case CAdbkAddress::eAddress:
+			prop_names.push_back(vCard::cVCardProperty_ADR);
+			break;
+		case CAdbkAddress::ePhoneWork:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::ePhoneHome:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::eFax:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::eURL:
+			prop_names.push_back(vCard::cVCardProperty_URL);
+			break;
+		case CAdbkAddress::eNotes:
+			prop_names.push_back(vCard::cVCardProperty_NOTE);
+			break;
+		}
 	}
 
 	cdstring match_type;
@@ -1043,7 +1048,7 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 	cdstring rurl = GetRURL(adbk);
 
 	// Create WebDAV REPORT
-	auto_ptr<http::carddav::CCardDAVQueryReport> request(new http::carddav::CCardDAVQueryReport(this, rurl, prop_name, name, match_type));
+	auto_ptr<http::carddav::CCardDAVQueryReport> request(new http::carddav::CCardDAVQueryReport(this, rurl, prop_names, name, match_type));
 	http::CHTTPOutputDataString dout;
 	request->SetOutput(&dout);
 

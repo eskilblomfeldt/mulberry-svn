@@ -121,7 +121,7 @@ public:
 	virtual void	_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list);	// Do search
 
 	// These must be implemented by specific client
@@ -145,7 +145,7 @@ protected:
 			void	ScanAddressBook(CAddressBook* adbk);
 			void	SearchAddressBook(CAddressBook* adbk,
 									const cdstring& name,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList* addr_list,
 									CGroupList* grp_list);
 			void	ParseFetchAddress(cdstring& line);

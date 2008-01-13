@@ -1464,11 +1464,11 @@ bool CAddressBook::FindGroupName(const char* grp_name, CGroup*& grp, bool cache_
 }
 
 // Do search
-void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field, CAddressList& addr_list)
+void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, const CAdbkAddress::CAddressFields& fields, CAddressList& addr_list)
 {
 	// Do remote lookup only if not open
 	if (!IsOpen())
-		mProtocol->SearchAddress(this, name, match, field, addr_list);
+		mProtocol->SearchAddress(this, name, match, fields, addr_list);
 	else
 	{
 		cdstring matchit(name);
@@ -1484,7 +1484,7 @@ void CAddressBook::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMat
 				continue;
 				
 			// Do comparison of specific field
-			result = addr->Search(matchit, field);
+			result = addr->Search(matchit, fields);
 
 			// Check for matching item
 			if (result)

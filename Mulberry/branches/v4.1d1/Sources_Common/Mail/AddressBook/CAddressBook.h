@@ -286,7 +286,7 @@ public:
 
 	void	SearchAddress(const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list);	// Do search
 
 	// ACLs

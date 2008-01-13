@@ -67,7 +67,7 @@ public:
 	int operator==(const char* grp) const;						// Compare with named group
 	int operator==(const CGroup& grp) const;					// Compare with another
 
-	bool Search(const cdstring& text, CAdbkAddress::EAddressField field) const;	// Compare specific field
+	bool Search(const cdstring& text, const CAdbkAddress::CAddressFields& fields) const;	// Compare specific field
 
 	void SetEntry(const char* theEntry)								// Set entry
 		{ mEntry = theEntry; }

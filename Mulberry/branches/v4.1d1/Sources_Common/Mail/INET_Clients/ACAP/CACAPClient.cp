@@ -1048,7 +1048,7 @@ void CACAPClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name, CGrou
 void CACAPClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	StParserState parser(this, eParseSearchAddress);
@@ -1062,7 +1062,7 @@ void CACAPClient::_SearchAddress(CAddressBook* adbk,
 
 	cdstring dataset = GetAdbkDataset(adbk->GetName());
 	cdstring criteria = cADBKDATASET_ATTR;
-	switch(field)
+	switch(fields.front())	// OK so this won't do multiple fields, but no one really uses ACAP.
 	{
 	case CAdbkAddress::eName:
 		criteria += cADBK_NAME;

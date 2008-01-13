@@ -578,7 +578,9 @@ void CLocalAdbkClient::_ResolveAddress(CAddressBook* adbk, const char* nick_name
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eNickName, NULL, NULL);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eNickName);
+		SearchAddressBook(adbk, nick_name, fields, NULL, NULL);
 	}
 	catch (...)
 	{
@@ -597,7 +599,9 @@ void CLocalAdbkClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name, 
 	try
 	{
 		// Fetch all matching addresses
-		SearchAddressBook(adbk, nick_name, CAdbkAddress::eNickName, NULL, NULL);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eNickName);
+		SearchAddressBook(adbk, nick_name, fields, NULL, NULL);
 	}
 	catch (...)
 	{
@@ -609,7 +613,7 @@ void CLocalAdbkClient::_ResolveGroup(CAddressBook* adbk, const char* nick_name, 
 void CLocalAdbkClient::_SearchAddress(CAddressBook* adbk,
 									const cdstring& name,
 									CAdbkAddress::EAddressMatch match,
-									CAdbkAddress::EAddressField field,
+									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
 	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
@@ -623,7 +627,7 @@ void CLocalAdbkClient::_SearchAddress(CAddressBook* adbk,
 		CAdbkAddress::ExpandMatch(match, matchit);
 
 		// Fetch all addresses
-		SearchAddressBook(adbk, matchit, field, &addr_list, NULL);
+		SearchAddressBook(adbk, matchit, fields, &addr_list, NULL);
 	}
 	catch (...)
 	{
@@ -848,7 +852,7 @@ void CLocalAdbkClient::ScanAddressBook(CAddressBook* adbk)
 }
 
 // Scan address book for matching addresses
-void CLocalAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, CAdbkAddress::EAddressField field, CAddressList* addr_list, CGroupList* grp_list)
+void CLocalAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& name, const CAdbkAddress::CAddressFields& fields, CAddressList* addr_list, CGroupList* grp_list)
 {
 	InitItemCtr();
 
@@ -880,7 +884,7 @@ void CLocalAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& nam
 		// Look for matching item
 		if (mTempAddr)
 		{
-			if (mTempAddr->Search(name, field))
+			if (mTempAddr->Search(name, fields))
 			{
 				if (addr_list)
 					addr_list->push_back(mTempAddr);
@@ -895,7 +899,7 @@ void CLocalAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& nam
 		}
 		else if (mTempGrp)
 		{
-			if (mTempGrp->Search(name, field))
+			if (mTempGrp->Search(name, fields))
 			{
 				if (grp_list)
 					grp_list->push_back(mTempGrp);
