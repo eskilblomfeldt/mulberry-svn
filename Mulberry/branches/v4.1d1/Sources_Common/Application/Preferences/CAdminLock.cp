@@ -177,7 +177,7 @@ void CAdminLock::ProcessPrefs(const CPreferences* prefs)
 	}
 
 	// Remote server
-	for(CINETAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
+	for(COptionsAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
 	{
 		if (!(*iter)->GetServerIP().empty())
 			mLockedPrefsServerAddr.push_back((*iter)->GetServerIP());
@@ -256,7 +256,7 @@ void CAdminLock::VirtualDomainPrefs(CPreferences* prefs, const cdstring& uid)
 	}
 
 	// Remote server
-	for(CINETAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++)
+	for(COptionsAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++)
 	{
 		cdstring serverip = (*iter)->GetServerIP();
 		const char* p = serverip.c_str();
@@ -366,7 +366,7 @@ void CAdminLock::LockPrefs(CPreferences* prefs)
 		// Remote server
 		remote_set = mLockedPrefsServerAddr.empty();
 		pos = 0;
-		for(CINETAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++, pos++)
+		for(COptionsAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++, pos++)
 		{
 			if (remote_set)
 			{
@@ -454,7 +454,7 @@ void CAdminLock::LockPrefs(CPreferences* prefs)
 		}
 
 		// Remote server
-		for(CINETAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++)
+		for(COptionsAccountList::iterator iter = prefs->mRemoteAccounts.Value().begin(); iter != prefs->mRemoteAccounts.Value().end(); iter++)
 		{
 			// Remove port number which shuld not be considered part of the domain
 			cdstring server_ip = (*iter)->GetServerIP();
@@ -515,7 +515,7 @@ void CAdminLock::LockPrefs(CPreferences* prefs)
 		}
 
 		// Change each plain text authenticator
-		for(CINETAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
+		for(COptionsAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
 		{
 			if ((*iter)->GetAuthenticator().RequiresUserPswd())
 			{
@@ -596,7 +596,7 @@ void CAdminLock::UpgradeAuthenticators(CPreferences* prefs)
 			UpgradeAuthenticator(*iter);
 
 		// Remote server
-		for(CINETAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
+		for(COptionsAccountList::const_iterator iter = prefs->mRemoteAccounts.GetValue().begin(); iter != prefs->mRemoteAccounts.GetValue().end(); iter++)
 			UpgradeAuthenticator(*iter);
 
 		// SMTP server

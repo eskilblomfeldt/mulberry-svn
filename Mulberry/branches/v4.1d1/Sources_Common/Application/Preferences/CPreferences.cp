@@ -330,7 +330,7 @@ bool CPreferences::Valid(bool showAlert)
 		}
 
 		// Test each remote options account status
-		for(CINETAccountList::const_iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
+		for(COptionsAccountList::const_iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
 		{
 			extra_txt = (*iter)->GetName();
 
@@ -576,7 +576,7 @@ void CPreferences::MultiuserConfigure(const cdstring& uid, const cdstring& real_
 		if (remote)
 		{
 			// Copy to all remote accounts
-			for(CINETAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
+			for(COptionsAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
 			{
 				if ((*iter)->GetAuthenticator().RequiresUserPswd())
 					(*iter)->GetAuthenticatorUserPswd()->SetUID(uid);
@@ -593,7 +593,7 @@ void CPreferences::MultiuserConfigure(const cdstring& uid, const cdstring& real_
 			}
 
 			// Copy to all remote accounts
-			for(CINETAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
+			for(COptionsAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
 			{
 				if ((*iter)->GetAuthenticator().RequiresUserPswd())
 					(*iter)->GetAuthenticatorUserPswd()->SetUID(uid);
@@ -711,7 +711,7 @@ bool CPreferences::TransferUIDs(const cdstring& uid)
 	}
 
 	// Check remote account uids
-	for(CINETAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
+	for(COptionsAccountList::iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
 	{
 		if ((*iter)->GetAuthenticator().RequiresUserPswd())
 		{
@@ -1085,12 +1085,20 @@ cdstring CPreferences::GetSupportDetails()
 		}
 	}
 	out << " ) Prefs (";
+	bool prefs_webdav = false;
 	bool prefs_imsp = false;
 	bool prefs_acap = false;
-	for(CINETAccountList::const_iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
+	for(COptionsAccountList::const_iterator iter = mRemoteAccounts.mValue.begin(); iter != mRemoteAccounts.mValue.end(); iter++)
 	{
 		switch((*iter)->GetServerType())
 		{
+		case CINETAccount::eWebDAVPrefs:
+			if (!prefs_webdav)
+			{
+				out << " WebDAV";
+				prefs_webdav = true;
+			}
+			break;
 		case CINETAccount::eIMSP:
 			if (!prefs_imsp)
 			{

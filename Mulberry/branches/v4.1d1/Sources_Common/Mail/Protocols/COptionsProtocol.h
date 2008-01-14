@@ -24,18 +24,31 @@
 
 #include "CINETProtocol.h"
 
+#include "COptionsAccount.h"
+
 // Classes
 class COptionsClient;
 
 class COptionsProtocol : public CINETProtocol
 {
 public:
-		COptionsProtocol(CINETAccount* account);
+	// Flags
+	enum EOptionsFlags
+	{
+		eCanPartialReadWrite	= 1L << 16,
+	};
+
+		COptionsProtocol(COptionsAccount* account);
 	virtual ~COptionsProtocol();
 
 	virtual void	CreateClient();
 	virtual void	CopyClient(const CINETProtocol& copy) {}
 	virtual void	RemoveClient();
+
+	virtual const COptionsAccount* GetOptionsAccount() const
+		{ return static_cast<const COptionsAccount*>(GetAccount()); }
+	virtual COptionsAccount* GetOptionsAccount()
+		{ return static_cast<COptionsAccount*>(GetAccount()); }
 
 			void	SetMap(cdstrmap* map)
 		{ mMap = map; }

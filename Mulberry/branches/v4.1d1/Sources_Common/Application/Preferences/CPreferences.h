@@ -35,6 +35,7 @@
 #include "CNotification.h"
 #include "CPreferenceEnum.h"
 #include "CPreferenceValue.h"
+#include "COptionsAccount.h"
 #include "CSearchStyle.h"
 #include "CSMTPAccount.h"
 #include "CTextMacros.h"
@@ -114,7 +115,7 @@ public:
 	// Account prefs
 	CPreferenceValueMap<CMailAccountList>			mMailAccounts;					// List of mail accounts
 	CPreferenceValueMap<CSMTPAccountList>			mSMTPAccounts;					// List of SMTP accounts
-	CPreferenceValueMap<CINETAccountList>			mRemoteAccounts;				// List of remote options accounts
+	CPreferenceValueMap<COptionsAccountList>		mRemoteAccounts;				// List of remote options accounts
 	CPreferenceValueMap<CManageSIEVEAccountList>	mSIEVEAccounts;					// List of ManageSIEVE accounts
 	CPreferenceValueMap<cdstring>					mMailDomain;					// Mail domain
 	CPreferenceValueMap<bool>						mRemoteCachePswd;				// Cache uid/pswd pairs

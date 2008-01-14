@@ -750,7 +750,7 @@ bool COptionsMap::ReadValue(const cdstring& key, CINETAccountList& value, NumVer
 				else if (key.compare_end(cRemoteAccountsKey_1_4) ||
 							key.compare_end(cRemoteAccountsKey_2_0))
 					// Create remote account
-					acct = new CINETAccount;
+					acct = new COptionsAccount;
 				else if (key.compare_end(cAddressAccountsKey_1_3) ||
 							key.compare_end(cAddressAccountsKey_1_4) ||
 							key.compare_end(cAddressAccountsKey_2_0) ||

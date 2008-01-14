@@ -28,18 +28,22 @@
 // Panes
 const	PaneIDT		paneid_PrefsRemoteOptions = 5022;
 const	PaneIDT		paneid_PrefsRemoteOptionsUse = 'USES';
+const	PaneIDT		paneid_PrefsRemoteOptionsBaseRURLText = 'RTXT';
+const	PaneIDT		paneid_PrefsRemoteOptionsBaseRURL = 'RURL';
 
 // Mesages
 
 // Resources
 
 // Classes
+class CTextFieldX;
 class LCheckBox;
 
 class	CPrefsRemoteOptions : public CPrefsTabSubPanel
 {
 private:
 	LCheckBox*		mUseRemote;
+	CTextFieldX*	mBaseRURL;
 
 public:
 	enum { class_ID = 'Arop' };

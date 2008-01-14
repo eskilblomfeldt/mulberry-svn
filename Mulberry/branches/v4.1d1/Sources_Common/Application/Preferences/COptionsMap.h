@@ -32,6 +32,7 @@
 #include "CMailNotification.h"
 #include "CManageSIEVEAccount.h"
 #include "CMIMEMap.h"
+#include "COptionsAccount.h"
 #include "CSearchStyle.h"
 #include "CSMTPAccount.h"
 #ifdef __use_speech
@@ -110,6 +111,8 @@ public:
 		{ return WriteValue(key, (const CINETAccountList&) value); }
 	virtual bool WriteValue(const cdstring& key, const CSMTPAccountList& value)
 		{ return WriteValue(key, (const CINETAccountList&) value); }
+	virtual bool WriteValue(const cdstring& key, const COptionsAccountList& value)
+		{ return WriteValue(key, (const CINETAccountList&) value); }
 	virtual bool WriteValue(const cdstring& key, const CAddressAccountList& value)
 		{ return WriteValue(key, (const CINETAccountList&) value); }
 	virtual bool WriteValue(const cdstring& key, const CManageSIEVEAccountList& value)
@@ -165,6 +168,8 @@ public:
 	virtual bool ReadValue(const cdstring& key, CMailAccountList& value, NumVersion vers_prefs)
 		{ return ReadValue(key, (CINETAccountList&) value, vers_prefs); }
 	virtual bool ReadValue(const cdstring& key, CSMTPAccountList& value, NumVersion vers_prefs)
+		{ return ReadValue(key, (CINETAccountList&) value, vers_prefs); }
+	virtual bool ReadValue(const cdstring& key, COptionsAccountList& value, NumVersion vers_prefs)
 		{ return ReadValue(key, (CINETAccountList&) value, vers_prefs); }
 	virtual bool ReadValue(const cdstring& key, CAddressAccountList& value, NumVersion vers_prefs)
 		{ return ReadValue(key, (CINETAccountList&) value, vers_prefs); }

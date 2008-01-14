@@ -946,7 +946,7 @@ bool CPreferences::ReadFromMap(COptionsMap* theMap,
 			// Now create real account info
 			if (!mRemoteIP.mValue.empty())
 			{
-				CINETAccount* remote = new CINETAccount;
+				COptionsAccount* remote = new COptionsAccount;
 
 				// Make name first part of IP address
 				cdstring acct_name = mRemoteIP.mValue;

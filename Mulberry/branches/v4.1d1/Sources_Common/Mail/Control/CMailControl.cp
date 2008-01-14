@@ -928,6 +928,7 @@ bool CMailControl::DoUserIDPassword(CAuthenticatorUserPswd* auth,
 				{
 				case CINETAccount::eIMSP:
 				case CINETAccount::eACAP:
+				case CINETAccount::eCardDAVAdbk:
 					icon = ICNx_UserPswdAddressBook;
 					title = rsrc::GetString("Alerts::UserPswd::ADBKLOGIN");
 					break;
@@ -970,6 +971,7 @@ bool CMailControl::DoUserIDPassword(CAuthenticatorUserPswd* auth,
 				{
 				case CINETAccount::eIMSP:
 				case CINETAccount::eACAP:
+				case CINETAccount::eCardDAVAdbk:
 					icon = IDI_USERPSWD_ADBK;
 					title = rsrc::GetString("Alerts::UserPswd::ADBKLOGIN");
 				break;
@@ -1018,6 +1020,7 @@ bool CMailControl::DoUserIDPassword(CAuthenticatorUserPswd* auth,
 				{
 				case CINETAccount::eIMSP:
 				case CINETAccount::eACAP:
+				case CINETAccount::eCardDAVAdbk:
 					icon = IDI_USERPSWD_ADBK;
 					title = rsrc::GetString("Alerts::UserPswd::ADBKLOGIN");
 				break;

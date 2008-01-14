@@ -267,7 +267,7 @@ void CPrefsAccount::InitAccountMenu(void)
 		::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName(), false, cicn_SMTPAccount);
 
 	// Add each remote account
-	for(CINETAccountList::const_iterator iter = mCopyPrefs->mRemoteAccounts.GetValue().begin();
+	for(COptionsAccountList::const_iterator iter = mCopyPrefs->mRemoteAccounts.GetValue().begin();
 			iter != mCopyPrefs->mRemoteAccounts.GetValue().end(); iter++, menu_pos++)
 		::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName(), false, cicn_RemoteAccount);
 
@@ -358,6 +358,7 @@ void CPrefsAccount::DoNewAccount(void)
 					acct_list = (CINETAccountList*) &mCopyPrefs->mSMTPAccounts.GetValue();
 					break;
 
+				case menu_AccountWebDAVOptions:
 				case menu_AccountIMSPOptions:
 				case menu_AccountACAPOptions:
 					acct_list = (CINETAccountList*) &mCopyPrefs->mRemoteAccounts.GetValue();
@@ -430,11 +431,15 @@ void CPrefsAccount::DoNewAccount(void)
 					insert_icon = cicn_SMTPAccount;
 					break;
 
+				case menu_AccountWebDAVOptions:
 				case menu_AccountIMSPOptions:
 				case menu_AccountACAPOptions:
-					acct = new CINETAccount;
+					acct = new COptionsAccount;
 					switch(acct_type)
 					{
+					case menu_AccountWebDAVOptions:
+						acct->SetServerType(CINETAccount::eWebDAVPrefs);
+						break;
 					case menu_AccountIMSPOptions:
 						acct->SetServerType(CINETAccount::eIMSP);
 						break;
@@ -604,7 +609,7 @@ void CPrefsAccount::DoRenameAccount(void)
 					acct_list = (CINETAccountList*) &mCopyPrefs->mMailAccounts.GetValue();
 				else if (typeid(*acct) == typeid(CSMTPAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mSMTPAccounts.GetValue();
-				else if (typeid(*acct) == typeid(CINETAccount))
+				else if (typeid(*acct) == typeid(COptionsAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mRemoteAccounts.GetValue();
 				else if (typeid(*acct) == typeid(CAddressAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mAddressAccounts.GetValue();
@@ -639,7 +644,7 @@ void CPrefsAccount::DoRenameAccount(void)
 					mCopyPrefs->mMailAccounts.SetDirty();
 				else if (typeid(*acct) == typeid(CSMTPAccount))
 					mCopyPrefs->mSMTPAccounts.SetDirty();
-				else if (typeid(*acct) == typeid(CINETAccount))
+				else if (typeid(*acct) == typeid(COptionsAccount))
 					mCopyPrefs->mRemoteAccounts.SetDirty();
 				else if (typeid(*acct) == typeid(CAddressAccount))
 					mCopyPrefs->mAddressAccounts.SetDirty();
@@ -695,7 +700,7 @@ void CPrefsAccount::DoDeleteAccount(void)
 			mCopyPrefs->mMailAccounts.SetDirty();
 		else if (typeid(*acct) == typeid(CSMTPAccount))
 			mCopyPrefs->mSMTPAccounts.SetDirty();
-		else if (typeid(*acct) == typeid(CINETAccount))
+		else if (typeid(*acct) == typeid(COptionsAccount))
 		{
 			// Prevent delete of last remote account if set to remote
 			if ((mCopyPrefs->mRemoteAccounts.GetValue().size() == 1) && !prefs_dlog->IsLocal())
@@ -817,10 +822,13 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			copyStr.FromResource("UI::Preferences::AccountSMTPSendMail");
 			mIsSMTP = true;
 		}
-		else if (typeid(*account) == typeid(CINETAccount))
+		else if (typeid(*account) == typeid(COptionsAccount))
 		{
 			switch(account->GetServerType())
 			{
+			case CINETAccount::eWebDAVPrefs:
+				copyStr.FromResource("UI::Preferences::AccountWebDAVOptions");
+				break;
 			case CINETAccount::eIMSP:
 				copyStr.FromResource("UI::Preferences::AccountIMSPOptions");
 				break;
@@ -911,8 +919,8 @@ void CPrefsAccount::UpdateAccount(void)
 		account = new CMailAccount(*(CMailAccount*) current);
 	else if (typeid(*current) == typeid(CSMTPAccount))
 		account = new CSMTPAccount(*(CSMTPAccount*) current);
-	else if (typeid(*current) == typeid(CINETAccount))
-		account = new CINETAccount(*(CINETAccount*) current);
+	else if (typeid(*current) == typeid(COptionsAccount))
+		account = new COptionsAccount(*(COptionsAccount*) current);
 	else if (typeid(*current) == typeid(CAddressAccount))
 		account = new CAddressAccount(*(CAddressAccount*) current);
 	else if (typeid(*current) == typeid(CManageSIEVEAccount))
@@ -939,8 +947,8 @@ void CPrefsAccount::UpdateAccount(void)
 		same = (*((CMailAccount*) current) == *((CMailAccount*) account));
 	else if (typeid(*current) == typeid(CSMTPAccount))
 		same = (*((CSMTPAccount*) current) == *((CSMTPAccount*) account));
-	else if (typeid(*current) == typeid(CINETAccount))
-		same = (*((CINETAccount*) current) == *((CINETAccount*) account));
+	else if (typeid(*current) == typeid(COptionsAccount))
+		same = (*((COptionsAccount*) current) == *((COptionsAccount*) account));
 	else if (typeid(*current) == typeid(CAddressAccount))
 		same = (*((CAddressAccount*) current) == *((CAddressAccount*) account));
 	else if (typeid(*current) == typeid(CManageSIEVEAccount))
@@ -955,7 +963,7 @@ void CPrefsAccount::UpdateAccount(void)
 			mCopyPrefs->mMailAccounts.SetDirty();
 		else if (typeid(*account) == typeid(CSMTPAccount))
 			mCopyPrefs->mSMTPAccounts.SetDirty();
-		else if (typeid(*account) == typeid(CINETAccount))
+		else if (typeid(*account) == typeid(COptionsAccount))
 			mCopyPrefs->mRemoteAccounts.SetDirty();
 		else if (typeid(*account) == typeid(CAddressAccount))
 			mCopyPrefs->mAddressAccounts.SetDirty();
@@ -1063,7 +1071,7 @@ void CPrefsAccount::SetPanel(const CINETAccount* account)
 	}
 	else if (typeid(*account) == typeid(CSMTPAccount))
 		panel = paneid_PrefsSMTPAccount;
-	else if (typeid(*account) == typeid(CINETAccount))
+	else if (typeid(*account) == typeid(COptionsAccount))
 		panel = paneid_PrefsRemoteAccount;
 	else if (typeid(*account) == typeid(CAddressAccount))
 	{

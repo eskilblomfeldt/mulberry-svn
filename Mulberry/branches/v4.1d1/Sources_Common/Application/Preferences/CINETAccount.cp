@@ -42,6 +42,7 @@ const char* cINETDescriptors[] =
 	 "Local",
 	 "SMTP",
 	 "NNTP",
+	 "WebDAV Prefs",
 	 "IMSP",
 	 "ACAP",
 	 "LDAP",
@@ -143,6 +144,7 @@ bool CINETAccount::SupportsTLSType(ETLSType type) const
 		return (type != eSSL);
 		
 	// HTTP only does SSL - no STARTTLS
+	case eWebDAVPrefs:
 	case eHTTPCalendar:
 	case eWebDAVCalendar:
 	case eCalDAVCalendar:

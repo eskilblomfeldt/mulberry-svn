@@ -43,6 +43,7 @@ public:
 		eLocal,
 		eSMTP,
 		eNNTP,
+		eWebDAVPrefs,
 		eIMSP,
 		eACAP,
 		eLDAP,

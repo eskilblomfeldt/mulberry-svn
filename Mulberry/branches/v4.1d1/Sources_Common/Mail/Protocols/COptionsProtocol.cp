@@ -22,17 +22,18 @@
 #include "CACAPClient.h"
 #include "CConnectionManager.h"
 #include "CIMSPClient.h"
+#include "CLocalPrefsClient.h"
 #include "CMulberryApp.h"
 #include "COptionsClient.h"
 #include "CPreferences.h"
 #include "CPreferencesFile.h"
 #include "CPreferenceKeys.h"
-#include "CLocalPrefsClient.h"
+#include "CWebDAVPrefsClient.h"
 
 // COptionsProtocol: Handles quotas for all resources
 
 // Constructor
-COptionsProtocol::COptionsProtocol(CINETAccount* account)
+COptionsProtocol::COptionsProtocol(COptionsAccount* account)
 	: CINETProtocol(account)
 {
 	mMap = NULL;
@@ -68,11 +69,17 @@ void COptionsProtocol::CreateClient()
 		SetFlags(eDisconnected, false);
 		switch(GetAccountType())
 		{
+		case CINETAccount::eWebDAVPrefs:
+			mClient = new prefsstore::CWebDAVPrefsClient(this);
+			mFlags.Set(eCanPartialReadWrite, false);
+			break;
 		case CINETAccount::eIMSP:
 			mClient = new CIMSPClient(this, NULL);
+			mFlags.Set(eCanPartialReadWrite, true);
 			break;
 		case CINETAccount::eACAP:
 			mClient = new CACAPClient(this, NULL);
+			mFlags.Set(eCanPartialReadWrite, true);
 			break;
 		default:;
 		}
@@ -83,6 +90,7 @@ void COptionsProtocol::CreateClient()
 		SetFlags(eDisconnected, true);
 		InitDisconnect();
 		mClient = new CLocalPrefsClient(this);
+		mFlags.Set(eCanPartialReadWrite, false);
 	}
 
 	mClient->SetVendor(cVendor);
@@ -100,8 +108,8 @@ void COptionsProtocol::RemoveClient()
 
 bool COptionsProtocol::DoesPartialPrefs() const
 {
-	// Test if disconnected
-	return !IsOffline();
+	// Test if partial read-write
+	return mFlags.IsSet(eCanPartialReadWrite);
 }
 
 #pragma mark ____________________________Options

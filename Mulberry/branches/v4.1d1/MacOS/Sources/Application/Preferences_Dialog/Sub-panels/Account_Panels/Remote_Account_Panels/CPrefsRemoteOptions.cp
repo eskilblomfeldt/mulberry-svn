@@ -19,7 +19,8 @@
 
 #include "CPrefsRemoteOptions.h"
 
-#include "CINETAccount.h"
+#include "COptionsAccount.h"
+#include "CTextFieldX.h"
 
 #include <LCheckBox.h>
 
@@ -52,21 +53,31 @@ void CPrefsRemoteOptions::FinishCreateSelf(void)
 
 	// Get controls
 	mUseRemote = (LCheckBox*) FindPaneByID(paneid_PrefsRemoteOptionsUse);
+	mBaseRURL = (CTextFieldX*) FindPaneByID(paneid_PrefsRemoteOptionsBaseRURL);
 }
 
 // Set prefs
 void CPrefsRemoteOptions::SetData(void* data)
 {
-	CINETAccount* acct = (CINETAccount*) data;
+	COptionsAccount* acct = (COptionsAccount*) data;
 
 	// Copy info
 	mUseRemote->SetValue(acct->GetLogonAtStart());
+	if (acct->GetServerType() == CINETAccount::eWebDAVPrefs)
+		mBaseRURL->SetText(acct->GetBaseRURL());
+	else
+	{
+		FindPaneByID(paneid_PrefsRemoteOptionsBaseRURLText)->Hide();
+		mBaseRURL->Hide();
+	}
 }
 
 // Force update of prefs
 void CPrefsRemoteOptions::UpdateData(void* data)
 {
-	CINETAccount* acct = (CINETAccount*) data;
+	COptionsAccount* acct = (COptionsAccount*) data;
 
 	acct->SetLoginAtStart(mUseRemote->GetValue()==1);
+	if (acct->GetServerType() == CINETAccount::eWebDAVPrefs)
+		acct->SetBaseRURL(mBaseRURL->GetText());
 }

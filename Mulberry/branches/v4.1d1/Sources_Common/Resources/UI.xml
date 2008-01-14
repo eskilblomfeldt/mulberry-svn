@@ -21,6 +21,7 @@
 	<string id="UI::Preferences::AccountPOP3Mailbox">POP3 Mailbox</string>
 	<string id="UI::Preferences::AccountLocalMailbox">Local Mailbox</string>
 	<string id="UI::Preferences::AccountSMTPSendMail">SMTP Send Email</string>
+	<string id="UI::Preferences::AccountWebDAVOptions">WebDAV Options</string>
 	<string id="UI::Preferences::AccountIMSPOptions">IMSP Options</string>
 	<string id="UI::Preferences::AccountACAPOptions">ACAP Options</string>
 	<string id="UI::Preferences::AccountCardDAVAddressBooks">CardDAV Address Books</string>
