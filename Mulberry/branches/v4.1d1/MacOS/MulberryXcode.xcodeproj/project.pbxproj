@@ -159,6 +159,8 @@
 		AF82694D0C1B2C9300B18EED /* XMLObject.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693A0C1B2C9300B18EED /* XMLObject.cp */; };
 		AF8269500C1B2C9300B18EED /* XMLParserSAX.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693D0C1B2C9300B18EED /* XMLParserSAX.cp */; };
 		AF8269520C1B2C9300B18EED /* XMLSAXSimple.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */; };
+		AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */; };
+		AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */; };
 		AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */; };
 		AFC798200CCAE69000E62F0F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC7981F0CCAE69000E62F0F /* Security.framework */; };
 		AFCDD2D30AE1647A00E30447 /* os_dep.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDD2D20AE1647A00E30447 /* os_dep.cp */; };
@@ -1687,6 +1689,10 @@
 		AF82693E0C1B2C9300B18EED /* XMLParserSAX.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLParserSAX.h; path = ../../Libraries/XMLLib/Source/XMLParserSAX.h; sourceTree = "<group>"; };
 		AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSAXSimple.cp; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.cp; sourceTree = "<group>"; };
 		AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLSAXSimple.h; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.h; sourceTree = "<group>"; };
+		AFBE2AB50D2F30DB002132BE /* CWebDAVPrefsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWebDAVPrefsClient.h; sourceTree = "<group>"; };
+		AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CWebDAVPrefsClient.cpp; sourceTree = "<group>"; };
+		AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = COptionsAccount.cp; path = ../Sources_Common/Application/Preferences/COptionsAccount.cp; sourceTree = SOURCE_ROOT; };
+		AFBE2AB90D2F34A4002132BE /* COptionsAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COptionsAccount.h; path = ../Sources_Common/Application/Preferences/COptionsAccount.h; sourceTree = SOURCE_ROOT; };
 		AFC798190CCADCAF00E62F0F /* CPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPasswordManager.h; path = ../Sources_Common/Mail/Control/CPasswordManager.h; sourceTree = SOURCE_ROOT; };
 		AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPasswordManager.cp; path = ../Sources_Common/Mail/Control/CPasswordManager.cp; sourceTree = SOURCE_ROOT; };
 		AFC7981F0CCAE69000E62F0F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
@@ -3889,6 +3895,7 @@
 				AFCDE0400AE176DF00E30447 /* Calendar_Store */,
 				AF2551720C4326EF001AAE53 /* vCard */,
 				AF25515A0C4326C8001AAE53 /* VCard_Store */,
+				AFBE2AB30D2F3089002132BE /* Preferences_Store */,
 				AFCDE05C0AE176DF00E30447 /* HTTP */,
 				AFCDE09C0AE176DF00E30447 /* Extensions */,
 				AFCDE0B10AE176DF00E30447 /* Network */,
@@ -4350,6 +4357,24 @@
 				AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */,
 			);
 			name = XMLLib;
+			sourceTree = "<group>";
+		};
+		AFBE2AB30D2F3089002132BE /* Preferences_Store */ = {
+			isa = PBXGroup;
+			children = (
+				AFBE2AB40D2F3089002132BE /* Clients */,
+			);
+			name = Preferences_Store;
+			path = ../Sources_Common/Preferences_Store;
+			sourceTree = SOURCE_ROOT;
+		};
+		AFBE2AB40D2F3089002132BE /* Clients */ = {
+			isa = PBXGroup;
+			children = (
+				AFBE2AB50D2F30DB002132BE /* CWebDAVPrefsClient.h */,
+				AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */,
+			);
+			path = Clients;
 			sourceTree = "<group>";
 		};
 		AFC79A4D0CCBEB4C00E62F0F /* Products */ = {
@@ -5529,6 +5554,8 @@
 				AFCDDBA00AE176D900E30447 /* CMailAccount.cp */,
 				AFCDDBA10AE176D900E30447 /* CSMTPAccount.h */,
 				AFCDDBA20AE176D900E30447 /* CSMTPAccount.cp */,
+				AFBE2AB90D2F34A4002132BE /* COptionsAccount.h */,
+				AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */,
 				AFCDDBA30AE176D900E30447 /* CAddressAccount.h */,
 				AFCDDBA40AE176D900E30447 /* CAddressAccount.cp */,
 				AFCDDBA50AE176D900E30447 /* CManageSIEVEAccount.h */,
@@ -7447,12 +7474,6 @@
 		AFCDE0BA0AE176DF00E30447 /* INET Clients */ = {
 			isa = PBXGroup;
 			children = (
-				AFCDE0D80AE176DF00E30447 /* Password */,
-				AFCDE0D50AE176DF00E30447 /* LDAP Client */,
-				AFCDE0D20AE176DF00E30447 /* SIEVE Client */,
-				AFCDE0CF0AE176DF00E30447 /* ACAP Client */,
-				AFCDE0CA0AE176DF00E30447 /* IMSP Client */,
-				AFCDE0C30AE176DF00E30447 /* IMAP Client */,
 				AFCDE0BB0AE176DF00E30447 /* CINETClient.h */,
 				AFCDE0BC0AE176DF00E30447 /* CINETClient.cp */,
 				AFCDE0BD0AE176DF00E30447 /* CINETCommon.h */,
@@ -7461,6 +7482,12 @@
 				AFCDE0C00AE176DF00E30447 /* COptionsClient.h */,
 				AFCDE0C10AE176DF00E30447 /* CAdbkClient.h */,
 				AFCDE0C20AE176DF00E30447 /* CFilterClient.h */,
+				AFCDE0C30AE176DF00E30447 /* IMAP Client */,
+				AFCDE0CA0AE176DF00E30447 /* IMSP Client */,
+				AFCDE0CF0AE176DF00E30447 /* ACAP Client */,
+				AFCDE0D50AE176DF00E30447 /* LDAP Client */,
+				AFCDE0D20AE176DF00E30447 /* SIEVE Client */,
+				AFCDE0D80AE176DF00E30447 /* Password */,
 			);
 			name = "INET Clients";
 			sourceTree = "<group>";
@@ -9210,6 +9237,8 @@
 				AF2555080C442299001AAE53 /* CFreeBusyViewCommon.cp in Sources */,
 				AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */,
 				AF17AE450CCC585C00205B17 /* CMulberryCocoaApp.m in Sources */,
+				AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */,
+				AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
