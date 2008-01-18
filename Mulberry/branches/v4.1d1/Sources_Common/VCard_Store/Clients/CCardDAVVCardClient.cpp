@@ -400,7 +400,7 @@ void CCardDAVVCardClient::GetAddressBookComponents(CAddressBook* adbk, vCard::CV
 	}
 }
 
-void CCardDAVVCardClient::ReadAddressBookComponent(const cdstring& rurl, vCard::CVCardAddressBook& adbk)
+vCard::CVCardVCard* CCardDAVVCardClient::ReadAddressBookComponent(const cdstring& rurl, vCard::CVCardAddressBook& adbk)
 {
 	// Create WebDAV GET
 	auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl));
@@ -419,7 +419,7 @@ void CCardDAVVCardClient::ReadAddressBookComponent(const cdstring& rurl, vCard::
 	default:
 		// Handle error and exit here
 		HandleHTTPError(request.get());
-		return;
+		return NULL;
 	}
 
 	// Get last segment of RURL path
@@ -443,7 +443,7 @@ void CCardDAVVCardClient::ReadAddressBookComponent(const cdstring& rurl, vCard::
 	// Read vcard component(s) from file
 	cdstring data = dout.GetData();
 	std::istrstream is(data.c_str());
-	adbk.ParseComponent(is, last_path, etag);
+	return adbk.ParseComponent(is, last_path, etag);
 }
 
 void CCardDAVVCardClient::_WriteFullAddressBook(CAddressBook* adbk)
@@ -614,7 +614,7 @@ void CCardDAVVCardClient::_ReadComponents(CAddressBook* adbk, vCard::CVCardAddre
 
 
 // Read single component from server
-void CCardDAVVCardClient::_ReadComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstring& comp_rurl)
+vCard::CVCardVCard* CCardDAVVCardClient::_ReadComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstring& comp_rurl)
 {
 	// Start UI action
 	StINETClientAction _action(this, "Status::Calendar::Reading", "Error::Calendar::OSErrReadCalendar", "Error::Calendar::NoBadReadCalendar", adbk->GetName());
@@ -624,7 +624,7 @@ void CCardDAVVCardClient::_ReadComponent(CAddressBook* adbk, vCard::CVCardAddres
 	rurl += comp_rurl;
 
 	// Read it in	
-	ReadAddressBookComponent(rurl, vadbk);
+	return ReadAddressBookComponent(rurl, vadbk);
 }
 
 void CCardDAVVCardClient::AddComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const vCard::CVCardVCard& component)

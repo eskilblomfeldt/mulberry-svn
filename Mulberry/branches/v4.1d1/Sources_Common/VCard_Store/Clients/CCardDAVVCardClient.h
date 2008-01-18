@@ -49,8 +49,6 @@ private:
 public:
 	virtual CINETClient*	CloneConnection();			// Create duplicate, empty connection
 
-protected:
-
 	// P R O T O C O L
 
 	// C A L E N D A R
@@ -97,14 +95,15 @@ protected:
 	virtual void _RemoveComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const vCard::CVCardVCard& component);
 	virtual void _RemoveComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstring& rurl);
 	virtual void _ReadComponents(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstrvect& rurls);
-	virtual void _ReadComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstring& rurl);
+	virtual vCard::CVCardVCard* _ReadComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const cdstring& rurl);
 
+protected:
 	virtual void ListAddressBooks(CAddressBook* root, const http::webdav::CWebDAVPropFindParser& parser);
 
 	virtual void ReadAddressBookComponents(CAddressBook* adbk, const http::webdav::CWebDAVPropFindParser& parser, vCard::CVCardAddressBook& vadbk);
 	virtual void ReadAddressBookComponents(CAddressBook* adbk, const cdstrvect& hrefs, vCard::CVCardAddressBook& vadbk);
 	virtual void GetAddressBookComponents(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const http::webdav::CWebDAVPropFindParser& parser, cdstrmap& compinfo, bool last_path);
-	virtual void ReadAddressBookComponent(const cdstring& url, vCard::CVCardAddressBook& adbk);
+	virtual vCard::CVCardVCard* ReadAddressBookComponent(const cdstring& url, vCard::CVCardAddressBook& adbk);
 	
 	virtual void WriteAddressBookComponents(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const vCard::CVCardComponentDB& components);
 	virtual void WriteAddressBookComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const vCard::CVCardVCard& component);
