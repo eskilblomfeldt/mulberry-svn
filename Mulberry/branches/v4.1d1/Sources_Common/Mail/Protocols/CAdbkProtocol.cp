@@ -44,7 +44,9 @@
 #include "CVCardStoreXML.h"					// Share XML defintions with calendar store
 
 #include "CVCardAddressBook.h"
+#include "CVCardMapper.h"
 #include "CVCardSync.h"
+#include "CVCardVCard.h"
 
 #include "cdfstream.h"
 
@@ -678,18 +680,21 @@ void CAdbkProtocol::LoadList()
 					mStoreRoot.AddChild(adbk);
 					break;
 				case CINETAccount::eCardDAVAdbk:
-					for(CAddressBookList::const_iterator niter = mStoreRoot.GetChildren()->begin();
-						niter != mStoreRoot.GetChildren()->end(); niter++)
+					if (mStoreRoot.GetChildren() != NULL)
 					{
-						if ((*niter)->IsAdbk())
+						for(CAddressBookList::const_iterator niter = mStoreRoot.GetChildren()->begin();
+							niter != mStoreRoot.GetChildren()->end(); niter++)
 						{
-							if (adbk)
+							if ((*niter)->IsAdbk())
 							{
-								adbk = NULL;
-								break;
+								if (adbk)
+								{
+									adbk = NULL;
+									break;
+								}
+								else
+									adbk = *niter;
 							}
-							else
-								adbk = *niter;
 						}
 					}
 					break;
@@ -1086,7 +1091,6 @@ void CAdbkProtocol::SyncFullFromServer(CAddressBook* adbk)
 
 void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 {
-#if 0
 	// We need to do this as a proper transaction with locking
 	try
 	{
@@ -1097,7 +1101,7 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 		// 2. Look at record DB and:
 		//  2.1 Add new components to server and cache info
 		//  2.2 Remove deleted components from server and cached server info if still present on server
-		//  2.3 Cache info for changed items for later sync (or change them immediately if the server has not changed
+		//  2.3 Cache info for changed items for later sync (or change them immediately if the server has not changed)
 		//
 		// 3. Scan list of local components
 		//  3.1 If in added set, ignore it
@@ -1117,10 +1121,12 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 		// Now do it...
 
 		// Step 1
+		vCard::CVCardAddressBook* vadbk = adbk->GetVCardAdbk();
+		CCardDAVVCardClient* cardclient = static_cast<CCardDAVVCardClient*>(mClient);
 		cdstrmap comps;
 		bool server_changed = mClient->_AdbkChanged(adbk);
 		if (server_changed)
-			mClient->_GetComponentInfo(adbk, vadbk, comps);
+			cardclient->_GetComponentInfo(adbk, *vadbk, comps);
 		else
 		{
 			mCacheClient->_ReadFullAddressBook(adbk);
@@ -1129,17 +1135,17 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 		// Step 2
 		cdstrmap cache_added;
 		cdstrmap cache_changed;
-		for(vcard::CVCardComponentRecordDB::const_iterator iter = adbk->GetRecording().begin(); iter != adbk->GetRecording().end(); iter++)
+		for(vCard::CVCardComponentRecordDB::const_iterator iter = vadbk->GetRecording().begin(); iter != vadbk->GetRecording().end(); iter++)
 		{
 			// Step 2.1
-			if ((*iter).second.GetAction() == vcard::CVCardComponentRecord::eAdded)
+			if ((*iter).second.GetAction() == vCard::CVCardComponentRecord::eAdded)
 			{
 				// Add component to server
-				const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
+				const vCard::CVCardVCard* comp = vadbk->GetCardByKey((*iter).first);
 				if (comp != NULL)
 				{
 					// Add component to server
-					mClient->_AddComponent(node, cal, *comp);
+					cardclient->_AddComponent(adbk, *vadbk, *comp);
 
 					// Add to added cache
 					cache_added.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
@@ -1147,13 +1153,13 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 			}
 			
 			// Step 2.2
-			else if ((*iter).second.GetAction() == iCal::CICalendarComponentRecord::eRemoved)
+			else if ((*iter).second.GetAction() == vCard::CVCardComponentRecord::eRemoved)
 			{
 				// Is it still present on the server
 				if (comps.count((*iter).second.GetRURL()) != 0)
 				{
 					// Remove component from server
-					mClient->_RemoveComponent(node, cal, (*iter).second.GetRURL());
+					cardclient->_RemoveComponent(adbk, *vadbk, (*iter).second.GetRURL());
 					
 					// Remove from server component info
 					comps.erase((*iter).second.GetRURL());
@@ -1161,15 +1167,15 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 			}
 
 			// Step 2.3
-			else if ((*iter).second.GetAction() == iCal::CICalendarComponentRecord::eChanged)
+			else if ((*iter).second.GetAction() == vCard::CVCardComponentRecord::eChanged)
 			{
 				if (server_changed)
 					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
 				else
 				{
 					// Change it on the server
-					const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
-					mClient->_ChangeComponent(node, cal, *comp);
+					const vCard::CVCardVCard* comp = vadbk->GetCardByKey((*iter).first);
+					cardclient->_ChangeComponent(adbk, *vadbk, *comp);
 					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
 				}
 			}
@@ -1180,22 +1186,17 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 		if (server_changed)
 		{
 			// Get component info from cache
-			iCal::CICalendarComponentDBList dbs;
-			cal.GetAllDBs(dbs);
 			cdstrvect component_keys;
-			for(iCal::CICalendarComponentDBList::const_iterator iter1 = dbs.begin(); iter1 != dbs.end(); iter1++)
+			for(vCard::CVCardComponentDB::const_iterator iter = vadbk->GetVCards().begin(); iter != vadbk->GetVCards().end(); iter++)
 			{
-				for(iCal::CICalendarComponentDB::const_iterator iter2 = (*iter1)->begin(); iter2 != (*iter1)->end(); iter2++)
-				{
-					component_keys.push_back((*iter2).second->GetMapKey());
-				}
+				component_keys.push_back((*iter).second->GetMapKey());
 			}
 			
 			// Step 3
 			cdstrset matching_components;
 			for(cdstrvect::const_iterator iter = component_keys.begin(); iter != component_keys.end(); iter++)
 			{
-				iCal::CICalendarComponent* cache_comp = cal.GetComponentByKey(*iter);
+				vCard::CVCardVCard* cache_comp = vadbk->GetCardByKey(*iter);
 				if (cache_comp == NULL)
 					continue;
 
@@ -1224,7 +1225,7 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 					if (cache_etag == server_etag)
 					{
 						// Write changed cache component to server
-						mClient->_ChangeComponent(node, cal, *cache_comp);
+						cardclient->_ChangeComponent(adbk, *vadbk, *cache_comp);
 					}
 					
 					// Step 3.2.2
@@ -1232,30 +1233,30 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 					{
 						// Do iCal SEQ etc comparison
 						
-						// First read in component from server into temp calendar
-						iCal::CICalendar tempcal;
-						iCal::CICalendarComponent* server_comp = mClient->_ReadComponent(node, tempcal, server_rurl);
+						// First read in component from server into temp addressbook
+						vCard::CVCardAddressBook tempvcard;
+						vCard::CVCardVCard* server_comp = cardclient->_ReadComponent(adbk, tempvcard, server_rurl);
 						if (server_comp != NULL)
 						{
-							int result = iCal::CICalendarSync::CompareComponentVersions(server_comp, cache_comp);
+							int result = -1; //iCal::CICalendarSync::CompareComponentVersions(server_comp, cache_comp);
 							
 							if (result == 1)
 							{
 								// Cache is newer than server - cache overwrites to server
-								mClient->_ChangeComponent(node, cal, *cache_comp);
+								cardclient->_ChangeComponent(adbk, *vadbk, *cache_comp);
 							}
 							else if (result == -1)
 							{
 								// Cache is older than server - server overwrites cache
 
 								// Remove the cached component first
-								cal.RemoveComponentByKey(cache_comp->GetMapKey());
+								vadbk->RemoveCardByKey(cache_comp->GetMapKey());
 								cache_comp = NULL;
 								
 								// Copy component from server into local cache effectively replacing old one
-								iCal::CICalendarComponent* new_comp = server_comp->clone();
-								new_comp->SetCalendar(cal.GetRef());
-								cal.AddComponent(new_comp);
+								vCard::CVCardComponent* new_comp = server_comp->clone();
+								new_comp->SetAddressBook(vadbk->GetRef());
+								vadbk->AddCard(new_comp);
 							}
 						}
 					}
@@ -1270,11 +1271,11 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 						// Copy from server to cache overwriting cache value
 						
 						// Remove the cached component first
-						cal.RemoveComponentByKey(cache_comp->GetMapKey());
+						vadbk->RemoveCardByKey(cache_comp->GetMapKey());
 						cache_comp = NULL;
 						
 						// Read component from server into local cache effectively replacing old one
-						mClient->_ReadComponent(node, cal, server_rurl);
+						cardclient->_ReadComponent(adbk, *vadbk, server_rurl);
 					}
 				}
 				
@@ -1282,7 +1283,7 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 				else
 				{
 					// comp is deleted in this call
-					cal.RemoveComponentByKey(cache_comp->GetMapKey());
+					vadbk->RemoveCardByKey(cache_comp->GetMapKey());
 					cache_comp = NULL;
 				}
 				
@@ -1302,19 +1303,22 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 
 			// Read components from server into local cache as its a new one on the server
 			if (rurls.size() != 0)
-				mClient->_ReadComponents(node, cal, rurls);
+				cardclient->_ReadComponents(adbk, *vadbk, rurls);
 		}
 
 		// Clear out cache recording
-		cal.ClearRecording();
+		vadbk->ClearRecording();
 		
 		// Get the current server sync token
-		mClient->_UpdateSyncToken(node, cal);
+		cardclient->_UpdateSyncToken(adbk);
 
 		// Now write back cache
-		if (!mCacheClient->_TouchCalendar(node))
-			DumpCalendars();
-		mCacheClient->_WriteFullCalendar(node, cal);
+		if (!mCacheClient->_TouchAdbk(adbk))
+			DumpAddressBooks();
+		mCacheClient->_WriteFullAddressBook(adbk);
+	
+		// Now map VCards into internal addresses
+		vcardstore::MapFromVCards(adbk);
 	}
 	catch(...)
 	{
@@ -1323,7 +1327,6 @@ void CAdbkProtocol::SyncComponentsFromServer(CAddressBook* adbk)
 		CLOG_LOGRETHROW;
 		throw;
 	}
-#endif
 }
 
 // Close existing address book
