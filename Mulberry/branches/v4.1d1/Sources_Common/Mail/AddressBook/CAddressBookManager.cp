@@ -989,19 +989,20 @@ void CAddressBookManager::ExpandAddresses(const cdstring& expand, cdstrvect& res
 {
 	// Search for addresses in Mulberry address books
 	CAddressList addr_list;
+	CAdbkAddress::CAddressFields fields;
 	if (CPreferences::sPrefs->mExpandFullName.GetValue())
 	{
-		SearchAddress(expand, CAdbkAddress::eMatchAnywhere, CAdbkAddress::eName, addr_list);
+		fields.push_back(CAdbkAddress::eName);
 	}
 	if (CPreferences::sPrefs->mExpandNickName.GetValue())
 	{
-		SearchAddress(expand, CAdbkAddress::eMatchAnywhere, CAdbkAddress::eNickName, addr_list);
+		fields.push_back(CAdbkAddress::eNickName);
 	}
 	if (CPreferences::sPrefs->mExpandEmail.GetValue())
 	{
-		SearchAddress(expand, CAdbkAddress::eMatchAnywhere, CAdbkAddress::eEmail, addr_list);
-
+		fields.push_back(CAdbkAddress::eEmail);
 	}
+	SearchAddress(expand, CAdbkAddress::eMatchAnywhere, fields, addr_list);
 
 	// Search for addresses in LDAP (only if required)
 	if (!CPreferences::sPrefs->mSkipLDAP.GetValue() || (addr_list.size() == 0))
