@@ -855,11 +855,6 @@ void CCardDAVVCardClient::_DeleteGroup(CAddressBook* adbk, const CGroupList* grp
 // Resolve address nick-name
 void CCardDAVVCardClient::_ResolveAddress(CAddressBook* adbk, const char* nick_name, CAdbkAddress*& addr)
 {
-	// vCard address book must exist
-	vCard::CVCardAddressBook* vadbk = adbk->GetVCardAdbk();
-	if (vadbk == NULL)
-		return;
-
 	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
 
 	// Cache actionable address book
@@ -891,11 +886,6 @@ void CCardDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 									const CAdbkAddress::CAddressFields& fields,
 									CAddressList& addr_list)
 {
-	// vCard address book must exist
-	vCard::CVCardAddressBook* vadbk = adbk->GetVCardAdbk();
-	if (vadbk == NULL)
-		return;
-
 	StINETClientAction action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress");
 
 	// Cache actionable address book - addresses actually go into list provided
@@ -1068,8 +1058,16 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 	}
 
 	vCard::CVCardAddressBook temp;
-	http::carddav::CCardDAVReportParser parser(temp, addr_list, true);
-	parser.ParseData(dout.GetData());
+	if (addr_list != NULL)
+	{
+		http::carddav::CCardDAVReportParser parser(temp, addr_list, true);
+		parser.ParseData(dout.GetData());
+	}
+	else if (adbk != NULL)
+	{
+		http::carddav::CCardDAVReportParser parser(temp, adbk, true);
+		parser.ParseData(dout.GetData());
+	}
 }
 
 // Return the encoded url for the adbk
