@@ -3305,7 +3305,11 @@ Handle CTextWidget::GetStyleRangeAs_ustl(UniCharArrayOffset start, UniCharCount 
 		atsui_styles[index] = atsui_cstyles[index];
 
 		if (runStart + runLength >= start + length)
+		{
+			// Adjust the final run to truncate to the actual length being copied
+			atsui_runs[index].runLength = start + length - startPos;
 			break;
+		}
 
 		startPos = runStart + runLength;
 		index++;
