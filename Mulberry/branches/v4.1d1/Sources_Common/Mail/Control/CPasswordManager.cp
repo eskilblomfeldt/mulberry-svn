@@ -101,6 +101,7 @@ void GetSecurityDetails(const CINETAccount* acct, cdstring& server, cdstring& an
 		else
 			protocol = 'siev';
 		break;
+	case CINETAccount::eWebDAVPrefs:
 	case CINETAccount::eHTTPCalendar:
 	case CINETAccount::eWebDAVCalendar:
 	case CINETAccount::eCalDAVCalendar:
