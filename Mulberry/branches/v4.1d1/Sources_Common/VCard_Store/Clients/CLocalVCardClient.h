@@ -129,6 +129,13 @@ protected:
 	void ListAddressBooks(CAddressBook* root, const cdstring& path);
 	void Append(CAddressBook* adbk, const CAddressList* add_addrs, const CGroupList* add_grps);
 
+	void SearchAddressBook (CAddressBook* adbk,
+							const cdstring& pattern,
+							const CAdbkAddress::CAddressFields& fields,
+							CAddressList* addr_list,
+							CGroupList* grp_list);
+
+
 private:
 			void	InitLocalClient();
 

@@ -31,8 +31,10 @@
 #include "CLocalCommon.h"
 
 #include "CVCardMapper.h"
+#include "CVCardSearch.h"
 
 #include "CVCardAddressBook.h"
+#include "CVCardDefinitions.h"
 #include "CVCardVCard.h"
 
 #if __dest_os == __win32_os || __dest_os == __linux_os
@@ -790,7 +792,9 @@ void CLocalVCardClient::_ResolveAddress(CAddressBook* adbk, const char* nick_nam
 	try
 	{
 		// Fetch all matching addresses
-		//SearchAddressBook(adbk, nick_name, CAdbkAddress::eNickName, NULL, NULL);
+		CAdbkAddress::CAddressFields fields;
+		fields.push_back(CAdbkAddress::eNickName);
+		SearchAddressBook(adbk, nick_name, fields, NULL, NULL);
 	}
 	catch (...)
 	{
@@ -835,7 +839,7 @@ void CLocalVCardClient::_SearchAddress(CAddressBook* adbk,
 		CAdbkAddress::ExpandMatch(match, matchit);
 
 		// Fetch all addresses
-		//SearchAddressBook(adbk, matchit, fields, &addr_list, NULL);
+		SearchAddressBook(adbk, matchit, fields, &addr_list, NULL);
 	}
 	catch (...)
 	{
@@ -976,4 +980,65 @@ cdstring CLocalVCardClient::MapAdbkCacheName(const cdstring& node_name) const
 	result += ".xml";
 
 	return result;
+}
+
+void CLocalVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& pattern, const CAdbkAddress::CAddressFields& fields,
+											CAddressList* addr_list, CGroupList* grp_list)
+{
+	// Map adbk field to vCard property
+	cdstrvect prop_names;
+	for(CAdbkAddress::CAddressFields::const_iterator iter = fields.begin(); iter != fields.end(); iter++)
+	{
+		switch(*iter)
+		{
+		case CAdbkAddress::eName:
+			prop_names.push_back(vCard::cVCardProperty_FN);
+			break;
+		case CAdbkAddress::eNickName:
+			prop_names.push_back(vCard::cVCardProperty_NICKNAME);
+			break;
+		case CAdbkAddress::eEmail:
+			prop_names.push_back(vCard::cVCardProperty_EMAIL);
+			break;
+		case CAdbkAddress::eCompany:
+			prop_names.push_back(vCard::cVCardProperty_ORG);
+			break;
+		case CAdbkAddress::eAddress:
+			prop_names.push_back(vCard::cVCardProperty_ADR);
+			break;
+		case CAdbkAddress::ePhoneWork:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::ePhoneHome:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::eFax:
+			prop_names.push_back(vCard::cVCardProperty_TEL);
+			break;
+		case CAdbkAddress::eURL:
+			prop_names.push_back(vCard::cVCardProperty_URL);
+			break;
+		case CAdbkAddress::eNotes:
+			prop_names.push_back(vCard::cVCardProperty_NOTE);
+			break;
+		}
+	}
+
+	// Get name for new file
+	cdstring fpath = MapAdbkName(adbk);
+	
+	// Make sure it already exists
+	if (!::fileexists(fpath))
+	{
+		//throw CGeneralException(-1, "Address Book file does not exist");
+		throw CGeneralException(-1);
+	}
+	
+	// Read address book from file
+	cdifstream is(fpath);
+	vCard::CVCardAddressBook temp;
+	temp.Parse(is);
+
+	vcardstore::SearchVCards(temp, pattern, prop_names, adbk, addr_list);
+
 }
