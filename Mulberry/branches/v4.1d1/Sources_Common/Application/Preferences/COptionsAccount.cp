@@ -49,7 +49,7 @@ COptionsAccount::~COptionsAccount()
 // Compare with same type
 int COptionsAccount::operator==(const COptionsAccount& comp) const
 {
-	return (mBaseRURL == comp.mBaseRURL);
+	return CINETAccount::operator==(comp) && (mBaseRURL == comp.mBaseRURL);
 }
 
 void COptionsAccount::SetServerType(EINETServerType type)
