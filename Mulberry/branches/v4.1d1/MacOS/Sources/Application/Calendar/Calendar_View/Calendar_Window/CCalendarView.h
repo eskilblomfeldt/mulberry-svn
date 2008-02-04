@@ -174,6 +174,8 @@ protected:
 
 			void		OnFileSave();
 
+			void		OnCheckCalendar();
+
 private:
 	bool mIgnoreValueFieldChanged;
 	

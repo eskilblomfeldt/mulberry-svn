@@ -210,6 +210,11 @@ Boolean CCalendarView::ObeyCommand(CommandT inCommand,void *ioParam)
 		cmdHandled = mCurrentView->GetTable()->ObeyCommand(inCommand, ioParam);
 		break;
 
+	case cmd_CheckCalendar:
+	case cmd_ToolbarCheckMailboxBtn:
+		OnCheckCalendar();
+		break;
+
 	default:
 		cmdHandled = CBaseView::ObeyCommand(inCommand, ioParam);
 		break;
@@ -305,6 +310,12 @@ void CCalendarView::FindCommandStatus(
 	case cmd_GotoToday:
 	case cmd_ToolbarShowTodayBtn:
 		mCurrentView->GetTable()->FindCommandStatus(inCommand, outEnabled, outUsesMark, outMark, outName);
+		break;
+
+	case cmd_CheckCalendar:
+	case cmd_ToolbarCheckMailboxBtn:
+		// Always enabled
+		outEnabled = true;
 		break;
 
 	default:

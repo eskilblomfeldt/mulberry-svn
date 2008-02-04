@@ -176,6 +176,11 @@ Boolean CCalendarStoreTable::ObeyCommand(CommandT inCommand,void *ioParam)
 		OnDeleteCalendar();
 		break;
 
+	case cmd_CheckCalendar:
+	case cmd_ToolbarCheckMailboxBtn:
+		OnCheckCalendar();
+		break;
+
 	case cmd_RefreshCalendarList:
 		OnRefreshList();
 		break;
@@ -325,12 +330,18 @@ void CCalendarStoreTable::FindCommandStatus(
 	case cmd_DeleteCalendar:
 	case cmd_FreeBusyCalendar:
 	case cmd_SendCalendar:
-		// Only if calendar selection;
+		// Only if calendar selection
 		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
 		break;
 
+	case cmd_CheckCalendar:
+	case cmd_ToolbarCheckMailboxBtn:
+		// Always enabled
+		outEnabled = true;
+		break;
+
 	case cmd_RefreshCalendarList:
-		// Only if single selection;
+		// Only if single selection
 		outEnabled = IsSingleSelection();
 		break;
 

@@ -833,6 +833,42 @@ bool CCalendarStoreTable::SendCalendar(TableIndexT row)
 	return true;
 }
 
+void CCalendarStoreTable::OnCheckCalendar()
+{
+	// If no selection, check all subscribed calendars
+	if (!IsSelectionValid())
+	{
+		const iCal::CICalendarList& cals = calstore::CCalendarStoreManager::sCalendarStoreManager->GetSubscribedCalendars();
+		for(iCal::CICalendarList::const_iterator iter = cals.begin(); iter != cals.end(); iter++)
+		{
+			calstore::CCalendarStoreNode* node = const_cast<calstore::CCalendarStoreNode*>(calstore::CCalendarStoreManager::sCalendarStoreManager->GetNode(*iter));
+			node->GetProtocol()->CheckCalendar(*node, *node->GetCalendar());
+		}
+	}
+	else
+	{
+		DoToSelection((DoToSelectionPP) &CCalendarStoreTable::CheckCalendar);
+	}
+
+	// Reset all views
+	CCalendarView::ResetAll();
+}
+
+bool CCalendarStoreTable::CheckCalendar(TableIndexT row)
+{
+	// Get calendar for hit cell
+	calstore::CCalendarStoreNode* node = GetCellNode(row);
+
+	// Only do those that are active calendars
+	if ((node == NULL) || !node->IsViewableCalendar() || !node->IsActive())
+		return false;
+
+	if (node->GetCalendar() != NULL)
+		return node->GetProtocol()->CheckCalendar(*node, *node->GetCalendar());
+		
+	return false;
+}
+
 void CCalendarStoreTable::OnRefreshList()
 {
 	// Only if we have a single selection

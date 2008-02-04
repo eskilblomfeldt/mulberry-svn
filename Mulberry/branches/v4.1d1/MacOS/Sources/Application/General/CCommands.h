@@ -421,6 +421,7 @@ const	CommandT	cmd_NewWebCalendar = 9510;
 const	CommandT	cmd_RefreshWebCalendar = 9511;
 const	CommandT	cmd_UploadWebCalendar = 9512;
 const	CommandT	cmd_FreeBusyCalendar = 9513;
+const	CommandT	cmd_CheckCalendar = 9514;
 
 // Calendar Window
 const	CommandT	cmd_NewEvent = 9600;

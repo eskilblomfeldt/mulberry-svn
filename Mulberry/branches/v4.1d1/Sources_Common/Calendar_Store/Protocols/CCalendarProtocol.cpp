@@ -812,67 +812,35 @@ void CCalendarProtocol::RenameCalendar(const CCalendarStoreNode& node, const cds
 
 bool CCalendarProtocol::CheckCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
 {
-	bool result = mClient->_CheckCalendar(node, cal);
-	
-	// Always keep disconnected cache in sync with server
-	if (result && (mCacheClient != NULL))
+	bool result = false;
+
+	// See if offline or disconnected	
+	if (IsOffline() || IsDisconnected())
 	{
-		// If cache does not exist, create it
-		if (!mCacheClient->_TestCalendar(node))
+		// Nothing to do here. We will assume that local files are always
+		// up to date.
+	}
+	else
+	{
+		// Look for local cache first
+		if ((mCacheClient != NULL) && !mCacheIsPrimary)
 		{
-			mCacheClient->_CreateCalendar(node);
-			mCacheClient->_WriteFullCalendar(node, cal);
+			// Read in the calendar cache if it exists
+			if (mCacheClient->_TestCalendar(node))
+				mCacheClient->_ReadFullCalendar(node, cal);
+
+			// Sync cache with server doing playback if needed
+			SyncFromServer(node, cal);
 		}
 		else
 		{
-			// Get temp copy of cached calendar
-			iCal::CICalendar temp;
-			mCacheClient->_ReadFullCalendar(node, temp);
-			
-			// Sync changes in cache
-			bool server_changed = false;
-			if (temp.GetETag() == cal.GetETag())
-			{
-				if (temp.NeedsSync())
-				{
-					// Local overwrites server
-					cal.Clear();
-					mCacheClient->_ReadFullCalendar(node, cal);
-					cal.ClearRecording();
-					server_changed = true;
-				}
-			}
-			else
-			{
-				if (!temp.NeedsSync())
-				{
-					// Server overwrites local - nothing to do just fall through to write
-				}
-				else
-				{
-					// Sync the two
-					iCal::CICalendarSync sync(temp, cal);
-					sync.Sync();
-					
-					// Local overwrites server
-					cal.Clear();
-					mCacheClient->_ReadFullCalendar(node, cal);
-					cal.ClearRecording();
-				}
-			}
-
-			// Update the server if needed
-			if (server_changed)
-			{
-				mClient->_WriteFullCalendar(node, cal);
-			}
-
-			// Now write out the new cache data, this will overwrite any recorded
-			// changes that have been sync'd so they will not be sync'd again
-			mCacheClient->_WriteFullCalendar(node, cal);
+			// Just read full calendar from server
+			result = mClient->_CalendarChanged(node, cal);
+			if (result)
+				ReadFullCalendar(node, cal);
 		}
 	}
-	
+
 	return result;
 }
 
@@ -1040,6 +1008,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 		// Step 1
 		cdstrmap comps;
 		bool server_changed = mClient->_CalendarChanged(node, cal);
+		bool changes_made = false;
 		if (server_changed)
 			mClient->_GetComponentInfo(node, cal, comps);
 		else
@@ -1061,6 +1030,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 				{
 					// Add component to server
 					mClient->_AddComponent(node, cal, *comp);
+					changes_made = true;
 
 					// Add to added cache
 					cache_added.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
@@ -1075,6 +1045,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 				{
 					// Remove component from server
 					mClient->_RemoveComponent(node, cal, (*iter).second.GetRURL());
+					changes_made = true;
 					
 					// Remove from server component info
 					comps.erase((*iter).second.GetRURL());
@@ -1091,6 +1062,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 					// Change it on the server
 					const iCal::CICalendarComponent* comp = cal.GetComponentByKey((*iter).first);
 					mClient->_ChangeComponent(node, cal, *comp);
+					changes_made = true;
 					cache_changed.insert(cdstrmap::value_type((*iter).second.GetRURL(), (*iter).second.GetETag()));
 				}
 			}
@@ -1146,6 +1118,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 					{
 						// Write changed cache component to server
 						mClient->_ChangeComponent(node, cal, *cache_comp);
+						changes_made = true;
 					}
 					
 					// Step 3.2.2
@@ -1164,6 +1137,7 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 							{
 								// Cache is newer than server - cache overwrites to server
 								mClient->_ChangeComponent(node, cal, *cache_comp);
+								changes_made = true;
 							}
 							else if (result == -1)
 							{
@@ -1229,8 +1203,9 @@ void CCalendarProtocol::SyncComponentsFromServer(const CCalendarStoreNode& node,
 		// Clear out cache recording
 		cal.ClearRecording();
 		
-		// Get the current server sync token
-		mClient->_UpdateSyncToken(node, cal);
+		// Get the current server sync token if changes were made or it was differemt
+		if (server_changed || changes_made)
+			mClient->_UpdateSyncToken(node, cal);
 
 		// Now write back cache
 		if (!mCacheClient->_TouchCalendar(node))

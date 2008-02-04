@@ -133,6 +133,8 @@ protected:
 			void		OnRenameCalendar();
 			bool		RenameCalendar(TableIndexT row);
 			void		OnDeleteCalendar();
+			void		OnCheckCalendar();
+			bool		CheckCalendar(TableIndexT row);
 			void		OnRefreshList();
 			void		OnFreeBusyCalendar();
 			bool		FreeBusyCalendar(TableIndexT row,
