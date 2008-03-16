@@ -280,7 +280,7 @@ void CCalendarStoreTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = node->GetProtocol()->IsLoggedOn() ? checkMark : noMark;
+					outMark = node->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 2.2 (as above)
@@ -300,7 +300,7 @@ void CCalendarStoreTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = !node->GetProtocol()->IsDisconnected() ? checkMark : noMark;
+					outMark = !node->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 3.2 (as above)

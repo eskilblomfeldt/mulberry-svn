@@ -448,7 +448,7 @@ void CPrefsAccount::DoNewAccount(void)
 						break;
 					}
 					acct->SetName(new_name);
-					mCopyPrefs->mRemoteAccounts.Value().push_back(acct);
+					mCopyPrefs->mRemoteAccounts.Value().push_back((COptionsAccount*)acct);
 					mCopyPrefs->mRemoteAccounts.SetDirty();
 					insert_pos = mCopyPrefs->mMailAccounts.GetValue().size() +
 									mCopyPrefs->mSMTPAccounts.GetValue().size() +

@@ -301,7 +301,7 @@ void CAdbkManagerTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = adbk->GetProtocol()->IsLoggedOn() ? checkMark : noMark;
+					outMark = adbk->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 2.2 (as above)
@@ -321,7 +321,7 @@ void CAdbkManagerTable::FindCommandStatus(
 				{
 					outEnabled = true;
 					outUsesMark = true;
-					outMark = !adbk->GetProtocol()->IsDisconnected() ? checkMark : noMark;
+					outMark = !adbk->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
 					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
 				}
 				// 3.2 (as above)

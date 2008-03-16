@@ -211,7 +211,7 @@ void CToDoItem::FindCommandStatus(
 		// Always enabled if real to do item
 		outEnabled = (mType == eToDo);
 		outUsesMark = true;
-		outMark = mIsCompleted ? checkMark : noMark;
+		outMark = mIsCompleted ? (UInt16)checkMark : (UInt16)noMark;
 		break;
 
 	default:
