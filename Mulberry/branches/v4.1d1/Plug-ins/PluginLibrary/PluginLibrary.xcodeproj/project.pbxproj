@@ -56,7 +56,6 @@
 		AFBD946A0AD9BC9C00DD4C86 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD94690AD9BC9C00DD4C86 /* md5.h */; };
 		AFBD946C0AD9BC9C00DD4C86 /* HResourceMap.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD946B0AD9BC9C00DD4C86 /* HResourceMap.h */; };
 		AFBD946E0AD9BC9C00DD4C86 /* CGeneralException.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD946D0AD9BC9C00DD4C86 /* CGeneralException.h */; };
-		AFBD94700AD9BC9C00DD4C86 /* MoreFilesX.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD946F0AD9BC9C00DD4C86 /* MoreFilesX.h */; };
 		AFBD94720AD9BC9C00DD4C86 /* CGB2312.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD94710AD9BC9C00DD4C86 /* CGB2312.h */; };
 		AFBD94740AD9BC9C00DD4C86 /* CBig5.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD94730AD9BC9C00DD4C86 /* CBig5.h */; };
 		AFBD94760AD9BC9C00DD4C86 /* CJIS_0201.h in Headers */ = {isa = PBXBuildFile; fileRef = AFBD94750AD9BC9C00DD4C86 /* CJIS_0201.h */; };
@@ -384,7 +383,6 @@
 				AFBD946A0AD9BC9C00DD4C86 /* md5.h in Headers */,
 				AFBD946C0AD9BC9C00DD4C86 /* HResourceMap.h in Headers */,
 				AFBD946E0AD9BC9C00DD4C86 /* CGeneralException.h in Headers */,
-				AFBD94700AD9BC9C00DD4C86 /* MoreFilesX.h in Headers */,
 				AFBD94720AD9BC9C00DD4C86 /* CGB2312.h in Headers */,
 				AFBD94740AD9BC9C00DD4C86 /* CBig5.h in Headers */,
 				AFBD94760AD9BC9C00DD4C86 /* CJIS_0201.h in Headers */,
@@ -439,10 +437,12 @@
 		AFBD93F00AD9BC9400DD4C86 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AFBD93F10AD9BC9400DD4C86 /* Build configuration list for PBXProject "PluginLibrary" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AFBD93EE0AD9BC9400DD4C86;
 			productRefGroup = AFBD93FC0AD9BC9400DD4C86 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AFBD93FA0AD9BC9400DD4C86 /* PluginLibrary MachO */,
 			);
