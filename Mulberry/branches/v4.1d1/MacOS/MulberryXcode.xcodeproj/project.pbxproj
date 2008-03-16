@@ -151,6 +151,7 @@
 		AF52F2170AE3367D00A75C72 /* f4996e82.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF5C0AE32EB300A75C72 /* f4996e82.0 */; };
 		AF52F2180AE3367D00A75C72 /* f73e89fd.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF5D0AE32EB300A75C72 /* f73e89fd.0 */; };
 		AF52F2250AE336CD00A75C72 /* vtimezones.ics in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF7E0AE32EB400A75C72 /* vtimezones.ics */; };
+		AF8093D10D425EEF002A2E39 /* CVCardSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF8093D00D425EEF002A2E39 /* CVCardSearch.cpp */; };
 		AF8269410C1B2C9300B18EED /* CStreamBuffer.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82692E0C1B2C9200B18EED /* CStreamBuffer.cp */; };
 		AF8269440C1B2C9300B18EED /* XMLDocument.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF8269310C1B2C9200B18EED /* XMLDocument.cp */; };
 		AF8269470C1B2C9300B18EED /* XMLName.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF8269340C1B2C9200B18EED /* XMLName.cp */; };
@@ -1305,6 +1306,132 @@
 			remoteGlobalIDString = AF4199450AE9A55A00E19592;
 			remoteInfo = "vCard MachO";
 		};
+		AF7AD7650D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4196C40AE6F4E000E19592;
+			remoteInfo = "CocoaSpeller MachO";
+		};
+		AF7AD7670D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E6F0AEA73F300E19592 /* GSSAPI.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AFD93B960AE5ADFB007F506F;
+			remoteInfo = "GSSAPI MachO";
+		};
+		AF7AD7690D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419EA50AEA750800E19592 /* QuickmailProAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4198F70AE9A3C400E19592;
+			remoteInfo = "QuickmailPro MachO";
+		};
+		AF7AD76B0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E460AEA72AE00E19592 /* CommunicatorAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF0F2E8A0AE3C9950074CFEF;
+			remoteInfo = "Communicator MachO";
+		};
+		AF7AD76D0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E9F0AEA750800E19592 /* PluginLibrary.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AFBD93FA0AD9BC9400DD4C86;
+			remoteInfo = "PluginLibrary MachO";
+		};
+		AF7AD76F0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E580AEA72C900E19592 /* EudoraAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF419A990AE9ABB600E19592;
+			remoteInfo = "Eudora MachO";
+		};
+		AF7AD7710D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E9C0AEA750800E19592 /* PineAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF41985B0AE9A05D00E19592;
+			remoteInfo = "PineAdbkIO MachO";
+		};
+		AF7AD7730D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419EC90AEA753B00E19592 /* vCardAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4199440AE9A55A00E19592;
+			remoteInfo = "vCard MachO";
+		};
+		AF7AD7750D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E930AEA74B900E19592 /* OEAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4199CC0AE9A7D000E19592;
+			remoteInfo = "OEAdbkIO MachO";
+		};
+		AF7AD7770D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E610AEA72DB00E19592 /* GPG.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF8AAE540AE5C83600A94FD4;
+			remoteInfo = "GPG MachO";
+		};
+		AF7AD7790D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419EC00AEA753B00E19592 /* SMIME.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF419D050AEA700500E19592;
+			remoteInfo = "SMIME MachO";
+		};
+		AF7AD77B0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E810AEA747800E19592 /* NetscapeAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF419A3A0AE9AA5B00E19592;
+			remoteInfo = "Netscape MachO";
+		};
+		AF7AD77D0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFD93B540AE5AA10007F506F /* CRAM-MD5.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AFBD95D10AD9CA0700DD4C86;
+			remoteInfo = "CRAM-MD5 MachO";
+		};
+		AF7AD77F0D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E4F0AEA72BB00E19592 /* Eudora4AdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF419AE70AE9CB1100E19592;
+			remoteInfo = "Eudora4 MachO";
+		};
+		AF7AD7810D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AFD93B660AE5AB45007F506F /* DIGEST-MD5.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF0F2FD90AE3D0990074CFEF;
+			remoteInfo = "DIGEST-MD5 MachO";
+		};
+		AF7AD7830D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E780AEA740200E19592 /* Kerberos.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AFD93C2F0AE5B342007F506F;
+			remoteInfo = "Kerberos MachO";
+		};
+		AF7AD7850D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419EA20AEA750800E19592 /* QuickmailAdbkIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF4198AE0AE9A25500E19592;
+			remoteInfo = "Quickmail MachO";
+		};
+		AF7AD7870D83A1540056107B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419EC60AEA753B00E19592 /* SSL.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AF419C850AEA6B9E00E19592;
+			remoteInfo = "SSL MachO";
+		};
 		AFC79A500CCBEB4C00E62F0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */;
@@ -1670,6 +1797,8 @@
 		AF52EF5C0AE32EB300A75C72 /* f4996e82.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = f4996e82.0; sourceTree = "<group>"; };
 		AF52EF5D0AE32EB300A75C72 /* f73e89fd.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = f73e89fd.0; sourceTree = "<group>"; };
 		AF52EF7E0AE32EB400A75C72 /* vtimezones.ics */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = vtimezones.ics; sourceTree = "<group>"; };
+		AF8093CF0D425EEF002A2E39 /* CVCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVCardSearch.h; sourceTree = "<group>"; };
+		AF8093D00D425EEF002A2E39 /* CVCardSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CVCardSearch.cpp; sourceTree = "<group>"; };
 		AF82692E0C1B2C9200B18EED /* CStreamBuffer.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CStreamBuffer.cp; path = ../../Libraries/XMLLib/Source/CStreamBuffer.cp; sourceTree = "<group>"; };
 		AF82692F0C1B2C9200B18EED /* CStreamBuffer.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CStreamBuffer.h; path = ../../Libraries/XMLLib/Source/CStreamBuffer.h; sourceTree = "<group>"; };
 		AF8269300C1B2C9200B18EED /* XMLAttribute.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLAttribute.h; path = ../../Libraries/XMLLib/Source/XMLAttribute.h; sourceTree = "<group>"; };
@@ -3998,6 +4127,8 @@
 				AF2551640C4326C8001AAE53 /* CVCardStoreXML.cpp */,
 				AF2551630C4326C8001AAE53 /* CVCardMapper.h */,
 				AF2551620C4326C8001AAE53 /* CVCardMapper.cpp */,
+				AF8093CF0D425EEF002A2E39 /* CVCardSearch.h */,
+				AF8093D00D425EEF002A2E39 /* CVCardSearch.cpp */,
 				AF25515B0C4326C8001AAE53 /* Clients */,
 			);
 			name = VCard_Store;
@@ -7880,6 +8011,24 @@
 			buildRules = (
 			);
 			dependencies = (
+				AF7AD76E0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD77E0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7820D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7840D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7680D83A1540056107B /* PBXTargetDependency */,
+				AF7AD76C0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7700D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7800D83A1540056107B /* PBXTargetDependency */,
+				AF7AD77C0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7760D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7720D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7860D83A1540056107B /* PBXTargetDependency */,
+				AF7AD76A0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7740D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7780D83A1540056107B /* PBXTargetDependency */,
+				AF7AD77A0D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7880D83A1540056107B /* PBXTargetDependency */,
+				AF7AD7660D83A1540056107B /* PBXTargetDependency */,
 			);
 			name = MulberryXcode;
 			productInstallPath = "$(HOME)/Applications";
@@ -9239,10 +9388,104 @@
 				AF17AE450CCC585C00205B17 /* CMulberryCocoaApp.m in Sources */,
 				AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */,
 				AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */,
+				AF8093D10D425EEF002A2E39 /* CVCardSearch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AF7AD7660D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CocoaSpeller MachO";
+			targetProxy = AF7AD7650D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7680D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GSSAPI MachO";
+			targetProxy = AF7AD7670D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD76A0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "QuickmailPro MachO";
+			targetProxy = AF7AD7690D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD76C0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Communicator MachO";
+			targetProxy = AF7AD76B0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD76E0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "PluginLibrary MachO";
+			targetProxy = AF7AD76D0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7700D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Eudora MachO";
+			targetProxy = AF7AD76F0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7720D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "PineAdbkIO MachO";
+			targetProxy = AF7AD7710D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7740D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "vCard MachO";
+			targetProxy = AF7AD7730D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7760D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "OEAdbkIO MachO";
+			targetProxy = AF7AD7750D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7780D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "GPG MachO";
+			targetProxy = AF7AD7770D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD77A0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "SMIME MachO";
+			targetProxy = AF7AD7790D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD77C0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Netscape MachO";
+			targetProxy = AF7AD77B0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD77E0D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "CRAM-MD5 MachO";
+			targetProxy = AF7AD77D0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7800D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Eudora4 MachO";
+			targetProxy = AF7AD77F0D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7820D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "DIGEST-MD5 MachO";
+			targetProxy = AF7AD7810D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7840D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Kerberos MachO";
+			targetProxy = AF7AD7830D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7860D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Quickmail MachO";
+			targetProxy = AF7AD7850D83A1540056107B /* PBXContainerItemProxy */;
+		};
+		AF7AD7880D83A1540056107B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "SSL MachO";
+			targetProxy = AF7AD7870D83A1540056107B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		0867D6AAFE840B52C02AAC07 /* InfoPlist.strings */ = {
@@ -9363,9 +9606,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				OTHER_CPLUSPLUSFLAGS = "-fpermissive";
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
 				ZERO_LINK = NO;
