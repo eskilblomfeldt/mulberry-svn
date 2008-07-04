@@ -45,7 +45,9 @@ namespace calstore
 
 	<!ELEMENT calendarnode	(name, last-sync?, webcal?, calendarnode*) >
 	<!ATTLIST calendarnode	directory		(true|false) "false"
-							has_expanded	(true|false) >
+							has_expanded	(true|false) 
+							inbox           (true|false) "false"
+							outbox          (true|false) "false">
 
 	<!ELEMENT name			(#PCDATA) >
 
@@ -74,6 +76,8 @@ const char* cXMLAttribute_datestamp = "datestamp";
 const xmllib::XMLName cXMLElement_calendarnode("calendarnode");
 const char* cXMLAttribute_directory = "directory";
 const char* cXMLAttribute_has_expanded = "has_expanded";
+const char*	cXMLAttribute_inbox = "inbox";
+const char*	cXMLAttribute_outbox = "outbox";
 
 const xmllib::XMLName cXMLElement_name("name");
 

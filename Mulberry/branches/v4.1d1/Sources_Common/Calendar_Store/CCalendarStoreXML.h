@@ -35,6 +35,8 @@ extern const char*			 cXMLAttribute_has_expanded;
 
 extern const xmllib::XMLName cXMLElement_calendarnode;
 extern const char*			 cXMLAttribute_directory;
+extern const char*			 cXMLAttribute_inbox;
+extern const char*			 cXMLAttribute_outbox;
 
 extern const xmllib::XMLName cXMLElement_name;
 

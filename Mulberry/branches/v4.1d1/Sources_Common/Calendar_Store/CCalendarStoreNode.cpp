@@ -904,6 +904,11 @@ void CCalendarStoreNode::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* par
 			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_directory, IsDirectory());
 			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_has_expanded, HasExpanded());
 		}
+		
+		if (IsInbox())		
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_inbox, IsInbox());
+		if (IsOutbox())		
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_outbox, IsOutbox());
 
 		// Set name child node
 		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
@@ -956,6 +961,11 @@ void CCalendarStoreNode::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 			if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_has_expanded, temp))
 				SetHasExpanded(temp);
 		}
+
+		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_inbox, temp))
+			SetFlags(eIsInbox, temp);
+		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_outbox, temp))
+			SetFlags(eIsOutbox, temp);
 
 		// Must have a name
 		cdstring name;
