@@ -754,10 +754,31 @@ void CCalendarStoreTable::SetTextStyle(const calstore::CCalendarStoreNode* node,
 			RGBColor text_color;
 			Style text_style = normal;
 
-			text_color = CPreferences::sPrefs->mMboxClosedStyle.GetValue().color;
-			color_set = true;
-			text_style = text_style | CPreferences::sPrefs->mMboxClosedStyle.GetValue().style & 0x007F;
-			strike =  strike || ((CPreferences::sPrefs->mMboxClosedStyle.GetValue().style & 0x0080) != 0);
+			if (node->IsSubscribed())
+			{
+				iCal::CICalendar* cal = node->GetCalendar();
+				if (node->IsInbox() && (cal != NULL) && cal->HasData())
+				{
+					text_color = CPreferences::sPrefs->mMboxUnseenStyle.GetValue().color;
+					color_set = true;
+					text_style = text_style | CPreferences::sPrefs->mMboxUnseenStyle.GetValue().style & 0x007F;
+					strike =  strike || ((CPreferences::sPrefs->mMboxUnseenStyle.GetValue().style & 0x0080) != 0);
+				}
+				else
+				{				
+					text_color = CPreferences::sPrefs->mMboxFavouriteStyle.GetValue().color;
+					color_set = true;
+					text_style = text_style | CPreferences::sPrefs->mMboxFavouriteStyle.GetValue().style & 0x007F;
+					strike =  strike || ((CPreferences::sPrefs->mMboxFavouriteStyle.GetValue().style & 0x0080) != 0);
+				}
+			}
+			if (!color_set)
+			{
+				text_color = CPreferences::sPrefs->mMboxClosedStyle.GetValue().color;
+				color_set = true;
+				text_style = text_style | CPreferences::sPrefs->mMboxClosedStyle.GetValue().style & 0x007F;
+				strike =  strike || ((CPreferences::sPrefs->mMboxClosedStyle.GetValue().style & 0x0080) != 0);
+			}
 
 			::RGBForeColor(&text_color);
 			::TextFace(text_style);
