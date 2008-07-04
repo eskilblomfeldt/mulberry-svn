@@ -319,7 +319,7 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 	}
 }
 
-void CCalDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+void CCalDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal, bool if_changed)
 {
 	// Start UI action
 	StINETClientAction _action(this, "Status::Calendar::Reading", "Error::Calendar::OSErrReadCalendar", "Error::Calendar::NoBadReadCalendar", node.GetName());

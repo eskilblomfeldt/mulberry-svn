@@ -525,7 +525,7 @@ void CLocalCalendarClient::_SizeCalendar(CCalendarStoreNode& node)
 		node.SetSize(0);
 }
 
-void CLocalCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+void CLocalCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal, bool if_changed)
 {
 	// Get name for new file
 	cdstring fpath = MapName(node);

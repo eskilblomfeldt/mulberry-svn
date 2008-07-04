@@ -672,7 +672,7 @@ void CWebDAVCalendarClient::SizeCalendar_HTTP(CCalendarStoreNode& node)
 	node.SetSize(request->GetContentLength());
 }
 
-void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal, bool if_changed)
 {
 	// Start UI action
 	StINETClientAction _action(this, "Status::Calendar::Reading", "Error::Calendar::OSErrReadCalendar", "Error::Calendar::NoBadReadCalendar", node.GetName());
@@ -691,6 +691,12 @@ void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iC
 		// Set server address
 		acct->SetServerIP(parsed.Server());
 		
+		// Handle authentication
+		if (!parsed.User().empty())
+		{
+			acct->GetAuthenticatorUserPswd()->SetUID(parsed.User());
+		}
+
 		// Set TLS type
 		if ((parsed.SchemeType() == CURL::eHTTP) || (parsed.SchemeType() == CURL::eWebcal))
 			acct->SetTLSType(CINETAccount::eNoTLS);
@@ -712,18 +718,24 @@ void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iC
 
 	// Create WebDAV GET
 	auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl));
+	if (if_changed)
+		request->SetETag(cal.GetETag(), false);
 	http::CHTTPOutputDataString dout;
 	request->SetData(&dout);
 
 	// Process it
 	RunSession(request.get());
 	
-	
 	// Check response status
+	bool changed = true;
 	switch(request->GetStatusCode())
 	{
 	case http::eStatus_OK:
 		// Do default action
+		break;
+	case http::eStatus_NotModified:
+		// Nothing more to do
+		changed = false;
 		break;
 	default:
 		// Handle error and exit here
@@ -731,50 +743,53 @@ void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iC
 		return;
 	}
 
-	// Read calendar from file
-	cdstring data = dout.GetData();
-	std::istrstream is(data.c_str());
-	cal.Parse(is);
-	
-	// Update ETag
-	if (request->GetNewETag() != NULL)
+	if (changed)
 	{
-		cdstring temp(*request->GetNewETag());
-
-		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
-		if (!temp.isquoted())
-			temp.quote(true);
+		// Read calendar from file
+		cdstring data = dout.GetData();
+		std::istrstream is(data.c_str());
+		cal.Parse(is);
 		
-		cal.SetETag(temp);
-	}
-	else
-		cal.SetETag(cdstring::null_str);
-	
-	// Check read-only status
-	auto_ptr<http::webdav::CWebDAVOptions> optrequest(new http::webdav::CWebDAVOptions(this, rurl));
+		// Update ETag
+		if (request->GetNewETag() != NULL)
+		{
+			cdstring temp(*request->GetNewETag());
 
-	// Process it
-	RunSession(optrequest.get());
-	
-	
-	// Check response status
-	switch(optrequest->GetStatusCode())
-	{
-	case http::eStatus_OK:
-	case http::eStatus_NoContent:
-		// Do default action
-		break;
-	case eStatus_NotImplemented:
-		// Ignore failure
-		return;
-	default:
-		// Handle error and exit here
-		HandleHTTPError(optrequest.get());
-		return;
-	}
+			// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+			if (!temp.isquoted())
+				temp.quote(true);
+			
+			cal.SetETag(temp);
+		}
+		else
+			cal.SetETag(cdstring::null_str);
+		
+		// Check read-only status
+		auto_ptr<http::webdav::CWebDAVOptions> optrequest(new http::webdav::CWebDAVOptions(this, rurl));
 
-	// Look for PUT
-	cal.SetReadOnly(!optrequest->IsAllowed(http::cRequestPUT));
+		// Process it
+		RunSession(optrequest.get());
+		
+		
+		// Check response status
+		switch(optrequest->GetStatusCode())
+		{
+		case http::eStatus_OK:
+		case http::eStatus_NoContent:
+			// Do default action
+			break;
+		case eStatus_NotImplemented:
+			// Ignore failure
+			return;
+		default:
+			// Handle error and exit here
+			HandleHTTPError(optrequest.get());
+			return;
+		}
+
+		// Look for PUT
+		cal.SetReadOnly(!optrequest->IsAllowed(http::cRequestPUT));
+	}
 }
 
 void CWebDAVCalendarClient::_WriteFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
