@@ -208,20 +208,58 @@ void CURL::Parse(const cdstring& url, bool decode)
 		
 		// Look for server
 		const char* p = ::strchr(temp.c_str(), '/');
+		cdstring host;
 		if (p == NULL)
-			mServer = temp;
+		{
+			host = temp;
+		}
 		else
 		{
 			punt_size = p - temp.c_str();
 			if (punt_size != 0)
 			{
-				mServer.assign(temp, 0, punt_size);
+				host.assign(temp, 0, punt_size);
 				temp.erase(0, punt_size);
 			}
 			
 			mPath = temp;
 			if (decode)
 				mPath.DecodeURL();
+		}
+		
+		// Now decode user:password@server
+		p = ::strchr(host.c_str(), '@');
+		cdstring userpswd;
+		if (p == NULL)
+		{
+			mServer = host;
+		}
+		else
+		{
+			punt_size = p - host.c_str();
+			if (punt_size != 0)
+			{
+				userpswd.assign(host, 0, punt_size);
+				host.erase(0, punt_size+1);
+			}
+			mServer = host;
+			
+			p = ::strchr(userpswd.c_str(), ':');
+			if (p == NULL)
+			{
+				mUser = userpswd;
+			}
+			else
+			{
+				punt_size = p - userpswd.c_str();
+				if (punt_size != 0)
+				{
+					mUser.assign(userpswd, 0, punt_size);
+					userpswd.erase(0, punt_size+1);
+				}
+				
+				mPassword = userpswd;
+			}
 		}
 		break;
 	}
@@ -250,6 +288,25 @@ cdstring CURL::ToString(EConversion conversion, bool encode) const
 	if (conversion == eAbsolute)
 	{
 		result += mScheme;
+		switch(mSchemeType)
+		{
+		case eHTTP:
+		case eHTTPS:
+		case eWebcal:
+		{
+			if (!mUser.empty())
+			{
+				result += mUser;
+				if (!mPassword.empty())
+				{
+					result += ":";
+					result += mPassword;
+				}
+				result += "@";
+			}
+		}
+		default:;
+		}
 		result += mServer;
 	}
 
@@ -275,6 +332,12 @@ bool CURL::Equal(const CURL& comp) const
 {
 	// Compare each component
 	if (mScheme.compare(comp.mScheme, true) != 0)
+		return false;
+	
+	if (mUser.compare(comp.mUser, true) != 0)
+		return false;
+	
+	if (mPassword.compare(comp.mPassword, true) != 0)
 		return false;
 	
 	if (mServer.compare(comp.mServer, true) != 0)

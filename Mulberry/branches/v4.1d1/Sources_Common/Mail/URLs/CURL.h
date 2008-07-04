@@ -108,6 +108,16 @@ public:
 		return mScheme;
 	}
 	
+	const cdstring& User() const
+	{
+		return mUser;
+	}
+	
+	const cdstring& Password() const
+	{
+		return mPassword;
+	}
+	
 	const cdstring& Server() const
 	{
 		return mServer;
@@ -131,6 +141,8 @@ public:
 protected:
 	EScheme		mSchemeType;
 	cdstring	mScheme;
+	cdstring	mUser;
+	cdstring	mPassword;
 	cdstring	mServer;
 	cdstring	mPath;
 	cdstring	mExtended;
