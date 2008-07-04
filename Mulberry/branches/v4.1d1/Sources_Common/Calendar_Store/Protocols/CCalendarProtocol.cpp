@@ -820,6 +820,10 @@ bool CCalendarProtocol::CheckCalendar(const CCalendarStoreNode& node, iCal::CICa
 		// Nothing to do here. We will assume that local files are always
 		// up to date.
 	}
+	else if (IsWebCalendar())
+	{
+		SubscribeFullCalendar(node, cal);
+	}
 	else
 	{
 		// Look for local cache first
@@ -894,6 +898,7 @@ void CCalendarProtocol::SyncFromServer(const CCalendarStoreNode& node, iCal::CIC
 		SyncComponentsFromServer(node, cal);
 	else
 		SyncFullFromServer(node, cal);
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::SyncFullFromServer(const CCalendarStoreNode& node, iCal::CICalendar& cal)
@@ -1265,13 +1270,14 @@ void CCalendarProtocol::CopyCalendarContents(const CCalendarStoreNode& node, iCa
 	}
 }
 
-void CCalendarProtocol::ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
+void CCalendarProtocol::ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal, bool if_changed)
 {
 	// Don't do on server if cache is primary
 	if (mCacheIsPrimary)
-		mCacheClient->_ReadFullCalendar(node, cal);
+		mCacheClient->_ReadFullCalendar(node, cal, if_changed);
 	else
-		mClient->_ReadFullCalendar(node, cal);
+		mClient->_ReadFullCalendar(node, cal, if_changed);
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::WriteFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
@@ -1300,7 +1306,8 @@ void CCalendarProtocol::WriteFullCalendar(const CCalendarStoreNode& node, iCal::
 void CCalendarProtocol::SubscribeFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal)
 {
 	// Always read from the main server
-	mClient->_ReadFullCalendar(node, cal);
+	bool if_changed = !cal.GetETag().empty();
+	mClient->_ReadFullCalendar(node, cal, if_changed);
 
 	// Always keep disconnected cache in sync with server
 	if (mCacheClient != NULL)
@@ -1334,6 +1341,7 @@ void CCalendarProtocol::AddComponent(const CCalendarStoreNode& node, iCal::CICal
 	{
 		// Always fall back to writing entire calendar
 		WriteFullCalendar(node, cal);
+		Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 		return;
 	}
 	
@@ -1352,6 +1360,8 @@ void CCalendarProtocol::AddComponent(const CCalendarStoreNode& node, iCal::CICal
 		// Set sync time in node
 		node.SyncNow();
 	}
+
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::ChangeComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component)
@@ -1361,6 +1371,7 @@ void CCalendarProtocol::ChangeComponent(const CCalendarStoreNode& node, iCal::CI
 	{
 		// Always fall back to writing entire calendar
 		WriteFullCalendar(node, cal);
+		Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 		return;
 	}
 	
@@ -1379,6 +1390,8 @@ void CCalendarProtocol::ChangeComponent(const CCalendarStoreNode& node, iCal::CI
 		// Set sync time in node
 		node.SyncNow();
 	}
+
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component)
@@ -1388,6 +1401,7 @@ void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CI
 	{
 		// Always fall back to writing entire calendar
 		WriteFullCalendar(node, cal);
+		Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 		return;
 	}
 	
@@ -1406,6 +1420,8 @@ void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CI
 		// Set sync time in node
 		node.SyncNow();
 	}
+
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const cdstring& rurl)
@@ -1415,6 +1431,7 @@ void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CI
 	{
 		// Always fall back to writing entire calendar
 		WriteFullCalendar(node, cal);
+		Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 		return;
 	}
 	
@@ -1433,6 +1450,8 @@ void CCalendarProtocol::RemoveComponent(const CCalendarStoreNode& node, iCal::CI
 		// Set sync time in node
 		node.SyncNow();
 	}
+
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 // Only called for component based calendar stores
@@ -1457,6 +1476,8 @@ void CCalendarProtocol::RemoveAllComponents(const CCalendarStoreNode& node, iCal
 		// Node state changed
 		DumpCalendars();
 	}
+
+	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
 void CCalendarProtocol::ReadComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const cdstring& rurl)

@@ -170,7 +170,7 @@ public:
 	void CopyCalendar(const CCalendarStoreNode& node, iCal::CICalendar& newcal);
 	void CopyCalendarContents(const CCalendarStoreNode& node, iCal::CICalendar& newcal);
 
-	void ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
+	void ReadFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal, bool if_changed=false);
 	void WriteFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 
 	void SubscribeFullCalendar(const CCalendarStoreNode& node, iCal::CICalendar& cal);
