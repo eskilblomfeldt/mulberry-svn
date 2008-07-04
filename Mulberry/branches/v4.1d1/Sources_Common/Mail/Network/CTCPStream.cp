@@ -75,10 +75,8 @@ CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
 	if (ok)
 	{
 		iostate err = goodbit;
-		#ifndef _MSL_NO_EXCEPTIONS
 		try
 		{
-		#endif
 			while (true)
 			{
 				CTCPStreamBuf::int_type ci = rdbuf()->sbumpc();
@@ -108,49 +106,44 @@ CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
 				//chcount++;
 			}
 			*s = CTCPStreamBuf::char_type();
-		#ifndef _MSL_NO_EXCEPTIONS
 		}
 		catch (...)
 		{
 			CLOG_LOGCATCH(...);
 
-#ifdef __SGI_STL_PORT
-			_M_setstate_nothrow(badbit);
-#elif __dest_os == __linux_os
-			setstate(badbit);
-#else
+			// Important - do not let this failure throw an exception!!!
+			// Any exception here is not handled properly by caller
+			try
+			{
 #ifdef __GNUC__
-			setstate(badbit);
+				setstate(badbit);
 #else
-			state() |= badbit;
+				state() |= badbit;
 #endif
-#endif
+			}
+			catch(...)
+			{
+				// Ignore
+			}
 			// Always throw up
 			CLOG_LOGRETHROW;
 			throw;
 		}
-		#endif
 
 		// Important - do not let this failure throw an exception!!!
 		// Any exception here is not handled
-#ifdef __SGI_STL_PORT
-		_M_clear_nothrow(err);
-#elif __dest_os == __linux_os
-		setstate(err);
-#else
-#ifdef __GNUC__
 		try
 		{
+#ifdef __GNUC__
 			setstate(err);
+#else
+			state() = err;
+#endif
 		}
 		catch(...)
 		{
 			// Ignore stream exception
 		}
-#else
-		state() = err;
-#endif
-#endif
 
 	}
 
