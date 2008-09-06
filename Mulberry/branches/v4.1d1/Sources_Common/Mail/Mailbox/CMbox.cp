@@ -1733,7 +1733,7 @@ bool CMbox::ValidSort(ESortMessageBy sort_by)
 		return true;
 
 	// Do caching
-	else if (GetSortCache() >= GetNumberFound() - GetNumberCached())
+	else if (GetSortCache() >= GetNumberMessages() - GetNumberCached())
 	{
 		// Do cache all automatcally
 		CacheAllMessages();
