@@ -738,6 +738,24 @@ void CCardDAVVCardClient::WriteComponent(CAddressBook* adbk, vCard::CVCardAddres
 		return;
 	}
 
+	// Get new location
+	cdstring location = request->GetResponseHeader(cHeaderLocation);
+	if (!location.empty())
+	{
+		// Check for "redirect" on PUT
+		
+		// We will assume that we only get redirected to another resource in the same collection
+		cdstrvect splits;
+		location.split("/", splits);
+		cdstring new_path = splits.back();
+		if (new_path != component.GetRURL())
+		{
+			const_cast<vCard::CVCardVCard&>(component).SetRURL(new_path);
+			rurl = GetRURL(adbk);
+			rurl += component.GetRURL();
+		}
+	}
+
 	// Update ETag
 	if (request->GetNewETag() != NULL)
 	{

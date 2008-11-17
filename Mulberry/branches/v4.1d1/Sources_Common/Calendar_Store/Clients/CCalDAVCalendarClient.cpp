@@ -937,6 +937,24 @@ void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal:
 		return;
 	}
 
+	// Get new location
+	cdstring location = request->GetResponseHeader(cHeaderLocation);
+	if (!location.empty())
+	{
+		// Check for "redirect" on PUT
+		
+		// We will assume that we only get redirected to another resource in the same collection
+		cdstrvect splits;
+		location.split("/", splits);
+		cdstring new_path = splits.back();
+		if (new_path != component.GetRURL())
+		{
+			const_cast<iCal::CICalendarComponent&>(component).SetRURL(new_path);
+				rurl = GetRURL(&node);
+			rurl += component.GetRURL();
+		}
+	}
+
 	// Update ETag
 	if (request->GetNewETag() != NULL)
 	{
