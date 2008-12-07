@@ -1682,10 +1682,9 @@ void CAddressBook::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 		
 		// Check attributes
 		bool temp = false;
-		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_adbk, temp))
-		{
-			SetFlags(eIsAdbk, temp);
-		}
+		xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_adbk, temp);
+		SetFlags(eIsAdbk, temp);
+
 		temp = false;
 		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_directory, temp))
 		{
