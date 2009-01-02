@@ -246,7 +246,7 @@ cdstring CMIMESupport::GenerateTransferEncodingHeader(const CAttachment* attach,
 cdstring CMIMESupport::GenerateContentDescription(const CAttachment* attach, EEndl for_endl, bool description)
 {
 	const CMIMEContent& content = attach->GetContent();
-
+	
 	// Look for description
 	if (content.GetContentDescription().empty())
 		return cdstring::null_str;
@@ -256,6 +256,24 @@ cdstring CMIMESupport::GenerateContentDescription(const CAttachment* attach, EEn
 		if (description)
 			txt += cHDR_MIME_DESCRIPTION;
 		txt += GenerateContentParameter(content.GetContentDescription());
+		return txt;
+	}
+}
+
+// Generate header for attachment
+cdstring CMIMESupport::GenerateContentId(const CAttachment* attach, EEndl for_endl, bool description)
+{
+	const CMIMEContent& content = attach->GetContent();
+	
+	// Look for description
+	if (content.GetContentId().empty())
+		return cdstring::null_str;
+	else
+	{
+		cdstring txt;
+		if (description)
+			txt += cHDR_MIME_ID;
+		txt += content.GetContentId();
 		return txt;
 	}
 }
@@ -276,7 +294,7 @@ cdstring CMIMESupport::GenerateContentDisposition(const CAttachment* attach, EEn
 		out << content.GetContentDispositionText();
 
 		// If name send it
-		if (description && (content.GetContentDisposition() == eContentDispositionAttachment))
+		if (description)
 		{
 			long line_length = out.pcount();
 
@@ -287,7 +305,8 @@ cdstring CMIMESupport::GenerateContentDisposition(const CAttachment* attach, EEn
 			}
 
 			// Generate size= parameter
-			AddParameter(out, cMIMEDispositionParameter[eContentDispositionSize], cdstring(content.GetContentSize()), true, line_length, for_endl);
+			if (content.GetContentSize() != 0)
+				AddParameter(out, cMIMEDispositionParameter[eContentDispositionSize], cdstring(content.GetContentSize()), true, line_length, for_endl);
 		}
 
 		out << ends;

@@ -2148,7 +2148,12 @@ void CAttachment::WriteToStream(costream& stream, unsigned long& level, bool dum
 			cdstring description = CMIMESupport::GenerateContentDescription(this, stream.GetEndlType());
 			if (!description.empty())
 				stream.Stream() << description << stream.endl();
-
+			
+			// Send id
+			cdstring id = CMIMESupport::GenerateContentId(this, stream.GetEndlType());
+			if (!id.empty())
+				stream.Stream() << id << stream.endl();
+			
 			// Send disposition
 			cdstring disposition = CMIMESupport::GenerateContentDisposition(this, stream.GetEndlType());
 			if (!disposition.empty())
@@ -2204,7 +2209,12 @@ void CAttachment::WriteToStream(costream& stream, unsigned long& level, bool dum
 			cdstring description = CMIMESupport::GenerateContentDescription(this, stream.GetEndlType());
 			if (!description.empty())
 				stream.Stream() << description << stream.endl();
-
+			
+			// Send id
+			cdstring id = CMIMESupport::GenerateContentId(this, stream.GetEndlType());
+			if (!id.empty())
+				stream.Stream() << id << stream.endl();
+			
 			// Send disposition
 			cdstring disposition = CMIMESupport::GenerateContentDisposition(this, stream.GetEndlType());
 			if (!disposition.empty())

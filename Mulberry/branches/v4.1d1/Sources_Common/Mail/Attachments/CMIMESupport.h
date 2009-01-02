@@ -46,8 +46,11 @@ public:
 											EEndl for_endl,
 											bool description = true);
 	static cdstring	GenerateContentDescription(const CAttachment* attach,		// Generate header for attachment
-											EEndl for_endl,
-											bool description = true);
+											   EEndl for_endl,
+											   bool description = true);
+	static cdstring	GenerateContentId(const CAttachment* attach,				// Generate header for attachment
+											   EEndl for_endl,
+											   bool description = true);
 	static cdstring	GenerateContentDisposition(const CAttachment* attach,		// Generate header for attachment
 											EEndl for_endl,
 											bool description = true);
