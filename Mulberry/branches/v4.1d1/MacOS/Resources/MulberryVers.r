@@ -23,7 +23,7 @@ resource 'vers' (1) {
 	0x1,
 	0,
 	"v4.1a1",
-	"Mulberry v4.1a1, © Cyrus Daboo, 2006-2007."
+	"Mulberry v4.1a1, © Cyrus Daboo, 2006-2009."
 };
 
 resource 'vers' (2) {
