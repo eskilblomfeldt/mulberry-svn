@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -203,7 +203,7 @@ void CCalendarStoreManager::SyncAccounts()
 		proto_offset++;
 	if (mWebProto != NULL)
 		proto_offset++;
-	for(CCalendarProtocolList::iterator iter1 = mProtos.begin() + proto_offset; iter1 != mProtos.end(); iter1++)
+	for(CCalendarProtocolList::iterator iter1 = mProtos.begin() + proto_offset; iter1 != mProtos.end();)
 	{
 		bool found = false;
 
@@ -222,9 +222,11 @@ void CCalendarStoreManager::SyncAccounts()
 
 			// Remove from list
 			iter1 = mProtos.erase(iter1);
-			iter1--;
 			mProtoCount--;
+			continue;
 		}
+		
+		iter1++;
 	}
 
 	// Now resync accounts with existing protocols and add new protocols

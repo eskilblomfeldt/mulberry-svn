@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -962,7 +962,7 @@ void CMboxProtocol::LoadRemoteList(bool deep)
 		if (!(*iter)->IsLoaded())
 		{
 			// Check for any open mailboxes and transfer to singleton list
-			for(CMboxList::iterator iter2 = (*iter)->begin(); iter2 != (*iter)->end(); iter2++)
+			for(CMboxList::iterator iter2 = (*iter)->begin(); iter2 != (*iter)->end();)
 			{
 				// Check open state
 				if (static_cast<CMbox*>(*iter2)->IsOpen())
@@ -970,8 +970,10 @@ void CMboxProtocol::LoadRemoteList(bool deep)
 					// Add as singleton and remove from WD
 					AddSingleton(static_cast<CMbox*>(*iter2));
 					iter2 = (*iter)->erase(iter2);
-					iter2--;
+					continue;
 				}
+				
+				iter2++;
 			}
 
 			// Cache current size

@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -306,7 +306,7 @@ void CMailAccountManager::SyncAccounts(const CMailAccountList& accts)
 	}
 
 	// Now delete protocols not in accounts
-	for(CMboxProtocolList::iterator iter1 = mProtos.begin(); iter1 != mProtos.end(); iter1++)
+	for(CMboxProtocolList::iterator iter1 = mProtos.begin(); iter1 != mProtos.end();)
 	{
 		bool found = false;
 
@@ -332,9 +332,11 @@ void CMailAccountManager::SyncAccounts(const CMailAccountList& accts)
 
 			// Remove from list
 			iter1 = mProtos.erase(iter1);
-			iter1--;
 			mProtoCount--;
+			continue;
 		}
+		
+		iter1++;
 	}
 
 	// Now add new protocols
@@ -660,7 +662,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 	}
 
 	// Remove ones that match namespace
-	for(cdstrvect::iterator iter1 = user.begin(); iter1 != user.end(); iter1++)
+	for(cdstrvect::iterator iter1 = user.begin(); iter1 != user.end();)
 	{
 		// Normalise
 		cdstring temp = *iter1;
@@ -668,6 +670,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 			temp = cdstring::null_str;
 		
 		unsigned long ctr = 0;
+		bool erased = false;
 		for(cdstrvect::const_iterator iter2 = name_list.begin(); iter2 != name_list.end(); iter2++, ctr++)
 		{
 			if (*iter2 == temp)
@@ -675,9 +678,12 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 				// Mark the NAMESPACE entry as already used
 				names_used.at(ctr) = true;
 				iter1 = user.erase(iter1);
-				iter1--;
+				erased = true;
 			}
 		}
+		
+		if (!erased)
+			iter1++;
 	}
 
 	// Do dialog

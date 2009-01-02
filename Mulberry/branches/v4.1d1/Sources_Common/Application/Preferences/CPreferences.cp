@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -1426,15 +1426,17 @@ void CPreferences::DeleteAccount(CINETAccount* acct)
 		// Remove all entries from favourites
 		for(CFavouriteItemList::iterator iter1 = mFavourites.Value().begin(); iter1 != mFavourites.Value().end(); iter1++)
 		{
-			for(cdstrpairvect::iterator iter2 = (*iter1).GetItems().begin(); iter2 != (*iter1).GetItems().end(); iter2++)
+			for(cdstrpairvect::iterator iter2 = (*iter1).GetItems().begin(); iter2 != (*iter1).GetItems().end();)
 			{
 				// Check starting name
 				if (::strncmp((*iter2).first, test.c_str(), test.length()) == 0)
 				{
 					// Erase this item
 					iter2 = (*iter1).GetItems().erase(iter2);
-					iter2--;
+					continue;
 				}
+				
+				iter2++;
 			}
 		}
 	
