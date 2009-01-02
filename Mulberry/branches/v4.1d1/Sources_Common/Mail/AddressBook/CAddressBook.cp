@@ -249,7 +249,7 @@ void CAddressBook::SortChildren()
 
 bool CAddressBook::sort_by_name(const CAddressBook* s1, const CAddressBook* s2)
 {
-	return ::strcmpnocase(s1->GetShortName(), s2->GetShortName()) < 0;
+	return ::strcmpnocase(s1->GetDisplayShortName(), s2->GetDisplayShortName()) < 0;
 }
 
 CAddressBook* CAddressBook::FindNode(cdstrvect& hierarchy, bool discover) const
@@ -259,7 +259,7 @@ CAddressBook* CAddressBook::FindNode(cdstrvect& hierarchy, bool discover) const
 	{
 		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
 		{
-			if (hierarchy.back() == (*iter)->GetShortName())
+			if (hierarchy.back() == (*iter)->GetDisplayShortName())
 			{
 				hierarchy.pop_back();
 				if (hierarchy.empty())
@@ -1646,6 +1646,10 @@ void CAddressBook::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* parent, b
 		// Set name child node
 		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
 		
+		// Set display name child node
+		if (!mDisplayName.empty())
+			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_displayname, mDisplayName);
+		
 		// Set last sync child node
 		if (mLastSync != 0)
 			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_lastsync, mLastSync);
@@ -1709,6 +1713,9 @@ void CAddressBook::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 		new_name += name;
 		SetName(new_name);
 
+		// Get display name details
+		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_displayname, mDisplayName);
+		
 		// Get last sync
 		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_lastsync, mLastSync);
 	}

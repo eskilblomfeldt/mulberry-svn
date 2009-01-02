@@ -33,6 +33,7 @@ namespace calstore
 // <calendarlist>
 //   <calendarnode type='directory'>
 //		<name>...</name>
+//		<displayname>...</displayname>
 //		<calendarnode>*
 //   </calendarnode>
 // </calendarlist>
@@ -43,14 +44,16 @@ namespace calstore
 	<!ATTLIST calendarlist	version			CDATA	#REQUIRED
 							datestamp       CDATA   "">
 
-	<!ELEMENT calendarnode	(name, last-sync?, webcal?, calendarnode*) >
+	<!ELEMENT calendarnode	(name, displayname?, last-sync?, webcal?, calendarnode*) >
 	<!ATTLIST calendarnode	directory		(true|false) "false"
 							has_expanded	(true|false) 
 							inbox           (true|false) "false"
 							outbox          (true|false) "false">
 
 	<!ELEMENT name			(#PCDATA) >
-
+ 
+	<!ELEMENT displayname	(#PCDATA) >
+ 
 	<!ELEMENT last-sync		() >
 	<!ATTLIST last-sync		value		CDATA	#REQUIRED >
 
@@ -80,6 +83,8 @@ const char*	cXMLAttribute_inbox = "inbox";
 const char*	cXMLAttribute_outbox = "outbox";
 
 const xmllib::XMLName cXMLElement_name("name");
+
+const xmllib::XMLName cXMLElement_displayname("displayname");
 
 const xmllib::XMLName cXMLElement_lastsync("last-sync");
 

@@ -52,6 +52,7 @@ const xmllib::XMLName	cProperty_getcontenttype("getcontenttype", cNamespace);
 const xmllib::XMLName	cProperty_resourcetype("resourcetype", cNamespace);
 const xmllib::XMLName	cProperty_collection("collection", cNamespace);
 const xmllib::XMLName	cProperty_getetag("getetag", cNamespace);
+const xmllib::XMLName	cProperty_displayname("displayname", cNamespace);
 
 // RFC3744 ¤ - ACL Properties
 const xmllib::XMLName	cProperty_supported_privilege_set("supported-privilege-set", cNamespace);

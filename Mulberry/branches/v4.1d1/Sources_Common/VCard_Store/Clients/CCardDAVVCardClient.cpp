@@ -259,6 +259,15 @@ void CCardDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webda
 			root->AddChild(adbk);
 			
 			// Cannot determine the size of the address book collection without another PROPFIND, so ignore for now
+
+			if ((*iter)->GetTextProperties().count(http::webdav::cProperty_displayname.FullName()) != 0)
+			{
+				cdstring result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_displayname.FullName())).second;
+				// Temporary FIX for getting GUIDs back from the server
+				if (result.length() == 36 && result.c_str()[8] == '-')
+					result = cdstring::null_str;
+				adbk->SetDisplayName(result);
+			}
 		}
 	}
 }

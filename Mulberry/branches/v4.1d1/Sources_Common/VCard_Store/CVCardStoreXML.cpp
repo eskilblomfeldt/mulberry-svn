@@ -43,7 +43,7 @@ namespace vcardstore
 	<!ATTLIST addressbooklist	version			CDATA	#REQUIRED
 							    datestamp       CDATA   "" >
 
-	<!ELEMENT addressbooknode	(name, last-sync?, webcal?, addressbooknode*) >
+	<!ELEMENT addressbooknode	(name, displayname?, last-sync?, webcal?, addressbooknode*) >
 	<!ATTLIST addressbooknode	adbk			(true|false) "false"
 								directory		(true|false) "false"
 								has_expanded	(true|false) >
@@ -65,6 +65,8 @@ const char* cXMLAttribute_directory = "directory";
 const char* cXMLAttribute_has_expanded = "has_expanded";
 
 const xmllib::XMLName cXMLElement_name("name");
+
+const xmllib::XMLName cXMLElement_displayname("displayname");
 
 const xmllib::XMLName cXMLElement_lastsync("last-sync");
 

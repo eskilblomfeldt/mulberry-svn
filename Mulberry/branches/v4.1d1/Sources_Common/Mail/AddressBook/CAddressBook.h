@@ -115,8 +115,15 @@ public:
 		{ return mName; }
 	const char*	GetShortName() const							// Get short name
 		{ return mShortName; }
+	const char*	GetDisplayShortName() const						// Get display short name
+		{ return mDisplayName.empty() ? mShortName : mDisplayName.c_str() ; }
 	void	NewName(const cdstring& name);						// Tell this and children to adjust names
-
+	
+	void SetDisplayName(const cdstring& name)					// Set name
+		{ mDisplayName = name; }
+	const cdstring&	GetDisplayName() const						// Get full name
+		{ return mDisplayName; }
+	
 	CAddressList* GetAddressList()
 		{ return &mAddresses; }
 	CGroupList* GetGroupList()
@@ -313,6 +320,7 @@ protected:
 	SBitFlags			mFlags;						// Flags state
 	cdstring			mName;						// Full path name of item
 	const char*			mShortName;					// Pointer to the last part of the path name
+	cdstring			mDisplayName;				// Display name of item
 	uint32_t			mSize;						// Disk size
 	mutable uint32_t	mLastSync;					// Last sync time
 	CAddressList		mAddresses;

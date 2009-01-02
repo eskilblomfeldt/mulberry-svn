@@ -40,6 +40,8 @@ extern const char*			 cXMLAttribute_outbox;
 
 extern const xmllib::XMLName cXMLElement_name;
 
+extern const xmllib::XMLName cXMLElement_displayname;
+
 extern const xmllib::XMLName cXMLElement_lastsync;
 
 extern const xmllib::XMLName cXMLElement_webcal;

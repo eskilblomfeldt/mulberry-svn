@@ -54,6 +54,7 @@ extern const xmllib::XMLName	cProperty_getcontenttype;
 extern const xmllib::XMLName	cProperty_resourcetype;
 extern const xmllib::XMLName	cProperty_collection;
 extern const xmllib::XMLName	cProperty_getetag;
+extern const xmllib::XMLName	cProperty_displayname;
 
 // RFC3744 ¤ - ACL Properties
 extern const xmllib::XMLName	cProperty_supported_privilege_set;

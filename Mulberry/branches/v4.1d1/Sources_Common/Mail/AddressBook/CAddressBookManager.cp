@@ -684,7 +684,7 @@ void CAddressBookManager::RenameAddressBook(CAddressBook* node, const cdstring& 
 			}
 			
 			// Change the name in the calendar
-			cal->EditName(node->GetShortName());
+			cal->EditName(node->GetDisplayShortName());
 			
 			// Now write the calendar data
 			node->GetProtocol()->WriteFullCalendar(*node, *cal);

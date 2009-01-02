@@ -592,7 +592,7 @@ void CCalendarStoreTable::DrawCell(const STableCell &inCell, const Rect &inLocal
 		::Ploticns(&iconRect, atNone, selected_state ? ttSelected : ttNone, GetPlotIcon(node, GetCellCalendarProtocol(inCell.row)));
 
 		// Get name of item
-		theTxt = node->GetShortName();
+		theTxt = node->GetDisplayShortName();
 
 		// Add protocol state descriptor
 		if (node->IsProtocol())
@@ -894,7 +894,7 @@ bool CCalendarStoreTable::ExportCalendar(TableIndexT row)
 		return false;
 
 	// Pick file to export to
-	cdstring name = node->GetShortName();
+	cdstring name = node->GetDisplayShortName();
 	name += ".ics";
 	PPx::CFString cfstr(name.c_str(), kCFStringEncodingUTF8);
 	PPx::FSObject fsspec;

@@ -39,6 +39,8 @@ extern const char*			 cXMLAttribute_directory;
 
 extern const xmllib::XMLName cXMLElement_name;
 
+extern const xmllib::XMLName cXMLElement_displayname;
+
 extern const xmllib::XMLName cXMLElement_lastsync;
 
 }	// namespace calstore

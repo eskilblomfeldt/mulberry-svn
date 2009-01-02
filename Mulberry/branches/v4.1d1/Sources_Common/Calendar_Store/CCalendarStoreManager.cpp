@@ -934,7 +934,7 @@ void CCalendarStoreManager::ActivateNode(CCalendarStoreNode* node)
 			// Do nothing
 			cdstring temp(os_endl2);
 			temp += "Calendar : ";
-			temp += node->GetShortName();
+			temp += node->GetDisplayShortName();
 			temp += os_endl2;
 			for(cdstrvect::const_iterator iter = tzids.begin(); iter != tzids.end(); iter++)
 			{

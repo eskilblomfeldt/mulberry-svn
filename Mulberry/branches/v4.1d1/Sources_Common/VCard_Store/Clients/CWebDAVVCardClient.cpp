@@ -233,6 +233,7 @@ void CWebDAVVCardClient::_ListAddressBooks(CAddressBook* root)
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	props.push_back(http::webdav::cProperty_getcontenttype);
 	props.push_back(http::webdav::cProperty_resourcetype);
+	props.push_back(http::webdav::cProperty_displayname);
 	auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth1, props));
 	http::CHTTPOutputDataString dout;
 	request->SetOutput(&dout);
@@ -329,6 +330,15 @@ void CWebDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webdav
 			cdstring result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_getcontentlength.FullName())).second;
 			long size = ::strtoul(result.c_str(), NULL, 10);
 			adbk->SetSize(size);
+		}
+
+		if ((*iter)->GetTextProperties().count(http::webdav::cProperty_displayname.FullName()) != 0)
+		{
+			cdstring result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_displayname.FullName())).second;
+			// Temporary FIX for getting GUIDs back from the server
+			if (result.length() == 36 && result.c_str()[8] == '-')
+				result = cdstring::null_str;
+			adbk->SetDisplayName(result);
 		}
 	}
 }

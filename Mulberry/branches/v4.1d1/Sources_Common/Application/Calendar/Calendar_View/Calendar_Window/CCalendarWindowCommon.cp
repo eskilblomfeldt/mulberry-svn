@@ -120,13 +120,13 @@ void CCalendarWindow::RefreshNode(calstore::CCalendarStoreNode* node)
 	// Set title
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 
-	cdstring title((mNode != NULL) ? cdstring(mNode->GetShortName()) : rsrc::GetString("UI::Calendar::SubscribedTitle"));
+	cdstring title((mNode != NULL) ? cdstring(mNode->GetDisplayShortName()) : rsrc::GetString("UI::Calendar::SubscribedTitle"));
 	MyCFString temp(title, kCFStringEncodingUTF8);
 	SetCFDescriptor(temp);
 
 #elif __dest_os == __win32_os
 
-	cdstring title((mNode != NULL) ? cdstring(mNode->GetShortName()) : rsrc::GetString("UI::Calendar::SubscribedTitle"));
+	cdstring title((mNode != NULL) ? cdstring(mNode->GetDisplayShortName()) : rsrc::GetString("UI::Calendar::SubscribedTitle"));
 	GetDocument()->SetTitle(title.win_str());
 
 #elif __dest_os == __linux_os

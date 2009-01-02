@@ -237,7 +237,7 @@ void CCalendarStoreNode::SortChildren()
 
 bool CCalendarStoreNode::sort_by_name(const CCalendarStoreNode* s1, const CCalendarStoreNode* s2)
 {
-	return ::strcmpnocase(s1->GetShortName(), s2->GetShortName()) < 0;
+	return ::strcmpnocase(s1->GetDisplayShortName(), s2->GetDisplayShortName()) < 0;
 }
 
 void CCalendarStoreNode::SetCalendar(const iCal::CICalendar* cal)
@@ -287,7 +287,7 @@ CCalendarStoreNode* CCalendarStoreNode::FindNode(cdstrvect& hierarchy, bool disc
 	{
 		for(CCalendarStoreNodeList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
 		{
-			if (hierarchy.back() == (*iter)->GetShortName())
+			if (hierarchy.back() == (*iter)->GetDisplayShortName())
 			{
 				hierarchy.pop_back();
 				if (hierarchy.empty())
@@ -913,6 +913,10 @@ void CCalendarStoreNode::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* par
 		// Set name child node
 		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
 		
+		// Set display name child node
+		if (!mDisplayName.empty())
+			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_displayname, mDisplayName);
+		
 		// Set sync child nodes
 		if (mLastSync != 0)
 			xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_lastsync, mLastSync);
@@ -983,9 +987,12 @@ void CCalendarStoreNode::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 		new_name += name;
 		SetName(new_name);
 
+		// Get display name details
+		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_displayname, mDisplayName);
+		
 		// Get sync details
 		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_lastsync, mLastSync);
-
+		
 		// Look for webcal node
 		const xmllib::XMLNode* webcalnode = xmlnode->GetChild(cXMLElement_webcal);
 		if (webcalnode != NULL)

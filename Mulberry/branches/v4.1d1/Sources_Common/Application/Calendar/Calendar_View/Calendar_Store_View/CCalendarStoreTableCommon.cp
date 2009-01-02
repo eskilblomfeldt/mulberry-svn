@@ -791,7 +791,7 @@ bool CCalendarStoreTable::FreeBusyCalendar(TableIndexT row, calstore::CCalendarS
 		tomorrow.OffsetDay(1);
 		
 		iCal::CICalendarPeriod period(today, tomorrow);
-		calstore::CCalendarStoreFreeBusy items(node->GetShortName());
+		calstore::CCalendarStoreFreeBusy items(node->GetDisplayShortName());
 		cal->GetFreeBusy(period, items.GetPeriods());
 		list->push_back(items);
 	}

@@ -315,6 +315,15 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 			root->AddChild(node);
 			
 			// Cannot determine the size of the calendar collection without another PROPFIND, so ignore for now
+			
+			if ((*iter)->GetTextProperties().count(http::webdav::cProperty_displayname.FullName()) != 0)
+			{
+				cdstring result = (*(*iter)->GetTextProperties().find(http::webdav::cProperty_displayname.FullName())).second;
+				// Temporary FIX for getting GUIDs back from the server
+				if (result.length() == 36 && result.c_str()[8] == '-')
+					result = cdstring::null_str;
+				node->SetDisplayName(result);
+			}
 		}
 	}
 }

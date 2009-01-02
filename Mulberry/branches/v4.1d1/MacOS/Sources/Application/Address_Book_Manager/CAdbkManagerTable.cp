@@ -518,8 +518,8 @@ void CAdbkManagerTable::DrawCell(const STableCell &inCell,
 		::Ploticns(&iconRect, atNone, selected_state ? ttSelected : ttNone, GetPlotIcon(adbk, GetCellAdbkProtocol(inCell.row)));
 
 		// Get name of item
-		theTxt = adbk->GetShortName();
-
+		theTxt = adbk->GetDisplayShortName();
+		
 		// Add protocol state descriptor
 		if (adbk->IsProtocol())
 		{
