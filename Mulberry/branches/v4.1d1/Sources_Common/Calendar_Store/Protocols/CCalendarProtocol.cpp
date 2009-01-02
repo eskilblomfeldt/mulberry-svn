@@ -1276,7 +1276,12 @@ void CCalendarProtocol::ReadFullCalendar(const CCalendarStoreNode& node, iCal::C
 	if (mCacheIsPrimary)
 		mCacheClient->_ReadFullCalendar(node, cal, if_changed);
 	else
+	{
 		mClient->_ReadFullCalendar(node, cal, if_changed);
+		if (IsComponentCalendar())
+			mClient->_UpdateSyncToken(node, cal);
+	}
+
 	Broadcast_Message(eBroadcast_RefreshNode, (void*)&node);
 }
 
