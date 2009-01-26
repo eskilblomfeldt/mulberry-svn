@@ -223,6 +223,9 @@ LTableArrayStorage::InsertRows(
 	const void*	inDataPtr,
 	UInt32		inDataSize)
 {
+        if (inHowMany == 0)
+                return;
+
 	STableCell	startCell(inAfterRow + 1, 1);
 	UInt32		startIndex;
 	mTableView->CellToIndex(startCell, startIndex);
@@ -258,6 +261,9 @@ LTableArrayStorage::InsertCols(
 	const void*	inDataPtr,
 	UInt32		inDataSize)
 {
+        if (inHowMany == 0)
+                return;
+
 	TableIndexT	rows, cols;
 	mTableView->GetTableSize(rows, cols);
 
