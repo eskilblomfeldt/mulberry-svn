@@ -162,7 +162,7 @@ const char* CTextEngine::WrapLines(const char* text, unsigned long length, unsig
 		}
 		else
 		{
-			if (isspace(*endLine))
+			if (isspace((unsigned char)*endLine))
 				lastSpace = count;
 			endLine++;
 			count++;
@@ -215,7 +215,7 @@ const char* CTextEngine::UnwrapLines(const char* text, unsigned long length)
 				;
 			
 			// Look for a space or tab which could imply formatted text (e.g. a table, bullet list etc)
-			else if (isspace(*s))
+			else if (isspace((unsigned char)*s))
 				// Output the original CRLF
 				out.write(os_endl, os_endl_len);
 			
@@ -495,7 +495,7 @@ const char* CTextEngine::QuoteLines(const char* text, unsigned long length,
 		}
 		else
 		{
-			if (isspace(*endLine))
+			if (isspace((unsigned char)*endLine))
 				lastSpace = count;
 			endLine++;
 			count++;
@@ -574,7 +574,7 @@ const char* CTextEngine::StripQuotedLines(const char* text, const cdstrvect& quo
 		}
 
 		// Punt whitespace at start of line
-		else if (line_start && isspace(*p))
+		else if (line_start && isspace((unsigned char)*p))
 		{
 			out << *p++;
 			continue;
