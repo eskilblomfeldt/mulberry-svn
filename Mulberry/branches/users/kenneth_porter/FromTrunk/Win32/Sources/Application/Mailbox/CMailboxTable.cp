@@ -1517,7 +1517,7 @@ BOOL CMailboxTable::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGloba
 			// Copy to global after lock
 			CMessage** pAddr = (CMessage**) ::GlobalLock(*phGlobal);
 			*((int*) pAddr) = msgs.size();
-			pAddr += sizeof(int);
+                        pAddr = (CMessage**)((char*)pAddr + sizeof(int));
 			for(CMessageList::iterator iter = msgs.begin(); iter != msgs.end(); iter++)
 				*pAddr++ = *iter;
 			//::memcpy(pAddr, msgs.begin(), msgs.size() * sizeof(CMessage*));
