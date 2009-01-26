@@ -28,7 +28,13 @@ class CUTF8StatusBar : public CStatusBar
 public:
 	CUTF8StatusBar() {}
 	
-	BOOL SetPaneTextUTF8(int nIndex, const char* utf8, BOOL bUpdate = TRUE);
+        BOOL SetPaneTextUTF8(int nIndex, const char* utf8, BOOL bUpdate = TRUE);
+
+        BOOL RedrawWindow(
+                          LPCRECT lpRectUpdate = NULL,
+                          CRgn* prgnUpdate = NULL,
+                          UINT flags = RDW_INVALIDATE | RDW_UPDATENOW | RDW_ERASE 
+                         );
 };
 
 class CStatusWindow
