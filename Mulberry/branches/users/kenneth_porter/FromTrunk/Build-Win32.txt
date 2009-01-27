@@ -1,6 +1,8 @@
 1. PRE-REQUISITES
 Get and install Visual Studio 2005 standard edition (at a minimum).
-If your Visual Studio tool does not have an assembler, get http://nasm.sourceforge.net/.
+If your Visual Studio tool does not have an assembler, get 
+http://nasm.sourceforge.net/. The current nasm.exe binary should be 
+copied to nasmw.exe in one's path for use by the openssl Makefile. 
 You will need perl installed to build openssl.
 A Subversion tool will also be required. Instructions below show how to use Eclipse for subversion access.
 
@@ -39,14 +41,14 @@ Then do:
 Copy 'openssl\ms\nt.mak' to 'openssl\ms\nt-static.mak'.
 Edit 'nt-static.mak' and do:
 
-- Change \MD to \MT in CFLAG.
+- Change /MD to /MT in CFLAG.
 - Change 'OUT_D=out32' to 'OUT_D=out32s'.
 - Change 'TMP_D=tmp32' to 'TMP_D=tmp32s'.
 
 Copy 'openssl\ms\nt-static.mak' to 'openssl\ms\nt-debug.mak'.
 Edit 'nt-debug.mak' and do:
 
-- Change \MT to \MDd in CFLAG.
+- Change /MT to /MDd in CFLAG.
 - Change 'OUT_D=out32s' to 'OUT_D=out32d'.
 - Change 'TMP_D=tmp32s' to 'TMP_D=tmp32d'.
 
