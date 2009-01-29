@@ -454,7 +454,7 @@ CSearchItem* CSearchCriteriaContainer::ConstructSearch() const
 
 void CSearchCriteriaContainer::MergeBinarySearchOperators(CSearchItemList& flat_list, CSearchItem::ESearchType op)
 {
-	for(CSearchItemList::iterator iter = flat_list.begin(); iter != flat_list.end(); iter++)
+	for(CSearchItemList::iterator iter = flat_list.begin(); iter != flat_list.end(); )
 	{
 		// Look for an op operation
 		if ((*iter)->GetType() == op)
@@ -471,10 +471,7 @@ void CSearchCriteriaContainer::MergeBinarySearchOperators(CSearchItemList& flat_
 				op_list->push_back(new CSearchItem(**next));
 
 				// Delete the current item and the next item
-				flat_list.erase(iter, next + 1);
-
-				// Adjust iter to previous item so it will point to the new item after cycling through the loop
-				iter = prev;
+				iter = flat_list.erase(iter, next + 1);
 			}
 			else
 			{
@@ -483,16 +480,18 @@ void CSearchCriteriaContainer::MergeBinarySearchOperators(CSearchItemList& flat_
 				op_list->push_back(new CSearchItem(**prev));
 				op_list->push_back(new CSearchItem(**next));
 
+				// Delete the prev item (revalidate iter)
+				iter = flat_list.erase(prev, prev + 1);
+
+				// Previous erase invalidated next
+				next = iter + 1;
+				
 				// Delete the next item
-				flat_list.erase(next, next + 1);
-
-				// Delete the prev item
-				flat_list.erase(prev, prev + 1);
-
-				// Adjust iter to previous item so it will point to the new item after cycling through the loop
-				iter = prev;
+				iter = flat_list.erase(next, next + 1);
 			}
 		}
+		else
+			iter++;
 	}
 }
 
