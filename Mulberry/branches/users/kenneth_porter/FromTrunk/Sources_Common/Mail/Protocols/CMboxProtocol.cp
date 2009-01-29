@@ -964,7 +964,7 @@ void CMboxProtocol::LoadRemoteList(bool deep)
 		if (!(*iter)->IsLoaded())
 		{
 			// Check for any open mailboxes and transfer to singleton list
-			for(CMboxList::iterator iter2 = (*iter)->begin(); iter2 != (*iter)->end(); iter2++)
+			for(CMboxList::iterator iter2 = (*iter)->begin(); iter2 != (*iter)->end(); )
 			{
 				// Check open state
 				if (static_cast<CMbox*>(*iter2)->IsOpen())
@@ -972,8 +972,9 @@ void CMboxProtocol::LoadRemoteList(bool deep)
 					// Add as singleton and remove from WD
 					AddSingleton(static_cast<CMbox*>(*iter2));
 					iter2 = (*iter)->erase(iter2);
-					iter2--;
 				}
+				else
+				   iter2++;
 			}
 
 			// Cache current size
