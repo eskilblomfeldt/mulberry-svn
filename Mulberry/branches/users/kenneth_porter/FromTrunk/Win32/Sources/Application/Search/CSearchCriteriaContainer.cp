@@ -434,88 +434,9 @@ CSearchItem* CSearchCriteriaContainer::ConstructSearch() const
 		}
 
 		// Pass 1: Merge all AND pairs into one
-		for(CSearchItemList::iterator iter = flat_list.begin(); iter != flat_list.end(); iter++)
-		{
-			// Look for an AND operation
-			if ((*iter)->GetType() == CSearchItem::eAnd)
-			{
-				// Get item before and after the AND operator
-				CSearchItemList::iterator prev = iter - 1;
-				CSearchItemList::iterator next = iter + 1;
-				
-				// Check to see if previous is an AND in which case we merge into that
-				if ((*prev)->GetType() == CSearchItem::eAnd)
-				{
-					// Add next item into previous which is an AND
-					CSearchItemList* and_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*prev)->GetData()));
-					and_list->push_back(new CSearchItem(**next));
-					
-					// Delete the current item and the next item
-					flat_list.erase(iter, next + 1);
-					
-					// Adjust iter to previous item so it will point to the new item after cycling through the loop
-					iter = prev;
-				}
-				else
-				{
-					// Add previous and next to the AND list
-					CSearchItemList* and_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*iter)->GetData()));
-					and_list->push_back(new CSearchItem(**prev));
-					and_list->push_back(new CSearchItem(**next));
-					
-					// Delete the next item
-					flat_list.erase(next, next + 1);
-					
-					// Delete the prev item
-					flat_list.erase(prev, prev + 1);
-					
-					// Adjust iter to previous item so it will point to the new item after cycling through the loop
-					iter = prev;
-				}
-			}
-		}
-
+		MergeBinarySearchOperators(flat_list, CSearchItem::eAnd);
 		// Pass 2: Merge all OR pairs into one
-		for(CSearchItemList::iterator iter = flat_list.begin(); iter != flat_list.end(); iter++)
-		{
-			// Look for an OR operation
-			if ((*iter)->GetType() == CSearchItem::eOr)
-			{
-				// Get item before and after the OR operator
-				CSearchItemList::iterator prev = iter - 1;
-				CSearchItemList::iterator next = iter + 1;
-				
-				// Check to see if previous is an OR in which case we merge into that
-				if ((*prev)->GetType() == CSearchItem::eOr)
-				{
-					// Add next item into previous which is an OR
-					CSearchItemList* and_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*prev)->GetData()));
-					and_list->push_back(new CSearchItem(**next));
-					
-					// Delete the current item and the next item
-					flat_list.erase(iter, next + 1);
-					
-					// Adjust iter to previous item so it will point to the new item after cycling through the loop
-					iter = prev;
-				}
-				else
-				{
-					// Add previous and next to the AND list
-					CSearchItemList* and_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*iter)->GetData()));
-					and_list->push_back(new CSearchItem(**prev));
-					and_list->push_back(new CSearchItem(**next));
-					
-					// Delete the next item
-					flat_list.erase(next, next + 1);
-					
-					// Delete the prev item
-					flat_list.erase(prev, prev + 1);
-					
-					// Adjust iter to previous item so it will point to the new item after cycling through the loop
-					iter = prev;
-				}
-			}
-		}
+		MergeBinarySearchOperators(flat_list, CSearchItem::eOr);
 
 		// We should now have one item left! Return it.
 		CSearchItem* generated = flat_list.front();
@@ -530,3 +451,48 @@ CSearchItem* CSearchCriteriaContainer::ConstructSearch() const
 	else
 		return new CSearchItem(CSearchItem::eGroup, result);
 }
+
+void CSearchCriteriaContainer::MergeBinarySearchOperators(CSearchItemList& flat_list, CSearchItem::ESearchType op)
+{
+	for(CSearchItemList::iterator iter = flat_list.begin(); iter != flat_list.end(); iter++)
+	{
+		// Look for an op operation
+		if ((*iter)->GetType() == op)
+		{
+			// Get item before and after the op operator
+			CSearchItemList::iterator prev = iter - 1;
+			CSearchItemList::iterator next = iter + 1;
+
+			// Check to see if previous is an op in which case we merge into that
+			if ((*prev)->GetType() == op)
+			{
+				// Add next item into previous which is an op
+				CSearchItemList* op_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*prev)->GetData()));
+				op_list->push_back(new CSearchItem(**next));
+
+				// Delete the current item and the next item
+				flat_list.erase(iter, next + 1);
+
+				// Adjust iter to previous item so it will point to the new item after cycling through the loop
+				iter = prev;
+			}
+			else
+			{
+				// Add previous and next to the op list
+				CSearchItemList* op_list = const_cast<CSearchItemList*>(static_cast<const CSearchItemList*>((*iter)->GetData()));
+				op_list->push_back(new CSearchItem(**prev));
+				op_list->push_back(new CSearchItem(**next));
+
+				// Delete the next item
+				flat_list.erase(next, next + 1);
+
+				// Delete the prev item
+				flat_list.erase(prev, prev + 1);
+
+				// Adjust iter to previous item so it will point to the new item after cycling through the loop
+				iter = prev;
+			}
+		}
+	}
+}
+

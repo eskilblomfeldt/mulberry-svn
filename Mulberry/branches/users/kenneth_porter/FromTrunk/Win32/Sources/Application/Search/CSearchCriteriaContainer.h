@@ -30,6 +30,7 @@
 // Classes
 class CSearchCriteria;
 class CSearchItem;
+enum CSearchItem::ESearchType;
 
 class CCriteriaBase;
 typedef vector<CCriteriaBase*> CCriteriaBaseList;
@@ -89,7 +90,7 @@ protected:
 	void	RemoveCriteria();
 	void	RemoveAllCriteria();
 	void	SelectNextCriteria(CSearchCriteria* previous);
-
+	static void MergeBinarySearchOperators(CSearchItemList& flat_list, CSearchItem::ESearchType op);
 	CSearchItem*	ConstructSearch() const;
 
 private:
