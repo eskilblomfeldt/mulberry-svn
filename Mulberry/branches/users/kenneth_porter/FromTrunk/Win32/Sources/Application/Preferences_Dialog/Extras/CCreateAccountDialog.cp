@@ -39,7 +39,6 @@ void CCreateAccountDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCreateAccountDialog)
-	DDX_Control(pDX, IDC_NEWACCOUNT_TYPE, mType);
 	DDX_UTF8Text(pDX, IDC_NEWACCOUNT_NAME, mText);
 	//}}AFX_DATA_MAP
 }
