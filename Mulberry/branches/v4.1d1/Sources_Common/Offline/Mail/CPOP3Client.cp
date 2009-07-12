@@ -121,7 +121,8 @@ CINETClient* CPOP3Client::CloneConnection()
 tcp_port CPOP3Client::GetDefaultPort()
 {
 	// TCP/IP-based sub-classes must deal with this
-	if (GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+		(GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		return cPOP3ServerPort_SSL;
 	else
 		return cPOP3ServerPort;
@@ -177,8 +178,8 @@ void CPOP3Client::DoStartTLS()
 		INETFinishSend();
 
 		// Now force TLS negotiation
-		mStream->TLSSetTLSOn(true);
-		mStream->TLSStartConnection(GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eTLS);
+		mStream->TLSSetTLSOn(true, GetMboxOwner()->GetAccount()->GetTLSType());
+		mStream->TLSStartConnection();
 	}
 
 	// Must redo capability after STARTTLS

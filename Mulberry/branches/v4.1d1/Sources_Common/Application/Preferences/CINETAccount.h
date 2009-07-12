@@ -64,6 +64,7 @@ public:
 	{
 		eNoTLS = 0,
 		eSSL,
+		eSSLv3,
 		eTLS,
 		eTLSBroken,
 		eTLSTypeMax = eTLSBroken

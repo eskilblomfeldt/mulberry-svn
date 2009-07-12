@@ -90,6 +90,7 @@ int	CTLSSocket::sDataIndex = -1;
 CTLSSocket::CTLSSocket()
 {
 	mTLSOn = false;
+	mTLSType = 0;
 	m_ctx = NULL;
 	m_tls = NULL;
 	mClientCert = NULL;
@@ -101,6 +102,7 @@ CTLSSocket::CTLSSocket(const CTLSSocket& copy) :
 	CTCPSocket(copy)
 {
 	mTLSOn = false;
+	mTLSType = 0;
 	m_ctx = NULL;
 	m_tls = NULL;
 	mClientCert = NULL;
@@ -158,12 +160,13 @@ void CTLSSocket::TCPClose()
 
 #pragma mark ________________________________start/stop
 
-void CTLSSocket::TLSSetTLSOn(bool tls_on)
+void CTLSSocket::TLSSetTLSOn(bool tls_on, int tls_type)
 {
 	// Only allow this to be switched on if TLS is actually present
 	if (CPluginManager::sPluginManager.HasSSL())
 	{
 		mTLSOn = tls_on;
+		mTLSType = tls_type;
 		
 		// Init library if turning on
 		if (mTLSOn)
@@ -242,7 +245,7 @@ void CTLSSocket::TCPStartConnection()
 	
 	// Do SSL negotiation if switched on already
 	if (mTLSOn)
-		TLSStartConnection(false);
+		TLSStartConnection();
 }
 
 // Receive data
@@ -268,7 +271,7 @@ void CTLSSocket::TCPSendData(char* buf, long len)
 #pragma mark ________________________________TLS Specific
 
 // Initiate a connection with remote host
-void CTLSSocket::TLSStartConnection(bool tls)
+void CTLSSocket::TLSStartConnection()
 {
 	// Begin a busy operation
 	StMailBusy busy_lock(&mBusy, &GetBusyDescriptor());
@@ -284,7 +287,19 @@ void CTLSSocket::TLSStartConnection(bool tls)
 		mCipher = cdstring::null_str;
 
 		// Create context
-		m_ctx = ::SSL_CTX_new(tls ? ::TLSv1_client_method() : ::SSLv23_client_method());
+		switch(mTLSType)
+		{
+			case 1:
+			case 4:
+				m_ctx = ::SSL_CTX_new(::SSLv23_client_method());
+				break;
+			case 2:
+				m_ctx = ::SSL_CTX_new(::SSLv3_client_method());
+				break;
+			case 3:
+				m_ctx = ::SSL_CTX_new(::TLSv1_client_method());
+				break;
+		}
 		if (!m_ctx)
 		{
 			CLOG_LOGTHROW(CTCPException, CTCPException::err_TCPSSLError);

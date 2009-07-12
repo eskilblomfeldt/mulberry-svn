@@ -153,6 +153,7 @@ void CPrefsAccountAuth::UpdateData(void* data)
 	if (mCurrentPanel)
 		mCurrentPanel->UpdateAuth(account->GetAuthenticator().GetAuthenticator());
 
+	int popup = mTLSPopup->GetValue() - 1;
 	account->SetTLSType((CINETAccount::ETLSType) (mTLSPopup->GetValue() - 1));
 	
 	account->SetUseTLSClientCert(mUseTLSClientCert->GetValue());

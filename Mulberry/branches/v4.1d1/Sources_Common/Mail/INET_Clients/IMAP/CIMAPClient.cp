@@ -141,7 +141,8 @@ CINETClient* CIMAPClient::CloneConnection()
 tcp_port CIMAPClient::GetDefaultPort()
 {
 	// TCP/IP-based sub-classes must deal with this
-	if (GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+		(GetMboxOwner()->GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		return cIMAPServerPort_SSL;
 	else
 		return cIMAPServerPort;

@@ -60,43 +60,50 @@ void GetSecurityDetails(const CINETAccount* acct, cdstring& server, cdstring& an
 	switch(acct->GetServerType())
 	{
 	case CINETAccount::eIMAP:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = kSecProtocolTypeIMAPS;
 		else
 			protocol = kSecProtocolTypeIMAP;
 		break;
 	case CINETAccount::ePOP3:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = kSecProtocolTypePOP3S;
 		else
 			protocol = kSecProtocolTypePOP3;
 		break;
 	case CINETAccount::eSMTP:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = 'smts';
 		else
 			protocol = kSecProtocolTypeSMTP;
 		break;
 	case CINETAccount::eIMSP:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = 'imss';
 		else
 			protocol = 'imsp';
 		break;
 	case CINETAccount::eACAP:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = 'acas';
 		else
 			protocol = 'acap';
 		break;
 	case CINETAccount::eLDAP:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = kSecProtocolTypeLDAPS;
 		else
 			protocol = kSecProtocolTypeLDAP;
 		break;
 	case CINETAccount::eManageSIEVE:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = 'sies';
 		else
 			protocol = 'siev';
@@ -106,7 +113,8 @@ void GetSecurityDetails(const CINETAccount* acct, cdstring& server, cdstring& an
 	case CINETAccount::eWebDAVCalendar:
 	case CINETAccount::eCalDAVCalendar:
 	case CINETAccount::eCardDAVAdbk:
-		if (acct->GetTLSType() == CINETAccount::eSSL)
+		if ((acct->GetTLSType() == CINETAccount::eSSL) ||
+			(acct->GetTLSType() == CINETAccount::eSSLv3))
 			protocol = kSecProtocolTypeHTTPS;
 		else
 			protocol = kSecProtocolTypeHTTP;

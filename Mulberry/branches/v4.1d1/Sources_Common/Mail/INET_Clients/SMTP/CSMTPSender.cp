@@ -293,9 +293,10 @@ void CSMTPSender::SMTPBegin()
 		SMTPSetStatus("Status::SMTP::Connecting");
 
 		// Look for SSL and turn on here
-		if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+		if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+			(GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		{
-			mStream.TLSSetTLSOn(true);
+			mStream.TLSSetTLSOn(true, GetAccount()->GetTLSType());
 			
 			// Check for client cert
 			if (GetAccount()->GetUseTLSClientCert())
@@ -1020,7 +1021,7 @@ void CSMTPSender::SMTPLookup()
 		{
 			// Get default port based on SSL setting
 			tcp_port default_port = 0;
-			if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+			if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 				default_port = kSMTPReceiverPort_SSL;
 			else
 				default_port = kSMTPReceiverPort;
@@ -1408,8 +1409,8 @@ void CSMTPSender::SMTPStartTLS()
 	SMTPReceiveData();
 
 	// Now force TLS negotiation
-	mStream.TLSSetTLSOn(true);
-	mStream.TLSStartConnection(GetAccount()->GetTLSType() == CINETAccount::eTLS);
+	mStream.TLSSetTLSOn(true, GetAccount()->GetTLSType());
+	mStream.TLSStartConnection();
 	
 	// Now redo EHLO so that we get updated capabilities
 	if (mESMTP)

@@ -61,6 +61,7 @@ const char* cINETDescriptors[] =
 const char* cTLSDescriptors[] =
 	{"NoTLS",
 	 "SSLv3",
+	 "SSLv3Real",
 	 "TLSv1",
 	 "TLSv1SSLHello"};
 
@@ -141,7 +142,7 @@ bool CINETAccount::SupportsTLSType(ETLSType type) const
 		
 	// ManageSIEVE only does STARTTLS - no high port SSL
 	case eManageSIEVE:
-		return (type != eSSL);
+		return ((type != eSSL) && (type != eSSLv3));
 		
 	// HTTP only does SSL - no STARTTLS
 	case eWebDAVPrefs:
@@ -149,7 +150,7 @@ bool CINETAccount::SupportsTLSType(ETLSType type) const
 	case eWebDAVCalendar:
 	case eCalDAVCalendar:
 	case eCardDAVAdbk:
-		return (type == eNoTLS) || (type == eSSL);
+		return (type == eNoTLS) || (type == eSSL) || (type == eSSLv3);
 	}
 }
 

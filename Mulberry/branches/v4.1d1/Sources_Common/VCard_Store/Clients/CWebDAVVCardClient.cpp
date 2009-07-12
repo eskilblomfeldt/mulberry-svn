@@ -111,7 +111,7 @@ CINETClient* CWebDAVVCardClient::CloneConnection()
 tcp_port CWebDAVVCardClient::GetDefaultPort()
 {
 	// TCP/IP-based sub-classes must deal with this
-	if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		return http::cHTTPServerPort_SSL;
 	else
 		return http::cHTTPServerPort;
@@ -148,7 +148,7 @@ void CWebDAVVCardClient::Reset()
 	mBaseRURL.EncodeURL('/');
 	
 	// Get absolute URL
-	if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		mBaseURL = cHTTPSURLScheme;
 	else
 		mBaseURL = cHTTPURLScheme;
@@ -1231,9 +1231,9 @@ void CWebDAVVCardClient::OpenSession()
 	LookupServer();
 
 	// Look for SSL and turn on here
-	if (mOwner && (GetAccount()->GetTLSType() == CINETAccount::eSSL))
+	if (mOwner && ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3)))
 	{
-		mStream->TLSSetTLSOn(true);
+		mStream->TLSSetTLSOn(true, GetAccount()->GetTLSType());
 		
 		// Check for client cert
 		if (GetAccount()->GetUseTLSClientCert())

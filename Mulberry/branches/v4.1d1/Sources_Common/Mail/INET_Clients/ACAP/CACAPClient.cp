@@ -153,7 +153,8 @@ CINETClient* CACAPClient::CloneConnection()
 tcp_port CACAPClient::GetDefaultPort()
 {
 	// TCP/IP-based sub-classes must deal with this
-	if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+		(GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		return cACAPServerPort_SSL;
 	else
 		return cACAPServerPort;

@@ -623,6 +623,9 @@ IMPORT_FUNCTION(sSSLLoader, SSL_METHOD *, SSLv23_method, (void), ())
 //SSL_METHOD *SSLv23_client_method(void);
 IMPORT_FUNCTION(sSSLLoader, SSL_METHOD *, SSLv23_client_method, (void), ())
 
+//SSL_METHOD *SSLv3_client_method(void);
+IMPORT_FUNCTION(sSSLLoader, SSL_METHOD *, SSLv3_client_method, (void), ())
+
 //SSL_METHOD *TLSv1_client_method(void);
 IMPORT_FUNCTION(sSSLLoader, SSL_METHOD *, TLSv1_client_method, (void), ())
 

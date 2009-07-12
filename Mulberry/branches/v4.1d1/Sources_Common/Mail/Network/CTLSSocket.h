@@ -43,7 +43,7 @@ public:
 
 	virtual void TCPClose();
 
-			void TLSSetTLSOn(bool tls_on);
+			void TLSSetTLSOn(bool tls_on, int tls_type=0);
 			bool TLSIsTLSOn() const
 		{ return mTLSOn; }
 			bool TLSSetClientCert(const cdstring& cert, const cdstring& passphrase);
@@ -52,7 +52,7 @@ public:
 	virtual void TCPWaitConnection();						// Passive connect (listen)
 
 	virtual void TCPStartConnection();						// Active connect
-			void TLSStartConnection(bool tls = true);		// Start TLS session
+			void TLSStartConnection();						// Start TLS session
 
 	// Receiving data
 	virtual void TCPReceiveData(char* buf, long* len);			// Receive some data
@@ -70,6 +70,7 @@ public:
 
 protected:
 	bool			mTLSOn;
+	int				mTLSType;
 	ssl_ctx_st*		m_ctx;
 	ssl_st*			m_tls;
 	vector<int>		mCertErrors;

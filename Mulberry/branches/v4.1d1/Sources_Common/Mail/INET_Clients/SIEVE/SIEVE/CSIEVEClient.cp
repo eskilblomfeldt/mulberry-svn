@@ -103,7 +103,8 @@ CINETClient* CSIEVEClient::CloneConnection()
 tcp_port CSIEVEClient::GetDefaultPort()
 {
 	// TCP/IP-based sub-classes must deal with this
-	if (GetAccount()->GetTLSType() == CINETAccount::eSSL)
+	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+		(GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		return cSIEVEServerPort_SSL;
 	else
 		return cSIEVEServerPort;

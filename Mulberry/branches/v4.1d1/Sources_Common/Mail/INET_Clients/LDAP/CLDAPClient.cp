@@ -154,7 +154,7 @@ void CLDAPClient::Lookup(const cdstring& item, CAdbkAddress::EAddressMatch match
 
 	// Look for port # appended to server
 	cdstring rname = GetAccount()->GetServerIP();
-	tcp_port rport = (GetAccount()->GetTLSType() == CINETAccount::eSSL) ? LDAPS_PORT : LDAP_PORT;
+	tcp_port rport = ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3)) ? LDAPS_PORT : LDAP_PORT;
 	if (::strchr(rname.c_str(), ':'))
 	{
 		rname = cdstring(GetAccount()->GetServerIP(), 0, ::strcspn(GetAccount()->GetServerIP(), ":"));

@@ -686,9 +686,10 @@ void CINETClient::Logon()
 		LookupServer();
 
 		// Look for SSL and turn on here
-		if (mOwner && GetAccount()->GetTLSType() == CINETAccount::eSSL)
+		if (mOwner && ((GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+					   (GetAccount()->GetTLSType() == CINETAccount::eSSLv3)))
 		{
-			mStream->TLSSetTLSOn(true);
+			mStream->TLSSetTLSOn(true, GetAccount()->GetTLSType());
 			
 			// Check for client cert
 			if (GetAccount()->GetUseTLSClientCert())
@@ -901,8 +902,8 @@ void CINETClient::DoStartTLS()
 	INETFinishSend();
 
 	// Now force TLS negotiation
-	mStream->TLSSetTLSOn(true);
-	mStream->TLSStartConnection(GetAccount()->GetTLSType() == CINETAccount::eTLS);
+	mStream->TLSSetTLSOn(true, GetAccount()->GetTLSType());
+	mStream->TLSStartConnection();
 
 	// Must redo capability after STARTTLS
 	_Capability(true);
