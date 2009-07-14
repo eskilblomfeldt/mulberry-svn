@@ -37,7 +37,7 @@ public:
 	CMailViewOptions();
 	CMailViewOptions(const CMailViewOptions& copy)
 		{ _copy(copy); }
-	~CMailViewOptions();
+	virtual ~CMailViewOptions();
 
 	CMailViewOptions& operator=(const CMailViewOptions& copy)			// Assignment with same type
 		{ if (this != &copy) _copy(copy); return *this; }

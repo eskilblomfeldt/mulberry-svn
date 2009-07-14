@@ -93,19 +93,19 @@ void CToDoItem::SetupTagText()
 
 	if (!mVToDo->GetMaster<iCal::CICalendarVToDo>()->HasEnd())
 	{
-		ostr << endl << rsrc::GetString("ToDoTip::No due date");
+		ostr << std::endl << rsrc::GetString("ToDoTip::No due date");
 	}
 	else
 	{
-		ostr << endl << rsrc::GetString("ToDoTip::Due on") << mVToDo->GetInstanceEnd().GetAdjustedTime().GetLocaleDate(iCal::CICalendarDateTime::eAbbrevDate);
+		ostr << std::endl << rsrc::GetString("ToDoTip::Due on") << mVToDo->GetInstanceEnd().GetAdjustedTime().GetLocaleDate(iCal::CICalendarDateTime::eAbbrevDate);
 	}
 
 	// Always add calendar name
 	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar( mVToDo->GetMaster<iCal::CICalendarVToDo>()->GetCalendar());
 	if (cal != NULL)
-		ostr << endl << endl << rsrc::GetString("ToDoTip::Calendar") << cal->GetName();
+		ostr << std::endl << std::endl << rsrc::GetString("ToDoTip::Calendar") << cal->GetName();
 
-	ostr << ends;
+	ostr << std::ends;
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 

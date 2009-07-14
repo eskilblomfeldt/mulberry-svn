@@ -38,7 +38,7 @@ class CToolbarView : public LWindowHeader, public CListener
 	friend class CToolbar;
 
 public:
-	typedef vector<CToolbarView*> CToolbarViewList;
+	typedef std::vector<CToolbarView*> CToolbarViewList;
 	static CToolbarViewList sToolbarViews;
 
 	enum { class_ID = 'TBar' };
@@ -82,7 +82,7 @@ protected:
 		unsigned long		mGroupID;
 		unsigned long		mActiveIndex;
 		bool				mIsVisible;
-		vector<CToolbar*>	mToolbars;
+		std::vector<CToolbar*>	mToolbars;
 	};
 	typedef ptrvector<SToolbarGroup> SToolbarGroups;
 	SToolbarGroups			mGroups;

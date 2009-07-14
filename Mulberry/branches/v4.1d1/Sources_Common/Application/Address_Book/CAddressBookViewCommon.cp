@@ -254,7 +254,7 @@ unsigned long CAddressBookView::CountViews(const CAddressBook* adbk)
 bool CAddressBookView::ViewExists(const CAddressBookView* wnd)
 {
 	cdmutexprotect<CAddressBookViewList>::lock _lock(sAddressBookViews);
-	CAddressBookViewList::iterator found = ::find(sAddressBookViews->begin(), sAddressBookViews->end(), wnd);
+	CAddressBookViewList::iterator found = std::find(sAddressBookViews->begin(), sAddressBookViews->end(), wnd);
 	return found != sAddressBookViews->end();
 }
 

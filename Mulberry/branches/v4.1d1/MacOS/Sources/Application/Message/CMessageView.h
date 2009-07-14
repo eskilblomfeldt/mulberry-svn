@@ -127,7 +127,7 @@ public:
 			  mFontScale = copy.mFontScale;  }
 	};
 
-	typedef vector<CMessageView*>	CMessageViewList;
+	typedef std::vector<CMessageView*>	CMessageViewList;
 	static cdmutexprotect<CMessageViewList> sMsgViews;	// List of windows (protected for multi-thread access)
 
 private:
@@ -137,8 +137,8 @@ private:
 	bool			mWasUnseen;							// Was it unseen before being displayed
 	bool			mItsMsgError;						// Flag for cleared out message
 	const char*		mShowText;							// Text to show direct from attachment in local encoding
-	auto_ptr<unichar_t>	mUTF16Text;						// UTF16 text
-	auto_ptr<unichar_t>	mRawUTF16Text;					// Raw UTF16 text
+	std::auto_ptr<unichar_t>	mUTF16Text;						// UTF16 text
+	std::auto_ptr<unichar_t>	mRawUTF16Text;					// Raw UTF16 text
 	LPrintSpec*		mPrintSpec;
 	LPrintSpec		mMyPrintSpec;
 	bool			mShowHeader;						// Show header

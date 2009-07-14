@@ -274,7 +274,7 @@ void CSummaryView::ResetTextTraits(const TextTraitsRecord& list_traits)
 
 void CSummaryView::DoPrint()
 {
-	auto_ptr<CSummaryPrintout> pout;
+	std::auto_ptr<CSummaryPrintout> pout;
 
 	try
 	{

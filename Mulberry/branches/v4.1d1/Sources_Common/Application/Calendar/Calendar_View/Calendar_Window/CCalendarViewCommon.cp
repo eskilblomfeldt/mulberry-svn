@@ -34,7 +34,7 @@
 bool CCalendarView::ViewExists(const CCalendarView* view)
 {
 	cdmutexprotect<CCalendarViewList>::lock _lock(sCalendarViews);
-	CCalendarViewList::iterator found = ::find(sCalendarViews->begin(), sCalendarViews->end(), view);
+	CCalendarViewList::iterator found = std::find(sCalendarViews->begin(), sCalendarViews->end(), view);
 	return found != sCalendarViews->end();
 }
 

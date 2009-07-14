@@ -308,7 +308,7 @@ void CTargetsDialog::ResizedTargets(int dy)
 		GetGlobalBounds(bounds);
 		
 		if (bounds.bottom - bounds.top < cMaxWindowHeight)
-			ResizeWindowBy(0, min(cMaxWindowHeight - (bounds.bottom - bounds.top), image.height - frame.height));
+			ResizeWindowBy(0, std::min(cMaxWindowHeight - (bounds.bottom - bounds.top), image.height - frame.height));
 	}
 	
 	// Always scroll to bottom if enlarging

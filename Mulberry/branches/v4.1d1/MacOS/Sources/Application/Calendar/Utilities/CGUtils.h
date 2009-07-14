@@ -22,8 +22,8 @@
 namespace CGUtils
 {
 
-	const float flatten_factor = 2.25;
-	const float unflatten_factor = 2.25;
+	const float flatten_factor = 2.25F;
+	const float unflatten_factor = 2.25F;
 
 									// QD <--> CG Geometry Converters
 	void	QDToHIPoint(
@@ -44,19 +44,19 @@ namespace CGUtils
 
 	inline float	GetCGAlpha(const uint32_t& colour)
 	{
-		return ((colour & 0xFF000000) >> 24) / 255.0;
+		return ((colour & 0xFF000000) >> 24) / 255.0F;
 	}
 	inline float	GetCGRed(const uint32_t& colour)
 	{
-		return ((colour & 0x00FF0000) >> 16) / 255.0;
+		return ((colour & 0x00FF0000) >> 16) / 255.0F;
 	}
 	inline float	GetCGGreen(const uint32_t& colour)
 	{
-		return ((colour & 0x0000FF00) >> 8) / 255.0;
+		return ((colour & 0x0000FF00) >> 8) / 255.0F;
 	}
 	inline float	GetCGBlue(const uint32_t& colour)
 	{
-		return (colour & 0x000000FF) / 255.0;
+		return (colour & 0x000000FF) / 255.0F;
 	}
 	void LightenColours(float& red, float& green, float& blue, bool lighter = false);
 	void DarkenColours(float& red, float& green, float& blue);
@@ -64,27 +64,27 @@ namespace CGUtils
 	void HSV2RGB(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 	inline void		FlattenColours(float& red, float& green, float& blue)
 	{
-		red = (red + flatten_factor) / (1.0 + flatten_factor);
-		green = (green + flatten_factor) / (1.0 + flatten_factor);
-		blue = (blue + flatten_factor) / (1.0 + flatten_factor);
+		red = (red + flatten_factor) / (1.0F + flatten_factor);
+		green = (green + flatten_factor) / (1.0F + flatten_factor);
+		blue = (blue + flatten_factor) / (1.0F + flatten_factor);
 	}
 	inline void		UnflattenColours(float& red, float& green, float& blue)
 	{
-		red = unflatten_factor * red - 1.0;
-		if (red > 1.0)
-			red = 1.0;
-		else if (red < 0.0)
-			red = 0.0;
-		green = unflatten_factor * green - 1.0;
-		if (green > 1.0)
-			green = 1.0;
-		else if (green < 0.0)
-			green = 0.0;
-		blue = unflatten_factor * blue - 1.0;
-		if (blue > 1.0)
-			blue = 1.0;
-		else if (blue < 0.0)
-			blue = 0.0;
+		red = unflatten_factor * red - 1.0F;
+		if (red > 1.0F)
+			red = 1.0F;
+		else if (red < 0.0F)
+			red = 0.0F;
+		green = unflatten_factor * green - 1.0F;
+		if (green > 1.0F)
+			green = 1.0F;
+		else if (green < 0.0F)
+			green = 0.0F;
+		blue = unflatten_factor * blue - 1.0F;
+		if (blue > 1.0F)
+			blue = 1.0F;
+		else if (blue < 0.0F)
+			blue = 0.0F;
 	}
 
 	inline RGBColor	GetQDColor(const uint32_t& colour)

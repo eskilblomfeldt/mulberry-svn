@@ -26,7 +26,6 @@
 
 #include "cdstring.h"
 
-using namespace std;
 
 namespace xmllib 
 {

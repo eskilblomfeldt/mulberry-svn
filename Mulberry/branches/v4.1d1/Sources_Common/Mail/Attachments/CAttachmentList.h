@@ -20,14 +20,13 @@
 #ifndef __CATTACHMENTLIST__MULBERRY__
 #define __CATTACHMENTLIST__MULBERRY__
 
-#include "vector.h"
-using namespace std;
+#include <vector>
 
 // Classes
 
 class CAttachment;
 
-class CAttachmentList : public vector<CAttachment*> {
+class CAttachmentList : public std::vector<CAttachment*> {
 
 public:
 						CAttachmentList();

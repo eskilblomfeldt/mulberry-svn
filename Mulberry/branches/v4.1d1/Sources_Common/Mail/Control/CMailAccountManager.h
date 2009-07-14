@@ -30,7 +30,7 @@
 #include "CMboxProtocol.h"
 #include "CMboxRefList.h"
 
-#include "vector.h"
+#include <vector>
 #include "templs.h"
 
 #include <time.h>
@@ -46,8 +46,8 @@ class CProgress;
 class CServerView;
 class CServerWindow;
 
-typedef vector<CMboxProtocol*> CMboxProtocolList;
-typedef vector<CMboxRefList*> CFavourites;
+typedef std::vector<CMboxProtocol*> CMboxProtocolList;
+typedef std::vector<CMboxRefList*> CFavourites;
 
 class CMailAccountManager : public CBroadcaster
 {

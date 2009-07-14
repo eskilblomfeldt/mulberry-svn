@@ -94,7 +94,7 @@ const char* CRFC822::RemoveMIMEHeaders(const char* header, bool no_subject)
 
 	bool beginLine = true;
 	bool record = true;
-	ostrstream out;
+	std::ostrstream out;
 
 	const char* p = header;
 	while(*p)
@@ -148,7 +148,7 @@ const char* CRFC822::RemoveMIMEHeaders(const char* header, bool no_subject)
 		}
 	}
 	
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -157,7 +157,7 @@ const char* CRFC822::OnlyHeaders(const char* header, const cdstrvect& hdrs)
 {
 	bool beginLine = true;
 	bool record = true;
-	ostrstream out;
+	std::ostrstream out;
 
 	const char* p = header;
 	while(*p)
@@ -222,7 +222,7 @@ const char* CRFC822::OnlyHeaders(const char* header, const cdstrvect& hdrs)
 		}
 	}
 	
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -235,7 +235,7 @@ void CRFC822::CreateHeader(CMessage* theMsg,
 	const CIdentity* default_id = &CPreferences::sPrefs->mIdentities.GetValue().front();
 
 	// Create stream to handle writing
-	ostrstream out;
+	std::ostrstream out;
 
 	// Add bounce header if there
 	if (bounced)
@@ -490,7 +490,7 @@ void CRFC822::CreateHeader(CMessage* theMsg,
 	}
 
 	// Give buffer to message
-	out << ends;
+	out << std::ends;
 	theMsg->SetHeader(out.str());
 }
 
@@ -507,7 +507,7 @@ void CRFC822::SendHeader(CMessage* theMsg, CDSN& dsn, bool allow_content)
 	CAddressList* rcpt_bcc = NULL;
 
 	// Create stream to handle writing
-	ostrstream out;
+	std::ostrstream out;
 
 	const char* p = theMsg->GetHeader();
 
@@ -676,7 +676,7 @@ void CRFC822::SendHeader(CMessage* theMsg, CDSN& dsn, bool allow_content)
 	}
 
 	// Give buffer to message
-	out << ends;
+	out << std::ends;
 	theMsg->SetHeader(out.str());
 	
 	// Replace message envelope address lists with SMTP envelope addresses if present
@@ -781,7 +781,7 @@ bool CRFC822::HeaderSearch(const char* hdr, const cdstring& field, cdstring& res
 void CRFC822::AddAddressList(const char* field,
 								bool bounced,
 								const CAddressList* theList,
-								ostream& out,
+								std::ostream& out,
 								bool encode)
 {
 	short line_length = ::strlen(field);
@@ -881,7 +881,7 @@ void CRFC822::FoldLines(cdstring& text, bool addr_phrase, unsigned long offset, 
 		return;
 
 	// Create stream to handle writing
-	ostrstream out;
+	std::ostrstream out;
 	const char* p = text.c_str();
 
 	// Loop over all text and wrap
@@ -976,7 +976,7 @@ void CRFC822::FoldLines(cdstring& text, bool addr_phrase, unsigned long offset, 
 	}
 
 	// Now create the buffer for the header
-	out << ends;
+	out << std::ends;
 	text.steal(out.str());
 }
 
@@ -1033,7 +1033,7 @@ void CRFC822::HeaderQuote(cdstring& str, bool addr_phrase, bool encode, bool par
 		// Check for specials
 		bool do_quote = ::strpbrk(str.c_str(), param ? cRFC822_PARAMQUOTE : cRFC822_QUOTE);
 
-		ostrstream out;
+		std::ostrstream out;
 		if (do_quote)
 			out << '\"';
 
@@ -1060,7 +1060,7 @@ void CRFC822::HeaderQuote(cdstring& str, bool addr_phrase, bool encode, bool par
 			out << '\"';
 
 		// Copy stream back to string
-		out << ends;
+		out << std::ends;
 		str.steal(out.str());
 	}
 }
@@ -1074,7 +1074,7 @@ bool CRFC822::TextTo1522(cdstring& str, bool addr_phrase, bool wrap, unsigned lo
 	// Do encoding if required
 	if (charset != i18n::eUSASCII)
 	{
-		ostrstream out;
+		std::ostrstream out;
 		const char* quote_start = cRFC1522_QUOTE_START_UTF8;
 		switch(charset)
 		{
@@ -1142,7 +1142,7 @@ bool CRFC822::TextTo1522(cdstring& str, bool addr_phrase, bool wrap, unsigned lo
 		out << cRFC1522_QUOTE_END;
 
 		// Copy stream back to string
-		out << ends;
+		out << std::ends;
 		str.steal(out.str());
 	}
 
@@ -1156,7 +1156,7 @@ bool CRFC822::TextFrom1522(cdstring& str)
 	bool decode = false;
 	bool did_decode = false;
 	bool non_ascii = false;
-	ostrstream* out = NULL;
+	std::ostrstream* out = NULL;
 
 	try
 	{
@@ -1170,7 +1170,7 @@ bool CRFC822::TextFrom1522(cdstring& str)
 				if (!decode)
 				{
 					// Create an output stream for decoded data
-					out = new ostrstream;
+					out = new std::ostrstream;
 
 					// Copy previous set of unencoded chars into output buffer
 					size_t length = p - str.c_str();
@@ -1393,7 +1393,7 @@ bool CRFC822::TextFrom1522(cdstring& str)
 		// Copy stream back to string if decode done
 		if (decode)
 		{
-			*out << ends;
+			*out << std::ends;
 			str.steal(out->str());
 			delete out;
 			out = NULL;
@@ -1438,7 +1438,7 @@ bool CRFC822::Needs2231(const cdstring& str)
 bool CRFC822::TextTo2231(cdstring& str)
 {
 	// Assume it needs encoding
-	ostrstream out;
+	std::ostrstream out;
 
 	// Determine charset to use
 	const char* p = str.c_str();
@@ -1476,7 +1476,7 @@ bool CRFC822::TextTo2231(cdstring& str)
 		}
 	}
 	
-	out << ends;
+	out << std::ends;
 	str.steal(out.str());
 
 	return true;	
@@ -1546,7 +1546,7 @@ bool CRFC822::TextFrom2231(cdstring& str)
 		cdstring lang_str(lang_start, lang_end - lang_start);
 
 		// Remainder of string is encoded data - write to stream doing decode
-		ostrstream decodedout;
+		std::ostrstream decodedout;
 		while(*p)
 		{
 			switch(*p)
@@ -1580,13 +1580,13 @@ bool CRFC822::TextFrom2231(cdstring& str)
 		}
 
 		// Grab decoded string
-		decodedout << ends;
+		decodedout << std::ends;
 		str.steal(decodedout.str());
 
 		// Convert to utf8 if not already
-		ostrstream out;
+		std::ostrstream out;
 		i18n::CCharsetManager::sCharsetManager.ToUTF8(charset, str, str.length(), out);
-		out << ends;
+		out << std::ends;
 		str.steal(out.str());
 	}
 	catch (...)

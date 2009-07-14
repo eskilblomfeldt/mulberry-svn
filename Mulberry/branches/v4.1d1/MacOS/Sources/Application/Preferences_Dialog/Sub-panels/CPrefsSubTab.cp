@@ -33,7 +33,7 @@ CPrefsSubTab::~CPrefsSubTab()
 {
 	// Remove all sub-panes (must remove from place holder first to prevent double delete)
 	RemovePanel();
-	for(vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
+	for(std::vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
 		delete *iter;
 }
 
@@ -68,7 +68,7 @@ void CPrefsSubTab::ChangePanel(unsigned long id, unsigned long index)
 void CPrefsSubTab::ToggleICDisplay(bool IC_on)
 {
 	// Set sub-panes
-	for(vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
+	for(std::vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
 		(*iter)->ToggleICDisplay(IC_on);
 }
 
@@ -76,7 +76,7 @@ void CPrefsSubTab::ToggleICDisplay(bool IC_on)
 void CPrefsSubTab::SetData(void* data)
 {
 	// Set sub-panes
-	for(vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
+	for(std::vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
 		(*iter)->SetData(data);
 }
 
@@ -84,7 +84,7 @@ void CPrefsSubTab::SetData(void* data)
 void CPrefsSubTab::UpdateData(void* data)
 {
 	// Update sub-panes
-	for(vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
+	for(std::vector<CPrefsTabSubPanel*>::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
 		(*iter)->UpdateData(data);
 }
 

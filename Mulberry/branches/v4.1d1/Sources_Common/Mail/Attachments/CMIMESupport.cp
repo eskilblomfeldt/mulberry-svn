@@ -83,7 +83,7 @@ CMIMESupport::~CMIMESupport()
 
 // O T H E R  M E T H O D S ____________________________________________________________________________
 
-void CMIMESupport::AddParameter(ostream& out, const cdstring& name, const cdstring& value, bool value_ok, long& line_length, EEndl for_endl)
+void CMIMESupport::AddParameter(std::ostream& out, const cdstring& name, const cdstring& value, bool value_ok, long& line_length, EEndl for_endl)
 {
 	// Check for 2231 encoding
 	if (CRFC822::Needs2231(value))
@@ -216,7 +216,7 @@ cdstring CMIMESupport::GenerateContentHeader(const CAttachment* attach, bool dum
 	}
 
 	// Now generate string
-	out << ends;
+	out << std::ends;
 	const char* p = out.str();
 	out.freeze(false);
 	return p;
@@ -309,7 +309,7 @@ cdstring CMIMESupport::GenerateContentDisposition(const CAttachment* attach, EEn
 				AddParameter(out, cMIMEDispositionParameter[eContentDispositionSize], cdstring(content.GetContentSize()), true, line_length, for_endl);
 		}
 
-		out << ends;
+		out << std::ends;
 		const char* p = out.str();
 		out.freeze(false);
 		return p;

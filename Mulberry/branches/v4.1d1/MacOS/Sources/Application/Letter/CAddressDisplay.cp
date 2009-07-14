@@ -181,7 +181,7 @@ void CAddressDisplay::ResolveAddresses(bool qualify)
 		bool qualify = !CPreferences::sPrefs->mExpandFailedNicknames.GetValue();
 		
 		// Generate an address list
-		auto_ptr<CAddressList> list(new CAddressList(orig_text, orig_text.length(), 0, resolution));
+		std::auto_ptr<CAddressList> list(new CAddressList(orig_text, orig_text.length(), 0, resolution));
 		
 		if (!resolution || !qualify)
 		{
@@ -225,9 +225,9 @@ void CAddressDisplay::ResolveAddresses(bool qualify)
 
 		{
 			// Write to a string stream
-			ostrstream new_txt;
+			std::ostrstream new_txt;
 			list->WriteToStream(new_txt);
-			new_txt << ends;
+			new_txt << std::ends;
 			cdstring total;
 			total.steal(new_txt.str());
 

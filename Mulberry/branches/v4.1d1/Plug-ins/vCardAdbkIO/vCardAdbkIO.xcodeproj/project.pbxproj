@@ -140,10 +140,12 @@
 		AF41993A0AE9A55A00E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF41993B0AE9A55A00E19592 /* Build configuration list for PBXProject "vCardAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF4199380AE9A55A00E19592;
 			productRefGroup = AF4199460AE9A55A00E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF4199440AE9A55A00E19592 /* vCard MachO */,
 			);
@@ -190,7 +192,7 @@
 		AF41993C0AE9A55A00E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

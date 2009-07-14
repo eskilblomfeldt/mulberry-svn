@@ -128,10 +128,12 @@
 		AF4199C20AE9A7D000E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF4199C30AE9A7D000E19592 /* Build configuration list for PBXProject "OEAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF4199C00AE9A7D000E19592;
 			productRefGroup = AF4199CE0AE9A7D000E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF4199CC0AE9A7D000E19592 /* OEAdbkIO MachO */,
 			);
@@ -176,7 +178,7 @@
 		AF4199C40AE9A7D000E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

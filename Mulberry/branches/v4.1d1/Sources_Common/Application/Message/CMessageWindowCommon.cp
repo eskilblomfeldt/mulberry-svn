@@ -100,7 +100,7 @@ void CMessageWindow::Text2UTF16(i18n::ECharsetCode charset)
 	std::ostrstream sout;
 	if ((mShowText != NULL) && (charset != i18n::eUTF16) && i18n::CCharsetManager::sCharsetManager.ToUTF16(charset, mShowText, ::strlen(mShowText), sout))
 	{
-		sout << ends << ends;
+		sout << std::ends << std::ends;
 		mUTF16Text.reset((unichar_t*)sout.str());
 	}
 }
@@ -190,7 +190,7 @@ CMessageWindow* CMessageWindow::FindWindow(const CMessage* theMsg, bool owned_by
 bool CMessageWindow::WindowExists(const CMessageWindow* wnd)
 {
 	cdmutexprotect<CMessageWindowList>::lock _lock(sMsgWindows);
-	CMessageWindowList::iterator found = ::find(sMsgWindows->begin(), sMsgWindows->end(), wnd);
+	CMessageWindowList::iterator found = std::find(sMsgWindows->begin(), sMsgWindows->end(), wnd);
 	return found != sMsgWindows->end();
 }
 

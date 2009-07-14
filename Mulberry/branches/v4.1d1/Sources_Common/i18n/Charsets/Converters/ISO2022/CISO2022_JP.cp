@@ -169,13 +169,13 @@ int CISO2022_JP::w_2_c(wchar_t wc, char* out)
 }
 
 // Start state in default (ASCII)
-void CISO2022_JP::init_w_2_c(ostream& out)
+void CISO2022_JP::init_w_2_c(std::ostream& out)
 {
 	mState = eASCII;
 }
 
 // Reset encoding state back to default (ASCII)
-void CISO2022_JP::finish_w_2_c(ostream& out)
+void CISO2022_JP::finish_w_2_c(std::ostream& out)
 {
 	if (mState != eASCII)
 	{

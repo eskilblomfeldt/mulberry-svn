@@ -131,7 +131,7 @@ protected:
 
 private:
 	static uint32_t					sTitleCounter;
-	static set<CNewEventDialog*>	sDialogs;
+	static std::set<CNewEventDialog*>	sDialogs;
 };
 
 #endif

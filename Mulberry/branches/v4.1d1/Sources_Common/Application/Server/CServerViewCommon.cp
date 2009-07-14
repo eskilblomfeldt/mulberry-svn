@@ -40,7 +40,7 @@ CServerWindow* CServerView::GetServerWindow(void) const
 bool CServerView::ViewExists(const CServerView* wnd)
 {
 	cdmutexprotect<CServerViewList>::lock _lock(sServerViews);
-	CServerViewList::iterator found = ::find(sServerViews->begin(), sServerViews->end(), wnd);
+	CServerViewList::iterator found = std::find(sServerViews->begin(), sServerViews->end(), wnd);
 	return found != sServerViews->end();
 }
 

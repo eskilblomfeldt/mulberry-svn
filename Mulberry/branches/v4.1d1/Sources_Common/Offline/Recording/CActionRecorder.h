@@ -62,11 +62,11 @@ public:
 	void StartRecording(unsigned long id);
 	void StopRecording();
 
-	void WriteItemsToStream(ostream& out, bool text = false) const;
-	void ReadItemsFromStream(istream& in, unsigned long vers);
+	void WriteItemsToStream(std::ostream& out, bool text = false) const;
+	void ReadItemsFromStream(std::istream& in, unsigned long vers);
 
 	// Playback logging
-	void SetLog(ostream* log)
+	void SetLog(std::ostream* log)
 		{ mLog = log; }
 
 	// Playback processing - handled by sub-class
@@ -79,7 +79,7 @@ protected:
 	unsigned long mStartRecord;
 	unsigned long mNextID;
 	unsigned long mCurrentID;
-	ostream*	mLog;
+	std::ostream*	mLog;
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 	virtual OSType	GetMacFileType() const = 0;

@@ -284,7 +284,7 @@ void CAddressBook::RemoveFromParent()
 	if (mParent)
 	{
 		CAddressBookList* list = mParent->GetChildren();
-		CAddressBookList::iterator found = ::find(list->begin(), list->end(), this);
+		CAddressBookList::iterator found = std::find(list->begin(), list->end(), this);
 		if (found != list->end())
 		{
 			// NULL it out so that the node is not deleted, then erase
@@ -712,7 +712,7 @@ CAdbkAddress* CAddressBook::FindAddress(const CAddress* addr)
 
 CAdbkAddress* CAddressBook::FindAddressEntry(const char* entry)
 {
-	CAddressList::iterator found = ::find_if(mAddresses.begin(), mAddresses.end(), CAdbkAddress::same_entry_str(entry));
+	CAddressList::iterator found = std::find_if(mAddresses.begin(), mAddresses.end(), CAdbkAddress::same_entry_str(entry));
 	if (found != mAddresses.end())
 		return static_cast<CAdbkAddress*>(*found);
 
@@ -733,7 +733,7 @@ CGroup* CAddressBook::FindGroup(const char* name)
 
 CGroup* CAddressBook::FindGroupEntry(const char* entry)
 {
-	CGroupList::iterator found = ::find_if(mGroups.begin(), mGroups.end(), CGroup::same_entry_str(entry));
+	CGroupList::iterator found = std::find_if(mGroups.begin(), mGroups.end(), CGroup::same_entry_str(entry));
 	if (found != mGroups.end())
 		return static_cast<CGroup*>(*found);
 
@@ -763,7 +763,7 @@ void CAddressBook::AddAddress(CAddressList* addrs, bool sorted)
 				mAddresses.push_back(*iter);
 			
 			// Map to vCard
-			auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), true));
+			std::auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(GetVCardAdbk()->GetRef(), static_cast<CAdbkAddress*>(*iter), true));
 			GetVCardAdbk()->AddNewVCard(vcard.release(), true);
 		}
 	}
@@ -834,7 +834,7 @@ void CAddressBook::UpdateAddress(CAddressList* old_addrs, CAddressList* new_addr
 	for(CAddressList::iterator iter = old_addrs->begin(); iter != old_addrs->end(); iter++)
 	{
 		// Find new one
-		CAddressList::iterator found = ::find_if(new_addrs->begin(), new_addrs->end(), CAdbkAddress::same_entry(static_cast<CAdbkAddress*>(*iter)));
+		CAddressList::iterator found = std::find_if(new_addrs->begin(), new_addrs->end(), CAdbkAddress::same_entry(static_cast<CAdbkAddress*>(*iter)));
 		if (found != new_addrs->end())
 		{
 			// Get index of old one and replace with new one
@@ -956,7 +956,7 @@ void CAddressBook::UpdateGroup(CGroupList* old_grps, CGroupList* new_grps, bool 
 	for(CGroupList::iterator iter = old_grps->begin(); iter != old_grps->end(); iter++)
 	{
 		// Find new one
-		CGroupList::iterator found = ::find_if(new_grps->begin(), new_grps->end(), CGroup::same_entry(*iter));
+		CGroupList::iterator found = std::find_if(new_grps->begin(), new_grps->end(), CGroup::same_entry(*iter));
 		if (found != new_grps->end())
 		{
 			// Get index of old one and replace with new one
@@ -1265,7 +1265,7 @@ char CAddressBook::SkipTerm(char** txt, cdstring& copy)
 
 char* CAddressBook::ExportAddress(const CAdbkAddress* addr) const
 {
-	ostrstream out;
+	std::ostrstream out;
 
 	// Write nick-name (adl)
 	cdstring str;
@@ -1354,13 +1354,13 @@ char* CAddressBook::ExportAddress(const CAdbkAddress* addr) const
 		out << str;
 	}
 
-	out << os_endl << ends;
+	out << os_endl << std::ends;
 	return out.str();
 }
 
 char* CAddressBook::ExportGroup(const CGroup* grp) const
 {
-	ostrstream out;
+	std::ostrstream out;
 
 	// Write group header
 	cdstring str = NEW_GROUP_HEADER;
@@ -1393,7 +1393,7 @@ char* CAddressBook::ExportGroup(const CGroup* grp) const
 		out << str;
 	}
 
-	out << os_endl << ends;
+	out << os_endl << std::ends;
 	return out.str();
 }
 
@@ -1539,7 +1539,7 @@ void CAddressBook::SetACL(CAdbkACL* acl)
 			mACLs = new CAdbkACLList;
 
 		// Search for existing ACL
-		CAdbkACLList::iterator found = ::find(mACLs->begin(), mACLs->end(), *acl);
+		CAdbkACLList::iterator found = std::find(mACLs->begin(), mACLs->end(), *acl);
 
 		// Add if not found
 		if (found == mACLs->end())
@@ -1569,7 +1569,7 @@ void CAddressBook::DeleteACL(CAdbkACL* acl)
 		mProtocol->DeleteACL(this, acl);
 
 		// Search for existing ACL
-		CAdbkACLList::iterator found = ::find(mACLs->begin(), mACLs->end(), *acl);
+		CAdbkACLList::iterator found = std::find(mACLs->begin(), mACLs->end(), *acl);
 
 		// Remove it
 		if (found != mACLs->end())

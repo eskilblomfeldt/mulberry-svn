@@ -20,7 +20,7 @@
 #ifndef __CCONVERTERBASE__MULBERRY__
 #define __CCONVERTERBASE__MULBERRY__
 
-#include <ostream.h>
+#include <ostream>
 
 namespace i18n 
 {
@@ -34,17 +34,17 @@ public:
 	static char undefined_charmap;
 	static wchar_t undefined_wcharmap;
 
-	virtual void ToUnicode(const char* str, size_t len, ostream& out);
-	virtual void FromUnicode(const wchar_t* wstr, size_t wlen, ostream& out);
+	virtual void ToUnicode(const char* str, size_t len, std::ostream& out);
+	virtual void FromUnicode(const wchar_t* wstr, size_t wlen, std::ostream& out);
 
-	virtual void ToUTF16(const char* str, size_t len, ostream& out);
-	virtual void FromUTF16(const unsigned short* str, size_t ulen, ostream& out);
+	virtual void ToUTF16(const char* str, size_t len, std::ostream& out);
+	virtual void FromUTF16(const unsigned short* str, size_t ulen, std::ostream& out);
 
-	virtual void ToUTF8(const char* str, size_t len, ostream& out);
-	virtual void FromUTF8(const char* str, size_t len, ostream& out);
+	virtual void ToUTF8(const char* str, size_t len, std::ostream& out);
+	virtual void FromUTF8(const char* str, size_t len, std::ostream& out);
 
-	virtual void init_w_2_c(ostream& out);
-	virtual void finish_w_2_c(ostream& out);
+	virtual void init_w_2_c(std::ostream& out);
+	virtual void finish_w_2_c(std::ostream& out);
 
 	virtual wchar_t c_2_w(const unsigned char*& c) = 0;
 	virtual int w_2_c(wchar_t wc, char* out) = 0;

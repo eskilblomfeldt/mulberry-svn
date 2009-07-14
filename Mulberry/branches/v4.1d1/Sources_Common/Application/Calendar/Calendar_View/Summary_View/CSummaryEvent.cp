@@ -82,21 +82,21 @@ void CSummaryEvent::InitSummary(EType type, const iCal::CICalendarComponentExpan
 	
 		// Setup a help tag;
 	std::ostrstream ostr;
-	ostr << rsrc::GetString("EventTip::Summary") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetSummary() << endl;
+	ostr << rsrc::GetString("EventTip::Summary") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetSummary() << std::endl;
 	if (vevent->GetInstanceStart().IsDateOnly())
 	{
-		ostr << rsrc::GetString("EventTip::Starts on") << vevent->GetInstanceStart().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << endl;
-		ostr << rsrc::GetString("EventTip::All Day Event") << endl;
+		ostr << rsrc::GetString("EventTip::Starts on") << vevent->GetInstanceStart().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << std::endl;
+		ostr << rsrc::GetString("EventTip::All Day Event") << std::endl;
 	}
 	else
 	{
-		ostr << rsrc::GetString("EventTip::Starts on") << vevent->GetInstanceStart().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << endl;
-		ostr << rsrc::GetString("EventTip::Ends on") << vevent->GetInstanceEnd().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << endl;
+		ostr << rsrc::GetString("EventTip::Starts on") << vevent->GetInstanceStart().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << std::endl;
+		ostr << rsrc::GetString("EventTip::Ends on") << vevent->GetInstanceEnd().GetAdjustedTime().GetLocaleDateTime(iCal::CICalendarDateTime::eNumericDate, false, !iCal::CICalendarLocale::Use24HourTime()) << std::endl;
 	}
 	if (!vevent->GetMaster<iCal::CICalendarVEvent>()->GetLocation().empty())
-		ostr << rsrc::GetString("EventTip::Location") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetLocation() << endl;
+		ostr << rsrc::GetString("EventTip::Location") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetLocation() << std::endl;
 	if (!vevent->GetMaster<iCal::CICalendarVEvent>()->GetDescription().empty())
-		ostr << rsrc::GetString("EventTip::Description") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetDescription() << endl;
+		ostr << rsrc::GetString("EventTip::Description") << vevent->GetMaster<iCal::CICalendarVEvent>()->GetDescription() << std::endl;
 	
 	// Add calendar name if more than one calendar in use
 	const iCal::CICalendarList& cals = calstore::CCalendarStoreManager::sCalendarStoreManager->GetActiveCalendars();
@@ -104,7 +104,7 @@ void CSummaryEvent::InitSummary(EType type, const iCal::CICalendarComponentExpan
 	{
 		iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(vevent->GetMaster<iCal::CICalendarVEvent>()->GetCalendar());
 		if (cal != NULL)
-			ostr << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName() << endl;
+			ostr << std::endl << rsrc::GetString("EventTip::Calendar") << cal->GetName() << std::endl;
 	}
 	
 	ostr << std::ends;

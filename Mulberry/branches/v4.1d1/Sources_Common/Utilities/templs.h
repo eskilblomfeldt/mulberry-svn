@@ -20,16 +20,16 @@
 #ifndef __TEMPLS__MULBERRY__
 #define __TEMPLS__MULBERRY__
 
-#include <map.h>
-#include <multimap.h>
-#include <set.h>
-#include <vector.h>
+#include <map>
+//#include <multimap>
+#include <set>
+#include <vector>
 
-typedef vector<bool> boolvector;
-typedef vector<long> lvector;
-typedef vector<unsigned long> ulvector;
-typedef map<unsigned long, unsigned long> ulmap;
-typedef multimap<unsigned long, unsigned long> ulmultimap;
-typedef set<unsigned long> ulset;
+typedef std::vector<bool> boolvector;
+typedef std::vector<long> lvector;
+typedef std::vector<unsigned long> ulvector;
+typedef std::map<unsigned long, unsigned long> ulmap;
+typedef std::multimap<unsigned long, unsigned long> ulmultimap;
+typedef std::set<unsigned long> ulset;
 
 #endif

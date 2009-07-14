@@ -131,7 +131,7 @@ bool CBlockOptionsMap::WriteKeyValue(const cdstring& key, const cdstring& value)
 	full_key += key;
 
 	// Insert
-	pair<cdstrmap::iterator, bool> result = mMap.insert(cdstrmap::value_type(full_key, value));
+	std::pair<cdstrmap::iterator, bool> result = mMap.insert(cdstrmap::value_type(full_key, value));
 
 	// Does it exist already
 	if (!result.second)

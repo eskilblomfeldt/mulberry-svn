@@ -541,7 +541,7 @@ void CSMTPAccountManager::AddOffline(CSMTPSender* sender)
 void CSMTPAccountManager::RemoveOffline(CSMTPSender* sender)
 {
 	// Find it in the list
-	CSMTPSenderList::iterator found = ::find(mSMTPSenders.begin(), mSMTPSenders.end(), sender);
+	CSMTPSenderList::iterator found = std::find(mSMTPSenders.begin(), mSMTPSenders.end(), sender);
 	if (found != mSMTPSenders.end())
 	{
 		// Shut down its thread
@@ -555,7 +555,7 @@ void CSMTPAccountManager::RemoveOffline(CSMTPSender* sender)
 
 CSMTPSendThread* CSMTPAccountManager::GetThread(const CSMTPSender* sender)
 {
-	CSMTPSenderList::iterator found = ::find(mSMTPSenders.begin(), mSMTPSenders.end(), sender);
+	CSMTPSenderList::iterator found = std::find(mSMTPSenders.begin(), mSMTPSenders.end(), sender);
 	if (found != mSMTPSenders.end())
 		return *(mSMTPThreads.begin() + (found - mSMTPSenders.begin()));
 	else

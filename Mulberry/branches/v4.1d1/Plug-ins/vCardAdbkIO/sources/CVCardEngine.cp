@@ -36,7 +36,7 @@
 #include "CStringUtils.h"
 
 // Read a single vCard address from the input stream
-bool CVCardEngine::ReadOne(istream& in, CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr)
+bool CVCardEngine::ReadOne(std::istream& in, CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr)
 {
 	// Create vCard 
 	CVCard vCard;
@@ -86,7 +86,7 @@ bool CVCardEngine::ReadOne(istream& in, CAdbkIOPluginDLL::SAdbkIOPluginAddress& 
 }
 
 // Write a single vCard address to the output stream
-void CVCardEngine::WriteOne(ostream& out, const CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr)
+void CVCardEngine::WriteOne(std::ostream& out, const CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr)
 {
 	// Creat vcard object and add appropriate fields
 	CVCard vcard;

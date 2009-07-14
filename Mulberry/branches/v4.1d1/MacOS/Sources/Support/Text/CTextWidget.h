@@ -301,10 +301,10 @@ protected:
 							UniCharCount			inTextLength,
 							ATSUTextMeasurement		inLineWidth,
 							ItemCount&				outLineCount,
-							vector<UniCharArrayOffset>&		outLineBreaks,
-							vector<unsigned long>&			outLineHeights,
-							vector<unsigned long>&			outLineDescents,
-							vector<unsigned long>&			outLineOffsets);
+							std::vector<UniCharArrayOffset>&		outLineBreaks,
+							std::vector<unsigned long>&			outLineHeights,
+							std::vector<unsigned long>&			outLineDescents,
+							std::vector<unsigned long>&			outLineOffsets);
 	};
 
 	CGContextRef		mCurrentContext;
@@ -321,10 +321,10 @@ protected:
 	SSelectionInfo		mSelection;
 	
 	ItemCount					mLineCount;
-	vector<UniCharArrayOffset>	mLineBreaks;
-	vector<unsigned long>		mLineHeights;
-	vector<unsigned long>		mLineDescents;
-	vector<unsigned long>		mLineOffsets;
+	std::vector<UniCharArrayOffset>	mLineBreaks;
+	std::vector<unsigned long>		mLineHeights;
+	std::vector<unsigned long>		mLineDescents;
+	std::vector<unsigned long>		mLineOffsets;
 
 	Rect				mMargins;
 
@@ -394,13 +394,13 @@ protected:
 
 	void GetBreakInfo(UniCharArrayOffset start, UniCharArrayOffset end,
 						ItemCount start_line, ItemCount end_line,
-						vector<UniCharArrayOffset>& outLineBreaks);
+						std::vector<UniCharArrayOffset>& outLineBreaks);
 
 	void GetLineInfo(ItemCount start_line, ItemCount end_line,
-							const vector<UniCharArrayOffset>& lineBreaks,
-							vector<unsigned long>&			outLineHeights,
-							vector<unsigned long>&			outLineDescents,
-							vector<unsigned long>&			outLineOffsets);
+							const std::vector<UniCharArrayOffset>& lineBreaks,
+							std::vector<unsigned long>&			outLineHeights,
+							std::vector<unsigned long>&			outLineDescents,
+							std::vector<unsigned long>&			outLineOffsets);
 
 	// Text conversion
 	Handle GetTextRangeAs_utxt() const

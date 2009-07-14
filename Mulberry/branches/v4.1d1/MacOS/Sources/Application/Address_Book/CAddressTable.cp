@@ -702,7 +702,7 @@ void CAddressTable::CreateNewLetter(bool option_key)
 // Create a new address
 void CAddressTable::CreateNewEntry()
 {
-	auto_ptr<CAdbkAddress> new_addr(new CAdbkAddress);
+	std::auto_ptr<CAdbkAddress> new_addr(new CAdbkAddress);
 	if (CEditAddressDialog::PoseDialog(new_addr.get()))
 	{
 		// Only add if some text available
@@ -753,7 +753,7 @@ bool CAddressTable::EditEntry(TableIndexT row)
 	CAdbkAddress* theAddr = static_cast<CAdbkAddress*>(mAdbk->GetAddressList()->at(row - 1));
 
 	// Copy original address
-	auto_ptr<CAdbkAddress> copy(new CAdbkAddress(*theAddr));
+	std::auto_ptr<CAdbkAddress> copy(new CAdbkAddress(*theAddr));
 	if (CEditAddressDialog::PoseDialog(copy.get()))
 	{
 		// Add info to action
@@ -843,7 +843,7 @@ bool CAddressTable::AddAdbkAddressText(TableIndexT row, LHandleStream* txt)
 	// Get selected address
 	CAdbkAddress* addr = static_cast<CAdbkAddress*>(mAdbk->GetAddressList()->at(row - 1));
 
-	auto_ptr<const char> temp(mAdbk->ExportAddress(addr));
+	std::auto_ptr<const char> temp(mAdbk->ExportAddress(addr));
 
 	txt->WriteBlock(temp.get(), ::strlen(temp.get()));
 

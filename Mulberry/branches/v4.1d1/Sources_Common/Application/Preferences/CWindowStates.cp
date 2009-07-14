@@ -281,7 +281,7 @@ bool CWindowState::MergeToList(CWindowStateArray& list, const CWindowState& defa
 		if (PartialCompare(default_state))
 		{
 			// Remove from list if the same
-			CWindowStateArray::iterator found = ::find(list.begin(), list.end(), old_state);
+			CWindowStateArray::iterator found = std::find(list.begin(), list.end(), old_state);
 			if (found != list.end())
 			{
 				list.erase(found);
@@ -323,7 +323,7 @@ void CWindowState::PruneDefaults(const CWindowState& default_state)
 	for(CScreenMap::iterator iter = mBounds.begin(); iter != mBounds.end(); )
 	{
 		// Try to find it in the default one
-		CScreenMap::const_iterator found = ::find(default_state.mBounds.begin(), default_state.mBounds.end(), *iter);
+		CScreenMap::const_iterator found = std::find(default_state.mBounds.begin(), default_state.mBounds.end(), *iter);
 		if (found != default_state.mBounds.end())
 		{
 			// Found duplicate so delete it
@@ -344,7 +344,7 @@ bool CWindowState::PartialCompare(const CWindowState& default_state)
 	for(CScreenMap::const_iterator iter = mBounds.begin(); iter != mBounds.end(); iter++)
 	{
 		// Try to find it in the default one
-		CScreenMap::const_iterator found = ::find(default_state.mBounds.begin(), default_state.mBounds.end(), *iter);
+		CScreenMap::const_iterator found = std::find(default_state.mBounds.begin(), default_state.mBounds.end(), *iter);
 		if (found == default_state.mBounds.end())
 			// Not found so must be error
 			return false;
@@ -378,7 +378,7 @@ bool CWindowState::Merge(const CWindowState& state)
 		{
 			// Add to this one
 			mBounds.push_back(comp);
-			::sort(mBounds.begin(), mBounds.end());
+			std::sort(mBounds.begin(), mBounds.end());
 			changed = true;
 		}
 		else if (!found_equal)
@@ -521,7 +521,7 @@ void CWindowState::AddUniqueRect(CScreenWindowSize& item)
 	{
 		// Not found so add it
 		mBounds.push_back(item);
-		::sort(mBounds.begin(), mBounds.end());
+		std::sort(mBounds.begin(), mBounds.end());
 	}
 }
 
@@ -660,7 +660,7 @@ void CTableWindowState::PruneDefaults(const CWindowState& default_state)
 	for(CColumnMap::iterator iter = mColumnMap.begin(); iter != mColumnMap.end(); )
 	{
 		// Try to find it in the default one
-		CColumnMap::const_iterator found = ::find(static_cast<const CTableWindowState&>(default_state).mColumnMap.begin(),
+		CColumnMap::const_iterator found = std::find(static_cast<const CTableWindowState&>(default_state).mColumnMap.begin(),
 													static_cast<const CTableWindowState&>(default_state).mColumnMap.end(), *iter);
 		if (found != static_cast<const CTableWindowState&>(default_state).mColumnMap.end())
 		{
@@ -681,7 +681,7 @@ bool CTableWindowState::PartialCompare(const CWindowState& default_state)
 	for(CColumnMap::const_iterator iter = mColumnMap.begin(); iter != mColumnMap.end(); iter++)
 	{
 		// Try to find it in the default one
-		CColumnMap::const_iterator found = ::find(static_cast<const CTableWindowState&>(default_state).mColumnMap.begin(),
+		CColumnMap::const_iterator found = std::find(static_cast<const CTableWindowState&>(default_state).mColumnMap.begin(),
 													static_cast<const CTableWindowState&>(default_state).mColumnMap.end(), *iter);
 		if (found == static_cast<const CTableWindowState&>(default_state).mColumnMap.end())
 			// Not found so must be error
@@ -709,7 +709,7 @@ bool CTableWindowState::Merge(const CWindowState& istate)
 	{
 		// Add to this one
 		mColumnMap.push_back(comp);
-		::sort(mColumnMap.begin(), mColumnMap.end());
+		std::sort(mColumnMap.begin(), mColumnMap.end());
 		return true;
 	}
 	else
@@ -855,7 +855,7 @@ void CTableWindowState::AddUniqueColumnInfo(CScreenColumnInfo& item)
 	{
 		// Not found so add it
 		mColumnMap.push_back(item);
-		::sort(mColumnMap.begin(), mColumnMap.end());
+		std::sort(mColumnMap.begin(), mColumnMap.end());
 	}
 }
 
@@ -884,7 +884,7 @@ bool CTableWindowState::SetInfo(char_stream& txt, NumVersion vers_prefs)
 	mColumnMap.SetInfo(txt, vers_prefs);
 
 	// Always sort the column info
-	::sort(mColumnMap.begin(), mColumnMap.end());
+	std::sort(mColumnMap.begin(), mColumnMap.end());
 
 	return true;
 }

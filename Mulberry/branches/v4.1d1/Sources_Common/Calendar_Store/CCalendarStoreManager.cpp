@@ -377,7 +377,7 @@ void CCalendarStoreManager::StopProtocol(CCalendarProtocol* proto)
 // Get index of protocol in list
 long CCalendarStoreManager::GetProtocolIndex(const CCalendarProtocol* proto) const
 {
-	CCalendarProtocolList::const_iterator found = ::find(mProtos.begin(), mProtos.end(), proto);
+	CCalendarProtocolList::const_iterator found = std::find(mProtos.begin(), mProtos.end(), proto);
 	if (found != mProtos.end())
 		return found - mProtos.begin();
 	else
@@ -601,7 +601,7 @@ CCalendarStoreNode* CCalendarStoreManager::NewCalendar(CCalendarProtocol* proto,
 		// Write out an empty calendar with the appropriate name
 		if (!directory)
 		{
-			auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
+			std::auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
 			
 			// Give it to the node - this will activate the node
 			node->SetCalendar(cal.get());
@@ -655,7 +655,7 @@ void CCalendarStoreManager::RenameCalendar(CCalendarStoreNode* node, const cdstr
 	{
 		// If the calendar is open rename the calendar object and do an immediate write
 		iCal::CICalendar* cal = node->GetCalendar();
-		auto_ptr<iCal::CICalendar> opened;
+		std::auto_ptr<iCal::CICalendar> opened;
 		try
 		{
 			if (cal == NULL)

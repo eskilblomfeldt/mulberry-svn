@@ -43,7 +43,7 @@ CWebDAVPropFindBase::~CWebDAVPropFindBase()
 
 static const char* cDepthMap[] = {cHeaderDepth0, cHeaderDepth1, cHeaderDepthInfinity};
 
-void CWebDAVPropFindBase::WriteHeaderToStream(ostream& os)
+void CWebDAVPropFindBase::WriteHeaderToStream(std::ostream& os)
 {
 	// Do default
 	CWebDAVRequestResponse::WriteHeaderToStream(os);

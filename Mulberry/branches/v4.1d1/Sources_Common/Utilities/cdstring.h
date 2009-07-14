@@ -23,22 +23,20 @@
 #include <string.h>
 #include <stdint.h>
 
-#include <deque.h>
-#include <queue.h>
-#include <stack.h>
-#include <string.h>
-#include <map.h>
+#include <deque>
+#include <queue>
+#include <stack>
+#include <map>
 #if __GNUC__ == 4
-#include <multimap.h>
+//#include <multimap.h>
 #endif
-#include <ostream.h>
-#include <set.h>
+#include <ostream>
+#include <set>
 #if __GNUC__ == 4
-#include <multiset.h>
+//#include <multiset.h>
 #endif
 #include <string>
-using std::string;
-#include <vector.h>
+#include <vector>
 
 #include "CCharsetCodes.h"
 
@@ -52,29 +50,29 @@ using std::string;
 
 class cdstring;
 
-typedef vector<cdstring> cdstrvect;				// Use small vector
-typedef deque<cdstring> cdstrdeque;
-typedef queue<cdstring, cdstrdeque> cdstrqueue;
+typedef std::vector<cdstring> cdstrvect;				// Use small vector
+typedef std::deque<cdstring> cdstrdeque;
+typedef std::queue<cdstring, cdstrdeque> cdstrqueue;
 //typedef stack<cdstrvect, cdstrdeque> cdstrstack;
-typedef pair<cdstring, cdstring> cdstrpair;
-typedef vector<cdstrpair> cdstrpairvect;			// Use small vector
-typedef pair<cdstring, bool> cdstrbool;
-typedef vector<cdstrbool> cdstrboolvect;			// Use small vector
-typedef pair<cdstring, long> cdstrlong;
-typedef vector<cdstrlong> cdstrlongvect;			// Use small vector
-typedef map<cdstring, cdstring> cdstrmap;
-typedef map<cdstring, uint32_t> cdstruint32map;
-typedef multimap<cdstring, cdstring> cdstrmultimap;
-typedef set<cdstring> cdstrset;
-typedef multiset<cdstring> cdstrmultiset;
+typedef std::pair<cdstring, cdstring> cdstrpair;
+typedef std::vector<cdstrpair> cdstrpairvect;			// Use small vector
+typedef std::pair<cdstring, bool> cdstrbool;
+typedef std::vector<cdstrbool> cdstrboolvect;			// Use small vector
+typedef std::pair<cdstring, long> cdstrlong;
+typedef std::vector<cdstrlong> cdstrlongvect;			// Use small vector
+typedef std::map<cdstring, cdstring> cdstrmap;
+typedef std::map<cdstring, uint32_t> cdstruint32map;
+typedef std::multimap<cdstring, cdstring> cdstrmultimap;
+typedef std::set<cdstring> cdstrset;
+typedef std::multiset<cdstring> cdstrmultiset;
 
 class char_stream;
 
 class cdstring
 {
-	friend istream& operator >> (istream&, cdstring&);
-	friend istream& getline (istream&, cdstring& str, char);
-	friend ostream& operator << (ostream&, cdstring&);
+	friend std::istream& operator >> (std::istream&, cdstring&);
+	friend std::istream& getline (std::istream&, cdstring& str, char);
+	friend std::ostream& operator << (std::ostream&, cdstring&);
 
 public:
 	enum EStringEncrypt
@@ -95,7 +93,7 @@ public:
 		{ _init(); _allocate(copy._str); }
 	cdstring(const cdstring& copy, size_type pos, size_type n = npos)
 		{ _init(); _allocate(copy._str + pos, n); }
-	cdstring(const string& copy)								// Construct from MSL string
+	cdstring(const std::string& copy)								// Construct from MSL string
 		{ _init(); _allocate(copy.data(), copy.length()); }
 	cdstring(const char* buf, size_type size)					// Construct from data
 		{ _init(); _allocate(buf, size); }
@@ -122,7 +120,7 @@ public:
 
 	cdstring& operator=(const cdstring& copy)							// Assignment with same type
 		{ if (this != &copy) _allocate(copy._str); return *this; }
-	cdstring& operator=(const string& copy)								// Assignment with MSL string
+	cdstring& operator=(const std::string& copy)								// Assignment with MSL string
 		{ _allocate(copy.data(), copy.length()); return *this; }
 	cdstring& operator=(const char* cstr)								// Assignment with c-string
 		{ _allocate(cstr); return *this; }
@@ -530,13 +528,13 @@ private:
 
 // stream helpers
 
-istream& operator >> (istream& is, cdstring& str);
-istream& getline (istream& is, cdstring& str, char delim = '\n');
-inline ostream& operator << (ostream& os, cdstring& str)
+std::istream& operator >> (std::istream& is, cdstring& str);
+std::istream& getline (std::istream& is, cdstring& str, char delim = '\n');
+inline std::ostream& operator << (std::ostream& os, cdstring& str)
 {
      return os.write(str.c_str(), str.length());
 }
-inline ostream& operator << (ostream& os, const cdstring& str)
+inline std::ostream& operator << (std::ostream& os, const cdstring& str)
 {
      return os.write(str.c_str(), str.length());
 }
@@ -549,6 +547,6 @@ struct case_insensitive_cdstring
 		return s1.compare(s2, true) < 0;
 	}
 };
-typedef multimap<cdstring, cdstring, case_insensitive_cdstring>	cdstrmultimapcasei;
+typedef std::multimap<cdstring, cdstring, case_insensitive_cdstring>	cdstrmultimapcasei;
 
 #endif

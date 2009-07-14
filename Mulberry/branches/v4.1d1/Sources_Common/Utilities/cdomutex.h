@@ -88,7 +88,7 @@ private:
 		unsigned long			mRefCount;
 	};
 
-	typedef set<objinfo>		objinfoset;
+	typedef std::set<objinfo>	objinfoset;
 	cdmutex						_mutex;
 	objinfoset					_objects;
 	

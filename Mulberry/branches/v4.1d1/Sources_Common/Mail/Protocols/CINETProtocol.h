@@ -214,7 +214,7 @@ protected:
 		bool			mInUse;							// Whether currently being used
 		time_t			mFreeTime;						// Time that it was last freed
 	};
-	typedef vector<SConnectionCache> CConnections;
+	typedef std::vector<SConnectionCache> CConnections;
 
 	cdmutex				_mutex;							// Thread blocking
 	SBitFlags			mFlags;							// State flags

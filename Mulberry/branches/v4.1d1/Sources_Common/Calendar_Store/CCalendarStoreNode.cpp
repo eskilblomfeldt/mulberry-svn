@@ -312,7 +312,7 @@ void CCalendarStoreNode::RemoveFromParent()
 	if (mParent)
 	{
 		CCalendarStoreNodeList* list = mParent->GetChildren();
-		CCalendarStoreNodeList::iterator found = ::find(list->begin(), list->end(), this);
+		CCalendarStoreNodeList::iterator found = std::find(list->begin(), list->end(), this);
 		if (found != list->end())
 		{
 			// NULL it out so that the node is not deleted, then erase
@@ -578,7 +578,7 @@ void CCalendarStoreNode::CopyCalendar(CCalendarStoreNode* node)
 	}
 
 	// Create calendar and read in this one's data
-	auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
+	std::auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
 	
 	// Read from source into new calendar object
 	GetProtocol()->ReadFullCalendar(*this, *cal);
@@ -612,7 +612,7 @@ void CCalendarStoreNode::CopyCalendarContents(CCalendarStoreNode* node)
 	}
 
 	// Create calendar and read in this one's data
-	auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
+	std::auto_ptr<iCal::CICalendar> cal(new iCal::CICalendar);
 	
 	// Read from source into new calendar object
 	GetProtocol()->ReadFullCalendar(*this, *cal);

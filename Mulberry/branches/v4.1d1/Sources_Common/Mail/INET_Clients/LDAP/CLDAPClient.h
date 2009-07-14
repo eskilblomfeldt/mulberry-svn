@@ -52,12 +52,12 @@ public:
 	virtual bool HandleResult(int code);
 
 private:
-	typedef vector<CLDAPClient*>	CLDAPClientList;
+	typedef std::vector<CLDAPClient*>	CLDAPClientList;
 
 	static CBusyContext*		sBusy;
 	static CLDAPClientList		sClients;
 	CBusyContext				mBusy;
-	vector<int>					mCertErrors;
+	std::vector<int>					mCertErrors;
 	
 
 			void SetStatus(const char* rsrcid);

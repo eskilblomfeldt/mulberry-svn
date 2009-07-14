@@ -28,22 +28,22 @@
 class CProgress;
 class LStream;
 
-class CStreamFilter : public iostream
+class CStreamFilter : public std::iostream
 {
 public:
-	CStreamFilter(filterbuf* filter, ostream* out = NULL, CProgress* progress = NULL) : iostream(0)
-		{ mFilterBuf = filter; mFilterBuf->SetStream(out); rdbuf(mFilterBuf); }
-	CStreamFilter(filterbuf* filter, LStream* out, CProgress* progress = NULL) : iostream(0)
-		{ mFilterBuf = filter; mFilterBuf->SetStream(out); rdbuf(mFilterBuf); }
+	CStreamFilter(filterbuf* filter, std::ostream* sout = NULL, CProgress* progress = NULL) : std::iostream(0)
+		{ mFilterBuf = filter; mFilterBuf->SetStream(sout); rdbuf(mFilterBuf); }
+	CStreamFilter(filterbuf* filter, LStream* sout, CProgress* progress = NULL) : std::iostream(0)
+		{ mFilterBuf = filter; mFilterBuf->SetStream(sout); rdbuf(mFilterBuf); }
 	virtual ~CStreamFilter()
 		{ if (mFilterBuf) delete mFilterBuf; }
 
-	virtual void	SetStream(ostream* out)
-		{ mFilterBuf->SetStream(out); }
-	virtual ostream*	GetOStream()
+	virtual void	SetStream(std::ostream* sout)
+		{ mFilterBuf->SetStream(sout); }
+	virtual std::ostream*	GetOStream()
 		{ return mFilterBuf->GetOStream(); }
-	virtual void	SetBuffer(char* out, unsigned long size)
-		{ mFilterBuf->SetBuffer(out, size); }
+	virtual void	SetBuffer(char* sout, unsigned long size)
+		{ mFilterBuf->SetBuffer(sout, size); }
 
 	virtual void	SetProgress(CProgress* progress)
 		{ mFilterBuf->SetProgress(progress); }

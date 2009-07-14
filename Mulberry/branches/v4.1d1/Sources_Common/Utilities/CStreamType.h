@@ -24,8 +24,8 @@
 template <class streamT> class CStreamType
 {
 public:
-	CStreamType(streamT* stream, EEndl endl)
-		{ mStream = stream; mEndl = endl; }
+	CStreamType(streamT* stream, EEndl endlt)
+		{ mStream = stream; mEndl = endlt; }
 	~CStreamType() {}
 	
 	streamT& Stream()

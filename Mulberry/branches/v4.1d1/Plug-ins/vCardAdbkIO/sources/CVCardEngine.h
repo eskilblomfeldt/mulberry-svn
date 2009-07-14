@@ -41,8 +41,8 @@ public:
 	CVCardEngine() {}
 	~CVCardEngine() {}
 	
-	bool ReadOne(istream& in, CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr);
-	void WriteOne(ostream& out, const CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr);
+	bool ReadOne(std::istream& in, CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr);
+	void WriteOne(std::ostream& out, const CAdbkIOPluginDLL::SAdbkIOPluginAddress& addr);
 };
 
 #endif

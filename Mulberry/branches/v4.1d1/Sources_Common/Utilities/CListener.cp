@@ -31,14 +31,14 @@ CListener::~CListener()
 
 void CListener::Add_Broadcaster(CBroadcaster* broadcaster)
 {
-	CBroadcastList::iterator found = ::find(mBroadcasters.begin(), mBroadcasters.end(), broadcaster);
+	CBroadcastList::iterator found = std::find(mBroadcasters.begin(), mBroadcasters.end(), broadcaster);
 	if (found == mBroadcasters.end())
 		mBroadcasters.push_back(broadcaster);
 }
 
 void CListener::Remove_Broadcaster(CBroadcaster* broadcaster)
 {
-	CBroadcastList::iterator found = ::find(mBroadcasters.begin(), mBroadcasters.end(), broadcaster);
+	CBroadcastList::iterator found = std::find(mBroadcasters.begin(), mBroadcasters.end(), broadcaster);
 	if (found != mBroadcasters.end())
 		mBroadcasters.erase(found);
 }

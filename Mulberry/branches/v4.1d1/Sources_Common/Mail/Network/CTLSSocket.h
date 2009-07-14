@@ -73,7 +73,7 @@ protected:
 	int				mTLSType;
 	ssl_ctx_st*		m_ctx;
 	ssl_st*			m_tls;
-	vector<int>		mCertErrors;
+	std::vector<int>		mCertErrors;
 	cdstring		mCertText;
 	cdstring		mCertSubject;
 	cdstring		mCertIssuer;

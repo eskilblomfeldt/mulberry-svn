@@ -75,8 +75,8 @@ public:
 	bool ImportCertificateFile(CCertificateManager::ECertificateType type, const CCertificate* cert, const CCertificateList* cas);
 
 	// SSL/server utilities
-	bool CheckServerCertificate(const cdstring& server, vector<int>& errors, X509* server_cert);
-	bool AcceptableServer(const cdstring& server, X509* server_cert, const vector<int>& errors, const cdstrvect& error_txt);
+	bool CheckServerCertificate(const cdstring& server, std::vector<int>& errors, X509* server_cert);
+	bool AcceptableServer(const cdstring& server, X509* server_cert, const std::vector<int>& errors, const cdstrvect& error_txt);
 	bool CertificateToString(X509* server_cert, cdstring& txt);
 
 	// SMIME utilities
@@ -93,8 +93,8 @@ public:
 
 	virtual STACK_OF(X509)* GetCerts(const char* key, ECertificateType type, ECertificateLookupType lookup = eAuto);
 
-	virtual bool CheckUserCertificate(const cdstring& email, vector<int>& errors, X509* user_cert);
-	virtual bool AcceptableUser(const cdstring& email, X509* user_cert, const vector<int>& errors, const cdstrvect& error_txt);
+	virtual bool CheckUserCertificate(const cdstring& email, std::vector<int>& errors, X509* user_cert);
+	virtual bool AcceptableUser(const cdstring& email, X509* user_cert, const std::vector<int>& errors, const cdstrvect& error_txt);
 
 private:
 	// struct used to store accept certs and map

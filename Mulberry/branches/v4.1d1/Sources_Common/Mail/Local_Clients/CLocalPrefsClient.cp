@@ -131,7 +131,7 @@ void CLocalPrefsClient::Logon()
 		cdstring fname;
 		GetFileName(fname);
 		mPrefs.clear();
-		mPrefs.open(fname, ios_base::in | ios_base::out | ios_base::binary);
+		mPrefs.open(fname, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 		CHECK_STREAM(mPrefs);
 	}
 	catch (...)
@@ -190,7 +190,7 @@ void CLocalPrefsClient::_FindAllAttributes(const cdstring& entry)
 	cdstring option = cWILDCARD;
 
 	// Go to start of file
-	mPrefs.seekg(0, ios_base::beg);
+	mPrefs.seekg(0, std::ios_base::beg);
 	
 	// Read lines from file
 	while(!mPrefs.fail())
@@ -210,7 +210,7 @@ void CLocalPrefsClient::_FindAllAttributes(const cdstring& entry)
 				value = cdstring::null_str;
 
 			// Insert
-			pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(key, value));
+			std::pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(key, value));
 
 			// Does it exist already
 			if (!result.second)
@@ -236,10 +236,10 @@ void CLocalPrefsClient::_SetAllAttributes(const cdstring& entry)
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 	StCreatorType file(cMulberryCreator, cPrefFileType);
 #endif
-	mPrefs.open(fname, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+	mPrefs.open(fname, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
 
 	// Go to start of file
-	mPrefs.seekp(0, ios_base::beg);
+	mPrefs.seekp(0, std::ios_base::beg);
 	
 	for(cdstrmap::const_iterator iter = GetOptionsOwner()->GetMap()->begin(); iter != GetOptionsOwner()->GetMap()->end(); iter++)
 	{

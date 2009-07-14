@@ -24,7 +24,7 @@
 
 // Typedefs
 class CMboxACL;
-typedef vector<CMboxACL> CMboxACLList;
+typedef std::vector<CMboxACL> CMboxACLList;
 
 // CMboxACL: contains specific ACL item for a mailbox
 

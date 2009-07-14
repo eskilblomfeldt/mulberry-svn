@@ -92,7 +92,7 @@ private:
 					~CMIMESupport();
 	static CMIMEContent*	GetMainContent(const CMessage* theMsg);					// Get the content type used in the message header
 	
-	static void AddParameter(ostream& out, const cdstring& name, const cdstring& value, bool value_ok, long& line_length, EEndl for_endl);
+	static void AddParameter(std::ostream& out, const cdstring& name, const cdstring& value, bool value_ok, long& line_length, EEndl for_endl);
 
 };
 

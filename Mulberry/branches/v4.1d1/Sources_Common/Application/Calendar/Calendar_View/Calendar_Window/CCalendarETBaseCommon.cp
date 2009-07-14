@@ -165,7 +165,7 @@ void CCalendarEventTableBase::GetSelectedMasterEvents(iCal::CICalendarComponentR
 	for(iCal::CICalendarExpandedComponents::iterator iter = items.begin(); iter != items.end(); iter++)
 	{
 		const iCal::CICalendarVEvent* vevent = (*iter)->GetTrueMaster<iCal::CICalendarVEvent>();
-		iCal::CICalendarComponentRecurs::const_iterator found = ::find(vevents.begin(), vevents.end(), vevent);
+		iCal::CICalendarComponentRecurs::const_iterator found = std::find(vevents.begin(), vevents.end(), vevent);
 		
 		if (found == vevents.end())
 		{
@@ -174,7 +174,7 @@ void CCalendarEventTableBase::GetSelectedMasterEvents(iCal::CICalendarComponentR
 	}
 
 	// Sort the components by dtstart
-	::sort(vevents.begin(), vevents.end(), iCal::CICalendarComponentRecur::sort_by_dtstart);
+	std::sort(vevents.begin(), vevents.end(), iCal::CICalendarComponentRecur::sort_by_dtstart);
 }
 
 // Base class does nothing

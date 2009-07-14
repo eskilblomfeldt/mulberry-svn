@@ -403,7 +403,7 @@ ExceptionCode CBinHexFilter::PutBytes(const void *inBuffer, SInt32& inByteCount)
 	OSErr err = noErr;
 
 	try {
-		SInt32 total = 0;
+		//SInt32 total = 0;
 
 		// Count down bytes in buffer
 		mBufferLength = inByteCount;

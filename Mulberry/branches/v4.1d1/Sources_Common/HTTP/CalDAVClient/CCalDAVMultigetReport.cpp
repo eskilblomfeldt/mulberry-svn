@@ -51,7 +51,7 @@ void CCalDAVMultigetReport::InitRequestData(const cdstrvect& hrefs)
 	// Write XML info to a string
 	std::ostrstream os;
 	GenerateXML(os, hrefs);
-	os << ends;
+	os << std::ends;
 	
 	mRequestData = new CHTTPInputDataString(os.str(), "text/xml; charset=utf-8");
 }

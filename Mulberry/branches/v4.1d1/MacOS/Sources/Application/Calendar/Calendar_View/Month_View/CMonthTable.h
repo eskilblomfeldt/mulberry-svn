@@ -25,7 +25,7 @@
 #include "CICalendarComponentExpanded.h"
 
 class CMonthEvent;
-typedef std::vector<pair<CMonthEvent*, bool> > CMonthEventSlotList;
+typedef std::vector<std::pair<CMonthEvent*, bool> > CMonthEventSlotList;
 typedef std::vector<CMonthEventSlotList> CMonthEventMatrixRow;
 typedef std::vector<CMonthEventMatrixRow> CMonthEventMatrix;
 
@@ -41,7 +41,7 @@ public:
 						
 	virtual				~CMonthTable();
 
-	void				ResetTable(const iCal::CICalendarUtils::CICalendarTable& table, const pair<int32_t, int32_t>& today_index, const iCal::CICalendarTimezone& timezone);
+	void				ResetTable(const iCal::CICalendarUtils::CICalendarTable& table, const std::pair<int32_t, int32_t>& today_index, const iCal::CICalendarTimezone& timezone);
 	virtual void		AdaptToNewSurroundings();					// Adjust column widths
 
 	void				AddEvents(iCal::CICalendarExpandedComponents& vevents);

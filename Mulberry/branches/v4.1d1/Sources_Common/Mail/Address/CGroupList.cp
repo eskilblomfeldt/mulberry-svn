@@ -172,7 +172,7 @@ unsigned long CGroupList::FetchInsertIndexOf(const CGroup* grp) const
 void CGroupList::clear_without_delete()
 {
 	// Do inherited erase
-	vector<CGroup*>::erase(begin(), end());
+	std::vector<CGroup*>::erase(begin(), end());
 }
 
 // Remove matching group (without deleting it)
@@ -193,6 +193,6 @@ void CGroupList::RemoveGroup(CGroup* grp)
 
 	CGroupList::iterator found = std::find(begin(), end(), grp);
 	if (found != end())
-		vector<CGroup*>::erase(found);
+		std::vector<CGroup*>::erase(found);
 }
 

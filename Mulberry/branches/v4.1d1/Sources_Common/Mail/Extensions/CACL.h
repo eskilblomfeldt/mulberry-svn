@@ -24,11 +24,11 @@
 
 // Typedefs
 class CACL;
-typedef vector<CACL> CACLList;
+typedef std::vector<CACL> CACLList;
 
 struct SACLRight;
-typedef pair<cdstring, SACLRight> SACLStyle;
-typedef vector<SACLStyle> SACLStyleList;
+typedef std::pair<cdstring, SACLRight> SACLStyle;
+typedef std::vector<SACLStyle> SACLStyleList;
 
 // SACLRight: the base struct for the rights object
 // This should be used where 'raw' rights are required

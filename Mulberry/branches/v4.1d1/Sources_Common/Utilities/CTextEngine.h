@@ -54,7 +54,7 @@ private:
 	static cdstring sCurrentPrefix;
 
 	static long GetPrefixDepth(const char*& text, long& remaining, const cdstrvect& matches);
-	static void AddPrefix(ostream& out, const cdstring& prefix, long prefix_length, long num_add, long depth, long& prefixed);
+	static void AddPrefix(std::ostream& out, const cdstring& prefix, long prefix_length, long num_add, long depth, long& prefixed);
 
 	// Always static, no object
 	CTextEngine() {}

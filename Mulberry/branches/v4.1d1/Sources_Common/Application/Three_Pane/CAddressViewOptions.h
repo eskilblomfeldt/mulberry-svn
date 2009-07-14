@@ -30,7 +30,7 @@ public:
 	CAddressViewOptions();
 	CAddressViewOptions(const CAddressViewOptions& copy)
 		{ _copy(copy); }
-	~CAddressViewOptions();
+	virtual ~CAddressViewOptions();
 
 	CAddressViewOptions& operator=(const CAddressViewOptions& copy)			// Assignment with same type
 		{ if (this != &copy) _copy(copy); return *this; }

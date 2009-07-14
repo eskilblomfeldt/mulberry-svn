@@ -30,7 +30,7 @@ public:
 	CCalendarViewOptions();
 	CCalendarViewOptions(const CCalendarViewOptions& copy)
 		{ _copy(copy); }
-	~CCalendarViewOptions();
+	virtual ~CCalendarViewOptions();
 
 	CCalendarViewOptions& operator=(const CCalendarViewOptions& copy)		// Assignment with same type
 		{ if (this != &copy) _copy(copy); return *this; }

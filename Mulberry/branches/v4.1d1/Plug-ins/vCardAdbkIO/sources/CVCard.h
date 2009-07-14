@@ -36,7 +36,7 @@
 
 class CVCard
 {
-	typedef multimap<cdstring, CVCardItem> CVCardItems;
+	typedef std::multimap<cdstring, CVCardItem> CVCardItems;
 
 public:
 	CVCard() {}
@@ -54,15 +54,15 @@ public:
 	unsigned long CountItems(const cdstring& name, const cdstrmap& params);
 	const cdstring& GetValue(const cdstring& name, const cdstrmap& params);
 	
-	bool Read(istream& in);
-	void Write(ostream& out);
+	bool Read(std::istream& in);
+	void Write(std::ostream& out);
 	
 private:
 	CVCardItems		mItems;
 
 	void ReadItem(cdstring& str, bool old_version);
 
-	void WriteItem(ostream& out, const cdstring& name, const CVCardItem& item);
+	void WriteItem(std::ostream& out, const cdstring& name, const CVCardItem& item);
 
 	// Encode/decode vCard formal syntax
 	

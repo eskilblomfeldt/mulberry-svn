@@ -195,8 +195,8 @@ CMessage::CMessage(const CIdentity* identity,
 		// Do not allow CRLFs in subject text
 		env->GetSubject() = subjectText;
 		char* subj = (char*) env->GetSubject().c_str();
-		::replace(subj, subj + ::strlen(subj), '\r', ' ');
-		::replace(subj, subj + ::strlen(subj), '\n', ' ');
+		std::replace(subj, subj + ::strlen(subj), '\r', ' ');
+		std::replace(subj, subj + ::strlen(subj), '\n', ' ');
 
 		// From address
 		if (!CAdminLock::sAdminLock.mLockIdentityFrom)
@@ -963,7 +963,7 @@ void CMessage::ReadHeader()
 				std::ostrstream out;
 				costream stream_out(&out, lendl);
 				WriteHeaderToStream(stream_out);
-				out << ends;
+				out << std::ends;
 				cdstring temp(out.str());
 				SetHeader(temp.grab_c_str());
 			}
@@ -1091,7 +1091,7 @@ void CMessage::ReadAttachment(CAttachment* attach, bool peek, bool filter)
 } // CMessage::ReadAttachment
 
 // Read in entire raw body
-void CMessage::GetRawBody(ostream& out, bool peek)
+void CMessage::GetRawBody(std::ostream& out, bool peek)
 {
 	// Do not allow delete while reading data
 	sAllowClear = false;
@@ -1114,7 +1114,7 @@ void CMessage::GetRawBody(ostream& out, bool peek)
 		}
 			
 		// Must add c-string terminator
-		out << ends;
+		out << std::ends;
 	}
 	catch (...)
 	{
@@ -1182,7 +1182,7 @@ char* CMessage::GetRFC822CRLF() const
 	}
 
 	// Convert stream to string
-	stream << ends;
+	stream << std::ends;
 	return stream.str();
 }
 
@@ -1321,7 +1321,7 @@ void CMessage::ReplaceBody(CStreamAttachment* body)
 
 	// Now add in new body's MIME headers
 	body->WriteHeaderToStream(hdrs);
-	hdrs << ends;
+	hdrs << std::ends;
 
 	// Now set a new header
 	cdstring temp(hdrs.str());
@@ -1406,7 +1406,7 @@ unsigned long CMessage::GetDigestNumber() const
 		const CAttachmentList* list = parent->GetParts();
 		if (list)
 		{
-			CAttachmentList::const_iterator found = ::find(list->begin(), list->end(), GetBody()->GetParent());
+			CAttachmentList::const_iterator found = std::find(list->begin(), list->end(), GetBody()->GetParent());
 			if (found != list->end())
 				return (found - list->begin()) + 1;
 		}
@@ -1429,7 +1429,7 @@ CMessage* CMessage::GetPrevDigest() const
 		const CAttachmentList* list = parent->GetParts();
 		if (list)
 		{
-			CAttachmentList::const_iterator found = ::find(list->begin(), list->end(), GetBody()->GetParent());
+			CAttachmentList::const_iterator found = std::find(list->begin(), list->end(), GetBody()->GetParent());
 			if (found != list->end())
 			{
 				// Bump down iterator and return message if not already at first
@@ -1460,7 +1460,7 @@ CMessage* CMessage::GetNextDigest() const
 		const CAttachmentList* list = parent->GetParts();
 		if (list)
 		{
-			CAttachmentList::const_iterator found = ::find(list->begin(), list->end(), GetBody()->GetParent());
+			CAttachmentList::const_iterator found = std::find(list->begin(), list->end(), GetBody()->GetParent());
 			if (found != list->end())
 			{
 				// Bump up iterator and return message if not already at last
@@ -1550,7 +1550,7 @@ CAttachment* CMessage::CreateMDNSeenBody(const CIdentity* id, bool automatic)
 		out << "The message sent on " << GetEnvelope()->GetTextDate(false);
 		out << " to " << orcpt << " with subject \"" << GetEnvelope()->GetSubject();
 		out << "\" has been displayed. This is no guarantee that the message has been read or understood." << os_endl;
-		out << os_endl << ends;
+		out << os_endl << std::ends;
 		text->SetData(out.str());
 	}
 
@@ -1607,7 +1607,7 @@ CAttachment* CMessage::CreateMDNSeenBody(const CIdentity* id, bool automatic)
 		out << "displayed" << os_endl;
 
 		// End of report
-		out << os_endl << ends;
+		out << os_endl << std::ends;
 		dsn->SetData(out.str());
 	}
 
@@ -1729,7 +1729,7 @@ CAttachment* CMessage::CreateRejectDSNBody(bool return_msg)
 		out << "   ----- Transcript of session follows -----" << os_endl;
 		out << for_addr.GetMailbox() << ": Mailbox does not exist" << os_endl;
 		out << "550 <" << for_addr.GetMailAddress() << ">... User unknown" << os_endl;
-		out << os_endl << ends;
+		out << os_endl << std::ends;
 		text->SetData(out.str());
 	}
 
@@ -1755,7 +1755,7 @@ CAttachment* CMessage::CreateRejectDSNBody(bool return_msg)
 		out << "Action: failed" << os_endl;
 		out << "Status: 5.0.0" << os_endl;
 		out << "Last-Attempt-Date: " << CRFC822::GetRFC822Date(GetInternalDate(), GetInternalZone()) << os_endl;
-		out << os_endl << ends;
+		out << os_endl << std::ends;
 		dsn->SetData(out.str());
 	}
 

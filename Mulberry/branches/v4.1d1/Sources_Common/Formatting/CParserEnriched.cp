@@ -121,7 +121,7 @@ void CParserEnriched::DrawTag(int start, int stop)
 
 void CParserEnriched::FlushStack(int index)
 {
-	auto_ptr<CParserEnrichedStackElement> element(mStack->pop());
+	std::auto_ptr<CParserEnrichedStackElement> element(mStack->pop());
 
 	while(element.get() != NULL)
 	{
@@ -223,7 +223,7 @@ void CParserEnriched::HandleFormat(unichar_t* format, int index)
 	if (format[0] == '/')
 	{
 		ETag tag = GetTag(format + 1);
-		auto_ptr<CParserEnrichedStackElement> element(mStack->pop(tag));
+		std::auto_ptr<CParserEnrichedStackElement> element(mStack->pop(tag));
 		if (element.get() != NULL)
 		{
 			// Only do styles if requested by user
@@ -339,7 +339,7 @@ const unichar_t* CParserEnriched::Parse(int offset, bool for_display, bool quote
 	const unichar_t* end_line = plain_endl.c_str();
 	int end_line_len = plain_endl.length();
 
-	ostrstream out;
+	std::ostrstream out;
 
 	const unichar_t* p = mTxt;
 
@@ -366,7 +366,7 @@ const unichar_t* CParserEnriched::Parse(int offset, bool for_display, bool quote
 					stop = p;
 					if (*p) p++;
 
-					auto_ptr<unichar_t> format(::unistrndup(start, stop-start));
+					std::auto_ptr<unichar_t> format(::unistrndup(start, stop-start));
 					if (format.get())
 					{
 						::unistrlower(format.get());
@@ -470,7 +470,7 @@ const unichar_t* CParserEnriched::Parse(int offset, bool for_display, bool quote
 
 	if (mFormatList)
 		FlushStack(finalCount + offset);
-	out << ends << ends;
+	out << std::ends << std::ends;
 	return reinterpret_cast<const unichar_t*>(out.str());
 }
 
@@ -519,7 +519,7 @@ void CParserEnriched::RawParse(int offset)
 					currPos++;
 				}
 
-				auto_ptr<unichar_t> format(::unistrndup(start, stop-start));
+				std::auto_ptr<unichar_t> format(::unistrndup(start, stop-start));
 				if (format.get())
 				{
 					::unistrlower(format.get());

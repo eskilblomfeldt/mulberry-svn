@@ -124,7 +124,7 @@ bool CRemotePrefsSet::IsDuplicateName(const cdstring& test, cdstring& duplicate)
 
 void CRemotePrefsSet::DeleteSet(cdstring set)
 {
-	cdstrvect::iterator name = ::find(mSets.begin(), mSets.end(), set);
+	cdstrvect::iterator name = std::find(mSets.begin(), mSets.end(), set);
 
 	// Can only do if it exists
 	if ((name == mSets.end()) && (set != cDefaultPrefsSetKey_2_0))
@@ -164,7 +164,7 @@ void CRemotePrefsSet::DeleteSet(cdstring set)
 
 void CRemotePrefsSet::RenameSet(cdstring old_set, cdstring new_set)
 {
-	cdstrvect::iterator name = ::find(mSets.begin(), mSets.end(), old_set);
+	cdstrvect::iterator name = std::find(mSets.begin(), mSets.end(), old_set);
 
 	// Can only do if it exists
 	if (name == mSets.end())

@@ -45,7 +45,7 @@
 #include <LTabsControl.h>
 
 uint32_t CNewToDoDialog::sTitleCounter = 0;
-set<CNewToDoDialog*> CNewToDoDialog::sDialogs;
+std::set<CNewToDoDialog*> CNewToDoDialog::sDialogs;
 
 // ---------------------------------------------------------------------------
 //	CNewToDoDialog														  [public]
@@ -513,7 +513,7 @@ void CNewToDoDialog::StartNew(const iCal::CICalendar* calin)
 void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original)
 {
 	// Look for an existinf dialog for this event
-	for(set<CNewToDoDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
+	for(std::set<CNewToDoDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
 	{
 		if ((*iter)->ContainsToDo(original))
 		{

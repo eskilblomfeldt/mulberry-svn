@@ -195,8 +195,8 @@ bool diriterator::next(const char** name)
 		// Get info about next file in directory
 		ItemCount actualCount;
 		FSCatalogInfo finfo;
-		HFSUniStr255 name;
-		OSErr err = ::FSGetCatalogInfoBulk(mIterator, 1, &actualCount, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo, &finfo, NULL, NULL, &name);
+		HFSUniStr255 fname;
+		OSErr err = ::FSGetCatalogInfoBulk(mIterator, 1, &actualCount, NULL, kFSCatInfoNodeFlags | kFSCatInfoFinderInfo, &finfo, NULL, NULL, &fname);
 		if (err && (err != errFSNoMoreItems))
 		{
 #ifdef __MULBERRY
@@ -215,7 +215,7 @@ bool diriterator::next(const char** name)
 
 		// Get the current one
 		cdustring utf16;
-		utf16.assign(name.unicode, name.length);
+		utf16.assign(fname.unicode, fname.length);
 		mCurrent = utf16.ToUTF8();
 
 		// Test for directory
@@ -426,7 +426,7 @@ void diriterator::_init(const char* path, bool dir, const char* extension)
 #elif __dest_os == __mac_os_x
 	FSRef fref;
 	Boolean isdir;
-	OSStatus err = ::FSPathMakeRef((const unsigned char*)path, &fref, &isdir);
+	::FSPathMakeRef((const unsigned char*)path, &fref, &isdir);
 	_init(fref, dir, extension);
 #elif __dest_os == __win32_os
 	mSearch = NULL;

@@ -90,7 +90,7 @@ CEnvelope::CEnvelopeIndex::CEnvelopeIndex(const CEnvelopeIndex& copy)
 }
 
 // Stream ops
-void CEnvelope::CEnvelopeIndex::WriteIndexToStream(ostream& out, long offset) const
+void CEnvelope::CEnvelopeIndex::WriteIndexToStream(std::ostream& out, long offset) const
 {
 	unsigned long items[20];
 
@@ -128,7 +128,7 @@ void CEnvelope::CEnvelopeIndex::WriteIndexToStream(ostream& out, long offset) co
 	out << cd_endl;
 }
 
-void CEnvelope::CEnvelopeIndex::ReadIndexFromStream(istream& in, unsigned long vers)
+void CEnvelope::CEnvelopeIndex::ReadIndexFromStream(std::istream& in, unsigned long vers)
 {
 	// Read in array of items
 	unsigned long items[20];
@@ -552,7 +552,7 @@ cdstring CEnvelope::NormaliseSubject(bool matching) const
 }
 
 // Get summary headers to stream
-void CEnvelope::GetSummary(ostream& out) const
+void CEnvelope::GetSummary(std::ostream& out) const
 {
 	// From
 	if (GetFrom()->size())
@@ -582,7 +582,7 @@ void CEnvelope::GetSummary(ostream& out) const
 }
 
 // Write to cache
-void CEnvelope::WriteCacheToStream(ostream& out, CEnvelopeIndex& index) const
+void CEnvelope::WriteCacheToStream(std::ostream& out, CEnvelopeIndex& index) const
 {
 	unsigned long offset = out.tellp();
 
@@ -631,7 +631,7 @@ void CEnvelope::WriteCacheToStream(ostream& out, CEnvelopeIndex& index) const
 }
 
 // Write to cache
-void CEnvelope::WriteAddressListToStream(ostream& out, const CAddressList* list) const
+void CEnvelope::WriteAddressListToStream(std::ostream& out, const CAddressList* list) const
 {
 	// Write out address list in RFC822 style but not wrapped
 	if (list)
@@ -656,7 +656,7 @@ void CEnvelope::WriteAddressListToStream(ostream& out, const CAddressList* list)
 }
 
 // Read from cache
-void CEnvelope::ReadCacheFromStream(istream& in, unsigned long vers)
+void CEnvelope::ReadCacheFromStream(std::istream& in, unsigned long vers)
 {
 	// Write out envelope information first
 	::ReadHost(in, mDate);
@@ -680,7 +680,7 @@ void CEnvelope::ReadCacheFromStream(istream& in, unsigned long vers)
 }
 
 // Read from cache
-CAddressList* CEnvelope::ReadAddressListFromStream(istream& in, unsigned long vers) const
+CAddressList* CEnvelope::ReadAddressListFromStream(std::istream& in, unsigned long vers) const
 {
 	cdstring temp;
 	getline(in, temp);

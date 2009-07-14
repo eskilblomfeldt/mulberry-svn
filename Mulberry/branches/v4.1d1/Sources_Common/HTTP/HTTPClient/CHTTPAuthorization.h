@@ -26,7 +26,6 @@
 
 #include <ostream>
 
-using namespace std;
 
 namespace http {
 
@@ -38,7 +37,7 @@ public:
 	CHTTPAuthorization() {}
 	virtual ~CHTTPAuthorization() {}
 
-	virtual void GenerateAuthorization(ostream& os, const CHTTPRequestResponse* request) const = 0;
+	virtual void GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const = 0;
 };
 
 }	// namespace http

@@ -91,7 +91,7 @@ protected:
 			{ return mType & eServerBrowseIndex; }
 	};
 
-	typedef vector<SServerBrowseData> CServerNodeArray;
+	typedef std::vector<SServerBrowseData> CServerNodeArray;
 
 	CMboxProtocol*		mServer;					// Mail server associated with this window
 	CServerNodeArray	mData;						// data

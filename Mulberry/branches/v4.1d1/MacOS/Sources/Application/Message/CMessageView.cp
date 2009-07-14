@@ -115,7 +115,7 @@ CMessageView::~CMessageView()
 	// Remove from list
 	{
 		cdmutexprotect<CMessageViewList>::lock _lock(sMsgViews);
-		CMessageViewList::iterator found = ::find(sMsgViews->begin(), sMsgViews->end(), this);
+		CMessageViewList::iterator found = std::find(sMsgViews->begin(), sMsgViews->end(), this);
 		if (found != sMsgViews->end())
 			sMsgViews->erase(found);
 	}
@@ -1657,9 +1657,9 @@ void CMessageView::ResetText()
 			mText->ParseHeader(mItsMsg->GetHeader(), actual_view);
 		else if (GetViewOptions().GetShowSummary())
 		{
-			ostrstream hdr;
+			std::ostrstream hdr;
 			mItsMsg->GetEnvelope()->GetSummary(hdr);
-			hdr << ends;
+			hdr << std::ends;
 
 			mText->ParseHeader(hdr.str(), actual_view);
 			hdr.freeze(false);
@@ -2063,9 +2063,9 @@ void CMessageView::DoPrint()
 		if (do_header_insert)
 		{
 			// Get summary from envelope
-			ostrstream hdr;
+			std::ostrstream hdr;
 			mItsMsg->GetEnvelope()->GetSummary(hdr);
-			hdr << ends;
+			hdr << std::ends;
 			header_insert.steal(hdr.str());
 
 			// Parse as header

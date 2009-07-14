@@ -42,7 +42,7 @@ CCalendarWindow* CCalendarWindow::FindWindow(const calstore::CCalendarStoreNode*
 bool CCalendarWindow::WindowExists(const CCalendarWindow* wnd)
 {
 	cdmutexprotect<CCalendarWindowList>::lock _lock(sCalendarWindows);
-	CCalendarWindowList::iterator found = ::find(sCalendarWindows->begin(), sCalendarWindows->end(), wnd);
+	CCalendarWindowList::iterator found = std::find(sCalendarWindows->begin(), sCalendarWindows->end(), wnd);
 	return found != sCalendarWindows->end();
 }
 

@@ -42,7 +42,7 @@
 
 #include "templs.h"
 
-typedef vector<RGBColor> CColourList;
+typedef std::vector<RGBColor> CColourList;
 
 // Classes
 

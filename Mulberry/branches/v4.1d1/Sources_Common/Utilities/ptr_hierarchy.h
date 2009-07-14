@@ -27,7 +27,7 @@
 #include <mslconfig>
 #endif
 
-#include "vector.h"
+#include <vector>
 #include <algorithm>
 
 #pragma mark ____________________________class ptr_hierarchy
@@ -38,12 +38,12 @@ template <class L, class N> class ptr_hierarchy
 public:
 #ifdef __GNUC__
 	typedef ptr_hierarchy<L, N> node_type;
-	typedef vector<ptr_hierarchy<L, N>*> node_list;
+	typedef std::vector<ptr_hierarchy<L, N>*> node_list;
 	typedef L select_type;
 	typedef N noselect_type;
 #else
 	typedef typename ptr_hierarchy<L, N> node_type;
-	typedef typename vector<ptr_hierarchy<L, N>*> node_list;
+	typedef typename std::vector<ptr_hierarchy<L, N>*> node_list;
 	typedef typename L select_type;
 	typedef typename N noselect_type;
 #endif

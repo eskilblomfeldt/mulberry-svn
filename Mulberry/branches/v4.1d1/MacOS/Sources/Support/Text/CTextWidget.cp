@@ -166,7 +166,7 @@ void CTextWidget::InitTextWidget()
 	}
     
 	// Set smart anti-aliased highlighting
-	ATSURGBAlphaColor white = { 1.0, 1.0, 1.0, 1.0 };
+	ATSURGBAlphaColor white = { 1.0F, 1.0F, 1.0F, 1.0F };
 	ATSUUnhighlightData uhd;
 	uhd.dataType = kATSUBackgroundColor;
 	uhd.unhighlightData.backgroundColor = white;
@@ -684,7 +684,7 @@ OSStatus CTextWidget::ProcessKeyEvent(EventHandlerCallRef inCallRef, EventRef in
 	OSStatus result = eventNotHandledErr;
 
 	// Determine type of event
-	UInt32 eclass = GetEventClass(inEventRef);
+	/*UInt32 eclass = */ GetEventClass(inEventRef);
 	UInt32 ekind = GetEventKind(inEventRef);
 
 	switch(ekind)
@@ -714,7 +714,7 @@ OSStatus CTextWidget::HandleKeyEvent(EventHandlerCallRef inCallRef, EventRef inE
 	UniCharCount ucount = dataSize / sizeof(UniChar);
 	
 	// Create space for chars
-	auto_ptr<UniChar> uc(new UniChar[ucount]);
+	std::auto_ptr<UniChar> uc(new UniChar[ucount]);
 	
 	// Get the unicode text
 	GetEventParameter(inEventRef, kEventParamTextInputSendText, typeUnicodeText, NULL, dataSize, NULL, uc.get());
@@ -1147,8 +1147,8 @@ void CTextWidget::Idle(UInt32* maxSleep)
 
 void CTextWidget::BlinkCaret()
 {
-	SInt16		direction = kHilite;
-	Boolean		useDualCaret = false;
+	//SInt16		direction = kHilite;
+	//Boolean		useDualCaret = false;
 
 	// do nothing if we're not active
 	if (!IsActive() && !IsSelectable())
@@ -1209,8 +1209,8 @@ void CTextWidget::DrawCaret(bool on)
 	// Special check for last char
 	if (mTextLength && (mSelection.caret == mTextLength) && (mTextPtr[mTextLength - 1] == '\r'))
 	{
-		start_x = 0.0;
-		end_x = 0.0;
+		start_x = 0.0F;
+		end_x = 0.0F;
 		start_y += mLineHeights[line];
 		end_y += mLineHeights[line];
 	}
@@ -1230,8 +1230,8 @@ void CTextWidget::DrawCaret(bool on)
 	// Clip to frame + margins
 	Rect marginFrame;
 	CalcMarginFrameRect(marginFrame);
-	newCaret.top = max(newCaret.top, (long)marginFrame.top);
-	newCaret.bottom = min(newCaret.bottom, (long)marginFrame.bottom);		
+	newCaret.top = std::max(newCaret.top, (long)marginFrame.top);
+	newCaret.bottom = std::min(newCaret.bottom, (long)marginFrame.bottom);		
 
 	// Look for change in state
 	if (mSelection.caretVisible ^ on)
@@ -1469,7 +1469,7 @@ void CTextWidget::SetBackground(const RGBColor& color)
 	mCurrentBackground = color;
 
 	// Set smart anti-aliased highlighting
-	ATSURGBAlphaColor atsuicolor = { CGUtils::GetCGRed(CGUtils::GetColor(color)), CGUtils::GetCGGreen(CGUtils::GetColor(color)), CGUtils::GetCGBlue(CGUtils::GetColor(color)), 1.0 };
+	ATSURGBAlphaColor atsuicolor = { CGUtils::GetCGRed(CGUtils::GetColor(color)), CGUtils::GetCGGreen(CGUtils::GetColor(color)), CGUtils::GetCGBlue(CGUtils::GetColor(color)), 1.0F };
 	ATSUUnhighlightData uhd;
 	uhd.dataType = kATSUBackgroundColor;
 	uhd.unhighlightData.backgroundColor = atsuicolor;
@@ -1528,7 +1528,7 @@ CTextWidget::DrawSelf()
 		CGRect cgclipper = ::CGContextGetClipBoundingBox(_cg);
 		{
 			CGUtils::CGContextSaver _saver(_cg);
-			::CGContextSetRGBFillColor(_cg, CGUtils::GetCGRed(CGUtils::GetColor(mCurrentBackground)), CGUtils::GetCGGreen(CGUtils::GetColor(mCurrentBackground)), CGUtils::GetCGBlue(CGUtils::GetColor(mCurrentBackground)), 1.0);
+			::CGContextSetRGBFillColor(_cg, CGUtils::GetCGRed(CGUtils::GetColor(mCurrentBackground)), CGUtils::GetCGGreen(CGUtils::GetColor(mCurrentBackground)), CGUtils::GetCGBlue(CGUtils::GetColor(mCurrentBackground)), 1.0F);
 			::CGContextFillRect(_cg, cgclipper);
 		}
 
@@ -1764,7 +1764,7 @@ CTextWidget::ClickSelf(
 			// so we'll make sure thePort remains properly set.
 			//OutOfFocus(NULL);
 			FocusDraw();
-			OSErr err = CreateDragEvent(inMouseDown);
+			/* OSErr err = */ CreateDragEvent(inMouseDown);
 			//OutOfFocus(NULL);
 			
 			return;
@@ -2091,7 +2091,6 @@ UniCharArrayOffset CTextWidget::PointToOffset(Point inLocalPt, bool& leading) co
 
 UniCharArrayOffset CTextWidget::PointToOffset(SPoint32 inImagePt, bool& leading) const
 {
-	OSStatus status = noErr;
 	UniCharArrayOffset result;
 
 	if ((mTextLength == 0) || (mLineCount == 0) || (inImagePt.h < 0) || (inImagePt.v < 0))
@@ -2246,8 +2245,6 @@ bool CTextWidget::GotTripleClick(const EventRecord& theEvent)
 
 void CTextWidget::SelectLine(UniCharArrayOffset thePos, bool leading, UniCharArrayOffset* startSel, UniCharArrayOffset* endSel)
 {
-	OSStatus status = noErr;
-
 	ItemCount lineNo = OffsetToLine(thePos);
 	*startSel = ((mLineCount != 0) && (lineNo > 0)) ? mLineBreaks[lineNo - 1] : 0;
 	*endSel = (mLineCount != 0) ? mLineBreaks[lineNo] : mTextLength;
@@ -2296,8 +2293,8 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 
 	OSStatus status;
 	
-	mSelection.caret = min(newStart, mTextLength);
-	mSelection.length = min(newEnd - newStart, mTextLength - mSelection.caret);
+	mSelection.caret = std::min(newStart, mTextLength);
+	mSelection.length = std::min(newEnd - newStart, mTextLength - mSelection.caret);
 	mSelection.leading = true;
 	
 	if (mSelection.withHilight)
@@ -2315,8 +2312,8 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 				UniCharArrayOffset	selEnd = sb->selStart + sb->selLength;
 				UniCharArrayOffset	thisLineStart = sb->lineNumber ? mLineBreaks[sb->lineNumber - 1] : 0;
 				UniCharArrayOffset	thisLineEnd = mLineBreaks[sb->lineNumber];
-				UniCharArrayOffset	tempStart = max(thisLineStart, min(newStart, thisLineEnd));
-				UniCharArrayOffset	tempEnd = min(thisLineEnd, max(newEnd, thisLineStart));
+				UniCharArrayOffset	tempStart = std::max(thisLineStart, std::min(newStart, thisLineEnd));
+				UniCharArrayOffset	tempEnd = std::min(thisLineEnd, std::max(newEnd, thisLineStart));
 				
 				SPoint32 localPt = ImageToMarginPoint32(sb->imageLineSel);
 				ATSUTextMeasurement	horizCoord;
@@ -2328,8 +2325,8 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 				// unlighlight on left
 				if (tempStart > sb->selStart)
 				{
-					status = ::ATSUUnhighlightText(mTextLayout, horizCoord, vertCoord, selStart, min(tempStart, selEnd) - selStart);
-					selStart = min(tempStart, selEnd);
+					status = ::ATSUUnhighlightText(mTextLayout, horizCoord, vertCoord, selStart, std::min(tempStart, selEnd) - selStart);
+					selStart = std::min(tempStart, selEnd);
 					if (selStart > selEnd)
 						selEnd = selStart;
 				}
@@ -2337,8 +2334,8 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 				// unhighlight on right
 				if (tempEnd < selEnd)
 				{
-					status = ::ATSUUnhighlightText(mTextLayout, horizCoord, vertCoord, max(tempEnd, selStart), selEnd - tempEnd);
-					selEnd = max(tempEnd, selStart);
+					status = ::ATSUUnhighlightText(mTextLayout, horizCoord, vertCoord, std::max(tempEnd, selStart), selEnd - tempEnd);
+					selEnd = std::max(tempEnd, selStart);
 					if (selEnd < selStart)
 						selEnd = selStart;
 				}
@@ -2346,13 +2343,13 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 				// highlight on left
 				if (tempStart < selStart)
 				{
-					status = ::ATSUHighlightText(mTextLayout, horizCoord, vertCoord, tempStart, min(selStart, tempEnd) - tempStart);
+					status = ::ATSUHighlightText(mTextLayout, horizCoord, vertCoord, tempStart, std::min(selStart, tempEnd) - tempStart);
 				}
 				
 				// highlight on right
 				if (tempEnd > selEnd)
 				{
-					status = ::ATSUHighlightText(mTextLayout, horizCoord, vertCoord, max(tempStart, selEnd), tempEnd - max(tempStart, selEnd));
+					status = ::ATSUHighlightText(mTextLayout, horizCoord, vertCoord, std::max(tempStart, selEnd), tempEnd - std::max(tempStart, selEnd));
 				}
 			}
 			
@@ -2381,8 +2378,8 @@ void CTextWidget::ModifySelection(UniCharArrayOffset newStart, UniCharArrayOffse
 					ATSUTextMeasurement	vertCoord;
 					coords.QDToATSU(IntToFixed(localPt.h), IntToFixed(localPt.v), horizCoord, vertCoord);
 
-					UniCharArrayOffset thisLineStart = max(i ? mLineBreaks[i - 1] : 0, newStart);
-					UniCharArrayOffset thisLineEnd = min(mLineBreaks[i], newEnd);
+					UniCharArrayOffset thisLineStart = std::max(i ? mLineBreaks[i - 1] : 0, newStart);
+					UniCharArrayOffset thisLineEnd = std::min(mLineBreaks[i], newEnd);
 					status = ::ATSUHighlightText(mTextLayout, horizCoord, vertCoord, thisLineStart, thisLineEnd - thisLineStart);
 					if (status != noErr) DebugStr("\p ATSUHighlightText failed");
 				}
@@ -2615,7 +2612,7 @@ CTextWidget::SetFontName(
 			return;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -2685,7 +2682,7 @@ CTextWidget::SetFontSize(
 			return;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -2752,7 +2749,7 @@ void CTextWidget::SetFontStyle(Style inStyle, bool add)
 			return;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -2867,7 +2864,7 @@ CTextWidget::SetFontColor(
 			return;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -2924,7 +2921,7 @@ void CTextWidget::SetSpellHighlight(UniCharArrayOffset sel_start, UniCharArrayOf
 	// Loop over style runs
 	UniCharArrayOffset start = sel_start;
 	UniCharCount length = sel_end - sel_start;
-	bool once = true;
+	//bool once = true;
 
 	while(length > 0)
 	{
@@ -2936,7 +2933,7 @@ void CTextWidget::SetSpellHighlight(UniCharArrayOffset sel_start, UniCharArrayOf
 			return;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -3042,7 +3039,7 @@ unsigned long CTextWidget::GetFullWidth() const
 
 		if (::ATSUGetUnjustifiedBounds(mTextLayout, lineStart, lineLength, &oTextBefore, &oTextAfter, &oAscent, &oDescent) == noErr)
 		{
-			result = max(result, (unsigned long)FixedToInt(oTextAfter - oTextBefore));
+			result = std::max(result, (unsigned long)FixedToInt(oTextAfter - oTextBefore));
 		}
 	}
 	
@@ -3125,10 +3122,10 @@ void CTextWidget::GetHiliteRgn(RgnHandle rgn)
 
 		// Clip to frame
 		Rect visible;
-		visible.top = max((SInt32)marginFrame.top, localRect.top);
-		visible.left = max((SInt32)marginFrame.left, localRect.left);
-		visible.bottom = min((SInt32)marginFrame.bottom, localRect.bottom);
-		visible.right = min((SInt32)marginFrame.right, localRect.right);
+		visible.top = std::max((SInt32)marginFrame.top, localRect.top);
+		visible.left = std::max((SInt32)marginFrame.left, localRect.left);
+		visible.bottom = std::min((SInt32)marginFrame.bottom, localRect.bottom);
+		visible.right = std::min((SInt32)marginFrame.right, localRect.right);
 
 		StRegion visibleRgn(visible);
 
@@ -3219,7 +3216,7 @@ Handle CTextWidget::GetTextRangeAs_TEXT(Handle utxt) const
 	SInt8 iTextState = ::HGetState( utxt );
 	SInt8 oTextState = ::HGetState( ptxt );
 	
-	UniCharCount ucCount = 0;
+	//UniCharCount ucCount = 0;
 	TextEncoding ucs2Encoding = ::CreateTextEncoding( kTextEncodingUnicodeDefault, kTextEncodingDefaultVariant, kUnicode16BitFormat );
 	TextEncoding systemEncoding = ::CreateTextEncoding( kTextEncodingMacRoman, kTextEncodingDefaultVariant, kTextEncodingDefaultFormat );
 	TECObjectRef encodingConverter;
@@ -3436,8 +3433,8 @@ void CTextWidget::InsertTextAndStyles(const UniChar* text, UniCharCount length, 
 		DeleteText(mSelection.caret, mSelection.length);
 	
 	// Insert new text
-	UniCharArrayOffset insertPos = mSelection.caret;
-	UniCharCount insertLength = length;
+	//UniCharArrayOffset insertPos = mSelection.caret;
+	//UniCharCount insertLength = length;
 	InsertTextAndStyles(text, length, styles, mSelection.caret);
 
 	// Always do refresh and user change action
@@ -3569,7 +3566,7 @@ void CTextWidget::InsertTextAndStyles(const UniChar* text, UniCharCount length, 
 
 	// Now batch break the range of text from the insert line to the next hard break (determined prior to insert)
 	ItemCount breakCount;
-	OSStatus err = ::ATSUBatchBreakLines(mTextLayout, start_char, end_char - start_char, IntToFixed(imageSize.width), &breakCount);
+	/* OSStatus err = */ ::ATSUBatchBreakLines(mTextLayout, start_char, end_char - start_char, IntToFixed(imageSize.width), &breakCount);
 	
 	// Check to see if the number of lines has changed
 	ItemCount lines_added = breakCount - (end_line - start_line + hard_break_adjust);
@@ -3672,7 +3669,7 @@ void CTextWidget::DeleteText(UniCharArrayOffset offset, UniCharCount length)
 	}
 
 	// Make sure length is within text array bounds
-	UniCharCount rmv_length = min(mTextLength - offset, length);
+	UniCharCount rmv_length = std::min(mTextLength - offset, length);
 	UniCharCount move_length = mTextLength - offset - rmv_length;
 	
 	// Now memmove the data
@@ -3854,10 +3851,10 @@ void CTextWidget::CreatePendingStyle()
 }
 
 // Assume the array size is setup properly
-void CTextWidget::GetBreakInfo(UniCharArrayOffset start, UniCharArrayOffset end, ItemCount start_line, ItemCount end_line, vector<UniCharArrayOffset>& outLineBreaks)
+void CTextWidget::GetBreakInfo(UniCharArrayOffset start, UniCharArrayOffset end, ItemCount start_line, ItemCount end_line, std::vector<UniCharArrayOffset>& outLineBreaks)
 {
 	ItemCount breakCount = 0;
-	OSStatus status = ::ATSUGetSoftLineBreaks( mTextLayout, start, end - start,
+	/* OSStatus status = */ ::ATSUGetSoftLineBreaks( mTextLayout, start, end - start,
 												   end_line - start_line + 1,
 												   &outLineBreaks[start_line],
 												   &breakCount );
@@ -3868,10 +3865,10 @@ void CTextWidget::GetBreakInfo(UniCharArrayOffset start, UniCharArrayOffset end,
 }
 
 void CTextWidget::GetLineInfo(ItemCount start_line, ItemCount end_line,
-							const vector<UniCharArrayOffset>& lineBreaks,
-							vector<unsigned long>&	outLineHeights,
-							vector<unsigned long>&	outLineDescents,
-							vector<unsigned long>&	outLineOffsets)
+							const std::vector<UniCharArrayOffset>& lineBreaks,
+							std::vector<unsigned long>&	outLineHeights,
+							std::vector<unsigned long>&	outLineDescents,
+							std::vector<unsigned long>&	outLineOffsets)
 {
 	// Special case when there is no text
 	if (mTextLength != 0)
@@ -3966,10 +3963,10 @@ CTextWidget::CATSUITextLayout::MeasureLinesMore(
 		UniCharCount			inTextLength,
 		ATSUTextMeasurement		inLineWidth,
 		ItemCount&				outLineCount,
-		vector<UniCharArrayOffset>&		outLineBreaks,
-		vector<unsigned long>&			outLineHeights,
-		vector<unsigned long>&			outLineDescents,
-		vector<unsigned long>&			outLineOffsets)
+		std::vector<UniCharArrayOffset>&		outLineBreaks,
+		std::vector<unsigned long>&			outLineHeights,
+		std::vector<unsigned long>&			outLineDescents,
+		std::vector<unsigned long>&			outLineOffsets)
 {
 	// Clear out existing data
 	outLineBreaks.clear();

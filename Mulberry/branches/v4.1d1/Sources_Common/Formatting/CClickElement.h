@@ -18,7 +18,7 @@
 #ifndef __CCLICKELEMENT__MULBERRY__
 #define __CCLICKELEMENT__MULBERRY__
 
-#include <map.h>
+#include <map>
 
 #include "cdstring.h"
 
@@ -104,6 +104,6 @@ private:
 		{ mStart = copy.mStart; mStop = copy.mStop; mName = copy.mName; }
 };
 
-typedef map<cdstring, CAnchorClickElement> CAnchorElementMap;
+typedef std::map<cdstring, CAnchorClickElement> CAnchorElementMap;
 
 #endif

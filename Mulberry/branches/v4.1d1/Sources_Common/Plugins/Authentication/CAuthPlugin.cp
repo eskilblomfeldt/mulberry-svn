@@ -143,7 +143,7 @@ bool CAuthPlugin::DoAuthentication(const CAuthenticator* acct_auth,
 		LoadPlugin();
 
 	// Now clone it
-	auto_ptr<CAuthPlugin> clone(new CAuthPlugin(*this));
+	std::auto_ptr<CAuthPlugin> clone(new CAuthPlugin(*this));
 	clone->ClonePlugin();
 
 	// Start authentication process
@@ -219,7 +219,7 @@ bool CAuthPlugin::DoAuthentication(const CAuthenticator* acct_auth,
 		break;
 	default:;
 	}
-	stream << buffer << net_endl << flush;
+	stream << buffer << net_endl << std::flush;
 	if (CLog::AllowAuthenticationLog())
 		log.LogEntry(buffer);
 	stream.qgetline(buffer, buflen);
@@ -245,7 +245,7 @@ bool CAuthPlugin::DoAuthentication(const CAuthenticator* acct_auth,
 			break;
 		case CAuthPlugin::eAuthSendDataToServer:
 			// Send to server
-			stream << buffer << net_endl << flush;
+			stream << buffer << net_endl << std::flush;
 			if (CLog::AllowAuthenticationLog())
 				log.LogEntry(buffer);
 			
@@ -258,7 +258,7 @@ bool CAuthPlugin::DoAuthentication(const CAuthenticator* acct_auth,
 				long len = *(long*) buffer;
 				const char* start = &buffer[4];
 				stream.write(start, len);
-				stream << net_endl << flush;
+				stream << net_endl << std::flush;
 				
 				// Get another line
 				read_more = true;

@@ -39,7 +39,7 @@ CCalDAVSchedule::~CCalDAVSchedule()
 {
 }
 
-void CCalDAVSchedule::WriteHeaderToStream(ostream& os)
+void CCalDAVSchedule::WriteHeaderToStream(std::ostream& os)
 {
 	// Do default
 	CWebDAVRequestResponse::WriteHeaderToStream(os);

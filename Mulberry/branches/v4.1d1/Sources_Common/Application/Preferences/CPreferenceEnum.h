@@ -31,7 +31,7 @@ public:
 		{ mValue = copy.mValue; }
 	CPreferenceEnum(T copy)
 		{ mValue = copy; }
-	~CPreferenceEnum() {}
+	virtual ~CPreferenceEnum() {}
 	
 	CPreferenceEnum& operator=(const CPreferenceEnum& copy)		// Assignment with same type
 		{ mValue = copy.mValue; return *this; }

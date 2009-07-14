@@ -224,7 +224,7 @@ void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& 
 
 	// Copy all attendee properties
 	const iCal::CICalendarPropertyMap& props = vcomp.GetProperties();
-	pair<iCal::CICalendarPropertyMap::const_iterator, iCal::CICalendarPropertyMap::const_iterator> result = props.equal_range(iCal::cICalProperty_ATTENDEE);
+	std::pair<iCal::CICalendarPropertyMap::const_iterator, iCal::CICalendarPropertyMap::const_iterator> result = props.equal_range(iCal::cICalProperty_ATTENDEE);
 	for(iCal::CICalendarPropertyMap::const_iterator iter = result.first; iter != result.second; iter++)
 	{
 		// Copy the property

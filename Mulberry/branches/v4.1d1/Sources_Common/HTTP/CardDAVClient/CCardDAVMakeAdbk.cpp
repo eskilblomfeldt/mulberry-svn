@@ -49,12 +49,12 @@ void CCardDAVMakeAdbk::InitRequestData()
 	// Write XML info to a string
 	std::ostrstream os;
 	GenerateXML(os);
-	os << ends;
+	os << std::ends;
 
 	mRequestData = new CHTTPInputDataString(os.str(), "text/xml; charset=utf-8");
 }
 
-void CCardDAVMakeAdbk::GenerateXML(ostream& os)
+void CCardDAVMakeAdbk::GenerateXML(std::ostream& os)
 {
 	using namespace xmllib;
 

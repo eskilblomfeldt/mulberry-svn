@@ -22,7 +22,7 @@
 #include "CCalendarStoreNode.h"
 #include "CStringUtils.h"
 
-#include <istream.h>
+#include <istream>
 
 extern const char* cValueBoolTrue;
 extern const char* cValueBoolFalse;
@@ -91,14 +91,14 @@ const cdstring& CCalendarAction::GetCalendarName() const
 	}
 }
 
-void CCalendarAction::WriteToStream(ostream& out, bool text) const
+void CCalendarAction::WriteToStream(std::ostream& out, bool text) const
 {
 	// Create string list of items
 	if (text)
 		out << "ID=" << mID << " ";
 	else
 		out.write(reinterpret_cast<const char*>(&mID), 4);
-	out << CCalendarActionDescriptors[mAction] << endl;
+	out << CCalendarActionDescriptors[mAction] << std::endl;
 
 	switch(mAction)
 	{
@@ -109,16 +109,16 @@ void CCalendarAction::WriteToStream(ostream& out, bool text) const
 		break;
 	case eRename:
 		WriteCalendarAction(out, GetCalendarActionRename().first);
-		out << GetCalendarActionRename().second << endl;
+		out << GetCalendarActionRename().second << std::endl;
 		break;
 	default:;
 	}
 	
 	if (text)
-		out << endl;
+		out << std::endl;
 }
 
-void CCalendarAction::ReadFromStream(istream& in, unsigned long vers)
+void CCalendarAction::ReadFromStream(std::istream& in, unsigned long vers)
 {
 	// get rid of existing
 	_tidy();
@@ -150,13 +150,13 @@ void CCalendarAction::ReadFromStream(istream& in, unsigned long vers)
 }
 
 
-void CCalendarAction::WriteCalendarAction(ostream& out, const SCalendarAction& action) const
+void CCalendarAction::WriteCalendarAction(std::ostream& out, const SCalendarAction& action) const
 {
-	out << (action.mIsDir ? cValueBoolTrue : cValueBoolFalse) << endl;
-	out << action.mName << endl;
+	out << (action.mIsDir ? cValueBoolTrue : cValueBoolFalse) << std::endl;
+	out << action.mName << std::endl;
 }
 
-void CCalendarAction::ReadCalendarAction(istream& in, SCalendarAction& action)
+void CCalendarAction::ReadCalendarAction(std::istream& in, SCalendarAction& action)
 {
 	{
 		cdstring temp;

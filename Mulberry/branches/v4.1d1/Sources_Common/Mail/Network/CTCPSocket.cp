@@ -204,7 +204,7 @@ CTCPSocket::~CTCPSocket()
 	// Remove from global list of sockets
 	{
 		cdmutex::lock_cdmutex _lock(sLock);
-		CTCPSocketList::iterator found = ::find(sSockets.begin(), sSockets.end(), this);
+		CTCPSocketList::iterator found = std::find(sSockets.begin(), sSockets.end(), this);
 		if (found != sSockets.end())
 			sSockets.erase(found);
 	}
@@ -379,7 +379,7 @@ bool CTCPSocket::CheckConnections(bool check_only)
 				continue;
 			
 			// Check whether its in the good list
-			CTCPAddrList::const_iterator found = ::find(good_addrs.begin(), good_addrs.end(), local_ip);
+			CTCPAddrList::const_iterator found = std::find(good_addrs.begin(), good_addrs.end(), local_ip);
 			if (found != good_addrs.end())
 				continue;
 			
@@ -419,7 +419,7 @@ bool CTCPSocket::GetInterfaceIPs(CTCPAddrList& addrs, bool include_localhost)
 			}
 
 			// Only insert if not duplicate
-			CTCPAddrList::const_iterator found = ::find(addrs.begin(), addrs.end(), *p);
+			CTCPAddrList::const_iterator found = std::find(addrs.begin(), addrs.end(), *p);
 			if (found != addrs.end())
 			{
 				p++;
@@ -893,17 +893,17 @@ void CTCPSocket::TCPCreateSocket()
 		}
 
 		// send using "push" flag
-		optVal = true;
-		result = ::setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char*) &optVal, sizeof(optVal));
-		if (result == SOCKET_ERROR)
-		{
-			// Check for error
-			int err = tcp_errno;
-
-			// Got an error => throw
-			CLOG_LOGTHROW(CTCPException, err);
-			throw CTCPException(err);
-		}
+//		optVal = true;
+//		result = ::setsockopt(mSocket, IPPROTO_TCP, TCP_NODELAY, (char*) &optVal, sizeof(optVal));
+//		if (result == SOCKET_ERROR)
+//		{
+//			// Check for error
+//			int err = tcp_errno;
+//
+//			// Got an error => throw
+//			CLOG_LOGTHROW(CTCPException, err);
+//			throw CTCPException(err);
+//		}
 
 		// don't receive urgent data separately
 		optVal = true;

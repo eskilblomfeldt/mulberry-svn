@@ -138,8 +138,8 @@ public:
 	bool	IsDelsp() const;
 	bool	IsTextFlowed() const;
 
-	void WriteCacheToStream(ostream& out) const;
-	void ReadCacheFromStream(istream& in, unsigned long vers);
+	void WriteCacheToStream(std::ostream& out) const;
+	void ReadCacheFromStream(std::istream& in, unsigned long vers);
 
 private:
 	ETransferMode				mTransferMode;

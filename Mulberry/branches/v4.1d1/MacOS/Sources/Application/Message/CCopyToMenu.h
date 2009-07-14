@@ -48,7 +48,7 @@ class CCopyToMenu : public CListener
 	friend class CMailboxToolbarPopup;
 
 private:
-	typedef vector<LMenu*> CMenuList;
+	typedef std::vector<LMenu*> CMenuList;
 
 	static LMenu*		sCopyToMenu;
 	static LMenu*		sAppendToMenu;

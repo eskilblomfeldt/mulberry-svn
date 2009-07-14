@@ -52,7 +52,7 @@ CParserPlain::~CParserPlain()
 
 const unichar_t* CParserPlain::Parse(int offset)
 {
-	ostrstream sout;
+	std::ostrstream sout;
 
 	const unichar_t* p = mTxt;
 	if (p != NULL)
@@ -101,7 +101,7 @@ const unichar_t* CParserPlain::Parse(int offset)
 			sout.write((const char*)p, ::unistrlen(p) * sizeof(unichar_t));
 	}
 
-	sout << ends << ends;
+	sout << std::ends << std::ends;
 	return (unichar_t*)sout.str();
 }
 

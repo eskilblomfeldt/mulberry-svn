@@ -528,11 +528,11 @@ bool CCertificateManager::ImportCertificateFile(CCertificateManager::ECertificat
 					// CW9 internal compiler error with find_if
 #if 0
 					// See if another cert has this one's subject as an issuer
-					CCertificateList::const_iterator found = ::find_if(static_cast<CCertificateList::const_iterator>(xcerts.begin()), static_cast<CCertificateList::const_iterator>(xcerts.end()), CCertificate::find_if((*iter)->GetSubject(), &CCertificate::GetIssuer));
+					CCertificateList::const_iterator found = std::find_if(static_cast<CCertificateList::const_iterator>(xcerts.begin()), static_cast<CCertificateList::const_iterator>(xcerts.end()), CCertificatestd::find_if((*iter)->GetSubject(), &CCertificate::GetIssuer));
 
 					// Do not match ourselves (i.e. self-signed)
 					if (found == iter)
-						found = ::find_if(++found, static_cast<CCertificateList::const_iterator>(xcerts.end()), CCertificate::find_if((*iter)->GetSubject(), &CCertificate::GetIssuer));
+						found = std::find_if(++found, static_cast<CCertificateList::const_iterator>(xcerts.end()), CCertificatestd::find_if((*iter)->GetSubject(), &CCertificate::GetIssuer));
 #else
 					CCertificateList::const_iterator found = xcerts.end();
 					for(CCertificateList::const_iterator iter2 = xcerts.begin(); iter2 != xcerts.end(); iter2++)
@@ -797,7 +797,7 @@ bool CCertificateManager::ImportCertificateFile(CCertificateManager::ECertificat
 	return true;
 }
 
-bool CCertificateManager::CheckServerCertificate(const cdstring& server, vector<int>& errors, X509* server_cert)
+bool CCertificateManager::CheckServerCertificate(const cdstring& server, std::vector<int>& errors, X509* server_cert)
 {
 	// Make sure certs are loaded
 	LoadCertificates();
@@ -852,7 +852,7 @@ bool CCertificateManager::CheckServerCertificate(const cdstring& server, vector<
 	
 	// Get list of error strings
 	cdstrvect error_txt;
-	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(std::vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		// Special for application error
 		if (*iter == X509_V_ERR_APPLICATION_VERIFICATION)
@@ -865,7 +865,7 @@ bool CCertificateManager::CheckServerCertificate(const cdstring& server, vector<
 	return AcceptableServer(server, server_cert, errors, error_txt);
 }
 
-bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_cert, const vector<int>& errors, const cdstrvect& error_txt)
+bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_cert, const std::vector<int>& errors, const cdstrvect& error_txt)
 {
 	// Get the fingerprint of the cert
 	CCertificate cert(NULL, server_cert);
@@ -873,7 +873,7 @@ bool CCertificateManager::AcceptableServer(const cdstring& server, X509* server_
 
 	// Check to see whether we have any 'dire' errors that need an extra alert to the user
 	bool dire_error = false;
-	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(std::vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		switch(*iter)
 		{
@@ -1124,7 +1124,7 @@ STACK_OF(X509)* CCertificateManager::GetCerts(const char* key, ECertificateType 
 	return result;	
 }
 
-bool CCertificateManager::CheckUserCertificate(const cdstring& email, vector<int>& errors, X509* user_cert)
+bool CCertificateManager::CheckUserCertificate(const cdstring& email, std::vector<int>& errors, X509* user_cert)
 {
 	// Make sure certs are loaded
 	LoadCertificates();
@@ -1182,7 +1182,7 @@ bool CCertificateManager::CheckUserCertificate(const cdstring& email, vector<int
 	
 	// Get list of error strings
 	cdstrvect error_txt;
-	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(std::vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		// Special for application error
 		if (*iter == X509_V_ERR_APPLICATION_VERIFICATION)
@@ -1195,7 +1195,7 @@ bool CCertificateManager::CheckUserCertificate(const cdstring& email, vector<int
 	return AcceptableUser(email, user_cert, errors, error_txt);
 }
 
-bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert, const vector<int>& errors, const cdstrvect& error_txt)
+bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert, const std::vector<int>& errors, const cdstrvect& error_txt)
 {
 	// Get the fingerprint of the cert
 	CCertificate cert(NULL, user_cert);
@@ -1203,7 +1203,7 @@ bool CCertificateManager::AcceptableUser(const cdstring& email, X509* user_cert,
 
 	// Check to see whether we have any 'dire' errors that need an extra alert to the user
 	bool dire_error = false;
-	for(vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
+	for(std::vector<int>::const_iterator iter = errors.begin(); iter != errors.end(); iter++)
 	{
 		switch(*iter)
 		{
@@ -1546,7 +1546,7 @@ void CCertificateManager::CAcceptDB::AddAcceptData(X509* cert, const cdstring& n
 	key += fingerprint;
 
 	// Add to map
-	pair<cdstrset::const_iterator, bool> result = set.insert(key);
+	std::pair<cdstrset::const_iterator, bool> result = set.insert(key);
 
 	// Always do immediate write for saved maps if something was actually added
 	if (!once && result.second)

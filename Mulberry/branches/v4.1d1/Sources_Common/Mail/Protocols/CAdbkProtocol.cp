@@ -767,7 +767,7 @@ void CAdbkProtocol::SyncSubList(CAddressBook* adbk)
 		cdstring adbk_url = adbk->GetURL();
 
 		// Match in open at start list
-		cdstrvect::const_iterator found = ::find(CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().begin(),
+		cdstrvect::const_iterator found = std::find(CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().begin(),
 												 CPreferences::sPrefs->mAdbkOpenAtStartup.GetValue().end(),
 												 adbk_url);
 
@@ -781,21 +781,21 @@ void CAdbkProtocol::SyncSubList(CAddressBook* adbk)
 		}
 
 		// Match in nick name list
-		found = ::find(CPreferences::sPrefs->mAdbkNickName.GetValue().begin(),
+		found = std::find(CPreferences::sPrefs->mAdbkNickName.GetValue().begin(),
 						CPreferences::sPrefs->mAdbkNickName.GetValue().end(), adbk_url);
 
 		if (found != CPreferences::sPrefs->mAdbkNickName.GetValue().end())
 			adbk->SetFlags(CAddressBook::eLookup, true);
 
 		// Match in search list
-		found = ::find(CPreferences::sPrefs->mAdbkSearch.GetValue().begin(),
+		found = std::find(CPreferences::sPrefs->mAdbkSearch.GetValue().begin(),
 						CPreferences::sPrefs->mAdbkSearch.GetValue().end(),  adbk_url);
 
 		if (found != CPreferences::sPrefs->mAdbkSearch.GetValue().end())
 			adbk->SetFlags(CAddressBook::eSearch, true);
 
 		// Match in auto sync list
-		found = ::find(CPreferences::sPrefs->mAdbkAutoSync.GetValue().begin(),
+		found = std::find(CPreferences::sPrefs->mAdbkAutoSync.GetValue().begin(),
 						CPreferences::sPrefs->mAdbkAutoSync.GetValue().end(),  adbk_url);
 
 		if (found != CPreferences::sPrefs->mAdbkAutoSync.GetValue().end())
@@ -852,7 +852,7 @@ CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
 	}
 	if (!parent)
 		names.push_back(cdstring(start));
-	::reverse(names.begin(), names.end());
+	std::reverse(names.begin(), names.end());
 	
 	// Now test account name
 	if (names.back() != GetAccountName())
@@ -1744,7 +1744,7 @@ bool CAdbkProtocol::DoPlayback()
 		return true;
 
 	// Create remote clone
-	auto_ptr<CAdbkProtocol> clone(new CAdbkProtocol(*this, false, true));
+	std::auto_ptr<CAdbkProtocol> clone(new CAdbkProtocol(*this, false, true));
 	clone->SetSynchronising();
 
 	// Prevent further recording

@@ -117,7 +117,7 @@ public:
 	static bool VerifyDecryptPart(CMessage* msg, CAttachment* part, CMessageCryptoInfo& info);
 
 protected:
-	typedef map<cdstring, CSecurityPlugin*> SSecurityPluginHandlers;
+	typedef std::map<cdstring, CSecurityPlugin*> SSecurityPluginHandlers;
 	static SSecurityPluginHandlers	sSecurityPlugins;
 	static cdstring sPreferredPlugin;
 

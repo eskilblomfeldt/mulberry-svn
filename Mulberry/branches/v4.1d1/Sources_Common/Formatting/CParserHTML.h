@@ -27,7 +27,7 @@ class CFormatList;
 class CClickList;
 class cdstring;
 class CAnchorClickElement;
-typedef map<cdstring, CAnchorClickElement> CAnchorElementMap;
+typedef std::map<cdstring, CAnchorClickElement> CAnchorElementMap;
 #if __dest_os == __linux_os
 #include <JPtrArray.h>
 class JString;
@@ -49,14 +49,14 @@ public:
 	void		SetFontScale(long scale);
 
 	static long FindParam(const unichar_t* param, cdustring& response, bool quoted = false);
-	static bool GetLatinChar(unichar_t* format, ostream* out, unsigned long* added);
-	static bool GetLatinChar(wchar_t charNum, ostream* out, unsigned long* added);
-	static bool HandleAmpChar(unichar_t* format, ostream* out, unsigned long* added);
+	static bool GetLatinChar(unichar_t* format, std::ostream* out, unsigned long* added);
+	static bool GetLatinChar(wchar_t charNum, std::ostream* out, unsigned long* added);
+	static bool HandleAmpChar(unichar_t* format, std::ostream* out, unsigned long* added);
 	
 	static long FindParamUTF8(const char* param, cdstring& response, bool quoted = false);
-	static bool GetLatinCharUTF8(char* format, ostream* out, unsigned long* added);
-	static bool GetLatinCharUTF8(wchar_t charNum, ostream* out, unsigned long* added);
-	static bool HandleAmpCharUTF8(char* format, ostream* out, unsigned long* added);
+	static bool GetLatinCharUTF8(char* format, std::ostream* out, unsigned long* added);
+	static bool GetLatinCharUTF8(wchar_t charNum, std::ostream* out, unsigned long* added);
+	static bool HandleAmpCharUTF8(char* format, std::ostream* out, unsigned long* added);
 	
 	const unichar_t* Parse(int offset, bool for_display, bool quote = false, bool forward = false);
 	void RawParse(int offset);
@@ -91,7 +91,7 @@ private:
 	void HandleBody(unichar_t* param);
 	void HandleHeading(long start, long stop, ETag tag, unichar_t *param);
 	void HandleFormat(unichar_t* format,int index);
-	void HandleImage(unichar_t* param, ostream* out, unsigned long* added);
+	void HandleImage(unichar_t* param, std::ostream* out, unsigned long* added);
 	void HandleFont(long start, long stop, unichar_t* param);
 	void HandleAnchor(long start, long stop, unichar_t* param);
 	void HandleScaledSize(long start, long stop, long relsize, bool fixed = false);

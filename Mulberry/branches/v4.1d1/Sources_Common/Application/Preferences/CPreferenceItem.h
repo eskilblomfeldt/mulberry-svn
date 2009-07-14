@@ -26,7 +26,7 @@ class CPreferenceItem
 {
 public:
 	CPreferenceItem() {}
-	~CPreferenceItem() {}
+	virtual ~CPreferenceItem() {}
 	
 	// Read/write prefs
 	virtual cdstring GetInfo(void) const = 0;

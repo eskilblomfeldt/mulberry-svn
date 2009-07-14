@@ -46,7 +46,7 @@
 #include "templs.h"
 
 // Types
-typedef vector<RGBColor> CColourList;
+typedef std::vector<RGBColor> CColourList;
 
 // Consts
 

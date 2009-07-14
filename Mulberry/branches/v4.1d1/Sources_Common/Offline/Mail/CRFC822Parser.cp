@@ -467,10 +467,10 @@ std::istream::pos_type CRFC822Parser::MessageStart(std::istream& in, bool do_pro
 	bool got_LF = true;		// Start of processing equiv. to end of line last time
 
 	// Speedier version with direct streambuf access
-	streambuf* sb = in.rdbuf();
-	streamoff posn = in.tellg();
-	streamoff startn = posn;
-	streamoff progress = 0;
+	std::streambuf* sb = in.rdbuf();
+	std::streamoff posn = in.tellg();
+	std::streamoff startn = posn;
+	std::streamoff progress = 0;
 
 	// Look for From at start of line
 	bool done = false;
@@ -662,7 +662,7 @@ void CRFC822Parser::GetLine(std::istream& in, cdstring& line)
 	{
 		// Clear and go to last byte
 		in.clear();
-		in.seekg(0, ios_base::end);
+		in.seekg(0, std::ios_base::end);
 	}
 
 	// Get final stream position
@@ -721,7 +721,7 @@ void CRFC822Parser::GetHeader(std::istream& in, cdstring& hdr)
 	if (hdr_end == std::istream::pos_type(-1L))
 	{
 		in.clear();
-		in.seekg(0, ios_base::end);
+		in.seekg(0, std::ios_base::end);
 		hdr_end = in.tellg();
 	}
 
@@ -1107,8 +1107,8 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 
 	// Speedier version with direct streambuf access
 	streambuf* sb = in.rdbuf();
-	streamoff posn = in.tellg();
-	streamoff progress = 0;
+	std::streamoff posn = in.tellg();
+	std::streamoff progress = 0;
 
 	// Reserve a buffer that is just bigger than the boundary
 	// We will copy the stream data in here as it is parsed so that we can later
@@ -1124,7 +1124,7 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 		if ((c == '\r') || (c == '\n'))
 		{
 			// Look for boundary start (include the preceeding CRLF)
-			streamoff bdry = posn - 1;
+			std::streamoff bdry = posn - 1;
 
 			if ((c == '\r') && (sb->sgetc() == '\n'))
 			{
@@ -1158,7 +1158,7 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 
 				// Rewind to start of boundary (which includes preceeding CRLF)
 				if (rewind)
-					sb->pubseekpos(bdry, ios_base::in);
+					sb->pubseekpos(bdry, std::ios_base::in);
 			}
 			else
 			{
@@ -1209,7 +1209,7 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 
 						// Rewind to start of delimiter (which includes preceeding CRLF)
 						if (rewind)
-							sb->pubseekpos(bdry, ios_base::in);
+							sb->pubseekpos(bdry, std::ios_base::in);
 					}
 				}
 			}
@@ -1875,11 +1875,11 @@ void CRFC822Parser::UpdateProgress(std::istream& in)
 	UpdateProgress(in.tellg());
 }
 
-void CRFC822Parser::UpdateProgress(streamoff pos)
+void CRFC822Parser::UpdateProgress(std::streamoff pos)
 {
 	if (mProgress)
 	{
-		streamoff current = (pos < 0) ? mProgressTotal : pos;
+		std::streamoff current = (pos < 0) ? mProgressTotal : pos;
 		unsigned long percent = 0;
 
 		// These numbers may get big an overflow integer arithmetic
@@ -1903,7 +1903,7 @@ long CRFC822Parser::SafeTellg(std::istream& in, bool& has_eof) const
 	{
 		// Clear EOF error and seek to end
 		in.clear();
-		in.seekg(0, ios_base::end);
+		in.seekg(0, std::ios_base::end);
 		end_pos = in.tellg();
 		has_eof = true;
 	}

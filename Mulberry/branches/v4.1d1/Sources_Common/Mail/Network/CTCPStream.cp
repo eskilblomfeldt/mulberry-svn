@@ -31,9 +31,9 @@
 #include <iomanip>
 
 CTCPStream::CTCPStream() :
-			ostream(0),
-			istream(0),
-			ios(0)
+			std::ostream(0),
+			std::istream(0),
+			std::ios(0)
 {
 	rdbuf(this);
 
@@ -42,9 +42,9 @@ CTCPStream::CTCPStream() :
 }
 
 CTCPStream::CTCPStream(const CTCPStream& copy) :
-			ostream(0),
-			istream(0),
-			ios(0),
+			std::ostream(0),
+			std::istream(0),
+			std::ios(0),
 			CTCPStreamBuf(copy)
 {
 	rdbuf(this);
@@ -62,9 +62,9 @@ void CTCPStream::TCPOpen()
 	CTCPStreamBuf::TCPOpen();
 }
 
-CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
+CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, std::streamsize n)
 {
-	istream::sentry ok(*this, true);
+	std::istream::sentry ok(*this, true);
 
 	if (s == 0 || n <= 0)
 	{
@@ -150,7 +150,7 @@ CTCPStream& CTCPStream::qgetline (CTCPStreamBuf::char_type* s, streamsize n)
 	return *this;
 }
 
-void CTCPStream::gettostream(LStream& stream, ostream* log, long* len, CProgress* progress)
+void CTCPStream::gettostream(LStream& stream, std::ostream* log, long* len, CProgress* progress)
 {
 	char tmp[cTCPBufferSize];
 	long total = *len;
@@ -223,7 +223,7 @@ void CTCPStream::gettostream(LStream& stream, ostream* log, long* len, CProgress
 		stream.SetLength(0);
 }
 
-void CTCPStream::gettostream(ostream& stream, ostream* log, long* len, CProgress* progress)
+void CTCPStream::gettostream(std::ostream& stream, std::ostream* log, long* len, CProgress* progress)
 {
 	char tmp[cTCPBufferSize];
 	long total = *len;
@@ -268,7 +268,7 @@ void CTCPStream::gettostream(ostream& stream, ostream* log, long* len, CProgress
 }
 
 // Constructor
-CTCPStreamBuf::CTCPStreamBuf() : streambuf()
+CTCPStreamBuf::CTCPStreamBuf() : std::streambuf()
 {
 	// Set buffers
 	setg(mBufIn, mBufIn, mBufIn);
@@ -277,7 +277,7 @@ CTCPStreamBuf::CTCPStreamBuf() : streambuf()
 
 // Copy constructor
 CTCPStreamBuf::CTCPStreamBuf(const CTCPStreamBuf& copy)
-	: streambuf(),
+	: std::streambuf(),
 	  CTLSSocket(copy)
 {
 	// Set buffers

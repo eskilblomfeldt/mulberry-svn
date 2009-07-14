@@ -129,7 +129,7 @@ void CFreeBusyTable::DrawRow(TableIndexT row, const Rect& inLocalQDRect)
 	
 	const SFreeBusyInfo& info = mItems.at(row - 1);
 	HIRect itemRect = adjustedRect;
-	for(vector<SFreeBusyInfo::SFreeBusyPeriod>::const_iterator iter = info.mPeriods.begin(); iter != info.mPeriods.end(); iter++)
+	for(std::vector<SFreeBusyInfo::SFreeBusyPeriod>::const_iterator iter = info.mPeriods.begin(); iter != info.mPeriods.end(); iter++)
 	{
 		// Adjust for current width
 		itemRect.size.width = total_width * ((float) (*iter).second / (float)mColumnSeconds);

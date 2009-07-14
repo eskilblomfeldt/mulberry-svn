@@ -266,7 +266,7 @@ void CGroupPreview::SortAddresses(void)
 	}
 
 	// Sort list
-	::sort(list.begin(), list.end(), comp_strnocase);
+	std::sort(list.begin(), list.end(), comp_strnocase);
 
 	// Put back in field
 	cdstring addrs;

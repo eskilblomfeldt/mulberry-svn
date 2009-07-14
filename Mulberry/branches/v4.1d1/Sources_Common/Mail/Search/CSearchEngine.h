@@ -39,7 +39,7 @@ class CMbox;
 class CMboxRef;
 class CMboxProtocol;
 
-typedef multimap<CMboxProtocol*, CMboxProtocol*> CMboxProtocolMap;
+typedef std::multimap<CMboxProtocol*, CMboxProtocol*> CMboxProtocolMap;
 
 class CSearchEngine : public cdthread
 {

@@ -80,7 +80,7 @@ protected:
 	CCalendarStoreView*						mTableView;
 	bool									mListChanging;			// In the process of changing the list
 	short									mHierarchyCol;			// Column containing names
-	vector<calstore::CCalendarStoreNode*>	mData;					// data
+	std::vector<calstore::CCalendarStoreNode*>	mData;					// data
 
 	virtual void		FinishCreateSelf();			// Get details of sub-panes
 

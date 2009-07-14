@@ -897,7 +897,7 @@ void CACAPClient::_StoreAddress(CAddressBook* adbk, const CAddressList* addrs)
 
 			temp = items.front().first;
 			temp.ConvertFromOS();
-			ostrstream buffer2;
+			std::ostrstream buffer2;
 			size_t buflen2 = 0;
 			buffer2.write(reinterpret_cast<const char*>(&buflen2), sizeof(size_t));
 			buffer2 << temp;
@@ -1608,7 +1608,7 @@ void CACAPClient::ACAPParseMetaList(char** txt)
 	const char* attribute = option_attribute.c_str() + sizeof(cOPTIONSDATASET_ATTR) - 1;
 
 	// Insert
-	pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(attribute, value));
+	std::pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(attribute, value));
 
 	// Does it exist already
 	if (!result.second)

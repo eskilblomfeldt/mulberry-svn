@@ -69,7 +69,7 @@ CCalendarWindow::~CCalendarWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CCalendarWindowList>::lock _lock(sCalendarWindows);
-		CCalendarWindowList::iterator found = ::find(sCalendarWindows->begin(), sCalendarWindows->end(), this);
+		CCalendarWindowList::iterator found = std::find(sCalendarWindows->begin(), sCalendarWindows->end(), this);
 		if (found != sCalendarWindows->end())
 			sCalendarWindows->erase(found);
 	}

@@ -20,8 +20,8 @@
 #ifndef __CCHARSETMANAGER__MULBERRY__
 #define __CCHARSETMANAGER__MULBERRY__
 
-#include <map.h>
-#include <ostream.h>
+#include <map>
+#include <ostream>
 
 #include "CCharsetCodes.h"
 #include "cdstring.h"
@@ -35,10 +35,10 @@ class CConverterBase;
 class CCharsetManager
 {
 public:
-	typedef map<cdstring, ECharsetCode> name_code_map;
-	typedef map<ECharsetCode, cdstring> code_name_map;
-	typedef map<ECharsetCode, ECharsetCode> code_code_map;
-	typedef map<ECharsetCode, EFontMapCode> code_font_map;
+	typedef std::map<cdstring, ECharsetCode> name_code_map;
+	typedef std::map<ECharsetCode, cdstring> code_name_map;
+	typedef std::map<ECharsetCode, ECharsetCode> code_code_map;
+	typedef std::map<ECharsetCode, EFontMapCode> code_font_map;
 
 	static CCharsetManager sCharsetManager;
 
@@ -66,22 +66,22 @@ public:
 	cdstring Transcode(ECharsetCode from, ECharsetCode to, const cdstring& txt) const;
 
 	bool ToUnicode(ECharsetCode from,								// Convert to unicode
-					const char* in, size_t len, ostream& out) const;
+				   const char* in, size_t len, std::ostream& out) const;
 
 	bool FromUnicode(ECharsetCode to,								// Convert from unicode
-					const wchar_t* in, size_t wlen, ostream& out) const;
+					const wchar_t* in, size_t wlen, std::ostream& out) const;
 
 	cdustring ToUTF16(ECharsetCode from, const cdstring& txt) const;
 	cdstring FromUTF16(ECharsetCode to, const cdustring& txt) const;
 
 	bool ToUTF16(ECharsetCode from,									// Convert to utf16
-					const char* in, size_t len, ostream& out) const;
+					const char* in, size_t len, std::ostream& out) const;
 	bool FromUTF16(ECharsetCode to,
-					const unichar_t* in, size_t ulen, ostream& out) const;	// Convert from utf8
+					const unichar_t* in, size_t ulen, std::ostream& out) const;	// Convert from utf8
 
 	bool ToUTF8(ECharsetCode from,									// Convert to utf8
-					const char* in, size_t len, ostream& out) const;
-	bool FromUTF8(const char* in, size_t len, ostream& out) const;	// Convert from utf8
+					const char* in, size_t len, std::ostream& out) const;
+	bool FromUTF8(const char* in, size_t len, std::ostream& out) const;	// Convert from utf8
 
 	ECharsetCode ScriptToCharset(unsigned long script) const;
 	unsigned long CharsetToScript(ECharsetCode charset) const;

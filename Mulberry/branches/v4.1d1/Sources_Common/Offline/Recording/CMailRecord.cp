@@ -203,7 +203,7 @@ bool CMailRecord::ExpungedUID(unsigned long uid, bool local) const
 		{
 			// Look for matching uid
 			const ulvector& uids = local ? action->GetExpungeAction().second : action->GetExpungeAction().first;
-			if (::find(uids.begin(), uids.end(), uid) != uids.end())
+			if (std::find(uids.begin(), uids.end(), uid) != uids.end())
 				return true;
 		}
 	}
@@ -232,8 +232,8 @@ void CMailRecord::Flush(CMailAction::EMailAction actions)
 	bool was_open = mStream.is_open();
 	if (was_open)
 		mStream.close();
-	mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
-	mStream.seekp(sizeof(unsigned long), ios_base::beg);
+	mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
+	mStream.seekp(sizeof(unsigned long), std::ios_base::beg);
 	WriteItemsToStream(mStream);
 	mStartRecord = size();
 	if (!was_open)
@@ -247,11 +247,11 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 {
 	// Check for forced logging
 	bool log_created = false;
-	auto_ptr<cdofstream> fout;
+	std::auto_ptr<cdofstream> fout;
 	if (!mLog && CLog::AllowPlaybackLog())
 	{
 		cdstring temp_name = mDescriptor + ".log";
-		fout.reset(new cdofstream(temp_name, ios_base::app | ios_base::binary));
+		fout.reset(new cdofstream(temp_name, std::ios_base::app | std::ios_base::binary));
 		SetLog(fout.get());
 		log_created = true;
 	}
@@ -393,10 +393,10 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		StCreatorType file(cMulberryCreator, cMailboxRecordType);
 #endif
-		mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+		mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
 
 		// Add next id tag at start
-		mStream.seekp(0, ios_base::beg);
+		mStream.seekp(0, std::ios_base::beg);
 		mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 		// Write out items
@@ -560,7 +560,7 @@ void CMailRecord::Playback_Create(CMailAction& action)
 	try
 	{
 		char dir_delim = mPlayRemote->GetMailAccount()->GetDirDelim();
-		auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
+		std::auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
 		mbox->Create();
 
 		// Need to get UIDValidity and sync with local
@@ -598,7 +598,7 @@ void CMailRecord::Playback_Delete(CMailAction& action)
 	try
 	{
 		char dir_delim = mPlayRemote->GetMailAccount()->GetDirDelim();
-		auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
+		std::auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
 
 		// Must check UIDValidity before delete
 		mbox->Check();
@@ -644,7 +644,7 @@ void CMailRecord::Playback_Rename(CMailAction& action)
 	try
 	{
 		char dir_delim = mPlayRemote->GetMailAccount()->GetDirDelim();
-		auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetRenameAction().first.first, dir_delim, NULL));
+		std::auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetRenameAction().first.first, dir_delim, NULL));
 
 		// Must check UIDValidity before delete
 		mbox->Check();
@@ -692,7 +692,7 @@ void CMailRecord::Playback_Subscribe(CMailAction& action)
 	try
 	{
 		char dir_delim = mPlayRemote->GetMailAccount()->GetDirDelim();
-		auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
+		std::auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
 
 		// Must check UIDValidity before subscribe
 		mbox->Check();
@@ -737,7 +737,7 @@ void CMailRecord::Playback_Unsubscribe(CMailAction& action)
 	try
 	{
 		char dir_delim = mPlayRemote->GetMailAccount()->GetDirDelim();
-		auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
+		std::auto_ptr<CMbox> mbox(new CMbox(mPlayRemote, action.GetNameUIDAction().first, dir_delim, NULL));
 
 		// Must check UIDValidity before unsubscribe
 		mbox->Check();
@@ -791,7 +791,7 @@ void CMailRecord::Playback_Select(CMailAction& action)
 		CMbox* lsource = mPlayLocal->FindMbox(action.GetNameUIDAction().first, true);
 
 		//  Add to ID map
-		mConns.insert(CConnectionList::value_type(action.GetID(), pair<CMbox*, CMbox*>(rsource, lsource)));
+		mConns.insert(CConnectionList::value_type(action.GetID(), std::pair<CMbox*, CMbox*>(rsource, lsource)));
 
 		// Open for sync (reuse connection if available)
 		rsource->SetFlags(NMbox::eSynchronising);
@@ -1640,7 +1640,7 @@ void CMailRecord::Playback_RemoveActions(const cdstring& name, CMbox* mbox)
 
 		// Subtract UIDs of messages appended to the mailbox
 		//ulvector uid_remove;
-		//::set_difference(uid_all.begin(), uid_all.end(), appended_uids.begin(), appended_uids.end(), back_inserter<ulvector>(uid_remove));
+		//std::set_difference(uid_all.begin(), uid_all.end(), appended_uids.begin(), appended_uids.end(), back_inserter<ulvector>(uid_remove));
 
 		// Remove messages that were originally in the mailbox before recording began
 		if (uid_all_nonzero.size())
@@ -2000,8 +2000,8 @@ void CMailRecord::CompactExpunge()
 			// Now move sorted accumulated uids into last expunge
 			if (action_prev != action1)
 			{
-				::sort(add.begin(), add.end());
-				::sort(ladd.begin(), ladd.end());
+				std::sort(add.begin(), add.end());
+				std::sort(ladd.begin(), ladd.end());
 				const_cast<ulvector&>(action_prev->GetExpungeAction().first) = add;
 				const_cast<ulvector&>(action_prev->GetExpungeAction().second) = ladd;
 			}
@@ -2177,7 +2177,7 @@ bool CMailRecord::CompetingAppendAction(const CMailAction* action1, const CMailA
 {
 	// Look at any overlap in uids
 	unsigned long luid = action2->GetNameUIDAction().second;
-	ulvector::const_iterator found = ::find(action1->GetFlagAction().mUids.second.begin(),
+	ulvector::const_iterator found = std::find(action1->GetFlagAction().mUids.second.begin(),
 											action1->GetFlagAction().mUids.second.end(),
 											luid);
 	return (found != action1->GetFlagAction().mUids.second.end());
@@ -2234,13 +2234,13 @@ void CMailRecord::transfer_unique(ulvector& from, ulvector& to) const
 	// Find unique items
 	for(ulvector::const_iterator iter = from.begin(); iter != from.end(); iter++)
 	{
-		ulvector::const_iterator found = ::find(to.begin(), to.end(), *iter);
+		ulvector::const_iterator found = std::find(to.begin(), to.end(), *iter);
 		if (found == to.end())
 			to.push_back(*iter);
 	}
 	
 	// Sort then remove old items
-	::sort(to.begin(), to.end());
+	std::sort(to.begin(), to.end());
 	from.clear();
 }
 
@@ -2299,7 +2299,7 @@ void CMailRecord::AddLocalUIDs(CMbox* local, const ulvector& luids, ulvector& ui
 	if (temp.size())
 	{
 		uids.insert(uids.end(), temp.begin(), temp.end());
-		::sort(uids.begin(), uids.end());
+		std::sort(uids.begin(), uids.end());
 	}
 }
 

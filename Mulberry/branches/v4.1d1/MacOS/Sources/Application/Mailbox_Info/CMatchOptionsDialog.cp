@@ -167,7 +167,7 @@ void CMatchOptionsDialog::SetMatchItems(NMbox::EViewMode mbox_mode, const CMatch
 			iter != CPreferences::sPrefs->mSearchStyles.GetValue().end(); iter++)
 	{
 		names.push_back((*iter)->GetName());
-		bool select =  (::find(sets.begin(), sets.end(), (*iter)->GetName()) != sets.end());
+		bool select =  (std::find(sets.begin(), sets.end(), (*iter)->GetName()) != sets.end());
 		selected.push_back(select);
 	}
 	mTable->SetContents(names);

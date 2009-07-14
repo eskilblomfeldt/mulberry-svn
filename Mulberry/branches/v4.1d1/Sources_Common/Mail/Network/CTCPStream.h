@@ -24,7 +24,7 @@
 class CProgress;
 class LStream;
 
-class CTCPStreamBuf :  public streambuf, public CTLSSocket
+class CTCPStreamBuf :  public std::streambuf, public CTLSSocket
 {
 public:
 		CTCPStreamBuf();
@@ -50,8 +50,8 @@ private:
 };
 
 class CTCPStream : virtual public CTCPStreamBuf,
-					virtual public ostream,
-					virtual public istream
+					virtual public std::ostream,
+					virtual public std::istream
 {
 public:
 	CTCPStream();
@@ -61,9 +61,9 @@ public:
 
 	virtual void TCPOpen();
 
-	virtual CTCPStream& qgetline(CTCPStreamBuf::char_type* s, streamsize n);
-	virtual void gettostream(LStream& stream, ostream* log, long* len, CProgress* progress = NULL);
-	virtual void gettostream(ostream& stream, ostream* log, long* len, CProgress* progress = NULL);
+	virtual CTCPStream& qgetline(CTCPStreamBuf::char_type* s, std::streamsize n);
+	virtual void gettostream(LStream& stream, std::ostream* log, long* len, CProgress* progress = NULL);
+	virtual void gettostream(std::ostream& stream, std::ostream* log, long* len, CProgress* progress = NULL);
 };
 
 #endif

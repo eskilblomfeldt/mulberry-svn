@@ -49,7 +49,7 @@ CWebDAVRequestResponse::~CWebDAVRequestResponse()
 {
 }
 
-void CWebDAVRequestResponse::WriteHeaderToStream(ostream& os)
+void CWebDAVRequestResponse::WriteHeaderToStream(std::ostream& os)
 {
 	// Do inherited
 	CHTTPRequestResponse::WriteHeaderToStream(os);

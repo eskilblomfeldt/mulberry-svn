@@ -34,8 +34,8 @@ public:
 	}
 	virtual ~CIMAPUTF7() {}
 
-	virtual void init_w_2_c(ostream& out);
-	virtual void finish_w_2_c(ostream& out);
+	virtual void init_w_2_c(std::ostream& out);
+	virtual void finish_w_2_c(std::ostream& out);
 
 	virtual wchar_t c_2_w(const unsigned char*& c);
 	virtual int w_2_c(wchar_t wc, char* out);

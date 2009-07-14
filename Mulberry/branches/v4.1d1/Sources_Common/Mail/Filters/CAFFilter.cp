@@ -810,8 +810,7 @@ void CAFFilter::CreateHeader()
 		dtpb.ioNamePtr = spec.name;
 		dtpb.ioDTBuffer = (char*) &comment[1];
 		dtpb.ioDirID = spec.parID;
-		OSErr err = ::PBDTGetCommentSync(&dtpb);
-		if (err)
+		if (::PBDTGetCommentSync(&dtpb))
 			*comment = 0;
 		else
 			*comment = dtpb.ioDTActCount;

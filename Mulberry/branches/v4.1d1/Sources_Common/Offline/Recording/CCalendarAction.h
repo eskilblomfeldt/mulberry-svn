@@ -43,7 +43,7 @@ public:
 		bool			mIsDir;
 		cdstring		mName;
 	};
-	typedef pair<SCalendarAction, cdstring> SCalendarActionRename;
+	typedef std::pair<SCalendarAction, cdstring> SCalendarActionRename;
 
 	enum ECalendarAction
 	{
@@ -86,8 +86,8 @@ public:
 	const SCalendarActionRename& GetCalendarActionRename() const
 		{ return *reinterpret_cast<const SCalendarActionRename*>(mData); }
 
-	virtual void WriteToStream(ostream& out, bool text = false) const;
-	virtual void ReadFromStream(istream& in, unsigned long vers);
+	virtual void WriteToStream(std::ostream& out, bool text = false) const;
+	virtual void ReadFromStream(std::istream& in, unsigned long vers);
 
 private:
 	ECalendarAction mAction;
@@ -97,8 +97,8 @@ private:
 	void _copy(const CCalendarAction& copy);
 	void _tidy();
 
-	void WriteCalendarAction(ostream& out, const SCalendarAction& action) const;
-	void ReadCalendarAction(istream& in, SCalendarAction& action);
+	void WriteCalendarAction(std::ostream& out, const SCalendarAction& action) const;
+	void ReadCalendarAction(std::istream& in, SCalendarAction& action);
 };
 
 #endif

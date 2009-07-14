@@ -39,7 +39,7 @@
 
 #include <algorithm>
 
-strstream* CFilterManager::sStrLog = NULL;
+std::strstream* CFilterManager::sStrLog = NULL;
 
 CFilterManager::CFilterManager()
 {
@@ -184,7 +184,7 @@ const CFilterItems* CFilterManager::MatchFilters(CTargetItem::ESchedule schedule
 			// Find filters that include matched targets
 			for(CFilterItems::const_iterator iter2 = (*iter1)->GetFilters().begin(); iter2 != (*iter1)->GetFilters().end(); iter2++)
 			{
-				CFilterItems::const_iterator found = ::find(list->begin(), list->end(), *iter2);
+				CFilterItems::const_iterator found = std::find(list->begin(), list->end(), *iter2);
 				if (found == list->end())
 					list->push_back(*iter2);
 			}
@@ -210,7 +210,7 @@ void CFilterManager::OpenMailbox(CMbox* mbox) const
 #endif
 
 	// Now do open filter
-	auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eOpenMailbox, mbox));
+	std::auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eOpenMailbox, mbox));
 
 	// Only bother if filters exist
 	if (list->size())
@@ -248,7 +248,7 @@ void CFilterManager::NewMailMailbox(CMbox* mbox, unsigned long count) const
 #endif
 
 	// Get matching filters
-	auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eIncomingMailbox, mbox));
+	std::auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eIncomingMailbox, mbox));
 
 	// Only bother if filters exist
 	if (list->size())
@@ -258,7 +258,7 @@ void CFilterManager::NewMailMailbox(CMbox* mbox, unsigned long count) const
 		items->push_back(new CSearchItem(CSearchItem::eUnseen));
 		items->push_back(new CSearchItem(CSearchItem::eUndeleted));
 		items->push_back(new CSearchItem(CSearchItem::eUndraft));
-		auto_ptr<CSearchItem> ands(new CSearchItem(CSearchItem::eAnd, items));
+		std::auto_ptr<CSearchItem> ands(new CSearchItem(CSearchItem::eAnd, items));
 
 
 		// Make sure only the new ones are tested
@@ -329,7 +329,7 @@ void CFilterManager::CloseMailbox(CMbox* mbox) const
 #endif
 
 	// Now do open filter
-	auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eCloseMailbox, mbox));
+	std::auto_ptr<const CFilterItems> list(MatchFilters(CTargetItem::eCloseMailbox, mbox));
 
 	// Only bother if filters exist
 	if (list->size())
@@ -421,7 +421,7 @@ void CFilterManager::Log(const char* str)
 	if (mUseLog.GetValue())
 	{
 		if (!sStrLog)
-			sStrLog = new strstream;
+			sStrLog = new std::strstream;
 		*sStrLog << str << os_endl;
 	}
 
@@ -540,7 +540,7 @@ void CFilterManager::RemoveRule(CFilterItem::EType type, CFilterItem* rule)
 {
 	// Find the rule
 	CFilterItemList& list = GetFilters(type);
-	CFilterItemList::iterator found = ::find(list.begin(), list.end(), rule);
+	CFilterItemList::iterator found = std::find(list.begin(), list.end(), rule);
 
 	// Erase it if found
 	if (found != list.end())
@@ -804,7 +804,7 @@ void CFilterManager::UploadSIEVEScript(const CFilterScript* script, unsigned lon
 		script->GetSIEVEScript(scripttxt, eEndl_CRLF);
 	
 	// Create protocol (using first account in prefs for now)
-	auto_ptr<CFilterProtocol> proto(new CFilterProtocol(CPreferences::sPrefs->mSIEVEAccounts.GetValue().at(acct_index)));
+	std::auto_ptr<CFilterProtocol> proto(new CFilterProtocol(CPreferences::sPrefs->mSIEVEAccounts.GetValue().at(acct_index)));
 	try
 	{
 		// Logon
@@ -949,7 +949,7 @@ void CFilterManager::MergeRules(CFilterItem::EType type, const CFilterItemList& 
 	bool name_conflict = false;
 	for(CFilterItemList::const_iterator iter = items.begin(); iter != items.end(); iter++)
 	{
-		CFilterItemList::const_iterator found = ::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
+		CFilterItemList::const_iterator found = std::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
 		if (found != merge_into->end())
 		{
 			name_conflict = true;
@@ -977,7 +977,7 @@ void CFilterManager::MergeRules(CFilterItem::EType type, const CFilterItemList& 
 				unsigned long ctr = 1;
 				cdstring oldname = (*iter)->GetName();
 
-				CFilterItemList::const_iterator found = ::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
+				CFilterItemList::const_iterator found = std::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
 				while((found != merge_into->end()) && (ctr < 100))
 				{
 					// Append .### to name
@@ -987,7 +987,7 @@ void CFilterManager::MergeRules(CFilterItem::EType type, const CFilterItemList& 
 					const_cast<CFilterItem*>(*iter)->SetName(newname);
 					
 					// Check to see whether new name is unique, if not will loop around
-					found = ::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
+					found = std::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
 				}
 			}
 		}
@@ -999,7 +999,7 @@ void CFilterManager::MergeRules(CFilterItem::EType type, const CFilterItemList& 
 	for(CFilterItemList::const_iterator iter = items.begin(); iter != items.end(); iter++)
 	{
 		// Look for conflicts
-		CFilterItemList::const_iterator found = ::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
+		CFilterItemList::const_iterator found = std::find_if(merge_into->begin(), merge_into->end(), CFilterItem::same_name(*iter));
 		if (found != merge_into->end())
 			// Replace original with new one
 			(*found)->ReplaceWith(*iter);

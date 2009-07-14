@@ -126,10 +126,12 @@
 		AF4198510AE9A05D00E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF4198520AE9A05D00E19592 /* Build configuration list for PBXProject "PineAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF41984F0AE9A05D00E19592;
 			productRefGroup = AF41985D0AE9A05D00E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF41985B0AE9A05D00E19592 /* PineAdbkIO MachO */,
 			);
@@ -176,7 +178,7 @@
 		AF4198530AE9A05D00E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

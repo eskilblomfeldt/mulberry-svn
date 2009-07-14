@@ -912,7 +912,7 @@ CPreferenceValue<C3PaneOptions>& CPreferences::Get3PaneOptions()
 // Format subject for forwarding
 void CPreferences::ForwardSubject(cdstring& subj) const
 {
-	ostrstream out;
+	std::ostrstream out;
 	const char* p = mForwardSubject.mValue.c_str();
 	while(*p)
 	{
@@ -932,7 +932,7 @@ void CPreferences::ForwardSubject(cdstring& subj) const
 			break;
 		}
 	}
-	out << ends;
+	out << std::ends;
 	
 	subj.steal(out.str());
 }
@@ -1034,7 +1034,7 @@ cdstring CPreferences::GetMailerDetails(bool full)
 // Get support information
 cdstring CPreferences::GetSupportDetails()
 {
-	ostrstream out;
+	std::ostrstream out;
 	out << "---------- Mulberry Details ----------" << os_endl;
 	out << "Version: " << GetMailerDetails(true) << os_endl;
 	//out << "Serial Number: " << CRegistration::sRegistration.GetSerialNumber() << os_endl;
@@ -1162,7 +1162,7 @@ cdstring CPreferences::GetSupportDetails()
 	out << "--------------------------------------" << os_endl;
 	out << os_endl;
 	out << os_endl;
-	out << ends;
+	out << std::ends;
 	
 	cdstring temp;
 	temp.steal(out.str());
@@ -1186,7 +1186,7 @@ void CPreferences::NewAccount(CINETAccount* acct)
 
 			// Also add INBOX to first notifier's cabinet
 			CFavouriteItem& item = mFavourites.Value().at(mMailNotification.GetValue().front().GetFavouriteIndex(this));
-			cdstrpairvect::iterator found = ::find(item.GetItems().begin(), item.GetItems().end(), test);
+			cdstrpairvect::iterator found = std::find(item.GetItems().begin(), item.GetItems().end(), test);
 			if (found == item.GetItems().end())
 			{
 				item.GetItems().push_back(test);
@@ -1198,7 +1198,7 @@ void CPreferences::NewAccount(CINETAccount* acct)
 				(acct->GetServerType() != CINETAccount::ePOP3))
 			{
 				CFavouriteItem& item = mFavourites.Value().at(CMailAccountManager::eFavouriteOpenLogin);
-				cdstrpairvect::iterator found = ::find(item.GetItems().begin(), item.GetItems().end(), test);
+				cdstrpairvect::iterator found = std::find(item.GetItems().begin(), item.GetItems().end(), test);
 				if (found == item.GetItems().end())
 				{
 					item.GetItems().push_back(test);
@@ -1562,7 +1562,7 @@ void CPreferences::DeleteCalendar(const cdstring& name)
 void CPreferences::DeleteIdentity(CIdentity* id)
 {
 	// Must exist
-	CIdentityList::iterator found = ::find(mIdentities.Value().begin(), mIdentities.Value().end(), *id);
+	CIdentityList::iterator found = std::find(mIdentities.Value().begin(), mIdentities.Value().end(), *id);
 	if (found == mIdentities.Value().end())
 		return;
 
@@ -1587,7 +1587,7 @@ void CPreferences::DeleteIdentity(CIdentity* id)
 void CPreferences::ReplaceIdentity(CIdentity& id, CIdentity& new_id)
 {
 	// Must exist
-	CIdentityList::iterator found = ::find(mIdentities.Value().begin(), mIdentities.Value().end(), id);
+	CIdentityList::iterator found = std::find(mIdentities.Value().begin(), mIdentities.Value().end(), id);
 	if (found == mIdentities.Value().end())
 		return;
 
@@ -1715,7 +1715,7 @@ const CIdentity* CPreferences::GetTiedIdentity(const CMessageList* msgs)
 				{
 					// Get identity from addresses
 					const cdstring& addrs = (*iter3).GetFrom(true);
-					auto_ptr<CAddressList> idaddrlist(new CAddressList(addrs, addrs.length()));
+					std::auto_ptr<CAddressList> idaddrlist(new CAddressList(addrs, addrs.length()));
 					
 					// Look at each from address in the identity and compare with message from address
 					for(CAddressList::const_iterator iter4 = idaddrlist->begin(); !id && (iter4 != idaddrlist->end()); iter4++)
@@ -1848,7 +1848,7 @@ void CPreferences::RenameAddressBookURL(const cdstring& old_name, const cdstring
 // Rename address book
 void CPreferences::RenameAddressBookFlag(const cdstring& old_name, const cdstring& new_name, CPreferenceValueMap<cdstrvect>& list)
 {
-	cdstrvect::iterator found = ::find(list.Value().begin(), list.Value().end(), old_name);
+	cdstrvect::iterator found = std::find(list.Value().begin(), list.Value().end(), old_name);
 	if (found != list.Value().end())
 	{
 		*found = new_name;
@@ -1878,7 +1878,7 @@ void CPreferences::DeleteAddressBookURL(const cdstring& name)
 // Delete address book
 void CPreferences::DeleteAddressBookFlag(const cdstring& name, CPreferenceValueMap<cdstrvect>& list)
 {
-	cdstrvect::iterator found = ::find(list.Value().begin(), list.Value().end(), name);
+	cdstrvect::iterator found = std::find(list.Value().begin(), list.Value().end(), name);
 	if (found != list.Value().end())
 	{
 		list.Value().erase(found);
@@ -1915,7 +1915,7 @@ void CPreferences::ChangeAddressBookFlag(CAddressBook* adbk, CPreferenceValueMap
 {
 	// Look for name in prefs list
 	cdstring adbk_url = adbk->GetURL();
-	cdstrvect::iterator found = ::find(list.mValue.begin(), list.mValue.end(), adbk_url);
+	cdstrvect::iterator found = std::find(list.mValue.begin(), list.mValue.end(), adbk_url);
 
 	// Add/remove from prefs list
 	if (set)

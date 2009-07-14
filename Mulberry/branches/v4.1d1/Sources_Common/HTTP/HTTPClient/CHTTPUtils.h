@@ -27,7 +27,6 @@
 #include <stdint.h>
 #include "cdstring.h"
 
-using namespace std;
 
 namespace http {
 

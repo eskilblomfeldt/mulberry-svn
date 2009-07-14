@@ -659,7 +659,7 @@ CCalendarStoreNode* CCalendarProtocol::SyncCalendarNode(const cdstring& node)
 		end = ::strchr(start, GetDirDelim());
 	}
 	names.push_back(cdstring(start));
-	::reverse(names.begin(), names.end());
+	std::reverse(names.begin(), names.end());
 	
 	// Now test account name
 	if (names.back() != GetAccountName())
@@ -707,7 +707,7 @@ CCalendarStoreNode* CCalendarProtocol::GetNode(const cdstring& cal, bool parent)
 	}
 	if (!parent)
 		names.push_back(cdstring(start));
-	::reverse(names.begin(), names.end());
+	std::reverse(names.begin(), names.end());
 	
 	// Now test account name
 	if (names.back() != GetAccountName())
@@ -1746,7 +1746,7 @@ bool CCalendarProtocol::DoPlayback()
 		return true;
 
 	// Create remote clone
-	auto_ptr<CCalendarProtocol> clone(new CCalendarProtocol(*this, false, true));
+	std::auto_ptr<CCalendarProtocol> clone(new CCalendarProtocol(*this, false, true));
 	clone->SetSynchronising();
 
 	// Prevent further recording

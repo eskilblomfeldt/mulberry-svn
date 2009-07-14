@@ -130,8 +130,8 @@ public:
 		void SetMessageIDLength(unsigned long length)
 			{ mMessageIDLength = length; }
 
-		void WriteIndexToStream(ostream& out, long offset = 0) const;
-		void ReadIndexFromStream(istream& in, unsigned long vers);
+		void WriteIndexToStream(std::ostream& out, long offset = 0) const;
+		void ReadIndexFromStream(std::istream& in, unsigned long vers);
 	
 	protected:
 		unsigned long	mDateStart;
@@ -238,13 +238,13 @@ public:
 	const cdstring& GetReferences() const						// Get References
 		{ return mReferences; }
 
-	void GetSummary(ostream& out) const;						// Get summary headers to stream
+	void GetSummary(std::ostream& out) const;						// Get summary headers to stream
 
-	void WriteCacheToStream(ostream& out, CEnvelopeIndex& index) const;
-	void WriteAddressListToStream(ostream& out, const CAddressList* list) const;
+	void WriteCacheToStream(std::ostream& out, CEnvelopeIndex& index) const;
+	void WriteAddressListToStream(std::ostream& out, const CAddressList* list) const;
 
-	void ReadCacheFromStream(istream& in, unsigned long vers);
-	CAddressList* ReadAddressListFromStream(istream& in, unsigned long vers) const;
+	void ReadCacheFromStream(std::istream& in, unsigned long vers);
+	CAddressList* ReadAddressListFromStream(std::istream& in, unsigned long vers) const;
 
 protected:
 	mutable cdstring	mTxt_date;				// Message date as text

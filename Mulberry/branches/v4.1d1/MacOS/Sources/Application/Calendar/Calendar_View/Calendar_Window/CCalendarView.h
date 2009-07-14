@@ -57,7 +57,7 @@ class CToolbar;
 class CCalendarView : public CBaseView
 {
 public:
-	typedef set<CCalendarView*>	CCalendarViewList;
+	typedef std::set<CCalendarView*>	CCalendarViewList;
 	static cdmutexprotect<CCalendarViewList> sCalendarViews;	// List of windows (protected for multi-thread access)
 
 	enum { class_ID = 'CaVi' };

@@ -170,7 +170,7 @@ const char* CTextEngine::WrapLines(const char* text, unsigned long length, unsig
 	}
 
 	// Now create the buffer for the header
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -239,7 +239,7 @@ const char* CTextEngine::UnwrapLines(const char* text, unsigned long length)
 	out.write(os_endl, os_endl_len);
 
 	// Now create the buffer for the header
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -503,7 +503,7 @@ const char* CTextEngine::QuoteLines(const char* text, unsigned long length,
 	}
 
 	// Now create the buffer for the header
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -551,7 +551,7 @@ const char* CTextEngine::UnquoteLines(const char* text, unsigned long length, co
 	}
 
 	// Now create the buffer for the header
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -609,7 +609,7 @@ const char* CTextEngine::StripQuotedLines(const char* text, const cdstrvect& quo
 			out << *p++;
 	}
 	
-	out << ends;
+	out << std::ends;
 	return out.str();
 }
 
@@ -667,7 +667,7 @@ long CTextEngine::GetPrefixDepth(const char*& text, long& remaining, const cdstr
 	return prefix_depth;
 }
 
-void CTextEngine::AddPrefix(ostream& out, const cdstring& prefix, long prefix_length, long num_add, long depth, long& prefixed)
+void CTextEngine::AddPrefix(std::ostream& out, const cdstring& prefix, long prefix_length, long num_add, long depth, long& prefixed)
 {
 	bool add_space = false;
 

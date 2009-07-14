@@ -694,7 +694,7 @@ int cdrwmutex::write_acquire()
 			{
 #if __dest_os != __linux_os
 				// Check that all read-tids match this one
-				pair<cdthreadset::iterator, cdthreadset::iterator> eq = ::equal_range(_read_tids.begin(), _read_tids.end(), this_tid);
+				std::pair<cdthreadset::iterator, cdthreadset::iterator> eq = std::equal_range(_read_tids.begin(), _read_tids.end(), this_tid);
 				if ((eq.first == _read_tids.begin()) &&
 					(eq.second == _read_tids.end()))
 #else

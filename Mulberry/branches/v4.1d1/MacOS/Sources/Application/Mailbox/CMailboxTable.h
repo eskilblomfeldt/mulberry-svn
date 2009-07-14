@@ -94,8 +94,8 @@ public:
 	virtual void	ListenToMessage(MessageT inMessage,
 											void *ioParam);	// Respond to clicks in the icon buttons
 protected:
-	typedef pair<bool, bool> (CMailboxTable::*TestSelectionIgnorePP)(TableIndexT);
-	typedef pair<bool, bool> (CMailboxTable::*TestSelectionIgnore1PP)(TableIndexT, NMessage::EFlags);
+	typedef std::pair<bool, bool> (CMailboxTable::*TestSelectionIgnorePP)(TableIndexT);
+	typedef std::pair<bool, bool> (CMailboxTable::*TestSelectionIgnore1PP)(TableIndexT, NMessage::EFlags);
 
 	bool				TestSelectionIgnoreAnd(TestSelectionIgnorePP proc)							// Test each cell in the selection using logical and
 		{ return TestSelectionIgnore(proc, true); }
@@ -109,9 +109,9 @@ protected:
 	bool				TestSelectionIgnore(TestSelectionIgnorePP proc, bool and_it);		// Test each cell in the selection using logical and/or
 	bool				TestSelectionIgnore1(TestSelectionIgnore1PP proc, NMessage::EFlags flag, bool and_it);		// Test each cell in the selection using logical and/or
 
-	pair<bool, bool>	TestSelectionFlag(TableIndexT row, NMessage::EFlags flag);			// Test for selected message flag
+	std::pair<bool, bool>	TestSelectionFlag(TableIndexT row, NMessage::EFlags flag);			// Test for selected message flag
 
-	pair<bool, bool>	TestSelectionSmart(TableIndexT row);				// Test for an outgoing message
+	std::pair<bool, bool>	TestSelectionSmart(TableIndexT row);				// Test for an outgoing message
 	bool				TestSelectionFake(TableIndexT row);					// Test for a fake message
 
 	virtual void	ClickCell(const STableCell& inCell,

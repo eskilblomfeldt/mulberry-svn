@@ -28,7 +28,6 @@
 
 #include "cdstring.h"
 
-using namespace std;
 
 namespace http {
 
@@ -49,7 +48,7 @@ public:
 		mPswd = pswd;
 	}
 
-	virtual void GenerateAuthorization(ostream& os, const CHTTPRequestResponse* request) const;
+	virtual void GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const;
 
 private:
 	cdstring	mUser;

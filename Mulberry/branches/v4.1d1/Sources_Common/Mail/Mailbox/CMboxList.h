@@ -67,8 +67,8 @@ public:
 
 	void		RemoveDuplicates();									// Remove duplicate items
 
-	void		DumpHierarchy(ostream& out);
-	void		ReadHierarchy(istream& in, CMboxProtocol* local, bool add_items = true);
+	void		DumpHierarchy(std::ostream& out);
+	void		ReadHierarchy(std::istream& in, CMboxProtocol* local, bool add_items = true);
 	
 protected:
 	CMboxProtocol*	mProtocol;
@@ -81,6 +81,6 @@ private:
 
 };
 
-typedef vector<CMboxList*> CHierarchies;
+typedef std::vector<CMboxList*> CHierarchies;
 
 #endif

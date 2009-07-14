@@ -68,7 +68,7 @@ protected:
 	iCal::CICalendarFreeBusyList	mPeriods;					// Periods for busy time
 };
 
-typedef vector<CCalendarStoreFreeBusy> CCalendarStoreFreeBusyList;
+typedef std::vector<CCalendarStoreFreeBusy> CCalendarStoreFreeBusyList;
 
 }	// namespace calstore
 

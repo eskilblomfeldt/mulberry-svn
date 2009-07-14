@@ -318,7 +318,7 @@ void CRulesWindow::OnImportRules()
 	{
 		// Get full path and create stream
 		cdstring fpath(fspec.GetPath());
-		cdifstream fin(fpath, ios_base::in | ios_base::binary);
+		cdifstream fin(fpath, std::ios_base::in | std::ios_base::binary);
 		if (fin.fail())
 			return;
 
@@ -413,7 +413,7 @@ void CRulesWindow::OnExportRules()
 
 		// Get full path and create stream
 		cdstring fpath(fspec.GetPath());
-		cdofstream fout(fpath, ios_base::in | ios_base::binary | ios_base::trunc);
+		cdofstream fout(fpath, std::ios_base::in | std::ios_base::binary | std::ios_base::trunc);
 		if (fout.fail())
 			return;
 

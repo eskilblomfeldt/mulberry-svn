@@ -81,8 +81,8 @@ public:
 	
 	virtual STACK_OF(X509)* GetCerts(const char* key, ECertificateType type, ECertificateLookupType lookup = eAuto) = 0;
 
-	virtual bool CheckUserCertificate(const cdstring& server, vector<int>& errors, X509* server_cert) = 0;
-	virtual bool AcceptableUser(const cdstring& server, X509* server_cert, const vector<int>& errors, const cdstrvect& error_txt) = 0;
+	virtual bool CheckUserCertificate(const cdstring& server, std::vector<int>& errors, X509* server_cert) = 0;
+	virtual bool AcceptableUser(const cdstring& server, X509* server_cert, const std::vector<int>& errors, const cdstrvect& error_txt) = 0;
 
 protected:
 

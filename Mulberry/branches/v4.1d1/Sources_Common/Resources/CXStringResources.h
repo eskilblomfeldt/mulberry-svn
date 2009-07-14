@@ -62,7 +62,7 @@ private:
 	cdstrvect		mPaths;
 
 	typedef cdstrmap CStringResourceMap;
-	typedef map<cdstring, cdstrvect> CIndexedStringResourceMap;
+	typedef std::map<cdstring, cdstrvect> CIndexedStringResourceMap;
 
 	CStringResourceMap 			mStrings;
 	CIndexedStringResourceMap	mIndexedStrings;

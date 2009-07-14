@@ -1161,7 +1161,7 @@ long CGPGPluginDLL::CallGPG(cdstrvect& args, const char* passphrase, bool binary
 		FD_SET (errorfd[0], &readfds);
 		FD_SET (statusfd[0], &readfds);
 		struct timeval timeout = { 0, 0 };
-		int select_fd = max(outputfd[0], max(errorfd[0], statusfd[0])) + 1;
+		int select_fd = std::max(outputfd[0], std::max(errorfd[0], statusfd[0])) + 1;
 		int dataavail = ::select(select_fd, &readfds, NULL, NULL, &timeout);
 
 		cdstring output_line;
@@ -1178,7 +1178,7 @@ long CGPGPluginDLL::CallGPG(cdstrvect& args, const char* passphrase, bool binary
 				int readsize = ::read(outputfd[0], buf, bufsize);
 				if (readsize == -1)
 					break;
-				buf[(unsigned long) min(bufsize - 1, readsize)] = 0;
+				buf[(unsigned long) std::min(bufsize - 1, readsize)] = 0;
 				buf.ConvertEndl();
 				output_line += buf;
 
@@ -1202,7 +1202,7 @@ long CGPGPluginDLL::CallGPG(cdstrvect& args, const char* passphrase, bool binary
 				int readsize = ::read(errorfd[0], buf, bufsize);
 				if (readsize == -1)
 					break;
-				buf[(unsigned long) min(bufsize - 1, readsize)] = 0;
+				buf[(unsigned long) std::min(bufsize - 1, readsize)] = 0;
 				buf.ConvertEndl();
 
 #ifdef DEBUG_OUTPUT
@@ -1221,7 +1221,7 @@ long CGPGPluginDLL::CallGPG(cdstrvect& args, const char* passphrase, bool binary
 				int readsize = ::read(statusfd[0], buf, bufsize);
 				if (readsize == -1)
 					break;
-				buf[(unsigned long) min(bufsize - 1, readsize)] = 0;
+				buf[(unsigned long) std::min(bufsize - 1, readsize)] = 0;
 				buf.ConvertEndl();
 				status_line += buf;
 

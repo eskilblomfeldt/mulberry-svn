@@ -100,7 +100,7 @@ void CMessageView::Text2UTF16(i18n::ECharsetCode charset)
 	std::ostrstream sout;
 	if ((mShowText != NULL) && (charset != i18n::eUTF16) && i18n::CCharsetManager::sCharsetManager.ToUTF16(charset, mShowText, ::strlen(mShowText), sout))
 	{
-		sout << ends << ends;
+		sout << std::ends << std::ends;
 		mUTF16Text.reset((unichar_t*)sout.str());
 	}
 }
@@ -194,7 +194,7 @@ CMessageView* CMessageView::FindView(const CMessage* theMsg, bool owned_by)
 bool CMessageView::ViewExists(const CMessageView* view)
 {
 	cdmutexprotect<CMessageViewList>::lock _lock(sMsgViews);
-	CMessageViewList::iterator found = ::find(sMsgViews->begin(), sMsgViews->end(), view);
+	CMessageViewList::iterator found = std::find(sMsgViews->begin(), sMsgViews->end(), view);
 	return found != sMsgViews->end();
 }
 

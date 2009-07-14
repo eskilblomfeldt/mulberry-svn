@@ -720,7 +720,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 		for(cdstrvect::iterator iter = original.begin(); iter != original.end(); pos++)
 		{
 			// Check against user items
-			cdstrvect::const_iterator found = ::find(user.begin(), user.end(), *iter);
+			cdstrvect::const_iterator found = std::find(user.begin(), user.end(), *iter);
 			if (found != user.end())
 			{
 				iter++;
@@ -728,7 +728,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 			}
 			
 			// Check against NAMEPSACE items
-			found = ::find(name_list.begin(), name_list.end(), *iter);
+			found = std::find(name_list.begin(), name_list.end(), *iter);
 			if (found != name_list.end())
 			{
 				iter++;
@@ -745,7 +745,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 		for(cdstrvect::iterator iter = user.begin(); iter != user.end(); iter++)
 		{
 			// Check against current items
-			cdstrvect::const_iterator found = ::find(original.begin(), original.end(), *iter);
+			cdstrvect::const_iterator found = std::find(original.begin(), original.end(), *iter);
 			if (found == original.end())
 				proto->AddWD(CDisplayItem(*iter), 0);
 		}
@@ -759,7 +759,7 @@ void CMailAccountManager::InitNamespace(CMboxProtocol* proto, CMboxProtocol::SNa
 				if (names_used.at(ctr))
 				{
 					// Check against current items
-					cdstrvect::const_iterator found = ::find(original.begin(), original.end(), (*iter).first);
+					cdstrvect::const_iterator found = std::find(original.begin(), original.end(), (*iter).first);
 					if (found == original.end())
 						proto->AddWD(CDisplayItem((*iter).first.empty() ? cWILDCARD_NODIR : (*iter).first.c_str()), *(*iter).second.c_str());
 				}
@@ -1198,7 +1198,7 @@ CMbox* CMailAccountManager::GetNewMailbox(const CMbox* mbox, bool reverse)
 // Get index of protocol in list
 long CMailAccountManager::GetProtocolIndex(const CMboxProtocol* proto) const
 {
-	CMboxProtocolList::const_iterator found = ::find(mProtos.begin(), mProtos.end(), proto);
+	CMboxProtocolList::const_iterator found = std::find(mProtos.begin(), mProtos.end(), proto);
 	if (found != mProtos.end())
 		return found - mProtos.begin();
 	else
@@ -1557,7 +1557,7 @@ bool CMailAccountManager::AddFavourite(const cdstring& name, unsigned long index
 
 void CMailAccountManager::RenameFavourite(CMboxRefList* list, const cdstring& name, bool update_prefs)
 {
-	CFavourites::iterator found = ::find(mFavourites.begin(), mFavourites.end(), list);
+	CFavourites::iterator found = std::find(mFavourites.begin(), mFavourites.end(), list);
 
 	// Must exist
 	if (found == mFavourites.end())
@@ -1576,7 +1576,7 @@ void CMailAccountManager::RenameFavourite(CMboxRefList* list, const cdstring& na
 
 void CMailAccountManager::RemoveFavourite(CMboxRefList* list, bool update_prefs)
 {
-	CFavourites::iterator found = ::find(mFavourites.begin(), mFavourites.end(), list);
+	CFavourites::iterator found = std::find(mFavourites.begin(), mFavourites.end(), list);
 
 	// Must exist
 	if (found == mFavourites.end())
@@ -1958,7 +1958,7 @@ void CMailAccountManager::RenameFavouriteItem(CMboxRefList* list, CMboxRef* mbox
 	// Determine type of list to drop into
 	EFavourite type = GetFavouriteType(list);
 
-	CMboxRefList::iterator found = ::find(list->begin(), list->end(), mboxref);
+	CMboxRefList::iterator found = std::find(list->begin(), list->end(), mboxref);
 
 	// Must exist
 	if (found == list->end())

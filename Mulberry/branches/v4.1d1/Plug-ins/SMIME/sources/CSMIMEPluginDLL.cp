@@ -1634,7 +1634,7 @@ int CSMIMEPluginDLL::Verify(int ok, X509_STORE_CTX *ctx)
 void CSMIMEPluginDLL::AddCertError(int err)
 {
 	// Add to list if unique
-	vector<int>::const_iterator found = std::find(mData->mCertErrors.begin(), mData->mCertErrors.end(), err);
+	std::vector<int>::const_iterator found = std::find(mData->mCertErrors.begin(), mData->mCertErrors.end(), err);
 	if (found == mData->mCertErrors.end())
 		mData->mCertErrors.push_back(err);
 }

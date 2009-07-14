@@ -32,7 +32,7 @@
 
 class CDayEvent;
 typedef std::vector<CDayEvent*> CDayEventList;
-typedef std::vector<pair<CDayEvent*, bool> > CDayEventSlotList;
+typedef std::vector<std::pair<CDayEvent*, bool> > CDayEventSlotList;
 typedef std::vector<CDayEventSlotList> CDayEventMatrixRow;
 typedef std::vector<CDayEventMatrixRow> CDayEventMatrix;
 typedef std::vector<CDayEventList> CDayEventColumn;

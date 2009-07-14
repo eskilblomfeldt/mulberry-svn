@@ -1129,7 +1129,7 @@ CSearchItem* CSearchItem::ParseItem(char_stream& txt, bool convert)
 
 		else if (::strcmp(str, cSEARCH_LPAREN) == 0)		// CSearchItemList*
 		{
-			auto_ptr<CSearchItemList> list(new CSearchItemList);
+			std::auto_ptr<CSearchItemList> list(new CSearchItemList);
 
 			// Parse items until NULL
 			CSearchItem* item = ParseItem(txt, convert);
@@ -1352,7 +1352,7 @@ ulvector CSearchItem::ParseSequence(char_stream& txt)
 	return nums;
 }
 
-void CSearchItem::GenerateSIEVEScript(ostream& out) const
+void CSearchItem::GenerateSIEVEScript(std::ostream& out) const
 {
 	// Now do criteria
 	switch(GetType())
@@ -1488,7 +1488,7 @@ void CSearchItem::GenerateSIEVEScript(ostream& out) const
 }
 
 // Generate list of expanded address items
-void CSearchItem::GenerateAddressSIEVE(ostream& out, const char* hdr) const
+void CSearchItem::GenerateAddressSIEVE(std::ostream& out, const char* hdr) const
 {
 	out << "address ";
 	GenerateSIEVEMatchType(out);
@@ -1544,7 +1544,7 @@ void CSearchItem::GenerateAddressSIEVE(ostream& out, const char* hdr) const
 }
 
 // Generate list of expanded address items
-void CSearchItem::GenerateSIEVEMatchType(ostream& out) const
+void CSearchItem::GenerateSIEVEMatchType(std::ostream& out) const
 {
 	switch(GetMatchType())
 	{
@@ -1586,7 +1586,7 @@ void CSearchItem::GenerateSIEVEKey(cdstring& key) const
 }
 
 // Generate number
-void CSearchItem::GenerateSIEVENumber(ostream& out) const
+void CSearchItem::GenerateSIEVENumber(std::ostream& out) const
 {
 	long num = reinterpret_cast<long>(GetData());
 	

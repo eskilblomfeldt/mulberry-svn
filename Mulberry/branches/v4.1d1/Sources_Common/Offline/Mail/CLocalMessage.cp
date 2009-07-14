@@ -123,7 +123,7 @@ void CLocalMessage::SetIndexStart(unsigned long start)
 }
 
 // Stream ops
-void CLocalMessage::WriteIndexToStream(ostream& out, long offset, ulvector* text_indices) const
+void CLocalMessage::WriteIndexToStream(std::ostream& out, long offset, ulvector* text_indices) const
 {
 	// If this is a sub-message and the text attachment indices only are being written, 
 	// then parts_only will be true => only write text attachment indices to stream
@@ -174,7 +174,7 @@ void CLocalMessage::WriteIndexToStream(ostream& out, long offset, ulvector* text
 	}
 }
 
-void CLocalMessage::ReadIndexFromStream(istream& in, ulvector* text_indices, unsigned long vers)
+void CLocalMessage::ReadIndexFromStream(std::istream& in, ulvector* text_indices, unsigned long vers)
 {
 	// Read basic index entries
 	unsigned long items[5];
@@ -207,7 +207,7 @@ void CLocalMessage::ReadIndexFromStream(istream& in, ulvector* text_indices, uns
 	mHasIndex = true;
 }
 
-void CLocalMessage::WriteCacheToStream(ostream& out) const
+void CLocalMessage::WriteCacheToStream(std::ostream& out) const
 {
 	// Write out envelope information first
 	GetEnvelope()->WriteCacheToStream(out, const_cast<CEnvelope::CEnvelopeIndex&>(mEnvelopeIndex));
@@ -220,7 +220,7 @@ void CLocalMessage::WriteCacheToStream(ostream& out) const
 	static_cast<const CLocalAttachment*>(GetBody())->WriteCacheToStream(out);
 }
 
-void CLocalMessage::ReadCacheFromStream(istream& in, unsigned long vers)
+void CLocalMessage::ReadCacheFromStream(std::istream& in, unsigned long vers)
 {
 	// Must be cached
 	CacheMessage();
@@ -246,7 +246,7 @@ void CLocalMessage::WriteHeaderToStream(costream& stream)
 	CStreamAttachment* streama = dynamic_cast<CStreamAttachment*>(GetBody());
 	if (streama)
 	{
-		istream* in = streama->GetStream();
+		std::istream* in = streama->GetStream();
 		if ((in != NULL) && mIndexHeaderLength)
 			::StreamCopy(*in, stream.Stream(), mIndexHeaderStart, mIndexHeaderLength);
 	}

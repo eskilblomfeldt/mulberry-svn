@@ -66,24 +66,24 @@ void CCalendarEventBase::SetupTagTextEvent()
 	ostr << rsrc::GetString("EventTip::Summary") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetSummary();
 	if (mVEvent->GetInstanceStart().IsDateOnly())
 	{
-		ostr << endl << rsrc::GetString("EventTip::All Day Event");
+		ostr << std::endl << rsrc::GetString("EventTip::All Day Event");
 	}
 	else
 	{
-		ostr << endl << rsrc::GetString("EventTip::Starts on") << mVEvent->GetInstanceStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
-		ostr << endl << rsrc::GetString("EventTip::Ends on") << mVEvent->GetInstanceEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+		ostr << std::endl << rsrc::GetString("EventTip::Starts on") << mVEvent->GetInstanceStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+		ostr << std::endl << rsrc::GetString("EventTip::Ends on") << mVEvent->GetInstanceEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
 	}
 	if (!mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetLocation().empty())
-		ostr << endl << rsrc::GetString("EventTip::Location") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetLocation();
+		ostr << std::endl << rsrc::GetString("EventTip::Location") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetLocation();
 	if (!mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetDescription().empty())
-		ostr << endl << rsrc::GetString("EventTip::Description") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetDescription();
+		ostr << std::endl << rsrc::GetString("EventTip::Description") << mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetDescription();
 	
 	// Always add calendar name
 	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVEvent->GetMaster<iCal::CICalendarVEvent>()->GetCalendar());
 	if (cal != NULL)
-		ostr << endl << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
+		ostr << std::endl << std::endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
 
-	ostr << ends;
+	ostr << std::ends;
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 
 	SetTagText(ostr.str());
@@ -103,17 +103,17 @@ void CCalendarEventBase::SetupTagTextEvent()
 void CCalendarEventBase::SetupTagTextFreeBusy()
 {
 	// Setup a help tag;
-	ostrstream ostr;
+	std::ostrstream ostr;
 	ostr << rsrc::GetString("EventTip::Summary") << rsrc::GetString("CDayWeekTable::BlockedBusy");
-	ostr << endl << rsrc::GetString("EventTip::Starts on") << mPeriod.GetStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
-	ostr << endl << rsrc::GetString("EventTip::Ends on") <<  mPeriod.GetEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+	ostr << std::endl << rsrc::GetString("EventTip::Starts on") << mPeriod.GetStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
+	ostr << std::endl << rsrc::GetString("EventTip::Ends on") <<  mPeriod.GetEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime());
 	
 	// Always add calendar name
 	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVFreeBusy->GetCalendar());
 	if (cal != NULL)
-		ostr << endl << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
+		ostr << std::endl << std::endl << rsrc::GetString("EventTip::Calendar") << cal->GetName();
 
-	ostr << ends;
+	ostr << std::ends;
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 
 	SetTagText(ostr.str());

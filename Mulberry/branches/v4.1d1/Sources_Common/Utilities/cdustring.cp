@@ -104,7 +104,7 @@ cdstring cdustring::ToUTF8() const
 {
 	std::ostrstream sout;
 	i18n::CCharsetManager::sCharsetManager.ToUTF8(i18n::eUTF16, (const char*)_str, length() * 2, sout);
-	sout << ends;
+	sout << std::ends;
 	cdstring result;
 	result.steal(sout.str());
 	return result;
@@ -140,7 +140,7 @@ void cdustring::ConvertEndl(EEndl endl)
 			break;
 		}
 	}
-	out << ends << ends;
+	out << std::ends << std::ends;
 	
 	// Grab the string
 	steal((unichar_t*)out.str());
@@ -192,7 +192,7 @@ void cdustring::_allocate(const char* utf8buf, size_type size)
 		{
 			std::ostrstream sout;
 			i18n::CCharsetManager::sCharsetManager.FromUTF8(utf8buf, size, sout);
-			sout << ends << ends;
+			sout << std::ends << std::ends;
 			steal((unichar_t*)sout.str());
 		}
 	}
@@ -260,9 +260,9 @@ void cdustring::_append_ascii(const char* buf, size_type size)
 
 #pragma mark ____________________________Stream Helpers
 
-istream& operator >> (istream& is, cdustring& str)
+std::istream& operator >> (std::istream& is, cdustring& str)
 {
-    istream::sentry s_ (is);
+    std::istream::sentry s_ (is);
     if (s_)
     {
          int c1;
@@ -311,7 +311,7 @@ istream& operator >> (istream& is, cdustring& str)
 }
 
 // If delim is NULL then do arbitrary line-end lookup
-istream& getline (istream& is, cdustring& str, unichar_t delim)
+std::istream& getline (std::istream& is, cdustring& str, unichar_t delim)
 {
 	int c1;
 	int c2;

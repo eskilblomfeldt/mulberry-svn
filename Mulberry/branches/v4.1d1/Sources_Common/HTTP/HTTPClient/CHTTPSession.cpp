@@ -51,7 +51,7 @@ CHTTPSession::~CHTTPSession()
 }
 
 // Do session global headers
-void CHTTPSession::WriteHeaderToStream(ostream& os, const CHTTPRequestResponse* request) const
+void CHTTPSession::WriteHeaderToStream(std::ostream& os, const CHTTPRequestResponse* request) const
 {
 	if (HasAuthorization())
 		GetAuthorization()->GenerateAuthorization(os, request);

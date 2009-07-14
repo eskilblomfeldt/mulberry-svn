@@ -194,7 +194,7 @@ class	CMessageWindow : public LWindow,
 	};
 
 public:
-	typedef vector<CMessageWindow*> CMessageWindowList;
+	typedef std::vector<CMessageWindow*> CMessageWindowList;
 	static cdmutexprotect<CMessageWindowList> sMsgWindows;	// List of windows (protected for multi-thread access)
 
 private:
@@ -204,8 +204,8 @@ private:
 	bool			mItsMsgError;						// Flag for cleared out message
 	CMessageList*	mMsgs;								// Used for multi-save operation
 	const char*			mShowText;							// Text to show
-	auto_ptr<unichar_t>	mUTF16Text;						// UTF16 text
-	auto_ptr<unichar_t>	mRawUTF16Text;					// Raw UTF16 text
+	std::auto_ptr<unichar_t>	mUTF16Text;						// UTF16 text
+	std::auto_ptr<unichar_t>	mRawUTF16Text;					// Raw UTF16 text
 	LPrintSpec*		mPrintSpec;
 	LPrintSpec		mMyPrintSpec;
 	bool			mShowHeader;						// Show header

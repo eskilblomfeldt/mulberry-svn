@@ -47,7 +47,7 @@ public:
 		return mAuthorization;
 	}
 
-	virtual void WriteHeaderToStream(ostream& os, const CHTTPRequestResponse* request) const;
+	virtual void WriteHeaderToStream(std::ostream& os, const CHTTPRequestResponse* request) const;
 
 	// Connection items
 	void SetHost(const cdstring& host);

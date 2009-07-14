@@ -901,7 +901,6 @@ void FilterEndls(char* txt)
 
 	char*	s1=txt;
 	char*	s2=txt;
-	bool	skip=false;
 
 	// Loop until null
 	while(*s2)

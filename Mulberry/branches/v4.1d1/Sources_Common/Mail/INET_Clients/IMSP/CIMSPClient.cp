@@ -1368,7 +1368,7 @@ void CIMSPClient::IMSPParseOption(char** txt)
 		char* key = prekey + mPreKeySize;
 
 		// Insert
-		pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(key, value));
+		std::pair<cdstrmap::iterator, bool> result = GetOptionsOwner()->GetMap()->insert(cdstrmap::value_type(key, value));
 
 		// Does it exist already
 		if (!result.second)

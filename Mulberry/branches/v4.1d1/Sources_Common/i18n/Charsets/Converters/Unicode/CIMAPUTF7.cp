@@ -206,13 +206,13 @@ int CIMAPUTF7::DoneEncoding(char*& out)
 
 
 // Start state in default (ASCII)
-void CIMAPUTF7::init_w_2_c(ostream& out)
+void CIMAPUTF7::init_w_2_c(std::ostream& out)
 {
 	mEncoding = false;
 }
 
 // Reset encoding state back to default (ASCII)
-void CIMAPUTF7::finish_w_2_c(ostream& out)
+void CIMAPUTF7::finish_w_2_c(std::ostream& out)
 {
 	if (mEncoding)
 	{

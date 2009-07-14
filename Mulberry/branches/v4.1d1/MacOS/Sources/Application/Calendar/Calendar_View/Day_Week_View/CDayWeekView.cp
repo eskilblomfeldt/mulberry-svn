@@ -309,7 +309,7 @@ void CDayWeekView::OnRange()
 
 void CDayWeekView::DoPrint()
 {
-	auto_ptr<CDayWeekPrintout> pout;
+	std::auto_ptr<CDayWeekPrintout> pout;
 
 	try
 	{

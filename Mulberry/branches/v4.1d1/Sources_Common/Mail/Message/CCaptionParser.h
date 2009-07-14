@@ -64,8 +64,8 @@ public:
 	static cdstring ParseCaption(const cdstring& caption, const CMessage* msg, bool multi = true, unsigned long page_num = 0);
 
 private:
-	static bool PutAddressListCaption(ostream& out, EMode mode, const CAddressList& addrs, bool multi);
-	static void PutAddressCaption(ostream& out, EMode mode, const CAddress& addr);
+	static bool PutAddressListCaption(std::ostream& out, EMode mode, const CAddressList& addrs, bool multi);
+	static void PutAddressCaption(std::ostream& out, EMode mode, const CAddress& addr);
 };
 
 #endif

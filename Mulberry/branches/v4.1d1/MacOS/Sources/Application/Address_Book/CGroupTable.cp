@@ -1261,7 +1261,7 @@ void CGroupTable::SelectGroups(CGroupList* grps)
 		if (item.mIsGroup)
 		{
 			CGroup* grp = item.mGroup;
-			CGroupList::const_iterator found = ::find(grps->begin(), grps->end(), grp);
+			CGroupList::const_iterator found = std::find(grps->begin(), grps->end(), grp);
 			if (found != grps->end())
 				SelectCell(STableCell(row, 1));
 		}

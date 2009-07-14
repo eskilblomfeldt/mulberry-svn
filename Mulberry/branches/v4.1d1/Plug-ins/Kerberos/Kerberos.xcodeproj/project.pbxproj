@@ -166,10 +166,12 @@
 		AFD93C250AE5B342007F506F /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AFD93C260AE5B342007F506F /* Build configuration list for PBXProject "Kerberos" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AFD93C230AE5B342007F506F;
 			productRefGroup = AFD93C310AE5B342007F506F /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AFD93C2F0AE5B342007F506F /* Kerberos MachO */,
 			);
@@ -217,7 +219,7 @@
 		AFD93C270AE5B342007F506F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

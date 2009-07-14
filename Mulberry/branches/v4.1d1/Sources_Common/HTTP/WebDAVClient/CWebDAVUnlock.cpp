@@ -35,7 +35,7 @@ CWebDAVUnlock::~CWebDAVUnlock()
 {
 }
 
-void CWebDAVUnlock::WriteHeaderToStream(ostream& os)
+void CWebDAVUnlock::WriteHeaderToStream(std::ostream& os)
 {
 	// Do default
 	CWebDAVRequestResponse::WriteHeaderToStream(os);

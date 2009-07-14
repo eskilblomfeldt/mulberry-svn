@@ -53,7 +53,7 @@ private:
 	CTextFieldX*						mLookup;				// Item to lookup
 	LPopupButton*						mMatch;					// Match choice
 	LPopupButton*						mCriteria;				// Criteria choice
-	vector<void*>						mData;					// data
+	std::vector<void*>						mData;					// data
 	TableIndexT							mLastParent;			// last parent row
 
 public:

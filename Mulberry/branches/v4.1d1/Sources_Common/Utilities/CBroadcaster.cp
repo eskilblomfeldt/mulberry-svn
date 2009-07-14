@@ -34,7 +34,7 @@ CBroadcaster::~CBroadcaster()
 
 void CBroadcaster::Add_Listener(CListener* listener)
 {
-	CListenerList::iterator found = ::find(mListeners.begin(), mListeners.end(), listener);
+	CListenerList::iterator found = std::find(mListeners.begin(), mListeners.end(), listener);
 	if (found == mListeners.end())
 	{
 		mListeners.push_back(listener);
@@ -44,7 +44,7 @@ void CBroadcaster::Add_Listener(CListener* listener)
 
 void CBroadcaster::Remove_Listener(CListener* listener)
 {
-	CListenerList::iterator found = ::find(mListeners.begin(), mListeners.end(), listener);
+	CListenerList::iterator found = std::find(mListeners.begin(), mListeners.end(), listener);
 	if (found != mListeners.end())
 	{
 		mListeners.erase(found);
@@ -59,7 +59,7 @@ void CBroadcaster::Broadcast_Message(long msg, void* param) const
 
 	// Warning: listener may remove itself during broadcast - cannot use iterators
 	size_t old_size = mListeners.size();
-	for(long i = 0; i < old_size; i++)
+	for(size_t i = 0; i < old_size; i++)
 	{
 		if (mListeners.at(i)->Is_Listening())
 			mListeners.at(i)->ListenTo_Message(msg, param);

@@ -67,7 +67,7 @@ public:
     typedef long int_type;
 #endif
 protected:
-     virtual streamsize xsputn (const char_type* s, streamsize n);
+     virtual std::streamsize xsputn (const char_type* s, std::streamsize n);
 #ifdef __MSL__
      virtual int_type overflow (int_type c=traits_type::eof ());
 #else
@@ -102,7 +102,7 @@ inline ctrbuf::int_type ctrbuf::overflow (int_type c)
     return (int_type) c;
 }
 
-inline streamsize ctrbuf::xsputn (const char_type* s, streamsize n)
+inline std::streamsize ctrbuf::xsputn (const char_type* s, std::streamsize n)
 {
 	ctr += n;
 	return n;

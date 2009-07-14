@@ -138,20 +138,20 @@ void CEventPreview::SetEvent(const iCal::CICalendarComponentExpandedShared& comp
 {
 	// Setup a help tag;
 	std::ostrstream ostr;
-	ostr << rsrc::GetString("EventTip::Summary") << comp->GetMaster<iCal::CICalendarVEvent>()->GetSummary() << endl;
+	ostr << rsrc::GetString("EventTip::Summary") << comp->GetMaster<iCal::CICalendarVEvent>()->GetSummary() << std::endl;
 	if (comp->GetInstanceStart().IsDateOnly())
 	{
-		ostr << rsrc::GetString("EventTip::All Day Event") << endl;
+		ostr << rsrc::GetString("EventTip::All Day Event") << std::endl;
 	}
 	else
 	{
-		ostr << rsrc::GetString("EventTip::Starts on") << comp->GetInstanceStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime()) << endl;
-		ostr << rsrc::GetString("EventTip::Ends on") << comp->GetInstanceEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime()) << endl;
+		ostr << rsrc::GetString("EventTip::Starts on") << comp->GetInstanceStart().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime()) << std::endl;
+		ostr << rsrc::GetString("EventTip::Ends on") << comp->GetInstanceEnd().GetAdjustedTime().GetTime(false, !iCal::CICalendarLocale::Use24HourTime()) << std::endl;
 	}
 	if (!comp->GetMaster<iCal::CICalendarVEvent>()->GetLocation().empty())
-		ostr << rsrc::GetString("EventTip::Location") << comp->GetMaster<iCal::CICalendarVEvent>()->GetLocation() << endl;
+		ostr << rsrc::GetString("EventTip::Location") << comp->GetMaster<iCal::CICalendarVEvent>()->GetLocation() << std::endl;
 	if (!comp->GetMaster<iCal::CICalendarVEvent>()->GetDescription().empty())
-		ostr << rsrc::GetString("EventTip::Description") << comp->GetMaster<iCal::CICalendarVEvent>()->GetDescription() << endl;
+		ostr << rsrc::GetString("EventTip::Description") << comp->GetMaster<iCal::CICalendarVEvent>()->GetDescription() << std::endl;
 	
 	// Add calendar name if more than one calendar in use
 	const iCal::CICalendarList& cals = calstore::CCalendarStoreManager::sCalendarStoreManager->GetActiveCalendars();
@@ -159,10 +159,10 @@ void CEventPreview::SetEvent(const iCal::CICalendarComponentExpandedShared& comp
 	{
 		iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(comp->GetMaster<iCal::CICalendarVEvent>()->GetCalendar());
 		if (cal != NULL)
-			ostr << endl << rsrc::GetString("EventTip::Calendar") << cal->GetName() << endl;
+			ostr << std::endl << rsrc::GetString("EventTip::Calendar") << cal->GetName() << std::endl;
 	}
 
-	ostr << ends;
+	ostr << std::ends;
 	cdstring temp;
 	temp.steal(ostr.str());
 	
@@ -173,15 +173,15 @@ void CEventPreview::SetToDo(const iCal::CICalendarComponentExpandedShared& comp)
 {
 	// Setup a help tag;
 	std::ostrstream ostr;
-	ostr << rsrc::GetString("ToDoTip::Summary") << comp->GetMaster<iCal::CICalendarVToDo>()->GetSummary() << endl;
+	ostr << rsrc::GetString("ToDoTip::Summary") << comp->GetMaster<iCal::CICalendarVToDo>()->GetSummary() << std::endl;
 
 	if (!comp->GetMaster<iCal::CICalendarVToDo>()->HasEnd())
 	{
-		ostr << rsrc::GetString("ToDoTip::No due date") << endl;
+		ostr << rsrc::GetString("ToDoTip::No due date") << std::endl;
 	}
 	else
 	{
-		ostr << rsrc::GetString("ToDoTip::Due on") << comp->GetInstanceEnd().GetAdjustedTime().GetLocaleDate(iCal::CICalendarDateTime::eAbbrevDate) << endl;
+		ostr << rsrc::GetString("ToDoTip::Due on") << comp->GetInstanceEnd().GetAdjustedTime().GetLocaleDate(iCal::CICalendarDateTime::eAbbrevDate) << std::endl;
 	}
 
 	// Add calendar name if more than one calendar in use
@@ -190,10 +190,10 @@ void CEventPreview::SetToDo(const iCal::CICalendarComponentExpandedShared& comp)
 	{
 		iCal::CICalendar* cal = iCal::CICalendar::GetICalendar( comp->GetMaster<iCal::CICalendarVToDo>()->GetCalendar());
 		if (cal != NULL)
-			ostr << endl << rsrc::GetString("ToDoTip::Calendar") << cal->GetName() << endl;
+			ostr << std::endl << rsrc::GetString("ToDoTip::Calendar") << cal->GetName() << std::endl;
 	}
 
-	ostr << ends;
+	ostr << std::ends;
 	cdstring temp;
 	temp.steal(ostr.str());
 	

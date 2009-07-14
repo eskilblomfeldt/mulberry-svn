@@ -50,7 +50,7 @@ void CCardDAVQueryReport::InitRequestData(const cdstrvect& search_props, const c
 	// Write XML info to a string
 	std::ostrstream os;
 	GenerateXML(os, search_props, search_text, match_type);
-	os << ends;
+	os << std::ends;
 	
 	mRequestData = new CHTTPInputDataString(os.str(), "text/xml; charset=utf-8");
 }

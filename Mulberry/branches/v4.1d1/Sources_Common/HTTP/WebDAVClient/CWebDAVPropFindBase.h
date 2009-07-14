@@ -28,8 +28,6 @@
 
 #include <vector>
 
-using namespace std;
-
 using namespace http; 
 
 namespace http {
@@ -50,7 +48,7 @@ public:
 protected:
 	EWebDAVDepth	mDepth;
 
-	virtual void WriteHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
 };
 
 }	// namespace webdav

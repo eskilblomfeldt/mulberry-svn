@@ -136,13 +136,13 @@ void CPrefsEditMappings::DoNewMapping()
 	{
 		// Add it and then sort
 		(*mMappings).push_back(new_map);
-		::sort(mMappings->begin(), mMappings->end());
+		std::sort(mMappings->begin(), mMappings->end());
 
 		// Reset table
 		mItsTable->ResetTable();
 
 		// Find position
-		CMIMEMapVector::const_iterator found = ::find(mMappings->begin(), mMappings->end(), new_map);
+		CMIMEMapVector::const_iterator found = std::find(mMappings->begin(), mMappings->end(), new_map);
 		if (found != mMappings->end())
 		{
 			// Select and scroll new item
@@ -163,13 +163,13 @@ void CPrefsEditMappings::DoChangeMapping()
 	if (CPrefsEditMappingDialog::PoseDialog(mapping))
 	{
 		CMIMEMap temp(mapping);
-		::sort(mMappings->begin(), mMappings->end());
+		std::sort(mMappings->begin(), mMappings->end());
 
 		// Reset table
 		mItsTable->ResetTable();
 
 		// Find position
-		CMIMEMapVector::const_iterator found = ::find(mMappings->begin(), mMappings->end(), temp);
+		CMIMEMapVector::const_iterator found = std::find(mMappings->begin(), mMappings->end(), temp);
 		if (found != mMappings->end())
 		{
 			// Select and scroll new item

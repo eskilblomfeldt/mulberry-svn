@@ -97,14 +97,14 @@ void CMessageComparator::SortMessageList(CMessageList* list)
 {
 	sOrder = mOrder;
 
-	::sort(list->begin(), list->end(), GetComparator());
+	std::sort(list->begin(), list->end(), GetComparator());
 }
 
 CMessageList::iterator CMessageComparator::LowerBound(CMessageList* list, const CMessage* aMsg)
 {
 	sOrder = mOrder;
 
-	return ::lower_bound(list->begin(), list->end(), const_cast<CMessage*>(aMsg), GetComparator());
+	return std::lower_bound(list->begin(), list->end(), const_cast<CMessage*>(aMsg), GetComparator());
 }
 
 bool CMessageComparator::TestCachedState(CMessage* inMsg1, CMessage* inMsg2, bool& result)
@@ -571,7 +571,7 @@ void CMessageThreadComparator::SortMessageList(CMessageList* list)
 	sOrder = 1;
 
 	// Sort by date first (always do in ascending order)
-	::sort(list->begin(), list->end(), CMessageDateComparator::GetDateComparator());
+	std::sort(list->begin(), list->end(), CMessageDateComparator::GetDateComparator());
 
 	// Only if finite size
 	if (list->size())
@@ -596,7 +596,7 @@ void CMessageThreadComparator::SortMessageList(CMessageList* list)
 
 			// Use partition
 			iter++;
-			iter = ::stable_partition(iter, list->end(), &PartitionFN);
+			iter = std::stable_partition(iter, list->end(), &PartitionFN);
 		}
 	}
 	

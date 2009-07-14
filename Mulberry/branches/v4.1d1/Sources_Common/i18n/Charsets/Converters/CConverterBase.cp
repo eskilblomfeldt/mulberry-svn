@@ -24,7 +24,7 @@ using namespace i18n;
 char CConverterBase::undefined_charmap = '?';		// Undefined mapping character
 wchar_t CConverterBase::undefined_wcharmap = '\0?';	// Undefined mapping character
 
-void CConverterBase::ToUnicode(const char* str, size_t len, ostream& wout)
+void CConverterBase::ToUnicode(const char* str, size_t len, std::ostream& wout)
 {
 	// Must have valid input
 	if (!str)
@@ -46,7 +46,7 @@ void CConverterBase::ToUnicode(const char* str, size_t len, ostream& wout)
 	}
 }
 
-void CConverterBase::FromUnicode(const wchar_t* wstr, size_t wlen, ostream& out)
+void CConverterBase::FromUnicode(const wchar_t* wstr, size_t wlen, std::ostream& out)
 {
 	// Must have valid input
 	if (!wstr)
@@ -70,7 +70,7 @@ void CConverterBase::FromUnicode(const wchar_t* wstr, size_t wlen, ostream& out)
 	finish_w_2_c(out);
 }
 
-void CConverterBase::ToUTF16(const char* str, size_t len, ostream& wout)
+void CConverterBase::ToUTF16(const char* str, size_t len, std::ostream& wout)
 {
 	// Must have valid input
 	if (!str)
@@ -131,7 +131,7 @@ void CConverterBase::ToUTF16(const char* str, size_t len, ostream& wout)
 	}
 }
 
-void CConverterBase::FromUTF16(const unsigned short* str, size_t ulen, ostream& out)
+void CConverterBase::FromUTF16(const unsigned short* str, size_t ulen, std::ostream& out)
 {
 	// Must have valid input
 	if (!str)
@@ -189,7 +189,7 @@ void CConverterBase::FromUTF16(const unsigned short* str, size_t ulen, ostream& 
 	}
 }
 
-void CConverterBase::ToUTF8(const char* str, size_t len, ostream& out)
+void CConverterBase::ToUTF8(const char* str, size_t len, std::ostream& out)
 {
 	// Must have valid input
 	if (!str)
@@ -231,7 +231,7 @@ void CConverterBase::ToUTF8(const char* str, size_t len, ostream& out)
 	}
 }
 
-void CConverterBase::FromUTF8(const char* str, size_t len, ostream& out)
+void CConverterBase::FromUTF8(const char* str, size_t len, std::ostream& out)
 {
 	// Must have valid input
 	if (!str)
@@ -285,10 +285,10 @@ void CConverterBase::FromUTF8(const char* str, size_t len, ostream& out)
 	}
 }
 
-void CConverterBase::init_w_2_c(ostream& out)
+void CConverterBase::init_w_2_c(std::ostream& out)
 {
 }
 
-void CConverterBase::finish_w_2_c(ostream& out)
+void CConverterBase::finish_w_2_c(std::ostream& out)
 {
 }

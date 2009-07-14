@@ -66,7 +66,7 @@ void vcardstore::MapFromVCard(CAddressBook* adbk, const vCard::CVCardVCard& vcar
 void vcardstore::MapFromVCard(CAddressList* addrs, const vCard::CVCardVCard& vcard)
 {
 	// Map to an address
-	auto_ptr<CAdbkAddress> addr(new CAdbkAddress());
+	std::auto_ptr<CAdbkAddress> addr(new CAdbkAddress());
 
 	// Get entry (the component's map key)
 	addr->SetEntry(vcard.GetMapKey());

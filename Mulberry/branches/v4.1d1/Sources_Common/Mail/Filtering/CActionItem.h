@@ -446,7 +446,7 @@ public:
 
 	// SIEVE items
 	void	GetSIEVEExtensions(CFilterProtocol::EExtension& ext) const;
-	void	GenerateSIEVEScript(ostream& out) const;
+	void	GenerateSIEVEScript(std::ostream& out) const;
 
 	// Read/write prefs
 	cdstring GetInfo(void) const;														// Get text expansion for prefs

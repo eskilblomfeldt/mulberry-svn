@@ -53,7 +53,7 @@ private:
 	CAddressBookManager*	mManager;				// Manager controlling window
 	CAdbkManagerView*		mTableView;				// Owner view
 	bool					mListChanging;			// In the process of changing the list
-	vector<CAddressBook*>	mData;					// data
+	std::vector<CAddressBook*>	mData;					// data
 	short					mHierarchyCol;			// Column containing names
 	bool					mDropFirst;				// Indicates first item in drop
 	bool					mDropSort;				// Drop with sort

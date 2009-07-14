@@ -144,7 +144,7 @@ CLetterWindow::~CLetterWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CLetterWindowList>::lock _lock(sLetterWindows);
-		CLetterWindowList::iterator found = ::find(sLetterWindows->begin(), sLetterWindows->end(), this);
+		CLetterWindowList::iterator found = std::find(sLetterWindows->begin(), sLetterWindows->end(), this);
 		if (found != sLetterWindows->end())
 			sLetterWindows->erase(found);
 		if (sLetterWindows->size() <= 1)
@@ -1211,7 +1211,7 @@ void CLetterWindow::SetEnvelope(Handle theText, long length)
 	data.ReadBlock(&copy_length, sizeof(long));
 	if (copy_length)
 	{
-		auto_ptr<char> txt(new char[copy_length]);
+		std::auto_ptr<char> txt(new char[copy_length]);
 		data.ReadBlock(txt.get(), copy_length);
 		mToEdit->SetText(txt.get(), copy_length);
 	}
@@ -1220,7 +1220,7 @@ void CLetterWindow::SetEnvelope(Handle theText, long length)
 	data.ReadBlock(&copy_length, sizeof(long));
 	if (copy_length)
 	{
-		auto_ptr<char> txt(new char[copy_length]);
+		std::auto_ptr<char> txt(new char[copy_length]);
 		data.ReadBlock(txt.get(), copy_length);
 		mCCEdit->SetText(txt.get(), copy_length);
 		if (!mHeaderState.mCcVisible)
@@ -1231,7 +1231,7 @@ void CLetterWindow::SetEnvelope(Handle theText, long length)
 	data.ReadBlock(&copy_length, sizeof(long));
 	if (copy_length)
 	{
-		auto_ptr<char> txt(new char[copy_length]);
+		std::auto_ptr<char> txt(new char[copy_length]);
 		data.GetBytes(txt.get(), copy_length);
 		mBCCEdit->SetText(txt.get(), copy_length);
 		if (!mHeaderState.mBccVisible)
@@ -1242,7 +1242,7 @@ void CLetterWindow::SetEnvelope(Handle theText, long length)
 	data.ReadBlock(&copy_length, sizeof(long));
 	if (copy_length)
 	{
-		auto_ptr<char> txt(new char[copy_length + 1]);
+		std::auto_ptr<char> txt(new char[copy_length + 1]);
 		data.ReadBlock(txt.get(), copy_length);
 		txt.get()[copy_length] = '\0';
 		mSubjectField->SetText(txt.get());
@@ -1255,7 +1255,7 @@ void CLetterWindow::SetEnvelope(Handle theText, long length)
 		data.ReadBlock(&copy_length, sizeof(long));
 		if (copy_length)
 		{
-			auto_ptr<char> txt(new char[copy_length + 1]);
+			std::auto_ptr<char> txt(new char[copy_length + 1]);
 			data.ReadBlock(txt.get(), copy_length);
 			txt.get()[copy_length] = '\0';
 			mBody->SetContentSubtype(txt.get());
@@ -1445,9 +1445,9 @@ void CLetterWindow::IncludeMessage(CMessage* theMsg, bool forward, bool header)
 				}
 				else
 				{
-					ostrstream sout;
+					std::ostrstream sout;
 					i18n::CCharsetManager::sCharsetManager.ToUTF8(charset, msg_txt, ::strlen(msg_txt), sout);
-					sout << ends;
+					sout << std::ends;
 					utf8.steal(sout.str());
 				}
 			}
@@ -1492,13 +1492,13 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			break;
 		case eContentSubEnriched:
 		{
-			auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
+			std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
 			theTxt += converted.get();
 			break;
 		}
 		case eContentSubHTML:
 		{
-			auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
+			std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
 			theTxt += converted.get();
 			break;
 		}
@@ -1519,13 +1519,13 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 				break;
 			case eContentSubEnriched:
 			{
-				auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
+				std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
 				theTxt += converted.get();
 				break;
 			}
 			case eContentSubHTML:
 			{
-				auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
+				std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
 				theTxt += converted.get();
 				break;
 			}
@@ -1562,19 +1562,19 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		{
 		case eContentSubPlain:
 		{
-			auto_ptr<const char> quoted(QuoteText(msg_hdr, forward, true));
+			std::auto_ptr<const char> quoted(QuoteText(msg_hdr, forward, true));
 			theTxt += quoted.get();
 			break;
 		}
 		case eContentSubEnriched:
 		{
-			auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(msg_hdr));
+			std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(msg_hdr));
 			theTxt += converted.get();
 			break;
 		}
 		case eContentSubHTML:
 		{
-			auto_ptr<const char> converted(CHTMLUtils::ToHTML(msg_hdr));
+			std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(msg_hdr));
 			theTxt += converted.get();
 			break;
 		}
@@ -1606,7 +1606,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		cdstring text_utf8 = mText->GetParsedText().ToUTF8();
 		
 		// Quote it and add to the text being added to the draft
-		auto_ptr<const char> quoted(QuoteText(text_utf8, forward, false, is_flowed));
+		std::auto_ptr<const char> quoted(QuoteText(text_utf8, forward, false, is_flowed));
 		theTxt += quoted.get();
 		break;
 	}
@@ -1617,14 +1617,14 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		case eContentSubPlain:
 		{
 			// Must wrap if flowed
-			auto_ptr<const char> wrapped;
+			std::auto_ptr<const char> wrapped;
 			const char* txt = msg_txt;
 			if (is_flowed)
 			{
 				wrapped.reset(CTextEngine::WrapLines(msg_txt, ::strlen(msg_txt), CRFC822::GetWrapLength(), false));
 				txt = wrapped.get();
 			}
-			auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(txt));
+			std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(txt));
 			theTxt += converted.get();
 			break;
 		}
@@ -1635,7 +1635,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		}
 		case eContentSubHTML:
 		{
-			auto_ptr<const char> converted(CHTMLUtils::ConvertToEnriched(msg_txt));
+			std::auto_ptr<const char> converted(CHTMLUtils::ConvertToEnriched(msg_txt));
 			theTxt += converted.get();
 			break;
 		}
@@ -1649,20 +1649,20 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		case eContentSubPlain:
 		{
 			// Must wrap if flowed
-			auto_ptr<const char> wrapped;
+			std::auto_ptr<const char> wrapped;
 			const char* txt = msg_txt;
 			if (is_flowed)
 			{
 				wrapped.reset(CTextEngine::WrapLines(msg_txt, ::strlen(msg_txt), CRFC822::GetWrapLength(), false));
 				txt = wrapped.get();
 			}
-			auto_ptr<const char> converted(CHTMLUtils::ToHTML(txt));
+			std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(txt));
 			theTxt += converted.get();
 			break;
 		}
 		case eContentSubEnriched:
 		{
-			auto_ptr<const char> converted(CEnrichedUtils::ConvertToHTML(msg_txt));
+			std::auto_ptr<const char> converted(CEnrichedUtils::ConvertToHTML(msg_txt));
 			theTxt += converted.get();
 			break;
 		}
@@ -1709,13 +1709,13 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			break;
 		case eContentSubEnriched:
 		{
-			auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
+			std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
 			theTxt += converted.get();
 			break;
 		}
 		case eContentSubHTML:
 		{
-			auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
+			std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
 			theTxt += converted.get();
 			break;
 		}
@@ -1737,13 +1737,13 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 				break;
 			case eContentSubEnriched:
 			{
-				auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
+				std::auto_ptr<const char> converted(CEnrichedUtils::ToEnriched(convertTxt));
 				theTxt += converted.get();
 				break;
 			}
 			case eContentSubHTML:
 			{
-				auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
+				std::auto_ptr<const char> converted(CHTMLUtils::ToHTML(convertTxt));
 				theTxt += converted.get();
 				break;
 			}
@@ -1852,7 +1852,7 @@ void CLetterWindow::IncludeText(const char* theText, bool forward, bool adding)
 		if (!adding)
 			theTxt += CR;
 
-		auto_ptr<const char> quoted(QuoteText(theText, forward));
+		std::auto_ptr<const char> quoted(QuoteText(theText, forward));
 		theTxt += quoted.get();
 
 		// Finish with CR
@@ -1994,12 +1994,12 @@ void CLetterWindow::SetCurrentPart(CAttachment* part)
 
 			// Do charset conversion to utf16
 			cdustring data_utf16;
-			ostrstream sout;
+			std::ostrstream sout;
 			if ((data != NULL))
 			{
 				if ((charset != i18n::eUTF16) && i18n::CCharsetManager::sCharsetManager.ToUTF16(charset, data, ::strlen(data), sout))
 				{
-					sout << ends << ends;
+					sout << std::ends << std::ends;
 					data_utf16.steal(reinterpret_cast<unichar_t*>(sout.str()));
 				}
 				else
@@ -2831,9 +2831,9 @@ void CLetterWindow::ReceiveDragItem(
 					}
 					else
 					{
-						ostrstream sout;
+						std::ostrstream sout;
 						i18n::CCharsetManager::sCharsetManager.ToUTF8(charset, msg_txt, ::strlen(msg_txt), sout);
-						sout << ends;
+						sout << std::ends;
 						utf8.steal(sout.str());
 					}
 				}

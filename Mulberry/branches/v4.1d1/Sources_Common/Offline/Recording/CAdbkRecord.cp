@@ -143,11 +143,11 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 {
 	// Check for forced logging
 	bool log_created = false;
-	auto_ptr<cdofstream> fout;
+	std::auto_ptr<cdofstream> fout;
 	if (!mLog && CLog::AllowPlaybackLog())
 	{
 		cdstring temp_name = mDescriptor + ".log";
-		fout.reset(new cdofstream(temp_name, ios_base::out | ios_base::trunc | ios_base::binary));
+		fout.reset(new cdofstream(temp_name, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary));
 		SetLog(fout.get());
 		log_created = true;
 	}
@@ -161,13 +161,13 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 		if (mLog)
 		{
 			*mLog << os_endl << os_endl << "----" << os_endl;
-			*mLog << "Starting Addressbook Playback: " << CRFC822::GetRFC822Date() << os_endl << flush;
+			*mLog << "Starting Addressbook Playback: " << CRFC822::GetRFC822Date() << os_endl << std::flush;
 		}
 
 		// Read in the entire journal
 		Open();
 		if (mLog)
-			*mLog << "Opened Playback log: " << mDescriptor << os_endl << flush;
+			*mLog << "Opened Playback log: " << mDescriptor << os_endl << std::flush;
 
 		// Compact the playback to minimise operations
 		CompactPlayback();
@@ -179,7 +179,7 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 			remote->Logon();
 
 			if (mLog)
-				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << flush;
+				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << std::flush;
 		}
 
 		// Cache useful items
@@ -206,7 +206,7 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 
 	// Close remote connection
 	if (remote->IsOpen() && mLog)
-		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << flush;
+		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << std::flush;
 	remote->Close();
 
 	// Clear it out
@@ -221,7 +221,7 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 		::remove_utf8(mDescriptor);
 
 		if (mLog)
-			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << std::flush;
 	}
 	else
 	{
@@ -233,26 +233,26 @@ bool CAdbkRecord::Playback(CAdbkProtocol* remote, CAdbkProtocol* local)
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		StCreatorType file(cMulberryCreator, cMailboxRecordType);
 #endif
-		mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+		mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
 
 		// Add next id tag at start
-		mStream.seekp(0, ios_base::beg);
+		mStream.seekp(0, std::ios_base::beg);
 		mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 		// Write out items
 		for(const_iterator iter = begin(); iter != end(); iter++)
 			(*iter)->WriteToStream(mStream);
 
-		mStream << flush;
+		mStream << std::flush;
 		
 		Close();
 
 		if (mLog)
-			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << std::flush;
 	}
 
 	if (mLog)
-		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << flush;
+		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << std::flush;
 
 	if (log_created)
 		SetLog(NULL);
@@ -317,20 +317,20 @@ void CAdbkRecord::Playback_Create(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
 
 		// Create on server
 		mPlayRemote->CreateAdbk(adbk.get());
 
 		if (mLog)
-			*mLog << "  Create Addressbook: " << action.GetName() << " succeeded" << os_endl << flush;
+			*mLog << "  Create Addressbook: " << action.GetName() << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Create Addressbook: " << action.GetName() << " failed" << os_endl << flush;
+			*mLog << "  Create Addressbook: " << action.GetName() << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -342,20 +342,20 @@ void CAdbkRecord::Playback_Delete(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetName()));
 
 		// Create on server
 		mPlayRemote->DeleteAdbk(adbk.get());
 
 		if (mLog)
-			*mLog << "  Delete Addressbook: " << action.GetName() << " succeeded" << os_endl << flush;
+			*mLog << "  Delete Addressbook: " << action.GetName() << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Delete Addressbook: " << action.GetName() << " failed" << os_endl << flush;
+			*mLog << "  Delete Addressbook: " << action.GetName() << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -364,8 +364,8 @@ void CAdbkRecord::Playback_Delete(CAdbkAction& action)
 
 void CAdbkRecord::Playback_Change(CAdbkAction& action)
 {
-	auto_ptr<CAddressBook> node;
-	auto_ptr<vCard::CVCardAddressBook> adbk;
+	std::auto_ptr<CAddressBook> node;
+	std::auto_ptr<vCard::CVCardAddressBook> adbk;
 
 	try
 	{
@@ -392,14 +392,14 @@ void CAdbkRecord::Playback_Change(CAdbkAction& action)
 		node->SetVCardAdbk(NULL);
 
 		if (mLog)
-			*mLog << "  Change Address Book: " << action.GetName() << " succeeded" << os_endl << flush;
+			*mLog << "  Change Address Book: " << action.GetName() << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Change Address Book: " << action.GetName() << " failed" << os_endl << flush;
+			*mLog << "  Change Address Book: " << action.GetName() << " failed" << os_endl << std::flush;
 		
 		// Clean-up
 		if (node.get() != NULL)
@@ -415,14 +415,14 @@ void CAdbkRecord::Playback_Rename(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetNamePair().first));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetNamePair().first));
 
 		// Create on server
 		mPlayRemote->RenameAdbk(adbk.get(), action.GetNamePair().second);
 
 		if (mLog)
 			*mLog << "  Rename Addressbook from: " << action.GetNamePair().first <<
-					" to: " << action.GetNamePair().second << " succeeded" << os_endl << flush;
+					" to: " << action.GetNamePair().second << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
@@ -430,7 +430,7 @@ void CAdbkRecord::Playback_Rename(CAdbkAction& action)
 
 		if (mLog)
 			*mLog << "  Rename Addressbook from: " << action.GetNamePair().first <<
-					" to: " << action.GetNamePair().second << " failed" << os_endl << flush;
+					" to: " << action.GetNamePair().second << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -454,7 +454,7 @@ void CAdbkRecord::Playback_StoreChangeAddress(CAdbkAction& action, bool store)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Get address from local object
 		local = mPlayLocal->GetNode(action.GetList().front());
@@ -499,7 +499,7 @@ void CAdbkRecord::Playback_StoreChangeAddress(CAdbkAction& action, bool store)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -519,7 +519,7 @@ void CAdbkRecord::Playback_StoreChangeAddress(CAdbkAction& action, bool store)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << std::flush;
 		}
 		
 		CLOG_LOGRETHROW;
@@ -532,7 +532,7 @@ void CAdbkRecord::Playback_DeleteAddress(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Create dummy addresses for delete
 		CAddressList addrs;
@@ -551,7 +551,7 @@ void CAdbkRecord::Playback_DeleteAddress(CAdbkAction& action)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -567,7 +567,7 @@ void CAdbkRecord::Playback_DeleteAddress(CAdbkAction& action)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << std::flush;
 		}
 		
 		CLOG_LOGRETHROW;
@@ -592,7 +592,7 @@ void CAdbkRecord::Playback_StoreChangeGroup(CAdbkAction& action, bool store)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Get address from local object
 		local = mPlayLocal->GetNode(action.GetList().front());
@@ -637,7 +637,7 @@ void CAdbkRecord::Playback_StoreChangeGroup(CAdbkAction& action, bool store)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -657,7 +657,7 @@ void CAdbkRecord::Playback_StoreChangeGroup(CAdbkAction& action, bool store)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << std::flush;
 		}
 		
 		CLOG_LOGRETHROW;
@@ -670,7 +670,7 @@ void CAdbkRecord::Playback_DeleteGroup(CAdbkAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
+		std::auto_ptr<CAddressBook> adbk(new CAddressBook(mPlayRemote, mPlayRemote->GetStoreRoot(), true, false, action.GetList().front()));
 
 		// Create dummy groups for delete
 		CGroupList grps;
@@ -692,7 +692,7 @@ void CAdbkRecord::Playback_DeleteGroup(CAdbkAction& action)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -708,7 +708,7 @@ void CAdbkRecord::Playback_DeleteGroup(CAdbkAction& action)
 					*mLog << ", ";
 				*mLog << *iter;
 			}
-			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << flush;
+			*mLog <<" in Addressbook: " << action.GetList().front() << " failed" << os_endl << std::flush;
 		}
 		
 		CLOG_LOGRETHROW;

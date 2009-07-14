@@ -151,7 +151,7 @@ protected:
 		cdstring mHash;
 		cdstring mFingerprint;
 	};
-	typedef vector<SCertificateLookup> SLookupList;
+	typedef std::vector<SCertificateLookup> SLookupList;
 
 	struct SData
 	{
@@ -161,7 +161,7 @@ protected:
 		long			mErrno;
 		bool			mDecryptPassphrase;
 		bool			mDidSig;
-		vector<int>		mCertErrors;
+		std::vector<int>		mCertErrors;
 	};
 	SData* mData;
 	CCertificateManagerCOM* mCertificateManagerCOM;

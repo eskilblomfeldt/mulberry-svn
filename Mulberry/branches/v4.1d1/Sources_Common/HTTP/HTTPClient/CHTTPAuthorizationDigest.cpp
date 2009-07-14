@@ -33,7 +33,7 @@
 
 using namespace http; 
 
-void CHTTPAuthorizationDigest::GenerateAuthorization(ostream& os, const CHTTPRequestResponse* request) const
+void CHTTPAuthorizationDigest::GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const
 {
 	// Generate response
 	const_cast<CHTTPAuthorizationDigest*>(this)->GenerateResponse(request);
@@ -146,7 +146,7 @@ void _H(unsigned char* digest, char* s, unsigned long s_len)
 void _KD(unsigned char*, char*, char*);
 void _KD(unsigned char* digest, char* k, char* s)
 {
-	auto_ptr<char> p(new char[::strlen(k) + ::strlen(s) + 2]);
+	std::auto_ptr<char> p(new char[::strlen(k) + ::strlen(s) + 2]);
 	::strcpy(p.get(), k);
 	::strcat(p.get(), ":");
 	::strcat(p.get(), s);

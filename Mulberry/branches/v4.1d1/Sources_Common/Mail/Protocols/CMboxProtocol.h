@@ -39,7 +39,7 @@
 // Consts
 
 // Types
-typedef vector<CMboxList*> CHierarchies;
+typedef std::vector<CMboxList*> CHierarchies;
 
 // Classes
 class CACL;

@@ -40,7 +40,7 @@ class CToolbarView;
 class	CServerWindow : public CTableViewWindow
 {
 public:
-	typedef vector<CServerWindow*>	CServerWindowList;
+	typedef std::vector<CServerWindow*>	CServerWindowList;
 	static cdmutexprotect<CServerWindowList> sServerWindows;	// List of windows (protected for multi-thread access)
 
 	enum { class_ID = 'SeWi' };

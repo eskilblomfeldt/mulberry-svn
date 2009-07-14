@@ -35,7 +35,7 @@ CActionRecorder::CActionRecorder()
 CActionRecorder::~CActionRecorder()
 {
 	if (mLog)
-		*mLog << flush;
+		*mLog << std::flush;
 	mLog = NULL;
 }
 
@@ -48,7 +48,7 @@ unsigned long CActionRecorder::GetNextID()
 	mNextID++;
 
 	// Write next ID
-	mStream.seekp(0, ios_base::beg);
+	mStream.seekp(0, std::ios_base::beg);
 	mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 	return mNextID - 1;
@@ -70,12 +70,12 @@ void CActionRecorder::Open()
 #endif
 
 	// Open the file stream and read in any existing items
-	mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::binary);
+	mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 	if (mStream.fail())
-		mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+		mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
 
 	// Move to beginning of stream
-	mStream.seekg(0, ios_base::beg);
+	mStream.seekg(0, std::ios_base::beg);
 
 	// See if empty file
 	if ((mStream.peek() == EOF) || mStream.fail())
@@ -84,11 +84,11 @@ void CActionRecorder::Open()
 		mStream.clear();
 
 		// Write next ID at start of file
-		mStream.seekp(0, ios_base::beg);
+		mStream.seekp(0, std::ios_base::beg);
 		mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 		// Go back to beginning for input
-		mStream.seekg(0, ios_base::beg);
+		mStream.seekg(0, std::ios_base::beg);
 	}
 
 	// Get next ID
@@ -104,7 +104,7 @@ void CActionRecorder::Close()
 	cdmutex::lock_cdmutex _lock(_mutex);
 
 	// Write next ID
-	mStream.seekp(0, ios_base::beg);
+	mStream.seekp(0, std::ios_base::beg);
 	mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 	mStream.close();
@@ -125,13 +125,13 @@ void CActionRecorder::StopRecording()
 	if (mStartRecord != size())
 	{
 		// Always seek to end of file
-		mStream.seekp(0, ios_base::end);
+		mStream.seekp(0, std::ios_base::end);
 
 		// Write out new items
 		for(const_iterator iter = begin() + mStartRecord; iter != end(); iter++)
 			(*iter)->WriteToStream(mStream);
 
-		mStream << flush;
+		mStream << std::flush;
 	}
 
 	mCurrentID = 0;
@@ -140,14 +140,14 @@ void CActionRecorder::StopRecording()
 	_mutex.release();
 }
 
-void CActionRecorder::WriteItemsToStream(ostream& out, bool text) const
+void CActionRecorder::WriteItemsToStream(std::ostream& out, bool text) const
 {
 	// Write each action to stream
 	for(const_iterator iter = begin(); iter != end(); iter++)
 		(*iter)->WriteToStream(out, text);
 }
 
-void CActionRecorder::ReadItemsFromStream(istream& in, unsigned long vers)
+void CActionRecorder::ReadItemsFromStream(std::istream& in, unsigned long vers)
 {
 	clear();
 

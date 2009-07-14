@@ -146,10 +146,10 @@ void CXStringResources::LoadStringsFile(const cdstring& file_path)
 				
 				// Now look at each child
 				cdstrvect items;
-				for(XMLNodeList::const_iterator iter = child->Children().begin(); iter != child->Children().end(); iter++)
+				for(XMLNodeList::const_iterator iter2 = child->Children().begin(); iter2 != child->Children().end(); iter2++)
 				{
 					// Check child name
-					XMLNode* item = *iter;
+					XMLNode* item = *iter2;
 					if (item->Name() == "string")
 					{
 						// Make sure c-escapes are expanded and that line ends match the OS

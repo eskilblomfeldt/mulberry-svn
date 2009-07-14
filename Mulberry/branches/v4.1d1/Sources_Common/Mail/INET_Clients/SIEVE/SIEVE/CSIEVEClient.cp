@@ -536,8 +536,8 @@ void CSIEVEClient::SIEVEParseResponseCode(char** txt, CINETClientResponse* respo
 void CSIEVEClient::SIEVEParseCAPABILITYResponse(char** txt, CINETClientResponse* response)
 {
 	// Possibly two strings
-	auto_ptr<char> str1(INETParseString(txt));
-	auto_ptr<char> str2(INETParseString(txt));
+	std::auto_ptr<char> str1(INETParseString(txt));
+	std::auto_ptr<char> str2(INETParseString(txt));
 	
 	// Add to capability map
 	mCapabilities.insert(cdstrmap::value_type(cdstring(str1.get()), cdstring(str2.get())));
@@ -547,8 +547,8 @@ void CSIEVEClient::SIEVEParseCAPABILITYResponse(char** txt, CINETClientResponse*
 void CSIEVEClient::SIEVEParseLISTSCRIPTSResponse(char** txt, CINETClientResponse* response)
 {
 	// Possibly two strings
-	auto_ptr<char> str1(INETParseString(txt));
-	auto_ptr<char> str2(INETParseString(txt));
+	std::auto_ptr<char> str1(INETParseString(txt));
+	std::auto_ptr<char> str2(INETParseString(txt));
 	
 	// Add first string to list results
 	if (mStringListResult)
@@ -563,7 +563,7 @@ void CSIEVEClient::SIEVEParseLISTSCRIPTSResponse(char** txt, CINETClientResponse
 void CSIEVEClient::SIEVEParseGETSCRIPTResponse(char** txt, CINETClientResponse* response)
 {
 	// Possibly two strings
-	auto_ptr<char> str1(INETParseString(txt));
+	std::auto_ptr<char> str1(INETParseString(txt));
 	
 	// Add script result
 	if (str1.get() && mStringResult)

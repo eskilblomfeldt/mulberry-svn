@@ -33,8 +33,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <istream.h>
-#include <ostream.h>
+#include <istream>
+#include <ostream>
 
 // __________________________________________________________________________________________________
 // S T R U C T __ C M I M E C O N T E N T
@@ -928,7 +928,7 @@ void CMIMEContent::SetDefaultEncoding()
 }
 
 
-void CMIMEContent::WriteCacheToStream(ostream& out) const
+void CMIMEContent::WriteCacheToStream(std::ostream& out) const
 {
 
 	out << GetContentTypeText() << cd_endl;
@@ -955,7 +955,7 @@ void CMIMEContent::WriteCacheToStream(ostream& out) const
 	}
 }
 
-void CMIMEContent::ReadCacheFromStream(istream& in, unsigned long vers)
+void CMIMEContent::ReadCacheFromStream(std::istream& in, unsigned long vers)
 {
 	cdstring temp;
 	getline(in, temp);

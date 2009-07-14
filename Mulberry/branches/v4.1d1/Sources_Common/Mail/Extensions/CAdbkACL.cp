@@ -234,7 +234,7 @@ void CAdbkACL::ParsePrivilege(const xmllib::XMLNode* parent, bool add)
 void CAdbkACL::MapRight(const cdstring& right, bool add)
 {
 	// Cache the mappings for this type of client
-	typedef map<cdstring, unsigned long> CMapRights;
+	typedef std::map<cdstring, unsigned long> CMapRights;
 	static CMapRights sMapRights;
 	
 	if (sMapRights.empty())
@@ -327,7 +327,7 @@ void CAdbkACL::GenerateACE(xmllib::XMLDocument* xmldoc, xmllib::XMLNode* aclnode
 	{
 		// <DAV:property> element - the UID is the property element name
 		xmllib::XMLNode* property = new xmllib::XMLNode(xmldoc, principal, http::webdav::cProperty_property);
-		xmllib::XMLNode* propname = new xmllib::XMLNode(xmldoc, property, GetPropName());
+		/* xmllib::XMLNode* propname = */ new xmllib::XMLNode(xmldoc, property, GetPropName());
 		break;
 	}
 	case CAdbkACL::ePrincipal_self:

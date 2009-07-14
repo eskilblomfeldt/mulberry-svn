@@ -37,7 +37,6 @@
 #include <istream>
 #include <cstdio>
 #include <cstring>
-using namespace std;
 
 #ifndef RC_INVOKED
 
@@ -54,7 +53,7 @@ static const unsigned long cFileBufferSize = 8192;
 
 template <class charT, class traits>
 class basic_cdfilebuf
-	: public basic_streambuf<charT, traits>
+: public std::basic_streambuf<charT, traits>
 {
 public:
 	typedef charT                     char_type;
@@ -70,7 +69,7 @@ public:
 
 	//  lib.filebuf.members Members:
 	bool is_open() const;
-	basic_cdfilebuf* open(const char* s, ios_base::openmode mode);
+	basic_cdfilebuf* open(const char* s, std::ios_base::openmode mode);
 	basic_cdfilebuf* close();
 
 protected:
@@ -81,9 +80,9 @@ protected:
 	virtual int_type overflow (int_type c = traits::eof());
 
 	// virtual basic_streambuf<charT,traits>* setbuf(char_type* s, streamsize n);  // default behavior which should be "do nothing"
-	virtual pos_type seekoff(off_type off, ios_base::seekdir way,
-		ios_base::openmode which = ios_base::in | ios_base::out);
-	virtual pos_type seekpos(pos_type sp, ios_base::openmode which = ios_base::in | ios_base::out); // set overflow_called_last_
+	virtual pos_type seekoff(off_type off, std::ios_base::seekdir way,
+		std::ios_base::openmode which = std::ios_base::in | std::ios_base::out);
+	virtual pos_type seekpos(pos_type sp, std::ios_base::openmode which = std::ios_base::in | std::ios_base::out); // set overflow_called_last_
 	virtual int      sync();
 private:
 	enum EReadWriteState
@@ -94,7 +93,7 @@ private:
 	};
 
 	FILE* file_;
-	ios_base::openmode mode_;
+	std::ios_base::openmode mode_;
 	char_type* buf_;
 	unsigned long buf_size_;
 #ifdef MSL_FAKE_STLPORT
@@ -107,7 +106,7 @@ private:
 
 template <class charT, class traits>
 class basic_cdifstream
-	: public basic_istream<charT, traits>
+	: public std::basic_istream<charT, traits>
 {
 public:
 	typedef charT                     char_type;
@@ -119,14 +118,14 @@ public:
 	//  lib.ifstream.cons Constructors:
 	basic_cdifstream(unsigned long bufsize = cFileBufferSize);
 	explicit basic_cdifstream(const char* s,
-								ios_base::openmode mode = ios_base::in,
+								std::ios_base::openmode mode = std::ios_base::in,
 								unsigned long bufsize = cFileBufferSize);
 
 	//  lib.ifstream.members Members:
 	basic_cdfilebuf<charT, traits>* rdbuf() const;
 
 	bool is_open();
-	void open(const char* s, ios_base::openmode mode = ios_base::in);
+	void open(const char* s, std::ios_base::openmode mode = std::ios_base::in);
 	void close();
 private:
 	basic_cdfilebuf<charT, traits> sb_;
@@ -134,7 +133,7 @@ private:
 
 template <class charT, class traits>
 class basic_cdofstream
-	: public basic_ostream<charT, traits>
+	: public std::basic_ostream<charT, traits>
 {
 public:
 	typedef charT                     char_type;
@@ -146,14 +145,14 @@ public:
 	//  lib.ofstream.cons Constructors:
 	basic_cdofstream(unsigned long bufsize = cFileBufferSize);
 	explicit basic_cdofstream(const char* s,
-								ios_base::openmode mode = ios_base::out,
+								std::ios_base::openmode mode = std::ios_base::out,
 								unsigned long bufsize = cFileBufferSize);
 
 	//  lib.ofstream.members Members:
 	basic_cdfilebuf<charT,traits>* rdbuf() const;
 
 	bool is_open();
-	void open(const char* s, ios_base::openmode mode = ios_base::out);
+	void open(const char* s, std::ios_base::openmode mode = std::ios_base::out);
 	void close();
 private:
 	basic_cdfilebuf<charT, traits> sb_;
@@ -161,7 +160,7 @@ private:
 
 template <class charT, class traits>
 class basic_cdfstream
-	: public basic_iostream<charT, traits>
+	: public std::basic_iostream<charT, traits>
 {
 public:
 	typedef charT                     char_type;
@@ -173,13 +172,13 @@ public:
 	//  constructors/destructor
 	basic_cdfstream(unsigned long bufsize = cFileBufferSize);
 	explicit basic_cdfstream(const char* s,
-								ios_base::openmode mode = ios_base::in | ios_base::out,
+								std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out,
 								unsigned long bufsize = cFileBufferSize);
 
 	//  Members:
 	basic_cdfilebuf<charT,traits>* rdbuf() const;
 	bool is_open();
-	void open(const char* s, ios_base::openmode mode = ios_base::in | ios_base::out);
+	void open(const char* s, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out);
 	void close();
 private:
 	basic_cdfilebuf<charT, traits> sb_;
@@ -192,7 +191,7 @@ private:
 template <class charT, class traits>
 basic_cdfilebuf<charT, traits>::basic_cdfilebuf(FILE* file, unsigned long bufsize)
 	: file_(file),
-	  mode_(ios_base::openmode(0)),
+	  mode_(std::ios_base::openmode(0)),
 	  buf_(NULL),
 	  buf_size_(bufsize),
 	  f_pos_(0),
@@ -220,44 +219,44 @@ basic_cdfilebuf<charT, traits>::is_open() const
 
 template <class charT, class traits>
 basic_cdfilebuf<charT,traits>*
-basic_cdfilebuf<charT, traits>::open(const char* s, ios_base::openmode mode)
+basic_cdfilebuf<charT, traits>::open(const char* s, std::ios_base::openmode mode)
 {
 	if (file_ != 0)
 		return 0;
 	const char* modstr;
 	mode_ = mode;
-	switch (mode & ~ios_base::ate)
+	switch (mode & ~std::ios_base::ate)
 	{
-	case ios_base::out:
-	case (int)ios_base::out | (int)ios_base::trunc:
+	case std::ios_base::out:
+	case (int)std::ios_base::out | (int)std::ios_base::trunc:
 		modstr = "w";
 		break;
-	case (int)ios_base::out | (int)ios_base::app:
+	case (int)std::ios_base::out | (int)std::ios_base::app:
 		modstr = "a";
 		break;
-	case ios_base::in:
+	case std::ios_base::in:
 		modstr = "r";
 		break;
-	case (int)ios_base::in | (int)ios_base::out:
+	case (int)std::ios_base::in | (int)std::ios_base::out:
 		modstr = "r+";
 		break;
-	case (int)ios_base::in | (int)ios_base::out | (int)ios_base::trunc:
+		case (int)std::ios_base::in | (int)std::ios_base::out | (int)std::ios_base::trunc:
 		modstr = "w+";
 		break;
-	case (int)ios_base::binary | (int)ios_base::out:
-	case (int)ios_base::binary | (int)ios_base::out | (int)ios_base::trunc:
+	case (int)std::ios_base::binary | (int)std::ios_base::out:
+	case (int)std::ios_base::binary | (int)std::ios_base::out | (int)std::ios_base::trunc:
 		modstr = "wb";
 		break;
-	case (int)ios_base::binary | (int)ios_base::out | (int)ios_base::app:
+	case (int)std::ios_base::binary | (int)std::ios_base::out | (int)std::ios_base::app:
 		modstr = "ab";
 		break;
-	case (int)ios_base::binary | (int)ios_base::in:
+	case (int)std::ios_base::binary | (int)std::ios_base::in:
 		modstr = "rb";
 		break;
-	case (int)ios_base::binary | (int)ios_base::in | (int)ios_base::out:
+	case (int)std::ios_base::binary | (int)std::ios_base::in | (int)std::ios_base::out:
 		modstr = "r+b";
 		break;
-	case (int)ios_base::binary | (int)ios_base::in | (int)ios_base::out | (int)ios_base::trunc:
+	case (int)std::ios_base::binary | (int)std::ios_base::in | (int)std::ios_base::out | (int)std::ios_base::trunc:
 		modstr = "w+b";
 		break;
 	default:
@@ -266,7 +265,7 @@ basic_cdfilebuf<charT, traits>::open(const char* s, ios_base::openmode mode)
 	file_ = fopen_utf8(s, modstr);
 	if (file_ == 0)
 		return 0;
-	if (mode & ios_base::ate && fseek(file_, 0, SEEK_END))
+	if (mode & std::ios_base::ate && fseek(file_, 0, SEEK_END))
 	{
 		close();
 		return 0;
@@ -406,17 +405,17 @@ basic_cdfilebuf<charT, traits>::overflow(int_type c)
 
 template <class charT, class traits>
 typename basic_cdfilebuf<charT, traits>::pos_type
-basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios_base::openmode which)
+basic_cdfilebuf<charT, traits>::seekoff(off_type off, std::ios_base::seekdir way, std::ios_base::openmode which)
 {
 	if (file_ == 0)
 		return pos_type(-1);
 
-	ios_base::openmode inout = ios_base::in | ios_base::out;
-	if (((which & inout) == inout) && (way == ios_base::cur) || ((which & inout) == 0))
+	std::ios_base::openmode inout = std::ios_base::in | std::ios_base::out;
+	if (((which & inout) == inout) && (way == std::ios_base::cur) || ((which & inout) == 0))
 		return pos_type(-1);
 
 	// Special for tellg/tellp
-	if ((way == ios_base::cur) && (off == 0))
+	if ((way == std::ios_base::cur) && (off == 0))
 	{
 		switch(rw_)
 		{
@@ -435,7 +434,7 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios
 		sync();
 
 	// Now check internal mode
-	if (which & ios_base::in && (rw_ != eRead))
+	if (which & std::ios_base::in && (rw_ != eRead))
 	{
 		// See if write was done last
 		if (rw_ == eWrite)
@@ -450,7 +449,7 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios
 		// Set to neutral
 		rw_ = eNeutral;
 	}
-	else if (which & ios_base::out && (rw_ != eWrite))
+	else if (which & std::ios_base::out && (rw_ != eWrite))
 	{
 		// See if read was done last
 		if (rw_ == eRead)
@@ -470,11 +469,11 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios
 	int whence;
 	switch (way)
 	{
-	case ios_base::beg:
+	case std::ios_base::beg:
 		absoff = off;
 		whence = SEEK_SET;
 		break;
-	case ios_base::cur:
+	case std::ios_base::cur:
 		switch(rw_)
 		{
 		case eNeutral:
@@ -490,7 +489,7 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios
 		}
 		whence = SEEK_SET;
 		break;
-	case ios_base::end:
+	case std::ios_base::end:
 		absoff = off;
 		whence = SEEK_END;
 		break;
@@ -553,9 +552,9 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, ios_base::seekdir way, ios
 
 template <class charT, class traits>
 typename basic_cdfilebuf<charT, traits>::pos_type
-basic_cdfilebuf<charT, traits>::seekpos(pos_type sp, ios_base::openmode which)
+basic_cdfilebuf<charT, traits>::seekpos(pos_type sp, std::ios_base::openmode which)
 {
-	return seekoff(sp, ios_base::beg, which);
+	return seekoff(sp, std::ios_base::beg, which);
 }
 
 template <class charT, class traits>
@@ -590,11 +589,11 @@ basic_cdfilebuf<charT, traits>::sync()
 template <class charT, class traits>
 basic_cdifstream<charT, traits>::basic_cdifstream(unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_istream<charT, traits>(0),
+	: std::basic_istream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_istream(&sb_)
+		std::basic_istream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
@@ -603,20 +602,20 @@ basic_cdifstream<charT, traits>::basic_cdifstream(unsigned long bufsize)
 }
 
 template <class charT, class traits>
-basic_cdifstream<charT, traits>::basic_cdifstream(const char* s, ios_base::openmode mode, unsigned long bufsize)
+basic_cdifstream<charT, traits>::basic_cdifstream(const char* s, std::ios_base::openmode mode, unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_istream<charT, traits>(0),
+	: std::basic_istream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_istream(&sb_)
+		std::basic_istream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
       this->init(&sb_);
 #endif
-      if (rdbuf()->open(s, mode | ios_base::in) == 0)
-	this->setstate(ios_base::failbit);
+      if (rdbuf()->open(s, mode | std::ios_base::in) == 0)
+	this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -638,10 +637,10 @@ basic_cdifstream<charT, traits>::is_open()
 template <class charT, class traits>
 inline
 void
-basic_cdifstream<charT, traits>::open(const char* s, ios_base::openmode mode)
+basic_cdifstream<charT, traits>::open(const char* s, std::ios_base::openmode mode)
 {
-  if (rdbuf()->open(s, mode | ios_base::in) == 0)
-    this->setstate(ios_base::failbit);
+  if (rdbuf()->open(s, mode | std::ios_base::in) == 0)
+    this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -650,7 +649,7 @@ void
 basic_cdifstream<charT, traits>::close()
 {
 	if (rdbuf()->close() == 0)
-	  this->setstate(ios_base::failbit);
+	  this->setstate(std::ios_base::failbit);
 }
 
 // basic_cdofstream Implementation
@@ -658,11 +657,11 @@ basic_cdifstream<charT, traits>::close()
 template <class charT, class traits>
 basic_cdofstream<charT, traits>::basic_cdofstream(unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_ostream<charT, traits>(0),
+	: std::basic_ostream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_ostream(&sb_)
+		std::basic_ostream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
@@ -671,20 +670,20 @@ basic_cdofstream<charT, traits>::basic_cdofstream(unsigned long bufsize)
 }
 
 template <class charT, class traits>
-basic_cdofstream<charT, traits>::basic_cdofstream(const char* s, ios_base::openmode mode, unsigned long bufsize)
+basic_cdofstream<charT, traits>::basic_cdofstream(const char* s, std::ios_base::openmode mode, unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_ostream<charT, traits>(0),
+	: std::basic_ostream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_ostream(&sb_)
+		std::basic_ostream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
       this->init(&sb_);
 #endif
-      if (rdbuf()->open(s, mode | ios_base::out) == 0)
-	this->setstate(ios_base::failbit);
+      if (rdbuf()->open(s, mode | std::ios_base::out) == 0)
+	this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -706,10 +705,10 @@ basic_cdofstream<charT, traits>::is_open()
 template <class charT, class traits>
 inline
 void
-basic_cdofstream<charT, traits>::open(const char* s, ios_base::openmode mode)
+basic_cdofstream<charT, traits>::open(const char* s, std::ios_base::openmode mode)
 {
-  if (rdbuf()->open(s, mode | ios_base::out) == 0)
-    this->setstate(ios_base::failbit);
+  if (rdbuf()->open(s, mode | std::ios_base::out) == 0)
+    this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -718,7 +717,7 @@ void
 basic_cdofstream<charT, traits>::close()
 {
 	if (rdbuf()->close() == 0)
-	  this->setstate(ios_base::failbit);
+	  this->setstate(std::ios_base::failbit);
 }
 
 // basic_cdfstream Implementation
@@ -726,11 +725,11 @@ basic_cdofstream<charT, traits>::close()
 template <class charT, class traits>
 basic_cdfstream<charT, traits>::basic_cdfstream(unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_iostream<charT, traits>(0),
+	: std::basic_iostream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_iostream(&sb_)
+		std::basic_iostream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
@@ -739,20 +738,20 @@ basic_cdfstream<charT, traits>::basic_cdfstream(unsigned long bufsize)
 }
 
 template <class charT, class traits>
-basic_cdfstream<charT, traits>::basic_cdfstream(const char* s, ios_base::openmode mode, unsigned long bufsize)
+basic_cdfstream<charT, traits>::basic_cdfstream(const char* s, std::ios_base::openmode mode, unsigned long bufsize)
 #ifdef MSL_FAKE_STLPORT
-	: basic_iostream<charT, traits>(0),
+	: std::basic_iostream<charT, traits>(0),
 		sb_(NULL, bufsize)
 #else
 	: sb_(NULL, bufsize),
-		basic_iostream(&sb_)
+		std::basic_iostream(&sb_)
 #endif
 {
 #ifdef MSL_FAKE_STLPORT
       this->init(&sb_);
 #endif
 	if (rdbuf()->open(s, mode) == 0)
-	  this->setstate(ios_base::failbit);
+	  this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -774,10 +773,10 @@ basic_cdfstream<charT, traits>::is_open()
 template <class charT, class traits>
 inline
 void
-basic_cdfstream<charT, traits>::open(const char* s, ios_base::openmode mode)
+basic_cdfstream<charT, traits>::open(const char* s, std::ios_base::openmode mode)
 {
 	if (rdbuf()->open(s, mode) == 0)
-	  this->setstate(ios_base::failbit);
+	  this->setstate(std::ios_base::failbit);
 }
 
 template <class charT, class traits>
@@ -786,13 +785,13 @@ void
 basic_cdfstream<charT, traits>::close()
 {
 	if (rdbuf()->close() == 0)
-	  this->setstate(ios_base::failbit);
+	  this->setstate(std::ios_base::failbit);
 }
 
-typedef basic_cdfilebuf<char, char_traits<char> >  cdfilebuf;
-typedef basic_cdifstream<char, char_traits<char> > cdifstream;
-typedef basic_cdofstream<char, char_traits<char> > cdofstream;
-typedef basic_cdfstream<char, char_traits<char> >  cdfstream;
+typedef basic_cdfilebuf<char, std::char_traits<char> >  cdfilebuf;
+typedef basic_cdifstream<char, std::char_traits<char> > cdifstream;
+typedef basic_cdofstream<char, std::char_traits<char> > cdofstream;
+typedef basic_cdfstream<char, std::char_traits<char> >  cdfstream;
 
 #ifndef _MSL_NO_CPP_NAMESPACE
 //	} // namespace std

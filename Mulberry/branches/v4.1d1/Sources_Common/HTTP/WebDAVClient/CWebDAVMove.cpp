@@ -53,7 +53,7 @@ void CWebDAVMove::SetData(const cdstring& etag)
 	}
 }
 
-void CWebDAVMove::WriteHeaderToStream(ostream& os)
+void CWebDAVMove::WriteHeaderToStream(std::ostream& os)
 {
 	// Do default
 	CWebDAVRequestResponse::WriteHeaderToStream(os);

@@ -29,7 +29,7 @@
 
 #include "SBitFlags.h"
 
-typedef set<unsigned long> ulset;
+typedef std::set<unsigned long> ulset;
 
 class CMbox;
 class CMboxProtocol;
@@ -39,8 +39,8 @@ class CProgress;
 class CMailRecord : public CActionRecorder
 {
 public:
-	typedef map<unsigned long, pair<CMbox*, CMbox*> > CConnectionList;
-	typedef map<unsigned long, cdstrlong> ulcdstrlongmap;
+	typedef std::map<unsigned long, std::pair<CMbox*, CMbox*> > CConnectionList;
+	typedef std::map<unsigned long, cdstrlong> ulcdstrlongmap;
 
 	enum EMailAction
 	{

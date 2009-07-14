@@ -214,7 +214,7 @@ void C3PaneItems::ListenToMessage(MessageT inMessage, void *ioParam)
 		OnTabs(*(long*) ioParam);
 		break;
 	case msg_3PaneItemsTabsMove:
-		OnTabsMove(*(pair<unsigned long, unsigned long>*) ioParam);
+		OnTabsMove(*(std::pair<unsigned long, unsigned long>*) ioParam);
 		break;
 	case msg_3PaneItemsTabsClose:
 		OnTabsClose(*(long*) ioParam);
@@ -262,7 +262,7 @@ void C3PaneItems::OnTabs(unsigned long index)
 	}
 }
 
-void C3PaneItems::OnTabsMove(pair<unsigned long, unsigned long> indices)
+void C3PaneItems::OnTabsMove(std::pair<unsigned long, unsigned long> indices)
 {
 	// Only do for mailboxes right now
 	if (mMailbox && (mMailbox == mCurrent) && GetMailboxView())

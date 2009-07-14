@@ -34,7 +34,6 @@
 #include "CHTTPData.h"
 #include "CHTTPDefinitions.h"
 
-using namespace std;
 
 namespace http {
 
@@ -77,7 +76,7 @@ public:
 		eRequest_MKADBK
 	};
 
-	class CHTTPResponseException : public exception
+	class CHTTPResponseException : public std::exception
 	{
 	public:
 		CHTTPResponseException(const char* error)
@@ -137,8 +136,8 @@ public:
 	}
 
 	virtual bool	 HasRequestData() const;
-	virtual istream* GetRequestDataStream();
-	virtual ostream* GetResponseDataStream();
+	virtual std::istream* GetRequestDataStream();
+	virtual std::ostream* GetResponseDataStream();
 	
 	void StartRequestData()
 	{
@@ -163,8 +162,8 @@ public:
 	}
 
 	cdstring GetRequestHeader();
-	void GenerateRequestHeader(ostream& os);
-	void ParseResponseHeader(istream& is, ostream* log);
+	void GenerateRequestHeader(std::ostream& os);
+	void ParseResponseHeader(std::istream& is, std::ostream* log);
 	void ClearResponse();
 
 	uint32_t GetStatusCode() const
@@ -233,14 +232,14 @@ protected:
 	
 	bool 					mCompleted;
 	
-	virtual void WriteHeaderToStream(ostream& os);
-	virtual void WriteContentHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
+	virtual void WriteContentHeaderToStream(std::ostream& os);
 
 private:
 	void InitResponse();
 
 	void ParseStatusLine(cdstring& line);
-	bool ReadFoldedLine(istream& is, cdstring& line1, cdstring& line2, ostream* log) const;
+	bool ReadFoldedLine(std::istream& is, cdstring& line1, cdstring& line2, std::ostream* log) const;
 
 	void CacheHeaders();
 };

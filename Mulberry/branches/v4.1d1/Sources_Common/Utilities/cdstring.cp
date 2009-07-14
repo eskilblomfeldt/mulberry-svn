@@ -37,7 +37,6 @@
 
 #ifdef __GNUC__
 #include <strstream>
-using namespace std;
 #else
 #include <strstream.h>
 #endif
@@ -625,7 +624,7 @@ cdstring::size_type cdstring::find_last_not_of(const char* s, size_type pos, siz
 	{
 		if (pos > sz - 1)
 			pos = sz - 1;
-		const char* e = beg + sz;
+		//const char* e = beg + sz;
 		for (const char* xpos = beg + pos + 1; xpos > beg;)
 		{
 			--xpos;
@@ -736,7 +735,7 @@ bool cdstring::quote(const char* specials, bool force, bool inet)
 		{
 			char* p = _str;
 			escape = false;
-			bool quote = false;
+			bool quoted = false;
 			while(*p && !escape)
 			{
 				switch(specials[(unsigned char) *p++])
@@ -744,7 +743,7 @@ bool cdstring::quote(const char* specials, bool force, bool inet)
 				case 0: // Atom
 					break;
 				case 1: // Quote
-					quote = true;
+					quoted = true;
 					break;
 				case 2: // Escaped
 					escape = true;
@@ -755,7 +754,7 @@ bool cdstring::quote(const char* specials, bool force, bool inet)
 				}
 			}
 
-			if (!quote && !escape)
+			if (!quoted && !escape)
 				return false;
 		}
 
@@ -804,7 +803,7 @@ bool cdstring::unquote()
 }
 
 // Split into tokens
-void cdstring::split(const char* tokens, cdstrvect& results, bool trim) const
+void cdstring::split(const char* tokens, cdstrvect& results, bool trimit) const
 {
 	cdstring::size_type start = 0;
 	cdstring::size_type end = cdstring::npos;
@@ -813,7 +812,7 @@ void cdstring::split(const char* tokens, cdstrvect& results, bool trim) const
 	{
 		cdstring temp;
 		temp.assign(*this, start, end - start);
-		if (trim)
+		if (trimit)
 			temp.trimspace();
 		results.push_back(temp);
 		start = find_first_not_of(tokens, end);
@@ -826,7 +825,7 @@ void cdstring::split(const char* tokens, cdstrvect& results, bool trim) const
 	{
 		cdstring temp;
 		temp.assign(*this, start, cdstring::npos);
-		if (trim)
+		if (trimit)
 			temp.trimspace();
 		results.push_back(temp);
 	}
@@ -835,7 +834,7 @@ void cdstring::split(const char* tokens, cdstrvect& results, bool trim) const
 // Join list into single string
 void cdstring::join(const cdstrvect& items, const char* delim)
 {
-	ostrstream sout;
+	std::ostrstream sout;
 	bool first = true;
 	for(cdstrvect::const_iterator iter = items.begin(); iter != items.end(); iter++)
 	{
@@ -845,7 +844,7 @@ void cdstring::join(const cdstrvect& items, const char* delim)
 			sout << delim;
 		sout << *iter;
 	}
-	sout << ends;
+	sout << std::ends;
 	
 	// Grab the string
 	steal(sout.str());
@@ -1501,7 +1500,7 @@ void cdstring::FromArray(const char** txt, cdstrvect& list, bool unique)
 			// test for uniqueness if required
 			if (unique)
 			{
-				cdstrvect::const_iterator found = ::find(list.begin(), list.end(), *p);
+				cdstrvect::const_iterator found = std::find(list.begin(), list.end(), *p);
 				if (found == list.end())
 					list.push_back(*p);
 			}
@@ -1722,7 +1721,7 @@ char* cdstring::ToModifiedUTF7(const char* str, bool charset)
 	{
 		// Stream to base64
 		p = str;
-		ostrstream sout;
+		std::ostrstream sout;
 		i18n::CUTF8 utf8;
 
 		while(*p)
@@ -1739,7 +1738,6 @@ char* cdstring::ToModifiedUTF7(const char* str, bool charset)
 
 				int atom_pos = 0;
 				TAtom atom;
-				bool lo_byte = false;
 				while(*p && !cSafemUTF7[(unsigned char) *p])
 				{
 					// Get converted wchar_t
@@ -1824,7 +1822,7 @@ char* cdstring::ToModifiedUTF7(const char* str, bool charset)
 		}
 
 		// Get data from stream
-		sout << ends;
+		sout << std::ends;
 		q = sout.str();
 	}
 
@@ -1868,7 +1866,7 @@ char* cdstring::FromModifiedUTF7(char* str, bool charset)
 
 	{
 		// Stream to store to if any decoding is needed
-		ostrstream sout;
+		std::ostrstream sout;
 		i18n::CUTF8 utf8;	// The utf8 character converter
 
 		// Catch exceptions
@@ -2073,7 +2071,7 @@ char* cdstring::FromModifiedUTF7(char* str, bool charset)
 				else
 					sout.put(*p++);
 			}
-			sout << ends;
+			sout << std::ends;
 		}
 		catch(long ex)
 		{
@@ -2140,7 +2138,7 @@ void cdstring::ConvertEndl(EEndl endl)
 		return;
 
 	// Now filter arbitrary line endings to local
-	ostrstream out;
+	std::ostrstream sout;
 	const char* p = c_str();
 	
 	while(*p)
@@ -2150,21 +2148,21 @@ void cdstring::ConvertEndl(EEndl endl)
 		case '\r':
 			p++;
 			if (*p == '\n') p++;
-			out.write(get_endl(endl), get_endl_len(endl));
+			sout.write(get_endl(endl), get_endl_len(endl));
 			break;
 		case '\n':
 			p++;
-			out.write(get_endl(endl), get_endl_len(endl));
+			sout.write(get_endl(endl), get_endl_len(endl));
 			break;
 		default:
-			out.put(*p++);
+			sout.put(*p++);
 			break;
 		}
 	}
-	out << ends;
+	sout << std::ends;
 	
 	// Grab the string
-	steal(out.str());
+	steal(sout.str());
 }
 
 // Convert to utf8 from iso-8859-15
@@ -2175,7 +2173,7 @@ void cdstring::FromISOToUTF8()
 		return;
 
 	// Convert each character
-	ostrstream out;
+	std::ostrstream sout;
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(_str);
 	const unsigned char* q = reinterpret_cast<const unsigned char*>(_str + length());
 	while(p < q)
@@ -2185,7 +2183,7 @@ void cdstring::FromISOToUTF8()
 		{
 			// Write 1 to buffer
 			unsigned char c = wp;
-			out.put(c);
+			sout.put(c);
 		}
 		else
 		{
@@ -2197,22 +2195,22 @@ void cdstring::FromISOToUTF8()
 			{
 				// Write 2 to buffer
 				unsigned char c = 0xc0 | (wp >> 6);
-				out.put(c);
+				sout.put(c);
 
 				c = 0x80 | (wp & 0x3f);
-				out.put(c);
+				sout.put(c);
 			}
 			else // if (wp < 0x10000)
 			{
 				// Write 3 to buffer
 				unsigned char c = 0xe0 | (wp >> 12);
-				out.put(c);
+				sout.put(c);
 
 				c = 0x80 | ((wp >> 6) & 0x3f);
-				out.put(c);
+				sout.put(c);
 
 				c = 0x80 | (wp & 0x3f);
-				out.put(c);
+				sout.put(c);
 			}
 
 		}
@@ -2221,10 +2219,10 @@ void cdstring::FromISOToUTF8()
 		p++;
 
 	}
-	out << ends;
+	sout << std::ends;
 	
 	// Grab the string
-	steal(out.str());
+	steal(sout.str());
 }
 
 // Convert from utf8 to local iso-8859-15 equivalent charset
@@ -2235,7 +2233,7 @@ void cdstring::FromUTF8ToISO()
 		return;
 
 	// Convert each character
-	ostrstream out;
+	std::ostrstream sout;
 	const char* p = _str;
 	const char* q = _str + length();
 	unsigned long charlen = 0;
@@ -2281,19 +2279,19 @@ void cdstring::FromUTF8ToISO()
 			if (wc == 0x20AC)
 			{
 				// Use iso-8859-15 code for Euro
-				out.put(0xA4);
+				sout.put(0xA4);
 				found_euro = true;
 			}
 			else if (wc > 0x00FF)
-				out.put('?');
+				sout.put('?');
 			else
-				out.put(wc & 0x00FF);
+				sout.put(wc & 0x00FF);
 		}
 	}
-	out << ends;
+	sout << std::ends;
 	
 	// Grab the string
-	steal(out.str());
+	steal(sout.str());
 }
 
 // Check for valid UTF8
@@ -2347,7 +2345,7 @@ bool cdstring::IsISO_8859_15_Subset() const
 	const unsigned char* q = p + length();
 	unsigned long charlen = 0;
 	wchar_t wc = 0;
-	bool found_euro = false;
+	//bool found_euro = false;
 	while(p < q)
 	{
 		unsigned char mask = 0x3f;
@@ -2471,9 +2469,9 @@ void cdstring::_append(const char chr, size_type size)
 
 #pragma mark ____________________________Stream Helpers
 
-istream& operator >> (istream& is, cdstring& str)
+std::istream& operator >> (std::istream& is, cdstring& str)
 {
-    istream::sentry s_ (is);
+    std::istream::sentry s_ (is);
     if (s_)
     {
          int c;
@@ -2488,7 +2486,7 @@ istream& operator >> (istream& is, cdstring& str)
 
               if (c == EOF)
               {
-                  is.setstate (ios_base::eofbit);
+                  is.setstate (std::ios_base::eofbit);
                   break;
               }
               else if (isspace(c))
@@ -2513,14 +2511,14 @@ istream& operator >> (istream& is, cdstring& str)
 }
 
 // If delim is NULL then do arbitrary line-end lookup
-istream& getline (istream& is, cdstring& str, char delim)
+std::istream& getline (std::istream& is, cdstring& str, char delim)
 {
 	int c;
 
-	ios_base::iostate flg = ios_base::goodbit;  // state of istream obj.
+	std::ios_base::iostate flg = std::ios_base::goodbit;  // state of istream obj.
 	// Don't skipws when starting as we might have an empty line or
 	// leading spaces are significant
-	istream::sentry s_ (is, true);
+	std::istream::sentry s_ (is, true);
 	if (s_)
 	{
 		const int BSIZE = 512;
@@ -2533,7 +2531,7 @@ istream& getline (istream& is, cdstring& str, char delim)
 			c = is.rdbuf ()->sbumpc();				// try to extract a character
 			if (c == EOF)
 			{
-				flg |= ios_base::eofbit;
+				flg |= std::ios_base::eofbit;
 				break;								// stop reading - eof was reached
 			}
 
@@ -2560,7 +2558,7 @@ istream& getline (istream& is, cdstring& str, char delim)
 	}
 
 
-	if (flg != ios_base::goodbit)				// setstate is called now to avoid
+	if (flg != std::ios_base::goodbit)				// setstate is called now to avoid
 		is.setstate (flg);						// throwing eof exception even when no
 												// char is extracted, in which case
 												// failure should be thrown.

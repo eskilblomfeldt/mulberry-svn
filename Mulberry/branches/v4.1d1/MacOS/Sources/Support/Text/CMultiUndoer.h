@@ -22,9 +22,9 @@
 
 #include <LUndoer.h>
 
-#include <vector.h>
+#include <vector>
 
-typedef vector<LAction*> CActionStack;
+typedef std::vector<LAction*> CActionStack;
 
 // ---------------------------------------------------------------------------
 

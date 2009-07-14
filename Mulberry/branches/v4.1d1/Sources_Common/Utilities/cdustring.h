@@ -27,13 +27,13 @@
 
 class cdustring;
 
-typedef vector<cdustring>	cdustrvect;
+typedef std::vector<cdustring>	cdustrvect;
 
 class cdustring
 {
-	friend istream& operator >> (istream&, cdustring&);
-	friend istream& getline (istream&, cdustring& str, unichar_t);
-	friend ostream& operator << (ostream&, cdustring&);
+	friend std::istream& operator >> (std::istream&, cdustring&);
+	friend std::istream& getline (std::istream&, cdustring& str, unichar_t);
+	friend std::ostream& operator << (std::ostream&, cdustring&);
 
 public:
 	typedef size_t       size_type;
@@ -254,9 +254,9 @@ private:
 
 // stream helpers
 
-istream& operator >> (istream& is, cdustring& str);
-istream& getline (istream& is, cdustring& str, unichar_t delim = '\n');
-ostream& operator << (ostream& os, cdustring& str);
-ostream& operator << (ostream& os, const cdustring& str);
+std::istream& operator >> (std::istream& is, cdustring& str);
+std::istream& getline (std::istream& is, cdustring& str, unichar_t delim = '\n');
+std::ostream& operator << (std::ostream& os, cdustring& str);
+std::ostream& operator << (std::ostream& os, const cdustring& str);
 
 #endif

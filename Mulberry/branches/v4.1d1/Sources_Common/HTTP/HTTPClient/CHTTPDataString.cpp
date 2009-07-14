@@ -30,8 +30,8 @@ using namespace http;
 CHTTPInputDataString::CHTTPInputDataString(const cdstring& str, const cdstring& content_type)
 {
 	// Create an input string stream
-	istrstream* temp = new istrstream(str.c_str());
-	ios* temp2 = temp;
+	std::istrstream* temp = new std::istrstream(str.c_str());
+	//std::ios* temp2 = temp;
 	mStream = temp;
 	mOwnsStream = true;
 	mContentLength = str.length();
@@ -44,8 +44,8 @@ CHTTPInputDataString::CHTTPInputDataString(char* str, const cdstring& content_ty
 	mCachedData.steal(str);
 
 	// Create an input string stream
-	istrstream* temp = new istrstream(mCachedData.c_str());
-	ios* temp2 = temp;
+	std::istrstream* temp = new std::istrstream(mCachedData.c_str());
+	//std::ios* temp2 = temp;
 	mStream = temp;
 	mOwnsStream = true;
 	mContentLength = mCachedData.length();
@@ -61,13 +61,13 @@ void CHTTPInputDataString::Start()
 {
 	// Always rewind to start in case it needs to be read multiple times
 	mStream->clear();
-	dynamic_cast<istrstream*>(mStream)->seekg(0);
+	dynamic_cast<std::istrstream*>(mStream)->seekg(0);
 }
 
 CHTTPOutputDataString::CHTTPOutputDataString()
 {
 	// Create stream that uses the string
-	mStream = new ostrstream;
+	mStream = new std::ostrstream;
 	mOwnsStream = true;
 }
 
@@ -78,9 +78,9 @@ CHTTPOutputDataString::~CHTTPOutputDataString()
 
 cdstring CHTTPOutputDataString::GetData() const
 {
-	*dynamic_cast<ostrstream*>(mStream) << ends;
+	*dynamic_cast<std::ostrstream*>(mStream) << std::ends;
 	cdstring result;
-	result.steal(dynamic_cast<ostrstream*>(mStream)->str());
+	result.steal(dynamic_cast<std::ostrstream*>(mStream)->str());
 	return result;
 }
 
@@ -88,5 +88,5 @@ void CHTTPOutputDataString::Clear()
 {
 	// Throw out existing data and start from scratch
 	delete mStream;
-	mStream = new ostrstream;
+	mStream = new std::ostrstream;
 }

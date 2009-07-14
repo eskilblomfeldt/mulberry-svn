@@ -22,7 +22,7 @@
 
 #include <exception>
 
-class CNetworkException : public exception
+class CNetworkException : public std::exception
 {
 public:
 	enum { class_ID = 'ntwk' };

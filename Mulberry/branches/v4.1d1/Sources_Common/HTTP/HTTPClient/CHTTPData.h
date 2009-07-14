@@ -28,8 +28,6 @@
 #include <iostream>
 #include "cdstring.h"
 
-using namespace std;
-
 namespace http
 {
 
@@ -50,7 +48,7 @@ public:
 	virtual void Stop() {}
 	
 protected:
-	ios*		mStream;
+	std::ios*		mStream;
 	bool		mOwnsStream;
 
 	void Clean()
@@ -69,9 +67,9 @@ public:
 	CHTTPInputData() {}
 	virtual ~CHTTPInputData() {}
 
-	istream* GetStream() const
+	std::istream* GetStream() const
 	{
-		return dynamic_cast<istream*>(mStream);
+		return dynamic_cast<std::istream*>(mStream);
 	}
 
 	uint32_t GetContentLength()
@@ -94,9 +92,9 @@ public:
 	CHTTPOutputData() {}
 	virtual ~CHTTPOutputData() {}
 
-	ostream* GetStream() const
+	std::ostream* GetStream() const
 	{
-		return dynamic_cast<ostream*>(mStream);
+		return dynamic_cast<std::ostream*>(mStream);
 	}
 	
 	virtual void Clear() = 0;

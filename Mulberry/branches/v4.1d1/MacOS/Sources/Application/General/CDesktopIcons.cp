@@ -85,7 +85,7 @@ const CIconRef* CDesktopIcons::GetDesktopIcons(OSType creator, OSType type)
 	if (result == NULL)
 	{
 		// Create new icon ref
-		auto_ptr<CIconRef> icons(new CIconRef);
+		std::auto_ptr<CIconRef> icons(new CIconRef);
 		icons->LoadIcons(creator, type);
 		
 		// Try to load items and add to cache if successful
@@ -119,7 +119,7 @@ const CIconRef* CDesktopIcons::GetDesktopIconsFromMIME(const cdstring& type, con
 	if (result == NULL)
 	{
 		// Create new icon ref
-		auto_ptr<CIconRef> icons(new CIconRef);
+		std::auto_ptr<CIconRef> icons(new CIconRef);
 		icons->LoadIcons(type, subtype);
 		
 		// Try to load items and add to cache if successful

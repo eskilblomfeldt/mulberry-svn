@@ -137,7 +137,7 @@ public:
 	virtual long	GetLastError(long* err_no, char** error);	// Get last textual error
 
 protected:
-	typedef map<cdstring, cdstrvect> cdstrvectmap;
+	typedef std::map<cdstring, cdstrvect> cdstrvectmap;
 
 	struct SData
 	{

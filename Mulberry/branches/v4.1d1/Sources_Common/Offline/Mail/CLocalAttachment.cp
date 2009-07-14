@@ -88,7 +88,7 @@ bool CLocalAttachment::RecoverCompare(const CLocalAttachment& comp) const
 
 #pragma mark ____________________________Stream ops
 
-void CLocalAttachment::WriteIndexToStream(ostream& out, ulvector* text, long offset) const
+void CLocalAttachment::WriteIndexToStream(std::ostream& out, ulvector* text, long offset) const
 {
 	// IMPORTANT: This will be called twice
 	// Once with text non-NULL, in which case only text indices calculation should be done
@@ -152,7 +152,7 @@ void CLocalAttachment::WriteIndexToStream(ostream& out, ulvector* text, long off
 	}
 }
 
-void CLocalAttachment::ReadIndexFromStream(istream& in, unsigned long vers)
+void CLocalAttachment::ReadIndexFromStream(std::istream& in, unsigned long vers)
 {
 	// Read basic indexes
 	unsigned long items[7];
@@ -207,7 +207,7 @@ void CLocalAttachment::ReadIndexFromStream(istream& in, unsigned long vers)
 	GetContent().SetContentSize(mIndexBodyLength);
 }
 
-void CLocalAttachment::WriteCacheToStream(ostream& out) const
+void CLocalAttachment::WriteCacheToStream(std::ostream& out) const
 {
 	// Write out this part
 	GetContent().WriteCacheToStream(out);
@@ -238,7 +238,7 @@ void CLocalAttachment::WriteCacheToStream(ostream& out) const
 	}
 }
 
-void CLocalAttachment::ReadCacheFromStream(istream& in, CLocalMessage* owner, unsigned long vers)
+void CLocalAttachment::ReadCacheFromStream(std::istream& in, CLocalMessage* owner, unsigned long vers)
 {
 	// Read basic indexes
 	GetContent().ReadCacheFromStream(in, vers);

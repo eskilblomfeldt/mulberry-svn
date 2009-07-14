@@ -1316,7 +1316,7 @@ void CFileTable::ExposePartsList()
 void CFileTable::DoAttachFile(void)
 {
 	bool done = false;
-	auto_ptr<CAttachmentList> attachList(new CAttachmentList);
+	std::auto_ptr<CAttachmentList> attachList(new CAttachmentList);
 
 	// Determine if NavServices available
 	{

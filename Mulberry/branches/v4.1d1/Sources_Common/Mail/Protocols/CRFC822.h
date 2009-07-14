@@ -148,7 +148,7 @@ public:
 	static void		AddAddressList(const char* field,
 									bool bounced,
 									const CAddressList* theList,
-									ostream& theStream,
+									std::ostream& theStream,
 									bool encode = true);		// Add address list to header
 	static CAddressList* ParseAddressList(const char* line);
 

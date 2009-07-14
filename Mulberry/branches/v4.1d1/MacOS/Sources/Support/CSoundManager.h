@@ -46,7 +46,7 @@ public:
 private:
 	cdstrvect		mSounds;
 #if PP_Target_Carbon
-	typedef map<cdstring, short> cdstrshortmap;
+	typedef std::map<cdstring, short> cdstrshortmap;
 	cdstrshortmap	mDomainMap;
 	cdstrmap		mNameFileMap;
 	typedef list<Movie> movielist;

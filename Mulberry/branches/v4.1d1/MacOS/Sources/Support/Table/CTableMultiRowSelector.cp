@@ -191,7 +191,7 @@ CTableMultiRowSelector::SelectAllCells()
 		mTableView->HiliteSelection(mTableView->IsActive(), true);
 
 		// Set all items to true
-		::fill(mSelection.begin(), mSelection.end(), true);
+		std::fill(mSelection.begin(), mSelection.end(), true);
 		mFirstSelection = 1;
 		mLastSelection = rows;
 
@@ -239,22 +239,22 @@ CTableMultiRowSelector::SelectCellBlock(
 	if (mFirstSelection == 0)
 	{
 		// Set selection to range
-		::fill(mSelection.begin() + (top - 1), mSelection.end() + bottom, true);
+		std::fill(mSelection.begin() + (top - 1), mSelection.end() + bottom, true);
 	}
 	else
 	{
 		// Create new selection
-		vector<bool> old_selection = mSelection;
+		std::vector<bool> old_selection = mSelection;
 		unsigned long old_first_index = mFirstSelection - 1;
 		unsigned long old_last_index = mLastSelection - 1;
-		vector<bool> new_selection;
+		std::vector<bool> new_selection;
 		new_selection.insert(new_selection.begin(), rows, false);
-		::fill(new_selection.begin() + (top - 1), new_selection.begin() + bottom, true);
+		std::fill(new_selection.begin() + (top - 1), new_selection.begin() + bottom, true);
 		unsigned long new_first_index = top - 1;
 		unsigned long new_last_index = bottom - 1;
 
 		// Determine difference for unhilite
-		vector<bool> difference;
+		std::vector<bool> difference;
 		difference.insert(difference.begin(), rows, false);
 		mFirstSelection = 0;
 		mLastSelection = 0;
@@ -371,7 +371,7 @@ CTableMultiRowSelector::UnselectAllCells()
 		TableIndexT rows, columns;
 		mTableView->GetTableSize(rows, columns);
 
-		::fill(mSelection.begin(), mSelection.end(), false);
+		std::fill(mSelection.begin(), mSelection.end(), false);
 		mFirstSelection = mLastSelection = 0;
 		mTableView->SelectionChanged();
 	}

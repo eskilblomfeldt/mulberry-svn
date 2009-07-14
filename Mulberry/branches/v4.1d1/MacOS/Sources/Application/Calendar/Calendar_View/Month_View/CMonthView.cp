@@ -252,7 +252,7 @@ void CMonthView::OnTimezone()
 
 void CMonthView::DoPrint()
 {
-	auto_ptr<CMonthPrintout> pout;
+	std::auto_ptr<CMonthPrintout> pout;
 
 	try
 	{

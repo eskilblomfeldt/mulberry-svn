@@ -29,7 +29,7 @@
 
 using namespace http; 
 
-void CHTTPAuthorizationBasic::GenerateAuthorization(ostream& os, const CHTTPRequestResponse* request) const
+void CHTTPAuthorizationBasic::GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const
 {
 	// Generate the string to base 64 encode
 	cdstring encode(mUser);
@@ -37,7 +37,7 @@ void CHTTPAuthorizationBasic::GenerateAuthorization(ostream& os, const CHTTPRequ
 	encode += mPswd;
 	
 	// Base64 encode it
-	auto_ptr<char> base64(::base64_encode(reinterpret_cast<const unsigned char*>(encode.c_str()), encode.length()));
+	std::auto_ptr<char> base64(::base64_encode(reinterpret_cast<const unsigned char*>(encode.c_str()), encode.length()));
 
 	// Generate header
 	os << cHeaderAuthorization << cHeaderDelimiter << "Basic " << base64.get() << net_endl;

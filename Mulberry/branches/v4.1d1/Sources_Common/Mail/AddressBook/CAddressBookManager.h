@@ -42,8 +42,8 @@ class CMessageList;
 typedef ptrvector<CAdbkProtocol> CAdbkProtocolList;
 typedef ptrvector<CAddrLookupProtocol> CAddrLookupProtocolList;
 
-typedef pair<cdstring, CAddressList*> CAddressSearchResult;
-typedef vector<CAddressSearchResult*> CAddressSearchResultList;
+typedef std::pair<cdstring, CAddressList*> CAddressSearchResult;
+typedef std::vector<CAddressSearchResult*> CAddressSearchResultList;
 
 class CAddressBookManager : public CBroadcaster
 {

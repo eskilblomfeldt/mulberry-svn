@@ -126,10 +126,12 @@
 		AF4198ED0AE9A3C400E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF4198EE0AE9A3C400E19592 /* Build configuration list for PBXProject "QuickmailProAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF4198EB0AE9A3C400E19592;
 			productRefGroup = AF4198F90AE9A3C400E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF4198F70AE9A3C400E19592 /* QuickmailPro MachO */,
 			);
@@ -176,7 +178,7 @@
 		AF4198EF0AE9A3C400E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

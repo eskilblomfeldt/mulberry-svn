@@ -65,7 +65,7 @@ unsigned long CVCard::CountItems(const cdstring& name, const cdstring& param_nam
 {
 	unsigned long ctr = 0;
 
-	pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
+	std::pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
 	for(CVCardItems::const_iterator iter1 = iters1.first; iter1 != iters1.second; iter1++)
 	{
 		pair<cdstrmultimap::const_iterator, cdstrmultimap::const_iterator> iters2 = (*iter1).second.GetParams().equal_range(param_name);
@@ -81,7 +81,7 @@ unsigned long CVCard::CountItems(const cdstring& name, const cdstring& param_nam
 
 const cdstring& CVCard::GetValue(const cdstring& name, const cdstring& param_name, const cdstring& param_value)
 {
-	pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
+	std::pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
 	for(CVCardItems::const_iterator iter1 = iters1.first; iter1 != iters1.second; iter1++)
 	{
 		pair<cdstrmultimap::const_iterator, cdstrmultimap::const_iterator> iters2 = (*iter1).second.GetParams().equal_range(param_name);
@@ -99,7 +99,7 @@ unsigned long CVCard::CountItems(const cdstring& name, const cdstrmap& params)
 {
 	unsigned long ctr = 0;
 
-	pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
+	std::pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
 	for(CVCardItems::const_iterator iter1 = iters1.first; iter1 != iters1.second; iter1++)
 	{
 		for(cdstrmap::const_iterator iter2 = params.begin(); iter2 != params.end(); iter2++)
@@ -118,7 +118,7 @@ unsigned long CVCard::CountItems(const cdstring& name, const cdstrmap& params)
 
 const cdstring& CVCard::GetValue(const cdstring& name, const cdstrmap& params)
 {
-	pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
+	std::pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters1 = mItems.equal_range(name);
 	for(CVCardItems::const_iterator iter1 = iters1.first; iter1 != iters1.second; iter1++)
 	{
 		bool foundall = true;
@@ -214,14 +214,14 @@ bool CVCard::Read(istream& in)
 }
 
 // Write a single vCard address to the output stream
-void CVCard::Write(ostream& out)
+void CVCard::Write(std::ostream& out)
 {
 	out << os_endl;
 	out << "BEGIN:VCARD" << os_endl;
 	out << "VERSION:3.0" << os_endl;
 
 	// Output the FN item first - must exist
-	pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters = mItems.equal_range("FN");
+	std::pair<CVCardItems::const_iterator, CVCardItems::const_iterator> iters = mItems.equal_range("FN");
 	for(CVCardItems::const_iterator iter = iters.first; iter != iters.second; iter++)
 		WriteItem(out, (*iter).first, (*iter).second);
 
@@ -366,7 +366,7 @@ void CVCard::ReadItem(cdstring& str, bool old_version)
 
 const char* cParamSpecials = ";,:";
 
-void CVCard::WriteItem(ostream& out, const cdstring& name, const CVCardItem& item)
+void CVCard::WriteItem(std::ostream& out, const cdstring& name, const CVCardItem& item)
 {
 	// We need to fold lines so write into temp output stream first
 	std::ostrstream tout;

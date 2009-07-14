@@ -28,8 +28,8 @@
 #include "cdstring.h"
 
 #include <cerrno>
-#include <istream.h>
-#include <ostream.h>
+#include <istream>
+#include <ostream>
 
 #if __dest_os == __win32_os
 #include <WIN_LStream.h>
@@ -43,7 +43,7 @@
 	{ if ((x).fail()) { int err_no = os_errno; CLOG_LOGTHROW(CGeneralException, err_no); throw CGeneralException(err_no); } }
 
 
-void StreamCopy(istream& in, ostream& out, unsigned long start, unsigned long length, unsigned long buf_size)
+void StreamCopy(std::istream& in, std::ostream& out, unsigned long start, unsigned long length, unsigned long buf_size)
 {
 	// Create temp buffer
 	cdstring buffer;
@@ -67,7 +67,7 @@ void StreamCopy(istream& in, ostream& out, unsigned long start, unsigned long le
 		in.clear();
 }
 
-void StreamCopyIO(iostream& inout, ostream& out, unsigned long start, unsigned long length, unsigned long buf_size)
+void StreamCopyIO(std::iostream& inout, std::ostream& out, unsigned long start, unsigned long length, unsigned long buf_size)
 {
 	// Create temp buffer
 	cdstring buffer;
@@ -79,7 +79,7 @@ void StreamCopyIO(iostream& inout, ostream& out, unsigned long start, unsigned l
 		inout.seekg(start);
 		inout.read(buffer.c_str_mod(), size);
 		CHECK_STREAM(inout);
-		inout.seekp(0, ios_base::end);
+		inout.seekp(0, std::ios_base::end);
 		out.write(buffer.c_str(), size);
 		CHECK_STREAM(out);
 		CHECK_STREAM(inout);
@@ -92,7 +92,7 @@ void StreamCopyIO(iostream& inout, ostream& out, unsigned long start, unsigned l
 		inout.clear();
 }
 
-void StreamCopy(istream& in, LStream& out, unsigned long start, unsigned long length, unsigned long buf_size)
+void StreamCopy(std::istream& in, LStream& out, unsigned long start, unsigned long length, unsigned long buf_size)
 {
 	// Create temp buffer
 	cdstring buffer;
@@ -115,11 +115,11 @@ void StreamCopy(istream& in, LStream& out, unsigned long start, unsigned long le
 		in.clear();
 }
 
-unsigned long StreamLength(istream& in)
+unsigned long StreamLength(std::istream& in)
 {
-	streampos old_pos = in.tellg();
-	in.seekg(0, ios_base::end);
-	streampos len_pos = in.tellg();
+	std::streampos old_pos = in.tellg();
+	in.seekg(0, std::ios_base::end);
+	std::streampos len_pos = in.tellg();
 	in.seekg(old_pos);
 	
 	return len_pos - old_pos;
@@ -127,13 +127,13 @@ unsigned long StreamLength(istream& in)
 
 #pragma mark ____________________________Network/host i/o
 
-void WriteHost(ostream& out, const unsigned long& data)
+void WriteHost(std::ostream& out, const unsigned long& data)
 {
 	unsigned long temp = htonl(data);
 	out.write(reinterpret_cast<const char*>(&temp), sizeof(unsigned long));
 }
 
-void WriteHost(ostream& out, const ulvector& data)
+void WriteHost(std::ostream& out, const ulvector& data)
 {
 	unsigned long size = htonl(data.size());
 	out.write(reinterpret_cast<const char*>(&size), sizeof(unsigned long));
@@ -144,19 +144,19 @@ void WriteHost(ostream& out, const ulvector& data)
 	}
 }
 
-void ReadHost(istream& in, unsigned long& data)
+void ReadHost(std::istream& in, unsigned long& data)
 {
 	in.read(reinterpret_cast<char*>(&data), sizeof(unsigned long));
 	data = ntohl(data);
 }
 
-void ReadHost(istream& in, long& data)
+void ReadHost(std::istream& in, long& data)
 {
 	in.read(reinterpret_cast<char*>(&data), sizeof(long));
 	data = ntohl(data);
 }
 
-void ReadHost(istream& in, ulvector* data)
+void ReadHost(std::istream& in, ulvector* data)
 {
 	unsigned long size = 0;
 	in.read(reinterpret_cast<char*>(&size), sizeof(unsigned long));
@@ -181,14 +181,14 @@ void ReadHost(istream& in, ulvector* data)
 
 #pragma mark ____________________________I18L i/o
 
-void Write1522(ostream& out, const cdstring& text)
+void Write1522(std::ostream& out, const cdstring& text)
 {
 	cdstring temp = text;
 	CRFC822::TextTo1522(temp, false);
 	out << temp << cd_endl;
 }
 
-void Read1522(istream& in, cdstring& text)
+void Read1522(std::istream& in, cdstring& text)
 {
 	getline(in, text);
 	CRFC822::TextFrom1522(text);

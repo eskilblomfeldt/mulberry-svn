@@ -48,7 +48,7 @@ public:
 protected:
 	cdstring				mLock;
 	
-	virtual void WriteHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
 };
 
 }	// namespace webdav

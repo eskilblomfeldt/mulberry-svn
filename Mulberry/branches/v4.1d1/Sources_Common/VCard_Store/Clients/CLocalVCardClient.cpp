@@ -893,14 +893,14 @@ void CLocalVCardClient::Append(CAddressBook* adbk, const CAddressList* addrs, co
 	
 	// Create the file and write address book to it
 	{
-		cdofstream os(fpath, ios_base::out | ios_base::app);
+		cdofstream os(fpath, std::ios_base::out | std::ios_base::app);
 		vCard::CVCardAddressBook vadbk;
 		
 		if (addrs != NULL)
 		{
 			for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 			{
-				auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(vadbk.GetRef(), static_cast<CAdbkAddress*>(*iter)));
+				std::auto_ptr<vCard::CVCardVCard> vcard(vcardstore::GenerateVCard(vadbk.GetRef(), static_cast<CAdbkAddress*>(*iter)));
 				vadbk.GenerateOne(os, *vcard);
 			}
 		}

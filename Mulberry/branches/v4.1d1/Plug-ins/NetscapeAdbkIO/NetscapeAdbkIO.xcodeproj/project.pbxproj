@@ -130,10 +130,12 @@
 		AF419A300AE9AA5B00E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF419A310AE9AA5B00E19592 /* Build configuration list for PBXProject "NetscapeAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF419A2E0AE9AA5B00E19592;
 			productRefGroup = AF419A3C0AE9AA5B00E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF419A3A0AE9AA5B00E19592 /* Netscape MachO */,
 			);
@@ -178,7 +180,7 @@
 		AF419A320AE9AA5B00E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

@@ -103,7 +103,7 @@ protected:
 class dotstuff_filterbuf : public filterbuf
 {
 public:
-	dotstuff_filterbuf(bool encode) : filterbuf(encode) { got_crlf = true; }
+	dotstuff_filterbuf(bool encode_it) : filterbuf(encode_it) { got_crlf = true; }
 	virtual ~dotstuff_filterbuf() {}
 
 protected:
@@ -117,7 +117,7 @@ protected:
 class fromstuff_filterbuf : public filterbuf
 {
 public:
-	fromstuff_filterbuf(bool encode) : filterbuf(encode) { mCRLast = false; got_crlf = true; }
+	fromstuff_filterbuf(bool encode_it) : filterbuf(encode_it) { mCRLast = false; got_crlf = true; }
 	virtual ~fromstuff_filterbuf() {}
 
 protected:

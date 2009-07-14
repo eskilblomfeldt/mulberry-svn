@@ -82,7 +82,7 @@ bool CDragServerTask::ExecuteSelf()
 		return false;
 	
 	// Execute operation
-	::sort(mMoveIndices.begin(), mMoveIndices.end());
+	std::sort(mMoveIndices.begin(), mMoveIndices.end());
 	for(ulvector::iterator iter = mMoveIndices.begin(); iter != mMoveIndices.end(); iter++)
 	{
 		// Only if different
@@ -295,7 +295,7 @@ bool CDragCalendarServerTask::ExecuteSelf()
 		return false;
 	
 	// Execute operation
-	::sort(mMoveIndices.begin(), mMoveIndices.end());
+	std::sort(mMoveIndices.begin(), mMoveIndices.end());
 	for(ulvector::iterator iter = mMoveIndices.begin(); iter != mMoveIndices.end(); iter++)
 	{
 		// Only if different

@@ -20,27 +20,27 @@
 #ifndef __PREFSVECTOR__MULBERRY__
 #define __PREFSVECTOR__MULBERRY__
 
-#include "vector.h"
+#include <vector>
 #include "ptrvector.h"
 
 #include "cdstring.h"
 
 class COptionsMap;
 
-template <class T> class prefsvector : public vector<T>
+template <class T> class prefsvector : public std::vector<T>
 {
 public:
 		prefsvector() :
-			vector<T>() {}
+	std::vector<T>() {}
 		prefsvector(const prefsvector& copy) :
-			vector<T>(copy) {}
+	std::vector<T>(copy) {}
 
 	virtual ~prefsvector() {}
 
     prefsvector<T>& operator= (const prefsvector<T>& copy)
-    	{ return static_cast<prefsvector<T>&>(vector<T>::operator=(copy)); }
+	{ return static_cast<prefsvector<T>&>(std::vector<T>::operator=(copy)); }
     bool operator== (const prefsvector<T>& other) const
-    	{ return static_cast<vector<T> >(*this) == static_cast<vector<T> >(other); }
+	{ return static_cast<std::vector<T> >(*this) == static_cast<std::vector<T> >(other); }
 
 	cdstring GetInfo() const;
 	bool SetInfo(char_stream& info, NumVersion vers_prefs);

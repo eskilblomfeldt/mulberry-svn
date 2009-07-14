@@ -22,7 +22,7 @@
 
 #include <Icons.h>
 
-#include <map.h>
+#include <map>
 
 // Classes
 
@@ -72,7 +72,7 @@ public:
 	static void				GetTypeList(OSType creator, LArray& list);
 
 private:
-	typedef	map<cdstring, const CIconRef*> CIconRefMap;
+	typedef	std::map<cdstring, const CIconRef*> CIconRefMap;
 
 	static CIconRef*	sGenericUnknown;
 	static CIconRef*	sGenericFolder;

@@ -784,7 +784,7 @@ void CMailControl::SpendTime(bool force_tickle, bool do_checks)
 	for(CINETProtocolList::iterator iter = copy.begin(); iter != copy.end(); iter++)
 	{
 		// First make sure it is still in the list
-		CINETProtocolList::iterator found = ::find(sPeriodics.begin(), sPeriodics.end(), *iter);
+		CINETProtocolList::iterator found = std::find(sPeriodics.begin(), sPeriodics.end(), *iter);
 		if (found != sPeriodics.end())
 		{
 			// Don't allow throw-ups
@@ -807,13 +807,13 @@ void CMailControl::RegisterPeriodic(CINETProtocol* periodic, bool add)
 	if (add)
 	{
 		// Only add once
-		CINETProtocolList::iterator found = ::find(sPeriodics.begin(), sPeriodics.end(), periodic);
+		CINETProtocolList::iterator found = std::find(sPeriodics.begin(), sPeriodics.end(), periodic);
 		if (found == sPeriodics.end())
 			sPeriodics.push_back(periodic);
 	}
 	else
 	{
-		CINETProtocolList::iterator found = ::find(sPeriodics.begin(), sPeriodics.end(), periodic);
+		CINETProtocolList::iterator found = std::find(sPeriodics.begin(), sPeriodics.end(), periodic);
 		if (found != sPeriodics.end())
 			sPeriodics.erase(found);
 	}

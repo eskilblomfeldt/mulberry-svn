@@ -68,7 +68,7 @@ struct SReplyElement
 	EReplyTo	reply_type;
 };
 
-typedef vector<SReplyElement> CReplyList;
+typedef std::vector<SReplyElement> CReplyList;
 
 class	CReplyChooseTable : public CTableDrag {
 

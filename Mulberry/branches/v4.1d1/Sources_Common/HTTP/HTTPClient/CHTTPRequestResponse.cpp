@@ -88,28 +88,28 @@ bool CHTTPRequestResponse::HasRequestData() const
 	return (mRequestData != NULL);
 }
 
-istream* CHTTPRequestResponse::GetRequestDataStream()
+std::istream* CHTTPRequestResponse::GetRequestDataStream()
 {
 	return mRequestData != NULL ? mRequestData->GetStream() : NULL;
 }
 
-ostream* CHTTPRequestResponse::GetResponseDataStream()
+std::ostream* CHTTPRequestResponse::GetResponseDataStream()
 {
 	return mResponseData != NULL ? mResponseData->GetStream() : NULL;
 }
 
 cdstring CHTTPRequestResponse::GetRequestHeader()
 {
-	ostrstream sout;
+	std::ostrstream sout;
 	GenerateRequestHeader(sout);
-	sout << ends;
+	sout << std::ends;
 	
 	cdstring result;
 	result.steal(sout.str());
 	return result;
 }
 
-void CHTTPRequestResponse::GenerateRequestHeader(ostream& os)
+void CHTTPRequestResponse::GenerateRequestHeader(std::ostream& os)
 {
 	// This will be overridden by sub-classes that add headers - those classes should
 	// call this class's implementation to write out the basic set of headers
@@ -119,7 +119,7 @@ void CHTTPRequestResponse::GenerateRequestHeader(ostream& os)
 	os << net_endl;
 }
 
-void CHTTPRequestResponse::WriteHeaderToStream(ostream& os)
+void CHTTPRequestResponse::WriteHeaderToStream(std::ostream& os)
 {
 	// Write Request-line
 	os << cMethodMap[mMethod] << " " << mURI << " HTTP/1.1" << net_endl;
@@ -140,7 +140,7 @@ void CHTTPRequestResponse::WriteHeaderToStream(ostream& os)
 	WriteContentHeaderToStream(os);
 }
 
-void CHTTPRequestResponse::WriteContentHeaderToStream(ostream& os)
+void CHTTPRequestResponse::WriteContentHeaderToStream(std::ostream& os)
 {
 	// Check for content
 	if (HasRequestData())
@@ -165,7 +165,7 @@ void CHTTPRequestResponse::ClearResponse()
 		mResponseData->Clear();
 }
 
-void CHTTPRequestResponse::ParseResponseHeader(istream& is, ostream* log)
+void CHTTPRequestResponse::ParseResponseHeader(std::istream& is, std::ostream* log)
 {
 	// First line must be status
 	cdstring line;
@@ -209,7 +209,7 @@ void CHTTPRequestResponse::ParseResponseHeader(istream& is, ostream* log)
 			throw CHTTPResponseException("missing header value in response");
 		
 		// Add to multimap
-		mHeaders.insert(multimap<cdstring, cdstring>::value_type(header, value));
+		mHeaders.insert(std::multimap<cdstring, cdstring>::value_type(header, value));
 	}
 	
 	// Validate
@@ -253,7 +253,7 @@ void CHTTPRequestResponse::ParseStatusLine(cdstring& line)
 	mStatusReason = p;
 }
 
-bool CHTTPRequestResponse::ReadFoldedLine(istream& is, cdstring& line1, cdstring& line2, ostream* log) const
+bool CHTTPRequestResponse::ReadFoldedLine(std::istream& is, cdstring& line1, cdstring& line2, std::ostream* log) const
 {
 	// If line2 already has data, transfer that into line1
 	if (!line2.empty() || !line1.empty())

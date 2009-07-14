@@ -41,7 +41,7 @@
 #include "MyCFString.h"
 
 uint32_t CNewEventDialog::sTitleCounter = 0;
-set<CNewEventDialog*> CNewEventDialog::sDialogs;
+std::set<CNewEventDialog*> CNewEventDialog::sDialogs;
 
 // ---------------------------------------------------------------------------
 //	CNewEventDialog														  [public]
@@ -454,7 +454,7 @@ void CNewEventDialog::StartNew(const iCal::CICalendarDateTime& dtstart, const iC
 	}
 
 	// Start with an empty new event
-	auto_ptr<iCal::CICalendarVEvent> vevent(static_cast<iCal::CICalendarVEvent*>(iCal::CICalendarVEvent::Create(cal->GetRef())));
+	std::auto_ptr<iCal::CICalendarVEvent> vevent(static_cast<iCal::CICalendarVEvent*>(iCal::CICalendarVEvent::Create(cal->GetRef())));
 	
 	// Duration is one hour
 	iCal::CICalendarDuration duration(60 * 60);
@@ -468,7 +468,7 @@ void CNewEventDialog::StartNew(const iCal::CICalendarDateTime& dtstart, const iC
 void CNewEventDialog::StartEdit(const iCal::CICalendarVEvent& original)
 {
 	// Look for an existinf dialog for this event
-	for(set<CNewEventDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
+	for(std::set<CNewEventDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
 	{
 		if ((*iter)->ContainsEvent(original))
 		{

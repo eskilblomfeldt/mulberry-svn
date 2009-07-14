@@ -214,7 +214,7 @@ CPlugin::~CPlugin()
 bool CPlugin::InitPlugin(CPlugin*& plugin)
 {
 	bool result = false;
-	pair<bool, bool> reg_result(false, false);
+	std::pair<bool, bool> reg_result(false, false);
 	
 	{
 		// Attempt to load
@@ -635,7 +635,7 @@ void CPlugin::UnloadPlugin(void)
 // return.second - delete plugin
 pair<bool, bool> CPlugin::TestRegistration()
 {
-	pair<bool, bool> result(true, false);
+	std::pair<bool, bool> result(true, false);
 
 	// Attempt to load - will cache new refcon
 	StLoadPlugin _load(this);
@@ -743,7 +743,7 @@ pair<bool, bool> CPlugin::DoRegistration(bool allow_demo, bool allow_delete)
 		CLOG_LOGCATCH(...);
 	}
 
-	return pair<bool, bool>(done, delete_it);
+	return std::pair<bool, bool>(done, delete_it);
 }
 
 

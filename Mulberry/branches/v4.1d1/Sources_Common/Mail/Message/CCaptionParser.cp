@@ -60,7 +60,7 @@ cdstring CCaptionParser::ParseCaption(const cdstring& caption, const CMessage* m
 	const char* p = caption.c_str();
 	long caption_on_line = 0;
 	bool empty_caption = true;
-	streampos line_pos = out.tellp();
+	std::streampos line_pos = out.tellp();
 
 	while(*p)
 	{
@@ -249,13 +249,13 @@ cdstring CCaptionParser::ParseCaption(const cdstring& caption, const CMessage* m
 		out.seekp(line_pos);
 	}
 
-	out << ends;
+	out << std::ends;
 	cdstring result;
 	result.steal(out.str());
 	return result;
 }
 
-bool CCaptionParser::PutAddressListCaption(ostream& out, EMode mode, const CAddressList& addrs, bool multi)
+bool CCaptionParser::PutAddressListCaption(std::ostream& out, EMode mode, const CAddressList& addrs, bool multi)
 {
 	if (addrs.size() && multi)
 	{
@@ -275,7 +275,7 @@ bool CCaptionParser::PutAddressListCaption(ostream& out, EMode mode, const CAddr
 	return addrs.size();
 }
 
-void CCaptionParser::PutAddressCaption(ostream& out, EMode mode, const CAddress& addr)
+void CCaptionParser::PutAddressCaption(std::ostream& out, EMode mode, const CAddress& addr)
 {
 	switch(mode)
 	{

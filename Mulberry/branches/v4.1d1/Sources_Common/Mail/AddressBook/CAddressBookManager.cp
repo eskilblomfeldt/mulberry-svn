@@ -163,7 +163,7 @@ void CAddressBookManager::ClearSearch()
 // Clear single search result
 void CAddressBookManager::ClearSearchItem(CAddressSearchResult* item)
 {
-	CAddressSearchResultList::iterator found = ::find(mSearchResultList.begin(), mSearchResultList.end(), item);
+	CAddressSearchResultList::iterator found = std::find(mSearchResultList.begin(), mSearchResultList.end(), item);
 
 	if (found != mSearchResultList.end())
 	{
@@ -177,12 +177,12 @@ void CAddressBookManager::ClearSearchItem(CAddressSearchResult* item)
 void CAddressBookManager::ClearSearchItemAddress(CAddressSearchResult* item, CAddress* addr)
 {
 	// Find result first
-	CAddressSearchResultList::iterator found = ::find(mSearchResultList.begin(), mSearchResultList.end(), item);
+	CAddressSearchResultList::iterator found = std::find(mSearchResultList.begin(), mSearchResultList.end(), item);
 
 	if (found != mSearchResultList.end())
 	{
 		// Now find address
-		CAddressList::iterator found_addr = ::find(item->second->begin(), item->second->end(), addr);
+		CAddressList::iterator found_addr = std::find(item->second->begin(), item->second->end(), addr);
 		if (found_addr != item->second->end())
 			item->second->erase(found_addr);
 	}
@@ -485,7 +485,7 @@ void CAddressBookManager::StopProtocol(CAdbkProtocol* proto)
 // Get index of protocol in list
 long CAddressBookManager::GetProtocolIndex(const CAdbkProtocol* proto) const
 {
-	CAdbkProtocolList::const_iterator found = ::find(mProtos.begin(), mProtos.end(), proto);
+	CAdbkProtocolList::const_iterator found = std::find(mProtos.begin(), mProtos.end(), proto);
 	if (found != mProtos.end())
 		return found - mProtos.begin();
 	else
@@ -670,7 +670,7 @@ void CAddressBookManager::RenameAddressBook(CAddressBook* node, const cdstring& 
 #ifdef _TODO
 		// If the calendar is open rename the calendar object and do an immediate write
 		iCal::CICalendar* cal = node->GetCalendar();
-		auto_ptr<iCal::CICalendar> opened;
+		std::auto_ptr<iCal::CICalendar> opened;
 		try
 		{
 			if (cal == NULL)
@@ -769,14 +769,14 @@ void CAddressBookManager::SyncAddressBook(CAddressBook* adbk, bool add)
 		if (adbk->IsLookup())
 		{
 			// Only add if not already present
-			CAddressBookList::iterator found = ::find(mAdbkNickName.begin(), mAdbkNickName.end(), adbk);
+			CAddressBookList::iterator found = std::find(mAdbkNickName.begin(), mAdbkNickName.end(), adbk);
 			if (found == mAdbkNickName.end())
 				mAdbkNickName.push_back(adbk);
 		}
 		if (adbk->IsSearch())
 		{
 			// Only add if not already present
-			CAddressBookList::iterator found = ::find(mAdbkSearch.begin(), mAdbkSearch.end(), adbk);
+			CAddressBookList::iterator found = std::find(mAdbkSearch.begin(), mAdbkSearch.end(), adbk);
 			if (found == mAdbkSearch.end())
 				mAdbkSearch.push_back(adbk);
 		}
@@ -784,10 +784,10 @@ void CAddressBookManager::SyncAddressBook(CAddressBook* adbk, bool add)
 	else
 	{
 		// Remove from caches
-		CAddressBookList::iterator found = ::find(mAdbkNickName.begin(), mAdbkNickName.end(), adbk);
+		CAddressBookList::iterator found = std::find(mAdbkNickName.begin(), mAdbkNickName.end(), adbk);
 		if (found != mAdbkNickName.end())
 			mAdbkNickName.erase(found);
-		found = ::find(mAdbkSearch.begin(), mAdbkSearch.end(), adbk);
+		found = std::find(mAdbkSearch.begin(), mAdbkSearch.end(), adbk);
 		if (found != mAdbkSearch.end())
 			mAdbkSearch.erase(found);
 	}
@@ -898,7 +898,7 @@ bool CAddressBookManager::ResolveGroupName(const char* grp_name, CAddressList* l
 // Do search
 void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field, const cdstring& field_name)
 {
-	auto_ptr<CAddressList> addr_list(new CAddressList);
+	std::auto_ptr<CAddressList> addr_list(new CAddressList);
 
 	// Get search results
 	SearchAddress(name, match, field, *addr_list);
@@ -939,7 +939,7 @@ void CAddressBookManager::SearchAddress(const cdstring& name, CAdbkAddress::EAdd
 // Do search (not IMSP/ACAP)
 void CAddressBookManager::SearchAddress(EAddrLookup method, bool expanding, const cdstring& item, CAdbkAddress::EAddressMatch match, CAdbkAddress::EAddressField field)
 {
-	auto_ptr<CAddressList> addr_list(new CAddressList);
+	std::auto_ptr<CAddressList> addr_list(new CAddressList);
 
 	// Get search results
 	SearchAddress(method, expanding, item, match, field, *addr_list);
@@ -1199,7 +1199,7 @@ void CAddressBookManager::CaptureAddress(CAddressList& addrs)
 		// Look at each address
 		for(CAddressList::iterator iter = add_addrs.begin(); iter != add_addrs.end() ; iter++)
 		{
-			auto_ptr<CAdbkAddress> test(new CAdbkAddress(**iter));
+			std::auto_ptr<CAdbkAddress> test(new CAdbkAddress(**iter));
 
 			// Check to see whether it already exists
 			cdstring email = test->GetMailAddress();

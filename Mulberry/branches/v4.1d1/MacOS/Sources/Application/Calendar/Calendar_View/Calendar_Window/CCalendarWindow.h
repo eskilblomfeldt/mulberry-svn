@@ -61,7 +61,7 @@ class	CCalendarWindow : public LWindow,
 							public CHelpTagWindow
 {
 public:
-	typedef vector<CCalendarWindow*>	CCalendarWindowList;
+	typedef std::vector<CCalendarWindow*>	CCalendarWindowList;
 	static cdmutexprotect<CCalendarWindowList> sCalendarWindows;	// List of windows (protected for multi-thread access)
 
 	enum { class_ID = 'CaWi' };

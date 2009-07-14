@@ -158,7 +158,7 @@ void CCertManagerDialog::RefreshList()
 	CCertificateManager::sCertificateManager->GetAllCertificatesInStores(type, mCerts);
 	
 	// Sort certificate list
-	::sort(mCerts.begin(), mCerts.end(), CCertificate::SubjectCompare);
+	std::sort(mCerts.begin(), mCerts.end(), CCertificate::SubjectCompare);
 
 	// Get display data from all certs
 	cdstrvect items;

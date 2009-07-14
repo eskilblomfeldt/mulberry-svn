@@ -72,10 +72,10 @@ public:
 	const CEnvelope::CEnvelopeIndex& GetEnvelopeIndex() const
 		{ return mEnvelopeIndex; }
 
-	void WriteIndexToStream(ostream& out, long offset = 0, ulvector* text_indices = NULL) const;
-	void ReadIndexFromStream(istream& in, ulvector* text_indices, unsigned long vers);
-	void WriteCacheToStream(ostream& out) const;
-	void ReadCacheFromStream(istream& in, unsigned long vers);
+	void WriteIndexToStream(std::ostream& out, long offset = 0, ulvector* text_indices = NULL) const;
+	void ReadIndexFromStream(std::istream& in, ulvector* text_indices, unsigned long vers);
+	void WriteCacheToStream(std::ostream& out) const;
+	void ReadCacheFromStream(std::istream& in, unsigned long vers);
 
 	virtual void	WriteHeaderToStream(costream& stream);		// Write message header to output stream
 	virtual void	WriteToStream(costream& stream,

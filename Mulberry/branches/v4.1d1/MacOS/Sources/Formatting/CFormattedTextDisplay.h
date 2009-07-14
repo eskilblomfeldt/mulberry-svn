@@ -32,7 +32,7 @@ class CFormatList;
 class CClickElement;
 class CClickList;
 class CAnchorClickElement;
-typedef map<cdstring, CAnchorClickElement> CAnchorElementMap;
+typedef std::map<cdstring, CAnchorClickElement> CAnchorElementMap;
 
 class CFormattedTextDisplay : public CTextDisplay
 {

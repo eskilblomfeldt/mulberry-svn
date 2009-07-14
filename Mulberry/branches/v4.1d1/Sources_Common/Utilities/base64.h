@@ -21,8 +21,6 @@
 
 #include <cstddef>
 
-using namespace std;
-
 char* base64_encode(const unsigned char* value, size_t vlen);
 unsigned char* base64_decode(const char* value, size_t& rlen);
 

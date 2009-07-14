@@ -63,7 +63,7 @@ CAddressBookWindow::~CAddressBookWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CAddressBookWindowList>::lock _lock(sAddressBookWindows);
-		CAddressBookWindowList::iterator found = ::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), this);
+		CAddressBookWindowList::iterator found = std::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), this);
 		if (found != sAddressBookWindows->end())
 			sAddressBookWindows->erase(found);
 	}
@@ -173,7 +173,7 @@ CAddressBookWindow* CAddressBookWindow::FindWindow(const CAddressBook* adbk)
 bool CAddressBookWindow::WindowExists(const CAddressBookWindow* wnd)
 {
 	cdmutexprotect<CAddressBookWindowList>::lock _lock(sAddressBookWindows);
-	CAddressBookWindowList::iterator found = ::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), wnd);
+	CAddressBookWindowList::iterator found = std::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), wnd);
 	return found != sAddressBookWindows->end();
 }
 

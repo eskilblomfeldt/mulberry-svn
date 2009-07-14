@@ -105,14 +105,14 @@ protected:
 		const unsigned long& LocalUIDNext() const
 			{ return mLocalUIDNext; }
 
-		void write(ostream& out) const;
-		void write_LastSync(ostream& out) const;
-		void write_IndexSize(ostream& out) const;
-		void write_UIDValidity(ostream& out) const;
-		void write_UIDNext(ostream& out) const;
-		void write_LastUID(ostream& out) const;
-		void write_LocalUIDNext(ostream& out) const;
-		void read(istream& in);
+		void write(std::ostream& out) const;
+		void write_LastSync(std::ostream& out) const;
+		void write_IndexSize(std::ostream& out) const;
+		void write_UIDValidity(std::ostream& out) const;
+		void write_UIDNext(std::ostream& out) const;
+		void write_LastUID(std::ostream& out) const;
+		void write_LocalUIDNext(std::ostream& out) const;
+		void read(std::istream& in);
 	};
 
 	struct SIndexRecord
@@ -165,14 +165,14 @@ protected:
 		const unsigned long& Sequence() const
 			{ return mSequence; }
 		
-		void write(ostream& out) const;
-		void write_Flags(ostream& out) const;
-		void write_UID(ostream& out) const;
-		void read(istream& in);
+		void write(std::ostream& out) const;
+		void write_Flags(std::ostream& out) const;
+		void write_UID(std::ostream& out) const;
+		void read(std::istream& in);
 	};
 
-	typedef vector<SIndexRecord>	SIndexList;
-	typedef vector<SIndexRecord*>	SIndexRefList;
+	typedef std::vector<SIndexRecord>	SIndexList;
+	typedef std::vector<SIndexRecord*>	SIndexRefList;
 
 	// I N S T A N C E  V A R I A B L E S
 
@@ -195,7 +195,7 @@ protected:
 	bool			mMboxReload;					// Flag to indicate mbox needs to be reread
 	bool			mMboxReadWrite;					// Flag indicating it was opened read-write
 
-	istream::pos_type mAppendStart;					// Start of multiple append
+	std::istream::pos_type mAppendStart;					// Start of multiple append
 
 	cdfstream*		mAppendMailbox;
 	cdfstream*		mAppendCache;
@@ -380,7 +380,7 @@ protected:
 
 protected:
 	// H A N D L E  E R R O R
-	virtual void	INETHandleError(exception& ex,
+	virtual void	INETHandleError(std::exception& ex,
 							const char* err_id,
 							const char* nobad_id);					// Handle an error condition
 
@@ -472,7 +472,7 @@ protected:
 									bool copying,
 									CLocalClient* copier,
 									bool dummy_files = false);
-			void	RollbackAppend(CMbox* mbox, cdfstream* stream, istream::pos_type old_start);
+			void	RollbackAppend(CMbox* mbox, cdfstream* stream, std::istream::pos_type old_start);
 
 			bool	SearchMessage(const CLocalMessage* lmsg, const CSearchItem* spec);
 			bool	AddressSearch(const CLocalMessage* lmsg, const CSearchItem* spec);
@@ -485,11 +485,11 @@ protected:
 			time_t	DateRead(const CLocalMessage* lmsg);
 			time_t	InternalDateRead(const CLocalMessage* lmsg);
 
-			bool	StreamSearch(istream& in, unsigned long start, unsigned long length, const cdstring& txt, EContentTransferEncoding cte);
+			bool	StreamSearch(std::istream& in, unsigned long start, unsigned long length, const cdstring& txt, EContentTransferEncoding cte);
 
 			bool	SearchBuffer(const char* str, unsigned long n, const char* pat, unsigned long& pat_pos, bool crlf_convert);
 
-			bool	StreamSearch1522(istream& in, unsigned long start, unsigned long length, const cdstring& txt);
+			bool	StreamSearch1522(std::istream& in, unsigned long start, unsigned long length, const cdstring& txt);
 
 	static	bool	uid_index_sort(SIndexRecord* rec1, SIndexRecord* rec2);
 };

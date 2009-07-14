@@ -20,10 +20,10 @@
 #ifndef __CLISTENER__MULBERRY__
 #define __CLISTENER__MULBERRY__
 
-#include "vector.h"
+#include <vector>
 
 class CBroadcaster;
-typedef vector<CBroadcaster*> CBroadcastList;
+typedef std::vector<CBroadcaster*> CBroadcastList;
 
 class CListener
 {

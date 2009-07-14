@@ -20,7 +20,7 @@
 #ifndef __CMESSAGELIST__MULBERRY__
 #define __CMESSAGELIST__MULBERRY__
 
-#include "vector.h"
+#include <vector>
 #include "CMessageFwd.h"
 #include "CMessageListFwd.h"
 
@@ -29,7 +29,7 @@
 class CMessage;
 class CMessageComparator;
 
-class CMessageList : public vector<CMessage*>
+class CMessageList : public std::vector<CMessage*>
 {
 public:
 	CMessageList(bool sorted = false);

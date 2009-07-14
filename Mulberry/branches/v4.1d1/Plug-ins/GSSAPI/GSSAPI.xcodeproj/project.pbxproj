@@ -166,10 +166,12 @@
 		AFD93B8C0AE5ADFB007F506F /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AFD93B8D0AE5ADFB007F506F /* Build configuration list for PBXProject "GSSAPI" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AFD93B8A0AE5ADFB007F506F;
 			productRefGroup = AFD93B980AE5ADFB007F506F /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AFD93B960AE5ADFB007F506F /* GSSAPI MachO */,
 			);
@@ -218,7 +220,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

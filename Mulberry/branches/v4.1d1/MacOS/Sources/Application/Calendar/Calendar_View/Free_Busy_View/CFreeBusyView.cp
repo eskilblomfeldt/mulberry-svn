@@ -296,7 +296,7 @@ void CFreeBusyView::OnRange()
 
 void CFreeBusyView::DoPrint()
 {
-	auto_ptr<CFreeBusyPrintout> pout;
+	std::auto_ptr<CFreeBusyPrintout> pout;
 
 	try
 	{

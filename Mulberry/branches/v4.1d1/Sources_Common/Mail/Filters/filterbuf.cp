@@ -27,14 +27,14 @@
 
 #pragma mark ____________________________filterbuf
 
-filterbuf::filterbuf(bool encode, CProgress* progress)
+filterbuf::filterbuf(bool encodeit, CProgress* progress)
 {
 	mOut = NULL;
 	mLOut = NULL;
 	mBOut = NULL;
 	mBOutSize = 0;
 	mBOutWritten = 0;
-	mEncode = encode;
+	mEncode = encodeit;
 	mProgress = progress;
 
  	CreateBuffer();
@@ -102,7 +102,7 @@ void filterbuf::write(const char_type* s, std::streamsize n)
 	}
 	if (mBOut)
 	{
-		mBOutWritten = ::min((unsigned long) n, mBOutSize);
+		mBOutWritten = std::min((unsigned long) n, mBOutSize);
 		::memcpy(mBOut, s, mBOutWritten);
 	}
 }
@@ -300,7 +300,7 @@ std::streamsize fromstuff_filterbuf::encode (const char_type* s, std::streamsize
 		if (p - s)
 		{
 			// Start and length of buffer to write/test
-			const char* start = s;
+			//const char* start = s;
 			unsigned long len = p - s;
 
 			// Got to end of line

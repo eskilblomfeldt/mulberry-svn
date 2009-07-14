@@ -190,7 +190,7 @@ void CMboxList::FindWildcard(const cdstring& pattern, CMboxList& list, bool no_d
 // Recursively search cache for mbox with requested name
 long CMboxList::FetchIndexOf(const CMbox* mbox) const
 {
-	const_iterator found = ::find(begin(), end(), static_cast<const CTreeNode*>(mbox));
+	const_iterator found = std::find(begin(), end(), static_cast<const CTreeNode*>(mbox));
 
 	if (found != end())
 		return found - begin();
@@ -229,10 +229,10 @@ void CMboxList::RemoveDuplicates()
 	}
 }
 
-void CMboxList::DumpHierarchy(ostream& out)
+void CMboxList::DumpHierarchy(std::ostream& out)
 {
 	// Write dir delim first
-	out << GetDirDelim() << endl;
+	out << GetDirDelim() << std::endl;
 
 	// Must compare against all mailboxes
 	for(const_iterator iter = begin(); iter != end(); iter++)
@@ -240,19 +240,19 @@ void CMboxList::DumpHierarchy(ostream& out)
 		CMbox* mbox = static_cast<CMbox*>(*iter);
 
 		// Write name then flags
-		out << mbox->GetName() << endl;
+		out << mbox->GetName() << std::endl;
 		out << (mbox->GetFlags() &
 					(NMbox::eNoSelect |
 					 NMbox::eNoInferiors |
 					 NMbox::eMarked |
-					 NMbox::eUnMarked)) << endl;
+					 NMbox::eUnMarked)) << std::endl;
 	}
 
 	// Always end with blank line
-	out << endl;
+	out << std::endl;
 }
 
-void CMboxList::ReadHierarchy(istream& in, CMboxProtocol* local, bool add_items)
+void CMboxList::ReadHierarchy(std::istream& in, CMboxProtocol* local, bool add_items)
 {
 	// Read dir delim
 	cdstring delim;

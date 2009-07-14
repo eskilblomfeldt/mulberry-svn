@@ -1578,14 +1578,14 @@
 
 /* Begin PBXFileReference section */
 		0867D6ABFE840B52C02AAC07 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = Packaging/English.lproj/InfoPlist.strings; sourceTree = SOURCE_ROOT; };
-		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		32DBCF6D0370B57F00C91783 /* MulberryXcode_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MulberryXcode_Prefix.pch; path = Sources/MulberryXcode_Prefix.pch; sourceTree = "<group>"; };
-		4A9504C8FFE6A3BC11CA0CBA /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
-		4A9504CAFFE6A41611CA0CBA /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		4A9504C8FFE6A3BC11CA0CBA /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		4A9504CAFFE6A41611CA0CBA /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		508344B209E5C41E0093A071 /* Mulberry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mulberry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D0C4E960486CD37000505A6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Packaging/Info.plist; sourceTree = SOURCE_ROOT; };
 		AF17ACEF0CCC54D300205B17 /* CocoaSpeller.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = CocoaSpeller.bundle; path = "../Plug-ins/CocoaSpeller/build/Debug/CocoaSpeller.bundle"; sourceTree = SOURCE_ROOT; };
-		AF17AD180CCC579D00205B17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		AF17AD180CCC579D00205B17 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		AF17AE430CCC585C00205B17 /* CMulberryCocoaApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMulberryCocoaApp.h; path = General/CMulberryCocoaApp.h; sourceTree = "<group>"; };
 		AF17AE440CCC585C00205B17 /* CMulberryCocoaApp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CMulberryCocoaApp.m; path = General/CMulberryCocoaApp.m; sourceTree = "<group>"; };
 		AF2551240C432558001AAE53 /* CFreeBusyPrintout.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CFreeBusyPrintout.cp; sourceTree = "<group>"; };
@@ -1689,12 +1689,12 @@
 		AF2551F50C4328A7001AAE53 /* CCalendarAddressDisplay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarAddressDisplay.h; path = Sources/Application/Calendar/Component_Editing/CCalendarAddressDisplay.h; sourceTree = "<group>"; };
 		AF2551F80C4328E9001AAE53 /* CCalendarAddress.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarAddress.cp; path = ../Sources_Common/Mail/Address/CCalendarAddress.cp; sourceTree = SOURCE_ROOT; };
 		AF2551F90C4328E9001AAE53 /* CCalendarAddress.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarAddress.h; path = ../Sources_Common/Mail/Address/CCalendarAddress.h; sourceTree = SOURCE_ROOT; };
-		AF2554580C43DAC7001AAE53 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		AF2554590C43DAC7001AAE53 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		AF2554580C43DAC7001AAE53 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		AF2554590C43DAC7001AAE53 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		AF2555050C442298001AAE53 /* CFreeBusyTableCommon.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CFreeBusyTableCommon.cp; path = ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/CFreeBusyTableCommon.cp; sourceTree = SOURCE_ROOT; };
 		AF2555060C442298001AAE53 /* CFreeBusyViewCommon.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CFreeBusyViewCommon.cp; path = ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/CFreeBusyViewCommon.cp; sourceTree = SOURCE_ROOT; };
-		AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libcrypto.0.9.7.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/libcrypto.0.9.7.dylib; sourceTree = "<absolute>"; };
-		AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libssl.0.9.7.dylib; path = /Developer/SDKs/MacOSX10.4u.sdk/usr/lib/libssl.0.9.7.dylib; sourceTree = "<absolute>"; };
+		AF2ADE070AE456F30078C306 /* libcrypto.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libcrypto.0.9.7.dylib; path = usr/lib/libcrypto.0.9.7.dylib; sourceTree = SDKROOT; };
+		AF2ADE090AE4571E0078C306 /* libssl.0.9.7.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; name = libssl.0.9.7.dylib; path = usr/lib/libssl.0.9.7.dylib; sourceTree = SDKROOT; };
 		AF37509F0AE1DC5D00C56E20 /* ATSUTextConversion.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = ATSUTextConversion.cp; sourceTree = "<group>"; };
 		AF3750A00AE1DC5D00C56E20 /* ATSUTextConversion.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ATSUTextConversion.h; sourceTree = "<group>"; };
 		AF3750A10AE1DC5D00C56E20 /* MoreATSUnicode.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MoreATSUnicode.cp; sourceTree = "<group>"; };
@@ -1702,9 +1702,9 @@
 		AF3750A30AE1DC5D00C56E20 /* MoreATSUnicodeFonts.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MoreATSUnicodeFonts.cp; sourceTree = "<group>"; };
 		AF3750A40AE1DC5D00C56E20 /* MoreATSUnicodeInternal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = MoreATSUnicodeInternal.h; sourceTree = "<group>"; };
 		AF3750A50AE1DC5D00C56E20 /* MoreATSUnicodeTextBox.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = MoreATSUnicodeTextBox.cp; sourceTree = "<group>"; };
-		AF3750B30AE1DD1B00C56E20 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/AddressBook.framework; sourceTree = "<absolute>"; };
-		AF3750B70AE1DD3900C56E20 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/LDAP.framework; sourceTree = "<absolute>"; };
-		AF3753BF0AE28C6200C56E20 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /Developer/SDKs/MacOSX10.4u.sdk/System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		AF3750B30AE1DD1B00C56E20 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		AF3750B70AE1DD3900C56E20 /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = /System/Library/Frameworks/LDAP.framework; sourceTree = "<absolute>"; };
+		AF3753BF0AE28C6200C56E20 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = System/Library/Frameworks/QuickTime.framework; sourceTree = SDKROOT; };
 		AF3753EE0AE28E0700C56E20 /* Mulberry.PPob */ = {isa = PBXFileReference; lastKnownFileType = archive.ppob; name = Mulberry.PPob; path = Resources/Mulberry.PPob; sourceTree = SOURCE_ROOT; };
 		AF3754670AE2D15900C56E20 /* AdBk.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = AdBk.icns; path = Resources/AdBk.icns; sourceTree = SOURCE_ROOT; };
 		AF3754680AE2D15900C56E20 /* Cald.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Cald.icns; path = Resources/Cald.icns; sourceTree = SOURCE_ROOT; };
@@ -1824,7 +1824,7 @@
 		AFBE2AB90D2F34A4002132BE /* COptionsAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COptionsAccount.h; path = ../Sources_Common/Application/Preferences/COptionsAccount.h; sourceTree = SOURCE_ROOT; };
 		AFC798190CCADCAF00E62F0F /* CPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPasswordManager.h; path = ../Sources_Common/Mail/Control/CPasswordManager.h; sourceTree = SOURCE_ROOT; };
 		AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPasswordManager.cp; path = ../Sources_Common/Mail/Control/CPasswordManager.cp; sourceTree = SOURCE_ROOT; };
-		AFC7981F0CCAE69000E62F0F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		AFC7981F0CCAE69000E62F0F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CocoaSpeller.xcodeproj; path = "../Plug-ins/CocoaSpeller/CocoaSpeller.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AFCDD2D10AE1647A00E30447 /* os_dep.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = os_dep.h; path = ../Sources_Common/os_dep.h; sourceTree = SOURCE_ROOT; };
 		AFCDD2D20AE1647A00E30447 /* os_dep.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = os_dep.cp; path = ../Sources_Common/os_dep.cp; sourceTree = SOURCE_ROOT; };
@@ -2160,8 +2160,8 @@
 		AFCDD5B10AE164F200E30447 /* PP Cursors.rsrc */ = {isa = PBXFileReference; lastKnownFileType = archive.rsrc; path = "PP Cursors.rsrc"; sourceTree = "<group>"; };
 		AFCDD5B20AE164F200E30447 /* PP DebugAlerts.rsrc */ = {isa = PBXFileReference; lastKnownFileType = archive.rsrc; path = "PP DebugAlerts.rsrc"; sourceTree = "<group>"; };
 		AFCDD5B30AE164F200E30447 /* PP Document Alerts.rsrc */ = {isa = PBXFileReference; lastKnownFileType = archive.rsrc; path = "PP Document Alerts.rsrc"; sourceTree = "<group>"; };
-		AFCDD5CB0AE164F200E30447 /* LFileChooser.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; path = LFileChooser.i; sourceTree = "<group>"; };
-		AFCDD5CC0AE164F200E30447 /* LFileDesignator.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.interfacer; path = LFileDesignator.i; sourceTree = "<group>"; };
+		AFCDD5CB0AE164F200E30447 /* LFileChooser.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; path = LFileChooser.i; sourceTree = "<group>"; };
+		AFCDD5CC0AE164F200E30447 /* LFileDesignator.i */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c.preprocessed; path = LFileDesignator.i; sourceTree = "<group>"; };
 		AFCDD5CD0AE164F200E30447 /* LFileTypeList.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LFileTypeList.cp; sourceTree = "<group>"; };
 		AFCDD5CE0AE164F200E30447 /* LFileTypeList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LFileTypeList.h; sourceTree = "<group>"; };
 		AFCDD5D30AE164F200E30447 /* UModalDialogs.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = UModalDialogs.cp; sourceTree = "<group>"; };
@@ -9530,6 +9530,7 @@
 		AF93880A0B116AA0000C5A54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -9538,7 +9539,7 @@
 				GCC_VERSION = 4.0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
@@ -9557,7 +9558,7 @@
 				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				OTHER_CPLUSPLUSFLAGS = "-fpermissive";
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				ZERO_LINK = NO;
 			};
 			name = Debug;
@@ -9592,17 +9593,15 @@
 		C0E91ACB08A95435008D54AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
 				GCC_VERSION = 4.0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
-				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
@@ -9621,7 +9620,7 @@
 				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				OTHER_CPLUSPLUSFLAGS = "-fpermissive";
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 				SEPARATE_STRIP = YES;
 			};
 			name = Release;

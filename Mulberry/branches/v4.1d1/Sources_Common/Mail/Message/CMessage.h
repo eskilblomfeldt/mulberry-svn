@@ -345,7 +345,7 @@ public:
 	void	ReadAttachment(CAttachment* attach,						// Read in an attachment
 							bool peek = false,
 							bool filter = true);
-	void	GetRawBody(ostream& out, bool peek = false);		// Read in entire raw body
+	void	GetRawBody(std::ostream& out, bool peek = false);		// Read in entire raw body
 	bool	HasText() const;									// Are there any text parts?
 	bool	HasData(const CAttachment* attach = NULL) const;	// Does the part already have data?
 	CAttachment*	FirstDisplayPart()							// Find first part to display

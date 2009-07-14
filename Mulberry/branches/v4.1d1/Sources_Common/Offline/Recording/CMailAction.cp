@@ -21,7 +21,7 @@
 
 #include "CStringUtils.h"
 
-#include <istream.h>
+#include <istream>
 
 extern const char* cValueBoolTrue;
 extern const char* cValueBoolFalse;
@@ -149,14 +149,14 @@ bool CMailAction::RemoveUIDs(const ulvector& leave)
 	return true;
 }
 
-void CMailAction::WriteToStream(ostream& out, bool text) const
+void CMailAction::WriteToStream(std::ostream& out, bool text) const
 {
 	// Create string list of items
 	if (text)
 		out << "ID=" << mID << " ";
 	else
 		out.write(reinterpret_cast<const char*>(&mID), 4);
-	out << cMailActionDescriptors[mAction] << endl;
+	out << cMailActionDescriptors[mAction] << std::endl;
 
 	switch(mAction)
 	{
@@ -166,21 +166,21 @@ void CMailAction::WriteToStream(ostream& out, bool text) const
 	case eUnsubscribe:
 	case eSelect:
 	case eDeselect:
-		out << GetNameUIDAction().first << endl;
+		out << GetNameUIDAction().first << std::endl;
 		if (text)
 			out << GetNameUIDAction().second;
 		else
 			out.write(reinterpret_cast<const char*>(&GetNameUIDAction().second), 4);
-		out << endl;
+		out << std::endl;
 		break;
 	case eRename:
-		out << GetRenameAction().first.first << endl;
-		out << GetRenameAction().first.second << endl;
+		out << GetRenameAction().first.first << std::endl;
+		out << GetRenameAction().first.second << std::endl;
 		if (text)
 			out << GetRenameAction().second;
 		else
 			out.write(reinterpret_cast<const char*>(&GetRenameAction().second), 4);
-		out << endl;
+		out << std::endl;
 		break;
 	case eFlag:
 		WriteUIDS(out, GetFlagAction().mUids.first, text);
@@ -196,18 +196,18 @@ void CMailAction::WriteToStream(ostream& out, bool text) const
 			char set = GetFlagAction().mSet ? 1 : 0;
 			out.write(&set, 1);
 		}
-		out << endl;
+		out << std::endl;
 		break;
 	case eCopy:
-		out << GetCopyAction().first << endl;
+		out << GetCopyAction().first << std::endl;
 		WriteUIDMap(out, GetCopyAction().second.first, text);
 		WriteUIDMap(out, GetCopyAction().second.second, text);
 		break;
 	case eAppend:
-		out << GetAppendAction().mName << endl;
+		out << GetAppendAction().mName << std::endl;
 		if (text)
 		{
-			out << GetAppendAction().mUid << endl;
+			out << GetAppendAction().mUid << std::endl;
 			out << GetAppendAction().mFlags;
 		}
 		else
@@ -218,7 +218,7 @@ void CMailAction::WriteToStream(ostream& out, bool text) const
 			out.write(&temp, 1);
 			out.write(reinterpret_cast<const char*>(&GetAppendAction().mFlags), 4);
 		}
-		out << endl;
+		out << std::endl;
 		break;
 	case eExpunge:
 		WriteUIDS(out, GetExpungeAction().first, text);
@@ -228,10 +228,10 @@ void CMailAction::WriteToStream(ostream& out, bool text) const
 	}
 	
 	if (text)
-		out << endl;
+		out << std::endl;
 }
 
-void CMailAction::ReadFromStream(istream& in, unsigned long vers)
+void CMailAction::ReadFromStream(std::istream& in, unsigned long vers)
 {
 	// get rid of existing
 	_tidy();
@@ -308,7 +308,7 @@ void CMailAction::ReadFromStream(istream& in, unsigned long vers)
 	}
 }
 
-void CMailAction::WriteUIDS(ostream& out, const ulvector& uids, bool text) const
+void CMailAction::WriteUIDS(std::ostream& out, const ulvector& uids, bool text) const
 {
 	unsigned long temp = uids.size();
 	if (text)
@@ -326,10 +326,10 @@ void CMailAction::WriteUIDS(ostream& out, const ulvector& uids, bool text) const
 		else
 			out.write(reinterpret_cast<const char*>(&(*iter)), 4);
 	}
-	out << endl;
+	out << std::endl;
 }
 
-void CMailAction::ReadUIDS(istream& in, unsigned long vers, ulvector& uids)
+void CMailAction::ReadUIDS(std::istream& in, unsigned long vers, ulvector& uids)
 {
 	unsigned long size;
 	in.read(reinterpret_cast<char*>(&size), 4);
@@ -342,7 +342,7 @@ void CMailAction::ReadUIDS(istream& in, unsigned long vers, ulvector& uids)
 	in.ignore();
 }
 
-void CMailAction::WriteUIDMap(ostream& out, const ulmap& uids, bool text) const
+void CMailAction::WriteUIDMap(std::ostream& out, const ulmap& uids, bool text) const
 {
 	unsigned long temp = uids.size();
 	if (text)
@@ -363,10 +363,10 @@ void CMailAction::WriteUIDMap(ostream& out, const ulmap& uids, bool text) const
 			out.write(reinterpret_cast<const char*>(&(*iter).second), 4);
 		}
 	}
-	out << endl;
+	out << std::endl;
 }
 
-void CMailAction::ReadUIDMap(istream& in, unsigned long vers, ulmap& uids)
+void CMailAction::ReadUIDMap(std::istream& in, unsigned long vers, ulmap& uids)
 {
 	unsigned long size;
 	in.read(reinterpret_cast<char*>(&size), 4);

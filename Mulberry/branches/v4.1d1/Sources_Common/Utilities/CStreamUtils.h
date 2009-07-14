@@ -28,27 +28,27 @@ class LStream;
 
 const int cDefaultCopyBufferSize = 4096;
 
-void StreamCopy(istream& in, ostream& out,
+void StreamCopy(std::istream& in, std::ostream& out,
 				unsigned long start, unsigned long length,
 				unsigned long buf_size = cDefaultCopyBufferSize);
-void StreamCopyIO(iostream& inout, ostream& out,
+void StreamCopyIO(std::iostream& inout, std::ostream& out,
 				unsigned long start, unsigned long length,
 				unsigned long buf_size = cDefaultCopyBufferSize);
-void StreamCopy(istream& in, LStream& out,
+void StreamCopy(std::istream& in, LStream& out,
 				unsigned long start, unsigned long length,
 				unsigned long buf_size = cDefaultCopyBufferSize);
-unsigned long StreamLength(istream& in);
+unsigned long StreamLength(std::istream& in);
 
 // Network/host byte order stream i/o
-void WriteHost(ostream& out, const unsigned long& data);
-void WriteHost(ostream& out, const ulvector& data);
+void WriteHost(std::ostream& out, const unsigned long& data);
+void WriteHost(std::ostream& out, const ulvector& data);
 
-void ReadHost(istream& in, unsigned long& data);
-void ReadHost(istream& in, long& data);
-void ReadHost(istream& in, ulvector* data);
+void ReadHost(std::istream& in, unsigned long& data);
+void ReadHost(std::istream& in, long& data);
+void ReadHost(std::istream& in, ulvector* data);
 
 // I18L i/o
-void Write1522(ostream& out, const cdstring& text);
-void Read1522(istream& in, cdstring& text);
+void Write1522(std::ostream& out, const cdstring& text);
+void Read1522(std::istream& in, cdstring& text);
 
 #endif

@@ -493,7 +493,7 @@ void CActionItem::ExecuteExpunge(CMbox* mbox, const ulvector& uids) const
 
 	// Remove undeleted from the set
 	ulvector actual_uids;
-	::set_difference(uids.begin(), uids.end(), undeleted.begin(), undeleted.end(), back_inserter<ulvector>(actual_uids));
+	std::set_difference(uids.begin(), uids.end(), undeleted.begin(), undeleted.end(), back_inserter<ulvector>(actual_uids));
 
 	// Now do UID expunge
 	mbox->ExpungeMessage(actual_uids, true);
@@ -749,7 +749,7 @@ void CActionItem::GetSIEVEExtensions(CFilterProtocol::EExtension& ext) const
 	}
 }
 
-void CActionItem::GenerateSIEVEScript(ostream& out) const
+void CActionItem::GenerateSIEVEScript(std::ostream& out) const
 {
 	switch(mType)
 	{

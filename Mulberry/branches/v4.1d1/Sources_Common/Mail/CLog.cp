@@ -500,12 +500,12 @@ void CLog::WriteOptions()
 	cdofstream fout(fname);
 
 	for(unsigned long i = eLogTypeFirst; i < eLogTypeLast; i++)
-		fout << cLogSection[i] << " " << (sLogInfo[i].mDoLog ? cLogOn : cLogOff) << endl;
+		fout << cLogSection[i] << " " << (sLogInfo[i].mDoLog ? cLogOn : cLogOff) << std::endl;
 
-	fout << cAuthenticationSection << " " << (sAllowAuthenticationLog ? cLogOn : cLogOff) << endl;
-	fout << cPlaybackSection << " " << (sAllowPlaybackLog ? cLogOn : cLogOff) << endl;
-	fout << cOverwriteSection << " " << (sOverwrite ? cLogOn : cLogOff) << endl;
-	fout << cUserCWDSection << " " << (sUserCWD ? cLogOn : cLogOff) << endl;
+	fout << cAuthenticationSection << " " << (sAllowAuthenticationLog ? cLogOn : cLogOff) << std::endl;
+	fout << cPlaybackSection << " " << (sAllowPlaybackLog ? cLogOn : cLogOff) << std::endl;
+	fout << cOverwriteSection << " " << (sOverwrite ? cLogOn : cLogOff) << std::endl;
+	fout << cUserCWDSection << " " << (sUserCWD ? cLogOn : cLogOff) << std::endl;
 #else
 #error __dest_os
 #endif
@@ -651,9 +651,9 @@ void CLog::LogThrow(const char* type, int err, const char* func, const char* fil
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
 		*sExceptionLog.GetLog() << os_endl << "Throw:     " << atime << os_endl
-				  << "\tTID: " << cdthread::current_tid() << " 0x" << hex << cdthread::current_tid() << dec << os_endl
+				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tType: " << type << os_endl
-				  << "\tErrno: " << err << " 0x" << hex << err << dec << os_endl
+				  << "\tErrno: " << err << " 0x" << std::hex << err << std::																																																																																																																																																																																																																																																																																																									dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
 				  << "," << line << os_endl << flush;
@@ -668,7 +668,7 @@ void CLog::LogCatch(const char* type, const char* func, const char* file, int li
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
 		*sExceptionLog.GetLog() << "-Catch:    " << atime << os_endl
-				  << "\tTID: " << cdthread::current_tid() << " 0x" << hex << cdthread::current_tid() << dec << os_endl
+				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tType: " << type << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
@@ -684,7 +684,7 @@ void CLog::LogRethrow(const char* func, const char* file, int line)
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
 		*sExceptionLog.GetLog() << "--Rethrow: " << atime << os_endl
-				  << "\tTID: " << cdthread::current_tid() << " 0x" << hex << cdthread::current_tid() << dec << os_endl
+				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
 				  << "," << line << os_endl << flush;
@@ -700,7 +700,7 @@ void CLog::LogError(const char* func, const char* file, int line, const char* er
 		atime[atime.length() - 1] = 0;
 		*sExceptionLog.GetLog() << "--Error: " << atime << os_endl
 				  << "\tWhat: " << err << os_endl
-				  << "\tTID: " << cdthread::current_tid() << " 0x" << hex << cdthread::current_tid() << dec << os_endl
+				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
 				  << "," << line << os_endl << flush;

@@ -321,11 +321,11 @@ protected:
 							CINETClientResponse* response);		// Parse tagged response
 
 	// H A N D L E  E R R O R S
-	virtual void	INETHandleError(exception& ex,
+	virtual void	INETHandleError(std::exception& ex,
 							const char* err_id,
 							const char* nobad_id);					// Handle an error condition
 
-	virtual void	INETDisplayError(exception& ex,
+	virtual void	INETDisplayError(std::exception& ex,
 							const char* err_id,
 							const char* nobad_id);					// Handle an error condition
 	virtual void	INETDisplayError(CINETException& ex,

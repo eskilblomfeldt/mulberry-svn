@@ -77,11 +77,11 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 {
 	// Check for forced logging
 	bool log_created = false;
-	auto_ptr<cdofstream> fout;
+	std::auto_ptr<cdofstream> fout;
 	if (!mLog && CLog::AllowPlaybackLog())
 	{
 		cdstring temp_name = mDescriptor + ".log";
-		fout.reset(new cdofstream(temp_name, ios_base::out | ios_base::trunc | ios_base::binary));
+		fout.reset(new cdofstream(temp_name, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary));
 		SetLog(fout.get());
 		log_created = true;
 	}
@@ -95,13 +95,13 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 		if (mLog)
 		{
 			*mLog << os_endl << os_endl << "----" << os_endl;
-			*mLog << "Starting Calendar Playback: " << CRFC822::GetRFC822Date() << os_endl << flush;
+			*mLog << "Starting Calendar Playback: " << CRFC822::GetRFC822Date() << os_endl << std::flush;
 		}
 
 		// Read in the entire journal
 		Open();
 		if (mLog)
-			*mLog << "Opened Playback log: " << mDescriptor << os_endl << flush;
+			*mLog << "Opened Playback log: " << mDescriptor << os_endl << std::flush;
 
 		// Compact the playback to minimise operations
 		CompactPlayback();
@@ -113,7 +113,7 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 			remote->Logon();
 
 			if (mLog)
-				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << flush;
+				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << std::flush;
 		}
 
 		// Cache useful items
@@ -140,7 +140,7 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 
 	// Close remote connection
 	if (remote->IsOpen() && mLog)
-		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << flush;
+		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << std::flush;
 	remote->Close();
 
 	// Clear it out
@@ -155,7 +155,7 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 		::remove_utf8(mDescriptor);
 
 		if (mLog)
-			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << std::flush;
 	}
 	else
 	{
@@ -167,26 +167,26 @@ bool CCalendarRecord::Playback(calstore::CCalendarProtocol* remote, calstore::CC
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		StCreatorType file(cMulberryCreator, cMailboxRecordType);
 #endif
-		mStream.open(mDescriptor, ios_base::in | ios_base::out | ios_base::trunc | ios_base::binary);
+		mStream.open(mDescriptor, std::ios_base::in | std::ios_base::out | std::ios_base::trunc | std::ios_base::binary);
 
 		// Add next id tag at start
-		mStream.seekp(0, ios_base::beg);
+		mStream.seekp(0, std::ios_base::beg);
 		mStream.write(reinterpret_cast<const char*>(&mNextID), sizeof(unsigned long));
 
 		// Write out items
 		for(const_iterator iter = begin(); iter != end(); iter++)
 			(*iter)->WriteToStream(mStream);
 
-		mStream << flush;
+		mStream << std::flush;
 		
 		Close();
 
 		if (mLog)
-			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << std::flush;
 	}
 
 	if (mLog)
-		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << flush;
+		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << std::flush;
 
 	if (log_created)
 		SetLog(NULL);
@@ -234,20 +234,20 @@ void CCalendarRecord::Playback_Create(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
+		std::auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
 
 		// Create on server
 		mPlayRemote->CreateCalendar(*node.get());
 
 		if (mLog)
-			*mLog << "  Create Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << flush;
+			*mLog << "  Create Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Create Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << flush;
+			*mLog << "  Create Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -259,20 +259,20 @@ void CCalendarRecord::Playback_Delete(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
+		std::auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarAction().mIsDir, false, false, action.GetCalendarAction().mName));
 
 		// Delete on server
 		mPlayRemote->DeleteCalendar(*node.get());
 
 		if (mLog)
-			*mLog << "  Delete Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << flush;
+			*mLog << "  Delete Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Delete Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << flush;
+			*mLog << "  Delete Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -284,14 +284,14 @@ void CCalendarRecord::Playback_Rename(CCalendarAction& action)
 	try
 	{
 		// Create temp remote object
-		auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarActionRename().first.mIsDir, false, false, action.GetCalendarActionRename().first.mName));
+		std::auto_ptr<calstore::CCalendarStoreNode> node(new calstore::CCalendarStoreNode(mPlayRemote, mPlayRemote->GetStoreRoot(), action.GetCalendarActionRename().first.mIsDir, false, false, action.GetCalendarActionRename().first.mName));
 
 		// Rename on server
 		mPlayRemote->RenameCalendar(*node.get(), action.GetCalendarActionRename().second);
 
 		if (mLog)
 			*mLog << "  Rename Calendar from: " << action.GetCalendarActionRename().first.mName <<
-					" to: " << action.GetCalendarActionRename().second << " succeeded" << os_endl << flush;
+					" to: " << action.GetCalendarActionRename().second << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
@@ -299,7 +299,7 @@ void CCalendarRecord::Playback_Rename(CCalendarAction& action)
 
 		if (mLog)
 			*mLog << "  Rename Calendar from: " << action.GetCalendarActionRename().first.mName <<
-					" to: " << action.GetCalendarActionRename().second << " failed" << os_endl << flush;
+					" to: " << action.GetCalendarActionRename().second << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -308,8 +308,8 @@ void CCalendarRecord::Playback_Rename(CCalendarAction& action)
 
 void CCalendarRecord::Playback_Change(CCalendarAction& action)
 {
-	auto_ptr<calstore::CCalendarStoreNode> node;
-	auto_ptr<iCal::CICalendar> cal;
+	std::auto_ptr<calstore::CCalendarStoreNode> node;
+	std::auto_ptr<iCal::CICalendar> cal;
 
 	try
 	{
@@ -336,14 +336,14 @@ void CCalendarRecord::Playback_Change(CCalendarAction& action)
 		node->SetCalendar(NULL);
 
 		if (mLog)
-			*mLog << "  Change Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << flush;
+			*mLog << "  Change Calendar: " << action.GetCalendarAction().mName << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Change Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << flush;
+			*mLog << "  Change Calendar: " << action.GetCalendarAction().mName << " failed" << os_endl << std::flush;
 		
 		// Clean-up
 		if (node.get() != NULL)
@@ -388,7 +388,7 @@ void CCalendarRecord::CompactChange()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: multiple changes." << os_endl << flush;
+		*mLog << "  Compacting Playback log: multiple changes." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -437,7 +437,7 @@ void CCalendarRecord::CompactDelete()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: no actions before delete." << os_endl << flush;
+		*mLog << "  Compacting Playback log: no actions before delete." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{

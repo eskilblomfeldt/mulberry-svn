@@ -37,7 +37,7 @@ struct SAttachmentDesc
 		{ mSpec = spec; mMimeType = mime; }
 };
 
-typedef map<cdstring, SAttachmentDesc> CAttachmentFileMap;
+typedef std::map<cdstring, SAttachmentDesc> CAttachmentFileMap;
 
 class CAttachment;
 class CFileAttachment;

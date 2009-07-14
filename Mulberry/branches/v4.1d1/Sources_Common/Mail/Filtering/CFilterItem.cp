@@ -91,9 +91,9 @@ void CFilterItem::SetUseScript(bool script)
 		else if (!mUseScript && script)
 		{
 			// Generate the current script
-			ostrstream out;
+			std::ostrstream out;
 			GenerateSIEVEScript(out, eEndl_Auto);
-			out << ends;
+			out << std::ends;
 			mScript = out.str();
 			out.freeze(false);
 
@@ -219,7 +219,7 @@ void CFilterItem::Execute(CMbox* mbox, const ulvector* selected, const CSearchIt
 	else if (andit || (mCriteria->GetType() != CSearchItem::eAll) || !selected || !selected->size())
 	{
 		// Modified criteria
-		auto_ptr<CSearchItem> criteria;
+		std::auto_ptr<CSearchItem> criteria;
 
 		// Intersect with selected messages
 		if (selected && selected->size())
@@ -258,7 +258,7 @@ void CFilterItem::Execute(CMbox* mbox, const ulvector* selected, const CSearchIt
 
 	// Subtract excluded
 	ulvector process;
-	::set_difference(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(process));
+	std::set_difference(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(process));
 	
 	// Only bother if something left
 	if (process.empty())
@@ -312,7 +312,7 @@ void CFilterItem::Execute(CMbox* mbox, const ulvector* selected, const CSearchIt
 	if (stop_it)
 	{
 		ulvector temp;
-		::set_union(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(temp));
+		std::set_union(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(temp));
 		exclude = temp;
 
 		// Log
@@ -338,7 +338,7 @@ void CFilterItem::GetSIEVEExtensions(CFilterProtocol::EExtension& ext) const
 	}
 }
 
-void CFilterItem::GenerateSIEVEScript(ostream& out, EEndl line_end) const
+void CFilterItem::GenerateSIEVEScript(std::ostream& out, EEndl line_end) const
 {
 	if (mUseScript)
 	{

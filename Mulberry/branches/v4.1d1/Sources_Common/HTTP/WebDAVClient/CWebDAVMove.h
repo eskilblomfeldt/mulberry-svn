@@ -45,7 +45,7 @@ protected:
 	cdstring mMoveToAbsURI;
 	bool mOverWrite;
 
-	virtual void WriteHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
 
 };
 

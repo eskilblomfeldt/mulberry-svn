@@ -66,7 +66,6 @@ const char* CSequence::GetSequenceText()
 		unsigned long numCtr = 0;
 		bool seq = false;
 		bool to_end = false;
-		CSequence::const_iterator iter = begin();
 		for(CSequence::const_iterator iter = begin(); iter != end(); iter++)
 		{
 			unsigned long theNum = *iter;
@@ -136,7 +135,7 @@ const char* CSequence::GetSequenceText()
 			// Single 0 in sequence - do entire list
 			out << "1:*";
 
-		out << ends;
+		out << std::ends;
 		mSequenceText.steal(out.str());
 
 	}

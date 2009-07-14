@@ -139,10 +139,12 @@
 		AF321A530AEAD36D00237005 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF321A540AEAD36D00237005 /* Build configuration list for PBXProject "PGP" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF321A510AEAD36D00237005;
 			productRefGroup = AF321A610AEAD36D00237005 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF321A5D0AEAD36D00237005 /* PGP8 MachO */,
 			);
@@ -188,7 +190,7 @@
 		AF321A550AEAD36D00237005 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

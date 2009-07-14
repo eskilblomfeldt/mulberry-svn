@@ -41,7 +41,7 @@ public:
 protected:
 	cdstring mLockToken;
 
-	virtual void WriteHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
 
 };
 

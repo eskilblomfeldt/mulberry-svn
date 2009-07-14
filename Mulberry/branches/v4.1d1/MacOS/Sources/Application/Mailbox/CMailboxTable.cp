@@ -603,7 +603,7 @@ bool CMailboxTable::TestSelectionIgnore(TestSelectionIgnorePP proc, bool and_it)
 	{
 		if (CellIsSelected(aCell))
 		{
-			pair<bool, bool> result = (this->*proc)(aCell.row);
+			std::pair<bool, bool> result = (this->*proc)(aCell.row);
 			if (result.second)
 				test = (and_it ? (result.first && test) : (result.first || test));
 		}
@@ -631,7 +631,7 @@ bool CMailboxTable::TestSelectionIgnore1(TestSelectionIgnore1PP proc, NMessage::
 	{
 		if (CellIsSelected(aCell))
 		{
-			pair<bool, bool> result = (this->*proc)(aCell.row, flag);
+			std::pair<bool, bool> result = (this->*proc)(aCell.row, flag);
 			if (result.second)
 				test = (and_it ? (result.first && test) : (result.first || test));
 		}

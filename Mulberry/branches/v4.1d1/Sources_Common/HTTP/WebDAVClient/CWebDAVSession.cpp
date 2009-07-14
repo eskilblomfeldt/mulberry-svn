@@ -58,7 +58,7 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 	while(true)
 	{
 		// Create OPTIONS request for the base_uri
-		auto_ptr<CHTTPRequestResponse> request(new CHTTPRequestResponse(this, CHTTPRequestResponse::eRequest_OPTIONS, base_uri));
+		std::auto_ptr<CHTTPRequestResponse> request(new CHTTPRequestResponse(this, CHTTPRequestResponse::eRequest_OPTIONS, base_uri));
 		request->SetSession(this);
 		CHTTPOutputDataString sout;
 		request->SetData(NULL, &sout);

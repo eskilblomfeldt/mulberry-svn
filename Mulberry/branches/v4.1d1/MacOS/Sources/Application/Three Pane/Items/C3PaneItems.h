@@ -136,7 +136,7 @@ protected:
 										void *ioParam);				// Respond to clicks in the icon buttons
 
 			void	OnTabs(unsigned long index);
-			void	OnTabsMove(pair<unsigned long, unsigned long> indices);
+			void	OnTabsMove(std::pair<unsigned long, unsigned long> indices);
 			void	OnTabsClose(unsigned long index);
 			void	OnTabsCloseAll();
 			void	OnTabsCloseOthers(unsigned long index);

@@ -71,7 +71,7 @@ protected:
 	virtual void	ExecuteSelf(MessageT inMessage, void *ioParam);					// Do context
 
 private:
-	static map<ResIDT, LMenu*> sContextMenus;
+	static std::map<ResIDT, LMenu*> sContextMenus;
 
 	LMenu* GetMenu(ResIDT resid);
 };

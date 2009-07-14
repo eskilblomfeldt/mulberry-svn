@@ -62,10 +62,10 @@ public:
 	void SetIndexBodyLength(unsigned long length)
 		{ mIndexBodyLength = length; }
 
-	void WriteIndexToStream(ostream& out, ulvector* text, long offset = 0) const;
-	void ReadIndexFromStream(istream& in, unsigned long vers);
-	void WriteCacheToStream(ostream& out) const;
-	void ReadCacheFromStream(istream& in, CLocalMessage* owner, unsigned long vers);
+	void WriteIndexToStream(std::ostream& out, ulvector* text, long offset = 0) const;
+	void ReadIndexFromStream(std::istream& in, unsigned long vers);
+	void WriteCacheToStream(std::ostream& out) const;
+	void ReadCacheFromStream(std::istream& in, CLocalMessage* owner, unsigned long vers);
 
 protected:
 	unsigned long	mIndexStart;

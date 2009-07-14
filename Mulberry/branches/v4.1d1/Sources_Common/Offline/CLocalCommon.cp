@@ -549,8 +549,8 @@ time_t GetDefinitiveFileTime(time_t time, const char* fpath)
 		// dates relative to the current timezone. But (oops) it does not account
 		// for daylight savings
 
-		typedef pair<cdstring, bool> TFileSystemTimeUTC;
-		typedef vector<TFileSystemTimeUTC> CFileSystemTimeUTCArray;
+		typedef std::pair<cdstring, bool> TFileSystemTimeUTC;
+		typedef std::vector<TFileSystemTimeUTC> CFileSystemTimeUTCArray;
 		static CFileSystemTimeUTCArray sFileSystemTimeUTC;
 
 		// Check on daylight savings
@@ -688,7 +688,7 @@ void hash_encode_name(std::ostrstream& out, const char* name, unsigned long n)
 	
 	// Get maximum length of filename less extension and hash bytes
 	const unsigned long cMaxFname = cMaxFnameLen - 8;
-	n = ::min(n, cMaxFname);
+	n = std::min(n, cMaxFname);
 	
 	// Output maximum filename length
 	while(n--)
@@ -744,7 +744,7 @@ void safe_encode_name(std::ostrstream& out, const char* name, unsigned long n, b
 
 cdstring LocalFileName(const cdstring& name, char dir_delim, bool hash_encode, bool single_level)
 {
-	ostrstream out;
+	std::ostrstream out;
 	const char* p = name;
 	const char* q = p;
 
@@ -774,7 +774,7 @@ cdstring LocalFileName(const cdstring& name, char dir_delim, bool hash_encode, b
 	else
 		safe_encode_name(out, q, p - q, single_level);
 
-	out << ends;
+	out << std::ends;
 
 	p = out.str();
 	out.freeze(false);

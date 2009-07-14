@@ -138,10 +138,12 @@
 		AF419CFB0AEA700500E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF419CFC0AEA700500E19592 /* Build configuration list for PBXProject "SMIME" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF419CF90AEA700500E19592;
 			productRefGroup = AF419D070AEA700500E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF419D050AEA700500E19592 /* SMIME MachO */,
 			);
@@ -186,7 +188,7 @@
 		AF419CFD0AEA700500E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

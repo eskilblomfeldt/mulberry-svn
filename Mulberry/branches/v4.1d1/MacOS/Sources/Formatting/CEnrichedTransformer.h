@@ -22,7 +22,6 @@
 #include "cdustring.h"
 
 #include <strstream>
-using namespace std;
 
 class CATSUIStyle;
 class CParserEnrichedStack;
@@ -37,10 +36,10 @@ public:
 	static char* ToEnriched(const char* text);							// UTF8 in, UTF8 out
 	static char* ToEnriched(const unichar_t* text);						// UTF16 in, UTF8 out
 
-	static void Write(ostrstream& sout, const unichar_t* string, size_t length);				// UTF8 in, UTF8 out
-	static void WriteNoEndlDouble(ostrstream& sout, const unichar_t* string, size_t length);	// UTF8 in, UTF8 out
+	static void Write(std::ostrstream& sout, const unichar_t* string, size_t length);				// UTF8 in, UTF8 out
+	static void WriteNoEndlDouble(std::ostrstream& sout, const unichar_t* string, size_t length);	// UTF8 in, UTF8 out
 
-	static void WriteHTML(char ch, ostream &out);
+	static void WriteHTML(char ch, std::ostream &out);
 };
 
 class CEnrichedTransformer
@@ -52,7 +51,7 @@ public:
 	char* Transform();
 
 private:
-	ostrstream				mOut;
+	std::ostrstream				mOut;
 	CTextDisplay*			mTextPane;
 	int						mCurrentSize;
 	short					mDefaultFont;

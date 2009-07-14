@@ -30,7 +30,7 @@
 
 #include <string.h>
 #include <algorithm>
-#include <ostream.h>
+#include <ostream>
 
 // Specializations
 
@@ -252,7 +252,7 @@ void CAddressList::SetComparator(CAddressComparator* comp)
 void CAddressList::Sort()
 {
 	if (mComparator)
-		::stable_sort(begin(), end(), mComparator->GetComparator());
+		std::stable_sort(begin(), end(), mComparator->GetComparator());
 }
 
 // Merge new list into current - filter out duplicates
@@ -398,7 +398,7 @@ void CAddressList::push_back_sorted(CAddress* anAddr)
 	CAddressList::iterator found = end();
 
 	if (mComparator)
-		found = ::lower_bound(begin(), end(), (const CAddress*&) anAddr, mComparator->GetComparator());
+		found = std::lower_bound(begin(), end(), (const CAddress*&) anAddr, mComparator->GetComparator());
 
 	insert(found, anAddr);
 }
@@ -410,7 +410,7 @@ unsigned long CAddressList::FetchIndexOf(const CAddress* addr) const
 	if (!addr)
 		return 0;
 
-	CAddressList::const_iterator found = ::find(begin(), end(), addr);
+	CAddressList::const_iterator found = std::find(begin(), end(), addr);
 
 	if (found != end())
 	{
@@ -427,7 +427,7 @@ unsigned long CAddressList::FetchInsertIndexOf(const CAddress* addr) const
 	if (!addr)
 		return 0;
 
-	CAddressList::const_iterator found = ::lower_bound(begin(), end(), addr, mComparator->GetComparator());
+	CAddressList::const_iterator found = std::lower_bound(begin(), end(), addr, mComparator->GetComparator());
 
 	if (found != end())
 	{
@@ -445,7 +445,7 @@ unsigned long CAddressList::FetchInsertIndexOf(const CAddress* addr) const
 void CAddressList::clear_without_delete()
 {
 	// Do inherited erase
-	vector<CAddress*>::erase(begin(), end());
+	std::vector<CAddress*>::erase(begin(), end());
 }
 
 // Remove matching address (without deleting it)
@@ -466,9 +466,9 @@ void CAddressList::RemoveAddress(CAddress* addr)
 	if (!addr)
 		return;
 
-	CAddressList::iterator found = ::find(begin(), end(), addr);
+	CAddressList::iterator found = std::find(begin(), end(), addr);
 	if (found != end())
-		vector<CAddress*>::erase(found);
+		std::vector<CAddress*>::erase(found);
 }
 
 // Find duplicate in list
@@ -591,7 +591,7 @@ void CAddressList::AddCalendarAddressToList(cdstrvect& list, bool full) const
 }
 
 // Write to stream
-void CAddressList::WriteToStream(ostream& stream) const
+void CAddressList::WriteToStream(std::ostream& stream) const
 {
 	// Get text of all addresses
 	bool first = true;

@@ -50,9 +50,9 @@ class CMboxProtocol;
 class CMbox;
 class CMessage;
 
-typedef vector<CINETProtocol*> CINETProtocolList;
+typedef std::vector<CINETProtocol*> CINETProtocolList;
 
-typedef vector<CMbox*> CSimpleMboxList;
+typedef std::vector<CMbox*> CSimpleMboxList;
 
 class CBusyContext
 {

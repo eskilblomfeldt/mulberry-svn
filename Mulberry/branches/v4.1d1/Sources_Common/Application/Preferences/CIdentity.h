@@ -104,38 +104,38 @@ public:
 		{ return mIdentity; }
 	
 	void	SetSMTPAccount(const cdstring& acct, bool use_smtp)
-		{ mSMTPAccount = make_pair(acct, use_smtp); }
+		{ mSMTPAccount = std::make_pair(acct, use_smtp); }
 	bool	UseSMTPAccount() const
 		{ return mSMTPAccount.second; }
 	const cdstring& GetSMTPAccount(bool resolve = false) const;
 	
 	void	SetFrom(const cdstring& from, bool use_from)
-		{ mFrom = make_pair(from, use_from); }
+		{ mFrom = std::make_pair(from, use_from); }
 	bool	UseFrom() const
 		{ return mFrom.second; }
 	const cdstring& GetFrom(bool resolve = false) const;
 	
 	void	SetReplyTo(const cdstring& reply_to, bool use_reply_to)
-		{ mReplyTo = make_pair(reply_to, use_reply_to); }
+		{ mReplyTo = std::make_pair(reply_to, use_reply_to); }
 	bool	UseReplyTo() const
 		{ return mReplyTo.second; }
 	const cdstring& GetReplyTo(bool resolve = false) const;
 	
 	void	SetSender(const cdstring& sender, bool use_sender)
-		{ mSender = make_pair(sender, use_sender); }
+		{ mSender = std::make_pair(sender, use_sender); }
 	bool	UseSender() const
 		{ return mSender.second; }
 	const cdstring& GetSender(bool resolve = false) const;
 	
 	void	SetCalendar(const cdstring& calendar, bool use_calendar)
-		{ mCalendar = make_pair(calendar, use_calendar); }
+		{ mCalendar = std::make_pair(calendar, use_calendar); }
 	bool	UseCalendar() const
 		{ return mCalendar.second; }
 	const cdstring& GetCalendar(bool resolve = false) const;
 	cdstring GetCalendarAddress() const;
 	
 	void	SetCopyTo(const cdstring& copy_to, bool use_copy_to)
-		{ mCopyTo = make_pair(copy_to, use_copy_to); }
+		{ mCopyTo = std::make_pair(copy_to, use_copy_to); }
 	bool	UseCopyTo() const
 		{ return mCopyTo.second; }
 	const cdstring& GetCopyTo(bool resolve = false) const;
@@ -153,32 +153,32 @@ public:
 	bool GetCopyReplied(bool resolve = false) const;
 	
 	void	SetHeader(const cdstring& header, bool use_header)
-		{ mHeader = make_pair(header, use_header); }
+		{ mHeader = std::make_pair(header, use_header); }
 	bool	UseHeader() const
 		{ return mHeader.second; }
 	const cdstring& GetHeader(bool resolve = false) const;
 	
 	void	SetSignature(const cdstring& signature, bool use_signature)
-		{ mSignature = make_pair(signature, use_signature); }
+		{ mSignature = std::make_pair(signature, use_signature); }
 	bool	UseSignature() const
 		{ return mSignature.second; }
 	cdstring GetSignature(bool resolve = false) const;
 	cdstring GetSignatureRaw(bool resolve = false) const;
 		
 	void	SetAddTo(const cdstring& add_to, bool use_add_to)
-		{ mAddTo = make_pair(add_to, use_add_to); }
+		{ mAddTo = std::make_pair(add_to, use_add_to); }
 	bool	UseAddTo() const
 		{ return mAddTo.second; }
 	const cdstring& GetAddTo(bool resolve = false) const;
 	
 	void	SetAddCC(const cdstring& add_cc, bool use_add_cc)
-		{ mAddCC = make_pair(add_cc, use_add_cc); }
+		{ mAddCC = std::make_pair(add_cc, use_add_cc); }
 	bool	UseAddCC() const
 		{ return mAddCC.second; }
 	const cdstring& GetAddCC(bool resolve = false) const;
 	
 	void	SetAddBcc(const cdstring& add_bcc, bool use_add_bcc)
-		{ mAddBcc = make_pair(add_bcc, use_add_bcc); }
+		{ mAddBcc = std::make_pair(add_bcc, use_add_bcc); }
 	bool	UseAddBcc() const
 		{ return mAddBcc.second; }
 	const cdstring& GetAddBcc(bool resolve = false) const;

@@ -245,7 +245,7 @@ public:
 	virtual bool IsDemo() const							// Is it in demo mode
 		{ return mDemo; }
 	virtual unsigned long GetRegistrationKey() const;	// Get registration key from plugin
-	virtual pair<bool, bool> DoRegistration(bool allow_demo, bool allow_delete);			// Register it
+	virtual std::pair<bool, bool> DoRegistration(bool allow_demo, bool allow_delete);			// Register it
 
 	// Preferences
 	virtual void 	WriteToMap(COptionsMap* theMap, bool dirty_only);	// Write data to a stream
@@ -290,7 +290,7 @@ protected:
 	cdmutex _mutex;										// Multithread lock
 
 	// Registration
-	virtual pair<bool, bool> TestRegistration();		// Test and do registration if required
+	virtual std::pair<bool, bool> TestRegistration();		// Test and do registration if required
 	virtual bool UseRegistration() const;				// Does plug-in need to be registered
 	virtual bool CanDemo() const;						// Can plug-in run as demo
 
@@ -329,6 +329,6 @@ private:
 	CPlugin* mPlugin;
 };
 
-typedef vector<CPlugin*> CPluginList;
+typedef std::vector<CPlugin*> CPluginList;
 
 #endif

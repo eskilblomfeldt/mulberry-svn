@@ -20,8 +20,8 @@
 #ifndef __CRECORDABLEACTION__MULBERRY__
 #define __CRECORDABLEACTION__MULBERRY__
 
-#include <istream.h>
-#include <ostream.h>
+#include <istream>
+#include <ostream>
 
 class CRecordableAction
 {
@@ -29,8 +29,8 @@ public:
 	CRecordableAction() {}
 	virtual ~CRecordableAction() {}
 
-	virtual void WriteToStream(ostream& out, bool text = false) const = 0;
-	virtual void ReadFromStream(istream& in, unsigned long vers) = 0;
+	virtual void WriteToStream(std::ostream& out, bool text = false) const = 0;
+	virtual void ReadFromStream(std::istream& in, unsigned long vers) = 0;
 };
 
 #endif

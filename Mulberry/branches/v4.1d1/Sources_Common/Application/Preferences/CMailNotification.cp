@@ -142,7 +142,7 @@ const cdstring& CMailNotification::GetSoundID(void) const
 	cdstrmap::const_iterator found = mSoundID.find(cOSKey);
 	if (found == mSoundID.end())
 	{
-		pair<cdstrmap::iterator, bool> result = const_cast<cdstrmap&>(mSoundID).insert(cdstrmap::value_type(cOSKey, cdstring::null_str));
+		std::pair<cdstrmap::iterator, bool> result = const_cast<cdstrmap&>(mSoundID).insert(cdstrmap::value_type(cOSKey, cdstring::null_str));
 		found = result.first;
 	}
 
@@ -152,7 +152,7 @@ const cdstring& CMailNotification::GetSoundID(void) const
 void CMailNotification::SetSoundID(const cdstring& sound_id)
 {
 	// Try insert or replace
-	pair<cdstrmap::iterator, bool> found = mSoundID.insert(cdstrmap::value_type(cOSKey, sound_id));
+	std::pair<cdstrmap::iterator, bool> found = mSoundID.insert(cdstrmap::value_type(cOSKey, sound_id));
 	if (!found.second)
 		(*found.first).second = sound_id;
 }

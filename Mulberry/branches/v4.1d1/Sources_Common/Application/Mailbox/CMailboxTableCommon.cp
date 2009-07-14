@@ -95,7 +95,7 @@ pair<bool, bool> CMailboxTable::TestSelectionFlag(TableIndexT row, NMessage::EFl
 	}
 
 	// This is deleted
-	return pair<bool, bool>(theMsg && theMsg->HasFlag(param), theMsg && !theMsg->IsFake());
+	return std::pair<bool, bool>(theMsg && theMsg->HasFlag(param), theMsg && !theMsg->IsFake());
 }
 
 // Test for an outgoing message
@@ -115,7 +115,7 @@ pair<bool, bool> CMailboxTable::TestSelectionSmart(TableIndexT row)
 		theMsg = NULL;
 	}
 
-	return pair<bool, bool>(theMsg && theMsg->IsSmartFrom(), theMsg && !theMsg->IsFake());
+	return std::pair<bool, bool>(theMsg && theMsg->IsSmartFrom(), theMsg && !theMsg->IsFake());
 }
 
 // Test for a fake message
@@ -689,7 +689,7 @@ void CMailboxTable::DoFlagMailMessage(NMessage::EFlags flags, bool set)
 	bool test = set ? !TestSelectionIgnore1And(&CMailboxTable::TestSelectionFlag, flags) :
 						!TestSelectionIgnore1Or(&CMailboxTable::TestSelectionFlag, flags);
 
-	// Make into vector<unsigned long>
+	// Make into std::vector<unsigned long>
 	ulvector nums;
 	GetSelectedRows(nums);
 

@@ -42,7 +42,7 @@ class CAddressView : public CBaseView
 public:
 	enum { class_ID = 'AdVi' };
 
-	typedef vector<CAddressView*>	CAddressViewList;
+	typedef std::vector<CAddressView*>	CAddressViewList;
 	static cdmutexprotect<CAddressViewList>	sAddressViews;
 
 					CAddressView();

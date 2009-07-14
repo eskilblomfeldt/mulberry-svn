@@ -162,7 +162,7 @@ class	CLetterWindow : public LWindow,
 	};
 
 public:
-	typedef vector<CLetterWindow*>	CLetterWindowList;
+	typedef std::vector<CLetterWindow*>	CLetterWindowList;
 	static cdmutexprotect<CLetterWindowList> sLetterWindows;	// List of windows (protected for multi-thread access)
 	static short		sLetterWindowCount;						// Total number of letters so far
 private:

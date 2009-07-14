@@ -179,7 +179,7 @@ bool CFileOptionsMap::WriteMap(bool verify)
 
 	// Write map to file
 #ifdef PREFS_USE_LSTREAM
-	ostrstream out;
+	std::ostrstream out;
 #endif
 
 	for(cdstrmap::const_iterator iter = mMap.begin(); iter != mMap.end(); iter++)

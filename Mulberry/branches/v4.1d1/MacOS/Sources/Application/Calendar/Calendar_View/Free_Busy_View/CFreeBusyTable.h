@@ -61,13 +61,13 @@ public:
 protected:
 	struct SFreeBusyInfo
 	{
-		typedef pair<iCal::CICalendarFreeBusy::EBusyType, uint32_t>	SFreeBusyPeriod;
+		typedef std::pair<iCal::CICalendarFreeBusy::EBusyType, uint32_t>	SFreeBusyPeriod;
 
 		cdstring 						mName;
-		vector<SFreeBusyPeriod>			mPeriods;
+		std::vector<SFreeBusyPeriod>			mPeriods;
 		
 	};
-	vector<SFreeBusyInfo> mItems;
+	std::vector<SFreeBusyInfo> mItems;
 
 	CFreeBusyTitleTable*			mTitles;
 	iCal::CICalendarDateTime		mDate;

@@ -62,7 +62,7 @@ public:
 	};
 
 	typedef ptrvector<CToolbarItem> CToolbarItems;
-	typedef vector<CToolbarItemInfo> CToolbarPtrItems;
+	typedef std::vector<CToolbarItemInfo> CToolbarPtrItems;
 
 	enum EItemType
 	{

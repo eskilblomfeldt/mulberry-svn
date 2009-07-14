@@ -30,7 +30,7 @@
 // Classes
 class CFilterItem;
 typedef prefsptrvector<CFilterItem> CFilterItemList;
-typedef vector<CFilterItem*> CFilterItems;
+typedef std::vector<CFilterItem*> CFilterItems;
 
 class CMbox;
 class char_stream;
@@ -128,7 +128,7 @@ public:
 
 	// SIEVE items
 	void	GetSIEVEExtensions(CFilterProtocol::EExtension& ext) const;
-	void	GenerateSIEVEScript(ostream& out, EEndl line_end) const;
+	void	GenerateSIEVEScript(std::ostream& out, EEndl line_end) const;
 
 	// Reade/write prefs
 	cdstring GetInfo(void) const;											// Get text expansion for prefs

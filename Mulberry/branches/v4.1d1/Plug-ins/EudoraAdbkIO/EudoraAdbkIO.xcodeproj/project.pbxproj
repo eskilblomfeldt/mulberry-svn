@@ -124,10 +124,12 @@
 		AF419A8F0AE9ABB600E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF419A900AE9ABB600E19592 /* Build configuration list for PBXProject "EudoraAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF419A8D0AE9ABB600E19592;
 			productRefGroup = AF419A9B0AE9ABB600E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF419A990AE9ABB600E19592 /* Eudora MachO */,
 			);
@@ -174,7 +176,7 @@
 		AF419A910AE9ABB600E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

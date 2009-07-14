@@ -137,7 +137,7 @@ void CMailboxView::ListenTo_Message(long msg, void* param)
 bool CMailboxView::ViewExists(const CMailboxView* wnd)
 {
 	cdmutexprotect<CMailboxViewList>::lock _lock(sMailboxViews);
-	CMailboxViewList::iterator found = ::find(sMailboxViews->begin(), sMailboxViews->end(), wnd);
+	CMailboxViewList::iterator found = std::find(sMailboxViews->begin(), sMailboxViews->end(), wnd);
 	return found != sMailboxViews->end();
 }
 
@@ -505,7 +505,7 @@ void CMailboxView::MoveSubstitute(unsigned long oldindex, unsigned long newindex
 		return;
 
 	// Rotate the vector
-	::rotate(mSubsList.begin() + min(oldindex, newindex),
+	std::rotate(mSubsList.begin() + min(oldindex, newindex),
 				(oldindex < newindex) ? mSubsList.begin() + (oldindex + 1) : mSubsList.begin() + oldindex,
 				mSubsList.begin() + (max(oldindex, newindex) + 1));
 

@@ -71,7 +71,7 @@ void CDSN::_copy(const CDSN& copy)
 	mFull = copy.mFull;
 }
 
-void CDSN::WriteHeaderToStream(ostream& out) const
+void CDSN::WriteHeaderToStream(std::ostream& out) const
 {
 	out << cSMTPNotify;
 	if (mSuccess || mFailure || mDelay)

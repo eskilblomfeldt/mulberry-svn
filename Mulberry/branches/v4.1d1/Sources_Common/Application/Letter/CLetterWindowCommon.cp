@@ -90,7 +90,7 @@ void CLetterWindow::ListenTo_Message(long msg, void* param)
 bool CLetterWindow::WindowExists(const CLetterWindow* wnd)
 {
 	cdmutexprotect<CLetterWindowList>::lock _lock(sLetterWindows);
-	CLetterWindowList::iterator found = ::find(sLetterWindows->begin(), sLetterWindows->end(), wnd);
+	CLetterWindowList::iterator found = std::find(sLetterWindows->begin(), sLetterWindows->end(), wnd);
 	return found != sLetterWindows->end();
 }
 
@@ -200,7 +200,7 @@ void CLetterWindow::MessageRemoved(const CMessage* msg)
 	if (mMsgs && mMsgs->size())
 	{
 		// Find matching message and erase
-		CMessageList::iterator found = ::find(mMsgs->begin(), mMsgs->end(), msg);
+		CMessageList::iterator found = std::find(mMsgs->begin(), mMsgs->end(), msg);
 		if (found != mMsgs->end())
 			mMsgs->erase(found);
 	}
@@ -888,7 +888,7 @@ void CLetterWindow::OnDraftSendMail()
 			}
 
 			// Create special bcc message
-			auto_ptr<CMessage> mail_msg_bcc(CreateMessage(true, true));
+			std::auto_ptr<CMessage> mail_msg_bcc(CreateMessage(true, true));
 
 			// Create header for bcc send
 			CRFC822::ECreateHeaderFlags flags = static_cast<CRFC822::ECreateHeaderFlags>(CRFC822::eAddBcc | CRFC822::eAddXMulberry | CRFC822::eBccSend);
@@ -1194,7 +1194,7 @@ CMessage* CLetterWindow::CreateMessage(bool send, bool bcc_only)
 		}
 
 		// If bcc only message add the bcc caption to the first text part
-		auto_ptr<CAttachment> fake_body;
+		std::auto_ptr<CAttachment> fake_body;
 		CAttachment* msg_body = mBody;
 		if (bcc_only)
 		{
@@ -1643,7 +1643,7 @@ void CLetterWindow::InitIdentity(const CIdentity* id)
 	// Now set the identity
 	if (id)
 	{
-		CIdentityList::const_iterator found = ::find(CPreferences::sPrefs->mIdentities.GetValue().begin(),
+		CIdentityList::const_iterator found = std::find(CPreferences::sPrefs->mIdentities.GetValue().begin(),
 													CPreferences::sPrefs->mIdentities.GetValue().end(), *id);
 
 		// Don't add signature if already present

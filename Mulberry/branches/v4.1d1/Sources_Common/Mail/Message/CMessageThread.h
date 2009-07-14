@@ -24,7 +24,7 @@
 
 #include "cdstring.h"
 
-#include <map.h>
+#include <map>
 
 class CMbox;
 class CMessage;
@@ -47,7 +47,7 @@ protected:
 	CMessageThread*	mNext;
 	bool			mReFwd;
 
-	typedef map<cdstring, CMessageThread*> CThreadMap;
+	typedef std::map<cdstring, CMessageThread*> CThreadMap;
 
 	// static to build tree from server results
 	static void				ThreadResult(CMbox* mbox, unsigned long msgnum, unsigned long msg_depth,

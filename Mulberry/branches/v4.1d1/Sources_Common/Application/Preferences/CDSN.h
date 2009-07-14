@@ -22,7 +22,7 @@
 
 #include "cdstring.h"
 
-#include <ostream.h>
+#include <ostream>
 
 class CDSN
 {
@@ -67,7 +67,7 @@ public:
 	void SetFull(bool set)
 		{ mFull = set; }
 
-	void WriteHeaderToStream(ostream& out) const;
+	void WriteHeaderToStream(std::ostream& out) const;
 	void ReadHeader(char* p);
 
 	// Read/write prefs

@@ -31,7 +31,7 @@ const cdstring& COSStringMap::GetData() const
 	const_iterator found = find(cOSKey);
 	if (found == end())
 	{
-		pair<iterator, bool> result = const_cast<COSStringMap*>(this)->insert(value_type(cOSKey, cdstring::null_str));
+		std::pair<iterator, bool> result = const_cast<COSStringMap*>(this)->insert(value_type(cOSKey, cdstring::null_str));
 		found = result.first;
 	}
 
@@ -41,7 +41,7 @@ const cdstring& COSStringMap::GetData() const
 void COSStringMap::SetData(const cdstring& txt)
 {
 	// Try insert or replace
-	pair<iterator, bool> found = insert(value_type(cOSKey, txt));
+	std::pair<iterator, bool> found = insert(value_type(cOSKey, txt));
 	if (!found.second)
 		(*found.first).second = txt;
 }

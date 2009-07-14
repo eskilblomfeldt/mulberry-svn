@@ -145,10 +145,12 @@
 		AFBD95C70AD9CA0700DD4C86 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AFBD95C80AD9CA0700DD4C86 /* Build configuration list for PBXProject "CRAM-MD5" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AFBD95C50AD9CA0700DD4C86;
 			productRefGroup = AFBD95D30AD9CA0700DD4C86 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AFBD95D10AD9CA0700DD4C86 /* CRAM-MD5 MachO */,
 			);
@@ -204,7 +206,7 @@
 				);
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				MACH_O_TYPE = mh_bundle;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

@@ -105,10 +105,10 @@ public:
 		eOtherPhoneType
 	};
 
-	typedef vector<EAddressField> CAddressFields;
-	typedef multimap<EEmailType, cdstring>	emailmap;
-	typedef multimap<EAddressType, cdstring> addrmap;
-	typedef multimap<EPhoneType, cdstring> phonemap;
+	typedef std::vector<EAddressField> CAddressFields;
+	typedef std::multimap<EEmailType, cdstring>	emailmap;
+	typedef std::multimap<EAddressType, cdstring> addrmap;
+	typedef std::multimap<EPhoneType, cdstring> phonemap;
 
 	CAdbkAddress()
 	{

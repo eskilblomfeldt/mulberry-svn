@@ -744,7 +744,7 @@ void CToolbar::ListenTo_Message(long msg, void* param)
 void CToolbar::SetCommander(LCommander* cmdr)
 {
 	// See if already in the list
-	CCommanderArray::const_iterator found = ::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
+	CCommanderArray::const_iterator found = std::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
 	if (found == mCmdrs.end())
 	{
 		// Erase all
@@ -760,7 +760,7 @@ void CToolbar::SetCommander(LCommander* cmdr)
 void CToolbar::AddCommander(LCommander* cmdr)
 {
 	// See if already in the list
-	CCommanderArray::const_iterator found = ::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
+	CCommanderArray::const_iterator found = std::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
 	if (found == mCmdrs.end())
 	{
 		mCmdrs.push_back(cmdr);
@@ -1023,14 +1023,14 @@ bool CToolbar::HandleContextMenuEvent(const EventRecord& cmmEvent)
 		pane->MouseLeave();
 
 	// Create popup menu
-	auto_ptr<LMenu> popup(new LMenu(15000));
+	std::auto_ptr<LMenu> popup(new LMenu(15000));
 	LMenuBar::GetCurrentMenuBar()->InstallMenu(popup.get(), hierMenu);
 	
 	// Fill add menu with items
 	LMenu* submenu = LMenuBar::GetCurrentMenuBar()->FetchMenu(175);
 	
 	// Place holder for apply rules popup if present
-	auto_ptr<LMenu> apply_rules;
+	std::auto_ptr<LMenu> apply_rules;
 	
 	// Get the allowed toolbar items
 	const CToolbarItem::CToolbarPtrItems& items = CToolbarManager::sToolbarManager.GetAllowedToolbarItems(GetType());

@@ -22,9 +22,8 @@
 
 #include "CTabs.h"
 
-#include "vector.h"
+#include <vector>
 
-using namespace std;
 
 class CPrefsTabSubPanel;
 class LCommander;
@@ -48,7 +47,7 @@ public:
 	virtual void	SetDisplayPanel(unsigned long index);		// Force update of display panel
 
 protected:
-	vector<CPrefsTabSubPanel*>		mPanels;
+	std::vector<CPrefsTabSubPanel*>		mPanels;
 	CPrefsTabSubPanel* mCurrentPanel;
 };
 

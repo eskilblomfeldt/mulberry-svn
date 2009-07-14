@@ -145,10 +145,12 @@
 		AF0F2E800AE3C9950074CFEF /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF0F2E810AE3C9950074CFEF /* Build configuration list for PBXProject "CommunicatorAdbkIO" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF0F2E7E0AE3C9950074CFEF;
 			productRefGroup = AF0F2E8E0AE3C9950074CFEF /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF0F2E8A0AE3C9950074CFEF /* Communicator MachO */,
 			);
@@ -195,7 +197,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				MACH_O_TYPE = mh_bundle;
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

@@ -602,14 +602,14 @@ void CPOP3Client::DoPOP3(CMbox* mbox)
 				if (*iter > GetMboxOwner()->GetMailAccount()->GetMaxSize() * 1024)
 				{
 					// See if this message number is marked for download
-					ulvector::iterator found = ::find(msgs.begin(), msgs.end(), num);
+					ulvector::iterator found = std::find(msgs.begin(), msgs.end(), num);
 					if (found != msgs.end())
 					{
 						// Remove it from download list
 						msgs.erase(found);
 						
 						// See if it was also marked for deletion
-						found = ::find(deletes.begin(), deletes.end(), num);
+						found = std::find(deletes.begin(), deletes.end(), num);
 						if (found != deletes.end())
 							// Remove from deletion list
 							deletes.erase(found);
@@ -664,9 +664,9 @@ void CPOP3Client::DoPOP3(CMbox* mbox)
 		
 		mPOP3INBOX = NULL;
 	}
-	catch (exception& ex)
+	catch (std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error alert to user
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -757,7 +757,7 @@ void CPOP3Client::NewUIDLs(const ulvector& uidls, ulvector& msgs, ulvector& dele
 					GetMboxOwner()->GetMailAccount()->GetDoTimedDelete())
 				{
 					// Get cache stream pos for envelope
-					istream::pos_type pos_cache = (*iter2).Cache();
+					std::istream::pos_type pos_cache = (*iter2).Cache();
 
 					// Now read in the envelope and body info
 					CLocalMessage lmsg(static_cast<CMbox*>(NULL));
@@ -836,10 +836,10 @@ void CPOP3Client::PopMessages(CMbox* mbox, const ulvector& msgs, const ulvector&
 		progress.SetTotal(sizes[*iter - 1]);
 
 		// Seek to end of mailbox stream
-		mMailbox.seekp(0, ios_base::end);
+		mMailbox.seekp(0, std::ios_base::end);
 
 		// Now at starting point for append
-		istream::pos_type old_start = mMailbox.tellp();
+		std::istream::pos_type old_start = mMailbox.tellp();
 
 		// Must add line between any previous message and this one
 		if (old_start)
@@ -849,7 +849,7 @@ void CPOP3Client::PopMessages(CMbox* mbox, const ulvector& msgs, const ulvector&
 		}
 
 		// Now at starting point for this message
-		istream::pos_type start = mMailbox.tellp();
+		std::istream::pos_type start = mMailbox.tellp();
 
 		// Add UNIX mailbox header
 		mMailbox << "From ";
@@ -898,7 +898,7 @@ void CPOP3Client::PopMessages(CMbox* mbox, const ulvector& msgs, const ulvector&
 		// Parse it
 		CRFC822Parser parser;
 		CNetworkAttachProgress progress;
-		auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(mMailbox, &progress));
+		std::auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(mMailbox, &progress));
 
 		// Parser will leave it in failed state
 		mMailbox.clear();
@@ -911,7 +911,7 @@ void CPOP3Client::PopMessages(CMbox* mbox, const ulvector& msgs, const ulvector&
 		SIndexRecord index_item;
 
 		// Add to end of cache file
-		mCache.seekg(0, ios_base::end);
+		mCache.seekg(0, std::ios_base::end);
 
 		// Write empty indices first
 		index_item.Index() = mCache.tellp();
@@ -949,7 +949,7 @@ void CPOP3Client::PopMessages(CMbox* mbox, const ulvector& msgs, const ulvector&
 			UpdateIndexLastUID(mIndex, index_item.UID());
 
 		// Write new indices at end
-		mIndex.seekg(0, ios_base::end);
+		mIndex.seekg(0, std::ios_base::end);
 		index_item.write(mIndex);
 		CHECK_STREAM(mIndex)
 	}

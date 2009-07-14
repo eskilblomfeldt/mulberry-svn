@@ -321,7 +321,7 @@ CTreeNode* CTreeNodeList::AddNode(CTreeNode* node, iterator pos)
 // Delete the node from the list
 void CTreeNodeList::RemoveNode(CTreeNode* node, bool delete_it)
 {
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 
 	if (found != end())
 	{
@@ -430,7 +430,7 @@ void CTreeNodeList::RemoveNode(CTreeNode* node, bool delete_it)
 void CTreeNodeList::ChangedNode(CTreeNode* node)
 {
 	// Must exist in this list
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 	if (found == end())
 		return;
 
@@ -454,7 +454,7 @@ void CTreeNodeList::NodeRenamed(CTreeNode* node, const cdstring& new_name)
 	node->SetName(new_name);
 
 	// Iterate over all child nodes and change their names
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 	if (found == end())
 		return;
 
@@ -519,7 +519,7 @@ CTreeNode* CTreeNodeList::GetParentNode(const CTreeNode* node)
 		return NULL;
 
 	// Must exist in this list
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 	if (found == end())
 		return NULL;
 
@@ -546,7 +546,7 @@ CTreeNode* CTreeNodeList::GetFirstChild(const CTreeNode* node)
 		return NULL;
 
 	// Must exist in this list
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 	if (found == end())
 		return NULL;
 
@@ -565,7 +565,7 @@ CTreeNode* CTreeNodeList::GetNextSibling(const CTreeNode* node)
 		return NULL;
 
 	// Must exist in this list
-	iterator found = ::find(begin(), end(), node);
+	iterator found = std::find(begin(), end(), node);
 	if (found == end())
 		return NULL;
 
@@ -589,7 +589,7 @@ CTreeNode* CTreeNodeList::GetNextSibling(const CTreeNode* node)
 // Get index (starts at 1)
 unsigned long CTreeNodeList::FetchIndexOf(const CTreeNode* node) const
 {
-	const_iterator found = ::find(begin(), end(), node);
+	const_iterator found = std::find(begin(), end(), node);
 
 	if (found != end())
 		return (found - begin()) + 1;
@@ -618,7 +618,7 @@ void CTreeNodeList::DeleteAll()
 void CTreeNodeList::Sort()
 {
 	// Sort all
-	::stable_sort(begin(), end(), GetCompareFN());
+	std::stable_sort(begin(), end(), GetCompareFN());
 }
 
 // Compare nodes in list (true if node1 < node2)
@@ -722,7 +722,7 @@ CTreeNodeList::iterator CTreeNodeList::GetInsertPosition(const CTreeNode* node)
 		// Find new sorted insert position
 		// Use upper bound so that insertion will hijack the sub-hierarchy
 		// of any existing similarly named node
-		pos = ::upper_bound(begin(), end(), node, GetCompareFN());
+		pos = std::upper_bound(begin(), end(), node, GetCompareFN());
 	}
 	else
 	{

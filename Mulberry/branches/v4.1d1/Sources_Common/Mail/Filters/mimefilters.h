@@ -25,8 +25,8 @@
 class mimefilterbuf : public filterbuf
 {
 public:
-	mimefilterbuf(bool encode, bool for_network)
-		: filterbuf(encode)
+	mimefilterbuf(bool encodeit, bool for_network)
+		: filterbuf(encodeit)
 		{}
 	virtual ~mimefilterbuf()
 		{}
@@ -45,7 +45,7 @@ protected:
 class mime_7bit_filterbuf : public mimefilterbuf
 {
 public:
-	mime_7bit_filterbuf(bool encode, bool for_network = false) : mimefilterbuf(encode, for_network)
+	mime_7bit_filterbuf(bool encodeit, bool for_network = false) : mimefilterbuf(encodeit, for_network)
 		{ mGotLineEnd = true; }
 	virtual ~mime_7bit_filterbuf() {}
 
@@ -59,7 +59,7 @@ protected:
 class mime_8bit_filterbuf : public mimefilterbuf
 {
 public:
-	mime_8bit_filterbuf(bool encode, bool for_network = false) : mimefilterbuf(encode, for_network)
+	mime_8bit_filterbuf(bool encodeit, bool for_network = false) : mimefilterbuf(encodeit, for_network)
 		{ mGotLineEnd = true; }
 	virtual ~mime_8bit_filterbuf() {}
 
@@ -73,7 +73,7 @@ protected:
 class mime_qp_filterbuf : public mimefilterbuf
 {
 public:
-	mime_qp_filterbuf(bool encode, bool for_network = false) : mimefilterbuf(encode, for_network)
+	mime_qp_filterbuf(bool encodeit, bool for_network = false) : mimefilterbuf(encodeit, for_network)
 		{ mDecodeState = eDecodeNormal; }
 	virtual ~mime_qp_filterbuf() {}
 
@@ -96,7 +96,7 @@ protected:
 class mime_base64_filterbuf : public mimefilterbuf
 {
 public:
-	mime_base64_filterbuf(bool encode, bool for_network = false) : mimefilterbuf(encode, for_network)
+	mime_base64_filterbuf(bool encodeit, bool for_network = false) : mimefilterbuf(encodeit, for_network)
 		{ mAtomPos = 0; mEncodeLength = 0; }
 	virtual ~mime_base64_filterbuf() {}
 

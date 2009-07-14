@@ -584,7 +584,7 @@ void CIMAPClient::_Deselect(CMbox* mbox)
 
 		// Do nothing...expecting NO response
 	}
-	catch (exception& ex)
+	catch (std::exception& ex)
 	{
 		CLOG_LOGCATCH(CNetworkException&);
 
@@ -1476,7 +1476,7 @@ void CIMAPClient::_CopyAttachment(unsigned long msg_num, CAttachment* attach,
 									costream* aStream, bool peek, unsigned long count, unsigned long start)
 {
 	// Get fetch specifier
-	ostrstream out;
+	std::ostrstream out;
 	if (attach)
 	{
 		// Get section description
@@ -1542,7 +1542,7 @@ void CIMAPClient::_CopyAttachment(unsigned long msg_num, CAttachment* attach,
 			break;
 		}
 	}
-	out << ends;
+	out << std::ends;
 	cdstring spec;
 	spec.steal(out.str());
 
@@ -2143,7 +2143,7 @@ int CIMAPClient::GetManualLiteralLength()
 	{
 		// Create counting stream
 		ctrbuf ctr;
-		ostream octr(&ctr);
+		std::ostream octr(&ctr);
 
 		// Make sure right line endings are used
 		costream stream_out(&octr, eEndl_CRLF);

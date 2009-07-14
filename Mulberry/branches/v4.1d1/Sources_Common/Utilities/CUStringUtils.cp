@@ -322,7 +322,7 @@ unichar_t * unistrcpy(unichar_t * dst, const unichar_t * src)
 	const	unichar_t * p = src;
 				unichar_t * q = dst;
 	
-	while (*q++ = *p++);
+	while ((*q++ = *p++) != 0);
 	
 #else
 	
@@ -385,7 +385,7 @@ unichar_t * unistrcat(unichar_t * dst, const unichar_t * src)
 	
 	q--;
 	
-	while (*q++ = *p++);
+	while ((*q++ = *p++) != 0);
 	
 #else
 	
@@ -457,7 +457,7 @@ unichar_t * unistrcat(unichar_t * dst, const char * src)
 	
 	q--;
 	
-	while (*q++ = (unsigned char)*p++);
+	while ((*q++ = (unsigned char)*p++) != 0) ;
 	
 #else
 	
@@ -553,7 +553,7 @@ unichar_t * unistrchr(const unichar_t * str, unichar_t chr)
 	      unichar_t   c = chr;
 	      unichar_t   ch;
 	
-	while(ch = *p++)
+	while((ch = *p++) != 0)
 		if (ch == c)
 			return((unichar_t *) (p - 1));
 	
@@ -583,7 +583,7 @@ unichar_t * unistrrchr(const unichar_t * str, const unichar_t chr)
 	      unichar_t   c = chr;
 	      unichar_t   ch;
 	
-	while(ch = *p++)
+	while((ch = *p++) != 0)
 		if (ch == c)
 			q = p - 1;
 	
@@ -644,12 +644,12 @@ unichar_t* unistrtok(unichar_t* str, const unichar_t* set, unichar_t** ptr)
 	
 	p = (unichar_t *) set;
 
-	while (c = *p++)
+	while ((c = *p++) != 0)
 		set_unichar_map(map, c);
 	
 	p = s;
 	
-	while (c = *p++)
+	while ((c = *p++) != 0)
 		if (!tst_unichar_map(map, c))
 			break;
 	
@@ -662,7 +662,7 @@ unichar_t* unistrtok(unichar_t* str, const unichar_t* set, unichar_t** ptr)
 	
 	q = p - 1;
 	
-	while (c = *p++)
+	while ((c = *p++) != 0)
 		if (tst_unichar_map(map, c))
 			break;
 	

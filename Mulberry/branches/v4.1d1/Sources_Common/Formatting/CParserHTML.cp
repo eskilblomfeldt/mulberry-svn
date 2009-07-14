@@ -29,7 +29,6 @@
 #include "CUTF8.h"
 
 #include <strstream>
-using namespace std;
 #if __dest_os == __linux_os
 #include <JFontManager.h>
 #include <JXDisplay.h>
@@ -300,7 +299,7 @@ ETag CParserHTML::GetTag(unichar_t* format, long &offset)
 long CParserHTML::FindParam(const unichar_t* param, cdustring& response, bool quoted)
 {
 	unsigned short state = 0;
-	ostrstream output;
+	std::ostrstream output;
 	bool done = false;
 	long eaten = 0;
 	bool quoting = false;
@@ -363,14 +362,14 @@ long CParserHTML::FindParam(const unichar_t* param, cdustring& response, bool qu
 
 	if (state == 2)
 	{
-		output << ends << ends;
+		output << std::ends << std::ends;
 		response.steal(reinterpret_cast<unichar_t*>(output.str()));
 	}
 
 	return eaten;
 }
 
-bool CParserHTML::GetLatinChar(unichar_t* format, ostream* out, unsigned long* added)
+bool CParserHTML::GetLatinChar(unichar_t* format, std::ostream* out, unsigned long* added)
 {
 	// Look for XML style hex/decimal notation
 	wchar_t charNum = ' ';
@@ -382,7 +381,7 @@ bool CParserHTML::GetLatinChar(unichar_t* format, ostream* out, unsigned long* a
 	return GetLatinChar(charNum, out, added);
 }
 
-bool CParserHTML::GetLatinChar(wchar_t charNum, ostream* out, unsigned long* added)
+bool CParserHTML::GetLatinChar(wchar_t charNum, std::ostream* out, unsigned long* added)
 {
 	// Never allow NULLs
 	if (!charNum)
@@ -398,7 +397,7 @@ bool CParserHTML::GetLatinChar(wchar_t charNum, ostream* out, unsigned long* add
 	return true;
 }
 
-bool CParserHTML::HandleAmpChar(unichar_t* format, ostream* out, unsigned long* added)
+bool CParserHTML::HandleAmpChar(unichar_t* format, std::ostream* out, unsigned long* added)
 {
 	// Valid input?
 	if (!format)
@@ -437,7 +436,7 @@ bool CParserHTML::HandleAmpChar(unichar_t* format, ostream* out, unsigned long* 
 long CParserHTML::FindParamUTF8(const char* param, cdstring &response, bool quoted)
 {
 	unsigned short state = 0;
-	ostrstream output;
+	std::ostrstream output;
 	bool done = false;
 	long eaten = 0;
 	bool quoting = false;
@@ -500,14 +499,14 @@ long CParserHTML::FindParamUTF8(const char* param, cdstring &response, bool quot
 
 	if (state == 2)
 	{
-		output << ends;
+		output << std::ends;
 		response.steal(output.str());
 	}
 
 	return eaten;
 }
 
-bool CParserHTML::GetLatinCharUTF8(char* format, ostream* sout, unsigned long* added)
+bool CParserHTML::GetLatinCharUTF8(char* format, std::ostream* sout, unsigned long* added)
 {
 	// Look for XML style hex/decimal notation
 	wchar_t charNum = ' ';
@@ -519,7 +518,7 @@ bool CParserHTML::GetLatinCharUTF8(char* format, ostream* sout, unsigned long* a
 	return GetLatinCharUTF8(charNum, sout, added);
 }
 
-bool CParserHTML::GetLatinCharUTF8(wchar_t charNum, ostream* sout, unsigned long* added)
+bool CParserHTML::GetLatinCharUTF8(wchar_t charNum, std::ostream* sout, unsigned long* added)
 {
 	// Never allow NULLs
 	if (!charNum)
@@ -552,7 +551,7 @@ bool CParserHTML::GetLatinCharUTF8(wchar_t charNum, ostream* sout, unsigned long
 	}
 }
 
-bool CParserHTML::HandleAmpCharUTF8(char* format, ostream* sout, unsigned long* added)
+bool CParserHTML::HandleAmpCharUTF8(char* format, std::ostream* sout, unsigned long* added)
 {
 	// Valid input?
 	if (!format)
@@ -702,7 +701,7 @@ void CParserHTML::HandleFormat(unichar_t* format, int index)
 	if (format[0] == '/')
 	{
 		ETag tag = GetTag(format + 1, offset);
-		auto_ptr<CParserHTMLStackElement> element(mHStack.pop(tag));
+		std::auto_ptr<CParserHTMLStackElement> element(mHStack.pop(tag));
 		if (element.get() != NULL)
 		{
 			// Some tags only make sense when they actuall enclose some valid data
@@ -796,7 +795,7 @@ void CParserHTML::HandleFormat(unichar_t* format, int index)
 	}
 }
 
-void CParserHTML::HandleImage(unichar_t* param, ostream* out, unsigned long* added)
+void CParserHTML::HandleImage(unichar_t* param, std::ostream* out, unsigned long* added)
 {
 	// Look for ALT param in images
 	bool done = false;
@@ -1069,7 +1068,7 @@ void CParserHTML::HandleScaledSize(long start, long stop, long relsize, bool fix
 
 void CParserHTML::FlushStack(int index)
 {
-	auto_ptr<CParserHTMLStackElement> element(mHStack.pop());
+	std::auto_ptr<CParserHTMLStackElement> element(mHStack.pop());
 	while(element.get() != NULL)
 	{
 		// Only do styles if requested by user
@@ -1141,7 +1140,7 @@ void CParserHTML::FlushStack(int index)
 
 void CParserHTML::ConvertAmpChar(cdustring& txt)
 {
-	ostrstream out;
+	std::ostrstream out;
 	const unichar_t* p = txt.c_str();
 	while(*p)
 	{
@@ -1177,7 +1176,7 @@ void CParserHTML::ConvertAmpChar(cdustring& txt)
 			break;
 		}
 	}
-	out << ends << ends;
+	out << std::ends << std::ends;
 	
 	txt.steal(reinterpret_cast<unichar_t*>(out.str()));
 }
@@ -1386,7 +1385,7 @@ const unichar_t* CParserHTML::Parse(int offset, bool for_display, bool quote, bo
 	const unichar_t* end_line = plain_endl.c_str();
 	int end_line_len = plain_endl.length();
 
-	ostrstream out;
+	std::ostrstream out;
 
 	const unichar_t* p = mTxt;
 	const unichar_t* start;
@@ -1405,7 +1404,7 @@ const unichar_t* CParserHTML::Parse(int offset, bool for_display, bool quote, bo
 					stop = start;
 					while (*stop && (*stop != ';') && !isuspace(*stop))
 						stop++;
-					auto_ptr<unichar_t> format(::unistrndup(start, stop - start));
+					std::auto_ptr<unichar_t> format(::unistrndup(start, stop - start));
 					
 					if (HandleAmpChar(format.get(), &out, &finalCount))
 					{
@@ -1471,10 +1470,10 @@ const unichar_t* CParserHTML::Parse(int offset, bool for_display, bool quote, bo
 				if (*p)
 					p++;
 
-				auto_ptr<unichar_t> format(::unistrndup(start, stop - start));
+				std::auto_ptr<unichar_t> format(::unistrndup(start, stop - start));
 				if (format.get() != NULL)
 				{
-					auto_ptr<unichar_t> lformat(::unistrdup(format.get()));
+					std::auto_ptr<unichar_t> lformat(::unistrdup(format.get()));
 					::unistrlower(lformat.get());
 
 					// Trim to starting tag
@@ -1889,7 +1888,7 @@ const unichar_t* CParserHTML::Parse(int offset, bool for_display, bool quote, bo
 
 	if (mFormatList)
 		FlushStack(finalCount + offset);
-	out << ends << ends;
+	out << std::ends << std::ends;
 	return reinterpret_cast<const unichar_t*>(out.str());
 }
 

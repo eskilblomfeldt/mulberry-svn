@@ -89,7 +89,7 @@ void CMonthView::ResetDate()
 	
 	// Now generate new month date table
 	iCal::CICalendarUtils::CICalendarTable monthDays;
-	pair<int32_t, int32_t> today_index;
+	std::pair<int32_t, int32_t> today_index;
 
 	iCal::CICalendarUtils::GetMonthTable(mDate.GetMonth(), mDate.GetYear(), CPreferences::sPrefs->mWeekStartDay.GetValue(), monthDays, today_index);
 	

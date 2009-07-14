@@ -31,7 +31,7 @@
 // Typedefs
 class CSearchItem;
 
-typedef vector<CSearchItem*> CSearchItemList;
+typedef std::vector<CSearchItem*> CSearchItemList;
 
 // CSearchItem: represents a single search criteria
 
@@ -174,7 +174,7 @@ public:
 	cdstring GenerateDate(bool expand_me = true) const;												// Generate date string
 	time_t ResolveDate() const;												// Get the actual specified date
 
-	void GenerateSIEVEScript(ostream& out) const;
+	void GenerateSIEVEScript(std::ostream& out) const;
 
 protected:
 	ESearchType			mType;
@@ -191,10 +191,10 @@ protected:
 	unsigned long ParseDate(char_stream& txt);										// Parse search item date
 	ulvector ParseSequence(char_stream& txt);										// Parse search item sequence
 
-	void GenerateAddressSIEVE(ostream& out, const char* hdr) const;					// Generate list of expanded address items
-	void GenerateSIEVEMatchType(ostream& out) const;								// Generate match type
+	void GenerateAddressSIEVE(std::ostream& out, const char* hdr) const;					// Generate list of expanded address items
+	void GenerateSIEVEMatchType(std::ostream& out) const;								// Generate match type
 	void GenerateSIEVEKey(cdstring& key) const;										// Generate key prefix
-	void GenerateSIEVENumber(ostream& out) const;									// Generate number
+	void GenerateSIEVENumber(std::ostream& out) const;									// Generate number
 
 private:
 	void _copy(const CSearchItem& copy);

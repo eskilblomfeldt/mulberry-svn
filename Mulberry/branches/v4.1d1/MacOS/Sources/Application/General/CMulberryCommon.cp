@@ -421,7 +421,7 @@ void RectOnScreen(Rect& rect, LWindow* wnd)
 IconSuiteRef Geticns(SInt16 theResID)
 {
 	// Look for icon suite in cache
-	typedef map<SInt16, IconSuiteRef> CIconSuiteCache;
+	typedef std::map<SInt16, IconSuiteRef> CIconSuiteCache;
 	static CIconSuiteCache cache;
 	CIconSuiteCache::const_iterator found = cache.find(theResID);
 	if (found != cache.end())

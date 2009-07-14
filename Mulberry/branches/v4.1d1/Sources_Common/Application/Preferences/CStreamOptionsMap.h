@@ -22,8 +22,8 @@
 
 #include "CBlockOptionsMap.h"
 
-#include <istream.h>
-#include <ostream.h>
+#include <istream>
+#include <ostream>
 
 // Classes
 class CStreamOptionsMap : public CBlockOptionsMap
@@ -42,9 +42,9 @@ public:
 		{ return false; }
 
 	// Set string
-			void SetIStream(istream* stream)
+	void SetIStream(std::istream* stream)
 		{ mIn = stream; }
-			void SetOStream(ostream* stream)
+	void SetOStream(std::ostream* stream)
 		{ mOut = stream; }
 
 	// Set upper
@@ -62,8 +62,8 @@ public:
 	virtual void PushSection(const cdstring& sub_section);
 
 private:
-	istream* mIn;
-	ostream* mOut;
+	std::istream* mIn;
+	std::ostream* mOut;
 	bool mUpper;
 	bool mIMSPFormat;
 

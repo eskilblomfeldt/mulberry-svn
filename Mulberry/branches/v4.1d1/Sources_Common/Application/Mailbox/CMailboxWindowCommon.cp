@@ -50,7 +50,7 @@ CMailboxWindow* CMailboxWindow::FindWindow(const CMbox* mbox)
 bool CMailboxWindow::WindowExists(const CMailboxWindow* wnd)
 {
 	cdmutexprotect<CMailboxWindowList>::lock _lock(sMboxWindows);
-	CMailboxWindowList::iterator found = ::find(sMboxWindows->begin(), sMboxWindows->end(), wnd);
+	CMailboxWindowList::iterator found = std::find(sMboxWindows->begin(), sMboxWindows->end(), wnd);
 	return found != sMboxWindows->end();
 }
 

@@ -219,7 +219,7 @@ void CYearView::OnLayout()
 
 void CYearView::DoPrint()
 {
-	auto_ptr<CYearPrintout> pout;
+	std::auto_ptr<CYearPrintout> pout;
 
 	try
 	{

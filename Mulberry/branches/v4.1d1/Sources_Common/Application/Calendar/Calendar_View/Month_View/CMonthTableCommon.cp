@@ -149,7 +149,7 @@ void CMonthTable::SelectDay()
 	}
 }
 
-void CMonthTable::ResetTable(const iCal::CICalendarUtils::CICalendarTable& table, const pair<int32_t, int32_t>& today_index, const iCal::CICalendarTimezone& timezone)
+void CMonthTable::ResetTable(const iCal::CICalendarUtils::CICalendarTable& table, const std::pair<int32_t, int32_t>& today_index, const iCal::CICalendarTimezone& timezone)
 {
 	// Remove all events
 	InitEvents(0, 0);

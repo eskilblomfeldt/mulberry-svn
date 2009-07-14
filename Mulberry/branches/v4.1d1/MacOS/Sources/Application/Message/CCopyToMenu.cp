@@ -357,7 +357,7 @@ void CCopyToMenu::AddProtocolToMenu(CMboxProtocol* proto, MenuHandle menuH, shor
 			if (!(*iter).GetCopyToNone(true) && !(*iter).GetCopyToChoose(true))
 			{
 				// Must not be duplicate
-				cdstrvect::const_iterator found = ::find(added.begin(), added.end(), copyto);
+				cdstrvect::const_iterator found = std::find(added.begin(), added.end(), copyto);
 				if (found != added.end())
 					continue;
 

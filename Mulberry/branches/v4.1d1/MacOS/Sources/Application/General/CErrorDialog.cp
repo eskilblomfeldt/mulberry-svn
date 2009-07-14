@@ -246,7 +246,7 @@ CErrorDialog::EDialogResult CErrorDialog::PoseDialog(EErrDialogType type, const 
 		PaneIDT paneid = (dontshow != NULL) ? paneid_ErrorDontShowDialog : paneid_ErrorDialog;
 
 		// Must auto destroy handler in case of exception
-		auto_ptr<CBalloonDialog> theHandler;
+		std::auto_ptr<CBalloonDialog> theHandler;
 		if (sErrorCritical)
 			theHandler.reset(new CCriticalBalloonDialog(paneid, CMulberryApp::sApp));
 		else

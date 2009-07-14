@@ -354,7 +354,7 @@ void CSecurityPlugin::ProcessBody(CMessage* msg, ESecureMessage mode, const char
 
 		// Write it to a stream
 		{
-			cdofstream outs(fin_path, ios_base::out|ios_base::trunc|ios_base::binary);
+			cdofstream outs(fin_path, std::ios_base::out|std::ios_base::trunc|std::ios_base::binary);
 			unsigned long level = 0;
 			costream stream_out(&outs, lendl);
 			part->WriteToStream(stream_out, level, false, nil);
@@ -384,11 +384,11 @@ void CSecurityPlugin::ProcessBody(CMessage* msg, ESecureMessage mode, const char
 
 		// Write it to a stream
 		{
-			ostrstream outs;
+			std::ostrstream outs;
 			unsigned long level = 0;
 			costream stream_out(&outs, lendl);
 			part->WriteToStream(stream_out, level, false, nil);
-			outs << ends;
+			outs << std::ends;
 			data.steal(outs.str());
 		}
 
@@ -770,8 +770,8 @@ void CSecurityPlugin::Process(const CMessage* msg,
 				keylist.push_back(key);
 
 			// Eliminate duplicates then create pointer array
-			::sort(keylist.begin(), keylist.end());
-			keylist.erase(::unique(keylist.begin(), keylist.end()), keylist.end());
+			std::sort(keylist.begin(), keylist.end());
+			keylist.erase(std::unique(keylist.begin(), keylist.end()), keylist.end());
 			const char** key_list = cdstring::ToArray(keylist);
 
 			try
@@ -827,8 +827,8 @@ void CSecurityPlugin::Process(const CMessage* msg,
 				keylist.push_back(key);
 
 			// Eliminate duplicates then create pointer array
-			::sort(keylist.begin(), keylist.end());
-			keylist.erase(::unique(keylist.begin(), keylist.end()), keylist.end());
+			std::sort(keylist.begin(), keylist.end());
+			keylist.erase(std::unique(keylist.begin(), keylist.end()), keylist.end());
 			const char** key_list = cdstring::ToArray(keylist);
 
 			try
@@ -1286,7 +1286,7 @@ bool CSecurityPlugin::VerifyMessage(CMessage* msg, CMessageCryptoInfo& info)
 
 		{
 			// Create the temporary file
-			cdofstream finstream(fin_path, ios_base::out|ios_base::trunc|ios_base::binary);
+			cdofstream finstream(fin_path, std::ios_base::out|std::ios_base::trunc|std::ios_base::binary);
 			costream stream_out(&finstream, eEndl_CRLF);
 			msg->WriteToStream(stream_out, false, NULL);
 		}
@@ -1294,9 +1294,9 @@ bool CSecurityPlugin::VerifyMessage(CMessage* msg, CMessageCryptoInfo& info)
 		// Try to parse it out as a local message
 		cdstring sig;
 		{
-			cdifstream buf_in(fin_path, ios_base::in|ios_base::binary);
+			cdifstream buf_in(fin_path, std::ios_base::in|std::ios_base::binary);
 			CRFC822Parser parser;
-			auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(buf_in));
+			std::auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(buf_in));
 			buf_in.clear();
 
 			// Must have message
@@ -1317,7 +1317,7 @@ bool CSecurityPlugin::VerifyMessage(CMessage* msg, CMessageCryptoInfo& info)
 			
 			// Write data into another temp file
 			{
-				cdofstream buf_out(fin_d_path, ios_base::out|ios_base::trunc|ios_base::binary);
+				cdofstream buf_out(fin_d_path, std::ios_base::out|std::ios_base::trunc|std::ios_base::binary);
 				::StreamCopy(buf_in, buf_out, data_start, data_length);
 			}
 			
@@ -1363,17 +1363,17 @@ bool CSecurityPlugin::VerifyMessage(CMessage* msg, CMessageCryptoInfo& info)
 	else
 	{
 		// Read raw message data into temp buffer
-		ostrstream buf;
+		std::ostrstream buf;
 		costream stream_out(&buf, eEndl_CRLF);
 		msg->WriteToStream(stream_out, false, NULL);
-		buf << ends;
+		buf << std::ends;
 		const char* in = buf.str();
 		buf.freeze(false);
 
 		// Try to parse it out as a local message
-		istrstream buf_in(in);
+		std::istrstream buf_in(in);
 		CRFC822Parser parser;
-		auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(buf_in));
+		std::auto_ptr<CLocalMessage> lmsg(parser.MessageFromStream(buf_in));
 
 		// Must have message
 		if (!lmsg.get() ||
@@ -1486,10 +1486,10 @@ bool CSecurityPlugin::DecryptMessage(CMessage* msg, CMessageCryptoInfo& info, bo
 				part2 = msg->GetBody();
 
 			// Create the temporary file
-			cdofstream finstream(fin_path, ios_base::out|ios_base::trunc|ios_base::binary);
+			cdofstream finstream(fin_path, std::ios_base::out|std::ios_base::trunc|std::ios_base::binary);
 			
 			// Get encoding filter
-			auto_ptr<CStreamFilter> filter;
+			std::auto_ptr<CStreamFilter> filter;
 
 			// May need to filter  - SMIME always gets raw base64 data
 			if (GetName() != cSMIMEName)
@@ -1515,7 +1515,7 @@ bool CSecurityPlugin::DecryptMessage(CMessage* msg, CMessageCryptoInfo& info, bo
 				}
 			}
 
-			costream stream_out(filter.get() ? static_cast<ostream*>(filter.get()) : static_cast<ostream*>(&finstream), eEndl_CRLF);
+			costream stream_out(filter.get() ? static_cast<std::ostream*>(filter.get()) : static_cast<std::ostream*>(&finstream), eEndl_CRLF);
 			part2->WriteDataToStream(stream_out, false, NULL, msg);
 		}
 
@@ -1554,7 +1554,7 @@ bool CSecurityPlugin::DecryptMessage(CMessage* msg, CMessageCryptoInfo& info, bo
 		{
 			// Replace existing part data with output
 			// Create fstream data
-			auto_ptr<cdifstream> stream(new cdifstream(fin_d_path, ios_base::in|ios_base::binary));
+			std::auto_ptr<cdifstream> stream(new cdifstream(fin_d_path, std::ios_base::in|std::ios_base::binary));
 			
 			// Parse RFC822 parts
 			CRFC822Parser parser(true, msg);
@@ -1626,7 +1626,7 @@ bool CSecurityPlugin::DecryptMessage(CMessage* msg, CMessageCryptoInfo& info, bo
 			{
 				// Create strstream data
 				cdstring temp(out);
-				auto_ptr<istrstream> stream(new istrstream(temp.c_str()));
+				std::auto_ptr<std::istrstream> stream(new std::istrstream(temp.c_str()));
 				
 				// Parse RFC822 parts
 				CRFC822Parser parser(true, msg);

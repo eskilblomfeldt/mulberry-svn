@@ -506,7 +506,7 @@ void CMbox::SetACL(CMboxACL* acl)
 				mStatusInfo->mACLs = new CMboxACLList;
 
 			// Search for existing ACL
-			CMboxACLList::iterator found = ::find(mStatusInfo->mACLs->begin(), mStatusInfo->mACLs->end(), *acl);
+			CMboxACLList::iterator found = std::find(mStatusInfo->mACLs->begin(), mStatusInfo->mACLs->end(), *acl);
 
 			// Add if not found
 			if (found == mStatusInfo->mACLs->end())
@@ -541,7 +541,7 @@ void CMbox::DeleteACL(CMboxACL* acl)
 		if (mStatusInfo && mStatusInfo->mACLs)
 		{
 			// Search for existing ACL
-			CMboxACLList::iterator found = ::find(mStatusInfo->mACLs->begin(), mStatusInfo->mACLs->end(), *acl);
+			CMboxACLList::iterator found = std::find(mStatusInfo->mACLs->begin(), mStatusInfo->mACLs->end(), *acl);
 
 			// Remove it
 			if (found != mStatusInfo->mACLs->end())
@@ -644,7 +644,7 @@ void CMbox::AddQuotaRoot(const char* txt)
 
 	// Try to find it in existing list
 	cdstring temp(txt);
-	cdstrvect::iterator found = ::find(mStatusInfo->mQuotas->begin(), mStatusInfo->mQuotas->end(), temp);
+	cdstrvect::iterator found = std::find(mStatusInfo->mQuotas->begin(), mStatusInfo->mQuotas->end(), temp);
 
 	// Add if not found
 	if (found == mStatusInfo->mQuotas->end())
@@ -1387,11 +1387,11 @@ void CMbox::SyncDisconnectedMessage(CMessage* msg)
 		unsigned long uid = msg->GetUID();
 
 		// Look for full local
-		if (::binary_search(mOpenInfo->mFullLocal.begin(), mOpenInfo->mFullLocal.end(), uid))
+		if (std::binary_search(mOpenInfo->mFullLocal.begin(), mOpenInfo->mFullLocal.end(), uid))
 			msg->GetFlags().Set(NMessage::eFullLocal);
 
 		// Look for partial local
-		else if (::binary_search(mOpenInfo->mPartialLocal.begin(), mOpenInfo->mPartialLocal.end(), uid))
+		else if (std::binary_search(mOpenInfo->mPartialLocal.begin(), mOpenInfo->mPartialLocal.end(), uid))
 			msg->GetFlags().Set(NMessage::ePartialLocal);
 	}
 }
@@ -1641,7 +1641,7 @@ void CMbox::Search(const CSearchItem* spec, ulvector* results, bool uids, bool n
 	}
 
 	// Always sort search results into ascending order
-	::sort(results->begin(), results->end());
+	std::sort(results->begin(), results->end());
 
 	// Change search flags on messages
 	if (!no_flags)
@@ -1800,7 +1800,7 @@ bool CMbox::ReSort()
 		
 		// Do global reverse
 		if (mOpenInfo->mShowBy == cShowMessageDescending)
-			::reverse(results.begin(), results.end());
+			std::reverse(results.begin(), results.end());
 
 		// Manually re-order messages
 		mOpenInfo->mSortedMessages->DeleteFakes();
@@ -2361,7 +2361,7 @@ void CMbox::CacheMessage(unsigned long msg_num,	unsigned long count)
 	CMessage* aMsg = GetMessage(msg_num);
 
 	// Reverse lookup sorted number
-	unsigned long start_msg = ::find(mOpenInfo->mSortedMessages->begin(), mOpenInfo->mSortedMessages->end(), aMsg) -
+	unsigned long start_msg = std::find(mOpenInfo->mSortedMessages->begin(), mOpenInfo->mSortedMessages->end(), aMsg) -
 								mOpenInfo->mSortedMessages->begin() + 1;
 
 	unsigned long lo_tide = GetLOCache();
@@ -2456,11 +2456,11 @@ void CMbox::CacheMessage(unsigned long msg_num,	unsigned long count)
 			sorted.reserve(mOpenInfo->mSortedMessages->size());
 			for(unsigned long i = 0; i < mOpenInfo->mSortedMessages->size(); i++)
 				sorted.push_back(mOpenInfo->mSortedMessages->at(i)->GetMessageNumber());
-			::sort(sorted.begin(), sorted.end());
+			std::sort(sorted.begin(), sorted.end());
 
 			// Get difference between sorted and full list
 			difference.insert(difference.begin(), mOpenInfo->mMessages->size() - mOpenInfo->mSortedMessages->size(), 0);
-			::set_difference(full.begin(),
+			std::set_difference(full.begin(),
 								full.end(),
 								sorted.begin(),
 								sorted.end(),
@@ -2482,7 +2482,7 @@ void CMbox::CacheMessage(unsigned long msg_num,	unsigned long count)
 		if (num_to_remove)
 		{
 			// Determine cached messages furthest away from new set
-			typedef multimap<long, unsigned long> mmapulul;
+			typedef std::multimap<long, unsigned long> mmapulul;
 			mmapulul mmap;
 			long average = (sorted_nums.back() + sorted_nums.front()) / 2;
 			unsigned long index = 1;
@@ -3142,7 +3142,7 @@ CMessage* CMbox::GetNextFlagMessage(CMessage* aMsg, NMessage::EFlags set_flag, N
 			aMsg = NULL;
 			for(ulvector::const_iterator iter = sorted_sequence.begin(); !aMsg && (iter != sorted_sequence.end()); iter++)
 			{
-				if (::binary_search(results.begin(), results.end(), *iter))
+				if (std::binary_search(results.begin(), results.end(), *iter))
 					aMsg = GetMessage(*iter);
 			}
 		}
@@ -3454,7 +3454,7 @@ void CMbox::MatchMessageFlags(NMessage::EFlags set_flag, NMessage::EFlags unset_
 
 			// Remove any missing message indexes from sorted view
 			unsigned long temp = 0;
-			ulvector::iterator erase_start = ::remove_copy(matched.begin(), matched.end(), matched.begin(), temp);
+			ulvector::iterator erase_start = std::remove_copy(matched.begin(), matched.end(), matched.begin(), temp);
 			if (erase_start != matched.end())
 				matched.erase(erase_start, matched.end());
 		}
@@ -3745,7 +3745,7 @@ void CMbox::ExpungeMessage(const ulvector& nums, bool uids, bool sorted)
 
 		// Find ones in original that are not to be expunged
 		ulvector no_expunge;
-		::set_difference(original.begin(), original.end(), nums.begin(), nums.end(), back_inserter<ulvector>(no_expunge));
+		std::set_difference(original.begin(), original.end(), nums.begin(), nums.end(), back_inserter<ulvector>(no_expunge));
 
 		// Unset delete flag on those not being expunged
 		if (no_expunge.size())
@@ -3804,7 +3804,7 @@ void CMbox::ClearDisconnectMessage(const ulvector& nums, bool uids, bool sorted)
 				if (clearem)
 				{
 					msg->GetFlags().Set(NMessage::eFullLocal | NMessage::ePartialLocal, false);
-					ulvector::iterator found = ::lower_bound(clearem->begin(), clearem->end(), *iter);
+					ulvector::iterator found = std::lower_bound(clearem->begin(), clearem->end(), *iter);
 					if ((found != clearem->end()) && (*found == *iter))
 						clearem->erase(found);
 				}

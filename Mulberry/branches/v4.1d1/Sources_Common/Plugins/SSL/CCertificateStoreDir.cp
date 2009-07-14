@@ -126,7 +126,7 @@ bool CCertificateStoreDir::DeleteCertificate(CCertificate& cert)
 		if (result)
 		{
 			mCertsMap.erase(cert.GetFingerprint());
-			CCertificateList::iterator found = ::find(mCerts.begin(), mCerts.end(), &cert);
+			CCertificateList::iterator found = std::find(mCerts.begin(), mCerts.end(), &cert);
 			mCerts.erase(found);
 		}
 	}

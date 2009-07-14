@@ -572,7 +572,7 @@ void CTLSSocket::TLSSendData(char* buf, long len)
 void CTLSSocket::TLSAddCertError(int err)
 {
 	// Add to list if unique
-	vector<int>::const_iterator found = ::find(mCertErrors.begin(), mCertErrors.end(), err);
+	std::vector<int>::const_iterator found = std::find(mCertErrors.begin(), mCertErrors.end(), err);
 	if (found == mCertErrors.end())
 		mCertErrors.push_back(err);
 }

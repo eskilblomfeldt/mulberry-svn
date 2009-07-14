@@ -725,7 +725,7 @@ void CMacOSXAdbkClient::ParseAddress(ABRecordRef abref)
 
 CAdbkAddress* CMacOSXAdbkClient::ParseAddressItem(ABRecordRef abref)
 {
-	auto_ptr<CAdbkAddress> addr(new CAdbkAddress);
+	std::auto_ptr<CAdbkAddress> addr(new CAdbkAddress);
 	
 	// Get UID
 	addr->SetEntry(GetAddressAttribute(abref, kABUIDProperty));
@@ -934,7 +934,7 @@ void CMacOSXAdbkClient::ParseGroup(ABRecordRef abref)
 
 CGroup* CMacOSXAdbkClient::ParseGroupItem(ABRecordRef abref)
 {
-	auto_ptr<CGroup> grp(new CGroup);
+	std::auto_ptr<CGroup> grp(new CGroup);
 
 	// Get UID
 	grp->SetEntry(GetAddressAttribute(abref, kABUIDProperty));
@@ -977,7 +977,7 @@ CGroup* CMacOSXAdbkClient::ParseGroupItem(ABRecordRef abref)
 		for(CFIndex i = 0; i < count; i++)
 		{
 			// Parse into a group
-			auto_ptr<CGroup> subgrp(ParseGroupItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
+			std::auto_ptr<CGroup> subgrp(ParseGroupItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
 			
 			// Add the groups nick-name (if any) to the parent group
 			if (!subgrp->GetNickName().empty())
@@ -1468,7 +1468,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 		for(CFIndex i = 0; i < count; i++)
 		{
 			// Parse into an address
-			auto_ptr<CAdbkAddress> addr(ParseAddressItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
+			std::auto_ptr<CAdbkAddress> addr(ParseAddressItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
 			addr_entries.push_back(addr->GetEntry());
 			
 		}
@@ -1485,7 +1485,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 		for(CFIndex i = 0; i < count; i++)
 		{
 			// Parse into a group
-			auto_ptr<CGroup> subgrp(ParseGroupItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
+			std::auto_ptr<CGroup> subgrp(ParseGroupItem((ABRecordRef) ::CFArrayGetValueAtIndex(array,i)));
 			grp_entries.push_back(subgrp->GetEntry());
 		}
 		::CFRelease(array);
@@ -1531,7 +1531,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 	for(cdstrvect::const_iterator iter = addr_entries.begin(); iter != addr_entries.end(); iter++)
 	{
 		// Try to find this one in the groups actual list
-		cdstrvect::const_iterator found = ::find(addrs.begin(), addrs.end(), *iter);
+		cdstrvect::const_iterator found = std::find(addrs.begin(), addrs.end(), *iter);
 		if (found == addrs.end())
 		{
 			// Remove the entry from the current group
@@ -1546,7 +1546,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 	for(cdstrvect::const_iterator iter = grp_entries.begin(); iter != grp_entries.end(); iter++)
 	{
 		// Try to find this one in the groups actual list
-		cdstrvect::const_iterator found = ::find(grps.begin(), grps.end(), *iter);
+		cdstrvect::const_iterator found = std::find(grps.begin(), grps.end(), *iter);
 		if (found == addrs.end())
 		{
 			// Remove the entry from the current group
@@ -1563,7 +1563,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 	for(cdstrvect::const_iterator iter = addrs.begin(); iter != addrs.end(); iter++)
 	{
 		// Try to find this one in the groups previous list
-		cdstrvect::const_iterator found = ::find(addr_entries.begin(), addr_entries.end(), *iter);
+		cdstrvect::const_iterator found = std::find(addr_entries.begin(), addr_entries.end(), *iter);
 		if (found == addr_entries.end())
 		{
 			// Add the entry to the current group
@@ -1578,7 +1578,7 @@ void CMacOSXAdbkClient::Fill(ABAddressBookRef ab, ABGroupRef group, CAddressBook
 	for(cdstrvect::const_iterator iter = grps.begin(); iter != grps.end(); iter++)
 	{
 		// Try to find this one in the groups actual list
-		cdstrvect::const_iterator found = ::find(grp_entries.begin(), grp_entries.end(), *iter);
+		cdstrvect::const_iterator found = std::find(grp_entries.begin(), grp_entries.end(), *iter);
 		if (found == grp_entries.end())
 		{
 			// Add the entry to the current group

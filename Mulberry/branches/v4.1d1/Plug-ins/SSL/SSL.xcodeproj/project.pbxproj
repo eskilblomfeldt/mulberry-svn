@@ -116,10 +116,12 @@
 		AF419C7B0AEA6B9D00E19592 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF419C7C0AEA6B9D00E19592 /* Build configuration list for PBXProject "SSL" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF419C790AEA6B9D00E19592;
 			productRefGroup = AF419C870AEA6B9E00E19592 /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF419C850AEA6B9E00E19592 /* SSL MachO */,
 			);
@@ -164,7 +166,7 @@
 		AF419C7D0AEA6B9D00E19592 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

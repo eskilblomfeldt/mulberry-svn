@@ -33,7 +33,7 @@ public:
 	CTextMacros();
 	CTextMacros(const CTextMacros& copy)
 		{ _copy(copy); }
-	~CTextMacros();
+	virtual ~CTextMacros();
 
 	CTextMacros& operator=(const CTextMacros& copy)					// Assignment with same type
 		{ if (this != &copy) _copy(copy); return *this; }

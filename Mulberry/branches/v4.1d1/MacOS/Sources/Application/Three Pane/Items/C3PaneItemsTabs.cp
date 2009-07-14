@@ -184,25 +184,25 @@ void C3PaneItemsTabs::MenuChoice(SInt32 choice, long btn)
 	{
 	case menuChoice_MoveLeft:
 		{
-			pair<unsigned long, unsigned long> p(btn, btn - 1);
+			std::pair<unsigned long, unsigned long> p(btn, btn - 1);
 			BroadcastMessage(msg_3PaneItemsTabsMove, &p);
 		}
 		break;
 	case menuChoice_MoveRight:
 		{
-			pair<unsigned long, unsigned long> p(btn, btn + 1);
+			std::pair<unsigned long, unsigned long> p(btn, btn + 1);
 			BroadcastMessage(msg_3PaneItemsTabsMove, &p);
 		}
 		break;
 	case menuChoice_MoveStart:
 		{
-			pair<unsigned long, unsigned long> p(btn, 1);
+			std::pair<unsigned long, unsigned long> p(btn, 1);
 			BroadcastMessage(msg_3PaneItemsTabsMove, &p);
 		}
 		break;
 	case menuChoice_MoveEnd:
 		{
-			pair<unsigned long, unsigned long> p(btn, GetMaxValue());
+			std::pair<unsigned long, unsigned long> p(btn, GetMaxValue());
 			BroadcastMessage(msg_3PaneItemsTabsMove, &p);
 		}
 		break;

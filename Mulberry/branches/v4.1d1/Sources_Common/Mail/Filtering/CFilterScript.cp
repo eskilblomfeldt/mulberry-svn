@@ -51,7 +51,7 @@ void CFilterScript::_tidy()
 bool CFilterScript::AddFilter(CFilterItem* filter)
 {
 	// See if duplicate
-	CFilterItems::const_iterator found = ::find(mFilters.begin(), mFilters.end(), filter);
+	CFilterItems::const_iterator found = std::find(mFilters.begin(), mFilters.end(), filter);
 	if (found == mFilters.end())
 	{
 		mFilters.push_back(filter);
@@ -64,7 +64,7 @@ bool CFilterScript::AddFilter(CFilterItem* filter)
 void CFilterScript::RemoveFilter(CFilterItem* filter)
 {
 	// See if it exists
-	CFilterItems::iterator found = ::find(mFilters.begin(), mFilters.end(), filter);
+	CFilterItems::iterator found = std::find(mFilters.begin(), mFilters.end(), filter);
 	if (found != mFilters.end())
 		mFilters.erase(found);
 }
@@ -72,7 +72,7 @@ void CFilterScript::RemoveFilter(CFilterItem* filter)
 bool CFilterScript::ContainsFilter(CFilterItem* filter) const
 {
 	// See if it exists
-	CFilterItems::const_iterator found = ::find(mFilters.begin(), mFilters.end(), filter);
+	CFilterItems::const_iterator found = std::find(mFilters.begin(), mFilters.end(), filter);
 	return found != mFilters.end();
 }
 
@@ -84,7 +84,7 @@ void CFilterScript::GetSIEVEExtensions(CFilterProtocol::EExtension& ext) const
 
 void CFilterScript::GetSIEVEScript(cdstring& txt, EEndl line_end) const
 {
-	ostrstream out;
+	std::ostrstream out;
 
 	out << "# SIEVE Script" << get_endl(line_end);
 	out << "# Name: " << GetName() << get_endl(line_end);
@@ -144,7 +144,7 @@ void CFilterScript::GetSIEVEScript(cdstring& txt, EEndl line_end) const
 
 	out << "# SIEVE Script ends here" << get_endl(line_end);
 	out << get_endl(line_end);
-	out << ends;
+	out << std::ends;
 	
 	txt.steal(out.str());
 }	

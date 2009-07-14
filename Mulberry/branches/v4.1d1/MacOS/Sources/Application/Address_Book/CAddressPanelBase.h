@@ -43,6 +43,6 @@ protected:
 	virtual bool	GetFields(CAdbkAddress* addr) = 0;			// Get fields from dialog
 };
 
-typedef vector<CAddressPanelBase*> CAddressPanelList;
+typedef std::vector<CAddressPanelBase*> CAddressPanelList;
 
 #endif

@@ -371,9 +371,9 @@ void CINETClient::SendString(const char* str, int flags)
 			mStream->write(s + sizeof(size_t), literal_size);
 			if (mAllowLog)
 			{
-				cdstring temp(s + sizeof(size_t), literal_size);
-				temp.FilterInEscapeChars(cCEscapeChar);
-				mLog.LogPartialEntry(temp);
+				cdstring temp2(s + sizeof(size_t), literal_size);
+				temp2.FilterInEscapeChars(cCEscapeChar);
+				mLog.LogPartialEntry(temp2);
 			}
 		}
 		else
@@ -503,9 +503,9 @@ void CINETClient::Open()
 		// Create log entry
 		mLog.StartLog(mLogType, mServerAddr);
 	}
-	catch (exception& ex)
+	catch (std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		mStream->TCPClose();
 
@@ -665,7 +665,7 @@ void CINETClient::Logon()
 	if (!mStream)
 		return;
 
-	OSErr err = noErr;
+	//OSErr err = noErr;
 	bool connection_up = false;
 	bool pre_auth = false;
 	bool auth_done = false;
@@ -754,9 +754,9 @@ void CINETClient::Logon()
 
 		// Fall through and treat like a failed auth
 	}
-	catch (exception& ex)
+	catch (std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Restore logging
 		mAllowLog = true;
@@ -1712,9 +1712,9 @@ void CINETClient::INETSendString(const char* str, int flags, bool handle_throw)
 			INETProcess();
 		}
 	}
-	catch (exception& ex)
+	catch (std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		const char* err_id = mErrorID;
 		const char* nobad_id = mNoBadID;
@@ -1882,7 +1882,7 @@ void CINETClient::INETParseTagged(char** txt, CINETClientResponse* response)
 #pragma mark ____________________________Handle Errors
 
 // Handle an error condition
-void CINETClient::INETHandleError(exception& ex, const char* err_id, const char* nobad_id)
+void CINETClient::INETHandleError(std::exception& ex, const char* err_id, const char* nobad_id)
 {
 	// Always make sure outstanding alerts are processed before attempting any reconnects etc
 	while(mLastResponse.CheckUntagged(cALERT))
@@ -1902,7 +1902,7 @@ void CINETClient::INETHandleError(exception& ex, const char* err_id, const char*
 
 	// Check for network or general exception
 	CNetworkException* nex = dynamic_cast<CNetworkException*>(&ex);
-	CGeneralException* gex = dynamic_cast<CGeneralException*>(&ex);
+	//CGeneralException* gex = dynamic_cast<CGeneralException*>(&ex);
 
 	// Handle network exception
 	if (nex)
@@ -1961,7 +1961,7 @@ void CINETClient::INETHandleError(exception& ex, const char* err_id, const char*
 }
 
 // Handle an error condition
-void CINETClient::INETDisplayError(exception& ex, const char* err_id, const char* nobad_id)
+void CINETClient::INETDisplayError(std::exception& ex, const char* err_id, const char* nobad_id)
 {
 	// Only handle if not silent
 	if (mSilentError) return;
@@ -2271,11 +2271,11 @@ char* CINETClient::INETParseString(char** txt, bool nullify)
 			// Must replace NULLs if required
 			if (nullify)
 			{
-				char* p = msg_txt;
+				char* p2 = msg_txt;
 				while(length--)
 				{
-					if (!*p) *p = 1;
-					p++;
+					if (!*p2) *p2 = 1;
+					p2++;
 				}
 			}
 

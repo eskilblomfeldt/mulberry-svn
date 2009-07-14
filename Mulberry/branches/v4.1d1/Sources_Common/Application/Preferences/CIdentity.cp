@@ -524,7 +524,7 @@ const CIdentity* CIdentity::GetInherited(TInheritTest inheritfn) const
 	const CIdentity* inherit = this;
 
 	// Holds the list of identities alread inherited from
-	vector<const CIdentity*> ids;
+	std::vector<const CIdentity*> ids;
 
 	// Check whether to inherit data
 	while(!(inherit->*inheritfn)())
@@ -536,7 +536,7 @@ const CIdentity* CIdentity::GetInherited(TInheritTest inheritfn) const
 		inherit = &inherit->GetInheritIdentity();
 		
 		// Make sure its not in the current chain (circular inheritance)
-		vector<const CIdentity*>::const_iterator found = ::find(ids.begin(), ids.end(), inherit);
+		std::vector<const CIdentity*>::const_iterator found = std::find(ids.begin(), ids.end(), inherit);
 		if (found != ids.end())
 			return NULL;
 	}
@@ -700,10 +700,10 @@ cdstring CIdentity::GetSignature(bool resolve) const
 		fpath.DecodeURL();
 
 		// Open file and read content
-		cdifstream fin(fpath, ios_base::in | ios_base::binary);
+		cdifstream fin(fpath, std::ios_base::in | std::ios_base::binary);
 		std::ostrstream out;
 		::StreamCopy(fin, out, 0, ::StreamLength(fin));
-		out << ends;
+		out << std::ends;
 		
 		result.steal(out.str());
 		result.ConvertToOS();

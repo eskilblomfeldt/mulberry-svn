@@ -49,7 +49,7 @@ public:
 		{ mPause = pause; }
 
 protected:
-	queue<CTaskBase*> mTaskQueue;
+	std::queue<CTaskBase*> mTaskQueue;
 	bool mPause;
 	cdmutex _mutex;
 #if __dest_os == __linux_os

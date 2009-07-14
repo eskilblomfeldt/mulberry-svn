@@ -139,7 +139,7 @@ protected:
 
 private:
 	static uint32_t				sTitleCounter;
-	static set<CNewToDoDialog*>	sDialogs;
+	static std::set<CNewToDoDialog*>	sDialogs;
 };
 
 #endif

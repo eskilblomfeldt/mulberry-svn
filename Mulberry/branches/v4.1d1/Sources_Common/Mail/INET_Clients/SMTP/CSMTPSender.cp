@@ -416,11 +416,11 @@ void CSMTPSender::SMTPBegin()
 			{
 				cdstring desc = GetAccount()->GetAuthenticator().GetSASLID();
 				::strupper(desc.c_str_mod());
-				cdstrvect::const_iterator found = ::find(mAUTHTypes.begin(), mAUTHTypes.end(), desc);
+				cdstrvect::const_iterator found = std::find(mAUTHTypes.begin(), mAUTHTypes.end(), desc);
 
 				// Special case - try LOGIN if PLAIN was specified and failed
 				if ((found == mAUTHTypes.end()) && (desc == cPLAIN))
-					found = ::find(mAUTHTypes.begin(), mAUTHTypes.end(), cLOGIN);
+					found = std::find(mAUTHTypes.begin(), mAUTHTypes.end(), cLOGIN);
 
 				if (found == mAUTHTypes.end())
 				{
@@ -1485,7 +1485,7 @@ bool CSMTPSender::SMTPDoAuthentication()
 // Send 'AUTH' to receiver
 void CSMTPSender::SMTPAuthenticate()
 {
-	bool first = true;
+	//bool first = true;
 
 	CAuthenticator* acct_auth = GetAccount()->GetAuthenticator().GetAuthenticator();
 
@@ -1496,8 +1496,8 @@ void CSMTPSender::SMTPAuthenticate()
 			CAuthenticatorUserPswd* auth = static_cast<CAuthenticatorUserPswd*>(acct_auth);
 
 			// Look for AUTH PLAIN
-			cdstrvect::const_iterator found1 = ::find(mAUTHTypes.begin(), mAUTHTypes.end(), cPLAIN);
-			cdstrvect::const_iterator found2 = ::find(mAUTHTypes.begin(), mAUTHTypes.end(), cLOGIN);
+			cdstrvect::const_iterator found1 = std::find(mAUTHTypes.begin(), mAUTHTypes.end(), cPLAIN);
+			cdstrvect::const_iterator found2 = std::find(mAUTHTypes.begin(), mAUTHTypes.end(), cLOGIN);
 			if (found1 != mAUTHTypes.end())
 			{
 				// Form buffer of plain text SASL response
@@ -1572,7 +1572,7 @@ void CSMTPSender::SMTPAuthenticate()
 
 	case CAuthenticator::eSSL:
 		{
-			CAuthenticatorUserPswd* auth = static_cast<CAuthenticatorUserPswd*>(acct_auth);
+			//CAuthenticatorUserPswd* auth = static_cast<CAuthenticatorUserPswd*>(acct_auth);
 
 			// Form buffer of external SASL response (authrization id is empty for now)
 			cdstring buffer;
@@ -1792,9 +1792,9 @@ void CSMTPSender::SMTPSendDataCmd()
 // Send text to receiver (remember to add header)
 void CSMTPSender::SMTPSendData()
 {
-	OSErr err = noErr;
-	unsigned long part_count = 1;
-	unsigned long part_offset = 0;
+	//OSErr err = noErr;
+	//unsigned long part_count = 1;
+	//unsigned long part_offset = 0;
 
 	// Need to dot-stuff
 	{

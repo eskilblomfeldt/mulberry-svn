@@ -35,7 +35,7 @@ bool CContextMenuProcessAttachment::sHasCMM = false;
 EventRecord CContextMenuProcessAttachment::sCMMEvent;
 bool CContextMenuProcessAttachment::sProcessing = false;
 
-map<ResIDT, LMenu*> CContextMenuAttachment::sContextMenus;
+std::map<ResIDT, LMenu*> CContextMenuAttachment::sContextMenus;
 
 // Default constructor
 CContextMenuProcessAttachment::CContextMenuProcessAttachment(LApplication* itsApp)
@@ -374,7 +374,7 @@ void CContextMenuAttachment::ExecuteSelf(MessageT inMessage, void *ioParam)
 LMenu* CContextMenuAttachment::GetMenu(ResIDT resid)
 {
 	LMenu* result = NULL;
-	map<ResIDT, LMenu*>::const_iterator found = sContextMenus.find(resid);
+	std::map<ResIDT, LMenu*>::const_iterator found = sContextMenus.find(resid);
 	if (found == sContextMenus.end())
 	{
 		result = new LMenu(resid);

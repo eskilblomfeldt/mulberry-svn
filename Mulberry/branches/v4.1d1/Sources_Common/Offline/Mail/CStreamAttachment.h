@@ -33,16 +33,16 @@ public:
 	CStreamAttachment(const CStreamAttachment &copy);		// Copy constructor
 	~CStreamAttachment();
 
-	void SetStream(istream* stream, const char* data, const cdstring& name)
+	void SetStream(std::istream* stream, const char* data, const cdstring& name)
 		{ mStream = stream; mStreamData = data; mStreamName = name; }
-	istream* GetStream();
+	std::istream* GetStream();
 
 	virtual const char*	ReadPart(CMessage* owner);
 
-	virtual void		WriteHeaderToStream(ostream& stream) const;
+	virtual void		WriteHeaderToStream(std::ostream& stream) const;
 
 protected:
-	istream* mStream;
+	std::istream* mStream;
 	const char* mStreamData;
 	cdstring mStreamName;
 

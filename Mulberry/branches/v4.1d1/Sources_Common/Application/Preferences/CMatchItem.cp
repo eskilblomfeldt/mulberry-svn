@@ -67,13 +67,13 @@ void CMatchItem::SetSingleMatch(EMatchItem item)
 bool CMatchItem::NeedsSelection() const
 {
 	// Count number of true items in selected range
-	return ::count(mBitsSet.begin() + eSelected_First, mBitsSet.begin() + eSelected_Last + 1, true);
+	return std::count(mBitsSet.begin() + eSelected_First, mBitsSet.begin() + eSelected_Last + 1, true);
 }
 
 CSearchItem* CMatchItem::ConstructSearch(const CMessageList* msgs) const
 {
 	// If nothing selected return
-	size_t bitsset = ::count(mBitsSet.begin(), mBitsSet.end(), true);
+	size_t bitsset = std::count(mBitsSet.begin(), mBitsSet.end(), true);
 	bitsset += mSearchSet.size();
 	if (!bitsset)
 		return NULL;
@@ -215,9 +215,9 @@ CSearchItem* CMatchItem::ConstructSearch(const CMessageList* msgs) const
 
 				// Now remove saddrs from addrs
 				cdstrvect caddrs(addrs);
-				::sort(addrs.begin(), addrs.end());
-				::sort(saddrs.begin(), saddrs.end());
-				cdstrvect::iterator set_end = ::set_difference(addrs.begin(), addrs.end(), saddrs.begin(), saddrs.end(), caddrs.begin());
+				std::sort(addrs.begin(), addrs.end());
+				std::sort(saddrs.begin(), saddrs.end());
+				cdstrvect::iterator set_end = std::set_difference(addrs.begin(), addrs.end(), saddrs.begin(), saddrs.end(), caddrs.begin());
 				caddrs.erase(set_end, caddrs.end());
 
 				// Are there any to do?
@@ -256,8 +256,8 @@ CSearchItem* CMatchItem::ConstructSearch(const CMessageList* msgs) const
 				}
 
 				// Sort, collapse, shorten
-				::sort(threads.begin(), threads.end());
-				cdstrvect::iterator unique_end = ::unique(threads.begin(), threads.end());
+				std::sort(threads.begin(), threads.end());
+				cdstrvect::iterator unique_end = std::unique(threads.begin(), threads.end());
 				threads.erase(unique_end, threads.end());
 
 				// Is there more than one?
@@ -306,8 +306,8 @@ CSearchItem* CMatchItem::ConstructSearch(const CMessageList* msgs) const
 				}
 
 				// Sort and filter duplicates
-				::sort(dates.begin(), dates.end());
-				ulvector::iterator unique_end = ::unique(dates.begin(), dates.end());
+				std::sort(dates.begin(), dates.end());
+				ulvector::iterator unique_end = std::unique(dates.begin(), dates.end());
 				dates.erase(unique_end, dates.end());
 
 				// Is there more than one?
@@ -443,8 +443,8 @@ CSearchItem* CMatchItem::AddAddressFieldToList(const CMessageList* msgs, CSearch
 		}
 
 		// Sort, collapse, shorten
-		::sort(addrs.begin(), addrs.end());
-		cdstrvect::iterator unique_end = ::unique(addrs.begin(), addrs.end());
+		std::sort(addrs.begin(), addrs.end());
+		cdstrvect::iterator unique_end = std::unique(addrs.begin(), addrs.end());
 		addrs.erase(unique_end, addrs.end());
 
 		// Is there more than one?

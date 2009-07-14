@@ -21,7 +21,7 @@
 #define __CMULTIROWSELECTOR__MULBERRY__
 
 #include <UTableHelpers.h>
-#include <vector.h>
+#include <vector>
 
 class LTableSelState;
 
@@ -80,7 +80,7 @@ protected:
 								TableIndexT			inRow,
 								Boolean inSelected);
 
-	vector<bool>	mSelection;
+	std::vector<bool>	mSelection;
 	unsigned long	mFirstSelection;
 	unsigned long	mLastSelection;
 	STableCell		mAnchorCell;

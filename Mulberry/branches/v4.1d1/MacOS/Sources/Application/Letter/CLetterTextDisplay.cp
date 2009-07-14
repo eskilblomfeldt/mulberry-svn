@@ -89,7 +89,7 @@ void CLetterTextDisplay::DoDragReceive(DragReference inDragRef)
 					ThrowIfOSErr_(::GetFlavorDataSize(inDragRef, itemRef, fileFlavors[i], &theDataSize));
 
 					// Create data
-					auto_ptr<char> theFlavorData(new char[theDataSize]);
+					std::auto_ptr<char> theFlavorData(new char[theDataSize]);
 
 					// Get the data about the attachment we are receiving.
 					::GetFlavorData(inDragRef, itemRef, fileFlavors[i], theFlavorData.get(), &theDataSize, 0L);

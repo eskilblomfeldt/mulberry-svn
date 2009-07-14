@@ -32,7 +32,7 @@ enum EAppLaunch
 
 // Declare vector
 class CMIMEMap;
-typedef vector<CMIMEMap> CMIMEMapVector;
+typedef std::vector<CMIMEMap> CMIMEMapVector;
 
 class CAttachment;
 

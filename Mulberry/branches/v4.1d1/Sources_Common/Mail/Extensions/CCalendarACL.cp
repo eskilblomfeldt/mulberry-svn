@@ -259,7 +259,7 @@ void CCalendarACL::ParsePrivilege(const xmllib::XMLNode* parent, bool add)
 void CCalendarACL::MapRight(const cdstring& right, bool add)
 {
 	// Cache the mappings for this type of client
-	typedef map<cdstring, unsigned long> CMapRights;
+	typedef std::map<cdstring, unsigned long> CMapRights;
 	static CMapRights sMapRights;
 	
 	if (sMapRights.empty())
@@ -355,7 +355,7 @@ void CCalendarACL::GenerateACE(xmllib::XMLDocument* xmldoc, xmllib::XMLNode* acl
 	{
 		// <DAV:property> element - the UID is the property element name
 		xmllib::XMLNode* property = new xmllib::XMLNode(xmldoc, principal, http::webdav::cProperty_property);
-		xmllib::XMLNode* propname = new xmllib::XMLNode(xmldoc, property, GetPropName());
+		/* xmllib::XMLNode* propname = */ new xmllib::XMLNode(xmldoc, property, GetPropName());
 		break;
 	}
 	case CCalendarACL::ePrincipal_self:

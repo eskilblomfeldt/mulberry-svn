@@ -1268,7 +1268,7 @@ void CLetterDoc::DoPrint()
 			// Get summary from envelope
 			std::ostrstream hdr;
 			msg->GetEnvelope()->GetSummary(hdr);
-			hdr << ends;
+			hdr << std::ends;
 			header_insert.steal(hdr.str());
 
 			// Parse as header

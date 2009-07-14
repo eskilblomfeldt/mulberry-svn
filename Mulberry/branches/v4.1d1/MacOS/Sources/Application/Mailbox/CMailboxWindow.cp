@@ -68,7 +68,7 @@ CMailboxWindow::~CMailboxWindow()
 {
 	// Remove from list
 	cdmutexprotect<CMailboxWindowList>::lock _lock(sMboxWindows);
-	CMailboxWindowList::iterator found = ::find(sMboxWindows->begin(), sMboxWindows->end(), this);
+	CMailboxWindowList::iterator found = std::find(sMboxWindows->begin(), sMboxWindows->end(), this);
 	if (found != sMboxWindows->end())
 		sMboxWindows->erase(found);
 	CWindowsMenu::RemoveWindow(this);

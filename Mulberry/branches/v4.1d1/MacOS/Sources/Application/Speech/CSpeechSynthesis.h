@@ -72,7 +72,7 @@ enum EMessageSpeakItem
 // Define vector
 
 class CMessageSpeak;
-typedef vector<CMessageSpeak> CMessageSpeakVector;
+typedef std::vector<CMessageSpeak> CMessageSpeakVector;
 
 class CMessageSpeak
 {

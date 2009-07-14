@@ -32,8 +32,8 @@ class CMailAction : public CRecordableAction
 	friend class CMailRecord;
 
 public:
-	typedef pair<ulvector, ulvector> SUIDs;
-	typedef pair<ulmap, ulmap> SMaps;
+	typedef std::pair<ulvector, ulvector> SUIDs;
+	typedef std::pair<ulmap, ulmap> SMaps;
 	struct SFlagAction
 	{
 		SFlagAction()
@@ -62,9 +62,9 @@ public:
 		unsigned long	mFlags;
 	};
 
-	typedef pair<const cdstring, unsigned long> SNameUIDAction;
-	typedef pair<const cdstrpair, unsigned long> SRenameAction;
-	typedef pair<const cdstring, SMaps > SCopyAction;
+	typedef std::pair<const cdstring, unsigned long> SNameUIDAction;
+	typedef std::pair<const cdstrpair, unsigned long> SRenameAction;
+	typedef std::pair<const cdstring, SMaps > SCopyAction;
 	typedef SUIDs SExpungeAction;
 
 	enum EMailAction
@@ -134,8 +134,8 @@ public:
 
 	bool RemoveUIDs(const ulvector& leave);
 
-	virtual void WriteToStream(ostream& out, bool text = false) const;
-	virtual void ReadFromStream(istream& in, unsigned long vers);
+	virtual void WriteToStream(std::ostream& out, bool text = false) const;
+	virtual void ReadFromStream(std::istream& in, unsigned long vers);
 
 private:
 	EMailAction mAction;
@@ -145,11 +145,11 @@ private:
 	void _copy(const CMailAction& copy);
 	void _tidy();
 	
-	void WriteUIDS(ostream& out, const ulvector& uids, bool text) const;
-	void ReadUIDS(istream& in, unsigned long vers, ulvector& uids);
+	void WriteUIDS(std::ostream& out, const ulvector& uids, bool text) const;
+	void ReadUIDS(std::istream& in, unsigned long vers, ulvector& uids);
 
-	void WriteUIDMap(ostream& out, const ulmap& uids, bool text) const;
-	void ReadUIDMap(istream& in, unsigned long vers, ulmap& uids);
+	void WriteUIDMap(std::ostream& out, const ulmap& uids, bool text) const;
+	void ReadUIDMap(std::istream& in, unsigned long vers, ulmap& uids);
 };
 
 #endif

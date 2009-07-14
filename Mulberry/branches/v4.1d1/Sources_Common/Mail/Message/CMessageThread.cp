@@ -90,7 +90,7 @@ void CMessageThread::InitMessageThread()
 void CMessageThread::ThreadResults(CMbox* mbox, const threadvector& results, CMessageList* list, bool reverse)
 {
 	// Look at the results and generate a root set
-	auto_ptr<CMessageThread> root(new CMessageThread(NULL));
+	std::auto_ptr<CMessageThread> root(new CMessageThread(NULL));
 	
 	CMessageThread* parent = root.get();
 	CMessageThread* last = NULL;
@@ -148,11 +148,11 @@ void CMessageThread::ThreadMessages(CMessageList* list)
 		return;
 
 	// Step 1 - link messages via header fields
-	auto_ptr<CThreadMap> map(RefLinkMessages(list));
+	std::auto_ptr<CThreadMap> map(RefLinkMessages(list));
 	
 	// Step 2 - gather orphans to root
 	unsigned long nroot = 0;
-	auto_ptr<CMessageThread> root(MakeRoot(map.get(), nroot));
+	std::auto_ptr<CMessageThread> root(MakeRoot(map.get(), nroot));
 
 	// Delete map - nodes will remain
 	map.reset();
@@ -397,7 +397,7 @@ void CMessageThread::ThreadSort(CMessageThread* root, bool do_children)
 	CMessageThread* child;
 
 	// sort the grandchildren
-	vector<CMessageThread*> list;
+	std::vector<CMessageThread*> list;
 	child = root->mChild;
 	while(child)
 	{
@@ -412,10 +412,10 @@ void CMessageThread::ThreadSort(CMessageThread* root, bool do_children)
 	// sort the children
 	if (list.size())
 	{
-		::sort(list.begin(), list.end(), thread_sort_comp);
+		std::sort(list.begin(), list.end(), thread_sort_comp);
 
 		child = root->mChild = list.front();
-		for(vector<CMessageThread*>::iterator iter = list.begin() + 1; iter != list.end(); iter++)
+		for(std::vector<CMessageThread*>::iterator iter = list.begin() + 1; iter != list.end(); iter++)
 		{
 			child->mNext = *iter;
 			child = child->mNext;
@@ -467,7 +467,7 @@ void CMessageThread::GroupSubjects(CMessageThread* root, unsigned long nroot)
 			cur->mMsg && !cur->mReFwd))
 		{
 			// Insert or replace in the map
-			pair<CThreadMap::iterator, bool> result = subj_map.insert(CThreadMap::value_type(xsubj, cur));
+			std::pair<CThreadMap::iterator, bool> result = subj_map.insert(CThreadMap::value_type(xsubj, cur));
 			if (!result.second)
 				(*result.first).second = cur;
 		}

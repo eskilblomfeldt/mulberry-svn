@@ -72,7 +72,7 @@ CAdbkManagerView::~CAdbkManagerView()
 {
 	// Remove from list
 	cdmutexprotect<CAdbkManagerViewList>::lock _lock(sAdbkManagerViews);
-	CAdbkManagerViewList::iterator found = ::find(sAdbkManagerViews->begin(), sAdbkManagerViews->end(), this);
+	CAdbkManagerViewList::iterator found = std::find(sAdbkManagerViews->begin(), sAdbkManagerViews->end(), this);
 	if (found != sAdbkManagerViews->end())
 		sAdbkManagerViews->erase(found);
 }

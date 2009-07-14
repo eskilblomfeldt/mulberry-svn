@@ -52,7 +52,6 @@ using namespace i18n;
 
 #ifdef __GNUC__
 #include <strstream>
-using namespace std;
 #else
 #include <strstream.h>
 #endif
@@ -441,23 +440,23 @@ bool CCharsetManager::Transcode(ECharsetCode from, ECharsetCode to, const char* 
 	// Special case utf-8 -> ucs-2
 	if ((from == eUTF8) && (to == eUCS2))
 	{
-		ostrstream sout;
+		std::ostrstream sout;
 		FromUTF8(in, len, sout);
-		sout << ends << ends;
+		sout << std::ends << std::ends;
 		out = sout.str();
 		return true;
 	}
 
 	// Get converters
-	auto_ptr<CConverterBase> to_unicode(GetConverter(from));
-	auto_ptr<CConverterBase> from_unicode(GetConverter(to));
+	std::auto_ptr<CConverterBase> to_unicode(GetConverter(from));
+	std::auto_ptr<CConverterBase> from_unicode(GetConverter(to));
 	
 	// Must have converters
 	if (!to_unicode.get() || !from_unicode.get())
 		return false;
 
 	// Loop over input
-	ostrstream sout;
+	std::ostrstream sout;
 	const unsigned char* p = reinterpret_cast<const unsigned char*>(in);
 	const unsigned char* end = p + len;
 	from_unicode->init_w_2_c(sout);
@@ -475,7 +474,7 @@ bool CCharsetManager::Transcode(ECharsetCode from, ECharsetCode to, const char* 
 		}
 	}
 	from_unicode->finish_w_2_c(sout);
-	sout << ends;
+	sout << std::ends;
 	out = sout.str();
 	return true;
 }
@@ -498,10 +497,10 @@ cdstring CCharsetManager::Transcode(ECharsetCode from, ECharsetCode to, const cd
 #pragma mark ____________________________unicode conversions
 
 // Convert to unicode
-bool CCharsetManager::ToUnicode(ECharsetCode from, const char* in, size_t len, ostream& out) const
+bool CCharsetManager::ToUnicode(ECharsetCode from, const char* in, size_t len, std::ostream& out) const
 {
 	// Get converter
-	auto_ptr<CConverterBase> to_unicode(GetConverter(from));
+	std::auto_ptr<CConverterBase> to_unicode(GetConverter(from));
 	
 	// Must have converter
 	if (!to_unicode.get())
@@ -513,10 +512,10 @@ bool CCharsetManager::ToUnicode(ECharsetCode from, const char* in, size_t len, o
 }
 
 // Convert from unicode
-bool CCharsetManager::FromUnicode(ECharsetCode to, const wchar_t* in, size_t wlen, ostream& out) const
+bool CCharsetManager::FromUnicode(ECharsetCode to, const wchar_t* in, size_t wlen, std::ostream& out) const
 {
 	// Get converter
-	auto_ptr<CConverterBase> from_unicode(GetConverter(to));
+	std::auto_ptr<CConverterBase> from_unicode(GetConverter(to));
 	
 	// Must have converter
 	if (!from_unicode.get())
@@ -531,9 +530,9 @@ bool CCharsetManager::FromUnicode(ECharsetCode to, const wchar_t* in, size_t wle
 cdustring CCharsetManager::ToUTF16(ECharsetCode from, const cdstring& txt) const
 {
 	cdustring result;
-	ostrstream sout;
+	std::ostrstream sout;
 	ToUTF16(from, txt, txt.length(), sout);
-	sout << ends << ends;
+	sout << std::ends << std::ends;
 	result.steal((unichar_t*)sout.str());
 	
 	return result;
@@ -543,16 +542,16 @@ cdustring CCharsetManager::ToUTF16(ECharsetCode from, const cdstring& txt) const
 cdstring CCharsetManager::FromUTF16(ECharsetCode to, const cdustring& txt) const
 {
 	cdstring result;
-	ostrstream sout;
+	std::ostrstream sout;
 	FromUTF16(to, txt, txt.length(), sout);
-	sout << ends;
+	sout << std::ends;
 	result.steal(sout.str());
 	
 	return result;
 }
 
 // Convert to utf16
-bool CCharsetManager::ToUTF16(ECharsetCode from, const char* in, size_t len, ostream& out) const
+bool CCharsetManager::ToUTF16(ECharsetCode from, const char* in, size_t len, std::ostream& out) const
 {
 	if (from == eUTF16)
 	{
@@ -561,7 +560,7 @@ bool CCharsetManager::ToUTF16(ECharsetCode from, const char* in, size_t len, ost
 	}
 	
 	// Get converter
-	auto_ptr<CConverterBase> to_unicode(GetConverter(from));
+	std::auto_ptr<CConverterBase> to_unicode(GetConverter(from));
 	
 	// Must have converter
 	if (!to_unicode.get())
@@ -573,7 +572,7 @@ bool CCharsetManager::ToUTF16(ECharsetCode from, const char* in, size_t len, ost
 }
 
 // Convert from unicode
-bool CCharsetManager::FromUTF16(ECharsetCode to, const unichar_t* in, size_t ulen, ostream& out) const
+bool CCharsetManager::FromUTF16(ECharsetCode to, const unichar_t* in, size_t ulen, std::ostream& out) const
 {
 	if (to == eUTF16)
 	{
@@ -582,7 +581,7 @@ bool CCharsetManager::FromUTF16(ECharsetCode to, const unichar_t* in, size_t ule
 	}
 	
 	// Get converter
-	auto_ptr<CConverterBase> from_unicode(GetConverter(to));
+	std::auto_ptr<CConverterBase> from_unicode(GetConverter(to));
 	
 	// Must have converter
 	if (!from_unicode.get())
@@ -594,7 +593,7 @@ bool CCharsetManager::FromUTF16(ECharsetCode to, const unichar_t* in, size_t ule
 }
 
 // Convert to utf8
-bool CCharsetManager::ToUTF8(ECharsetCode from, const char* in, size_t len, ostream& out) const
+bool CCharsetManager::ToUTF8(ECharsetCode from, const char* in, size_t len, std::ostream& out) const
 {
 	if (from == eUTF8)
 	{
@@ -603,7 +602,7 @@ bool CCharsetManager::ToUTF8(ECharsetCode from, const char* in, size_t len, ostr
 	}
 	
 	// Get converter
-	auto_ptr<CConverterBase> to_unicode(GetConverter(from));
+	std::auto_ptr<CConverterBase> to_unicode(GetConverter(from));
 	
 	// Must have converter
 	if (!to_unicode.get())
@@ -615,7 +614,7 @@ bool CCharsetManager::ToUTF8(ECharsetCode from, const char* in, size_t len, ostr
 }
 
 // Convert from utf8
-bool CCharsetManager::FromUTF8(const char* in, size_t len, ostream& out) const
+bool CCharsetManager::FromUTF8(const char* in, size_t len, std::ostream& out) const
 {
 	// Convert each character
 	const char* p = in;
@@ -938,7 +937,7 @@ ECharsetCode CCharsetManager::CharsetForText(const char* txt, bool always_unicod
 	// Determine charset for simple ascii/utf8 case
 	if (always_unicode)
 	{
-		bool non_ascii = false;
+		//bool non_ascii = false;
 		const unsigned char* p = reinterpret_cast<const unsigned char*>(txt);
 		while(*p)
 		{

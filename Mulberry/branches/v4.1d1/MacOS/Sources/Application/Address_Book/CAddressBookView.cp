@@ -97,7 +97,7 @@ CAddressBookView::~CAddressBookView()
 {
 	// Remove from list
 	cdmutexprotect<CAddressBookViewList>::lock _lock(sAddressBookViews);
-	CAddressBookViewList::iterator found = ::find(sAddressBookViews->begin(), sAddressBookViews->end(), this);
+	CAddressBookViewList::iterator found = std::find(sAddressBookViews->begin(), sAddressBookViews->end(), this);
 	if (found != sAddressBookViews->end())
 		sAddressBookViews->erase(found);
 

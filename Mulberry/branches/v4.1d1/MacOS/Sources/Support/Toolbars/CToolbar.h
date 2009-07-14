@@ -85,8 +85,8 @@ protected:
 		CommandT cmd;
 	};
 
-	typedef vector<CToolbar*> CToolbarList;
-	typedef vector<LCommander*> CCommanderArray;
+	typedef std::vector<CToolbar*> CToolbarList;
+	typedef std::vector<LCommander*> CCommanderArray;
 
 	static CToolbarList	sToolbars;
 
@@ -109,7 +109,7 @@ protected:
 		LPane*				mWnd;
 		CToolbarItem::CToolbarItemInfo	mDetails;
 	};
-	typedef vector<SItemSpec> CItemArray;
+	typedef std::vector<SItemSpec> CItemArray;
 
 	CItemArray mItemList;
 

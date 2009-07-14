@@ -179,7 +179,7 @@ void CPrefsRemoteSets::DoRename(void)
 				{
 
 					// Check for duplicate
-					if (::find(CMulberryApp::sRemotePrefs->GetRemoteSets().begin(),
+					if (std::find(CMulberryApp::sRemotePrefs->GetRemoteSets().begin(),
 								CMulberryApp::sRemotePrefs->GetRemoteSets().end(), new_name) != CMulberryApp::sRemotePrefs->GetRemoteSets().end())
 					{
 						CErrorHandler::PutStopAlertRsrc("Alerts::Preferences::DuplicateRenameSet");

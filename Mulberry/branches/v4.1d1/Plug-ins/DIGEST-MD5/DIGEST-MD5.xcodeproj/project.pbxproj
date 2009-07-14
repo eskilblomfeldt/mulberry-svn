@@ -153,10 +153,12 @@
 		AF0F2FCF0AE3D0990074CFEF /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = AF0F2FD00AE3D0990074CFEF /* Build configuration list for PBXProject "DIGEST-MD5" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 0;
 			mainGroup = AF0F2FCD0AE3D0990074CFEF;
 			productRefGroup = AF0F2FDB0AE3D0990074CFEF /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				AF0F2FD90AE3D0990074CFEF /* DIGEST-MD5 MachO */,
 			);
@@ -206,7 +208,7 @@
 		AF0F2FD10AE3D0990074CFEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};

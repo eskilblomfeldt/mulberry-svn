@@ -453,7 +453,7 @@ void CLDAPClient::Lookup(const cdstring& item, CAdbkAddress::EAddressMatch match
 		SetStatus("Status::LDAP::Lookup");
 
 		// Restrict attributes returned?
-		auto_ptr<const char*> attrs;
+		std::auto_ptr<const char*> attrs;
 		cdstrvect attrlist;
 		if (!GetAccount()->GetLDAPNotes())
 		{
@@ -806,7 +806,7 @@ int CLDAPClient::Verify(int ok, X509_STORE_CTX *ctx)
 void CLDAPClient::AddCertError(int err)
 {
 	// Add to list if unique
-	vector<int>::const_iterator found = ::find(mCertErrors.begin(), mCertErrors.end(), err);
+	std::vector<int>::const_iterator found = std::find(mCertErrors.begin(), mCertErrors.end(), err);
 	if (found == mCertErrors.end())
 		mCertErrors.push_back(err);
 }

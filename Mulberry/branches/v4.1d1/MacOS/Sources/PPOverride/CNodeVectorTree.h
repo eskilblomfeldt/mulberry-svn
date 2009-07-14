@@ -21,7 +21,7 @@
 
 #include <LCollapsableTree.h>
 
-#include "vector.h"
+#include <vector>
 
 #if PP_Uses_Pragma_Import
 	#pragma import on
@@ -39,7 +39,7 @@ struct SHierarchyNode {
 	Boolean			expanded;
 };
 
-typedef vector<SHierarchyNode*> CNodeVector;
+typedef std::vector<SHierarchyNode*> CNodeVector;
 
 // ---------------------------------------------------------------------------
 

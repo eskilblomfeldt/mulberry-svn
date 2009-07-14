@@ -70,7 +70,7 @@ CWebDAVLock::~CWebDAVLock()
 
 static const char* cDepthMap[] = {cHeaderDepth0, cHeaderDepth1, cHeaderDepthInfinity};
 
-void CWebDAVLock::WriteHeaderToStream(ostream& os)
+void CWebDAVLock::WriteHeaderToStream(std::ostream& os)
 {
 	// Do default
 	CWebDAVRequestResponse::WriteHeaderToStream(os);
@@ -90,12 +90,12 @@ void CWebDAVLock::InitRequestData()
 	// Write XML info to a string
 	std::ostrstream os;
 	GenerateXML(os);
-	os << ends;
+	os << std::ends;
 	
 	mRequestData = new CHTTPInputDataString(os.str(), "text/xml; charset=utf-8");
 }
 
-void CWebDAVLock::GenerateXML(ostream& os)
+void CWebDAVLock::GenerateXML(std::ostream& os)
 {
 	using namespace xmllib;
 

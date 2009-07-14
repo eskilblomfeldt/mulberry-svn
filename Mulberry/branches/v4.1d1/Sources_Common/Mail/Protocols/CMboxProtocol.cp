@@ -580,7 +580,7 @@ void CMboxProtocol::Open()
 // Get index of hierarchy in list
 long CMboxProtocol::GetHierarchyIndex(const CMboxList* list) const
 {
-	CHierarchies::const_iterator found = ::find(mHierarchies.begin(), mHierarchies.end(), list);
+	CHierarchies::const_iterator found = std::find(mHierarchies.begin(), mHierarchies.end(), list);
 	if (found != mHierarchies.end())
 		return found - mHierarchies.begin();
 	else
@@ -1312,7 +1312,7 @@ void CMboxProtocol::AddSingleton(CMbox* mbox)
 void CMboxProtocol::RemoveSingleton(CMbox* mbox)
 {
 	// Look for it in the list
-	CMboxList::iterator found = ::find(mSingletons.begin(), mSingletons.end(), mbox);
+	CMboxList::iterator found = std::find(mSingletons.begin(), mSingletons.end(), mbox);
 
 	if (found != mSingletons.end())
 		// Just remove it - it will delete itself
@@ -2865,7 +2865,7 @@ void CMboxProtocol::AddQuotaRoot(CQuotaRoot* root)
 		return;
 
 	// Try to find it in existing list
-	CQuotaRootList::iterator found = ::find(mRoots.begin(), mRoots.end(), *root);
+	CQuotaRootList::iterator found = std::find(mRoots.begin(), mRoots.end(), *root);
 
 	// If found replace it with copy
 	if (found != mRoots.end())
@@ -2886,7 +2886,7 @@ CQuotaRoot* CMboxProtocol::FindQuotaRoot(const char* txt)
 	CQuotaRoot dummy(txt);
 
 	// Try to find it in existing list
-	CQuotaRootList::iterator found = ::find(mRoots.begin(), mRoots.end(), dummy);
+	CQuotaRootList::iterator found = std::find(mRoots.begin(), mRoots.end(), dummy);
 
 	// If found return it
 	if (found != mRoots.end())
@@ -3022,7 +3022,7 @@ void CMboxProtocol::SynchroniseRemote(CMbox* mbox, bool fast, bool partial, unsi
 	// Sync mailbox from this proto to temp one
 
 	// Create local clone
-	auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
+	std::auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
 	clone->SetSynchronising();
 
 	try
@@ -3032,7 +3032,7 @@ void CMboxProtocol::SynchroniseRemote(CMbox* mbox, bool fast, bool partial, unsi
 		clone->SetState(eINETLoggedOn);
 
 		// Create copy of mailbox
-		auto_ptr<CMbox> temp(new CMbox(*mbox));
+		std::auto_ptr<CMbox> temp(new CMbox(*mbox));
 
 		// Local mailbox is given local protocol
 		temp->SetProtocol(clone.get());
@@ -3265,7 +3265,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 		// Find ones in local not in remote if not fast and not selection only
 		if (!fast && !uids.size())
-			::set_difference(local_uids.begin(), local_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(remove));
+			std::set_difference(local_uids.begin(), local_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(remove));
 
 		// If full cache, remove the partial ones so they get fully cached
 		if (!partial && !size && partial_uids.size())
@@ -3274,14 +3274,14 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 			temp1.reserve(partial_uids.size());
 
 			// Find partials in remote
-			::set_intersection(partial_uids.begin(), partial_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(temp1));
+			std::set_intersection(partial_uids.begin(), partial_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(temp1));
 
 			// Expunge these as well
 			if (temp1.size())
 			{
 				ulvector temp2;
 				temp2.reserve(remove.size() + temp1.size());
-				::set_union(remove.begin(), remove.end(), temp1.begin(), temp1.end(), back_inserter<ulvector>(temp2));
+				std::set_union(remove.begin(), remove.end(), temp1.begin(), temp1.end(), back_inserter<ulvector>(temp2));
 				remove = temp2;
 			}
 		}
@@ -3318,7 +3318,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 		{
 			// Find ones in remote not in local
 			copy.reserve((remote_uids.size() > local_uids.size()) ? remote_uids.size() - local_uids.size() : remote_uids.size());
-			::set_difference(remote_uids.begin(), remote_uids.end(), local_uids.begin(), local_uids.end(), back_inserter<ulvector>(copy));
+			std::set_difference(remote_uids.begin(), remote_uids.end(), local_uids.begin(), local_uids.end(), back_inserter<ulvector>(copy));
 
 			// Copy the new ones
 			if (copy.size())
@@ -3336,7 +3336,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 					// Intersect with ones actually being copied
 					make_partial.reserve(results.size());
-					::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
+					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
 				}
 				else if (size)
 				{
@@ -3347,7 +3347,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 					// Intersect with ones actually being copied
 					make_partial.reserve(results.size());
-					::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
+					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
 					
 					// Make sure partial fetch count is set
 					if (make_partial.size())
@@ -3415,7 +3415,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 			// First subtract ones that were just copied from remote set
 			ulvector flag_sync;
 			flag_sync.reserve(remote_uids.size() - copy.size());
-			::set_difference(remote_uids.begin(), remote_uids.end(), copy.begin(), copy.end(), back_inserter<ulvector>(flag_sync));
+			std::set_difference(remote_uids.begin(), remote_uids.end(), copy.begin(), copy.end(), back_inserter<ulvector>(flag_sync));
 
 			// Get all flags
 			if (flag_sync.size())
@@ -3670,7 +3670,7 @@ void CMboxProtocol::ClearDisconnect(CMbox* mbox, const ulvector& uids)
 	else
 	{
 		// Create local clone
-		auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
+		std::auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
 		clone->SetSynchronising();
 
 		try
@@ -3680,7 +3680,7 @@ void CMboxProtocol::ClearDisconnect(CMbox* mbox, const ulvector& uids)
 			clone->SetState(eINETLoggedOn);
 
 			// Create copy of mailbox
-			auto_ptr<CMbox> temp(new CMbox(*mbox));
+			std::auto_ptr<CMbox> temp(new CMbox(*mbox));
 
 			// Local mailbox is given local protocol
 			temp->SetProtocol(clone.get());
@@ -3860,7 +3860,7 @@ bool CMboxProtocol::DoPlayback(CProgress* progress)
 		return true;
 
 	// Create remote clone
-	auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, false, true));
+	std::auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, false, true));
 	clone->SetSynchronising();
 
 	// Prevent further recording
@@ -3877,7 +3877,7 @@ bool CMboxProtocol::DoPlayback(CProgress* progress)
 void CMboxProtocol::GetDisconnectedMessageState(CMbox* remote, ulvector& full, ulvector& partial)
 {
 	// Create local clone
-	auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
+	std::auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
 	clone->SetSynchronising();
 	clone->SetNoErrorAlert(true);
 	clone->SetNoRecovery(true);
@@ -3889,7 +3889,7 @@ void CMboxProtocol::GetDisconnectedMessageState(CMbox* remote, ulvector& full, u
 		clone->SetState(eINETLoggedOn);
 
 		// Create copy of mailbox
-		auto_ptr<CMbox> local(new CMbox(*remote));
+		std::auto_ptr<CMbox> local(new CMbox(*remote));
 
 		// Local mailbox is given local protocol
 		local->SetProtocol(clone.get());
@@ -3960,7 +3960,7 @@ void CMboxProtocol::GetLastSync(CMbox* remote)
 {
 
 	// Create local clone
-	auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
+	std::auto_ptr<CMboxProtocol> clone(new CMboxProtocol(*this, true));
 	clone->SetSynchronising();
 
 	try
@@ -3970,7 +3970,7 @@ void CMboxProtocol::GetLastSync(CMbox* remote)
 		clone->SetState(eINETLoggedOn);
 
 		// Create copy of mailbox
-		auto_ptr<CMbox> local(new CMbox(*remote));
+		std::auto_ptr<CMbox> local(new CMbox(*remote));
 
 		// Local mailbox is given local protocol
 		local->SetProtocol(clone.get());

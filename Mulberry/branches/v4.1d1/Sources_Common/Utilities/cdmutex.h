@@ -25,10 +25,10 @@
 #elif __dest_os == __linux_os
 #include <ace/Synch.h>
 #include <ace/OS.h>
-#include <vector.h>
+#include <vector>
 #endif
 
-#include <set.h>
+#include <set>
 
 class CBusyContext;
 
@@ -109,9 +109,9 @@ class cdrwmutex
 	typedef ACE_Mutex cdmutex_t;
 #endif
 #if __dest_os == __linux_os
-	typedef vector<cdthread_t> cdthreadset;
+	typedef std::vector<cdthread_t> cdthreadset;
 #else
-	typedef multiset<cdthread_t> cdthreadset;
+	typedef std::multiset<cdthread_t> cdthreadset;
 #endif
 public:
 	// Stack class to do locks

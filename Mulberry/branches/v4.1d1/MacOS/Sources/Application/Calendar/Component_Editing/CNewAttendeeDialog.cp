@@ -214,7 +214,7 @@ void CNewAttendeeDialog::GetDetails(iCal::CICalendarProperty& prop)
 // Get the details
 void CNewAttendeeDialog::GetDetails(iCal::CICalendarPropertyList& proplist)
 {
-	auto_ptr<CCalendarAddressList> addrs(mNames->GetAddresses());
+	std::auto_ptr<CCalendarAddressList> addrs(mNames->GetAddresses());
 
 	for(CCalendarAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 	{

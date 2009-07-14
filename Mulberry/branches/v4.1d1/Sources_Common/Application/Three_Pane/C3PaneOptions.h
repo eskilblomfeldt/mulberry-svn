@@ -126,7 +126,7 @@ public:
 	C3PaneOptions();
 	C3PaneOptions(const C3PaneOptions& copy)
 		{ _copy(copy); }
-	~C3PaneOptions();
+	virtual ~C3PaneOptions();
 
 	C3PaneOptions& operator=(const C3PaneOptions& copy)			// Assignment with same type
 		{ if (this != &copy) _copy(copy); return *this; }

@@ -72,7 +72,7 @@ void CStreamAttachment::InitStreamAttachment()
 
 #pragma mark ____________________________Stream ops
 
-istream* CStreamAttachment::GetStream()
+std::istream* CStreamAttachment::GetStream()
 {
 	if (mParent && dynamic_cast<CStreamAttachment*>(mParent))
 		return static_cast<CStreamAttachment*>(mParent)->GetStream();
@@ -87,11 +87,11 @@ const char*	CStreamAttachment::ReadPart(CMessage* owner)
 
 #if 0
 	// Read from stream into internal buffer
-	istream* stream = GetStream();
+	std::istream* stream = GetStream();
 	if (stream && mIndexBodyLength)
 	{
 		// Create data space
-		auto_ptr<char> data(new char[mIndexBodyLength + 1]);
+		std::auto_ptr<char> data(new char[mIndexBodyLength + 1]);
 		
 		// Read stream into buffer
 		stream->seekg(mIndexBodyStart);
@@ -112,7 +112,7 @@ const char*	CStreamAttachment::ReadPart(CMessage* owner)
 void CStreamAttachment::ReadAttachment(CMessage* msg, LStream* aStream, bool peek)
 {
 	// Read from stream into internal buffer
-	istream* stream = GetStream();
+	std::istream* stream = GetStream();
 	if (stream && mIndexBodyLength)
 		::StreamCopy(*stream, *aStream, mIndexBodyStart, mIndexBodyLength);
 }
@@ -121,7 +121,7 @@ void CStreamAttachment::ReadAttachment(CMessage* msg, LStream* aStream, bool pee
 void CStreamAttachment::ReadAttachment(CMessage* msg, costream* aStream, bool peek, unsigned long count, unsigned long start) const
 {
 	// Read from stream into internal buffer
-	istream* stream = const_cast<CStreamAttachment*>(this)->GetStream();
+	std::istream* stream = const_cast<CStreamAttachment*>(this)->GetStream();
 	if (stream && mIndexBodyLength)
 	{
 		// Check for filter requirements
@@ -143,7 +143,7 @@ void  CStreamAttachment::WriteToStream(costream& stream, unsigned long& level, b
 	level++;
 
 	// Just output the entire stream to preserve its content completely
-	istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
+	std::istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
 	if (astream && mIndexBodyLength)
 	{
 		// Check for filter requirements
@@ -158,10 +158,10 @@ void  CStreamAttachment::WriteToStream(costream& stream, unsigned long& level, b
 }
 
 // Write header to stream
-void CStreamAttachment::WriteHeaderToStream(ostream& stream) const
+void CStreamAttachment::WriteHeaderToStream(std::ostream& stream) const
 {
 	// Just output the entire stream to preserve its content completely
-	istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
+	std::istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
 	if (astream && mIndexBodyLength)
 		::StreamCopy(*astream, stream, mIndexHeaderStart, mIndexHeaderLength);
 }
@@ -190,7 +190,7 @@ void CStreamAttachment::WriteDataToStream(costream& stream, bool dummy_files, CP
 	}
 
 	// Read from stream into internal buffer
-	istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
+	std::istream* astream = const_cast<CStreamAttachment*>(this)->GetStream();
 	if (astream && mIndexBodyLength)
 	{
 		// Check for filter requirements

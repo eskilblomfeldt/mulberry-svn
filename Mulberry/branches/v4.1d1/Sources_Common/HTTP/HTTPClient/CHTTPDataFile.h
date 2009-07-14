@@ -28,8 +28,6 @@
 
 #include "cdstring.h"
 
-using namespace std;
-
 namespace http {
 
 class CHTTPInputDataFile: public CHTTPInputData

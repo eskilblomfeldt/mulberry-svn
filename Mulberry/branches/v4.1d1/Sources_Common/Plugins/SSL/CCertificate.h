@@ -102,7 +102,7 @@ public:
 	static bool SubjectCompare(const CCertificate*, const CCertificate*);
 
 private:
-	typedef pair<cdstrvect, bool>	cdstrvectbool;
+	typedef std::pair<cdstrvect, bool>	cdstrvectbool;
 
 	mutable cdstrbool		mSubject;
 	mutable cdstrbool		mIssuer;

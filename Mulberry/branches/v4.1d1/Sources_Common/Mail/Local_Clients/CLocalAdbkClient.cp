@@ -730,8 +730,8 @@ void CLocalAdbkClient::ListAddressBooks(CAddressBook* root, const cdstring& path
 void CLocalAdbkClient::ScanDirectory(const char* path, const cdstring& pattern, bool first)
 {
 	// Create lists for directories and mailboxes
-	auto_ptr<cdstrvect> dirs(new cdstrvect);
-	auto_ptr<cdstrvect> adbks(new cdstrvect);
+	std::auto_ptr<cdstrvect> dirs(new cdstrvect);
+	std::auto_ptr<cdstrvect> adbks(new cdstrvect);
 
 	// Iterate over all .mba files/directories in directory
 	// but not ones that are hidden
@@ -779,7 +779,7 @@ void CLocalAdbkClient::ScanDirectory(const char* path, const cdstring& pattern, 
 	for(cdstrvect::iterator iter = adbks->begin(); iter != adbks->end(); iter++)
 	{
 		// Look in list of dirs
-		cdstrvect::iterator found = ::find(dirs->begin(), dirs->end(), *iter);
+		cdstrvect::iterator found = std::find(dirs->begin(), dirs->end(), *iter);
 		if (found == dirs->end())
 		{
 			// Add as addressbook without hierarchy
@@ -831,10 +831,10 @@ void CLocalAdbkClient::ScanAddressBook(CAddressBook* adbk)
 	
 	// Open address book
 	mAdbk.clear();
-	mAdbk.open(adbk_name, ios_base::in | ios_base::binary);
+	mAdbk.open(adbk_name, std::ios_base::in | std::ios_base::binary);
 	CHECK_STREAM(mAdbk)
 	
-	mAdbk.seekg(0, ios_base::beg);
+	mAdbk.seekg(0, std::ios_base::beg);
 	
 	// Get each line from file
 	while(!mAdbk.fail())
@@ -861,10 +861,10 @@ void CLocalAdbkClient::SearchAddressBook(CAddressBook* adbk, const cdstring& nam
 	
 	// Open address book
 	mAdbk.clear();
-	mAdbk.open(adbk_name, ios_base::in | ios_base::binary);
+	mAdbk.open(adbk_name, std::ios_base::in | std::ios_base::binary);
 	CHECK_STREAM(mAdbk)
 	
-	mAdbk.seekg(0, ios_base::beg);
+	mAdbk.seekg(0, std::ios_base::beg);
 	
 	// Use search mode
 	StValueChanger<bool> change(mSearchMode, true);
@@ -955,10 +955,10 @@ void CLocalAdbkClient::Change(CAddressBook* adbk, const CAddressList* add_addrs,
 
 			// Open address book
 			mAdbk.clear();
-			mAdbk.open(adbk_name, ios_base::in | ios_base::binary);
+			mAdbk.open(adbk_name, std::ios_base::in | std::ios_base::binary);
 			CHECK_STREAM(mAdbk)
 		
-			mAdbk.seekg(0, ios_base::beg);
+			mAdbk.seekg(0, std::ios_base::beg);
 			
 			// Use search mode
 			StValueChanger<bool> change(mSearchMode, true);
@@ -982,7 +982,7 @@ void CLocalAdbkClient::Change(CAddressBook* adbk, const CAddressList* add_addrs,
 					bool delete_it = false;
 					if (rmv_addrs)
 					{
-						CAddressList::const_iterator found = ::find_if(rmv_addrs->begin(), rmv_addrs->end(), CAdbkAddress::same_entry(mTempAddr));
+						CAddressList::const_iterator found = std::find_if(rmv_addrs->begin(), rmv_addrs->end(), CAdbkAddress::same_entry(mTempAddr));
 						delete_it = (found != rmv_addrs->end());
 					}
 
@@ -999,7 +999,7 @@ void CLocalAdbkClient::Change(CAddressBook* adbk, const CAddressList* add_addrs,
 					bool delete_it = false;
 					if (rmv_grps)
 					{
-						CGroupList::const_iterator found = ::find_if(rmv_grps->begin(), rmv_grps->end(), CGroup::same_entry(mTempGrp));
+						CGroupList::const_iterator found = std::find_if(rmv_grps->begin(), rmv_grps->end(), CGroup::same_entry(mTempGrp));
 						delete_it = (found != rmv_grps->end());
 					}
 
@@ -1030,7 +1030,7 @@ void CLocalAdbkClient::Change(CAddressBook* adbk, const CAddressList* add_addrs,
 		if (add_addrs || add_grps)
 		{
 			mAdbk.clear();
-			mAdbk.open(adbk_name, ios_base::out | ios_base::app | ios_base::binary);
+			mAdbk.open(adbk_name, std::ios_base::out | std::ios_base::app | std::ios_base::binary);
 			CHECK_STREAM(mAdbk)
 			
 			// Write the relevant ones

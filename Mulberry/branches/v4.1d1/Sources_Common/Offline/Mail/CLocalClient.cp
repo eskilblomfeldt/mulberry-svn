@@ -85,7 +85,7 @@ const unsigned long cWorkBufferSize = 4096;
 
 #pragma mark ____________________________SIndexHeader
 
-void CLocalClient::SIndexHeader::write(ostream& out) const
+void CLocalClient::SIndexHeader::write(std::ostream& out) const
 {
 	out.seekp(0);
 	::WriteHost(out, Version());
@@ -99,43 +99,43 @@ void CLocalClient::SIndexHeader::write(ostream& out) const
 	::WriteHost(out, LocalUIDNext());
 }
 
-void CLocalClient::SIndexHeader::write_LastSync(ostream& out) const
+void CLocalClient::SIndexHeader::write_LastSync(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mLastSync), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mLastSync), std::ios_base::beg);
 	::WriteHost(out, LastSync());
 }
 
-void CLocalClient::SIndexHeader::write_IndexSize(ostream& out) const
+void CLocalClient::SIndexHeader::write_IndexSize(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mIndexSize), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mIndexSize), std::ios_base::beg);
 	::WriteHost(out, IndexSize());
 }
 
-void CLocalClient::SIndexHeader::write_UIDValidity(ostream& out) const
+void CLocalClient::SIndexHeader::write_UIDValidity(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mUIDValidity), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mUIDValidity), std::ios_base::beg);
 	::WriteHost(out, UIDValidity());
 }
 
-void CLocalClient::SIndexHeader::write_UIDNext(ostream& out) const
+void CLocalClient::SIndexHeader::write_UIDNext(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mUIDNext), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mUIDNext), std::ios_base::beg);
 	::WriteHost(out, UIDNext());
 }
 
-void CLocalClient::SIndexHeader::write_LastUID(ostream& out) const
+void CLocalClient::SIndexHeader::write_LastUID(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mLastUID), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mLastUID), std::ios_base::beg);
 	::WriteHost(out, LastUID());
 }
 
-void CLocalClient::SIndexHeader::write_LocalUIDNext(ostream& out) const
+void CLocalClient::SIndexHeader::write_LocalUIDNext(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexHeader, mLocalUIDNext), ios_base::beg);
+	out.seekp(offsetof(SIndexHeader, mLocalUIDNext), std::ios_base::beg);
 	::WriteHost(out, LocalUIDNext());
 }
 
-void CLocalClient::SIndexHeader::read(istream& in)
+void CLocalClient::SIndexHeader::read(std::istream& in)
 {
 	in.seekg(0);
 	::ReadHost(in, Version());
@@ -154,7 +154,7 @@ void CLocalClient::SIndexHeader::read(istream& in)
 
 #pragma mark ____________________________SIndexRecord
 
-void CLocalClient::SIndexRecord::write(ostream& out) const
+void CLocalClient::SIndexRecord::write(std::ostream& out) const
 {
 	::WriteHost(out, Cache());
 	::WriteHost(out, Index());
@@ -164,19 +164,19 @@ void CLocalClient::SIndexRecord::write(ostream& out) const
 	::WriteHost(out, MessageStart());
 }
 
-void CLocalClient::SIndexRecord::write_Flags(ostream& out) const
+void CLocalClient::SIndexRecord::write_Flags(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexRecord, mFlags), ios_base::cur);
+	out.seekp(offsetof(SIndexRecord, mFlags), std::ios_base::cur);
 	::WriteHost(out, Flags());
 }
 
-void CLocalClient::SIndexRecord::write_UID(ostream& out) const
+void CLocalClient::SIndexRecord::write_UID(std::ostream& out) const
 {
-	out.seekp(offsetof(SIndexRecord, mUID), ios_base::cur);
+	out.seekp(offsetof(SIndexRecord, mUID), std::ios_base::cur);
 	::WriteHost(out, UID());
 }
 
-void CLocalClient::SIndexRecord::read(istream& in)
+void CLocalClient::SIndexRecord::read(std::istream& in)
 {
 	::ReadHost(in, Cache());
 	::ReadHost(in, Index());
@@ -319,9 +319,9 @@ void CLocalClient::Abort()
 	
 	// Force mailbox and cache streams to error states to trigger throw
 	if (mMailbox.is_open())
-		mMailbox.setstate(ios_base::failbit);
+		mMailbox.setstate(std::ios_base::failbit);
 	if (mCache.is_open())
-		mCache.setstate(ios_base::failbit);
+		mCache.setstate(std::ios_base::failbit);
 }
 
 // Forced close
@@ -549,9 +549,9 @@ void CLocalClient::_CreateMbox(CMbox* mbox)
 			}
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -648,9 +648,9 @@ void CLocalClient::_CloseMbox(CMbox* mbox)
 			SyncIndexHeader(mbox, mIndex);
 		mIndex.close();
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -698,9 +698,9 @@ void CLocalClient::_SelectMbox(CMbox* mbox, bool examine)
 		// Get mailbox info from index
 		CheckFromIndex(mbox, mIndexList);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -772,9 +772,9 @@ void CLocalClient::_CheckMbox(CMbox* mbox, bool fast)
 			CheckFromIndex(mbox, index_list);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -827,9 +827,9 @@ void CLocalClient::_MailboxSize(CMbox* mbox)
 
 		mbox->SetSize(size);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -871,9 +871,9 @@ bool CLocalClient::_ExpungeMbox(bool closing)
 		// Now expunge them
 		ExpungeMessage(indices);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -961,9 +961,9 @@ void CLocalClient::_DeleteMbox(CMbox* mbox)
 			}
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1097,9 +1097,9 @@ void CLocalClient::_RenameMbox(CMbox* mbox_old, const char* mbox_new)
 			}
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1209,9 +1209,9 @@ void CLocalClient::_FindAllMbox(CMboxList* mboxes)
 			ScanDirectory(mCWD, pattern, mboxes, true);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1262,14 +1262,14 @@ void CLocalClient::_StartAppend(CMbox* mbox)
 		}
 
 		// Seek to end of mailbox stream
-		mAppendMailbox->seekp(0, ios_base::end);
+		mAppendMailbox->seekp(0, std::ios_base::end);
 
 		// Now at starting point for this message
 		mAppendStart = mAppendMailbox->tellp();
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1389,9 +1389,9 @@ void CLocalClient::_StopAppend(CMbox* mbox)
 		mAppendCache = NULL;
 		mAppendIndex = NULL;
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1442,9 +1442,9 @@ void CLocalClient::_AppendMbox(CMbox* mbox, CMessage* theMsg, unsigned long& new
 			mRecorder->AppendTo(new_uid, static_cast<NMessage::EFlags>(theMsg->GetFlags().Get() & NMessage::eServerFlags), mbox);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		if (do_start)
 			_StopAppend(mbox);
@@ -1483,7 +1483,7 @@ void CLocalClient::_SearchMbox(const CSearchItem* spec, ulvector* results, bool 
 		bool use_dummy = !GetCurrentMbox()->IsFullOpen();
 
 		// Create search buffer
-		auto_ptr<char> search(new char[cSearchBufferSize]);
+		std::auto_ptr<char> search(new char[cSearchBufferSize]);
 		StValueChanger<char*> change(mSearchBuffer, search.get());
 
 		//StProfileSection profile("\pSearching", 200, 20);
@@ -1507,9 +1507,9 @@ void CLocalClient::_SearchMbox(const CSearchItem* spec, ulvector* results, bool 
 				results->push_back(uids ? (*iter).UID() : seq);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Might be cancelled
 		if (mPendingAbort)
@@ -1560,9 +1560,9 @@ void CLocalClient::_SetUIDValidity(unsigned long uidv)
 
 		CHECK_STREAM(mIndex)
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1595,9 +1595,9 @@ void CLocalClient::_SetUIDNext(unsigned long uidn)
 
 		CHECK_STREAM(mIndex)
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1630,9 +1630,9 @@ void CLocalClient::_SetLastSync(unsigned long sync)
 
 		CHECK_STREAM(mIndex)
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1701,9 +1701,9 @@ void CLocalClient::_FetchItems(const ulvector& nums, bool uids, CMboxProtocol::E
 			FetchMessage(msg, *iter, items);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1779,7 +1779,7 @@ void CLocalClient::_ReadHeaders(const ulvector& nums, bool uids, const cdstring&
 				CStreamFilter filter(new crlf_filterbuf(lendl), &hdr);
 				::StreamCopy(mMailbox, filter, start, length);
 			}
-			hdr << ends;
+			hdr << std::ends;
 
 			// Check for specific headers
 			if (hdrs.empty())
@@ -1802,9 +1802,9 @@ void CLocalClient::_ReadHeaders(const ulvector& nums, bool uids, const cdstring&
 			}
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1844,7 +1844,7 @@ void CLocalClient::_ReadHeader(CMessage* msg)
 			CStreamFilter filter(new crlf_filterbuf(lendl), &hdr);
 			::StreamCopy(mMailbox, filter, start, length);
 		}
-		hdr << ends;
+		hdr << std::ends;
 
 		// Now grab string from stream and minimise its size
 		cdstring temp_hdr(hdr.str());
@@ -1855,11 +1855,11 @@ void CLocalClient::_ReadHeader(CMessage* msg)
 		// is part of the message being appended. If the stream position is changed
 		// then the append position will be corrupted so we must reset it
 		if (mAppendMailbox != NULL)
-			mMailbox.seekp(0, ios_base::end);
+			mMailbox.seekp(0, std::ios_base::end);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1915,9 +1915,9 @@ void CLocalClient::_ReadAttachment(unsigned long msg_num, CAttachment* attach,
 		if (!peek && lmsg->IsUnseen())
 			lmsg->ChangeFlags(NMessage::eSeen, true);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -1977,8 +1977,8 @@ void CLocalClient::_CopyAttachment(unsigned long msg_num, CAttachment* attach,
 		{
 			// Look for copy back to self during append
 			bool copy_to_same = false;
-			ostream* f1 = &mMailbox;
-			ostream* f2 = NULL;
+			std::ostream* f1 = &mMailbox;
+			std::ostream* f2 = NULL;
 			if (dynamic_cast<CStreamFilter*>(aStream->GetStream()))
 				f2 = dynamic_cast<CStreamFilter*>(aStream->GetStream())->GetOStream();
 			else
@@ -1998,9 +1998,9 @@ void CLocalClient::_CopyAttachment(unsigned long msg_num, CAttachment* attach,
 		if (!peek && lmsg->IsUnseen())
 			lmsg->ChangeFlags(NMessage::eSeen, true);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -2050,9 +2050,9 @@ void CLocalClient::_RemapUID(unsigned long local_uid, unsigned long new_uid)
 			CHECK_STREAM(mIndex)
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -2081,7 +2081,7 @@ void CLocalClient::_MapLocalUIDs(const ulvector& uids, ulvector* missing, ulmap*
 	MapBetweenUIDs(uids, temp, false, missing, local_map);
 	
 	// Remove any 0 UIDs
-	ulvector::iterator remove_end = ::remove_copy(temp.begin(), temp.end(), const_cast<ulvector&>(uids).begin(), 0UL);
+	ulvector::iterator remove_end = std::remove_copy(temp.begin(), temp.end(), const_cast<ulvector&>(uids).begin(), 0UL);
 	if (remove_end != const_cast<ulvector&>(uids).end())
 		const_cast<ulvector&>(uids).erase(remove_end, const_cast<ulvector&>(uids).end());
 }
@@ -2191,9 +2191,9 @@ void CLocalClient::_SetFlag(const ulvector& nums, bool uids, NMessage::EFlags fl
 			CHECK_STREAM(mIndex)
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -2292,7 +2292,7 @@ void CLocalClient::_CopyMessage(const ulvector& nums, bool uids, CMbox* mbox_to,
 			CLocalMessage* msg = is_full_open ? dynamic_cast<CLocalMessage*>(GetCurrentMbox()->GetMessage(*iter)) : NULL;
 
 			// Message must exist and be cached
-			auto_ptr<CLocalMessage> lmsg;
+			std::auto_ptr<CLocalMessage> lmsg;
 			if (!msg || !msg->IsFullyCached())
 			{
 				// Create temp local message
@@ -2334,9 +2334,9 @@ void CLocalClient::_CopyMessage(const ulvector& nums, bool uids, CMbox* mbox_to,
 			mRecorder->CopyTo(ruids, rluids, mbox_to);
 		}
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Must always stop the append
 		if (dest_client)
@@ -2399,9 +2399,9 @@ void CLocalClient::_CopyMessage(unsigned long msg_num, bool uids, costream* aStr
 		// Do local message copy via stream copy
 		CopyMessage(lmsg, aStream, count, start);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -2445,9 +2445,9 @@ void CLocalClient::_ExpungeMessage(const ulvector& nums, bool uids)
 
 		ExpungeMessage(actual_nums);
 	}
-	catch(exception& ex)
+	catch(std::exception& ex)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
 		// Handle error
 		INETHandleError(ex, mErrorID, mNoBadID);
@@ -2541,7 +2541,7 @@ void CLocalClient::_GetQuotaRoot(CMbox* mbox)
 #pragma mark ____________________________Handle Errors
 
 // Handle an error condition
-void CLocalClient::INETHandleError(exception& ex, const char* err_id, const char* nobad_id)
+void CLocalClient::INETHandleError(std::exception& ex, const char* err_id, const char* nobad_id)
 {
 	// Check for network or general exception
 	CNetworkException* nex = dynamic_cast<CNetworkException*>(&ex);
@@ -2611,19 +2611,19 @@ void CLocalClient::ValidateCache(CMbox* mbox, cdfstream& mailbox, cdfstream& cac
 	{
 		// Open mailbox
 		mailbox.clear();
-		mailbox.open(mbox_name, static_cast<ios_base::openmode>(ios_base::in | (examine ? 0 : ios_base::out) | ios_base::binary));
+		mailbox.open(mbox_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (examine ? 0 : std::ios_base::out) | std::ios_base::binary));
 		CHECK_STREAM(mailbox)
 
 		// Open the cache files
 		cache.clear();
-		cache.open(cache_name, static_cast<ios_base::openmode>(ios_base::in | (examine ? 0 : ios_base::out) | ios_base::binary));
+		cache.open(cache_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (examine ? 0 : std::ios_base::out) | std::ios_base::binary));
 		CHECK_STREAM(cache)
 
 		// Check whether index file is writeable
 		mMboxReadWrite = (::access_utf8(index_name, R_OK | W_OK) == 0);
 		
 		index.clear();
-		index.open(index_name, static_cast<ios_base::openmode>(ios_base::in | (mMboxReadWrite ? ios_base::out : 0) | ios_base::binary));
+		index.open(index_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (mMboxReadWrite ? std::ios_base::out : 0) | std::ios_base::binary));
 
 		// Do special check for write permission failure - do not rely on access fn as that
 		// seems to not always work with locked volumes (e.g. CDs)
@@ -2641,7 +2641,7 @@ void CLocalClient::ValidateCache(CMbox* mbox, cdfstream& mailbox, cdfstream& cac
 				// Turn off read-write and retry the fopen
 				mMboxReadWrite = false;
 				index.clear();
-				index.open(index_name, static_cast<ios_base::openmode>(ios_base::in | (mMboxReadWrite ? ios_base::out : 0) | ios_base::binary));
+				index.open(index_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (mMboxReadWrite ? std::ios_base::out : 0) | std::ios_base::binary));
 			}
 		}
 		CHECK_STREAM(index)
@@ -2749,15 +2749,15 @@ void CLocalClient::ValidateCache(CMbox* mbox, cdfstream& mailbox, cdfstream& cac
 			try
 			{
 				mailbox.clear();
-				mailbox.open(mbox_name, static_cast<ios_base::openmode>(ios_base::in | (examine ? 0 : ios_base::out) | ios_base::binary));
+				mailbox.open(mbox_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (examine ? 0 : std::ios_base::out) | std::ios_base::binary));
 				CHECK_STREAM(mailbox)
 
 				cache.clear();
-				cache.open(cache_name, static_cast<ios_base::openmode>(ios_base::in | (examine ? 0 : ios_base::out) | ios_base::binary));
+				cache.open(cache_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (examine ? 0 : std::ios_base::out) | std::ios_base::binary));
 				CHECK_STREAM(cache)
 
 				index.clear();
-				index.open(index_name, static_cast<ios_base::openmode>(ios_base::in | ios_base::out | ios_base::binary));
+				index.open(index_name, static_cast<std::ios_base::openmode>(std::ios_base::in | std::ios_base::out | std::ios_base::binary));
 				CHECK_STREAM(index)
 			}
 			catch (...)
@@ -2796,13 +2796,13 @@ void CLocalClient::SwitchCache(CMbox* mbox, cdfstream& index, cdfstream& mailbox
 	// Close/reopen mailbox
 	mailbox.close();
 	mailbox.clear();
-	mailbox.open(mbox_name, static_cast<ios_base::openmode>(ios_base::in | (read_only ? 0 : ios_base::out) | ios_base::binary));
+	mailbox.open(mbox_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (read_only ? 0 : std::ios_base::out) | std::ios_base::binary));
 	CHECK_STREAM(mailbox)
 
 	// Close/reopen the cache files
 	cache.close();
 	cache.clear();
-	cache.open(cache_name, static_cast<ios_base::openmode>(ios_base::in | (read_only ? 0 : ios_base::out) | ios_base::binary));
+	cache.open(cache_name, static_cast<std::ios_base::openmode>(std::ios_base::in | (read_only ? 0 : std::ios_base::out) | std::ios_base::binary));
 	CHECK_STREAM(cache)
 
 	// After switching to read-only from read-write we must re-sync the index
@@ -2832,7 +2832,7 @@ void CLocalClient::Reconstruct(CMbox* mbox)
 		{
 			//StProfileSection profile("\pReconstruct Parse", 200, 20);
 			// Must not be open already
-			cdfstream fin(mbox_name, ios_base::in | ios_base::binary);
+			cdfstream fin(mbox_name, std::ios_base::in | std::ios_base::binary);
 			CHECK_STREAM(fin)
 
 			CNetworkAttachProgress progress;
@@ -2858,14 +2858,14 @@ void CLocalClient::Reconstruct(CMbox* mbox)
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 			StCreatorType file(cMulberryCreator, cMailboxCacheType);
 #endif
-			cdfstream fout(cache_name, ios_base::out | ios_base::binary | ios_base::trunc);
+			cdfstream fout(cache_name, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 			unsigned long uid = 1;
 			for(CMessageList::const_iterator iter = list->begin(); iter != list->end(); iter++, uid++)
 			{
 				SIndexRecord index_item;
 
 				// Always append items to output
-				fout.seekp(0, ios_base::end);
+				fout.seekp(0, std::ios_base::end);
 
 				// Write empty index to stream first
 				index_item.Index() = fout.tellp();
@@ -2897,7 +2897,7 @@ void CLocalClient::Reconstruct(CMbox* mbox)
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 			StCreatorType file(cMulberryCreator, cMailboxIndexType);
 #endif
-			cdfstream fout(index_name, ios_base::in | ios_base::out | ios_base::binary | ios_base::trunc);
+			cdfstream fout(index_name, std::ios_base::in | std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 
 			// Write out new header
 			SIndexHeader header;
@@ -2961,7 +2961,7 @@ bool CLocalClient::ReconstructRecover(CMbox* mbox, CMessageList* list, SIndexHea
 	{
 		// Its not ours - we have to create a fake CLocalClient and use that to do
 		// the reconstruct to keep the data in this CLocalClient consistent
-		auto_ptr<CLocalClient> temp(new CLocalClient(*this, mbox->GetProtocol()));
+		std::auto_ptr<CLocalClient> temp(new CLocalClient(*this, mbox->GetProtocol()));
 		
 		// Reconstruct recovery via the fake but force it to use the mailbox even though
 		// its not really current
@@ -2980,11 +2980,11 @@ bool CLocalClient::ReconstructRecover(CMbox* mbox, CMessageList* list, SIndexHea
 	{
 		// Open the cache & index files
 		mCache.clear();
-		mCache.open(cache_name, static_cast<ios_base::openmode>(ios_base::in | ios_base::binary));
+		mCache.open(cache_name, static_cast<std::ios_base::openmode>(std::ios_base::in | std::ios_base::binary));
 		CHECK_STREAM(mCache)
 
 		mIndex.clear();
-		mIndex.open(index_name, static_cast<ios_base::openmode>(ios_base::in | ios_base::binary));
+		mIndex.open(index_name, static_cast<std::ios_base::openmode>(std::ios_base::in | std::ios_base::binary));
 		CHECK_STREAM(mIndex)
 
 		// Read index into memory
@@ -3011,7 +3011,7 @@ bool CLocalClient::ReconstructRecover(CMbox* mbox, CMessageList* list, SIndexHea
 		
 		// Create message-id -> list position mappings for faster compares
 		// NB Use multimap as message-ids may be duplicated
-		typedef multimap<cdstring, unsigned long> msgidmap;
+		typedef std::multimap<cdstring, unsigned long> msgidmap;
 		msgidmap mapid;
 		unsigned long index = 0;
 		for(CMessageList::const_iterator iter = temp.begin(); iter != temp.end(); iter++, index++)
@@ -3233,7 +3233,7 @@ void CLocalClient::ReadIndex(cdfstream& in, SIndexHeader& header, SIndexList& in
 	{
 		seq->clear();
 		seq->reserve(index.size());			// Optimisation for large mailbox
-		::stable_sort(sort_list.begin(), sort_list.end(), uid_index_sort);
+		std::stable_sort(sort_list.begin(), sort_list.end(), uid_index_sort);
 		unsigned long seq_pos = 1;
 		for(SIndexRefList::iterator iter = sort_list.begin(); iter != sort_list.end(); iter++, seq_pos++)
 		{
@@ -3274,7 +3274,7 @@ void CLocalClient::ReadMessageIndex(CLocalMessage* lmsg, ulvector* indices)
 {
 	// Get seek position for this index
 	unsigned long index = GetIndex(lmsg);
-	istream::pos_type pos_index = mIndexList[index].Index();
+	std::istream::pos_type pos_index = mIndexList[index].Index();
 
 	// Get length of index
 	unsigned long length = mIndexList[index].Cache() - pos_index;
@@ -3308,7 +3308,7 @@ void CLocalClient::ReadMessageCache(CLocalMessage* lmsg)
 {
 	// Get seek position for this index
 	unsigned long index = GetIndex(lmsg);
-	istream::pos_type pos_cache = mIndexList[index].Cache();
+	std::istream::pos_type pos_cache = mIndexList[index].Cache();
 
 	// Determine if direct streaming or buffer
 	bool use_buffer = false;
@@ -3397,7 +3397,7 @@ void CLocalClient::MapFromUIDs(const ulvector& uids, ulvector& nums, bool local)
 	nums.reserve(uids.size());	// Optimisation for large mailbox
 	for(unsigned long i = 0; i < mIndexList.size(); i++)
 	{
-		ulvector::const_iterator found = ::find(uids.begin(), uids.end(), local ? mIndexList[i].LocalUID() : mIndexList[i].UID());
+		ulvector::const_iterator found = std::find(uids.begin(), uids.end(), local ? mIndexList[i].LocalUID() : mIndexList[i].UID());
 		if (found != uids.end())
 			nums.push_back(mIndexList[i].Sequence());
 	}
@@ -3410,7 +3410,7 @@ void CLocalClient::MapBetweenUIDs(const ulvector& uids, ulvector& luids, bool to
 	for(unsigned long i = 0; i < mIndexList.size(); i++)
 	{
 		unsigned long find_it = to_local ? mIndexList[i].UID() : mIndexList[i].LocalUID();
-		ulvector::const_iterator found = ::find(uids.begin(), uids.end(), find_it);
+		ulvector::const_iterator found = std::find(uids.begin(), uids.end(), find_it);
 		if (found != uids.end())
 		{
 			unsigned long found_it = to_local ? mIndexList[i].LocalUID() : mIndexList[i].UID();
@@ -3426,7 +3426,7 @@ void CLocalClient::MapBetweenUIDs(const ulvector& uids, ulvector& luids, bool to
 		}
 	}
 	
-	::sort(luids.begin(), luids.end());
+	std::sort(luids.begin(), luids.end());
 }
 
 unsigned long CLocalClient::GetIndex(unsigned long seq) const
@@ -3437,8 +3437,8 @@ unsigned long CLocalClient::GetIndex(unsigned long seq) const
 void CLocalClient::ScanDirectory(const char* path, const cdstring& pattern, CMboxList* mbox_list, bool first)
 {
 	// Create lists for directories and mailboxes
-	auto_ptr<cdstrvect> dirs(new cdstrvect);
-	auto_ptr<cdstrvect> mboxes(new cdstrvect);
+	std::auto_ptr<cdstrvect> dirs(new cdstrvect);
+	std::auto_ptr<cdstrvect> mboxes(new cdstrvect);
 
 	// Iterate over all .mbx files/directories in directory
 	// but not ones that are hidden
@@ -3480,7 +3480,7 @@ void CLocalClient::ScanDirectory(const char* path, const cdstring& pattern, CMbo
 	for(cdstrvect::iterator iter = mboxes->begin(); iter != mboxes->end(); iter++)
 	{
 		// Look in list of dirs
-		cdstrvect::iterator found = ::find(dirs->begin(), dirs->end(), *iter);
+		cdstrvect::iterator found = std::find(dirs->begin(), dirs->end(), *iter);
 		if (found == dirs->end())
 		{
 			// Add as mailbox without hierarchy
@@ -3615,19 +3615,19 @@ void CLocalClient::ExpungeMessage(ulvector& indices)
 		file1.Reset();
 		StCreatorType file2(cMulberryCreator, cMailboxCacheType);
 #endif
-		cdfstream temp_cache(cache_temp, ios::out | ios_base::binary | ios::trunc);
+		cdfstream temp_cache(cache_temp, ios::out | std::ios_base::binary | ios::trunc);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file2.Reset();
 		StCreatorType file3(cMulberryCreator, cMailboxIndexType);
 #endif
-		cdfstream temp_index(index_temp, ios::out | ios_base::binary | ios::trunc);
+		cdfstream temp_index(index_temp, ios::out | std::ios_base::binary | ios::trunc);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file3.Reset();
 #endif
 
 		unsigned long msg_start_offset = 0;
 		unsigned long cache_offset = 0;
-		istream::pos_type start_copy = 0;
+		std::istream::pos_type start_copy = 0;
 
 		// Copy in initial index header
 		SIndexHeader header;
@@ -3636,7 +3636,7 @@ void CLocalClient::ExpungeMessage(ulvector& indices)
 		header.write(temp_index);
 
 		// Make sure list of indices to remove is sorted
-		::sort(indices.begin(), indices.end());
+		std::sort(indices.begin(), indices.end());
 
 		// Copy each index record
 		ulvector recorded;	// Used for recording
@@ -3722,7 +3722,7 @@ void CLocalClient::ExpungeMessage(ulvector& indices)
 		if (mMboxReset)
 		{
 			// Sort sequence numbers to make this easier
-			::sort(seq.begin(), seq.end());
+			std::sort(seq.begin(), seq.end());
 
 			// Remove each squence number, but adjust for ones removed
 			unsigned long offset = 0;
@@ -3756,17 +3756,17 @@ void CLocalClient::ExpungeMessage(ulvector& indices)
 
 		// Force update of index header
 		mIndex.clear();
-		mIndex.open(index_name, ios_base::in | ios_base::out | ios_base::binary);
+		mIndex.open(index_name, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 		CHECK_STREAM(mIndex)
 		UpdateIndexSize(mIndex, header.IndexSize());
 		SyncIndexHeader(GetCurrentMbox(), mIndex);
 
 		// Now select it to reopen/recache
 		mMailbox.clear();
-		mMailbox.open(mbox_name, ios_base::in | ios_base::binary);
+		mMailbox.open(mbox_name, std::ios_base::in | std::ios_base::binary);
 		CHECK_STREAM(mMailbox)
 		mCache.clear();
-		mCache.open(cache_name, ios_base::in | ios_base::binary);
+		mCache.open(cache_name, std::ios_base::in | std::ios_base::binary);
 		CHECK_STREAM(mCache)
 
 		// Read index into cache
@@ -3864,8 +3864,8 @@ void CLocalClient::CopyMessage(const CLocalMessage* lmsg, costream* aStream, uns
 	{
 		// Look for copy back to self during append
 		bool copy_to_same = false;
-		ostream* f1 = &mMailbox;
-		ostream* f2 = NULL;
+		std::ostream* f1 = &mMailbox;
+		std::ostream* f2 = NULL;
 		if (dynamic_cast<CStreamFilter*>(aStream->GetStream()))
 			f2 = dynamic_cast<CStreamFilter*>(aStream->GetStream())->GetOStream();
 		else
@@ -3892,10 +3892,10 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 	costream stream_out(&from_stuff, mEndl);
 
 	// Seek to end of mailbox stream
-	mAppendMailbox->seekp(0, ios_base::end);
+	mAppendMailbox->seekp(0, std::ios_base::end);
 
 	// Now at starting point for append
-	istream::pos_type old_start = mAppendMailbox->tellp();
+	std::istream::pos_type old_start = mAppendMailbox->tellp();
 
 	// Must add line between any previous message and this one
 	if (old_start)
@@ -3905,7 +3905,7 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 	}
 
 	// Now at starting point for this message
-	istream::pos_type start = mAppendMailbox->tellp();
+	std::istream::pos_type start = mAppendMailbox->tellp();
 
 	// Add UNIX mailbox header
 	*mAppendMailbox << "From ";
@@ -3917,7 +3917,7 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 	CHECK_STREAM(*mAppendMailbox)
 
 	// Now at starting point for the message header
-	istream::pos_type start_hdr = mAppendMailbox->tellp();
+	std::istream::pos_type start_hdr = mAppendMailbox->tellp();
 
 	// Catch errors and rollback the append
 	try
@@ -4028,7 +4028,7 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 	SIndexRecord index_item;
 
 	// Add to end of cache file
-	mAppendCache->seekp(0, ios_base::end);
+	mAppendCache->seekp(0, std::ios_base::end);
 
 	// Write empty indices first
 	index_item.Index() = mAppendCache->tellp();
@@ -4079,7 +4079,7 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 		UpdateIndexLastUID(*mAppendIndex, new_uid);
 
 	// Write new indices at end
-	mAppendIndex->seekp(0, ios_base::end);
+	mAppendIndex->seekp(0, std::ios_base::end);
 	index_item.write(*mAppendIndex);
 	CHECK_STREAM(*mAppendCache)
 
@@ -4087,7 +4087,7 @@ unsigned long CLocalClient::AppendMessage(CMbox* mbox, CMessage* msg, bool add,
 	return mSeparateUIDs ? new_local_uid : new_uid;
 }
 
-void CLocalClient::RollbackAppend(CMbox* mbox, cdfstream* stream, istream::pos_type old_start)
+void CLocalClient::RollbackAppend(CMbox* mbox, cdfstream* stream, std::istream::pos_type old_start)
 {
 	// Rollback append mailbox
 	try
@@ -4116,7 +4116,7 @@ void CLocalClient::RollbackAppend(CMbox* mbox, cdfstream* stream, istream::pos_t
 		// Now copy from original (clearing errors first) to temp upto the start position of this append
 		stream->close();
 		stream->clear();
-		stream->open(mbox_name, ios_base::in | ios_base::binary);
+		stream->open(mbox_name, std::ios_base::in | std::ios_base::binary);
 		CHECK_STREAM(*stream)
 		::StreamCopy(*stream, temp_mbox, 0, old_start);
 		
@@ -4131,7 +4131,7 @@ void CLocalClient::RollbackAppend(CMbox* mbox, cdfstream* stream, istream::pos_t
 		
 		// Now reopen the stream
 		stream->clear();
-		stream->open(mbox_name, ios_base::in | ios_base::out | ios_base::binary);
+		stream->open(mbox_name, std::ios_base::in | std::ios_base::out | std::ios_base::binary);
 		CHECK_STREAM(*stream)
 	}
 	catch (...)
@@ -4314,7 +4314,7 @@ bool CLocalClient::SearchMessage(const CLocalMessage* lmsg, const CSearchItem* s
 	case CSearchItem::eUID:
 		{
 			const ulvector* uids = static_cast<const ulvector*>(spec->GetData());
-			return ::find(uids->begin(), uids->end(), mIndexList[GetIndex(lmsg)].UID()) != uids->end();
+			return std::find(uids->begin(), uids->end(), mIndexList[GetIndex(lmsg)].UID()) != uids->end();
 		}
 
 	case CSearchItem::eUnanswered:
@@ -4632,7 +4632,7 @@ time_t CLocalClient::InternalDateRead(const CLocalMessage* lmsg)
 	return date;
 }
 
-bool CLocalClient::StreamSearch(istream& in, unsigned long start, unsigned long length, const cdstring& txt, EContentTransferEncoding cte)
+bool CLocalClient::StreamSearch(std::istream& in, unsigned long start, unsigned long length, const cdstring& txt, EContentTransferEncoding cte)
 {
 	// Only bother if something to search
 	if (!length)
@@ -4643,7 +4643,7 @@ bool CLocalClient::StreamSearch(istream& in, unsigned long start, unsigned long 
 	// Set initial stream pos
 	in.seekg(start);
 
-	auto_ptr<CStreamFilter> filter;
+	std::auto_ptr<CStreamFilter> filter;
 
 	// May need to filter
 	switch(cte)
@@ -4667,7 +4667,7 @@ bool CLocalClient::StreamSearch(istream& in, unsigned long start, unsigned long 
 	}
 	
 	// Loop reading into buffer
-	unsigned long comp_len = pattern.length();
+	//unsigned long comp_len = pattern.length();
 	unsigned long pat_pos = 0;
 	while(length)
 	{
@@ -4819,7 +4819,7 @@ bool CLocalClient::KMPSearch(unsigned long length, const cdstring& txt, long M, 
 }
 #endif
 
-bool CLocalClient::StreamSearch1522(istream& in, unsigned long start, unsigned long length, const cdstring& txt)
+bool CLocalClient::StreamSearch1522(std::istream& in, unsigned long start, unsigned long length, const cdstring& txt)
 {
 	// Only bother if something to search
 	if (!length)

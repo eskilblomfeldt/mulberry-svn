@@ -77,8 +77,8 @@ public:
 	const cdstrvect& GetList() const
 		{ return *reinterpret_cast<const cdstrvect*>(mData); }
 
-	virtual void WriteToStream(ostream& out, bool text = false) const;
-	virtual void ReadFromStream(istream& in, unsigned long vers);
+	virtual void WriteToStream(std::ostream& out, bool text = false) const;
+	virtual void ReadFromStream(std::istream& in, unsigned long vers);
 
 private:
 	EAdbkAction mAction;

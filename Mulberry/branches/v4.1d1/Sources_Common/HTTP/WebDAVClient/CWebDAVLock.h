@@ -60,7 +60,7 @@ protected:
 	cdstring			mOwner;
 	unsigned long		mTimeout;
 
-	virtual void WriteHeaderToStream(ostream& os);
+	virtual void WriteHeaderToStream(std::ostream& os);
 
 	void	InitRequestData();
 

@@ -21,7 +21,7 @@
 
 #include "CStringUtils.h"
 
-#include <istream.h>
+#include <istream>
 
 const char* cAdbkActionDescriptors[] =
 	{"None",
@@ -94,25 +94,25 @@ void CAdbkAction::_tidy()
 	mData = NULL;
 }
 
-void CAdbkAction::WriteToStream(ostream& out, bool text) const
+void CAdbkAction::WriteToStream(std::ostream& out, bool text) const
 {
 	// Create string list of items
 	if (text)
 		out << "ID=" << mID << " ";
 	else
 		out.write(reinterpret_cast<const char*>(&mID), 4);
-	out << cAdbkActionDescriptors[mAction] << endl;
+	out << cAdbkActionDescriptors[mAction] << std::endl;
 
 	switch(mAction)
 	{
 	case eCreate:
 	case eDelete:
 	case eChange:
-		out << GetName() << endl;
+		out << GetName() << std::endl;
 		break;
 	case eRename:
-		out << GetNamePair().first << endl;
-		out << GetNamePair().second << endl;
+		out << GetNamePair().first << std::endl;
+		out << GetNamePair().second << std::endl;
 		break;
 	case eStoreAddress:
 	case eChangeAddress:
@@ -120,18 +120,18 @@ void CAdbkAction::WriteToStream(ostream& out, bool text) const
 	case eStoreGroup:
 	case eChangeGroup:
 	case eDeleteGroup:
-		out << GetList().size() << endl;
+		out << GetList().size() << std::endl;
 		for(cdstrvect::const_iterator iter = GetList().begin(); iter != GetList().end(); iter++)
-			out << *iter << endl;
+			out << *iter << std::endl;
 		break;
 	default:;
 	}
 	
 	if (text)
-		out << endl;
+		out << std::endl;
 }
 
-void CAdbkAction::ReadFromStream(istream& in, unsigned long vers)
+void CAdbkAction::ReadFromStream(std::istream& in, unsigned long vers)
 {
 	// get rid of existing
 	_tidy();

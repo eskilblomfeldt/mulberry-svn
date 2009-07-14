@@ -1341,7 +1341,7 @@ void CToolbarManager::MergeScreenToolbars()
 	else
 	{
 		mScreenToolbars.push_back(current_data);
-		::sort(mScreenToolbars.begin(), mScreenToolbars.end());
+		std::sort(mScreenToolbars.begin(), mScreenToolbars.end());
 	}
 	
 }
