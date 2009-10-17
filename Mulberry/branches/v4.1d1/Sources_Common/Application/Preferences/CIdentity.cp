@@ -918,10 +918,13 @@ CIdentity* CIdentityList::GetIdentity(const CCalendarAddress& caladdr) const
 	const cdstring& comp = caladdr.GetAddress();
 	for(const_iterator iter = begin(); iter != end(); iter++)
 	{
-		cdstring test((*iter).GetCalendar(true));
-		CCalendarAddress testc(test);
-		if (testc.GetAddress().compare(comp, true) == 0)
-			return const_cast<CIdentity*>(&(*iter));
+		CCalendarAddressList addrs;
+		CCalendarAddress::FromIdentityText((*iter).GetCalendar(true), addrs);
+		for(CCalendarAddressList::const_iterator iter2 = addrs.begin(); iter2 != addrs.end(); iter2++)
+		{
+			if ((*iter2)->GetAddress().compare(comp, true) == 0)
+				return const_cast<CIdentity*>(&(*iter));
+		}
 	}
 	
 	// If calendar address is mailto, try to match a From address
