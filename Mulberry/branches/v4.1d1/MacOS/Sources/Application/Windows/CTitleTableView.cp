@@ -177,7 +177,7 @@ void CTitleTableView::ClickSelf(const SMouseDownEvent &inMouseDown)
 
 				// Create gray line region
 				RgnHandle	gray_line = ::NewRgn();
-				Rect line = {0, col_pos, mFrameSize.height + info_size.height, col_pos+1};
+				Rect line = {0, col_pos, mFrameSize.height/* + info_size.height*/, col_pos+14};
 				LocalToPortPoint(topLeft(line));
 				LocalToPortPoint(botRight(line));
 				PortToGlobalPoint(topLeft(line));
@@ -217,24 +217,38 @@ void CTitleTableView::ClickSelf(const SMouseDownEvent &inMouseDown)
 				// Focus on desktop
 				GrafPtr save_port;
 				::GetPort(&save_port);
-				::SetPort(UScreenPort::GetScreenPort());
+				//::SetPort(UScreenPort::GetScreenPort());
 
 				// Drag gray line
-				SInt32 moved = ::DragGrayRgn(gray_line, startPt, &limit ,&slop, hAxisOnly, nil);
+				//SInt32 moved = ::DragGrayRgn(gray_line, startPt, &limit ,&slop, hAxisOnly, nil);
+				Point outPt = startPt;
+				MouseTrackingResult result = kMouseTrackingMouseDown;
+				SInt16 old_width = GetColWidth(i);
+				mTableView->Draw(NULL);
+				Draw(NULL);
+				while (result != kMouseTrackingMouseUp) {
+					//::SetPort(save_port);
+					UMouseTracking::TrackMouseDown(save_port, outPt, result);
+					LocalToPortPoint(outPt);
+					PortToGlobalPoint(outPt);
+					SInt32 moved = outPt.h - startPt.h;
 
-				// Clear up
-				::DisposeRgn(gray_line);
-				::SetPort(save_port);
+					// Clear up
+					//::DisposeRgn(gray_line);
+					//::SetPort(save_port);
 
-				// Adjust column only if moved
-				if (moved != 0x80008000)
-				{
-					SInt16 new_width = GetColWidth(i) + moved & 0x0000FFFF;
+					// Adjust column only if moved
+					if (moved != 0x80008000)
+					{
+						SInt16 new_width = old_width + moved & 0x0000FFFF;
 
-					// Resize columns
-					if (new_width < 16)
-						new_width = 16;
-					mTableView->SetColumnWidth(i, new_width);
+						// Resize columns
+						if (new_width < 16)
+							new_width = 16;
+						mTableView->SetColumnWidth(i, new_width);
+						mTableView->Draw(NULL);
+						Draw(NULL);
+					}
 				}
 
 				return;
