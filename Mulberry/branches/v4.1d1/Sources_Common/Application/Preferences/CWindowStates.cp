@@ -648,10 +648,10 @@ CTableWindowState::CTableWindowState(const char* name, Rect* bounds, EWindowStat
 }
 
 // Assignment with same type
-void CTableWindowState::_copy(const CTableWindowState& copy)
+void CTableWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mColumnMap = copy.mColumnMap;
+	mColumnMap = dynamic_cast<const CTableWindowState&>(copy).mColumnMap;
 }
 
 void CTableWindowState::PruneDefaults(const CWindowState& default_state)

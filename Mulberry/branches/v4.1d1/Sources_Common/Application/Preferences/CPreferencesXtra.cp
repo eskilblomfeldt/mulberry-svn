@@ -473,12 +473,12 @@ void CPreferences::InitMailboxPrefs()
 	mUseAppendToMboxes.mValue = false;
 	mMRUMaximum.mValue = 10;
 	{
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("All"), SACLRight(SACLRight::eACL_AllRights)));
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("Shared"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Write | CMboxACL::eMboxACL_Insert | CMboxACL::eMboxACL_Post | CMboxACL::eMboxACL_Delete)));
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("BBoard"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Insert | CMboxACL::eMboxACL_Post)));
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("Post-only BBoard"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Post)));
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("Read-only"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen)));
-		mMboxACLStyles.mValue.push_back(make_pair(cdstring("Delivery Only"), SACLRight(CMboxACL::eMboxACL_Post)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("All"), SACLRight(SACLRight::eACL_AllRights)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("Shared"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Write | CMboxACL::eMboxACL_Insert | CMboxACL::eMboxACL_Post | CMboxACL::eMboxACL_Delete)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("BBoard"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Insert | CMboxACL::eMboxACL_Post)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("Post-only BBoard"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen | CMboxACL::eMboxACL_Post)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("Read-only"), SACLRight(CMboxACL::eMboxACL_Lookup | CMboxACL::eMboxACL_Read | CMboxACL::eMboxACL_Seen)));
+		mMboxACLStyles.mValue.push_back(std::make_pair(cdstring("Delivery Only"), SACLRight(CMboxACL::eMboxACL_Post)));
 	}
 	mPromptDisconnected.mValue = true;
 	mAutoDial.mValue = true;
@@ -682,9 +682,9 @@ void CPreferences::InitAddressPrefs()
 		mOSAdbkAccount.Value() = temp;
 	}
 
-	mAdbkACLStyles.mValue.push_back(make_pair(cdstring("All"), SACLRight(SACLRight::eACL_AllRights)));
-	mAdbkACLStyles.mValue.push_back(make_pair(cdstring("Shared"), SACLRight(CAdbkACL::eAdbkACL_Lookup | CAdbkACL::eAdbkACL_Read | CAdbkACL::eAdbkACL_Write | CAdbkACL::eAdbkACL_Delete)));
-	mAdbkACLStyles.mValue.push_back(make_pair(cdstring("Read-only"), SACLRight(CAdbkACL::eAdbkACL_Lookup | CAdbkACL::eAdbkACL_Read)));
+	mAdbkACLStyles.mValue.push_back(std::make_pair(cdstring("All"), SACLRight(SACLRight::eACL_AllRights)));
+	mAdbkACLStyles.mValue.push_back(std::make_pair(cdstring("Shared"), SACLRight(CAdbkACL::eAdbkACL_Lookup | CAdbkACL::eAdbkACL_Read | CAdbkACL::eAdbkACL_Write | CAdbkACL::eAdbkACL_Delete)));
+	mAdbkACLStyles.mValue.push_back(std::make_pair(cdstring("Read-only"), SACLRight(CAdbkACL::eAdbkACL_Lookup | CAdbkACL::eAdbkACL_Read)));
 
 	mOptionKeyAddressDialog.mValue = false;
 

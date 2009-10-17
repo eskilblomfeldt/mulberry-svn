@@ -78,7 +78,7 @@ StMailboxTableSelection::~StMailboxTableSelection()
 #pragma mark ____________________________Selection tests
 
 // Test for selected message deleted
-pair<bool, bool> CMailboxTable::TestSelectionFlag(TableIndexT row, NMessage::EFlags param)
+std::pair<bool, bool> CMailboxTable::TestSelectionFlag(TableIndexT row, NMessage::EFlags param)
 {
 	// Get the message
 	CMessage* theMsg = NULL;
@@ -99,7 +99,7 @@ pair<bool, bool> CMailboxTable::TestSelectionFlag(TableIndexT row, NMessage::EFl
 }
 
 // Test for an outgoing message
-pair<bool, bool> CMailboxTable::TestSelectionSmart(TableIndexT row)
+std::pair<bool, bool> CMailboxTable::TestSelectionSmart(TableIndexT row)
 {
 	// Get the message
 	CMessage* theMsg = NULL;
@@ -1063,7 +1063,7 @@ void CMailboxTable::ScrollForNewMessages()
 	// Check whether pin item is at limit
 	TableIndexT can_move_select = (ascending ? pin_select - visible_top : visible_bottom - pin_select);
 	TableIndexT can_move_unseen = (ascending ? pin_unseen - visible_top : visible_bottom - pin_unseen);
-	TableIndexT can_move = ::min(can_move_select, can_move_unseen);
+	TableIndexT can_move = std::min(can_move_select, can_move_unseen);
 	
 	// If no move allowed then exit
 	if (can_move == 0)

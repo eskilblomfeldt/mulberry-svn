@@ -1256,7 +1256,7 @@ bool COptionsMap::ReadValue(const cdstring& key, SACLStyleList& value, NumVersio
 				acl.SetRights(txt_acl);
 
 				// Add to array
-				value.push_back(make_pair(aStr, acl.GetRights()));
+				value.push_back(std::make_pair(aStr, acl.GetRights()));
 			}
 			else
 			{
@@ -1265,7 +1265,7 @@ bool COptionsMap::ReadValue(const cdstring& key, SACLStyleList& value, NumVersio
 				acl.SetRights(txt_acl);
 
 				// Add to array
-				value.push_back(make_pair(aStr, acl.GetRights()));
+				value.push_back(std::make_pair(aStr, acl.GetRights()));
 			}
 
 			// Get next token and step over leading space

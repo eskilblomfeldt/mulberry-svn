@@ -58,7 +58,7 @@ void CMatchItem::SetSingleMatch(EMatchItem item)
 	// Clear existing items
 	mNegate = false;
 	mUseOr = true;
-	::fill(mBitsSet.begin(), mBitsSet.end(), false);
+	std::fill(mBitsSet.begin(), mBitsSet.end(), false);
 	mSearchSet.clear();
 
 	mBitsSet[item] = true;

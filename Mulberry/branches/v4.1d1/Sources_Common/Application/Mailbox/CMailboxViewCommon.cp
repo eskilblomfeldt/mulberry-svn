@@ -505,12 +505,12 @@ void CMailboxView::MoveSubstitute(unsigned long oldindex, unsigned long newindex
 		return;
 
 	// Rotate the vector
-	std::rotate(mSubsList.begin() + min(oldindex, newindex),
+	std::rotate(mSubsList.begin() + std::min(oldindex, newindex),
 				(oldindex < newindex) ? mSubsList.begin() + (oldindex + 1) : mSubsList.begin() + oldindex,
-				mSubsList.begin() + (max(oldindex, newindex) + 1));
+				mSubsList.begin() + (std::max(oldindex, newindex) + 1));
 
 	// Now change the value if it moved
-	if ((mSubstituteIndex >= min(oldindex, newindex)) && (mSubstituteIndex <= max(oldindex, newindex)))
+	if ((mSubstituteIndex >= std::min(oldindex, newindex)) && (mSubstituteIndex <std::max(oldindex, newindex)))
 	{
 		if (mSubstituteIndex == oldindex)
 			mSubstituteIndex = newindex;

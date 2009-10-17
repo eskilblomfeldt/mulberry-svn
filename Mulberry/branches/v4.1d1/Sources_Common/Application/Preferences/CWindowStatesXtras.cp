@@ -52,10 +52,10 @@ CStatusWindowState::CStatusWindowState(const char* name, Rect* bounds, EWindowSt
 }
 
 // Copy constructor
-void CStatusWindowState::_copy(const CStatusWindowState& copy)
+void CStatusWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mClosed = copy.mClosed;
+	mClosed = dynamic_cast<const CStatusWindowState&>(copy).mClosed;
 }
 
 bool CStatusWindowState::PartialCompare(const CWindowState& default_state)
@@ -382,7 +382,7 @@ CServerWindowState::CServerWindowState(const char* name, Rect* bounds, EWindowSt
 }
 
 // Assignment with same type
-void CServerWindowState::_copy(const CServerWindowState& copy)
+void CServerWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 }
@@ -512,7 +512,7 @@ bool CServerWindowState::SetInfo_Old(cdstring& info, NumVersion vers_prefs)
 	// If >= v1.3d1
 	if (::VersionTest(vers_prefs, VERS_1_3_0_D_1) >= 0)
 	{
-		CColumnInfoArray info;
+		CColumnInfoArray colinfo;
 
 		// Get column info count
 		item = ::strtok(nil, ",");
@@ -526,11 +526,11 @@ bool CServerWindowState::SetInfo_Old(cdstring& info, NumVersion vers_prefs)
 			SColumnInfo col_info;
 			col_info.SetInfo_Old(cServerColumnDescriptors, eServerColumnMax, eServerColumnFlags, vers_prefs);
 
-			info.push_back(col_info);
+			colinfo.push_back(col_info);
 		}
 
 		mColumnMap.clear();
-		mColumnMap.push_back(CScreenColumnInfo(info));
+		mColumnMap.push_back(CScreenColumnInfo(colinfo));
 	}
 	else
 		not_old_vers = false;
@@ -597,15 +597,15 @@ CMailboxWindowState::CMailboxWindowState(const char* name, Rect* bounds, EWindow
 }
 
 // Assignment with same type
-void CMailboxWindowState::_copy(const CMailboxWindowState& copy)
+void CMailboxWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 
-	mSortBy = copy.mSortBy;
-	mShowBy = copy.mShowBy;
-	mViewMode = copy.mViewMode;
-	mMatchItem = copy.mMatchItem;
-	mSplitterSize = copy.mSplitterSize;
+	mSortBy = dynamic_cast<const CMailboxWindowState&>(copy).mSortBy;
+	mShowBy = dynamic_cast<const CMailboxWindowState&>(copy).mShowBy;
+	mViewMode = dynamic_cast<const CMailboxWindowState&>(copy).mViewMode;
+	mMatchItem = dynamic_cast<const CMailboxWindowState&>(copy).mMatchItem;
+	mSplitterSize = dynamic_cast<const CMailboxWindowState&>(copy).mSplitterSize;
 }
 
 // Default constructor
@@ -968,14 +968,14 @@ CMessageWindowState::CMessageWindowState(const char* name, Rect* bounds, EWindow
 }
 
 // Assignment with same type
-void CMessageWindowState::_copy(const CMessageWindowState& copy)
+void CMessageWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mSplitChange = copy.mSplitChange;
-	mPartsTwisted = copy.mPartsTwisted;
-	mCollapsed = copy.mCollapsed;
-	mFlat = copy.mFlat;
-	mInline = copy.mInline;
+	mSplitChange = dynamic_cast<const CMessageWindowState&>(copy).mSplitChange;
+	mPartsTwisted = dynamic_cast<const CMessageWindowState&>(copy).mPartsTwisted;
+	mCollapsed = dynamic_cast<const CMessageWindowState&>(copy).mCollapsed;
+	mFlat = dynamic_cast<const CMessageWindowState&>(copy).mFlat;
+	mInline = dynamic_cast<const CMessageWindowState&>(copy).mInline;
 }
 
 // Default constructor
@@ -1142,12 +1142,12 @@ CLetterWindowState::CLetterWindowState(const char* name, Rect* bounds, EWindowSt
 }
 
 // Assignment with same type
-void CLetterWindowState::_copy(const CLetterWindowState& copy)
+void CLetterWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mSplitChange = copy.mSplitChange;
-	mPartsTwisted = copy.mPartsTwisted;
-	mCollapsed = copy.mCollapsed;
+	mSplitChange = dynamic_cast<const CLetterWindowState&>(copy).mSplitChange;
+	mPartsTwisted = dynamic_cast<const CLetterWindowState&>(copy).mPartsTwisted;
+	mCollapsed = dynamic_cast<const CLetterWindowState&>(copy).mCollapsed;
 }
 
 // Default constructor
@@ -1343,22 +1343,22 @@ CAddressBookWindowState::CAddressBookWindowState(const char* name, Rect* bounds,
 }
 
 // Assignment with same type
-void CAddressBookWindowState::_copy(const CAddressBookWindowState& copy)
+void CAddressBookWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mSort = copy.mSort;
-	mShow = copy.mShow;
+	mSort = dynamic_cast<const CAddressBookWindowState&>(copy).mSort;
+	mShow = dynamic_cast<const CAddressBookWindowState&>(copy).mShow;
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
-	mSplitChange = copy.mSplitChange;
+	mSplitChange = dynamic_cast<const CAddressBookWindowState&>(copy).mSplitChange;
 #elif __dest_os == __win32_os || __dest_os == __linux_os
-	mAddressSize = copy.mAddressSize;
-	mGroupSize = copy.mGroupSize;
+	mAddressSize = dynamic_cast<const CAddressBookWindowState&>(copy).mAddressSize;
+	mGroupSize = dynamic_cast<const CAddressBookWindowState&>(copy).mGroupSize;
 #else
 #error __dest_os
 #endif
-	mAddressShow = copy.mAddressShow;
-	mGroupShow = copy.mGroupShow;
-	mVisible = copy.mVisible;
+	mAddressShow = dynamic_cast<const CAddressBookWindowState&>(copy).mAddressShow;
+	mGroupShow = dynamic_cast<const CAddressBookWindowState&>(copy).mGroupShow;
+	mVisible = dynamic_cast<const CAddressBookWindowState&>(copy).mVisible;
 }
 
 // Default constructor
@@ -1605,17 +1605,17 @@ CNewAddressBookWindowState::CNewAddressBookWindowState(const char* name, Rect* b
 }
 
 // Assignment with same type
-void CNewAddressBookWindowState::_copy(const CNewAddressBookWindowState& copy)
+void CNewAddressBookWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 
 	// Copy items in list
-	mSort = copy.mSort;
-	mAddressSize = copy.mAddressSize;
-	mGroupSize = copy.mGroupSize;
-	mAddressShow = copy.mAddressShow;
-	mGroupShow = copy.mGroupShow;
-	mSplitterSize = copy.mSplitterSize;
+	mSort = dynamic_cast<const CNewAddressBookWindowState&>(copy).mSort;
+	mAddressSize = dynamic_cast<const CNewAddressBookWindowState&>(copy).mAddressSize;
+	mGroupSize = dynamic_cast<const CNewAddressBookWindowState&>(copy).mGroupSize;
+	mAddressShow = dynamic_cast<const CNewAddressBookWindowState&>(copy).mAddressShow;
+	mGroupShow = dynamic_cast<const CNewAddressBookWindowState&>(copy).mGroupShow;
+	mSplitterSize = dynamic_cast<const CNewAddressBookWindowState&>(copy).mSplitterSize;
 }
 
 // Default constructor
@@ -1772,13 +1772,13 @@ CAdbkManagerWindowState::CAdbkManagerWindowState(const char* name, Rect* bounds,
 }
 
 // Assignment with same type
-void CAdbkManagerWindowState::_copy(const CAdbkManagerWindowState& copy)
+void CAdbkManagerWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 
 	// Copy items in list
-	mHide = copy.mHide;
-	mTwisted = copy.mTwisted;
+	mHide = dynamic_cast<const CAdbkManagerWindowState&>(copy).mHide;
+	mTwisted = dynamic_cast<const CAdbkManagerWindowState&>(copy).mTwisted;
 }
 
 // Default constructor
@@ -1993,15 +1993,15 @@ CAdbkSearchWindowState::CAdbkSearchWindowState(const char* name, Rect* bounds, E
 }
 
 // Assignment with same type
-void CAdbkSearchWindowState::_copy(const CAdbkSearchWindowState& copy)
+void CAdbkSearchWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 
 	// Copy items in list
-	mHide = copy.mHide;
-	mMethod = copy.mMethod;
-	mField = copy.mField;
-	mCriteria = copy.mCriteria;
+	mHide = dynamic_cast<const CAdbkSearchWindowState&>(copy).mHide;
+	mMethod = dynamic_cast<const CAdbkSearchWindowState&>(copy).mMethod;
+	mField = dynamic_cast<const CAdbkSearchWindowState&>(copy).mField;
+	mCriteria = dynamic_cast<const CAdbkSearchWindowState&>(copy).mCriteria;
 }
 
 // Default constructor
@@ -2246,13 +2246,13 @@ CFindReplaceWindowState::CFindReplaceWindowState(const char* name, Rect* bounds,
 }
 
 // Assignment with same type
-void CFindReplaceWindowState::_copy(const CFindReplaceWindowState& copy)
+void CFindReplaceWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mCaseSensitive = copy.mCaseSensitive;
-	mBackwards = copy.mBackwards;
-	mWrap = copy.mWrap;
-	mEntireWord = copy.mEntireWord;
+	mCaseSensitive = dynamic_cast<const CFindReplaceWindowState&>(copy).mCaseSensitive;
+	mBackwards = dynamic_cast<const CFindReplaceWindowState&>(copy).mBackwards;
+	mWrap = dynamic_cast<const CFindReplaceWindowState&>(copy).mWrap;
+	mEntireWord = dynamic_cast<const CFindReplaceWindowState&>(copy).mEntireWord;
 }
 
 bool CFindReplaceWindowState::PartialCompare(const CWindowState& default_state)
@@ -2375,10 +2375,10 @@ CSearchWindowState::CSearchWindowState(const char* name, Rect* bounds, EWindowSt
 }
 
 // Assignment with same type
-void CSearchWindowState::_copy(const CSearchWindowState& copy)
+void CSearchWindowState::_copy(const CWindowState& copy)
 {
 	CWindowState::_copy(copy);
-	mExpanded = copy.mExpanded;
+	mExpanded = dynamic_cast<const CSearchWindowState&>(copy).mExpanded;
 }
 
 bool CSearchWindowState::PartialCompare(const CWindowState& default_state)
@@ -2490,14 +2490,14 @@ CRulesWindowState::CRulesWindowState(const char* name, Rect* bounds, EWindowStat
 }
 
 // Assignment with same type
-void CRulesWindowState::_copy(const CRulesWindowState& copy)
+void CRulesWindowState::_copy(const CWindowState& copy)
 {
 	CTableWindowState::_copy(copy);
 
 	// Copy items in list
-	mSplitPos = copy.mSplitPos;
-	mShowTriggers = copy.mShowTriggers;
-	mHide = copy.mHide;
+	mSplitPos = dynamic_cast<const CRulesWindowState&>(copy).mSplitPos;
+	mShowTriggers = dynamic_cast<const CRulesWindowState&>(copy).mShowTriggers;
+	mHide = dynamic_cast<const CRulesWindowState&>(copy).mHide;
 }
 
 // Default constructor
@@ -2626,10 +2626,10 @@ CCalendarStoreWindowState::CCalendarStoreWindowState(const char* name, Rect* bou
 }
 
 // Assignment with same type
-void CCalendarStoreWindowState::_copy_CCalendarStoreWindowState(const CCalendarStoreWindowState& copy)
+void CCalendarStoreWindowState::_copy(const CWindowState& copy)
 {
 	// Copy items in list
-	mTwisted = copy.mTwisted;
+	mTwisted = dynamic_cast<const CCalendarStoreWindowState&>(copy).mTwisted;
 }
 
 // Default constructor
@@ -2770,16 +2770,16 @@ CCalendarWindowState::CCalendarWindowState(const char* name, Rect* bounds, EWind
 }
 
 // Assignment with same type
-void CCalendarWindowState::_copy_CCalendarWindowState(const CCalendarWindowState& copy)
+void CCalendarWindowState::_copy(const CWindowState& copy)
 {
-	mType = copy.mType;
-	mShowToDo = copy.mShowToDo;
-	mYearLayout = copy.mYearLayout;
-	mDayWeekRange = copy.mDayWeekRange;
-	mDayWeekScale = copy.mDayWeekScale;
-	mSummaryType = copy.mSummaryType;
-	mSummaryRange = copy.mSummaryRange;
-	mSplitterSize = copy.mSplitterSize;
+	mType = dynamic_cast<const CCalendarWindowState&>(copy).mType;
+	mShowToDo = dynamic_cast<const CCalendarWindowState&>(copy).mShowToDo;
+	mYearLayout = dynamic_cast<const CCalendarWindowState&>(copy).mYearLayout;
+	mDayWeekRange = dynamic_cast<const CCalendarWindowState&>(copy).mDayWeekRange;
+	mDayWeekScale = dynamic_cast<const CCalendarWindowState&>(copy).mDayWeekScale;
+	mSummaryType = dynamic_cast<const CCalendarWindowState&>(copy).mSummaryType;
+	mSummaryRange = dynamic_cast<const CCalendarWindowState&>(copy).mSummaryRange;
+	mSplitterSize = dynamic_cast<const CCalendarWindowState&>(copy).mSplitterSize;
 }
 
 bool CCalendarWindowState::PartialCompare(const CWindowState& default_state)

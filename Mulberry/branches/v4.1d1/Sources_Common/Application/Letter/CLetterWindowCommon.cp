@@ -1735,7 +1735,7 @@ void CLetterWindow::ReplaceSignature(const cdstring& old_sig, const cdstring& ne
 #else
 	long text_len = mText->GetTextLength();
 #endif
-	long start_sel = max(text_len, mSignatureLength) - mSignatureLength;
+	long start_sel = std::max(text_len, mSignatureLength) - mSignatureLength;
 	long end_sel = text_len;
 	mText->SetSelectionRange(start_sel, end_sel);
 
@@ -1776,7 +1776,7 @@ void CLetterWindow::ReplaceSignature(const cdstring& old_sig, const cdstring& ne
 			return;
 		}
 		// Set selection to old sig
-		start_sel = max(text_len, mSignatureLength) - mSignatureLength;
+		start_sel = std::max(text_len, mSignatureLength) - mSignatureLength;
 		mText->SetSelectionRange(start_sel, end_sel);
 	}
 	

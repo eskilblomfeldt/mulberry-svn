@@ -121,7 +121,7 @@ public:
 protected:
 	CColumnMap	mColumnMap;
 
-	virtual void _copy(const CTableWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 	
 	virtual void ResetColumns(void) = 0;								// Set default columns
 	CColumnMap::const_iterator GetExactColumnInfo(const CScreenColumnInfo& comp) const;
@@ -156,7 +156,7 @@ public:
 protected:
 	bool mClosed;
 
-	virtual void _copy(const CStatusWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual bool PartialCompare(const CWindowState& default_state);
 };
@@ -245,7 +245,7 @@ public:
 	virtual bool SetInfo_Old(cdstring& info, NumVersion vers_prefs);
 
 protected:
-	virtual void _copy(const CServerWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -296,7 +296,7 @@ protected:
 	CMatchItem			mMatchItem;
 	long				mSplitterSize;
 
-	virtual void _copy(const CMailboxWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -344,7 +344,7 @@ protected:
 	bool	mFlat;
 	bool	mInline;
 
-	virtual void _copy(const CMessageWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual bool PartialCompare(const CWindowState& default_state);
@@ -383,7 +383,7 @@ protected:
 	bool	mPartsTwisted;
 	bool	mCollapsed;
 
-	virtual void _copy(const CLetterWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual bool PartialCompare(const CWindowState& default_state);
@@ -457,7 +457,7 @@ protected:
 	bool			mGroupShow;
 	bool			mVisible;
 
-	virtual void _copy(const CAddressBookWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual bool PartialCompare(const CWindowState& default_state);
@@ -509,7 +509,7 @@ protected:
 	bool			mGroupShow;
 	long			mSplitterSize;
 
-	virtual void _copy(const CNewAddressBookWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -546,7 +546,7 @@ protected:
 	bool				mHide;
 	cdstrvect			mTwisted;
 
-	virtual void _copy(const CAdbkManagerWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -591,7 +591,7 @@ protected:
 	EAdbkSearchCriteria		mCriteria;
 	bool					mHide;
 
-	virtual void _copy(const CAdbkSearchWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -632,7 +632,7 @@ protected:
 	bool mWrap;
 	bool mEntireWord;
 
-	virtual void _copy(const CFindReplaceWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 	virtual bool PartialCompare(const CWindowState& default_state);
 };
 
@@ -660,7 +660,7 @@ public:
 protected:
 	bool mExpanded;
 
-	virtual void _copy(const CSearchWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 	virtual bool PartialCompare(const CWindowState& default_state);
 };
 
@@ -696,7 +696,7 @@ protected:
 	bool				mShowTriggers;
 	bool				mHide;
 
-	virtual void _copy(const CRulesWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -712,11 +712,11 @@ public:
 						cdstrvect* twisted);										// Build from window
 	CCalendarStoreWindowState(const CCalendarStoreWindowState& copy) :				// Copy constructor
 		CTableWindowState(copy)
-		{ _copy_CCalendarStoreWindowState(copy); }
+		{ _copy(copy); }
 	virtual ~CCalendarStoreWindowState() {}
 
 	CCalendarStoreWindowState& operator=(const CCalendarStoreWindowState& copy)		// Assignment with same type
-		{ CTableWindowState::operator=(copy); if (this != &copy) _copy_CCalendarStoreWindowState(copy); return *this; }
+		{ CTableWindowState::operator=(copy); if (this != &copy) _copy(copy); return *this; }
 
 	const cdstrvect& GetTwisted() const
 		{ return mTwisted; }
@@ -730,7 +730,7 @@ public:
 protected:
 	cdstrvect			mTwisted;
 
-	virtual void _copy_CCalendarStoreWindowState(const CCalendarStoreWindowState& copy);
+	virtual void _copy(const CWindowState& copy);
 
 	virtual void ResetRect(void);										// Set default size
 	virtual void ResetColumns(void);									// Set default columns
@@ -751,11 +751,11 @@ public:
 						long splitter);											// Build from window
 	CCalendarWindowState(const CCalendarWindowState& copy) :									// Copy constructor
 		CWindowState(copy)
-		{ _copy_CCalendarWindowState(copy); }
+		{ _copy(copy); }
 	virtual ~CCalendarWindowState() {}
 
 	CCalendarWindowState& operator=(const CCalendarWindowState& copy)							// Assignment with same type
-		{ CWindowState::operator=(copy); if (this != &copy) _copy_CCalendarWindowState(copy); return *this; }
+		{ CWindowState::operator=(copy); if (this != &copy) _copy(copy); return *this; }
 
 	NCalendarView::EViewType GetType() const
 	{
@@ -811,7 +811,7 @@ protected:
 	long							mSplitterSize;
 
 private:
-	void _copy_CCalendarWindowState(const CCalendarWindowState& copy);
+	void _copy(const CWindowState& copy);
 	virtual bool PartialCompare(const CWindowState& default_state);
 };
 
