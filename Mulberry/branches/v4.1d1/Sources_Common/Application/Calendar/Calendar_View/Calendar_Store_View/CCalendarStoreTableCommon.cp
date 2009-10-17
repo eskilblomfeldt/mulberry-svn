@@ -886,7 +886,7 @@ void CCalendarStoreTable::OnRefreshList()
 	if (node->IsProtocol())
 		node->GetProtocol()->RefreshList();
 	else if (node->IsDirectory())
-		node->GetProtocol()->LoadSubList(node, false);
+		node->GetProtocol()->RefreshSubList(node);
 	
 	// Reset all views
 	CCalendarView::ResetAll();

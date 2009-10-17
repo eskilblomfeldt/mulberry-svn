@@ -219,7 +219,7 @@ void CCalendarEventTableBase::OnEditEvent()
 	// Edit each one
 	for(iCal::CICalendarComponentRecurs::const_iterator iter = vevents.begin(); iter != vevents.end(); iter++)
 	{
-		CNewEventDialog::StartEdit(*static_cast<iCal::CICalendarVEvent*>(*iter));
+		CNewEventDialog::StartEdit(*static_cast<iCal::CICalendarVEvent*>(*iter), NULL);
 	}
 }
 
@@ -228,11 +228,15 @@ void CCalendarEventTableBase::OnEditOneEvent(CCalendarEventBase* event)
 	if (event->GetVEvent().get() == NULL)
 		return;
 
+#if 0
 	// IMPORTANT the VEVENT object may get deleted if its is a recurrence item,
 	// so we must cache the master VEVENT here and use this
 	iCal::CICalendarVEvent* master = event->GetVEvent()->GetTrueMaster<iCal::CICalendarVEvent>();
 
 	CNewEventDialog::StartEdit(*master);
+#else
+	CNewEventDialog::StartEdit(*event->GetVEvent()->GetMaster<iCal::CICalendarVEvent>(), event->GetVEvent().get());
+#endif
 }
 
 void CCalendarEventTableBase::OnDuplicateEvent()

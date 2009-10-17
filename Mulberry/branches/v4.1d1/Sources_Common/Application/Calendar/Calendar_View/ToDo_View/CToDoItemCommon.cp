@@ -49,11 +49,15 @@ void CToDoItem::OnEditToDo()
 	if (mType != eToDo)
 		return;
 
+#if 0
 	// IMPORTANT the VTODO object may get deleted if its is a recurrence item,
 	// so we must cache the master VTODO here and use this
 	iCal::CICalendarVToDo* master = mVToDo->GetTrueMaster<iCal::CICalendarVToDo>();
 
 	CNewToDoDialog::StartEdit(*master);
+#else
+	CNewToDoDialog::StartEdit(*mVToDo->GetMaster<iCal::CICalendarVToDo>(), mVToDo.get());
+#endif
 }
 
 void CToDoItem::OnDuplicateToDo()
