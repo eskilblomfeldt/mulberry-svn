@@ -697,6 +697,7 @@ void CHTMLTransformer::ExamineStack(const CATSUIStyle& styles)
 			// Anchors handled elsewhere
 			mStack->push(currElement);
 			break;
+		default:;
 		}
 
 		if (matched)
@@ -771,6 +772,7 @@ void CHTMLTransformer::ExamineStack(const CATSUIStyle& styles)
 			matched = true;
 			RemoveElement(currElement);
 			break;
+		default:;
 		}
 
 		// If element no longer used, delete it
@@ -927,6 +929,7 @@ void CHTMLTransformer::AddElement(CParserHTMLStackElement* element)
 	case E_ANCHOR:
 		mOut << "<A HREF=\"" << element->mParam.ToUTF8() << "\">";
 		break;
+	default:;
 	}
 }
 
@@ -952,6 +955,7 @@ void CHTMLTransformer::RemoveElement(CParserHTMLStackElement* element)
 	case E_ANCHOR:
 		mOut << "</A>";
 		break;
+	default:;
 	}
 }
 

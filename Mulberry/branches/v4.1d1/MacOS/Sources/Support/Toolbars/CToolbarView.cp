@@ -324,7 +324,7 @@ void CToolbarView::AdjustSize()
 		tbrs[i]->ShowToolbar(true);
 
 		// Adjust total height for next toolbar
-		total_height = max((int) total_height, vpos + tbsize.height);
+		total_height = std::max((int) total_height, vpos + tbsize.height);
 		vpos += (sidebyside ? 0 : tbsize.height);
 		hpos += (sidebyside ? tbrs[i]->GetActualWidth() : 0);
 	}

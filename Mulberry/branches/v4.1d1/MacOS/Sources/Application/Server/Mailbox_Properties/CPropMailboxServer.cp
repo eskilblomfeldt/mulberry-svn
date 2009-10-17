@@ -113,6 +113,7 @@ void CPropMailboxServer::SetProtocol(CMboxProtocol* server)
 	case CINETAccount::eLocal:
 		mIconState->SetResourceID(icnx_MailboxStateLocal);
 		break;
+	default:;
 	}
 
 	// Do server data

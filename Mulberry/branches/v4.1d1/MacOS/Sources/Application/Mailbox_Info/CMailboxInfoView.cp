@@ -623,7 +623,7 @@ void CMailboxInfoView::SaveState(void)
 	if (!mbox->GetAutoViewMode())
 		match = GetInfoTable()->GetCurrentMatch();
 	NMbox::EViewMode mode = mbox->GetAutoViewMode() ? NMbox::eViewMode_All : mbox->GetViewMode();
-	if (!std::accumulate(match.GetBitsSet().begin(), match.GetBitsSet().end(), false, logical_or<bool>()) && !match.GetSearchSet().size())
+	if (!std::accumulate(match.GetBitsSet().begin(), match.GetBitsSet().end(), false, std::logical_or<bool>()) && !match.GetSearchSet().size())
 		mode = NMbox::eViewMode_All;
 
 	// Add info to prefs

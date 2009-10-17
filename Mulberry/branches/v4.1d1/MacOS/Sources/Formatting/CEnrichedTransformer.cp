@@ -677,6 +677,7 @@ void CEnrichedTransformer::ExamineStack(const CATSUIStyle& styles)
 			else
 				matched = false;
 			break;
+		default:;
 		}
 
 		if (matched)
@@ -780,6 +781,7 @@ void CEnrichedTransformer::ExamineStack(const CATSUIStyle& styles)
 			}
 			RemoveElement(currElement);
 			break;
+		default:;
 		}
 
 		// If element no longer used, delete it
@@ -913,6 +915,7 @@ void CEnrichedTransformer::AddElement(CParserEnrichedStackElement* element)
 	case E_FBOTH:
 		mOut << "<flushboth>";
 		break;
+	default:;
 	}
 }
 
@@ -956,5 +959,6 @@ void CEnrichedTransformer::RemoveElement(CParserEnrichedStackElement* element)
 	case E_FBOTH:
 		mOut << "</flushboth>";
 		break;
+	default:;
 	}
 }

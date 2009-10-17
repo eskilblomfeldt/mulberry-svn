@@ -1216,7 +1216,7 @@ void CMailboxTable::DrawMessage(const CMessage* aMsg, const STableCell& inCell, 
 				}
 
 				// Indent
-				unsigned long text_offset = min(width - 32UL, 16 * depth);
+				unsigned long text_offset = std::min(width - 32UL, 16 * depth);
 				::Move(text_offset, 0);
 				width -= text_offset;
 			}

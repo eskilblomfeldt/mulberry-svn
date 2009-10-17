@@ -367,6 +367,7 @@ const unichar_t* CFormattedTextDisplay::ParseBody(const unichar_t* body, EConten
 					mText += body;
 				}
 				break;
+			default:;
 			}
 			break;
 		case eContentSubEnriched:
@@ -407,6 +408,7 @@ const unichar_t* CFormattedTextDisplay::ParseBody(const unichar_t* body, EConten
 					mText += body;
 				}
 				break;
+			default:;
 			}
 			break;
 		case eContentSubPlain:
@@ -636,7 +638,7 @@ void CFormattedTextDisplay::AdjustMouseSelf(Point inPortPt, const EventRecord& i
 
 		// Point to position and add line height or at least cursor height
 		SPoint32 pos = {inPortPt.h, inPortPt.v};
-		pos.v += ::max(lineHeight, 18L);
+		pos.v += std::max(lineHeight, 18L);
 
 		// Start a tooltip
 		CTooltip::ShowTooltip(this, pos, LStr255(url));
@@ -977,6 +979,7 @@ void CFormattedTextDisplay::FaceFormat(ETag tagid, SInt32 start, SInt32 stop)
 		break;
 	case E_PLAIN:
 		break;
+	default:;
 	}
 
 	SetFontStyle(ts);
@@ -1032,7 +1035,7 @@ void CFormattedTextDisplay::FontSizeFormat(short size, bool adding, SInt32 start
 				return;
 			
 			// Get minimum length of change within this run
-			UniCharCount applyLength = min(runLength - (start - runStart), length);
+			UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 			
 			// Now create new style
 			CATSUIStyle newStyle;

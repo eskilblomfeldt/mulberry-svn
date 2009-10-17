@@ -151,6 +151,7 @@ void CServerBrowse::ClickCell(const STableCell& inCell,
 			mbox = GetCellMboxRef(woRow)->ResolveMbox(true);
 			directory = GetCellMboxRef(woRow)->IsDirectory();
 			break;
+		default:;
 		}
 
 		bool do_refresh = false;
@@ -270,6 +271,7 @@ void CServerBrowse::DrawCell(const STableCell &inCell,
 			return;
 		plot_data =	server;
 		break;
+	default:;
 	}
 
 	// Save text state in stack object

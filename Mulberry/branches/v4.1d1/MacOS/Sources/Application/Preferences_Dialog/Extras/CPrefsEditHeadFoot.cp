@@ -276,7 +276,7 @@ void CPrefsEditHeadFoot::UpdateFile()
 	else
 	{
 		// Open file and read content
-		cdifstream fin(fpath, ios::in | ios::binary);
+		cdifstream fin(fpath, std::ios::in | std::ios::binary);
 		std::ostrstream out;
 		::StreamCopy(fin, out, 0, ::StreamLength(fin));
 		

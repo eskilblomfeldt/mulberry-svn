@@ -379,6 +379,7 @@ void CToolbar::BuildToolbar()
 			case CToolbarItem::eCopyToButton:
 				behaviour = kControlBehaviorSingleValueMenu;
 				break;
+			default:;
 			}
 
 			CToolbarButton* tbtn = NULL;
@@ -482,6 +483,7 @@ void CToolbar::BuildToolbar()
 								offset,
 								false);
 				break;
+			default:;
 			}
 			
 			// Always complete creation

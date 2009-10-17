@@ -246,5 +246,6 @@ void CStyleToolbar::Setup(EContentSubType type)
 		mAlignRight->Hide();
 		mAlignJustify->Hide();
 		break;
+	default:;
 	}
 }

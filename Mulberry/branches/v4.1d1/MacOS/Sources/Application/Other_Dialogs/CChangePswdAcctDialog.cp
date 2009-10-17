@@ -119,6 +119,7 @@ void CChangePswdAcctDialog::InitAccountMenu()
 		case CINETAccount::eFinger:
 			::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName(), false, cicn_AddrSearchAccount);
 			break;
+		default:;
 		}
 		if (!(*iter)->GetAuthenticator().RequiresUserPswd())
 			::DisableItem(mAccountPopup->GetMacMenuH(), menu_pos);

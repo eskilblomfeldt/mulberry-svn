@@ -1321,7 +1321,7 @@ bool CTextDisplay::IsMisspelled(SInt32 sel_start, SInt32 sel_end) const
 			return false;
 		
 		// Get minimum length of change within this run
-		UniCharCount applyLength = min(runLength - (start - runStart), length);
+		UniCharCount applyLength = std::min(runLength - (start - runStart), length);
 		
 		// Now create new style
 		CATSUIStyle newStyle;
@@ -1395,7 +1395,7 @@ long CTextDisplay::GetWordAt(long pos, cdustring& word, long* startPos, bool wor
 	const long maxWordSize = 256;
 	
 	// Determine sensible buffer range around start pos
-	long rstart = max(0L, pos - maxWordSize);
+	long rstart = std::max(0L, pos - maxWordSize);
 	long rend = pos + maxWordSize;
 	
 	// Get the text in that range
@@ -1404,8 +1404,8 @@ long CTextDisplay::GetWordAt(long pos, cdustring& word, long* startPos, bool wor
 	const unichar_t* _buf = buf.c_str();
 	
 	// Locate beginning of word by stepping back
-	pos = min(pos, rstart + (long) buf.length());
-	long i = min(pos, maxWordSize);
+	pos = std::min(pos, rstart + (long) buf.length());
+	long i = std::min(pos, maxWordSize);
 	while((i > 0) &&
 			(IS_WORD_CHAR(_buf[(unsigned long) i - 1]) ||
 			 (_buf[(unsigned long) i - 1] == '.') ||
@@ -1619,10 +1619,10 @@ void CTextDisplay::SpellInsertText(long start, long numchars)
 	// Determine reasonable buffer around cursor
 	long cursor_pos = start + numchars;
 	long text_start = cursor_pos - (numchars + 256);
-	text_start = max(text_start, 0L);
+	text_start = std::max(text_start, 0L);
 	long text_len = cursor_pos - text_start;
-	text_len += max(text_len / 5L, 256L);
-	text_len = min(text_len, GetTextLength() - text_start);
+	text_len += std::max(text_len / 5L, 256L);
+	text_len = std::min(text_len, GetTextLength() - text_start);
 
 	// Copy text into buffer
 	cdustring text;

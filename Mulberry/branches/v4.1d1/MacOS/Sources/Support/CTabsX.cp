@@ -147,7 +147,7 @@ void CTabsX::MoveTabButtonAt(unsigned long oldindex, unsigned long newindex)
 	GetControlImp()->SetDataTag(newindex + 1, kControlTabInfoTag, sizeof(ControlTabInfoRecV1), &oldinfo);
 	
 	// Now change the value if it moved
-	if ((selected >= min(oldindex, newindex)) && (selected <= max(oldindex, newindex)))
+	if ((selected >= std::min(oldindex, newindex)) && (selected <= std::max(oldindex, newindex)))
 	{
 		StopBroadcasting();
 		if (selected == oldindex)

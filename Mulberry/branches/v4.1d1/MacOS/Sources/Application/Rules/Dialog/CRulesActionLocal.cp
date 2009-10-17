@@ -408,6 +408,7 @@ void CRulesActionLocal::SetActionItem(const CActionItem* spec)
 			case NMessage::eLabel8:
 				popup2 = eFlagMenu_Label8;
 				break;
+			default:;
 			}
 			
 			// Readjust for flag set offset

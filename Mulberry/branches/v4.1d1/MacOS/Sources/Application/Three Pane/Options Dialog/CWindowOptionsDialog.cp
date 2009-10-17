@@ -180,6 +180,7 @@ void CWindowOptionsDialog::SetViewType(N3Pane::EViewType view)
 							mCalendarOptions);
 		mCalendar->Hide();
 		break;
+	default:;
 	}
 	
 	mCurrentView = view;
@@ -211,6 +212,7 @@ void CWindowOptionsDialog::SetViewType(N3Pane::EViewType view)
 							mCalendarOptions, mIs3Pane);
 		mCalendar->Show();
 		break;
+	default:;
 	}
 }
 

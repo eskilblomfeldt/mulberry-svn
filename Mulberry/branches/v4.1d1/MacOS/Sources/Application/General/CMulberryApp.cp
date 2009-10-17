@@ -2249,7 +2249,7 @@ void CMulberryApp::HandleGetURLEvent(
 
 		long len = ::AEGetDescDataSize(&coerceDesc);
 		txt = new char[len + 1];
-		OSErr err = ::AEGetDescData(&coerceDesc, txt, len);
+		err = ::AEGetDescData(&coerceDesc, txt, len);
 		txt[len] = 0;
 
 		::AEDisposeDesc(&coerceDesc);

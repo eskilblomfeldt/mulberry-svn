@@ -667,6 +667,7 @@ void CReplyChooseTable::DrawCell(const STableCell &inCell, const Rect &inLocalRe
 			case replyCC:
 				theTxt.FromResource("UI::ReplyChoose::Cc");
 				break;
+			default:;
 			}
 			::TextFace(bold);
 			::MoveTo(inLocalRect.left, inLocalRect.bottom - 4);
@@ -726,6 +727,7 @@ void CReplyChooseTable::ClickCell(const STableCell &inCell, const SMouseDownEven
 			case replyBCC:
 				refresh.col = 3;
 				break;
+			default:;
 			}
 			RefreshCell(refresh);
 		}
@@ -945,6 +947,7 @@ void CReplyChooseTable::ChangeSelection(EReplyTo select)
 		case replyNone:
 			elem.reply_type = replyNone;
 			break;
+		default:;
 		}
 	}
 	

@@ -1047,6 +1047,7 @@ void CSearchCriteriaLocal::SetSearchItem(const CSearchItem* spec, bool negate)
 			popup7 = CPreferences::sPrefs->mSearchStyles.GetValue().FindIndexOf(*static_cast<const cdstring*>(spec->GetData())) + 1;
 			popup8 = negate ? eSearchSetMethod_IsNot : eSearchSetMethod_Is;
 			break;
+		default:;
 		}
 	}
 

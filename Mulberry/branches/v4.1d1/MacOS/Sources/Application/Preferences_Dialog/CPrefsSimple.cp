@@ -406,6 +406,7 @@ void CPrefsSimple::UpdatePrefs(void)
 		case CINETAccount::eLocal:
 			change_name = (imap->GetName() == "Local");
 			break;
+		default:;
 		}
 		imap->SetServerType(type);
 
@@ -423,6 +424,7 @@ void CPrefsSimple::UpdatePrefs(void)
 			case CINETAccount::eLocal:
 				local_prefs->RenameAccount(imap, "Local");
 				break;
+			default:;
 			}
 		}
 

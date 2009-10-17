@@ -1502,6 +1502,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			theTxt += converted.get();
 			break;
 		}
+		default:;
 		}
 	}
 
@@ -1529,6 +1530,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 				theTxt += converted.get();
 				break;
 			}
+			default:;
 			}
 		}
 	}
@@ -1553,6 +1555,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		theTxt += "<blockquote>";
 		break;
 	}
+	default:;
 	}
 
 	// Include the message's header as addition if required
@@ -1578,6 +1581,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			theTxt += converted.get();
 			break;
 		}
+		default:;
 		}
 	}
 
@@ -1639,6 +1643,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			theTxt += converted.get();
 			break;
 		}
+		default:;
 		}
 		break;
 	}
@@ -1671,9 +1676,11 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			theTxt += msg_txt;
 			break;
 		}
+		default:;
 		}
 		break;
 	}
+	default:;
 	}
 
 	// Stop styled quotation before line end
@@ -1693,6 +1700,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 		theTxt += "</blockquote>";
 		break;
 	}
+	default:;
 	}
 
 	// Finish with CRs
@@ -1719,6 +1727,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 			theTxt += converted.get();
 			break;
 		}
+		default:;
 		}
 	}
 
@@ -1747,6 +1756,7 @@ void CLetterWindow::IncludeMessageTxt(CMessage* theMsg,
 				theTxt += converted.get();
 				break;
 			}
+			default:;
 			}
 		}
 	}
@@ -2131,6 +2141,7 @@ void CLetterWindow::DoStyleChangePopup(long index)
 				case eContentSubHTML:
 					index = 4;
 					break;
+				default:;
 				}
 				return;
 			}

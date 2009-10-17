@@ -1972,7 +1972,7 @@ void CFileTable::DropDataAtCell(FlavorType theFlavor,
 
 		// Must update drop at position to take into account new item
 		int add = (mRows - old_total > 1) ? 2 : 1;
-		mLastDropCursor.row = min(mLastDropCursor.row + add, mRows);
+		mLastDropCursor.row = std::min(mLastDropCursor.row + add, mRows);
 		
 	}
 }

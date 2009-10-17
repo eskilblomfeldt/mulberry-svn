@@ -1737,12 +1737,13 @@ void CMessageWindow::ResetText(void)
 			actual_view = eViewFormatted;
 			actual_traits = &CPreferences::sPrefs->mFixedTextTraits.GetValue().traits;
 			break;
+		default:;
 		}
 
 		// Adjust font size by scale factor
 		TextTraitsRecord mod_traits = *actual_traits;
 		if (mFontScale)
-			mod_traits.size = max(1.0, pow(1.2, mFontScale) * mod_traits.size);
+			mod_traits.size = std::max(1.0, pow(1.2, mFontScale) * mod_traits.size);
 
 		// Delete any previous text
 		mText->WipeText(mod_traits);

@@ -815,6 +815,7 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			case CINETAccount::eLocal:
 				copyStr.FromResource("UI::Preferences::AccountLocalMailbox");
 				break;
+			default:;
 			}
 		}
 		else if (typeid(*account) == typeid(CSMTPAccount))
@@ -835,6 +836,7 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			case CINETAccount::eACAP:
 				copyStr.FromResource("UI::Preferences::AccountACAPOptions");
 				break;
+			default:;
 			}
 		}
 		else if (typeid(*account) == typeid(CAddressAccount))
@@ -853,6 +855,7 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			case CINETAccount::eCardDAVAdbk:
 				copyStr.FromResource("UI::Preferences::AccountCardDAVAddressBooks");
 				break;
+			default:;
 			}
 		}
 		else if (typeid(*account) == typeid(CManageSIEVEAccount))
@@ -869,6 +872,7 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			case CINETAccount::eWebDAVCalendar:
 				copyStr.FromResource("UI::Preferences::AccountWebDAVCalendar");
 				break;
+			default:;
 			}
 		}
 		mServerType->SetText(copyStr);
@@ -1066,6 +1070,7 @@ void CPrefsAccount::SetPanel(const CINETAccount* account)
 			case CINETAccount::eLocal:
 				panel = paneid_PrefsLocalAccount;
 				break;
+			default:;
 			}
 		}
 	}
