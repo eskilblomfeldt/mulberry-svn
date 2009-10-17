@@ -1668,7 +1668,7 @@ void CServerBrowse::RemoveServer(CMboxProtocol* proto)
 					single = protos.at(1);
 
 				// Adjust index to last remaining server
-				index = ::min(index, (mShowFavourites ? CMailAccountManager::sMailAccountManager->FetchServerOffset() : 0) + 1);
+				index = std::min(index, (mShowFavourites ? CMailAccountManager::sMailAccountManager->FetchServerOffset() : 0) + 1);
 
 				// Remove this and all children
 				RemoveRows(1, index, true);
@@ -1818,7 +1818,7 @@ void CServerBrowse::RemoveWD(CMboxList* list)
 					flatten = hiers.at(2);
 
 				// Get its index (modified after delete) and remove its hierarchy
-				index = ::min(index, FetchIndexOf(flatten));
+				index = std::min(index, FetchIndexOf(flatten));
 				RemoveRows(1, index, false);
 
 				// Determine parent of flattened list

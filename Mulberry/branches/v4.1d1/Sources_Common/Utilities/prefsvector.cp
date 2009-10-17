@@ -195,9 +195,9 @@ template <class T> bool prefsptrvector<T>::ReadFromMapMulti(COptionsMap* theMap,
 	for(ulvector::const_iterator iter = nums.begin(); iter != nums.end(); iter++)
 	{
 		// Read key value without charset conversion (will be done later)
-		cdstring key = *iter;
+		cdstring key2 = *iter;
 		cdstring value;
-		theMap->ReadValue(key, value, vers_prefs, false);
+		theMap->ReadValue(key2, value, vers_prefs, false);
 		
 		// Ignore if empty
 		if (value.empty())

@@ -2102,7 +2102,7 @@ long CMboxProtocol::CheckMbox(CMbox* mbox, bool fast)
 		if (CPreferences::sPrefs->mUnseenNew.GetValue() && CPreferences::sPrefs->mRecentNew.GetValue())
 		{
 			// Use check recent flag
-			num_new = ::min(new_unseen - old_unseen, mbox->GetCheckRecent());
+			num_new = std::min(new_unseen - old_unseen, mbox->GetCheckRecent());
 			mbox->SetCheckRecent(0);
 		}
 		else if (CPreferences::sPrefs->mUnseenNew.GetValue())
@@ -2118,7 +2118,7 @@ long CMboxProtocol::CheckMbox(CMbox* mbox, bool fast)
 	{
 		// Use user determined concept of 'new' messages
 		if (CPreferences::sPrefs->mUnseenNew.GetValue() && CPreferences::sPrefs->mRecentNew.GetValue())
-			num_new = ::min(new_unseen - old_unseen, new_recent - old_recent);
+			num_new = std::min(new_unseen - old_unseen, new_recent - old_recent);
 		else if (CPreferences::sPrefs->mUnseenNew.GetValue())
 			num_new = new_unseen - old_unseen;
 		else if (CPreferences::sPrefs->mRecentNew.GetValue())
@@ -3265,7 +3265,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 		// Find ones in local not in remote if not fast and not selection only
 		if (!fast && !uids.size())
-			std::set_difference(local_uids.begin(), local_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(remove));
+			std::set_difference(local_uids.begin(), local_uids.end(), remote_uids.begin(), remote_uids.end(), std::back_inserter<ulvector>(remove));
 
 		// If full cache, remove the partial ones so they get fully cached
 		if (!partial && !size && partial_uids.size())
@@ -3274,14 +3274,14 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 			temp1.reserve(partial_uids.size());
 
 			// Find partials in remote
-			std::set_intersection(partial_uids.begin(), partial_uids.end(), remote_uids.begin(), remote_uids.end(), back_inserter<ulvector>(temp1));
+			std::set_intersection(partial_uids.begin(), partial_uids.end(), remote_uids.begin(), remote_uids.end(), std::back_inserter<ulvector>(temp1));
 
 			// Expunge these as well
 			if (temp1.size())
 			{
 				ulvector temp2;
 				temp2.reserve(remove.size() + temp1.size());
-				std::set_union(remove.begin(), remove.end(), temp1.begin(), temp1.end(), back_inserter<ulvector>(temp2));
+				std::set_union(remove.begin(), remove.end(), temp1.begin(), temp1.end(), std::back_inserter<ulvector>(temp2));
 				remove = temp2;
 			}
 		}
@@ -3318,7 +3318,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 		{
 			// Find ones in remote not in local
 			copy.reserve((remote_uids.size() > local_uids.size()) ? remote_uids.size() - local_uids.size() : remote_uids.size());
-			std::set_difference(remote_uids.begin(), remote_uids.end(), local_uids.begin(), local_uids.end(), back_inserter<ulvector>(copy));
+			std::set_difference(remote_uids.begin(), remote_uids.end(), local_uids.begin(), local_uids.end(), std::back_inserter<ulvector>(copy));
 
 			// Copy the new ones
 			if (copy.size())
@@ -3336,7 +3336,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 					// Intersect with ones actually being copied
 					make_partial.reserve(results.size());
-					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
+					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), std::back_inserter<ulvector>(make_partial));
 				}
 				else if (size)
 				{
@@ -3347,7 +3347,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 
 					// Intersect with ones actually being copied
 					make_partial.reserve(results.size());
-					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), back_inserter<ulvector>(make_partial));
+					std::set_intersection(results.begin(), results.end(), copy.begin(), copy.end(), std::back_inserter<ulvector>(make_partial));
 					
 					// Make sure partial fetch count is set
 					if (make_partial.size())
@@ -3415,7 +3415,7 @@ void CMboxProtocol::SyncRemote(CMbox* remote, CMbox* local, bool fast, bool part
 			// First subtract ones that were just copied from remote set
 			ulvector flag_sync;
 			flag_sync.reserve(remote_uids.size() - copy.size());
-			std::set_difference(remote_uids.begin(), remote_uids.end(), copy.begin(), copy.end(), back_inserter<ulvector>(flag_sync));
+			std::set_difference(remote_uids.begin(), remote_uids.end(), copy.begin(), copy.end(), std::back_inserter<ulvector>(flag_sync));
 
 			// Get all flags
 			if (flag_sync.size())

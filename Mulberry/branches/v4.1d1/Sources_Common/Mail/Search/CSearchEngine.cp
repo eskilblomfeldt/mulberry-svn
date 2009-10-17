@@ -157,7 +157,7 @@ void CSearchEngine::Abort()
 void CSearchEngine::Execute()
 {
 	long num_search = mTargets.size();
-	long num_threads = ::min(CPreferences::sPrefs->mMultipleSearch.GetValue() ?
+	long num_threads = std::min(CPreferences::sPrefs->mMultipleSearch.GetValue() ?
 								CPreferences::sPrefs->mNumberMultipleSearch.GetValue() : 1, num_search);
 
 	// Reset thread done event

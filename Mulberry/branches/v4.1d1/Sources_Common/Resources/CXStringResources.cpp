@@ -295,7 +295,7 @@ void CXStringResources::InitRsrcPaths()
 		const char* lang = ::getenv("LANG");
 		if (lang != NULL)
 		{
-			locale.assign(lang, min(::strlen(lang), (size_t)5));
+			locale.assign(lang, std::min(::strlen(lang), (size_t)5));
 		}
 		
 #endif

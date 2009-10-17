@@ -288,7 +288,7 @@ CLocalMessage* CRFC822Parser::MessageFromStream(std::istream& in, CProgress* pro
 
 		// Force fail state back on
 		if (has_eof)
-			in.setstate(ios::failbit);
+			in.setstate(std::ios::failbit);
 	}
 	catch (...)
 	{
@@ -544,7 +544,7 @@ std::istream::pos_type CRFC822Parser::MessageStart(std::istream& in, bool do_pro
 				else if (c == EOF)
 				{
 					done = true;
-					in.setstate(ios::failbit);
+					in.setstate(std::ios::failbit);
 				}
 				else
 				{
@@ -558,7 +558,7 @@ std::istream::pos_type CRFC822Parser::MessageStart(std::istream& in, bool do_pro
 		else if (c == EOF)
 		{
 			done = true;
-			in.setstate(ios::failbit);
+			in.setstate(std::ios::failbit);
 		}
 		else
 			got_LF = false;
@@ -629,7 +629,7 @@ void CRFC822Parser::GetLine(std::istream& in, cdstring& line)
 	std::istream::pos_type line_start = in.tellg();
 
 	// Speedier version with direct streambuf access
-	streambuf* sb = in.rdbuf();
+	std::streambuf* sb = in.rdbuf();
 
 	// Find header end
 	bool got_eol = false;
@@ -653,7 +653,7 @@ void CRFC822Parser::GetLine(std::istream& in, cdstring& line)
 		else if (s == EOF)
 		{
 			got_eof = true;
-			in.setstate(ios::failbit);
+			in.setstate(std::ios::failbit);
 		}
 	}
 
@@ -708,7 +708,7 @@ void CRFC822Parser::GetHeader(std::istream& in, cdstring& hdr)
 		else if (s == EOF)
 		{
 			got_eol2 = true;
-			in.setstate(ios::failbit);
+			in.setstate(std::ios::failbit);
 		}
 		else
 		{
@@ -992,7 +992,7 @@ void CRFC822Parser::ParseMultipart(CLocalAttachment* body, std::istream& in)
 	mBoundaries.push_back(boundary);
 
 	// Speedier version with direct streambuf access
-	streambuf* sb = in.rdbuf();
+	std::streambuf* sb = in.rdbuf();
 
 	// Now find boundary at start of line, punting over preamble
 	bool done = false;
@@ -1106,7 +1106,7 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 	bool boundary_at_from = false;
 
 	// Speedier version with direct streambuf access
-	streambuf* sb = in.rdbuf();
+	std::streambuf* sb = in.rdbuf();
 	std::streamoff posn = in.tellg();
 	std::streamoff progress = 0;
 
@@ -1217,7 +1217,7 @@ bool CRFC822Parser::ParseToBoundary(std::istream& in, const cdstring& boundary, 
 		else if (c == EOF)
 		{
 			done = true;
-			in.setstate(ios::failbit);
+			in.setstate(std::ios::failbit);
 		}
 		else
 		{

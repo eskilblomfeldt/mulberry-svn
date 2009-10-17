@@ -936,6 +936,7 @@ bool CMailControl::DoUserIDPassword(CAuthenticatorUserPswd* auth,
 					icon = ICNx_UserPswdLDAP;
 					title = rsrc::GetString("Alerts::UserPswd::LDAPLOGIN");
 					break;
+				default:;
 				}
 			}
 			else if (rfilter)

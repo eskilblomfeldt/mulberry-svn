@@ -39,7 +39,7 @@ CMIMEFilter::CMIMEFilter(i18n::ECharsetCode charset, bool is_text, bool is_flowe
 
 	// Need some slack in line buffer to account for possible overrun by a single QP char
 	// Also base64 is forcibly wrapped to cWrapLength so need a buffer big enough for that
-	mLineBufferLength = ::max(wrap + 16, 1024UL);
+	mLineBufferLength = std::max(wrap + 16, 1024UL);
 	mLineBuffer = new unsigned char[mLineBufferLength];
 	mLinePos = mLineBuffer;
 	mLineLength = 0;
@@ -589,6 +589,7 @@ ExceptionCode CQPFilter::GetBytes(void* outBuffer, SInt32& inByteCount)
 					mReadStatus = eLineBuild;		// switch state if line complete
 			}
 			break;
+		default:;
 		}
 	}
 
@@ -924,6 +925,7 @@ ExceptionCode CBase64Filter::GetBytes(void* outBuffer, SInt32& inByteCount)
 					mReadStatus = eLineBuild;		// switch state if line complete
 			}
 			break;
+		default:;
 		}
 	}
 

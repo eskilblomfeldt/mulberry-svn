@@ -1552,7 +1552,7 @@ bool CMbox::SetViewMode(EViewMode mode)
 	case eViewMode_AllMatched:
 		// Copy all messages into sorted list and sort
 		mOpenInfo->mSortedMessages->insert(mOpenInfo->mSortedMessages->begin(), mOpenInfo->mMessages->size(), 0);
-		::copy(mOpenInfo->mMessages->begin(), mOpenInfo->mMessages->end(), mOpenInfo->mSortedMessages->begin());
+		std::copy(mOpenInfo->mMessages->begin(), mOpenInfo->mMessages->end(), mOpenInfo->mSortedMessages->begin());
 		mOpenInfo->mSortedMessages->SortDirty();
 		break;
 
@@ -2382,7 +2382,7 @@ void CMbox::CacheMessage(unsigned long msg_num,	unsigned long count)
 	if (count)
 		num_to_cache = count;
 	else if (num_cached < lo_tide)
-		num_to_cache = ::max(increment, lo_tide - num_cached);
+		num_to_cache = std::max(increment, lo_tide - num_cached);
 	else
 		num_to_cache = increment;
 
@@ -3745,7 +3745,7 @@ void CMbox::ExpungeMessage(const ulvector& nums, bool uids, bool sorted)
 
 		// Find ones in original that are not to be expunged
 		ulvector no_expunge;
-		std::set_difference(original.begin(), original.end(), nums.begin(), nums.end(), back_inserter<ulvector>(no_expunge));
+		std::set_difference(original.begin(), original.end(), nums.begin(), nums.end(), std::back_inserter<ulvector>(no_expunge));
 
 		// Unset delete flag on those not being expunged
 		if (no_expunge.size())

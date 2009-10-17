@@ -548,7 +548,7 @@ void CSMTPSender::SMTPSendMessage(CMessage* theMsg)
 			::strcpy(mLineData, error.c_str());
 
 			if (mAllowLog && mLog.DoLog())
-				*mLog.GetLog() << error << os_endl << flush;
+				*mLog.GetLog() << error << os_endl << std::flush;
 
 			// Force failure before even attempting SMTP commands as we know it will fail
 			mMailState = cSMTPSendingMail;
@@ -1119,7 +1119,7 @@ void CSMTPSender::SMTPReceiveData(char code)
 	{
 		mStream.qgetline(mLineData, cSMTPBufferLen);
 		if (mAllowLog && mLog.DoLog())
-			*mLog.GetLog() << mLineData << os_endl << flush;
+			*mLog.GetLog() << mLineData << os_endl << std::flush;
 		if (!SMTPCheckResponse(code))
 		{
 			CLOG_LOGTHROW(CSMTPException, *mLineData);
@@ -1151,7 +1151,7 @@ void CSMTPSender::SMTPReceiveCapability(char code)
 	{
 		mStream.qgetline(mLineData, cSMTPBufferLen);
 		if (mAllowLog && mLog.DoLog())
-			*mLog.GetLog() << mLineData << os_endl << flush;
+			*mLog.GetLog() << mLineData << os_endl << std::flush;
 		if (!SMTPCheckResponse(code))
 		{
 			CLOG_LOGTHROW(CSMTPException, *mLineData);
@@ -1336,11 +1336,11 @@ void CSMTPSender::SMTPSendHello(bool extend)
 	}
 
 	// Use host machines canonical name/ip name for domain
-	mStream << (extend ? EHLO : HELO) << domain << CRLF << flush;
+	mStream << (extend ? EHLO : HELO) << domain << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << (extend ? EHLO : HELO) << domain << os_endl << flush;
+		*mLog.GetLog() << (extend ? EHLO : HELO) << domain << os_endl << std::flush;
 }
 
 // Setup TLS certificate
@@ -1398,11 +1398,11 @@ void CSMTPSender::SMTPStartTLS()
 {
 	// Use host machines canonical name/ip name for domain
 	mMailState = cSMTPSendingStartTLS;
-	mStream << STARTTLS << CRLF << flush;
+	mStream << STARTTLS << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << STARTTLS << os_endl << flush;
+		*mLog.GetLog() << STARTTLS << os_endl << std::flush;
 
 	// Get response
 	mMailState = cSMTPWaitingStartTLSResponse;
@@ -1520,11 +1520,11 @@ void CSMTPSender::SMTPAuthenticate()
 				StValueChanger<bool> value(mAllowLog, CLog::AllowAuthenticationLog());
 
 				// Use host machines canonical name/ip name for domain
-				mStream << AUTHPLAIN << b64 << CRLF << flush;
+				mStream << AUTHPLAIN << b64 << CRLF << std::flush;
 
 				// Write to log file
 				if (mAllowLog && mLog.DoLog())
-					*mLog.GetLog() << AUTHPLAIN << b64 << os_endl << flush;
+					*mLog.GetLog() << AUTHPLAIN << b64 << os_endl << std::flush;
 
 				// Get response
 				mMailState = cSMTPWaitingAuthResponse;
@@ -1533,11 +1533,11 @@ void CSMTPSender::SMTPAuthenticate()
 			else if (found2 != mAUTHTypes.end())
 			{
 				// Use host machines canonical name/ip name for domain
-				mStream << AUTHLOGIN << CRLF << flush;
+				mStream << AUTHLOGIN << CRLF << std::flush;
 
 				// Write to log file
 				if (mAllowLog && mLog.DoLog())
-					*mLog.GetLog() << AUTHLOGIN << os_endl << flush;
+					*mLog.GetLog() << AUTHLOGIN << os_endl << std::flush;
 
 				// Wait for data response
 				SMTPReceiveData(DATA_RESPONSE);
@@ -1546,11 +1546,11 @@ void CSMTPSender::SMTPAuthenticate()
 				cdstring buffer = auth->GetUID();
 				cdstring b64;
 				b64.steal(::base64_encode(reinterpret_cast<const unsigned char*>(buffer.c_str()), buffer.length()));
-				mStream << b64 << CRLF << flush;
+				mStream << b64 << CRLF << std::flush;
 
 				// Write to log file
 				if (mAllowLog && mLog.DoLog())
-					*mLog.GetLog() << b64 << os_endl << flush;
+					*mLog.GetLog() << b64 << os_endl << std::flush;
 				
 				// Wait for data response
 				SMTPReceiveData(DATA_RESPONSE);
@@ -1558,11 +1558,11 @@ void CSMTPSender::SMTPAuthenticate()
 				// Send base64 encoded password
 				buffer = auth->GetPswd();
 				b64.steal(::base64_encode(reinterpret_cast<const unsigned char*>(buffer.c_str()), buffer.length()));
-				mStream << b64 << CRLF << flush;
+				mStream << b64 << CRLF << std::flush;
 
 				// Write to log file
 				if (mAllowLog && mLog.DoLog())
-					*mLog.GetLog() << b64 << os_endl << flush;
+					*mLog.GetLog() << b64 << os_endl << std::flush;
 				
 				// Wait for success response
 				SMTPReceiveData();
@@ -1585,11 +1585,11 @@ void CSMTPSender::SMTPAuthenticate()
 			StValueChanger<bool> value(mAllowLog, CLog::AllowAuthenticationLog());
 
 			// Use host machines canonical name/ip name for domain
-			mStream << AUTHEXTERNAL << b64 << CRLF << flush;
+			mStream << AUTHEXTERNAL << b64 << CRLF << std::flush;
 
 			// Write to log file
 			if (mAllowLog && mLog.DoLog())
-				*mLog.GetLog() << AUTHEXTERNAL << b64 << os_endl << flush;
+				*mLog.GetLog() << AUTHEXTERNAL << b64 << os_endl << std::flush;
 
 			// Get response
 			mMailState = cSMTPWaitingAuthResponse;
@@ -1638,11 +1638,11 @@ void CSMTPSender::SMTPAuthenticate()
 // Send 'RSET' from
 void CSMTPSender::SMTPSendRset()
 {
-	mStream << RSET << CRLF << flush;
+	mStream << RSET << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << RSET << os_endl << flush;
+		*mLog.GetLog() << RSET << os_endl << std::flush;
 }
 
 // Send 'MAIL' from
@@ -1680,11 +1680,11 @@ void CSMTPSender::SMTPSendMail()
 	}
 
 	// Finished
-	mStream << CRLF << flush;
+	mStream << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << os_endl << flush;
+		*mLog.GetLog() << os_endl << std::flush;
 }
 
 // Send 'RCPT'
@@ -1751,11 +1751,11 @@ void CSMTPSender::SMTPSendRcpt(const cdstring& addr)
 	}
 
 	// Finished
-	mStream << CRLF << flush;
+	mStream << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << os_endl << flush;
+		*mLog.GetLog() << os_endl << std::flush;
 }
 
 // Send 'RCPT' for all To's
@@ -1782,11 +1782,11 @@ void CSMTPSender::SMTPSendBCCRcpt()
 // Send 'DATA' to receiver
 void CSMTPSender::SMTPSendDataCmd()
 {
-	mStream << DATA << CRLF << flush;
+	mStream << DATA << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << DATA << os_endl << flush;
+		*mLog.GetLog() << DATA << os_endl << std::flush;
 }
 
 // Send text to receiver (remember to add header)
@@ -1798,7 +1798,7 @@ void CSMTPSender::SMTPSendData()
 
 	// Need to dot-stuff
 	{
-		CStreamFilter dot_stuff(new dotstuff_filterbuf(true), static_cast<ostream*>(&mStream));
+		CStreamFilter dot_stuff(new dotstuff_filterbuf(true), static_cast<std::ostream*>(&mStream));
 
 		// Create stream type for output
 		costream stream_out(&dot_stuff, eEndl_CRLF);
@@ -1812,7 +1812,7 @@ void CSMTPSender::SMTPSendData()
 		}
 		else
 		{
-			CStreamFilter filter(new crlf_filterbuf(stream_out.GetEndlType()), static_cast<ostream*>(&mStream));
+			CStreamFilter filter(new crlf_filterbuf(stream_out.GetEndlType()), static_cast<std::ostream*>(&mStream));
 			filter.write(hdr, ::strlen(hdr));
 		}
 
@@ -1860,19 +1860,19 @@ void CSMTPSender::SMTPSendData()
 	}
 
 	// Send mail terminator
-	mStream << CRLF_DOT_CRLF << flush;
+	mStream << CRLF_DOT_CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << os_endl << "." << os_endl << flush;
+		*mLog.GetLog() << os_endl << "." << os_endl << std::flush;
 }
 
 // Send 'QUIT' to receiver
 void CSMTPSender::SMTPSendQuit()
 {
-	mStream << QUIT << CRLF << flush;
+	mStream << QUIT << CRLF << std::flush;
 
 	// Write to log file
 	if (mLog.DoLog())
-		*mLog.GetLog() << QUIT << os_endl << flush;
+		*mLog.GetLog() << QUIT << os_endl << std::flush;
 }

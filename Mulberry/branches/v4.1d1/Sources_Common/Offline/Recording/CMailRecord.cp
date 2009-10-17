@@ -266,13 +266,13 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 		if (mLog)
 		{
 			*mLog << os_endl << os_endl << "----" << os_endl;
-			*mLog << "Starting Mailbox Playback: " << CRFC822::GetRFC822Date() << os_endl << flush;
+			*mLog << "Starting Mailbox Playback: " << CRFC822::GetRFC822Date() << os_endl << std::flush;
 		}
 
 		// Read in the entire journal
 		Open();
 		if (mLog)
-			*mLog << "Opened Playback log: " << mDescriptor << os_endl << flush;
+			*mLog << "Opened Playback log: " << mDescriptor << os_endl << std::flush;
 
 		// Compact the playback to minimise operations
 		CompactPlayback();
@@ -288,7 +288,7 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 			remote->Logon();
 
 			if (mLog)
-				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << flush;
+				*mLog << "Opened remote server: " << remote->GetAccountName() << os_endl << std::flush;
 		}
 		else
 		{
@@ -334,7 +334,7 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 				if (attempts > 1)
 				{
 					if (mLog)
-						*mLog << "  Too many errors while attempting action: " << os_endl << flush;
+						*mLog << "  Too many errors while attempting action: " << os_endl << std::flush;
 
 					CLOG_LOGTHROW(CGeneralException, eException_TooManyAttempts);
 					throw CGeneralException(eException_TooManyAttempts);
@@ -351,7 +351,7 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Recovering from Error: " << os_endl << flush;
+			*mLog << "  Recovering from Error: " << os_endl << std::flush;
 
 		// Recover currently selected items
 		Playback_RecoverSelects();
@@ -366,7 +366,7 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 
 	// Close remote connection
 	if (remote->IsOpen() && mLog)
-		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << flush;
+		*mLog << "Closed remote server: " << remote->GetAccountName() << os_endl << std::flush;
 	remote->Close();
 
 	// If no failure clear out the file
@@ -381,7 +381,7 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 		::remove_utf8(mDescriptor);
 
 		if (mLog)
-			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (cleared): " << mDescriptor << os_endl << std::flush;
 	}
 	else
 	{
@@ -403,16 +403,16 @@ bool CMailRecord::Playback(CMboxProtocol* remote, CMboxProtocol* local, CProgres
 		for(const_iterator iter = begin(); iter != end(); iter++)
 			(*iter)->WriteToStream(mStream);
 
-		mStream << flush;
+		mStream << std::flush;
 		
 		Close();
 
 		if (mLog)
-			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << flush;
+			*mLog << "Closed Playback log (not cleared): " << mDescriptor << os_endl << std::flush;
 	}
 
 	if (mLog)
-		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << flush;
+		*mLog << os_endl << (result ? "Playback complete (no error): " : "Playback complete (error): ") << CRFC822::GetRFC822Date() << os_endl << os_endl << std::flush;
 
 	if (log_created)
 		SetLog(NULL);
@@ -494,14 +494,14 @@ void CMailRecord::PlaybackItem(CMailAction& action, bool& done)
 			Playback_RecoverNonfatal(action);
 
 			if (mLog)
-				*mLog << "  Recovering from non-fatal error: removed pending EXPUNGE's" << os_endl << flush;
+				*mLog << "  Recovering from non-fatal error: removed pending EXPUNGE's" << os_endl << std::flush;
 		}
 
 		// See if connection remained up
 		else if (ex.disconnected())
 		{
 			if (mLog)
-				*mLog << "  Recovering from connection loss error" << os_endl << flush;
+				*mLog << "  Recovering from connection loss error" << os_endl << std::flush;
 
 			// Throw up - connection went down entirely
 			CLOG_LOGRETHROW;
@@ -513,7 +513,7 @@ void CMailRecord::PlaybackItem(CMailAction& action, bool& done)
 			done = false;
 
 			if (mLog)
-				*mLog << "  Recovered from non-fatal error" << os_endl << flush;
+				*mLog << "  Recovered from non-fatal error" << os_endl << std::flush;
 		}
 	}
 	
@@ -530,12 +530,12 @@ void CMailRecord::PlaybackItem(CMailAction& action, bool& done)
 
 			// Just continue processing
 			if (mLog)
-				*mLog << "  Recovering from non-fatal error: removed pending EXPUNGE's" << os_endl << flush;
+				*mLog << "  Recovering from non-fatal error: removed pending EXPUNGE's" << os_endl << std::flush;
 		}
 		else
 		{
 			if (mLog)
-				*mLog << "  Recovering from fatal error" << os_endl << flush;
+				*mLog << "  Recovering from fatal error" << os_endl << std::flush;
 
 			// Throw up - connection went down entirely
 			CLOG_LOGRETHROW;
@@ -547,7 +547,7 @@ void CMailRecord::PlaybackItem(CMailAction& action, bool& done)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Recovering from fatal error" << os_endl << flush;
+			*mLog << "  Recovering from fatal error" << os_endl << std::flush;
 
 		// This is a terminal error - just throw up
 		CLOG_LOGRETHROW;
@@ -579,14 +579,14 @@ void CMailRecord::Playback_Create(CMailAction& action)
 		}
 
 		if (mLog)
-			*mLog << "  Create Mailbox: " << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+			*mLog << "  Create Mailbox: " << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Create Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+			*mLog << "  Create Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -611,7 +611,7 @@ void CMailRecord::Playback_Delete(CMailAction& action)
 				mbox->Remove();
 				mbox.release();
 				if (mLog)
-					*mLog << "* ERROR: Delete Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << flush;
+					*mLog << "* ERROR: Delete Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << std::flush;
 				CLOG_LOGTHROW(CGeneralException, eException_FailedSafe);
 				throw CGeneralException(eException_FailedSafe);
 			}
@@ -624,7 +624,7 @@ void CMailRecord::Playback_Delete(CMailAction& action)
 		if (mLog)
 		{
 			*mLog << (uidvalidity_override ? "  Delete Mailbox (UIDValidity overridden): " : "  Delete Mailbox: ");
-			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -632,7 +632,7 @@ void CMailRecord::Playback_Delete(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Delete Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+			*mLog << "  Delete Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -657,7 +657,7 @@ void CMailRecord::Playback_Rename(CMailAction& action)
 				mbox->Remove();
 				mbox.release();
 				if (mLog)
-					*mLog << "* ERROR: Rename Mailbox: " << action.GetRenameAction().first.first << " - UIDValidity does not match" << os_endl << flush;
+					*mLog << "* ERROR: Rename Mailbox: " << action.GetRenameAction().first.first << " - UIDValidity does not match" << os_endl << std::flush;
 				CLOG_LOGTHROW(CGeneralException, eException_FailedSafe);
 				throw CGeneralException(eException_FailedSafe);
 			}
@@ -671,7 +671,7 @@ void CMailRecord::Playback_Rename(CMailAction& action)
 		{
 			*mLog << (uidvalidity_override ? "  Rename Mailbox from (UIDValidity overridden): " : "  Rename Mailbox from: ");
 			*mLog << action.GetRenameAction().first.first << " to: " <<
-					 action.GetRenameAction().first.second << " succeeded" << os_endl << flush;
+					 action.GetRenameAction().first.second << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -680,7 +680,7 @@ void CMailRecord::Playback_Rename(CMailAction& action)
 
 		if (mLog)
 			*mLog << "  Rename Mailbox from: " << action.GetRenameAction().first.first <<
-					" to: " << action.GetRenameAction().first.second << " failed" << os_endl << flush;
+					" to: " << action.GetRenameAction().first.second << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -705,7 +705,7 @@ void CMailRecord::Playback_Subscribe(CMailAction& action)
 				mbox->Remove();
 				mbox.release();
 				if (mLog)
-					*mLog << "* ERROR: Subscribe to Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << flush;
+					*mLog << "* ERROR: Subscribe to Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << std::flush;
 				CLOG_LOGTHROW(CGeneralException, eException_FailedSafe);
 				throw CGeneralException(eException_FailedSafe);
 			}
@@ -717,7 +717,7 @@ void CMailRecord::Playback_Subscribe(CMailAction& action)
 		if (mLog)
 		{
 			*mLog << (uidvalidity_override ? "  Subscribe to Mailbox (UIDValidity overridden): " : "  Subscribe to Mailbox: ");
-			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -725,7 +725,7 @@ void CMailRecord::Playback_Subscribe(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Subscribe to Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+			*mLog << "  Subscribe to Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -750,7 +750,7 @@ void CMailRecord::Playback_Unsubscribe(CMailAction& action)
 				mbox->Remove();
 				mbox.release();
 				if (mLog)
-					*mLog << "* ERROR: Unsubscribe from Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << flush;
+					*mLog << "* ERROR: Unsubscribe from Mailbox: " << action.GetNameUIDAction().first << " - UIDValidity does not match" << os_endl << std::flush;
 				CLOG_LOGTHROW(CGeneralException, eException_FailedSafe);
 				throw CGeneralException(eException_FailedSafe);
 			}
@@ -763,7 +763,7 @@ void CMailRecord::Playback_Unsubscribe(CMailAction& action)
 		if (mLog)
 		{
 			*mLog << (uidvalidity_override ? "  Unsubscribe from Mailbox (UIDValidity overridden): " : "  Unsubscribe from Mailbox: ");
-			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+			*mLog << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -771,7 +771,7 @@ void CMailRecord::Playback_Unsubscribe(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Unsubscribe from Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+			*mLog << "  Unsubscribe from Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -835,7 +835,7 @@ void CMailRecord::Playback_Select(CMailAction& action)
 				lsource->ChangeUIDValidity(rsource->GetUIDValidity());
 
 				if (mLog)
-					*mLog << "  Select Mailbox (new local): " << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+					*mLog << "  Select Mailbox (new local): " << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 			}
 			else if (!lsource || (lsource->GetUIDValidity() != rsource->GetUIDValidity()))
 			{
@@ -862,16 +862,16 @@ void CMailRecord::Playback_Select(CMailAction& action)
 				{
 					*mLog << "* ERROR: Select Mailbox: " << action.GetNameUIDAction().first;
 					if (lsource)
-						*mLog << " - UIDValidity does not match" << os_endl << flush;
+						*mLog << " - UIDValidity does not match" << os_endl << std::flush;
 					else
 						*mLog << " - local mailbox missing" << os_endl;
-					*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+					*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 				}
 			}
 			else
 			{
 				if (mLog)
-					*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " succeeded" << os_endl << flush;
+					*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " succeeded" << os_endl << std::flush;
 			}
 		}
 	}
@@ -880,7 +880,7 @@ void CMailRecord::Playback_Select(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << flush;
+			*mLog << "  Select Mailbox: " << action.GetNameUIDAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -925,7 +925,7 @@ void CMailRecord::Playback_Deselect(CMailAction& action)
 			lsource->CloseSilent();
 
 		if (mLog)
-			*mLog << "  Deselect Mailbox: " << name << " succeeded" << os_endl << flush;
+			*mLog << "  Deselect Mailbox: " << name << " succeeded" << os_endl << std::flush;
 	}
 	catch (...)
 	{
@@ -936,7 +936,7 @@ void CMailRecord::Playback_Deselect(CMailAction& action)
 			lsource->CloseSilent();
 
 		if (mLog)
-			*mLog << "  Deselect Mailbox: " << name << " failed" << os_endl << flush;
+			*mLog << "  Deselect Mailbox: " << name << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -1003,7 +1003,7 @@ void CMailRecord::Playback_SetFlags(CMailAction& action)
 							*mLog << ", ";
 						*mLog << *iter;
 					}
-					*mLog << os_endl << flush;
+					*mLog << os_endl << std::flush;
 				}
 			}
 		}
@@ -1013,7 +1013,7 @@ void CMailRecord::Playback_SetFlags(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Set flags Mailbox: " << name << " failed" << os_endl << flush;
+			*mLog << "  Set flags Mailbox: " << name << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -1082,7 +1082,7 @@ void CMailRecord::Playback_CopyTo(CMailAction& action)
 						*mLog << ", ";
 					*mLog << (*iter).first;
 				}
-				*mLog << os_endl << flush;
+				*mLog << os_endl << std::flush;
 			}
 		}
 
@@ -1115,7 +1115,7 @@ void CMailRecord::Playback_CopyTo(CMailAction& action)
 
 		if (mLog)
 			*mLog << "  Copy from Mailbox: " << name << 
-					" to Mailbox: " << action.GetCopyAction().first << " failed" << os_endl << flush;
+					" to Mailbox: " << action.GetCopyAction().first << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -1306,13 +1306,13 @@ void CMailRecord::Playback_AppendTo(CMailAction& action)
 				}
 				else
 					*mLog << "  Append to Mailbox: " << name << " ignored - missing local message" << os_endl;
-				*mLog  << flush;
+				*mLog  << std::flush;
 			}
 		}
 		else
 		{
 			if (mLog)
-				*mLog << "  Append to Mailbox: " << name << " ignored - missing local mailbox" << os_endl << flush;
+				*mLog << "  Append to Mailbox: " << name << " ignored - missing local mailbox" << os_endl << std::flush;
 		}
 	}
 	catch (...)
@@ -1320,7 +1320,7 @@ void CMailRecord::Playback_AppendTo(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Append to Mailbox: " << name << " failed" << os_endl << flush;
+			*mLog << "  Append to Mailbox: " << name << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -1381,7 +1381,7 @@ void CMailRecord::Playback_Expunge(CMailAction& action)
 					}
 					*mLog << os_endl;
 				}
-				*mLog << flush;
+				*mLog << std::flush;
 			}
 		}
 	}
@@ -1390,7 +1390,7 @@ void CMailRecord::Playback_Expunge(CMailAction& action)
 		CLOG_LOGCATCH(...);
 
 		if (mLog)
-			*mLog << "  Expunge Mailbox: " << name << " failed" << os_endl << flush;
+			*mLog << "  Expunge Mailbox: " << name << " failed" << os_endl << std::flush;
 		
 		CLOG_LOGRETHROW;
 		throw;
@@ -1446,7 +1446,7 @@ void CMailRecord::Playback_RecoverSelects()
 			lsource->CloseSilent();
 
 		if (mLog)
-			*mLog << "    Recover Mailbox Select: " << name << " succeeded" << os_endl << flush;
+			*mLog << "    Recover Mailbox Select: " << name << " succeeded" << os_endl << std::flush;
 	}
 	
 	// Clear out all connections
@@ -1726,7 +1726,7 @@ void CMailRecord::CompactPlayback()
 	CompactFlags();
 
 	if (mLog)
-		*mLog << "  Compacting Playback log." << os_endl << flush;
+		*mLog << "  Compacting Playback log." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -1804,7 +1804,7 @@ void CMailRecord::CompactMissing()
 								break;
 							default:;
 						}
-						*mLog << " action removal." << os_endl << flush;
+						*mLog << " action removal." << os_endl << std::flush;
 					}
 
 					// Remove current item
@@ -1819,7 +1819,7 @@ void CMailRecord::CompactMissing()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: missing SELECTs." << os_endl << flush;
+		*mLog << "  Compacting Playback log: missing SELECTs." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -1881,7 +1881,7 @@ void CMailRecord::CompactUnterminated()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: unterminated SELECTs." << os_endl << flush;
+		*mLog << "  Compacting Playback log: unterminated SELECTs." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -1954,7 +1954,7 @@ void CMailRecord::CompactMultiple()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: multiple SELECTs." << os_endl << flush;
+		*mLog << "  Compacting Playback log: multiple SELECTs." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -2009,7 +2009,7 @@ void CMailRecord::CompactExpunge()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: single EXPUNGE." << os_endl << flush;
+		*mLog << "  Compacting Playback log: single EXPUNGE." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{
@@ -2089,7 +2089,7 @@ void CMailRecord::CompactFlags()
 	}
 
 	if (mLog)
-		*mLog << "  Compacting Playback log: similar FLAGs." << os_endl << flush;
+		*mLog << "  Compacting Playback log: similar FLAGs." << os_endl << std::flush;
 
 	if (CLog::AllowPlaybackLog() && CLog::AllowAuthenticationLog())
 	{

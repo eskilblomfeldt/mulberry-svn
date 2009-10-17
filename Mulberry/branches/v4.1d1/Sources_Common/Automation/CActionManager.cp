@@ -588,10 +588,10 @@ bool CActionManager::MDNMessage(CMessage* msg)
 
 	{
 		// Create the message (it takes possesion of address lists)
-		std::auto_ptr<CMessage> msg(CreateMessage(to_list.release(), cc_list.release(), bcc_list.release(), subject, body.get(), id, NULL, NULL, NULL));
+		std::auto_ptr<CMessage> msg2(CreateMessage(to_list.release(), cc_list.release(), bcc_list.release(), subject, body.get(), id, NULL, NULL, NULL));
 		
 		// Now send it
-		SendMessage(*msg.get(), id, NULL, NMessage::eDraftMDN, NULL);
+		SendMessage(*msg2.get(), id, NULL, NMessage::eDraftMDN, NULL);
 	}
 
 	return true;
@@ -962,19 +962,19 @@ bool CActionManager::ReplyMessages(CMessageList& msgs, bool quote, NMessage::ERe
 				to_list->AddUnique(theEnv->GetFrom()->front());
 
 			// Add all recipients except me
-			for(CAddressList::iterator iter = theEnv->GetTo()->begin(); iter != theEnv->GetTo()->end(); iter++)
+			for(CAddressList::iterator iter2 = theEnv->GetTo()->begin(); iter2 != theEnv->GetTo()->end(); iter2++)
 			{
 				// Do not add me
-				if (!CPreferences::TestSmartAddress(**iter))
-					to_list->AddUnique(*iter);
+				if (!CPreferences::TestSmartAddress(**iter2))
+					to_list->AddUnique(*iter2);
 			}
 
 			// Add all CCs except me
-			for(CAddressList::iterator iter = theEnv->GetCC()->begin(); iter != theEnv->GetCC()->end(); iter++)
+			for(CAddressList::iterator iter2 = theEnv->GetCC()->begin(); iter2 != theEnv->GetCC()->end(); iter2++)
 			{
 				// Do not add me
-				if (!CPreferences::TestSmartAddress(**iter))
-					cc_list->AddUnique(*iter);
+				if (!CPreferences::TestSmartAddress(**iter2))
+					cc_list->AddUnique(*iter2);
 			}
 			break;
 		}

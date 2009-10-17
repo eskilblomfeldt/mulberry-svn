@@ -227,7 +227,7 @@ void CLog::FlushLogs()
 	for(unsigned long i = eLogTypeFirst; i < eLogTypeLast; i++)
 	{
 		if (sLogInfo[i].mLog)
-			*sLogInfo[i].mLog << flush;
+			*sLogInfo[i].mLog << std::flush;
 	}
 }
 
@@ -568,7 +568,7 @@ void CLog::BeginLog(cdofstream*& log, const char* name, bool user_start)
 	time_t systime = ::time(NULL);
 	cdstring atime = ::ctime(&systime);
 	atime[atime.length() - 1] = 0;
-	*log << atime << os_endl << flush;
+	*log << atime << os_endl << std::flush;
 }
 
 void CLog::EndLog(cdofstream*& log, bool user_stop)
@@ -581,7 +581,7 @@ void CLog::EndLog(cdofstream*& log, bool user_stop)
 	time_t systime = ::time(NULL);
 	cdstring atime = ::ctime(&systime);
 	atime[atime.length() - 1] = 0;
-	*log << atime << os_endl << flush;
+	*log << atime << os_endl << std::flush;
 	log->close();
 	delete log;
 	log = NULL;
@@ -656,7 +656,7 @@ void CLog::LogThrow(const char* type, int err, const char* func, const char* fil
 				  << "\tErrno: " << err << " 0x" << std::hex << err << std::																																																																																																																																																																																																																																																																																																									dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
-				  << "," << line << os_endl << flush;
+				  << "," << line << os_endl << std::flush;
 	}
 }
 
@@ -672,7 +672,7 @@ void CLog::LogCatch(const char* type, const char* func, const char* file, int li
 				  << "\tType: " << type << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
-				  << "," << line << os_endl << flush;
+				  << "," << line << os_endl << std::flush;
 	}
 }
 
@@ -687,7 +687,7 @@ void CLog::LogRethrow(const char* func, const char* file, int line)
 				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
-				  << "," << line << os_endl << flush;
+				  << "," << line << os_endl << std::flush;
 	}
 }
 
@@ -703,7 +703,7 @@ void CLog::LogError(const char* func, const char* file, int line, const char* er
 				  << "\tTID: " << cdthread::current_tid() << " 0x" << std::hex << cdthread::current_tid() << std::dec << os_endl
 				  << "\tFunction: " << func << os_endl
 				  << "\tFile: " << file
-				  << "," << line << os_endl << flush;
+				  << "," << line << os_endl << std::flush;
 	}
 }
 
@@ -728,7 +728,7 @@ void CLog::StartLog(ELogType type, const char* desc)
 		*GetLog() << atime;
 		if (desc)
 			*GetLog() << ": " << desc;
-		*GetLog() << os_endl << flush;
+		*GetLog() << os_endl << std::flush;
 	}
 }
 
@@ -747,7 +747,7 @@ void CLog::StopLog()
 		*GetLog() << os_endl << "--> #" << session_id << desc;
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
-		*GetLog() << atime << os_endl << flush;
+		*GetLog() << atime << os_endl << std::flush;
 	}
 }
 
@@ -781,7 +781,7 @@ void CLog::LogEntry(const char* log)
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
 		*GetLog() << os_endl << "--> #" << session_id << "." << cdthread::current_tid() << " " << atime << os_endl;
-		*GetLog() << log << os_endl << flush;
+		*GetLog() << log << os_endl << std::flush;
 	}
 }
 
@@ -792,7 +792,7 @@ void CLog::AddEntry(const char* log)
 	{
 		PuntPartial();
 
-		*GetLog() << log << os_endl << flush;
+		*GetLog() << log << os_endl << std::flush;
 	}
 }
 
@@ -809,7 +809,7 @@ void CLog::StartPartialEntry()
 		cdstring session_id(GetSessionID());
 		cdstring atime = ::ctime(&systime);
 		atime[atime.length() - 1] = 0;
-		*GetLog() << os_endl << "--> #" << session_id << "." << cdthread::current_tid() << " " << atime << os_endl << flush;
+		*GetLog() << os_endl << "--> #" << session_id << "." << cdthread::current_tid() << " " << atime << os_endl << std::flush;
 	}
 }
 
@@ -823,7 +823,7 @@ void CLog::LogPartialEntry(const char* log)
 		{
 			if (!mPartial)
 				StartPartialEntry();
-			*GetLog() << log << flush;
+			*GetLog() << log << std::flush;
 		}
 	}
 }
@@ -833,7 +833,7 @@ void CLog::StopPartialEntry()
 {
 	if (DoLog())
 	{
-		*GetLog() << os_endl << flush;
+		*GetLog() << os_endl << std::flush;
 		mPartial = false;
 	}
 }

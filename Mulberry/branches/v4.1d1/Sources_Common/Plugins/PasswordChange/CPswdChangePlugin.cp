@@ -228,7 +228,7 @@ void CPswdChangePlugin::ProcessPswdChange(CTCPStream& stream, CLog& log, char* b
 			done = true;
 			break;
 		case CPswdChangePlugin::ePswdChangeSendData:		// Send to server
-			stream << buffer << net_endl << flush;
+			stream << buffer << net_endl << std::flush;
 			if (CLog::AllowAuthenticationLog())
 				log.LogEntry(buffer);
 			break;
@@ -238,7 +238,7 @@ void CPswdChangePlugin::ProcessPswdChange(CTCPStream& stream, CLog& log, char* b
 				log.LogEntry(buffer);
 			break;
 		case CPswdChangePlugin::ePswdChangeSendGetData:		// Send to server, then get from server
-			stream << buffer << net_endl << flush;
+			stream << buffer << net_endl << std::flush;
 			if (CLog::AllowAuthenticationLog())
 				log.LogEntry(buffer);
 			stream.qgetline(buffer, buflen);

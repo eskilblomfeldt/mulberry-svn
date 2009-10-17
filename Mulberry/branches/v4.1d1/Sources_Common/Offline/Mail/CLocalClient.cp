@@ -2187,7 +2187,7 @@ void CLocalClient::_SetFlag(const ulvector& nums, bool uids, NMessage::EFlags fl
 		// Flush index file
 		if (changed)
 		{
-			mIndex << flush;
+			mIndex << std::flush;
 			CHECK_STREAM(mIndex)
 		}
 	}
@@ -3172,7 +3172,7 @@ void CLocalClient::SyncIndexHeader(CMbox* mbox, cdfstream& index)
 		header.CacheModified() = (unsigned long)GetDefinitiveFileTime(cache_finfo.st_mtime, cache_name);
 		header.write(index);
 		
-		index << flush;
+		index << std::flush;
 	}
 
 	CHECK_STREAM(index)
@@ -3610,17 +3610,17 @@ void CLocalClient::ExpungeMessage(ulvector& indices)
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		StCreatorType file1(cMulberryCreator, cMailboxType);
 #endif
-		cdfstream temp_mbox(mbox_temp, ios::out | ios::binary);
+		cdfstream temp_mbox(mbox_temp, std::ios::out | std::ios::binary);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file1.Reset();
 		StCreatorType file2(cMulberryCreator, cMailboxCacheType);
 #endif
-		cdfstream temp_cache(cache_temp, ios::out | std::ios_base::binary | ios::trunc);
+		cdfstream temp_cache(cache_temp, std::ios::out | std::ios_base::binary | std::ios::trunc);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file2.Reset();
 		StCreatorType file3(cMulberryCreator, cMailboxIndexType);
 #endif
-		cdfstream temp_index(index_temp, ios::out | std::ios_base::binary | ios::trunc);
+		cdfstream temp_index(index_temp, std::ios::out | std::ios_base::binary | std::ios::trunc);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file3.Reset();
 #endif
@@ -4108,7 +4108,7 @@ void CLocalClient::RollbackAppend(CMbox* mbox, cdfstream* stream, std::istream::
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		StCreatorType file1(cMulberryCreator, cMailboxType);
 #endif
-		cdfstream temp_mbox(mbox_temp, ios::out | ios::binary);
+		cdfstream temp_mbox(mbox_temp, std::ios::out | std::ios::binary);
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 		file1.Reset();
 #endif
@@ -4672,7 +4672,7 @@ bool CLocalClient::StreamSearch(std::istream& in, unsigned long start, unsigned 
 	while(length)
 	{
 		// Determine length to read into buffer
-		unsigned long read_length = ::min(length, cSearchBufferSize);
+		unsigned long read_length = std::min(length, cSearchBufferSize);
 		unsigned long search_length = read_length;
 
 		// Read from stream

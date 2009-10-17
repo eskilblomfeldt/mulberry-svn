@@ -139,8 +139,8 @@ void CParserHTML::InitParserHTML()
 
 void CParserHTML::SetFontScale(long scale)
 {
-	mStyledFontSize = max(1.0, pow(1.2, scale) * mStyledFontSize);
-	mFixedFontSize = max(1.0, pow(1.2, scale) * mFixedFontSize);
+	mStyledFontSize = std::max(1.0, pow(1.2, scale) * mStyledFontSize);
+	mFixedFontSize = std::max(1.0, pow(1.2, scale) * mFixedFontSize);
 }
 
 ETag CParserHTML::GetTag(unichar_t* format, long &offset)
@@ -1060,7 +1060,7 @@ void CParserHTML::HandleScaledSize(long start, long stop, long relsize, bool fix
 	if (mUseStyles)
 	{
 		// Use 20% increments
-		int styled_size = max(1.0, pow(1.2, relsize - 3) * (fixed ? mFixedFontSize : mStyledFontSize));
+		int styled_size = std::max(1.0, pow(1.2, relsize - 3) * (fixed ? mFixedFontSize : mStyledFontSize));
 
 		mFormatList->addElement(new CFontSizeFormatElement(start, stop, styled_size, false));
 	}

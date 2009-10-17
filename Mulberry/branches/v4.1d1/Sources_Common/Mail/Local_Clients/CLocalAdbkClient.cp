@@ -951,7 +951,7 @@ void CLocalAdbkClient::Change(CAddressBook* adbk, const CAddressList* add_addrs,
 	#if __dest_os == __mac_os || __dest_os == __mac_os_x
 			StCreatorType file(cMulberryCreator, cAddressBookFileType);
 	#endif
-			cdfstream temp_adbk(temp_name, ios::out | ios::binary);
+			cdfstream temp_adbk(temp_name, std::ios::out | std::ios::binary);
 
 			// Open address book
 			mAdbk.clear();

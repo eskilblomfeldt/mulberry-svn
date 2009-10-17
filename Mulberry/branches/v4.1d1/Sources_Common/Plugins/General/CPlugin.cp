@@ -633,7 +633,7 @@ void CPlugin::UnloadPlugin(void)
 // Test and do registration if required
 // return.first - registration done
 // return.second - delete plugin
-pair<bool, bool> CPlugin::TestRegistration()
+std::pair<bool, bool> CPlugin::TestRegistration()
 {
 	std::pair<bool, bool> result(true, false);
 
@@ -715,7 +715,7 @@ unsigned long CPlugin::GetRegistrationKey(void) const
 }
 
 // Do registration
-pair<bool, bool> CPlugin::DoRegistration(bool allow_demo, bool allow_delete)
+std::pair<bool, bool> CPlugin::DoRegistration(bool allow_demo, bool allow_delete)
 {
 	bool done = false;
 	bool delete_it = false;

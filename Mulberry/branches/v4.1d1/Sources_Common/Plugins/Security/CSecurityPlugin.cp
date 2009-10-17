@@ -1087,7 +1087,7 @@ CSecurityPlugin* CSecurityPlugin::GetDecryptPlugin(const cdstring& type)
 	for(SSecurityPluginHandlers::iterator iter = sSecurityPlugins.begin(); iter != sSecurityPlugins.end(); iter++)
 	{
 		// Try each one
-		CSecurityPlugin* splugin = (*iter).second;
+		splugin = (*iter).second;
 		if (splugin->CanDecryptThis(type) == 0)
 		{
 			// cache it and return

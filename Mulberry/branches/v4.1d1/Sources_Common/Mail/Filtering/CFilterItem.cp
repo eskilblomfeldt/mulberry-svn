@@ -258,7 +258,7 @@ void CFilterItem::Execute(CMbox* mbox, const ulvector* selected, const CSearchIt
 
 	// Subtract excluded
 	ulvector process;
-	std::set_difference(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(process));
+	std::set_difference(uids.begin(), uids.end(), exclude.begin(), exclude.end(), std::back_inserter<ulvector>(process));
 	
 	// Only bother if something left
 	if (process.empty())
@@ -312,7 +312,7 @@ void CFilterItem::Execute(CMbox* mbox, const ulvector* selected, const CSearchIt
 	if (stop_it)
 	{
 		ulvector temp;
-		std::set_union(uids.begin(), uids.end(), exclude.begin(), exclude.end(), back_inserter<ulvector>(temp));
+		std::set_union(uids.begin(), uids.end(), exclude.begin(), exclude.end(), std::back_inserter<ulvector>(temp));
 		exclude = temp;
 
 		// Log

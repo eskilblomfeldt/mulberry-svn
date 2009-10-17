@@ -19,13 +19,13 @@
 #ifndef __CSTREAMTYPEFWD__MULBERRY__
 #define __CSTREAMTYPEFWD__MULBERRY__
 
-#include <istream.h>
-#include <ostream.h>
+#include <istream>
+#include <ostream>
 
 template <class streamT> class CStreamType;
 
-typedef CStreamType<ostream>	costream;
-typedef CStreamType<istream>	cistream;
-typedef CStreamType<iostream>	cstream;
+typedef CStreamType<std::ostream>	costream;
+typedef CStreamType<std::istream>	cistream;
+typedef CStreamType<std::iostream>	cstream;
 
 #endif

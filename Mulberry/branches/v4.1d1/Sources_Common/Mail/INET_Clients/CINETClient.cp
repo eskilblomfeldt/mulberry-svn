@@ -354,7 +354,7 @@ void CINETClient::SendString(const char* str, int flags)
 		if (!mAsyncLiteral)
 		{
 			// Flush out to server
-			*mStream << flush;
+			*mStream << std::flush;
 
 			// Now process responses waiting for continuation
 			INETProcess();
@@ -1706,7 +1706,7 @@ void CINETClient::INETSendString(const char* str, int flags, bool handle_throw)
 			SendString(str, flags);
 		else
 		{
-			*mStream << flush;
+			*mStream << std::flush;
 
 			// Process response
 			INETProcess();
