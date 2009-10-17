@@ -22,9 +22,15 @@
 
 #include "cdstring.h"
 
+class CCalendarAddress;
+typedef ptrvector<CCalendarAddress> CCalendarAddressList;
+
 class CCalendarAddress
 {
 public:
+	
+	static void FromIdentityText(const cdstring& txt, CCalendarAddressList& list);
+
 	CCalendarAddress();
 	CCalendarAddress(const CCalendarAddress &copy);				// Copy constructor
 
@@ -64,7 +70,5 @@ private:
 	cdstring			mCalendar;					// Calendar name
 
 };
-
-typedef ptrvector<CCalendarAddress> CCalendarAddressList;
 
 #endif

@@ -29,6 +29,16 @@
 // C L A S S __ C A D D R E S S
 // __________________________________________________________________________________________________
 
+void CCalendarAddress::FromIdentityText(const cdstring& txt, CCalendarAddressList& list)
+{
+	cdstrvect addrs;
+	txt.split("\r\n", addrs);
+	for (cdstrvect::const_iterator iter = addrs.begin(); iter != addrs.end(); iter++)
+	{
+		list.push_back(new CCalendarAddress(*iter));
+	}
+}
+
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 
 // Default constructor
