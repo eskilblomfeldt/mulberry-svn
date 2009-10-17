@@ -68,10 +68,9 @@
 	<string id="CCalendarStoreTable::DuplicateWebCalendar">The Web Calendar at "%s" is already loaded.</string>
 
 <!-- New Component Dialog Bits -->
+	<string id="CNewComponentDialog::MissingNewCalendar">The chosen calendar no longer exists or is not open. Choose another calendar for this item.</string>
 	<string id="CNewEventDialog::MissingOriginal">The event being edited no longer exists and changes to it cannot be saved.</string>
-	<string id="CNewEventDialog::MissingNewCalendar">The chosen calendar no longer exists or is not open. Choose another calendar for this event.</string>
 	<string id="CNewToDoDialog::MissingOriginal">The task being edited no longer exists and changes to it cannot be saved.</string>
-	<string id="CNewToDoDialog::MissingNewCalendar">The chosen calendar no longer exists or is not open. Choose another calendar for this task.</string>
 	<string id="CNewComponentAttendees::ReallyDelete">Do you really want to remove the selected attendees?</string>
 
 <!-- iTIP -->

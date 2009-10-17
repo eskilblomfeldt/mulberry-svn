@@ -38,6 +38,9 @@
 	<string id="ErrorDialog::Btn::LetterSendAsReply">Send Reply</string>
 	<string id="ErrorDialog::Btn::LetterSendAsOriginal">Send New</string>
 
+	<string id="ErrorDialog::Btn::ChangeAllEvents">Change All Events</string>
+	<string id="ErrorDialog::Btn::ChangeThisEvent">Change Only This Event</string>
+	<string id="ErrorDialog::Btn::ChangeThisFutureEvent">Change This and Future Events</string>
 	<string id="ErrorDialog::Btn::DeleteAllEvents">Delete All Events</string>
 	<string id="ErrorDialog::Btn::DeleteThisEvent">Delete Only This Event</string>
 	<string id="ErrorDialog::Btn::DeleteThisFutureEvent">Delete This and Future Events</string>
@@ -85,6 +88,7 @@
 	<string id="ErrorDialog::Text::RulesMergeExportType">Do you want to export only the selected rules, or the entire set of rules and triggers or scripts?</string>
 	<string id="ErrorDialog::Text::WarnReplySubject">The subject of this reply was changed. Do you want to send this message as if it were a reply to the original messages (the same thread of discussion), or send it as a new message (new thread of discussion)?</string>
 	<string id="ErrorDialog::Text::WarnMailtoFiles">A mailto URL has added a local file on disk to an outgoing message. Please double-check the attachments in the draft and verify they are files you want to send to the intended recipient, and not files that should be kept private.</string>
+	<string id="ErrorDialog::Text::ChangeRecurEvent">The event being changed is one event in a set of recurring events. Do you want to change this event only, or change this event and all future events, or change all events in the recurring set?</string>
 	<string id="ErrorDialog::Text::DeleteRecurEvent">The event being deleted is one event in a set of recurring events. Do you want to delete this event only, or delete this event and all future events, or delete all events in the recurring set?</string>
 	<string id="ErrorDialog::Text::DeleteEvent">Do you want to delete this event?</string>
 	<string id="ErrorDialog::Text::ImportCalendarSelection">Do you want to import into the calendar '%s' and merge with the existing data or completely replace the existing data, or create a new calendar to import into?</string>
