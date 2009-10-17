@@ -286,15 +286,37 @@ void CEditIdentityAddress::SetItemData(bool active, const cdstring& address)
 	}
 	else
 	{
-		CCalendarAddress addr(address);
+		CCalendarAddressList addrs;
+		CCalendarAddress::FromIdentityText(address, addrs);
+		if (addrs.size() == 1)
+		{
+			// Hide multiple items
+			mFocus->Hide();
+			
+			// Insert text
+			mName->SetText(addrs.front()->GetName());
+			mEmail->SetText(addrs.front()->GetCalendarAddress());
+			mSingle->SetValue(1);
+		}
+		else
+		{
+			// Hide single items
+			mPanel->Hide();
+			
+			// Insert text
+			cdstring txt;
+			for(CCalendarAddressList::const_iterator iter = addrs.begin(); iter != addrs.end(); iter++)
+			{
+				txt += (*iter)->GetFullAddress();
+				txt += os_endl;
+			}
+			mText->SetText(txt);
+			
+			StopListening();
+			mMultiple->SetValue(1);
+			StartListening();
+		}
 
-		// Hide multiple items
-		mFocus->Hide();
-		
-		// Insert text
-		mName->SetText(addr.GetName());
-		mEmail->SetText(addr.GetCalendarAddress());
-		mSingle->SetValue(1);
 	}
 
 	// Lock fields
