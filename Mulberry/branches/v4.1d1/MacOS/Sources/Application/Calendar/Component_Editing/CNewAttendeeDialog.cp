@@ -88,14 +88,7 @@ void CNewAttendeeDialog::ListenToMessage(
 	switch (inMessage)
 	{
 	case eStatus_ID:
-		if ((*(long*)ioParam - 1) == iCal::ePartStat_NeedsAction)
-		{
-			mRSVP->SetEnabled(true);
-		}
-		else
-		{
-			mRSVP->SetEnabled(false);
-		}
+		mRSVP->SetEnabled((*(long*)ioParam - 1) == iCal::ePartStat_NeedsAction);
 		break;
 
 	default:

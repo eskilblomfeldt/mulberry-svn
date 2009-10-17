@@ -49,10 +49,11 @@ public:
 
 	virtual void		SelectionChanged();
 
-			void		ResetTable(const iCal::CICalendarPropertyList* items);
+	void		ResetTable(const iCal::CICalendarPropertyList* items, const iCal::CICalendarProperty* organizer);
 
 protected:
 	const iCal::CICalendarPropertyList*	mAttendees;
+	const iCal::CICalendarProperty*	mOrganizer;
 
 	virtual void		AdaptToNewSurroundings(void);						// Adjust column widths
 

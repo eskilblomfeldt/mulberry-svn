@@ -21,6 +21,7 @@
 
 #include "CICalendarDuration.h"
 #include "CICalendar.h"
+#include "CICalendarComponentExpanded.h"
 
 #include <LCheckBox.h>
 #include <LPopupButton.h>
@@ -138,16 +139,27 @@ void CNewEventTiming::DoEnds(bool use_duration)
 		SyncEnd();
 }
 
-void CNewEventTiming::SetEvent(const iCal::CICalendarVEvent& vevent)
+void CNewEventTiming::SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded)
 {
-	// Set the relevant fields
-	mAllDay->SetValue(vevent.GetStart().IsDateOnly() ? 1 : 0);
+	iCal::CICalendarDateTime event_start;
+	iCal::CICalendarDateTime event_end;
 	
-	const iCal::CICalendarDateTime& event_start = vevent.GetStart();
-	const iCal::CICalendarDateTime& event_end = vevent.GetEnd();
+	if (expanded != NULL)
+	{
+		event_start = expanded->GetInstanceStart();
+		event_end = expanded->GetInstanceEnd();
+	}
+	else
+	{
+		event_start = vevent.GetStart();
+		event_end = vevent.GetEnd();
+	}
 
+	// Set the relevant fields
+	mAllDay->SetValue(event_start.IsDateOnly() ? 1 : 0);
+	
 	// Set start date-time
-	mStartDateTimeZone->SetDateTimeZone(event_start, vevent.GetStart().IsDateOnly());
+	mStartDateTimeZone->SetDateTimeZone(event_start, event_start.IsDateOnly());
 	
 	// Set ending type
 	if (vevent.UseDuration())
@@ -156,18 +168,18 @@ void CNewEventTiming::SetEvent(const iCal::CICalendarVEvent& vevent)
 		mUseEnd->SetValue(1);
 	
 	// Set end date-time
-	if (vevent.GetStart().IsDateOnly())
+	if (event_start.IsDateOnly())
 	{
-		// Switch to inclusive end as that is whay user will expect
+		// Switch to inclusive end as that is what user will expect
 
 		// Offset end day by one as its inclusive for all day events
 		iCal::CICalendarDateTime temp(event_end);
 		temp.OffsetDay(-1);
-		mEndDateTimeZone->SetDateTimeZone(temp, vevent.GetStart().IsDateOnly());
+		mEndDateTimeZone->SetDateTimeZone(temp, event_start.IsDateOnly());
 	}
 	else
 		// Set non-inclusive end
-		mEndDateTimeZone->SetDateTimeZone(event_end, vevent.GetStart().IsDateOnly());
+		mEndDateTimeZone->SetDateTimeZone(event_end, event_start.IsDateOnly());
 	
 	// Set duration
 	iCal::CICalendarDuration duration = event_end - event_start;

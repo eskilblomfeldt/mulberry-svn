@@ -25,6 +25,7 @@
 #include "CTableMultiRowSelector.h"
 #include "CTableRowGeometry.h"
 
+#include "CICalendarCalAddressValue.h"
 #include "CITIPProcessor.h"
 
 CAttendeeTable::CAttendeeTable(LStream *inStream)
@@ -101,6 +102,14 @@ void CAttendeeTable::DrawCell(const STableCell &inCell, const Rect &inLocalRect)
 
 	if (theTxt.length() > 0)
 	{
+		Style text_style = normal;
+		const CIdentity* id = NULL;
+		if (iCal::CITIPProcessor::AttendeeIdentity(prop, id))
+			text_style |= bold;
+		if (prop.GetCalAddressValue()->GetValue() == mOrganizer->GetCalAddressValue()->GetValue())
+			text_style |= italic;
+		::TextFace(text_style);
+
 		::MoveTo(inLocalRect.left, inLocalRect.bottom - mTextDescent);
 		short width = inLocalRect.right - inLocalRect.left;
 		::DrawClippedStringUTF8(theTxt, width, eDrawString_Left);
@@ -162,10 +171,11 @@ void CAttendeeTable::SelectionChanged()
 }
 
 // Reset the table from the address list
-void CAttendeeTable::ResetTable(const iCal::CICalendarPropertyList* items)
+void CAttendeeTable::ResetTable(const iCal::CICalendarPropertyList* items, const iCal::CICalendarProperty* organizer)
 {
 
 	mAttendees = items;
+	mOrganizer = organizer;
 
 	// Prevent selection changes
 	StDeferSelectionChanged _defer(this);

@@ -44,7 +44,7 @@ public:
 	virtual bool	GetAllDay() const;
 	virtual void	GetTimezone(iCal::CICalendarTimezone& tz) const;
 
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
+	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);
 
 	virtual void	SetReadOnly(bool read_only);

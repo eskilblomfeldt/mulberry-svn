@@ -100,8 +100,8 @@ protected:
 									calstore::CCalendarProtocol* proto);			// Get appropriate icon id
 	void	SetTextStyle(const calstore::CCalendarStoreNode* node,
 							calstore::CCalendarProtocol* proto, bool& strike);	// Get appropriate text style
-	bool 	UsesBackgroundColor(const STableCell &inCell) const;
-	const RGBColor& GetBackgroundColor(const STableCell &inCell) const;
+	bool 	UsesBackgroundColor(const calstore::CCalendarStoreNode* node) const;
+	const RGBColor& GetBackgroundColor(const calstore::CCalendarStoreNode* node) const;
 
 	virtual void	DoSelectionChanged(void);
 

@@ -513,11 +513,12 @@ void CCalendarStoreTable::ClickSelf(const SMouseDownEvent &inMouseDown)
 
 	if (GetCellHitBy(imagePt, hitCell))
 	{
-		if ((hitCell.col == mHierarchyCol) && UsesBackgroundColor(hitCell))
+		calstore::CCalendarStoreNode* node = GetCellNode(hitCell.row);
+		if ((hitCell.col == mHierarchyCol) && UsesBackgroundColor(node))
 		{
 			FocusDraw();
 			ApplyForeAndBackColors();
-			::RGBBackColor(&GetBackgroundColor(hitCell));
+			::RGBBackColor(&GetBackgroundColor(node));
 		}
 	}
 
@@ -553,12 +554,12 @@ void CCalendarStoreTable::DrawCell(const STableCell &inCell, const Rect &inLocal
 	// Erase to ensure drag hightlight is overwritten
 	// Erase to ensure drag hightlight is overwritten
 	FocusDraw();
-	if (UsesBackgroundColor(inCell))
+	if (UsesBackgroundColor(node))
 	{
 		Rect greyer = inLocalRect;
 		greyer.bottom = greyer.top + 1;
 		::EraseRect(&greyer);
-		::RGBBackColor(&GetBackgroundColor(inCell));
+		::RGBBackColor(&GetBackgroundColor(node));
 		greyer = inLocalRect;
 		greyer.top++;
 		::EraseRect(&greyer);
@@ -698,6 +699,10 @@ ResIDT CCalendarStoreTable::GetPlotIcon(const calstore::CCalendarStoreNode* node
 		else
 			return ICNx_BrowseRemoteHierarchy;
 	}
+	else if (node->IsDisplayHierarchy())
+	{
+		return ICNx_BrowseSearchHierarchy;
+	}
 	else if (node->IsDirectory())
 	{
 		return ICNx_BrowseDirectory;
@@ -786,15 +791,21 @@ void CCalendarStoreTable::SetTextStyle(const calstore::CCalendarStoreNode* node,
 	}
 }
 
-bool CCalendarStoreTable::UsesBackgroundColor(const STableCell &inCell) const
+bool CCalendarStoreTable::UsesBackgroundColor(const calstore::CCalendarStoreNode* node) const
 {
-	TableIndexT	woRow = mCollapsableTree->GetWideOpenIndex(inCell.row);
-	return mCollapsableTree->GetNestingLevel(woRow) == 0;
+	return node->IsProtocol() || node->IsDisplayHierarchy();
 }
 
-const RGBColor& CCalendarStoreTable::GetBackgroundColor(const STableCell &inCell) const
+const RGBColor& CCalendarStoreTable::GetBackgroundColor(const calstore::CCalendarStoreNode* node) const
 {
-	return CPreferences::sPrefs->mServerBkgndStyle.GetValue().color;
+	if (node->IsDisplayHierarchy())
+	{
+		return CPreferences::sPrefs->mHierarchyBkgndStyle.GetValue().color;
+	}
+	else
+	{
+		return CPreferences::sPrefs->mServerBkgndStyle.GetValue().color;
+	}
 }
 
 void CCalendarStoreTable::DoChangeColour(TableIndexT row)

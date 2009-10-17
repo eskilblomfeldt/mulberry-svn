@@ -578,7 +578,7 @@ void CDayWeekTable::AddAllDayEvent(iCal::CICalendarComponentExpandedShared& veve
 
 		// Modify all columns - first is the real one, others are pseudo
 		for(TableIndexT col_ctr = col_start; col_ctr <= col_end; col_ctr++)
-			mAllDayEvents[col_ctr - 2][slot] = make_pair(event, col_ctr == col_start);
+			mAllDayEvents[col_ctr - 2][slot] = std::make_pair(event, col_ctr == col_start);
 		
 		// Now show it
 		event->SetVisible(true);

@@ -44,7 +44,7 @@ public:
 	virtual bool	GetAllDay() const;
 	virtual void	GetTimezone(iCal::CICalendarTimezone& tz) const;
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
+	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
 			void    GetPeriod(iCal::CICalendarPeriod& period);
 

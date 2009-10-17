@@ -19,33 +19,30 @@
 #include "CICalendar.h"
 #include "CICalendarManager.h"
 
-#include "CBalloonDialog.h"
-#include "CCalendarPopup.h"
 #include "CCalendarView.h"
 #include "CDateTimeZoneSelect.h"
 #include "CErrorDialog.h"
 #include "CMulberryApp.h"
 #include "CNewComponentAlarm.h"
 #include "CNewComponentAttendees.h"
-#include "CNewComponentDescription.h"
-#include "CNewComponentTiming.h"
+#include "CNewComponentDetails.h"
+#include "CNewComponentRepeat.h"
+#include "CNewComponentDetails.h"
 #include "CPreferences.h"
-#include "CTextFieldX.h"
-#include "CWindowsMenu.h"
+//#include "CStaticText.h"
+//#include "CTextFieldX.h"
+//#include "CWindowsMenu.h"
 #include "CXStringResources.h"
 
 #include "CCalendarStoreManager.h"
 #include "CICalendarLocale.h"
-#include "CITIPProcessor.h"
+//#include "CITIPProcessor.h"
 
-#include "MyCFString.h"
+//#include "MyCFString.h"
 
 #include <LBevelButton.h>
 #include <LCheckBox.h>
 #include <LTabsControl.h>
-
-uint32_t CNewToDoDialog::sTitleCounter = 0;
-std::set<CNewToDoDialog*> CNewToDoDialog::sDialogs;
 
 // ---------------------------------------------------------------------------
 //	CNewToDoDialog														  [public]
@@ -53,10 +50,8 @@ std::set<CNewToDoDialog*> CNewToDoDialog::sDialogs;
 	Default constructor */
 
 CNewToDoDialog::CNewToDoDialog(LStream *inStream)
-		: CModelessDialog(inStream)
+ : CNewComponentDialog(inStream)
 {
-	mCurrentPanel = 0;
-	sDialogs.insert(this);
 }
 
 
@@ -67,19 +62,15 @@ CNewToDoDialog::CNewToDoDialog(LStream *inStream)
 
 CNewToDoDialog::~CNewToDoDialog()
 {
-	sDialogs.erase(this);
 }
 
 #pragma mark -
 
 void CNewToDoDialog::FinishCreateSelf()
 {
-	CModelessDialog::FinishCreateSelf();
+	CNewComponentDialog::FinishCreateSelf();
 
 	// Get UI items
-	mSummary = dynamic_cast<CTextFieldX*>(FindPaneByID(eSummary_ID));
-	mSummary->AddListener(this);
-	mCalendar = dynamic_cast<CCalendarPopup*>(FindPaneByID(eCalendar_ID));
 	mCompleted = dynamic_cast<LCheckBox*>(FindPaneByID(eCompleted_ID));
 	mCompletedDateTimeZone = CDateTimeZoneSelect::CreateInside(dynamic_cast<LView*>(FindPaneByID(eCompletedDateTimeZone_ID)));
 	mCompletedDateTimeZone->SetEnabled(false);
@@ -87,20 +78,8 @@ void CNewToDoDialog::FinishCreateSelf()
 	mCompletedNow = dynamic_cast<LBevelButton*>(FindPaneByID(eCompletedNow_ID));
 	mCompletedNow->SetVisible(false);
 
-	mTabs = dynamic_cast<LTabsControl*>(FindPaneByID(eTabs_ID));
-	mTabView = dynamic_cast<LView*>(FindPaneByID(eTabView_ID));
-
-	mOrganiserEdit = dynamic_cast<LCheckBox*>(FindPaneByID(eChangeOrganised_ID));
-
 	// Listen to some of them
 	UReanimator::LinkListenerToBroadcasters(this, this, pane_ID);
-	
-	// Init controls
-	InitPanels();
-	DoTab(1);
-	mPanels[mCurrentPanel]->SetVisible(true);
-
-	// Focus on summary
 }
 
 void CNewToDoDialog::InitPanels()
@@ -110,11 +89,11 @@ void CNewToDoDialog::InitPanels()
 	GetSubCommanders().FetchItemAt(1, defCommander);
 
 	// Load each panel for the tabs
-	mPanels.push_back(static_cast<CNewComponentTiming*>(UReanimator::CreateView(CNewComponentTiming::pane_ID, mTabView, defCommander)));
+	mPanels.push_back(static_cast<CNewComponentDetails*>(UReanimator::CreateView(CNewComponentDetails::pane_ID, mTabView, defCommander)));
 	mTabView->ExpandSubPane(mPanels.back(), true, true);
 	mPanels.back()->SetVisible(false);
 
-	mPanels.push_back(static_cast<CNewComponentDescription*>(UReanimator::CreateView(CNewComponentDescription::pane_ID, mTabView, defCommander)));
+	mPanels.push_back(static_cast<CNewComponentRepeat*>(UReanimator::CreateView(CNewComponentRepeat::pane_ID, mTabView, defCommander)));
 	mTabView->ExpandSubPane(mPanels.back(), true, true);
 	mPanels.back()->SetVisible(false);
 
@@ -125,19 +104,6 @@ void CNewToDoDialog::InitPanels()
 	mPanels.push_back(static_cast<CNewComponentAttendees*>(UReanimator::CreateView(CNewComponentAttendees::pane_ID, mTabView, defCommander)));
 	mTabView->ExpandSubPane(mPanels.back(), true, true);
 	mPanels.back()->SetVisible(false);
-}
-
-void CNewToDoDialog::ListenTo_Message(long msg, void* param)
-{
-	switch(msg)
-	{
-	case iCal::CICalendar::eBroadcast_Closed:
-		// Force dialog to close immediately as event is about to be deleted.
-		// Any changes so far will be lost.
-		OnCancel();
-		break;
-	default:;
-	}
 }
 
 // Handle controls
@@ -155,36 +121,9 @@ void CNewToDoDialog::ListenToMessage(
 		DoNow();
 		break;
 
-	case eTabs_ID:
-		DoTab(mTabs->GetValue());
-		break;
-
-	case eSummary_ID:
-		ChangedSummary();
-		break;
-
-	case eCalendar_ID:
-		ChangedCalendar();
-		break;
-
-	case eChangeOrganised_ID:
-		OnOrganiserEdit();
-		break;
-
 	default:
-		CModelessDialog::ListenToMessage(inMessage, ioParam);
+		CNewComponentDialog::ListenToMessage(inMessage, ioParam);
 		break;
-	}
-}
-
-void CNewToDoDialog::DoTab(UInt32 value)
-{
-	// Only if different
-	if (mCurrentPanel != value - 1)
-	{
-		mPanels[mCurrentPanel]->SetVisible(false);
-		mCurrentPanel = value - 1;
-		mPanels[mCurrentPanel]->SetVisible(true);
 	}
 }
 
@@ -210,160 +149,52 @@ void CNewToDoDialog::DoNow()
 	mCompletedDateTimeZone->SetDateTimeZone(mActualCompleted, false);
 }
 
-bool CNewToDoDialog::ContainsToDo(const iCal::CICalendarVToDo& vtodo) const
+void CNewToDoDialog::SetComponent(iCal::CICalendarComponentRecur& vcomponent, const iCal::CICalendarComponentExpanded* expanded)
 {
-	// Does this dialog contain a copy of this event
-	return vtodo.GetMapKey() == mVToDo->GetMapKey();
-}
+	CNewComponentDialog::SetComponent(vcomponent, expanded);
 
-void CNewToDoDialog::SetToDo(iCal::CICalendarVToDo& vtodo)
-{
-	// Listen to original calendar as we need to cancel if calendar goes away
-	iCal::CICalendarRef calref = vtodo.GetCalendar();
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(calref);
-	if (cal)
-		cal->Add_Listener(this);
-	
-	mVToDo = &vtodo;
+	mCompleted->SetValue(static_cast<iCal::CICalendarVToDo&>(vcomponent).GetStatus() == iCal::eStatus_VToDo_Completed);
 
-	// Set the relevant fields
-	
-	mSummary->SetText(vtodo.GetSummary());
-
-	mCalendar->SetCalendar(vtodo.GetCalendar());
-	ChangedCalendar();
-
-	mCompleted->SetValue(vtodo.GetStatus() == iCal::eStatus_VToDo_Completed);
-
-	mCompletedExists = vtodo.HasCompleted();
+	mCompletedExists = static_cast<iCal::CICalendarVToDo&>(vcomponent).HasCompleted();
 	if (mCompletedExists)
 	{
 		// COMPLETED is in UTC but we adjust to local timezone
-		mActualCompleted = vtodo.GetCompleted();
+		mActualCompleted = static_cast<iCal::CICalendarVToDo&>(vcomponent).GetCompleted();
 		mActualCompleted.AdjustTimezone(iCal::CICalendarManager::sICalendarManager->GetDefaultTimezone());
 	
 		mCompletedDateTimeZone->SetDateTimeZone(mActualCompleted, false);
 	}
-
-	// Set in each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->SetToDo(vtodo);
-	}
-	
-	// Set title to summary if not empty
-	if (!vtodo.GetSummary().empty())
-	{
-		MyCFString cftitle(vtodo.GetSummary(), kCFStringEncodingUTF8);
-		SetCFDescriptor(cftitle);
-	}
-
-	// Determine read-only status based on organiser
-	SetReadOnly((vtodo.CountProperty(iCal::cICalProperty_ORGANIZER) != 0) && !iCal::CITIPProcessor::OrganiserIsMe(vtodo));
-	mOrganiserEdit->SetVisible(mReadOnly);
 }
 
-void CNewToDoDialog::GetToDo(iCal::CICalendarVToDo& vtodo)
+void CNewToDoDialog::GetComponent(iCal::CICalendarComponentRecur& vcomponent)
 {
-	// Do descriptive items
-	vtodo.EditSummary(mSummary->GetText());
+	CNewComponentDialog::GetComponent(vcomponent);
 
-	vtodo.EditStatus(mCompleted->GetValue() == 1 ? iCal::eStatus_VToDo_Completed : iCal::eStatus_VToDo_NeedsAction);
+	// Do descriptive items
+	static_cast<iCal::CICalendarVToDo&>(vcomponent).EditStatus(mCompleted->GetValue() == 1 ? iCal::eStatus_VToDo_Completed : iCal::eStatus_VToDo_NeedsAction);
 	
 	// Changed completed date if needed
 	mCompletedDateTimeZone->GetDateTimeZone(mActualCompleted, false);
-	if ((mCompleted->GetValue() == 1) && (vtodo.GetCompleted() != mActualCompleted))
+	if ((mCompleted->GetValue() == 1) && (static_cast<iCal::CICalendarVToDo&>(vcomponent).GetCompleted() != mActualCompleted))
 	{
 		// Adjust to UTC and then change
 		mActualCompleted.AdjustToUTC();
-		vtodo.EditCompleted(mActualCompleted);
+		static_cast<iCal::CICalendarVToDo&>(vcomponent).EditCompleted(mActualCompleted);
 	}
-
-	// Get from each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->GetToDo(vtodo);
-	}
-}
-
-void CNewToDoDialog::ChangedSummary()
-{
-	MyCFString cftitle(mSummary->GetText(), kCFStringEncodingUTF8);
-	SetCFDescriptor(cftitle);
-	CWindowsMenu::RenamedWindow();
-}
-
-void CNewToDoDialog::ChangedCalendar()
-{
-	iCal::CICalendarRef newcal;
-	mCalendar->GetCalendar(newcal);
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(newcal);
-	FindPaneByID(eOK_ID)->SetEnabled(!mReadOnly && (cal != NULL) && (!cal->IsReadOnly()));
 }
 
 void CNewToDoDialog::SetReadOnly(bool read_only)
 {
-	mReadOnly = read_only;
-
-	// This will reset state of OK button
-	ChangedCalendar();
-
-	mSummary->SetReadOnly(mReadOnly);
-	mCalendar->SetEnabled(!mReadOnly);
+	CNewComponentDialog::SetReadOnly(read_only);
+	
 	mCompleted->SetEnabled(!mReadOnly);
 	mCompletedDateTimeZone->SetEnabled(!mReadOnly);
 	mCompletedNow->SetEnabled(!mReadOnly);
-
-	// Set in each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->SetReadOnly(mReadOnly);
-	}
 }
 
-cdstring CNewToDoDialog::GetCurrentSummary() const
+void CNewToDoDialog::ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status)
 {
-	return mSummary->GetText();
-}
-
-iCal::CICalendarRef CNewToDoDialog::GetCurrentCalendar() const
-{
-	iCal::CICalendarRef newcal;
-	mCalendar->GetCalendar(newcal);
-	return newcal;
-}
-
-void CNewToDoDialog::OnOK()
-{
-	bool result = true;
-	switch(mAction)
-	{
-	case eNew:
-	case eDuplicate:
-		result = DoNewOK();
-		break;
-	case eEdit:
-		result = DoEditOK();
-		break;
-	default:;
-	}
-	
-	// Now do inherited if result was OK
-	if (result)
-		CModelessDialog::OnOK();
-}
-
-void CNewToDoDialog::OnCancel()
-{
-	DoCancel();
-	
-	// Now do inherited
-	CModelessDialog::OnCancel();
-}
-
-void CNewToDoDialog::OnOrganiserEdit()
-{
-	SetReadOnly(mOrganiserEdit->GetValue() == 0);
+	static_cast<CNewComponentAttendees*>(mPanels.back())->ChangedMyStatus(attendee, new_status);
 }
 
 bool CNewToDoDialog::DoNewOK()
@@ -376,13 +207,13 @@ bool CNewToDoDialog::DoNewOK()
 		return false;
 
 	// Get updated info
-	GetToDo(*mVToDo);
+	GetComponent(*mComponent);
 	
 	// Look for change to calendar
-	if (newcal != mVToDo->GetCalendar())
+	if (newcal != mComponent->GetCalendar())
 	{
 		// Use new calendar
-		mVToDo->SetCalendar(newcal);
+		mComponent->SetCalendar(newcal);
 		
 		// Set the default calendar for next time
 		const calstore::CCalendarStoreNode* node = calstore::CCalendarStoreManager::sCalendarStoreManager->GetNode(new_cal);
@@ -391,8 +222,8 @@ bool CNewToDoDialog::DoNewOK()
 	}
 
 	// Add to calendar (this will do the display update)
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVToDo->GetCalendar());
-	new_cal->AddNewVToDo(mVToDo);
+	//iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mComponent->GetCalendar());
+	new_cal->AddNewVToDo(static_cast<iCal::CICalendarVToDo*>(mComponent));
 	CCalendarView::ToDosChangedAll();
 	
 	return true;
@@ -401,7 +232,7 @@ bool CNewToDoDialog::DoNewOK()
 bool CNewToDoDialog::DoEditOK()
 {
 	// Find the original calendar if it still exists
-	iCal::CICalendarRef oldcal = mVToDo->GetCalendar();
+	iCal::CICalendarRef oldcal = mComponent->GetCalendar();
 	iCal::CICalendar* old_cal = iCal::CICalendar::GetICalendar(oldcal);
 	if (old_cal == NULL)
 	{
@@ -415,7 +246,7 @@ bool CNewToDoDialog::DoEditOK()
 	}
 	
 	// Find the original to do if it still exists
-	iCal::CICalendarVToDo*	original = static_cast<iCal::CICalendarVToDo*>(old_cal->FindComponent(mVToDo));
+	iCal::CICalendarVToDo*	original = static_cast<iCal::CICalendarVToDo*>(old_cal->FindComponent(mComponent));
 	if (original == NULL)
 	{
 		// Inform user of missing calendar
@@ -434,7 +265,7 @@ bool CNewToDoDialog::DoEditOK()
 		return false;
 
 	// Get updated info
-	GetToDo(*original);
+	GetComponent(*original);
 	
 	// Look for change to calendar
 	if (new_cal != NULL)
@@ -458,29 +289,8 @@ bool CNewToDoDialog::DoEditOK()
 void CNewToDoDialog::DoCancel()
 {
 	// Delete the to do which we own and is not going to be used
-	delete mVToDo;
-	mVToDo = NULL;
-}
-
-bool CNewToDoDialog::GetCalendar(iCal::CICalendarRef oldcal, iCal::CICalendarRef& newcal, iCal::CICalendar*& new_cal)
-{
-	mCalendar->GetCalendar(newcal);
-	if ((oldcal == 0) || (newcal != oldcal))
-	{
-		new_cal = iCal::CICalendar::GetICalendar(newcal);
-		if (new_cal == NULL)
-		{
-			// Inform user of missing calendar
-			CErrorDialog::StopAlert(rsrc::GetString("CNewToDoDialog::MissingNewCalendar"));
-			
-			// Force calendar popup reset and return to dialog
-			mCalendar->Reset();
-			mCalendar->SetCalendar(oldcal);
-			return false;
-		}
-	}
-	
-	return true;
+	delete mComponent;
+	mComponent = NULL;
 }
 
 void CNewToDoDialog::StartNew(const iCal::CICalendar* calin)
@@ -507,15 +317,15 @@ void CNewToDoDialog::StartNew(const iCal::CICalendar* calin)
 	// Set event with initial timing
 	vtodo->EditTiming();
 
-	StartModeless(*vtodo, CNewToDoDialog::eNew);
+	StartModeless(*vtodo, NULL, CNewToDoDialog::eNew);
 }
 
-void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original)
+void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Look for an existinf dialog for this event
-	for(std::set<CNewToDoDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
+	for(std::set<CNewComponentDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
 	{
-		if ((*iter)->ContainsToDo(original))
+		if ((*iter)->ContainsComponent(original))
 		{
 			(*iter)->Select();
 			return;
@@ -525,7 +335,7 @@ void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original)
 	// Use a copy of the event
 	iCal::CICalendarVToDo* vtodo = new iCal::CICalendarVToDo(original);
 	
-	StartModeless(*vtodo, CNewToDoDialog::eEdit);
+	StartModeless(*vtodo, expanded, CNewToDoDialog::eEdit);
 }
 
 void CNewToDoDialog::StartDuplicate(const iCal::CICalendarVToDo& original)
@@ -534,13 +344,13 @@ void CNewToDoDialog::StartDuplicate(const iCal::CICalendarVToDo& original)
 	iCal::CICalendarVToDo* vtodo = new iCal::CICalendarVToDo(original);
 	vtodo->Duplicated();
 	
-	StartModeless(*vtodo, CNewToDoDialog::eDuplicate);
+	StartModeless(*vtodo, NULL, CNewToDoDialog::eDuplicate);
 }
 
-void CNewToDoDialog::StartModeless(iCal::CICalendarVToDo& vtodo, EModelessAction action)
+void CNewToDoDialog::StartModeless(iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded, EModelessAction action)
 {
 	CNewToDoDialog* dlog = static_cast<CNewToDoDialog*>(LWindow::CreateWindow(pane_ID, CMulberryApp::sApp));
 	dlog->SetAction(action);
-	dlog->SetToDo(vtodo);
+	dlog->SetComponent(vtodo, expanded);
 	dlog->Show();
 }

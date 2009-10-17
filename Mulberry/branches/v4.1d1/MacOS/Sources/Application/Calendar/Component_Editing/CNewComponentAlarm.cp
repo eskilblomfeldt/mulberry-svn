@@ -239,14 +239,14 @@ void CNewComponentAlarm::DoActionPopup(UInt32 value)
 	}
 }
 
-void CNewComponentAlarm::SetEvent(const iCal::CICalendarVEvent& vevent)
+void CNewComponentAlarm::SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Get the first embedded alarm and display that
 	const iCal::CICalendarVAlarm* alarm = dynamic_cast<const iCal::CICalendarVAlarm*>(vevent.GetFirstEmbeddedComponent(iCal::CICalendarComponent::eVALARM));
 	SetAlarm(alarm);
 }
 
-void CNewComponentAlarm::SetToDo(const iCal::CICalendarVToDo& vtodo)
+void CNewComponentAlarm::SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Get the first embedded alarm and display that
 	const iCal::CICalendarVAlarm* alarm = dynamic_cast<const iCal::CICalendarVAlarm*>(vtodo.GetFirstEmbeddedComponent(iCal::CICalendarComponent::eVALARM));

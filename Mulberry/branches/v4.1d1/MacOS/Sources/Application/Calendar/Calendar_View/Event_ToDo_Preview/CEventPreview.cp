@@ -211,10 +211,10 @@ void CEventPreview::Edit()
 	switch(mComp->GetOwner()->GetType())
 	{
 	case iCal::CICalendarComponent::eVEVENT:
-		CNewEventDialog::StartEdit(*mComp->GetMaster<iCal::CICalendarVEvent>());
+		CNewEventDialog::StartEdit(*mComp->GetMaster<iCal::CICalendarVEvent>(), mComp.get());
 		break;
 	case iCal::CICalendarComponent::eVTODO:
-		CNewToDoDialog::StartEdit(*mComp->GetMaster<iCal::CICalendarVToDo>());
+		CNewToDoDialog::StartEdit(*mComp->GetMaster<iCal::CICalendarVToDo>(), mComp.get());
 		break;
 	default:;
 	}

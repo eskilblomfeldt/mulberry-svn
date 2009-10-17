@@ -367,7 +367,7 @@ void CMonthTable::AddEvent(iCal::CICalendarComponentExpandedShared& vevent)
 
 			// Modify all columns - first is the real one, others are pseudo
 			for(TableIndexT col_ctr = col_start; col_ctr <= col_end; col_ctr++)
-				mEvents[row - 1][col_ctr - 1][slot] = make_pair(event, col_ctr == col_start);
+				mEvents[row - 1][col_ctr - 1][slot] = std::make_pair(event, col_ctr == col_start);
 			
 			// Now show it if it fits entirely within the cell
 			bool visible = (start_cellFrame.origin.y + start_cellFrame.size.height <= actual_cellFrame.origin.y + actual_cellFrame.size.height);
