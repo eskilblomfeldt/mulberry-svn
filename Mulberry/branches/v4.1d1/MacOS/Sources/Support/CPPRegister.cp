@@ -156,8 +156,8 @@
 #include "CNetworkResetError.h"
 #include "CNewACLDialog.h"
 #include "CNewAttendeeDialog.h"
-#include "CNewComponentTiming.h"
-#include "CNewComponentDescription.h"
+#include "CNewComponentDetails.h"
+#include "CNewComponentRepeat.h"
 #include "CNewComponentAlarm.h"
 #include "CNewComponentAttendees.h"
 #include "CNewEventDialog.h"
@@ -544,8 +544,8 @@ void RegisterClasses(void)
 	RegisterClass_(CNetworkResetError);
 	RegisterClass_(CNewACLDialog);
 	RegisterClass_(CNewAttendeeDialog);
-	RegisterClass_(CNewComponentTiming);
-	RegisterClass_(CNewComponentDescription);
+	RegisterClass_(CNewComponentDetails);
+	RegisterClass_(CNewComponentRepeat);
 	RegisterClass_(CNewComponentAlarm);
 	RegisterClass_(CNewComponentAttendees);
 	RegisterClass_(CNewEventDialog);
