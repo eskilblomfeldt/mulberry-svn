@@ -188,6 +188,7 @@ extern const char*	cRequestMKCALENDAR;
 
 	extern const char* cHeaderCalendarAccess;
 	extern const char* cHeaderCalendarSchedule;
+	extern const char* cHeaderCalendarAutoSchedule;
 
 }
 

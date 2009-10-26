@@ -46,6 +46,7 @@
 #include "CWebDAVMakeCollection.h"
 #include "CWebDAVMove.h"
 #include "CWebDAVOptions.h"
+#include "CWebDAVPrincipalMatch.h"
 #include "CWebDAVPropFind.h"
 #include "CWebDAVPut.h"
 #include "CWebDAVUnlock.h"
@@ -132,7 +133,22 @@ void CWebDAVVCardClient::Open()
 // Reset acount info
 void CWebDAVVCardClient::Reset()
 {
-	mBaseRURL = GetAdbkOwner()->GetAddressAccount()->GetBaseRURL();
+	_Reset(GetAdbkOwner()->GetAddressAccount()->GetBaseRURL());
+	
+	SetServerType(eDAVUnknown);
+
+	// Check for account details change
+	if (!CheckCurrentAuthorization())
+	{
+		delete mAuthorization;
+		mAuthorization = NULL;
+	}
+}
+
+// Reset account info
+void CWebDAVVCardClient::_Reset(const cdstring& baseRURL)
+{
+	mBaseRURL = baseRURL;
 	if (mBaseRURL.empty())
 		mBaseRURL = "/";
 	else if (mBaseRURL[mBaseRURL.length() - 1] != '/')
@@ -148,29 +164,40 @@ void CWebDAVVCardClient::Reset()
 	mBaseRURL.EncodeURL('/');
 	
 	// Get absolute URL
-	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) || (GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
+	if ((GetAccount()->GetTLSType() == CINETAccount::eSSL) ||
+		(GetAccount()->GetTLSType() == CINETAccount::eSSLv3))
 		mBaseURL = cHTTPSURLScheme;
 	else
 		mBaseURL = cHTTPURLScheme;
 	
 	mBaseURL += GetAccount()->GetServerIP();
+	mHostURL = mBaseURL;
 	mBaseURL += mBaseRURL;
-	
-	SetServerType(eDAVUnknown);
-
-	// Check for account details change
-	if (!CheckCurrentAuthorization())
-	{
-		delete mAuthorization;
-		mAuthorization = NULL;
-	}
 }
 
 #pragma mark ____________________________Login & Logout
 
 void CWebDAVVCardClient::Logon()
 {
-	// Local does nothing
+	// Do initialisation if not already done
+	if (!Initialise(mServerAddr, mBaseRURL))
+	{
+		// Break connection with server
+		CloseConnection();
+		return;
+	}
+	
+	// Recache user id & password after successful logon
+	if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+	{
+		CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+		
+		// Only bother if it contains something
+		if (!auth->GetPswd().empty())
+		{
+			CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+		}
+	}
 }
 
 void CWebDAVVCardClient::Logoff()
@@ -226,8 +253,11 @@ void CWebDAVVCardClient::_ListAddressBooks(CAddressBook* root)
 	StINETClientAction _action(this, "Status::IMSP::AddressBooks", "Error::IMSP::OSErrAddressBooks", "Error::IMSP::NoBadAddressBooks");
 
 	// Determine URL
-	cdstring rurl = GetRURL(root);
-
+	cdstring rurl = root->GetName();
+	rurl.EncodeURL('/');
+	if (root->IsProtocol())
+		rurl = mBaseRURL;
+	
 	// Create WebDAV propfind
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
@@ -267,36 +297,36 @@ void CWebDAVVCardClient::_FindAllAdbks(const cdstring& path)
 
 void CWebDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webdav::CWebDAVPropFindParser& parser)
 {
-	cdstring base_temp(mBaseURL);
-	base_temp.DecodeURL();
-	cdstring baser_temp(mBaseRURL);
-	baser_temp.DecodeURL();
+	cdstring nodeURL = root->GetName();
+	nodeURL.EncodeURL('/');
+	if (root->IsProtocol())
+		nodeURL = mBaseRURL;
+	cdstring nodeURLNoSlash = nodeURL;
+	if (nodeURLNoSlash.compare_end("/"))
+		nodeURLNoSlash.erase(nodeURLNoSlash.length() - 1);
+	else
+	{
+		nodeURLNoSlash = nodeURL;
+		nodeURL += "/";
+	}
 	
-	unsigned long url_strip_length = base_temp.length();
-	unsigned long rurl_strip_length = baser_temp.length();
-
-	cdstring strippedrooturl(GetRURL(root), rurl_strip_length, cdstring::npos);
-	strippedrooturl.DecodeURL();
-
-	cdstring strippedrooturl_noslash(strippedrooturl);
-	if (strippedrooturl_noslash.compare_end(cdstring('/')))
-		strippedrooturl_noslash.erase(strippedrooturl_noslash.length() - 1);
-
+	cdstring relBase = nodeURL;
+	cdstring relBaseNoSlash = nodeURLNoSlash;
+	
 	// Look at each propfind result and determine type of calendar
 	for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
 	{
 		// Get child element name (decode URL)
-		cdstring name((*iter)->GetResource());
-		name.DecodeURL();
-	
-		// Strip base prefix off
-		cdstring rpath;
-		if (name.compare_start(baser_temp))
-			rpath.assign(name, rurl_strip_length, cdstring::npos);
-		else if (name.compare_start(base_temp))
-			rpath.assign(name, url_strip_length, cdstring::npos);
-		if (rpath.empty() || (rpath == strippedrooturl) || (rpath == strippedrooturl_noslash))
+		cdstring rpath((*iter)->GetResource());
+		
+		// Strip of path prefix
+		if (rpath.compare_start(mHostURL))
+			rpath.erase(0, mHostURL.length());
+		
+		// Ignore root
+		if ((rpath == relBase) or (rpath == relBaseNoSlash))
 			continue;
+		rpath.DecodeURL();
 
 		// Strip off trailing .vcf
 		if (rpath.compare_end(".vcf"))
@@ -312,10 +342,10 @@ void CWebDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webdav
 			const xmllib::XMLNode* node = (*(*iter)->GetNodeProperties().find(http::webdav::cProperty_resourcetype.FullName())).second;
 			
 			// Look at each child element
-			for(xmllib::XMLNodeList::const_iterator iter = node->Children().begin(); iter != node->Children().end(); iter++)
+			for(xmllib::XMLNodeList::const_iterator iter2 = node->Children().begin(); iter2 != node->Children().end(); iter2++)
 			{
 				// Look for collection
-				if ((*iter)->CompareFullName(http::webdav::cProperty_collection))
+				if ((*iter2)->CompareFullName(http::webdav::cProperty_collection))
 					is_dir = true;
 			}
 		}
@@ -349,7 +379,8 @@ void CWebDAVVCardClient::_CreateAdbk(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::CreateAddressBook", "Error::IMSP::OSErrCreateAddressBook", "Error::IMSP::NoBadCreateAddressBook", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Use MKCOL for directories
 	if (adbk->IsDirectory())
@@ -404,7 +435,8 @@ void CWebDAVVCardClient::_DeleteAdbk(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::DeleteAddressBook", "Error::IMSP::OSErrDeleteAddressBook", "Error::IMSP::NoBadDeleteAddressBook", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV DELETE
 	std::auto_ptr<http::webdav::CWebDAVDelete> request(new http::webdav::CWebDAVDelete(this, rurl));
@@ -433,7 +465,8 @@ void CWebDAVVCardClient::_RenameAdbk(const CAddressBook* old_adbk, const cdstrin
 	StINETClientAction _action(this, "Status::IMSP::RenameAddressBook", "Error::IMSP::OSErrRenameAddressBook", "Error::IMSP::NoBadRenameAddressBook", old_adbk->GetName());
 
 	// Determine URLs (new one must be absolute URL)
-	cdstring rurl_old = GetRURL(old_adbk);
+	cdstring rurl_old = old_adbk->GetName();
+	rurl_old.EncodeURL('/');
 	cdstring absurl_new = GetRURL(new_adbk, old_adbk->IsDirectory(), true);
 
 	// Create WebDAV MOVE (overwrite not allowed)
@@ -462,7 +495,8 @@ bool CWebDAVVCardClient::_TestAdbk(const CAddressBook* adbk)
 	// Do PROPFIND Depth 0 on the uri - if we get get multistatus response then the item is OK
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV propfind
 	xmllib::XMLNameList props;
@@ -510,7 +544,8 @@ void CWebDAVVCardClient::_LockAdbk(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::Calendar::NoBadCheck", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Lock if not already locked
 	LockToken(rurl, 300, false);
@@ -530,7 +565,8 @@ void CWebDAVVCardClient::_UnlockAdbk(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::Calendar::NoBadCheck", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// See if already locked
 	UnlockToken(rurl);
@@ -545,7 +581,8 @@ bool CWebDAVVCardClient::_CheckCalendar(const CCalendarStoreNode& node, iCal::CI
 	bool result = false;
 
 	// Determine URL
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = adbk.GetName();
+	rurl.EncodeURL('/');
 
 	// Do LOCK request (5 minute timeout)
 	cdstring lock_token = LockResource(rurl, 300);
@@ -580,7 +617,8 @@ bool CWebDAVVCardClient::_AdbkChanged(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current ETag
@@ -596,7 +634,8 @@ void CWebDAVVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current ETag
@@ -625,7 +664,8 @@ void CWebDAVVCardClient::_SizeAdbk(CAddressBook* adbk)
 void CWebDAVVCardClient::SizeAddressBook_DAV(CAddressBook* adbk)
 {
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	std::auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
@@ -671,7 +711,8 @@ void CWebDAVVCardClient::SizeAddressBook_DAV(CAddressBook* adbk)
 void CWebDAVVCardClient::SizeAddressBook_HTTP(CAddressBook* adbk)
 {
 	// Create WebDAV HEAD
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	std::auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl, true));
 	http::CHTTPOutputDataString dout;
 	request->SetData(&dout);
@@ -701,7 +742,8 @@ void CWebDAVVCardClient::_ReadFullAddressBook(CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::SearchAddress", "Error::IMSP::OSErrSearchAddress", "Error::IMSP::NoBadSearchAddress", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV GET
 	std::auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl));
@@ -772,7 +814,8 @@ void CWebDAVVCardClient::_ReadFullAddressBook(CAddressBook* adbk)
 void CWebDAVVCardClient::_WriteFullAddressBook(CAddressBook* adbk)
 {
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Need to have capability cached before we can decide appropriate method to use
 	if (!Initialised())
@@ -798,7 +841,8 @@ void CWebDAVVCardClient::WriteFullAddressBook_Put(CAddressBook* adbk, const cdst
 	data.steal(os.str());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV PUT
 	std::auto_ptr<http::webdav::CWebDAVPut> request(new http::webdav::CWebDAVPut(this, rurl, lock_token));
@@ -854,7 +898,8 @@ void CWebDAVVCardClient::WriteFullAddressBook_Lock(CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::StoreAddress", "Error::IMSP::OSErrStoreAddress", "Error::IMSP::NoBadStoreAddress", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Do LOCK request (5 minute timeout)
 	cdstring lock_token = LockResource(rurl, 300);
@@ -974,7 +1019,8 @@ void CWebDAVVCardClient::WriteFullACL(CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::SetACLAddressBook", "Error::IMSP::OSErrSetACLAddressBook", "Error::IMSP::NoBadSetACLAddressBook", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV ACL
 	std::auto_ptr<http::webdav::CWebDAVACL> request(new http::webdav::CWebDAVACL(this, rurl, adbk->GetACLs()));
@@ -1002,8 +1048,9 @@ void CWebDAVVCardClient::_GetACL(CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::GetACLAddressBook", "Error::IMSP::OSErrGetACLAddressBook", "Error::IMSP::NoBadGetACLAddressBook", adbk->GetName());
 
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
-	CURL base(GetRURL(adbk, true), true);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
+	CURL base(mHostURL + rurl, true);
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_supported_privilege_set);
 	props.push_back(http::webdav::cProperty_acl);
@@ -1053,8 +1100,9 @@ void CWebDAVVCardClient::_MyRights(CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::MyRightsAddressBook", "Error::IMSP::OSErrMyRightsAddressBook", "Error::IMSP::NoBadMyRightsAddressBook", adbk->GetName());
 
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
-	CURL base(GetRURL(adbk, true), true);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
+	CURL base(mHostURL + rurl, true);
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_supported_privilege_set);
 	props.push_back(http::webdav::cProperty_current_user_privilege_set);
@@ -1156,6 +1204,186 @@ cdstring CWebDAVVCardClient::GetProperty(const cdstring& rurl, const cdstring& l
 	}
 
 	return result;
+}
+
+cdstrvect CWebDAVVCardClient::GetHrefListProperty(const cdstring& rurl, const xmllib::XMLName& propname)
+{
+	cdstrvect results;
+	
+	// Create WebDAV propfind
+	xmllib::XMLNameList props;
+	props.push_back(propname);
+	std::auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+	
+	// Process it
+	RunSession(request.get());
+	
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+		
+		// Look at each propfind result and extract any Hrefs
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+			
+			// Must match rurl
+			if (name.compare_end(decoded_rurl))
+			{
+				if ((*iter1)->GetNodeProperties().count(propname.FullName()) != 0)
+				{
+					const xmllib::XMLNode* hrefs = (*(*iter1)->GetNodeProperties().find(propname.FullName())).second;
+					for(xmllib::XMLNodeList::const_iterator iter2 = hrefs->Children().begin(); iter2 !=  hrefs->Children().end(); iter2++)
+					{
+						// Make sure we got an Href
+						if ((*iter2)->CompareFullName(http::webdav::cElement_href))
+							results.push_back((*iter2)->Data());
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return results;
+	}
+	
+	return results;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVVCardClient::GetProperties(const cdstring& rurl, const xmllib::XMLNameList& props, cdstrmap& results)
+{
+	// Create WebDAV propfind
+	std::auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+	
+	// Process it
+	RunSession(request.get());
+	
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+		
+		// Look at each principal-match result and return first one that is appropriate
+		cdstring decoded_rurl = rurl;
+		decoded_rurl.DecodeURL();
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+			
+			for(xmllib::XMLNameList::const_iterator iter2 = props.begin(); iter2 != props.end(); iter2++)
+			{
+				if ((*iter1)->GetNodeProperties().count((*iter2).FullName()) != 0)
+				{
+					const xmllib::XMLNode* hrefs = (*(*iter1)->GetNodeProperties().find((*iter2).FullName())).second;
+					if (hrefs->Children().size() == 1)
+					{
+						// Make sure we got an Href
+						if ((*hrefs->Children().begin())->CompareFullName(http::webdav::cElement_href))
+							results.insert(cdstrmap::value_type((*iter2).FullName(), (*hrefs->Children().begin())->Data()));
+					}
+				}
+			}
+			
+			// We'll take the first one, whatever that is
+			break;
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return false;
+	}
+	
+	return true;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVVCardClient::GetSelfHrefs(const cdstring& rurl, cdstrvect& results)
+{
+	xmllib::XMLNameList props;
+	props.push_back(http::webdav::cProperty_principal_URL);
+	
+	// Create WebDAV principal-match
+	std::auto_ptr<http::webdav::CWebDAVPrincipalMatch> request(new http::webdav::CWebDAVPrincipalMatch(this, rurl, props));
+	http::CHTTPOutputDataString dout;
+	request->SetOutput(&dout);
+	
+	// Process it
+	RunSession(request.get());
+	
+	// If its a 207 we want to parse the XML
+	if (request->GetStatusCode() == http::webdav::eStatus_MultiStatus)
+	{
+		http::webdav::CWebDAVPropFindParser parser;
+		parser.ParseData(dout.GetData());
+		
+		// Look at each principal-match result and return first one that is appropriate
+		for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter1 = parser.Results().begin(); iter1 != parser.Results().end(); iter1++)
+		{
+			// Get child element name (decode URL)
+			cdstring name((*iter1)->GetResource());
+			name.DecodeURL();
+			
+			results.push_back(name);
+		}
+	}
+	else
+	{
+		HandleHTTPError(request.get());
+		return false;
+	}
+	
+	return true;
+}
+
+// Do principal-match report with self on the passed in url
+bool CWebDAVVCardClient::GetSelfPrincipalResource(const cdstring& rurl, cdstring& result)
+{
+	// Start UI action
+	StINETClientAction _action(this, "Status::Calendar::Listing", "Error::Calendar::OSErrListCalendars", "Error::Calendar::NoBadListCalendars");
+	
+	cdstrvect hrefs = GetHrefListProperty(rurl, http::webdav::cProperty_current_user_principal);
+	if (not hrefs.empty())
+	{
+		result = hrefs.front();
+		return true;
+	}
+	
+	hrefs = GetHrefListProperty(rurl, http::webdav::cProperty_principal_collection_set);
+	if (hrefs.empty())
+		return false;
+	
+	// For each principal collection find one that matches self
+	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
+	{
+		cdstrvect results;
+		if (GetSelfHrefs(*iter, results))
+		{
+			if (results.size() > 0)
+			{
+				result = results.front();
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
 cdstring CWebDAVVCardClient::LockResource(const cdstring& rurl, unsigned long timeout, bool lock_null)
@@ -1276,6 +1504,29 @@ void CWebDAVVCardClient::CloseSession()
 
 void CWebDAVVCardClient::RunSession(CHTTPRequestResponse* request)
 {
+	// Do initialisation if not already done
+	if (!Initialised())
+	{
+		if (!Initialise(mServerAddr, mBaseRURL))
+		{
+			// Break connection with server
+			CloseConnection();
+			return;
+		}
+		
+		// Recache user id & password after successful logon
+		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+		{
+			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+			
+			// Only bother if it contains something
+			if (!auth->GetPswd().empty())
+			{
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
+		}
+	}
+	
 	// Server, base uri may change due to redirection
 	StValueChanger<cdstring> _preserve1(mServerAddr, mServerAddr);
 	StValueChanger<cdstring> _preserve2(mBaseRURL, mBaseRURL);
@@ -1337,29 +1588,6 @@ void CWebDAVVCardClient::RunSession(CHTTPRequestResponse* request)
 
 void CWebDAVVCardClient::DoSession(CHTTPRequestResponse* request)
 {
-	// Do initialisation if not already done
-	if (!Initialised())
-	{
-		if (!Initialise(mServerAddr, mBaseRURL))
-		{
-			// Break connection with server
-			CloseConnection();
-			return;
-		}
-		
-		// Recache user id & password after successful logon
-		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
-		{
-			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
-
-			// Only bother if it contains something
-			if (!auth->GetPswd().empty())
-			{
-				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
-			}
-		}
-	}
-	
 	// Do the request if present
 	if (request != NULL)
 	{
@@ -1532,7 +1760,7 @@ void CWebDAVVCardClient::DoRequest(CHTTPRequestResponse* request)
 	WriteRequestData(request);
 
 	// Flush all request data
-	*mStream << flush;
+	*mStream << std::flush;
 	
 	// Blank line in log between 
 	if (mAllowLog)
@@ -1687,6 +1915,8 @@ cdstring CWebDAVVCardClient::GetRURL(const cdstring& name, bool directory, bool 
 {
 	// Determine URL
 	cdstring rurl = (abs ? mBaseURL : mBaseRURL);
+	if (name[0] == '/')
+		rurl = "";
 	cdstring temp(name);
 	temp.EncodeURL('/');
 	rurl += temp;

@@ -121,6 +121,7 @@ const char*	cRequestMKCALENDAR = "MKCALENDAR";
 
 	const char* cHeaderCalendarAccess = "calendar-access";
 	const char* cHeaderCalendarSchedule = "calendar-schedule";
+	const char* cHeaderCalendarAutoSchedule = "calendar-auto-schedule";
 }
 
 namespace carddav 

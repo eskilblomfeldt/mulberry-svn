@@ -90,7 +90,10 @@ private:
 	bool TestSelectionAdbk(TableIndexT row);						// Test for selected adbk
 	bool TestSelectionAdbkDisconnected(TableIndexT row);			// Test for selected adbk
 	bool TestSelectionAdbkClearDisconnected(TableIndexT row);		// Test for selected adbk
-
+	
+	// Hierarchy related
+	bool TestSelectionHierarchy(TableIndexT row);					// Test for selected hierarchies only
+	
 protected:
 
 	virtual void	ClickSelf(const SMouseDownEvent &inMouseDown);	// Click
@@ -149,6 +152,10 @@ protected:
 
 	void	OnLogin();
 
+	void	OnNewHierarchy();							// Create new hierarchy
+	void	OnRenameHierarchy();						// Rename hierarchy
+	void	OnDeleteHierarchy();						// Delete hierarchy
+	
 	void	OnRefreshAddressBook();
 
 	void	OnSynchroniseAddressBook();

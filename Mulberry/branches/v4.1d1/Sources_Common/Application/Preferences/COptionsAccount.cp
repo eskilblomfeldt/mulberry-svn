@@ -71,7 +71,10 @@ cdstring COptionsAccount::GetInfo(void) const
 {
 	cdstring result = CINETAccount::GetInfo();
 	result += cSpace;
-	result += mBaseRURL;
+	
+	cdstring temp = mBaseRURL;
+	temp.quote();
+	result += temp;
 	return result;
 }
 

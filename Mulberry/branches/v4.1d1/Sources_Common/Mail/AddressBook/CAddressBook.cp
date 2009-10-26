@@ -57,7 +57,6 @@ CAddressBook::CAddressBook()
 	SetFlags(eIsProtocol, true);
 	SetFlags(eIsDirectory, true);
 	SetFlags(eHasExpanded, true);
-	mShortName = mName.c_str();
 	mSize = ULONG_MAX;
 	mLastSync = 0;
 	mACLs = NULL;
@@ -75,7 +74,7 @@ CAddressBook::CAddressBook(CAdbkProtocol* proto)
 	SetFlags(eIsDirectory, true);
 	SetFlags(eHasExpanded, true);
 	mName = proto->GetAccountName();
-	mShortName = mName.c_str();
+	mShortName = mName;
 	mSize = ULONG_MAX;
 	mLastSync = 0;
 	mACLs = NULL;
@@ -149,8 +148,12 @@ cdstring CAddressBook::GetURL(bool full) const
 	cdstring ruri = GetName();
 	ruri.EncodeURL(GetProtocol()->GetDirDelim());
 
-	cdstring result = mProtocol->GetURL(full);
-	result += "/";
+	cdstring result;
+	if (not IsDisplayHierarchy())
+	{
+		result = mProtocol->GetURL(full);
+		result += "/";
+	}
 	result += ruri;
 	return result;
 }
@@ -249,28 +252,32 @@ void CAddressBook::SortChildren()
 
 bool CAddressBook::sort_by_name(const CAddressBook* s1, const CAddressBook* s2)
 {
-	return ::strcmpnocase(s1->GetDisplayShortName(), s2->GetDisplayShortName()) < 0;
+	// Put display hierarchies at the end
+	if (s1->IsDisplayHierarchy() ^ s2->IsDisplayHierarchy())
+	{
+		return s2->IsDisplayHierarchy();
+	}
+	else
+	{
+		return ::strcmpnocase(s1->GetDisplayShortName(), s2->GetDisplayShortName()) < 0;
+	}
 }
 
-CAddressBook* CAddressBook::FindNode(cdstrvect& hierarchy, bool discover) const
+CAddressBook* CAddressBook::FindNode(const cdstring& path, bool discover) const
 {
 	// Find top-level item matching last item in hierarchy
 	if (mChildren)
 	{
 		for(CAddressBookList::iterator iter = mChildren->begin(); iter != mChildren->end(); iter++)
 		{
-			if (hierarchy.back() == (*iter)->GetDisplayShortName())
+			if (path == (*iter)->GetName())
+				return *iter;
+			if (path.compare_start((*iter)->GetName()))
 			{
-				hierarchy.pop_back();
-				if (hierarchy.empty())
-					return *iter;
-				else
-				{
-					// May need discovery
-					if (discover && (*iter)->IsDirectory() && !(*iter)->HasExpanded())
-						GetProtocol()->LoadSubList(*iter, false);					
-					return (*iter)->FindNode(hierarchy, discover);
-				}
+				// May need discovery
+				if (discover && (*iter)->IsDirectory() && !(*iter)->HasExpanded())
+					GetProtocol()->LoadSubList(*iter, false);					
+				return (*iter)->FindNode(path, discover);
 			}
 		}
 	}
@@ -386,9 +393,22 @@ void CAddressBook::GetInsertRows(uint32_t& parent_row, uint32_t& sibling_row) co
 void CAddressBook::SetShortName()
 {
 	// Determine last directory break
-	const char* p = NULL;
-	if ((GetProtocol()->GetDirDelim() != 0) && ((p = ::strrchr(mName.c_str(), mProtocol->GetDirDelim())) != NULL))
-		mShortName = ++p;
+	if (GetProtocol()->GetDirDelim() != 0)
+	{
+		cdstrvect splits;
+		mName.split(cdstring(GetProtocol()->GetDirDelim()), splits);
+		if (splits.size() > 1)
+		{
+			if (splits.back().empty())
+				splits.pop_back();
+			mShortName = splits.back();
+		}
+		else
+		{
+			mShortName = splits.front();
+		}
+		
+	}
 	else
 		mShortName = mName.c_str();
 }
@@ -1643,8 +1663,11 @@ void CAddressBook::WriteXML(xmllib::XMLDocument* doc, xmllib::XMLNode* parent, b
 			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_has_expanded, HasExpanded());
 		}
 
+		if (IsDisplayHierarchy())		
+			xmllib::XMLObject::WriteAttribute(xmlnode, cXMLAttribute_displayhierachy, IsDisplayHierarchy());
+
 		// Set name child node
-		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, cdstring(GetShortName()));
+		xmllib::XMLObject::WriteValue(doc, xmlnode, cXMLElement_name, GetName());
 		
 		// Set display name child node
 		if (!mDisplayName.empty())
@@ -1697,21 +1720,14 @@ void CAddressBook::ReadXML(const xmllib::XMLNode* xmlnode, bool is_root)
 				SetHasExpanded(temp);
 		}
 
+		if (xmllib::XMLObject::ReadAttribute(xmlnode, cXMLAttribute_displayhierachy, temp))
+			SetFlags(eIsDisplayHierarchy, temp);
+
 		// Must have a name
 		cdstring name;
 		if (!xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_name, name))
 			return;
-
-		// Get full path of name (do not include root store node name in path)
-		cdstring new_name;
-		if (!GetParent()->IsProtocol())
-		{
-			new_name = GetParent()->GetName();
-			if (GetProtocol()->GetDirDelim() != 0)
-				new_name += GetProtocol()->GetDirDelim();
-		}
-		new_name += name;
-		SetName(new_name);
+		SetName(name);
 
 		// Get display name details
 		xmllib::XMLObject::ReadValue(xmlnode, cXMLElement_displayname, mDisplayName);

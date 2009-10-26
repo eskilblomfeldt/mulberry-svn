@@ -129,7 +129,7 @@ bool CWebDAVSession::Initialise(const cdstring& host, const cdstring& base_uri)
 						mVersion |= eDAVACL;
 					else if (temp == caldav::cHeaderCalendarAccess)
 						mVersion |= eCALDAVaccess;
-					else if (temp == caldav::cHeaderCalendarSchedule)
+					else if ((temp == caldav::cHeaderCalendarSchedule) or (temp == caldav::cHeaderCalendarAutoSchedule))
 						mVersion |= eCALDAVsched;
 					else if (temp == slide::cHeaderCyrusoftInheritable)
 						mVersion |= eCyrusoftInheritable;

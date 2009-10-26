@@ -154,207 +154,228 @@ Boolean CAdbkManagerTable::HandleKeyPress(const EventRecord &inKeyEvent)
 Boolean CAdbkManagerTable::ObeyCommand(CommandT inCommand,void *ioParam)
 {
 	bool cmdHandled = true;
-
+	
 	switch (inCommand)
 	{
-	case cmd_Properties:
-	case cmd_ToolbarDetailsBtn:
-		OnAddressBookProperties();
-		break;
-
-	case cmd_NewAddressBook:
-	case cmd_ToolbarAdbkMgrNewBtn:
-		OnNewAddressBook();
-		break;
-
-	case cmd_OpenAddressBook:
-	case cmd_ToolbarAdbkMgrOpenBtn:
-		OnOpenAddressBook();
-		break;
-
-	case cmd_RenameAddressBook:
-		OnRenameAddressBook();
-		break;
-
-	case cmd_DeleteAddressBook:
-	case cmd_ToolbarAdbkMgrDeleteBtn:
-		OnDeleteAddressBook();
-		break;
-
-	case cmd_ToolbarServerLoginBtn:
-		OnLogin();
-		break;
-
-	case cmd_RefreshAddressBook:
-		OnRefreshAddressBook();
-		break;
-
-	case cmd_SynchroniseAddressBook:
-		OnSynchroniseAddressBook();
-		break;
-
-	case cmd_ClearDisconnectAddressBook:
-		OnClearDisconnectAddressBook();
-		break;
-
-	case cmd_ToolbarAdbkMgrSearchBtn:
-		OnSearchAddressBook();
-		break;
-
-	default:
-		cmdHandled = CHierarchyTableDrag::ObeyCommand(inCommand, ioParam);
-		break;
+		case cmd_Properties:
+		case cmd_ToolbarDetailsBtn:
+			OnAddressBookProperties();
+			break;
+			
+		case cmd_NewAddressBook:
+		case cmd_ToolbarAdbkMgrNewBtn:
+			OnNewAddressBook();
+			break;
+			
+		case cmd_OpenAddressBook:
+		case cmd_ToolbarAdbkMgrOpenBtn:
+			OnOpenAddressBook();
+			break;
+			
+		case cmd_RenameAddressBook:
+			OnRenameAddressBook();
+			break;
+			
+		case cmd_DeleteAddressBook:
+		case cmd_ToolbarAdbkMgrDeleteBtn:
+			OnDeleteAddressBook();
+			break;
+			
+		case cmd_ToolbarServerLoginBtn:
+			OnLogin();
+			break;
+			
+		case cmd_NewHierarchy:
+			OnNewHierarchy();
+			break;
+			
+		case cmd_EditHierarchy:
+			OnRenameHierarchy();
+			break;
+			
+		case cmd_DeleteHierarchy:
+			OnDeleteHierarchy();
+			break;
+		case cmd_RefreshAddressBook:
+			OnRefreshAddressBook();
+			break;
+			
+		case cmd_SynchroniseAddressBook:
+			OnSynchroniseAddressBook();
+			break;
+			
+		case cmd_ClearDisconnectAddressBook:
+			OnClearDisconnectAddressBook();
+			break;
+			
+		case cmd_ToolbarAdbkMgrSearchBtn:
+			OnSearchAddressBook();
+			break;
+			
+		default:
+			cmdHandled = CHierarchyTableDrag::ObeyCommand(inCommand, ioParam);
+			break;
 	}
-
+	
 	return cmdHandled;
 }
 
 //	Pass back status of a (menu) command
 void CAdbkManagerTable::FindCommandStatus(
-	CommandT	inCommand,
-	Boolean		&outEnabled,
-	Boolean		&outUsesMark,
-	UInt16		&outMark,
-	Str255		outName)
+										  CommandT	inCommand,
+										  Boolean		&outEnabled,
+										  Boolean		&outUsesMark,
+										  UInt16		&outMark,
+										  Str255		outName)
 {
 	outUsesMark = false;
-
+	
 	switch (inCommand)
 	{
-	// These ones must have a selection
-	case cmd_Properties:
-	case cmd_ToolbarDetailsBtn:
-	case cmd_RenameAddressBook:
-	case cmd_DeleteAddressBook:
-	case cmd_ToolbarAdbkMgrDeleteBtn:
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbk);
-		break;
-
-	case cmd_SynchroniseAddressBook:
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbkDisconnected);
-		break;
-
-	case cmd_ClearDisconnectAddressBook:
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbkClearDisconnected);
-		break;
-
-	// These can only have logged on protocol selection
-	case cmd_NewAddressBook:
-	case cmd_ToolbarAdbkMgrNewBtn:
-		outEnabled = true;
-		break;
-
-	case cmd_OpenAddressBook:
-	case cmd_ToolbarAdbkMgrOpenBtn:
-		// Remap command id for tests
-		if (inCommand == cmd_ToolbarAdbkMgrNewBtn)
-			inCommand = cmd_NewAddressBook;
-
-		if (IsSingleSelection())
-		{
-			STableCell aCell(0,0);
-			GetNextSelectedCell(aCell);
-			CAdbkProtocol* proto = GetCellAdbkProtocol(aCell.row);
-			outEnabled = ((proto == NULL) || ((inCommand == cmd_NewAddressBook) ? proto->IsLoggedOn() : false));
-		}
-		else if (!IsSelectionValid())
-		{
-			outEnabled = (inCommand == cmd_NewAddressBook) ? false :
-							!CAdminLock::sAdminLock.mNoLocalAdbks;
-		}
-		else
+			// These ones must have a selection
+		case cmd_Properties:
+		case cmd_ToolbarDetailsBtn:
+		case cmd_RenameAddressBook:
+		case cmd_DeleteAddressBook:
+		case cmd_ToolbarAdbkMgrDeleteBtn:
 			outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbk);
-		break;
-
-	// These can only have logged on protocol selection
-	case cmd_ToolbarServerLoginBtn:
-		// Logon button must have single server selected
-		if (IsSingleSelection() && TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionServer))
-		{
-			TableIndexT row = GetFirstSelectedRow();
-			CAddressBook* adbk = GetCellNode(row);
-
-			// Policy:
-			//
-			// 1. 	Local protocols are always logged in - login button is disabled
-			// 2.	Protocols that cannot disconnect
-			// 2.1	maintain their own logged in state when global connect state is on,
-			// 2.2	else they are always logged out when global state is disconnected and the login button is disabled
-			// 3.	Protocols that can disconnect
-			// 3.1	when global connect state is on, they maintain their own logged in state based on disconnected state
-			// 3.3	else they are always logged in and the login button is disabled
+			break;
 			
-			// 1. (as above)
-			if (adbk->GetProtocol()->IsOffline() && !adbk->GetProtocol()->IsDisconnected())
+		case cmd_SynchroniseAddressBook:
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbkDisconnected);
+			break;
+			
+		case cmd_ClearDisconnectAddressBook:
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbkClearDisconnected);
+			break;
+			
+			// These can only have logged on protocol selection
+		case cmd_NewAddressBook:
+		case cmd_ToolbarAdbkMgrNewBtn:
+			outEnabled = true;
+			break;
+			
+		case cmd_OpenAddressBook:
+		case cmd_ToolbarAdbkMgrOpenBtn:
+			// Remap command id for tests
+			if (inCommand == cmd_ToolbarAdbkMgrNewBtn)
+				inCommand = cmd_NewAddressBook;
+			
+			if (IsSingleSelection())
 			{
-				// Local items are always logged in (connected) so disable the button
-				outEnabled = false;
-				outUsesMark = true;
-				::GetIndString(outName, STRx_Standards, str_Logoff);
+				STableCell aCell(0,0);
+				GetNextSelectedCell(aCell);
+				CAdbkProtocol* proto = GetCellAdbkProtocol(aCell.row);
+				outEnabled = ((proto == NULL) || ((inCommand == cmd_NewAddressBook) ? proto->IsLoggedOn() : false));
 			}
-
-			// 2. (as above)
-			else if (!adbk->GetProtocol()->CanDisconnect())
+			else if (!IsSelectionValid())
 			{
-				// 2.1 (as above)
-				if (CConnectionManager::sConnectionManager.IsConnected())
+				outEnabled = (inCommand == cmd_NewAddressBook) ? false :
+				!CAdminLock::sAdminLock.mNoLocalAdbks;
+			}
+			else
+				outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbk);
+			break;
+			
+			// These can only have logged on protocol selection
+		case cmd_ToolbarServerLoginBtn:
+			// Logon button must have single server selected
+			if (IsSingleSelection() && TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionServer))
+			{
+				TableIndexT row = GetFirstSelectedRow();
+				CAddressBook* adbk = GetCellNode(row);
+				
+				// Policy:
+				//
+				// 1. 	Local protocols are always logged in - login button is disabled
+				// 2.	Protocols that cannot disconnect
+				// 2.1	maintain their own logged in state when global connect state is on,
+				// 2.2	else they are always logged out when global state is disconnected and the login button is disabled
+				// 3.	Protocols that can disconnect
+				// 3.1	when global connect state is on, they maintain their own logged in state based on disconnected state
+				// 3.3	else they are always logged in and the login button is disabled
+				
+				// 1. (as above)
+				if (adbk->GetProtocol()->IsOffline() && !adbk->GetProtocol()->IsDisconnected())
 				{
-					outEnabled = true;
-					outUsesMark = true;
-					outMark = adbk->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
-					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
-				}
-				// 2.2 (as above)
-				else
-				{
+					// Local items are always logged in (connected) so disable the button
 					outEnabled = false;
 					outUsesMark = true;
 					::GetIndString(outName, STRx_Standards, str_Logoff);
 				}
+				
+				// 2. (as above)
+				else if (!adbk->GetProtocol()->CanDisconnect())
+				{
+					// 2.1 (as above)
+					if (CConnectionManager::sConnectionManager.IsConnected())
+					{
+						outEnabled = true;
+						outUsesMark = true;
+						outMark = adbk->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
+						::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
+					}
+					// 2.2 (as above)
+					else
+					{
+						outEnabled = false;
+						outUsesMark = true;
+						::GetIndString(outName, STRx_Standards, str_Logoff);
+					}
+				}
+				
+				// 3. (as above)
+				else
+				{
+					// 3.1 (as above)
+					if (CConnectionManager::sConnectionManager.IsConnected())
+					{
+						outEnabled = true;
+						outUsesMark = true;
+						outMark = !adbk->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
+						::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
+					}
+					// 3.2 (as above)
+					else
+					{
+						outEnabled = false;
+						outUsesMark = true;
+						::GetIndString(outName, STRx_Standards, str_Logoff);
+					}
+				}
 			}
-			
-			// 3. (as above)
 			else
 			{
-				// 3.1 (as above)
-				if (CConnectionManager::sConnectionManager.IsConnected())
-				{
-					outEnabled = true;
-					outUsesMark = true;
-					outMark = !adbk->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
-					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
-				}
-				// 3.2 (as above)
-				else
-				{
-					outEnabled = false;
-					outUsesMark = true;
-					::GetIndString(outName, STRx_Standards, str_Logoff);
-				}
+				outEnabled = false;
+				outUsesMark = false;
+				::GetIndString(outName, STRx_Standards, str_Logon);
 			}
-		}
-		else
-		{
-			outEnabled = false;
-			outUsesMark = false;
-			::GetIndString(outName, STRx_Standards, str_Logon);
-		}
-		break;
-
-	// These can only have logged off protocol selection
-	case cmd_RefreshAddressBook:
-		// Only if single selection;
-		outEnabled = IsSingleSelection();
-		break;
-
-	// Always available
-	case cmd_ToolbarAdbkMgrSearchBtn:
-		outEnabled = true;
-		break;
-
-	default:
-		CHierarchyTableDrag::FindCommandStatus(inCommand, outEnabled, outUsesMark, outMark, outName);
-		break;
+			break;
+			
+		case cmd_Hierarchy:
+		case cmd_NewHierarchy:
+			// Always able to do this, even if logged off or no selection
+			outEnabled = true;
+			break;
+			
+		case cmd_EditHierarchy:
+		case cmd_DeleteHierarchy:
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionHierarchy);
+			break;
+			// These can only have logged off protocol selection
+		case cmd_RefreshAddressBook:
+			// Only if single selection;
+			outEnabled = IsSingleSelection();
+			break;
+			
+			// Always available
+		case cmd_ToolbarAdbkMgrSearchBtn:
+			outEnabled = true;
+			break;
+			
+		default:
+			CHierarchyTableDrag::FindCommandStatus(inCommand, outEnabled, outUsesMark, outMark, outName);
+			break;
 	}
 }
 

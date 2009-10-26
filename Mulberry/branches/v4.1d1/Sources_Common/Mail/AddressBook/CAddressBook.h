@@ -71,7 +71,8 @@ public:
 		eAdd =						1L << 9,
 		eAutoSync =					1L << 10,
 		eIsCached =					1L << 11,
-		eSynchronising =			1L << 12		// Addressbook is being synchronised
+		eSynchronising =			1L << 12,		// Addressbook is being synchronised
+		eIsDisplayHierarchy =       1L << 13
 		
 	};
 
@@ -113,10 +114,10 @@ public:
 	void SetName(const cdstring& name);							// Set name
 	const cdstring&	GetName() const								// Get full name
 		{ return mName; }
-	const char*	GetShortName() const							// Get short name
+	const cdstring&	GetShortName() const							// Get short name
 		{ return mShortName; }
-	const char*	GetDisplayShortName() const						// Get display short name
-		{ return mDisplayName.empty() ? mShortName : mDisplayName.c_str() ; }
+	const cdstring&	GetDisplayShortName() const						// Get display short name
+		{ return mDisplayName.empty() ? mShortName : mDisplayName; }
 	void	NewName(const cdstring& name);						// Tell this and children to adjust names
 	
 	void SetDisplayName(const cdstring& name)					// Set name
@@ -139,6 +140,11 @@ public:
 		return mFlags.IsSet(eIsProtocol);
 	}
 
+	bool IsDisplayHierarchy() const
+	{
+		return mFlags.IsSet(eIsDisplayHierarchy);
+	}
+	
 	bool IsDirectory() const
 	{
 		return mFlags.IsSet(eIsDirectory);
@@ -199,10 +205,10 @@ public:
 	bool IsCached() const;
 	void TestDisconnectCache();
 
-	CAddressBook* FindNode(cdstrvect& hierarchy, bool discover = false) const;
-	CAddressBook* FindNodeOrCreate(cdstrvect& hierarchy) const
+	CAddressBook* FindNode(const cdstring& path, bool discover = false) const;
+	CAddressBook* FindNodeOrCreate(const cdstring& path) const
 	{
-		return FindNode(hierarchy, true);
+		return FindNode(path, true);
 	}
 
 	void RemoveFromParent();
@@ -319,7 +325,7 @@ protected:
 	CAddressBookList*	mChildren;
 	SBitFlags			mFlags;						// Flags state
 	cdstring			mName;						// Full path name of item
-	const char*			mShortName;					// Pointer to the last part of the path name
+	cdstring			mShortName;					// Pointer to the last part of the path name
 	cdstring			mDisplayName;				// Display name of item
 	uint32_t			mSize;						// Disk size
 	mutable uint32_t	mLastSync;					// Last sync time

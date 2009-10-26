@@ -841,25 +841,23 @@ void CAdbkProtocol::ListChanged()
 CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
 {
 	// Break the name down into components
-	cdstrvect names;
+	cdstring acct;
+	cdstring path;
 	const char* start = adbk.c_str();
 	const char* end = ::strchr(start, cMailAccountSeparator);
-	while(end != NULL)
+	if (end != NULL)
 	{
-		names.push_back(cdstring(start, end - start));
-		start = end + 1;
-		end = ::strchr(start, GetDirDelim());
+		acct = cdstring(start, end - start);
+		path = cdstring(end + 1);
 	}
-	if (!parent)
-		names.push_back(cdstring(start));
-	std::reverse(names.begin(), names.end());
+	else
+		return NULL;
 	
 	// Now test account name
-	if (names.back() != GetAccountName())
+	if (acct != GetAccountName())
 		return NULL;
-	names.pop_back();
 	
-	return names.empty() ? const_cast<CAddressBook*>(&mStoreRoot) : mStoreRoot.FindNode(names);
+	return mStoreRoot.FindNode(path);
 }
 
 CAddressBook* CAdbkProtocol::GetParentNode(const cdstring& adbk) const

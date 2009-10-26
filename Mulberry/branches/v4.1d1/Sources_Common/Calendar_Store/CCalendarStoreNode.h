@@ -69,7 +69,8 @@ public:
 		eIsActive =					1L << 4,
 		eIsCached =					1L << 5,
 		eIsInbox =					1L << 6,
-		eIsOutbox =					1L << 7
+		eIsOutbox =					1L << 7,
+		eIsDisplayHierarchy =       1L << 8
 	};
 
 	// std::sort methods
@@ -107,10 +108,10 @@ public:
 		{ mName = name; SetShortName(); }
 	const cdstring&	GetName() const								// Get full name
 		{ return mName; }
-	const char*	GetShortName() const							// Get short name
+	const cdstring&	GetShortName() const							// Get short name
 		{ return mShortName; }
-	const char*	GetDisplayShortName() const						// Get display short name
-		{ return mDisplayName.empty() ? mShortName : mDisplayName.c_str() ; }
+	const cdstring&	GetDisplayShortName() const						// Get display short name
+		{ return mDisplayName.empty() ? mShortName : mDisplayName; }
 	void	NewName(const cdstring& name);						// Tell this and children to adjust names
 
 	void SetDisplayName(const cdstring& name)					// Set name
@@ -127,7 +128,12 @@ public:
 	{
 		return mFlags.IsSet(eIsProtocol);
 	}
-
+	
+	bool IsDisplayHierarchy() const
+	{
+		return mFlags.IsSet(eIsDisplayHierarchy);
+	}
+	
 	bool IsDirectory() const
 	{
 		return mFlags.IsSet(eIsDirectory);
@@ -212,10 +218,10 @@ public:
 		return mCalendarRef;
 	}
 	CCalendarStoreNode* FindNode(const iCal::CICalendar* cal) const;
-	CCalendarStoreNode* FindNode(cdstrvect& hierarchy, bool discover = false) const;
-	CCalendarStoreNode* FindNodeOrCreate(cdstrvect& hierarchy) const
+	CCalendarStoreNode* FindNode(const cdstring& path, bool discover = false) const;
+	CCalendarStoreNode* FindNodeOrCreate(const cdstring& path) const
 	{
-		return FindNode(hierarchy, true);
+		return FindNode(path, true);
 	}
 
 	void RemoveFromParent();
@@ -268,7 +274,7 @@ protected:
 	SBitFlags				mFlags;						// State flags
 	iCal::CICalendarRef		mCalendarRef;
 	cdstring				mName;						// Full path name of item
-	const char*				mShortName;					// Pointer to the last part of the path name
+	cdstring				mShortName;					// Last part of the path name
 	cdstring				mDisplayName;				// Display name
 	uint32_t				mSize;						// Disk size
 	mutable uint32_t		mLastSync;					// Last sync time

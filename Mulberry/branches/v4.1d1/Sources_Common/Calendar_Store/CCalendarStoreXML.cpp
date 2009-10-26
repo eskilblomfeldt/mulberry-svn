@@ -48,7 +48,8 @@ namespace calstore
 	<!ATTLIST calendarnode	directory		(true|false) "false"
 							has_expanded	(true|false) 
 							inbox           (true|false) "false"
-							outbox          (true|false) "false">
+							outbox          (true|false) "false"
+							display         (true|false) "false">
 
 	<!ELEMENT name			(#PCDATA) >
  
@@ -81,6 +82,7 @@ const char* cXMLAttribute_directory = "directory";
 const char* cXMLAttribute_has_expanded = "has_expanded";
 const char*	cXMLAttribute_inbox = "inbox";
 const char*	cXMLAttribute_outbox = "outbox";
+const char* cXMLAttribute_displayhierachy = "display";
 
 const xmllib::XMLName cXMLElement_name("name");
 

@@ -1132,6 +1132,75 @@ void CCalendarStoreTable::RefreshSubList(calstore::CCalendarStoreNode* node)
 	AddChildren(node, woRow, true);
 }
 
+#pragma mark ____________________________Hierarchy Related
+
+// Create new hierarchy
+void CCalendarStoreTable::OnNewHierarchy(void)
+{
+	// New hierarchy dialog
+	cdstring new_name;
+	
+	if (CGetStringDialog::PoseDialog("Alerts::Server::NewHierarchy", new_name))
+	{
+		TableIndexT row = GetFirstSelectedRow();
+		calstore::CCalendarStoreNode* selected = GetCellNode(row);
+		selected->GetProtocol()->AddWD(new_name);
+	}
+}
+
+// Rename hierarchy
+void CCalendarStoreTable::OnRenameHierarchy(void)
+{
+	// Add selection to list
+	calstore::CCalendarStoreNodeList selected;
+	selected.set_delete_data(false);
+	if (DoToSelection1((DoToSelection1PP) &CCalendarStoreTable::AddSelectionToList, &selected))
+	{
+		// Rename (do in reverse)
+		for(calstore::CCalendarStoreNodeList::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
+		{
+			calstore::CCalendarStoreNode* cal = static_cast<calstore::CCalendarStoreNode*>(*iter);
+
+			// Rename it
+			cdstring new_name = cal->GetName();
+			
+			if (CGetStringDialog::PoseDialog("Alerts::Server::NewHierarchy", new_name))
+			{
+				cal->GetProtocol()->RenameWD(*cal, new_name);
+			}
+			else
+				// Break out of entire loop if user cancels
+				break;
+		}
+	}
+	
+	RefreshSelection();
+}
+
+// Delete hierarchy
+void CCalendarStoreTable::OnDeleteHierarchy(void)
+{
+	// Check that this is what we want to do
+	if (CErrorHandler::PutCautionAlertRsrc(true, "Alerts::Server::DeleteHierarchy") == CErrorHandler::Ok)
+	{
+		// Prevent flashes during multiple selection changes
+		StDeferSelectionChanged noSelChange(this);
+		
+		// Add selection to list
+		calstore::CCalendarStoreNodeList selected;
+		selected.set_delete_data(false);
+		if (DoToSelection1((DoToSelection1PP) &CCalendarStoreTable::AddSelectionToList, &selected))
+		{
+			// Remove (do in reverse)
+			for(calstore::CCalendarStoreNodeList::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
+			{
+				calstore::CCalendarStoreNode* cal = static_cast<calstore::CCalendarStoreNode*>(*iter);
+				cal->GetProtocol()->RemoveWD(*cal);
+			}
+		}
+	}
+}
+
 #pragma mark ____________________________Tests
 
 // Test for selected servers only
@@ -1174,6 +1243,14 @@ bool CCalendarStoreTable::TestSelectionUploadWebCalendar(TableIndexT row)
 {
 	calstore::CCalendarStoreNode* node = GetCellNode(row, false);
 	return !node->IsProtocol() && !node->IsDirectory() && (node->GetWebcal() != NULL) && !node->GetWebcal()->GetReadOnly();
+}
+
+// Test for selected hierarchies only
+bool CCalendarStoreTable::TestSelectionHierarchy(TableIndexT row)
+{
+	// This is deleted
+	calstore::CCalendarStoreNode* node = GetCellNode(row, false);
+	return node->IsDisplayHierarchy();
 }
 
 #pragma mark ____________________________Expand/collapse

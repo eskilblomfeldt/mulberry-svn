@@ -123,6 +123,11 @@ public:
 	CCalendarStoreNode* GetNodeByRemoteURL(const cdstring& url) const;
 	CCalendarStoreNode* GetParentNode(const cdstring& cal) const;
 
+	void	AddWD(const cdstring& wd);							// Add the working directory prefix
+	void	RenameWD(CCalendarStoreNode& node,
+					 const cdstring& new_name);					// Rename the working directory
+	void	RemoveWD(CCalendarStoreNode& node);			// Remove the working directory prefix
+
 	// Calendar lists
 	void	LoadList();											// Load calendar list from server
 	void	LoadSubList(CCalendarStoreNode* node, bool deep);	// Load calendar list from server

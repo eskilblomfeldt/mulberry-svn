@@ -102,6 +102,8 @@ extern const xmllib::XMLName	cElement_principal_match;
 extern const xmllib::XMLName	cElement_mkcol;
 extern const xmllib::XMLName	cElement_mkcol_response;
 
+// current-user-principal
+extern const xmllib::XMLName	cProperty_current_user_principal;
 }
 
 namespace caldav 
@@ -142,6 +144,9 @@ extern const xmllib::XMLName	cElement_freebusyquery;
 	extern const xmllib::XMLName	cAttributeValue_no;
 
 extern const xmllib::XMLName	cProperty_privilege_readfreebusy;
+
+// Principal
+extern const xmllib::XMLName	cProperty_calendar_home_set;
 
 // Schedule
 extern const xmllib::XMLName	cProperty_scheduleinbox;
@@ -199,6 +204,9 @@ extern const xmllib::XMLName	cElement_adbkmultiget;
 	extern const xmllib::XMLName	cAttributeValue_matchtype_contains;
 	extern const xmllib::XMLName	cAttributeValue_matchtype_is;
 
+	// Principal
+	extern const xmllib::XMLName	cProperty_addressbook_home_set;
+	
 }
 
 namespace slide

@@ -135,6 +135,10 @@ protected:
 			void		OnDeleteCalendar();
 			void		OnCheckCalendar();
 			bool		CheckCalendar(TableIndexT row);
+			void		OnNewHierarchy();							// Create new hierarchy
+			void		OnRenameHierarchy();						// Rename hierarchy
+			void		OnDeleteHierarchy();						// Delete hierarchy
+			
 			void		OnRefreshList();
 			void		OnFreeBusyCalendar();
 			bool		FreeBusyCalendar(TableIndexT row,
@@ -173,7 +177,10 @@ protected:
 			bool	TestSelectionRealCalendar(TableIndexT row);				// Test for selected real (not directory) calendars only
 			bool	TestSelectionWebCalendar(TableIndexT row);				// Test for selected web calendars only
 			bool	TestSelectionUploadWebCalendar(TableIndexT row);		// Test for selected uploadable web calendars only
-
+			
+			// Hierarchy related
+			bool	TestSelectionHierarchy(TableIndexT row);				// Test for selected hierarchies only
+	
 private:
 			void		InitCalendarStoreTable();
 

@@ -213,7 +213,9 @@ cdstring CAddressAccount::GetInfo(void) const
 	info += mExpanded ? cValueBoolTrue : cValueBoolFalse;
 	info += cSpace;
 
-	info += mBaseRURL;
+	cdstring temp = mBaseRURL;
+	temp.quote();
+	info += temp;
 
 	info += mFuture.GetInfo();
 	info += ')';

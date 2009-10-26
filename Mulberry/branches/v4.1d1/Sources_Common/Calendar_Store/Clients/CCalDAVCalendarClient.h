@@ -59,6 +59,8 @@ protected:
 
 	// C A L E N D A R
 
+	virtual void _GetPrincipalDetails(const cdstring& puri, bool reset_home=false);
+
 	virtual void _CreateCalendar(const CCalendarStoreNode& node);
 	virtual bool _CalendarChanged(const CCalendarStoreNode& node, iCal::CICalendar& cal);
 	virtual void _UpdateSyncToken(const CCalendarStoreNode& node, iCal::CICalendar& cal);

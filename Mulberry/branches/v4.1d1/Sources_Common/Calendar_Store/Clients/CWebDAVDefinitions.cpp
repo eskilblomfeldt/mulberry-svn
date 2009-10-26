@@ -96,6 +96,9 @@ const xmllib::XMLName	cElement_principal_match("principal-match", cNamespace);
 const xmllib::XMLName	cElement_mkcol("mkcol", cNamespace);
 const xmllib::XMLName	cElement_mkcol_response("mkcol-response", cNamespace);
 
+// current-user-principal
+const xmllib::XMLName	cProperty_current_user_principal("current-user-principal", cNamespace);
+
 }
 
 namespace caldav 
@@ -135,6 +138,9 @@ const xmllib::XMLName	cElement_freebusyquery("free-busy-query", cNamespace);
 	const xmllib::XMLName	cAttributeValue_no("no", cNamespace);
 
 const xmllib::XMLName	cProperty_privilege_readfreebusy("read-free-busy", cNamespace);
+
+// Principal
+const xmllib::XMLName	cProperty_calendar_home_set("calendar-home-set", cNamespace);
 
 // Schedule
 const xmllib::XMLName	cProperty_scheduleinbox("schedule-inbox", cNamespace);
@@ -191,6 +197,9 @@ const xmllib::XMLName	cElement_adbkmultiget("addressbook-multiget", cNamespace);
 	const xmllib::XMLName	cAttributeValue_matchtype_contains("contains", cNamespace);
 	const xmllib::XMLName	cAttributeValue_matchtype_is("equals", cNamespace);
 
+	// Principal
+	const xmllib::XMLName	cProperty_addressbook_home_set("addressbook-home-set", cNamespace);
+	
 }
 
 namespace slide

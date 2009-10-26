@@ -349,19 +349,21 @@ bool CURL::Equal(const CURL& comp) const
 		{
 			cdstring temp(mPath);
 			temp.erase(temp.length() - 1);
-			if (temp.compare(comp.mPath) != 0)
-				return false;
+			if (temp.compare(comp.mPath) == 0)
+				return true;
 		}
 		else if (comp.mPath.compare_end("/"))
 		{
 			cdstring temp(comp.mPath);
 			temp.erase(temp.length() - 1);
-			if (mPath.compare(temp) != 0)
-				return false;
+			if (mPath.compare(temp) == 0)
+				return true;
 		}
 	}
-
-	return true;
+	else
+		return true;
+	
+	return false;
 }
 
 bool CURL::EqualRelative(const CURL& comp) const
@@ -377,17 +379,19 @@ bool CURL::EqualRelative(const CURL& comp) const
 		{
 			cdstring temp(mPath);
 			temp.erase(temp.length() - 1);
-			if (temp.compare(comp.mPath) != 0)
-				return false;
+			if (temp.compare(comp.mPath) == 0)
+				return true;
 		}
 		else if (comp.mPath.compare_end("/"))
 		{
 			cdstring temp(comp.mPath);
 			temp.erase(temp.length() - 1);
-			if (mPath.compare(temp) != 0)
-				return false;
+			if (mPath.compare(temp) == 0)
+				return true;
 		}
 	}
+	else
+		return true;
 
-	return true;
+	return false;
 }

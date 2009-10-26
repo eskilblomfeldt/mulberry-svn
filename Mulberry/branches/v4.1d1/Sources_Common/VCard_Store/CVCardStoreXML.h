@@ -36,6 +36,7 @@ extern const char*			 cXMLAttribute_has_expanded;
 extern const xmllib::XMLName cXMLElement_adbknode;
 extern const char*			 cXMLAttribute_adbk;
 extern const char*			 cXMLAttribute_directory;
+extern const char*			 cXMLAttribute_displayhierachy;
 
 extern const xmllib::XMLName cXMLElement_name;
 

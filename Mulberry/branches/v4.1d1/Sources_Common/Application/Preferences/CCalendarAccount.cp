@@ -45,6 +45,7 @@ void CCalendarAccount::_copy(const CCalendarAccount& copy)
 	mBaseRURL = copy.mBaseRURL;
 	mTieIdentity = copy.mTieIdentity;
 	mTiedIdentity = copy.mTiedIdentity;
+	mWDs = copy.mWDs;
 	mFuture = copy.mFuture;
 }
 
@@ -64,7 +65,8 @@ int CCalendarAccount::operator==(const CCalendarAccount& comp) const
 			(mDisconnected == comp.mDisconnected) &&
 			(mBaseRURL == comp.mBaseRURL) &&
 			(mTieIdentity == comp.mTieIdentity) &&
-			(mTiedIdentity == comp.mTiedIdentity);
+			(mTiedIdentity == comp.mTiedIdentity) &&
+			(mWDs == comp.mWDs);
 }
 
 void CCalendarAccount::SetServerType(EINETServerType type)
@@ -120,16 +122,21 @@ cdstring CCalendarAccount::GetInfo(void) const
 	info += mDisconnected ? cValueBoolTrue : cValueBoolFalse;
 	info += cSpace;
 
-	info += mBaseRURL;
+	cdstring temp = mBaseRURL;
+	temp.quote();
+	info += temp;
 	info += cSpace;
 
 	info += (mTieIdentity ? cValueBoolTrue : cValueBoolFalse);
 	info += cSpace;
 
-	cdstring temp = mTiedIdentity;
+	temp = mTiedIdentity;
 	temp.quote();
 	temp.ConvertFromOS();
 	info += temp;
+	info += cSpace;
+
+	info += GetWDs().GetInfo();
 
 	info += mFuture.GetInfo();
 	info += ')';
@@ -144,7 +151,7 @@ bool CCalendarAccount::SetInfo(char_stream& txt, NumVersion vers_prefs)
 
 	// If >= v1.4
 	txt.start_sexpression();
-		result = CINETAccount::SetInfo(txt, vers_prefs);
+	result = CINETAccount::SetInfo(txt, vers_prefs);
 	txt.end_sexpression();
 
 	txt.start_sexpression();
@@ -152,6 +159,7 @@ bool CCalendarAccount::SetInfo(char_stream& txt, NumVersion vers_prefs)
 	txt.get(mBaseRURL);
 	txt.get(mTieIdentity);
 	txt.get(mTiedIdentity, true);
+	GetWDs().SetInfo(txt, vers_prefs);
 
 	mFuture.SetInfo(txt, vers_prefs);
 	txt.end_sexpression();

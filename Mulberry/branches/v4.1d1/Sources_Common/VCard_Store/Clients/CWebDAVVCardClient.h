@@ -52,12 +52,15 @@ public:
 	virtual void	Logoff();								// Logoff from server
 	
 protected:
+	cdstring		mHostURL;
 	cdstring		mBaseURL;
 	cdstring		mBaseRURL;
 	cdstrmap		mLockTokens;
 	cdstring		mAuthUniqueness;
 
 	virtual tcp_port GetDefaultPort();						// Get default port;
+
+	virtual void	_Reset(const cdstring& baseRURL);		// Setup paths for this base URL
 
 	// P R O T O C O L
 	virtual void	_InitCapability();					// Initialise capability flags to empty set
@@ -151,6 +154,10 @@ protected:
 
 	cdstring GetETag(const cdstring& rurl, const cdstring& lock_token = cdstring::null_str);
 	cdstring GetProperty(const cdstring& rurl, const cdstring& lock_token, const xmllib::XMLName& property);
+	cdstrvect GetHrefListProperty(const cdstring& rurl, const xmllib::XMLName& propname);
+	bool GetProperties(const cdstring& rurl, const xmllib::XMLNameList& props, cdstrmap& results);
+	bool GetSelfHrefs(const cdstring& rurl, cdstrvect& results);
+	bool GetSelfPrincipalResource(const cdstring& rurl, cdstring& result);
 	cdstring LockResource(const cdstring& rurl, unsigned long timeout, bool lock_null = false);
 	void UnlockResource(const cdstring& rurl, const cdstring& lock_token);
 

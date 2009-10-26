@@ -116,7 +116,11 @@ CINETClient* CCalDAVCalendarClient::CloneConnection()
 // which we know must indicate caldav capability levels.
 bool CCalDAVCalendarClient::Initialise(const cdstring& host, const cdstring& base_uri)
 {
-	if (CWebDAVCalendarClient::Initialise(host, base_uri) && HasDAVACL())
+	cdstring actual_base_uri = base_uri;
+	if (actual_base_uri.length() == 0)
+		actual_base_uri = "/";
+		
+	if (CWebDAVCalendarClient::Initialise(host, actual_base_uri) && HasDAVACL())
 	{
 		bool no_preport = false;
 #ifdef NO_PRINCIPAL_REPORT
@@ -126,15 +130,56 @@ bool CCalDAVCalendarClient::Initialise(const cdstring& host, const cdstring& bas
 			return true;
 		else
 		{
-			cdstring puri;
-			if (GetSelfPrincipalResource(base_uri, puri))
+			if (GetSelfPrincipalResource(actual_base_uri, mPrincipalURI))
 			{
-				return CWebDAVCalendarClient::Initialise(host, puri);
+				bool result = CWebDAVCalendarClient::Initialise(host, mPrincipalURI);
+				if (result)
+				{
+					// Get details from principal resource
+					_GetPrincipalDetails(mPrincipalURI, true);
+				}
+				return result;
 			}
 		}
 	}
 	
 	return false;
+}
+
+void CCalDAVCalendarClient::_GetPrincipalDetails(const cdstring& puri, bool reset_home)
+{
+	cdstrmap result;
+	xmllib::XMLNameList props;
+	props.push_back(http::caldav::cProperty_calendar_home_set);
+	// Only if scheduling supported
+	if (HasDAVVersion(eCALDAVsched))
+	{
+		props.push_back(http::caldav::cProperty_scheduleinboxURL);
+		props.push_back(http::caldav::cProperty_scheduleoutboxURL);
+	}
+	if (GetProperties(puri, props, result))
+	{
+		cdstrmap::const_iterator found = result.find(http::caldav::cProperty_calendar_home_set.FullName());
+		if (found != result.end() and reset_home)
+		{
+			// May need to reset calendar-home path
+			if (GetCalendarProtocol()->GetCalendarAccount()->GetBaseRURL().empty())
+			{
+				_Reset((*found).second);
+			}
+		}
+		if (HasDAVVersion(eCALDAVsched))
+		{
+			found = result.find(http::caldav::cProperty_scheduleinboxURL.FullName());
+			if (found != result.end())
+				mCachedInbox = (*found).second;
+			found = result.find(http::caldav::cProperty_scheduleoutboxURL.FullName());
+			if (found != result.end())
+				mCachedOutbox = (*found).second;
+			mCachedInboxOutbox = true;
+		}
+		return;
+	}
 }
 
 // Check version of server
@@ -152,7 +197,8 @@ void CCalDAVCalendarClient::_CreateCalendar(const CCalendarStoreNode& node)
 	StINETClientAction _action(this, "Status::Calendar::Creating", "Error::Calendar::OSErrCreateCalendar", "Error::Calendar::NoBadCreateCalendar", node.GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 
 	// Use MKCOL for directories
 	if (node.IsDirectory())
@@ -201,7 +247,8 @@ bool CCalDAVCalendarClient::_CalendarChanged(const CCalendarStoreNode& node, iCa
 	StINETClientAction _action(this, "Status::Calendar::Checking", "Error::Calendar::OSErrCheckCalendar", "Error::Calendar::NoBadCheckCalendar", node.GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current CTag
@@ -217,7 +264,8 @@ void CCalDAVCalendarClient::_UpdateSyncToken(const CCalendarStoreNode& node, iCa
 	StINETClientAction _action(this, "Status::Calendar::Checking", "Error::Calendar::OSErrCheckCalendar", "Error::Calendar::NoBadCheckCalendar", node.GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current CTag
@@ -228,43 +276,38 @@ void CCalDAVCalendarClient::_UpdateSyncToken(const CCalendarStoreNode& node, iCa
 
 void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::webdav::CWebDAVPropFindParser& parser)
 {
-	cdstring base_temp(mBaseURL);
-	base_temp.DecodeURL();
-	cdstring baser_temp(mBaseRURL);
-	baser_temp.DecodeURL();
+	cdstring nodeURL = root->GetName();
+	nodeURL.EncodeURL('/');
+	if (root->IsProtocol())
+		nodeURL = mBaseRURL;
+	cdstring nodeURLNoSlash = nodeURL;
+	if (nodeURLNoSlash.compare_end("/"))
+		nodeURLNoSlash.erase(nodeURLNoSlash.length() - 1);
+	else
+	{
+		nodeURLNoSlash = nodeURL;
+		nodeURL += "/";
+	}
+
 	
-	unsigned long url_strip_length = base_temp.length();
-	unsigned long rurl_strip_length = baser_temp.length();
-
-	cdstring strippedrooturl(GetRURL(root), rurl_strip_length, cdstring::npos);
-	strippedrooturl.DecodeURL();
-
-	cdstring strippedrooturl_noslash(strippedrooturl);
-	if (strippedrooturl_noslash.compare_end(cdstring('/')))
-		strippedrooturl_noslash.erase(strippedrooturl_noslash.length() - 1);
-
+	cdstring relBase = nodeURL;
+	cdstring relBaseNoSlash = nodeURLNoSlash;
+	
 	// Look at each propfind result and determine type of calendar
 	for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
 	{
 		// Get child element name (decode URL)
-		cdstring name((*iter)->GetResource());
-		name.DecodeURL();
-	
-		// Strip base prefix off
-		cdstring rpath;
-		if (name.compare_start(baser_temp))
-			rpath.assign(name, rurl_strip_length, cdstring::npos);
-		else if (name.compare_start(base_temp))
-			rpath.assign(name, url_strip_length, cdstring::npos);
-		if (rpath.empty() || (rpath == strippedrooturl) || (rpath == strippedrooturl_noslash))
+		cdstring rpath((*iter)->GetResource());
+		
+		// Strip of path prefix
+		if (rpath.compare_start(mHostURL))
+			rpath.erase(0, mHostURL.length());
+		
+		// Ignore root
+		if ((rpath == relBase) or (rpath == relBaseNoSlash))
 			continue;
-
-		// Strip off trailing .ics
-		if (rpath.compare_end(".ics"))
-			rpath.erase(rpath.length() - 4);
-		else if (rpath.compare_end("/"))
-			rpath.erase(rpath.length() - 1);
-
+		rpath.DecodeURL();
+		
 		// Determine type of element
 		bool is_dir = false;
 		bool is_cal = false;
@@ -278,21 +321,21 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 			const xmllib::XMLNode* node = (*(*iter)->GetNodeProperties().find(http::webdav::cProperty_resourcetype.FullName())).second;
 			
 			// Look at each child element
-			for(xmllib::XMLNodeList::const_iterator iter = node->Children().begin(); iter != node->Children().end(); iter++)
+			for(xmllib::XMLNodeList::const_iterator iter2 = node->Children().begin(); iter2 != node->Children().end(); iter2++)
 			{
 				// Look for collection
-				if ((*iter)->CompareFullName(http::webdav::cProperty_collection))
+				if ((*iter2)->CompareFullName(http::webdav::cProperty_collection))
 					is_col = true;
 				
 				// Look for calendar
-				if ((*iter)->CompareFullName(http::caldav::cProperty_caldavcalendar))
+				if ((*iter2)->CompareFullName(http::caldav::cProperty_caldavcalendar))
 					is_cal = true;
-				else if ((*iter)->CompareFullName(http::caldav::cProperty_scheduleinbox))
+				else if ((*iter2)->CompareFullName(http::caldav::cProperty_scheduleinbox))
 				{
 					is_cal = true;
 					is_inbox = true;
 				}
-				if ((*iter)->CompareFullName(http::caldav::cProperty_scheduleoutbox))
+				if ((*iter2)->CompareFullName(http::caldav::cProperty_scheduleoutbox))
 				{
 					is_cal = true;
 					is_outbox = true;
@@ -308,7 +351,8 @@ void CCalDAVCalendarClient::ListCalendars(CCalendarStoreNode* root, const http::
 		}
 
 		// Only add a node that is a normal collection or a calendar - ignore everything else
-		if (is_dir || is_cal)
+		// Also ignore the outbox - it clutters the display
+		if ((is_dir or is_cal) and not is_outbox)
 		{
 			// Create the new node and add to parent
 			CCalendarStoreNode* node = new CCalendarStoreNode(GetCalendarProtocol(), root, is_dir, is_inbox, is_outbox, rpath);
@@ -340,7 +384,8 @@ void CCalDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iC
 	// Get each item found and parse into calendar one at a time whilst caching HREF
 	
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	props.push_back(http::webdav::cProperty_getcontenttype);
@@ -405,7 +450,8 @@ void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& nod
 			return;
 
 		// Run the calendar-multiget report
-		cdstring rurl = GetRURL(&node);
+		cdstring rurl = node.GetName();
+		rurl.EncodeURL('/');
 
 		// Create WebDAV REPORT
 		bool old_style = false;
@@ -438,7 +484,7 @@ void CCalDAVCalendarClient::ReadCalendarComponents(const CCalendarStoreNode& nod
 
 void CCalDAVCalendarClient::GetCalendarComponents(const CCalendarStoreNode& node, const http::webdav::CWebDAVPropFindParser& parser, iCal::CICalendar& cal, cdstrmap& compinfo, bool last_path)
 {
-	CURL base(GetRURL(&node, true), true);
+	CURL base(mHostURL + node.GetName(), true);
 	
 	// Look at each propfind result and determine type of calendar
 	for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
@@ -584,7 +630,8 @@ void CCalDAVCalendarClient::_GetComponentInfo(const CCalendarStoreNode& node, iC
 	// Get each item found and parse into calendar one at a time whilst caching HREF
 	
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	props.push_back(http::webdav::cProperty_getcontenttype);
@@ -652,7 +699,8 @@ void CCalDAVCalendarClient::_RemoveComponent(const CCalendarStoreNode& node, iCa
 		return;
 
 	// Determine URL
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	rurl += comp_rurl;
 
 	// Create WebDAV DELETE
@@ -684,7 +732,8 @@ void CCalDAVCalendarClient::_ReadComponents(const CCalendarStoreNode& node, iCal
 
 	// Determine URLs
 	cdstrvect hrefs;
-	cdstring root_url = GetRURL(&node);
+	cdstring root_url = node.GetName();
+	root_url.EncodeURL('/');
 	for(cdstrvect::const_iterator iter = rurls.begin(); iter != rurls.end(); iter++)
 	{
 		cdstring rurl = root_url;
@@ -704,7 +753,8 @@ iCal::CICalendarComponent* CCalDAVCalendarClient::_ReadComponent(const CCalendar
 	StINETClientAction _action(this, "Status::Calendar::Reading", "Error::Calendar::OSErrReadCalendar", "Error::Calendar::NoBadReadCalendar", node.GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	rurl += comp_rurl;
 
 	// Read it in	
@@ -741,34 +791,10 @@ void CCalDAVCalendarClient::_GetScheduleInboxOutbox(const CCalendarStoreNode& no
 	// Start UI action
 	StINETClientAction _action(this, "Status::Calendar::Listing", "Error::Calendar::OSErrListCalendars", "Error::Calendar::NoBadListCalendars");
 
-	// Determine URL
-	cdstring rurl = GetRURL(&node);
-
-	cdstrvect hrefs = GetHrefListProperty(rurl, http::webdav::cProperty_principal_collection_set);
-	if (hrefs.empty())
-		return;
-	
-	// For each principal collection find one that matches self
-	for(cdstrvect::const_iterator iter = hrefs.begin(); iter != hrefs.end(); iter++)
-	{
-		cdstrmap result;
-		xmllib::XMLNameList props;
-		props.push_back(http::caldav::cProperty_scheduleinboxURL);
-		props.push_back(http::caldav::cProperty_scheduleoutboxURL);
-		if (GetSelfProperties(*iter, props, result))
-		{
-			 cdstrmap::const_iterator found = result.find(http::caldav::cProperty_scheduleinboxURL.FullName());
-			 if (found != result.end())
-			 	inboxURI = (*found).second;
-			 found = result.find(http::caldav::cProperty_scheduleoutboxURL.FullName());
-			 if (found != result.end())
-			 	outboxURI = (*found).second;
-			 mCachedInbox = inboxURI;
-			 mCachedOutbox = outboxURI;
-			 mCachedInboxOutbox = true;
-			 return;
-		}
-	}
+	// Get calendar-home-set from principal resource
+	_GetPrincipalDetails(mPrincipalURI);
+	inboxURI = mCachedInbox;
+	outboxURI = mCachedOutbox;
 }
 
 // Run scheduling request
@@ -854,7 +880,8 @@ void CCalDAVCalendarClient::AddComponent(const CCalendarStoreNode& node, iCal::C
 		const_cast<iCal::CICalendarComponent&>(component).GenerateRURL();
 
 		// Determine URL
-		rurl = GetRURL(&node);
+		rurl = node.GetName();
+		rurl.EncodeURL('/');
 		rurl += component.GetRURL();
 
 #ifndef ORACLE_FIX_3
@@ -888,7 +915,8 @@ void CCalDAVCalendarClient::ChangeComponent(const CCalendarStoreNode& node, iCal
 {
 	// Determine URL
 #ifndef ORACLE_FIX_3
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	rurl += component.GetRURL();
 
 	// Lock it
@@ -908,7 +936,8 @@ void CCalDAVCalendarClient::ChangeComponent(const CCalendarStoreNode& node, iCal
 void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal::CICalendar& cal, const iCal::CICalendarComponent& component, bool new_item)
 {
 	// Determine URL
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	rurl += component.GetRURL();
 	cdstring lock_token = GetLockToken(rurl);
 
@@ -959,7 +988,8 @@ void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal:
 		if (new_path != component.GetRURL())
 		{
 			const_cast<iCal::CICalendarComponent&>(component).SetRURL(new_path);
-				rurl = GetRURL(&node);
+			rurl = node.GetName();
+			rurl.EncodeURL('/');
 			rurl += component.GetRURL();
 		}
 	}
@@ -984,7 +1014,8 @@ void CCalDAVCalendarClient::WriteComponent(const CCalendarStoreNode& node, iCal:
 void CCalDAVCalendarClient::SizeCalendar_DAV(CCalendarStoreNode& node)
 {
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	std::auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
@@ -1030,7 +1061,8 @@ void CCalDAVCalendarClient::SizeCalendar_DAV(CCalendarStoreNode& node)
 void CCalDAVCalendarClient::SizeCalendar_HTTP(CCalendarStoreNode& node)
 {
 	// Create WebDAV HEAD
-	cdstring rurl = GetRURL(&node);
+	cdstring rurl = node.GetName();
+	rurl.EncodeURL('/');
 	std::auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl, true));
 	http::CHTTPOutputDataString dout;
 	request->SetData(&dout);
@@ -1068,6 +1100,8 @@ cdstring CCalDAVCalendarClient::GetRURL(const cdstring& name, bool directory, bo
 {
 	// Determine URL
 	cdstring rurl = (abs ? mBaseURL : mBaseRURL);
+	if (name[0] == '/')
+		rurl = "";
 	cdstring temp(name);
 	temp.EncodeURL('/');
 	rurl += temp;

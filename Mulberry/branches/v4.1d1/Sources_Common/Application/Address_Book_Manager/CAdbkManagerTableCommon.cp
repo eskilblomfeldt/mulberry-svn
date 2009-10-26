@@ -1022,6 +1022,77 @@ void CAdbkManagerTable::DeleteNode(CAddressBook* adbk)
 	RemoveRows(1, woRow, true);
 }
 
+#pragma mark ____________________________Hierarchy Related
+
+// Create new hierarchy
+void CAdbkManagerTable::OnNewHierarchy(void)
+{
+	// New hierarchy dialog
+	cdstring new_name;
+	
+	if (CGetStringDialog::PoseDialog("Alerts::Server::NewHierarchy", new_name))
+	{
+		//StValueChanger<bool> change(mListChanging, true);
+		//list->GetProtocol()->RenameWD(wd_index, new_name);
+	}
+}
+
+// Rename hierarchy
+void CAdbkManagerTable::OnRenameHierarchy(void)
+{
+	// Add selection to list
+	CAddressBookList selected;
+	selected.set_delete_data(false);
+	if (DoToSelection1((DoToSelection1PP) &CAdbkManagerTable::AddSelectionToList, &selected))
+	{
+		// Rename (do in reverse)
+		for(CAddressBookList::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
+		{
+			CAddressBook* adbk = static_cast<CAddressBook*>(*iter);
+			
+			// Rename it
+			cdstring new_name = adbk->GetName();
+			
+			if (CGetStringDialog::PoseDialog("Alerts::Server::NewHierarchy", new_name))
+			{
+				//StValueChanger<bool> change(mListChanging, true);
+				//list->GetProtocol()->RenameWD(wd_index, new_name);
+			}
+			else
+				// Break out of entire loop if user cancels
+				break;
+		}
+	}
+	
+	RefreshSelection();
+}
+
+// Delete hierarchy
+void CAdbkManagerTable::OnDeleteHierarchy(void)
+{
+	// Check that this is what we want to do
+	if (CErrorHandler::PutCautionAlertRsrc(true, "Alerts::Server::DeleteHierarchy") == CErrorHandler::Ok)
+	{
+		// Prevent flashes during multiple selection changes
+		StDeferSelectionChanged noSelChange(this);
+		
+		//		CServerNodeArray selected;
+		//		
+		//		// Add selection to list
+		//		if (DoToSelection1((DoToSelection1PP) &CServerBrowse::AddSelectedNodesToList, &selected))
+		//		{
+		//			// Remove wds from account (do in reverse)
+		//			for(CServerNodeArray::reverse_iterator iter = selected.rbegin(); iter != selected.rend(); iter++)
+		//			{
+		//				CMboxList* list = (CMboxList*) (*iter).mData;
+		//				long wd_index = list->GetHierarchyIndex();
+		//				if (wd_index >= 1)
+		//					list->GetProtocol()->RemoveWD(wd_index);
+		//			}
+		//		}
+	}
+}
+
 // Refresh a node from the list
 void CAdbkManagerTable::RefreshNode(CAddressBook* adbk)
 {
@@ -1088,6 +1159,15 @@ bool CAdbkManagerTable::TestSelectionAdbkClearDisconnected(TableIndexT row)
 	
 	return false;
 }
+
+// Test for selected hierarchies only
+bool CAdbkManagerTable::TestSelectionHierarchy(TableIndexT row)
+{
+	// This is deleted
+	CAddressBook* adbk = GetCellNode(row, false);
+	return adbk->IsDisplayHierarchy();
+}
+
 
 #pragma mark ____________________________Expand/collapse
 

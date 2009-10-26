@@ -25,6 +25,7 @@
 #include "CINETAccount.h"
 #include "ptrvector.h"
 
+#include "CDisplayItem.h"
 #include "CFutureItems.h"
 
 // Classes
@@ -74,6 +75,13 @@ public:
 	
 	CIdentity& GetAccountIdentity() const;
 
+	CDisplayItemList& GetWDs()
+		{ return mWDs; }
+	const CDisplayItemList& GetWDs() const
+		{ return mWDs; }
+	void SetWDs(const CDisplayItemList& wds)
+		{ mWDs = wds; }
+
 	virtual cdstring GetInfo(void) const;
 	virtual bool SetInfo(char_stream& info, NumVersion vers_prefs);
 
@@ -82,6 +90,7 @@ private:
 	cdstring				mBaseRURL;
 	bool					mTieIdentity;
 	cdstring				mTiedIdentity;
+	CDisplayItemList		mWDs;
 	CFutureItems			mFuture;
 	
 	void _copy(const CCalendarAccount& copy);

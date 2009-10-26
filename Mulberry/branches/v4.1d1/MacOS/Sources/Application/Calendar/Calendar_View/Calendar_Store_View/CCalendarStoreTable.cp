@@ -140,237 +140,260 @@ void CCalendarStoreTable::FinishCreateSelf(void)
 Boolean CCalendarStoreTable::ObeyCommand(CommandT inCommand,void *ioParam)
 {
 	Boolean	cmdHandled = true;
-
+	
 	switch (inCommand)
 	{
-	case cmd_FileImport:
-		OnImport();
-		break;
-
-	case cmd_FileExport:
-		OnExport();
-		break;
-
-	case cmd_Properties:
-	case cmd_ToolbarDetailsBtn:
-		if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionServer))
-			OnServerProperties();
-		else if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendarStoreNode))
-			OnCalendarProperties();
-		break;
-
-	case cmd_ToolbarServerLoginBtn:
-		OnLogin();
-		break;
-
-	case cmd_NewCalendar:
-	case cmd_ToolbarNewCalendarBtn:
-		OnNewCalendar();
-		break;
-
-	case cmd_RenameCalendar:
-		OnRenameCalendar();
-		break;
-
-	case cmd_DeleteCalendar:
-		OnDeleteCalendar();
-		break;
-
-	case cmd_CheckCalendar:
-	case cmd_ToolbarCheckMailboxBtn:
-		OnCheckCalendar();
-		break;
-
-	case cmd_RefreshCalendarList:
-		OnRefreshList();
-		break;
-
-	case cmd_FreeBusyCalendar:
-		OnFreeBusyCalendar();
-		break;
-
-	case cmd_SendCalendar:
-		OnSendCalendar();
-		break;
-
-	case cmd_NewWebCalendar:
-		OnNewWebCalendar();
-		break;
-
-	case cmd_RefreshWebCalendar:
-		OnRefreshWebCalendar();
-		break;
-
-	case cmd_UploadWebCalendar:
-		OnUploadWebCalendar();
-		break;
-
-	default:
-		cmdHandled = CHierarchyTableDrag::ObeyCommand(inCommand, ioParam);
-		break;
+		case cmd_FileImport:
+			OnImport();
+			break;
+			
+		case cmd_FileExport:
+			OnExport();
+			break;
+			
+		case cmd_Properties:
+		case cmd_ToolbarDetailsBtn:
+			if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionServer))
+				OnServerProperties();
+			else if (TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCalendarStoreNode))
+				OnCalendarProperties();
+			break;
+			
+		case cmd_ToolbarServerLoginBtn:
+			OnLogin();
+			break;
+			
+		case cmd_NewCalendar:
+		case cmd_ToolbarNewCalendarBtn:
+			OnNewCalendar();
+			break;
+			
+		case cmd_RenameCalendar:
+			OnRenameCalendar();
+			break;
+			
+		case cmd_DeleteCalendar:
+			OnDeleteCalendar();
+			break;
+			
+		case cmd_CheckCalendar:
+		case cmd_ToolbarCheckMailboxBtn:
+			OnCheckCalendar();
+			break;
+			
+		case cmd_NewHierarchy:
+			OnNewHierarchy();
+			break;
+			
+		case cmd_EditHierarchy:
+			OnRenameHierarchy();
+			break;
+			
+		case cmd_DeleteHierarchy:
+			OnDeleteHierarchy();
+			break;
+			
+		case cmd_RefreshCalendarList:
+			OnRefreshList();
+			break;
+			
+		case cmd_FreeBusyCalendar:
+			OnFreeBusyCalendar();
+			break;
+			
+		case cmd_SendCalendar:
+			OnSendCalendar();
+			break;
+			
+		case cmd_NewWebCalendar:
+			OnNewWebCalendar();
+			break;
+			
+		case cmd_RefreshWebCalendar:
+			OnRefreshWebCalendar();
+			break;
+			
+		case cmd_UploadWebCalendar:
+			OnUploadWebCalendar();
+			break;
+			
+		default:
+			cmdHandled = CHierarchyTableDrag::ObeyCommand(inCommand, ioParam);
+			break;
 	}
-
+	
 	return cmdHandled;
 }
 
 //	Pass back status of a (menu) command
 void CCalendarStoreTable::FindCommandStatus(
-	CommandT	inCommand,
-	Boolean		&outEnabled,
-	Boolean		&outUsesMark,
-	UInt16		&outMark,
-	Str255		outName)
+											CommandT	inCommand,
+											Boolean		&outEnabled,
+											Boolean		&outUsesMark,
+											UInt16		&outMark,
+											Str255		outName)
 {
 	outUsesMark = false;
-
+	
 	switch (inCommand)
 	{
-	case cmd_FileImport:
-	{
-		outEnabled = true;
-		LStr255 txt(STRx_Standards, str_ImportCalendar);
-		::PLstrcpy(outName, txt);
-		break;
-	}
-	case cmd_FileExport:
-	{
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
-		LStr255 txt(STRx_Standards, str_ExportCalendar);
-		::PLstrcpy(outName, txt);
-		break;
-	}
-
-	// These ones must have a selection
-	case cmd_Properties:
-	case cmd_ToolbarDetailsBtn:
-		outEnabled = IsSelectionValid();;
-		break;
-
-	case cmd_ToolbarServerLoginBtn:
-		// Logon button must have single server selected
-		if (IsSingleSelection() && TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionServer))
+		case cmd_FileImport:
 		{
-			TableIndexT row = GetFirstSelectedRow();
-			calstore::CCalendarStoreNode* node = GetCellNode(row);
-
-			// Policy:
-			//
-			// 1. 	Local protocols are always logged in - login button is disabled
-			// 2.	Protocols that cannot disconnect
-			// 2.1	maintain their own logged in state when global connect state is on,
-			// 2.2	else they are always logged out when global state is disconnected and the login button is disabled
-			// 3.	Protocols that can disconnect
-			// 3.1	when global connect state is on, they maintain their own logged in state based on disconnected state
-			// 3.3	else they are always logged in and the login button is disabled
+			outEnabled = true;
+			LStr255 txt(STRx_Standards, str_ImportCalendar);
+			::PLstrcpy(outName, txt);
+			break;
+		}
+		case cmd_FileExport:
+		{
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
+			LStr255 txt(STRx_Standards, str_ExportCalendar);
+			::PLstrcpy(outName, txt);
+			break;
+		}
 			
-			// 1. (as above)
-			if (node->GetProtocol()->IsOffline() && !node->GetProtocol()->IsDisconnected())
+			// These ones must have a selection
+		case cmd_Properties:
+		case cmd_ToolbarDetailsBtn:
+			outEnabled = IsSelectionValid();;
+			break;
+			
+		case cmd_ToolbarServerLoginBtn:
+			// Logon button must have single server selected
+			if (IsSingleSelection() && TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionServer))
 			{
-				// Local items are always logged in (connected) so disable the button
-				outEnabled = false;
-				outUsesMark = true;
-				::GetIndString(outName, STRx_Standards, str_Logoff);
-			}
-
-			// 2. (as above)
-			else if (!node->GetProtocol()->CanDisconnect())
-			{
-				// 2.1 (as above)
-				if (CConnectionManager::sConnectionManager.IsConnected())
+				TableIndexT row = GetFirstSelectedRow();
+				calstore::CCalendarStoreNode* node = GetCellNode(row);
+				
+				// Policy:
+				//
+				// 1. 	Local protocols are always logged in - login button is disabled
+				// 2.	Protocols that cannot disconnect
+				// 2.1	maintain their own logged in state when global connect state is on,
+				// 2.2	else they are always logged out when global state is disconnected and the login button is disabled
+				// 3.	Protocols that can disconnect
+				// 3.1	when global connect state is on, they maintain their own logged in state based on disconnected state
+				// 3.3	else they are always logged in and the login button is disabled
+				
+				// 1. (as above)
+				if (node->GetProtocol()->IsOffline() && !node->GetProtocol()->IsDisconnected())
 				{
-					outEnabled = true;
-					outUsesMark = true;
-					outMark = node->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
-					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
-				}
-				// 2.2 (as above)
-				else
-				{
+					// Local items are always logged in (connected) so disable the button
 					outEnabled = false;
 					outUsesMark = true;
 					::GetIndString(outName, STRx_Standards, str_Logoff);
 				}
+				
+				// 2. (as above)
+				else if (!node->GetProtocol()->CanDisconnect())
+				{
+					// 2.1 (as above)
+					if (CConnectionManager::sConnectionManager.IsConnected())
+					{
+						outEnabled = true;
+						outUsesMark = true;
+						outMark = node->GetProtocol()->IsLoggedOn() ? (UInt16)checkMark : (UInt16)noMark;
+						::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
+					}
+					// 2.2 (as above)
+					else
+					{
+						outEnabled = false;
+						outUsesMark = true;
+						::GetIndString(outName, STRx_Standards, str_Logoff);
+					}
+				}
+				
+				// 3. (as above)
+				else
+				{
+					// 3.1 (as above)
+					if (CConnectionManager::sConnectionManager.IsConnected())
+					{
+						outEnabled = true;
+						outUsesMark = true;
+						outMark = !node->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
+						::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
+					}
+					// 3.2 (as above)
+					else
+					{
+						outEnabled = false;
+						outUsesMark = true;
+						::GetIndString(outName, STRx_Standards, str_Logoff);
+					}
+				}
 			}
-			
-			// 3. (as above)
 			else
 			{
-				// 3.1 (as above)
-				if (CConnectionManager::sConnectionManager.IsConnected())
-				{
-					outEnabled = true;
-					outUsesMark = true;
-					outMark = !node->GetProtocol()->IsDisconnected() ? (UInt16)checkMark : (UInt16)noMark;
-					::GetIndString(outName, STRx_Standards, !outMark ? str_Logon : str_Logoff);
-				}
-				// 3.2 (as above)
-				else
-				{
-					outEnabled = false;
-					outUsesMark = true;
-					::GetIndString(outName, STRx_Standards, str_Logoff);
-				}
+				outEnabled = false;
+				outUsesMark = false;
+				::GetIndString(outName, STRx_Standards, str_Logon);
 			}
-		}
-		else
-		{
-			outEnabled = false;
-			outUsesMark = false;
-			::GetIndString(outName, STRx_Standards, str_Logon);
-		}
-		break;
-
-	case cmd_NewCalendar:
-	case cmd_ToolbarNewCalendarBtn:
-		// Always enabled
-		outEnabled = true;
-		break;
-
-	case cmd_RenameCalendar:
-	case cmd_DeleteCalendar:
-	case cmd_FreeBusyCalendar:
-	case cmd_SendCalendar:
-		// Only if calendar selection
-		outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
-		break;
-
-	case cmd_CheckCalendar:
-	case cmd_ToolbarCheckMailboxBtn:
-		// Always enabled
-		outEnabled = true;
-		break;
-
-	case cmd_RefreshCalendarList:
-		// Only if single selection
-		outEnabled = IsSingleSelection();
-		break;
-
-	case cmd_NewWebCalendar:
-		// Always enabled if admin allows it
-		outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars && 
-						((calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() == NULL) ||
-						!calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected());
-		break;
-
-	case cmd_RefreshWebCalendar:
-		// Always enabled if admin allows it
-		outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars &&
-						(calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() != NULL) &&
-						!calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected() &&
-						TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionWebCalendar);
-		break;
-
-	case cmd_UploadWebCalendar:
-		// Always enabled if admin allows it
-		outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars &&
-						(calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() != NULL) &&
-						!calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected() &&
-						TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionUploadWebCalendar);
-		break;
-
-	default:
-		CHierarchyTableDrag::FindCommandStatus(inCommand, outEnabled, outUsesMark, outMark, outName);
-		break;
+			break;
+			
+		case cmd_NewCalendar:
+		case cmd_ToolbarNewCalendarBtn:
+			// Always enabled
+			outEnabled = true;
+			break;
+			
+		case cmd_RenameCalendar:
+		case cmd_DeleteCalendar:
+		case cmd_FreeBusyCalendar:
+		case cmd_SendCalendar:
+			// Only if calendar selection
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionCanChangeCalendar);
+			break;
+			
+		case cmd_CheckCalendar:
+		case cmd_ToolbarCheckMailboxBtn:
+			// Always enabled
+			outEnabled = true;
+			break;
+			
+		case cmd_Hierarchy:
+		case cmd_NewHierarchy:
+			// Always able to do this, even if logged off or no selection
+			outEnabled = true;
+			break;
+			
+		case cmd_EditHierarchy:
+		case cmd_DeleteHierarchy:
+			outEnabled = TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionHierarchy);
+			break;
+			
+		case cmd_RefreshCalendarList:
+			// Only if single selection
+			outEnabled = IsSingleSelection();
+			break;
+			
+		case cmd_NewWebCalendar:
+			// Always enabled if admin allows it
+			outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars && 
+			((calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() == NULL) ||
+			 !calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected());
+			break;
+			
+		case cmd_RefreshWebCalendar:
+			// Always enabled if admin allows it
+			outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars &&
+			(calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() != NULL) &&
+			!calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected() &&
+			TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionWebCalendar);
+			break;
+			
+		case cmd_UploadWebCalendar:
+			// Always enabled if admin allows it
+			outEnabled = !CAdminLock::sAdminLock.mNoLocalCalendars &&
+			(calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol() != NULL) &&
+			!calstore::CCalendarStoreManager::sCalendarStoreManager->GetWebCalendarProtocol()->IsDisconnected() &&
+			TestSelectionAnd((TestSelectionPP) &CCalendarStoreTable::TestSelectionUploadWebCalendar);
+			break;
+			
+		default:
+			CHierarchyTableDrag::FindCommandStatus(inCommand, outEnabled, outUsesMark, outMark, outName);
+			break;
 	}
 }
 

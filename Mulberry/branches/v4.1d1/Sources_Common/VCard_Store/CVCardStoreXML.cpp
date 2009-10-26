@@ -46,7 +46,8 @@ namespace vcardstore
 	<!ELEMENT addressbooknode	(name, displayname?, last-sync?, webcal?, addressbooknode*) >
 	<!ATTLIST addressbooknode	adbk			(true|false) "false"
 								directory		(true|false) "false"
-								has_expanded	(true|false) >
+								has_expanded	(true|false)
+								display         (true|false) "false" >
 
 	<!ELEMENT name			(#PCDATA) >
 
@@ -63,6 +64,7 @@ const xmllib::XMLName cXMLElement_adbknode("addressbooknode");
 const char* cXMLAttribute_adbk = "adbk";
 const char* cXMLAttribute_directory = "directory";
 const char* cXMLAttribute_has_expanded = "has_expanded";
+const char* cXMLAttribute_displayhierachy = "display";
 
 const xmllib::XMLName cXMLElement_name("name");
 

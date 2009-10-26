@@ -48,10 +48,13 @@ private:
 
 public:
 	virtual CINETClient*	CloneConnection();			// Create duplicate, empty connection
+	
+	virtual bool Initialise(const cdstring& host, const cdstring& base_uri);
 
 	// P R O T O C O L
 
-	// C A L E N D A R
+	// A D D R E S S B O O K
+	virtual void _GetPrincipalDetails(const cdstring& puri, bool reset_home=false);
 
 	virtual void _CreateAdbk(const CAddressBook* adbk);
 	virtual bool _AdbkChanged(const CAddressBook* adbk);

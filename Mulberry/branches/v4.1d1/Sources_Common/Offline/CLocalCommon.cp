@@ -759,20 +759,25 @@ cdstring LocalFileName(const cdstring& name, char dir_delim, bool hash_encode, b
 			else
 				safe_encode_name(out, q, p - q, single_level);
 
-			// Output the local dir delim in place of remote one
-			out.put(os_dir_delim);
 			p++;
 			q = p;
+
+			// Output the local dir delim in place of remote one
+			if (*p)
+				out.put(os_dir_delim);
 		}
 		else
 			p++;
 	}
 
 	// Output remainder
-	if (hash_encode)
-		hash_encode_name(out, q, p - q);
-	else
-		safe_encode_name(out, q, p - q, single_level);
+	if (p - q)
+	{
+		if (hash_encode)
+			hash_encode_name(out, q, p - q);
+		else
+			safe_encode_name(out, q, p - q, single_level);
+	}
 
 	out << std::ends;
 

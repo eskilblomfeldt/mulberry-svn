@@ -559,6 +559,78 @@ void CCalendarProtocol::Logoff()
 
 }
 
+// Set the working directory prefix
+void CCalendarProtocol::AddWD(const cdstring& wd)
+{
+	// Create new hierarchy
+	CCalendarStoreNode* node = new CCalendarStoreNode(this, &mStoreRoot, true, false, false, wd);
+	node->SetFlags(CCalendarStoreNode::eIsDisplayHierarchy);
+	mStoreRoot.AddChild(node);
+	GetCalendarAccount()->GetWDs().push_back(CDisplayItem(wd));
+	
+	// Broadcast addition
+	Broadcast_Message(eBroadcast_RefreshList, this);
+	
+	// Make prefs as dirty
+	CPreferences::sPrefs->mCalendarAccounts.SetDirty();
+	
+	// Now load it if logged in
+	if (IsLoggedOn())
+	{
+		LoadList();
+		SyncList();
+	}
+}
+
+// Rename the working directory prefix
+void CCalendarProtocol::RenameWD(CCalendarStoreNode& node, const cdstring& new_name)
+{
+	// Change name in list and force refresh
+	for(CDisplayItemList::iterator iter = GetCalendarAccount()->GetWDs().begin(); iter != GetCalendarAccount()->GetWDs().end(); iter++)
+	{
+		if ((*iter).GetName() == node.GetName())
+		{
+			(*iter).SetName(new_name);
+			break;
+		}
+	}
+	node.SetName(new_name);
+	
+	// Make prefs as dirty
+	CPreferences::sPrefs->mCalendarAccounts.SetDirty();
+	
+	// Now load it if logged in
+	if (IsLoggedOn())
+	{
+		LoadList();
+		SyncList();
+	}
+}
+
+// Set the working directory prefix
+void CCalendarProtocol::RemoveWD(CCalendarStoreNode& node)
+{
+	// Change name in list and force refresh
+	for(CDisplayItemList::iterator iter = GetCalendarAccount()->GetWDs().begin(); iter != GetCalendarAccount()->GetWDs().end(); iter++)
+	{
+		if ((*iter).GetName() == node.GetName())
+		{
+			GetCalendarAccount()->GetWDs().erase(iter);
+			break;
+		}
+	}
+	
+	// Make prefs as dirty
+	CPreferences::sPrefs->mCalendarAccounts.SetDirty();
+	
+	// Now load it if logged in
+	if (IsLoggedOn())
+	{
+		LoadList();
+		SyncList();
+	}
+}
+
 void CCalendarProtocol::LoadList()
 {
 	// NB This protocol does not delete the list items when it logs out, so we
@@ -578,6 +650,14 @@ void CCalendarProtocol::LoadList()
 		// First try the disconnected cache - but only use if current
 		if (mListedFromCache || ((mCacheClient == NULL) || !ReadCalendars(true)))
 		{
+			// Add WDs
+			for(CDisplayItemList::const_iterator iter = GetCalendarAccount()->GetWDs().begin(); iter != GetCalendarAccount()->GetWDs().end(); iter++)
+			{
+				CCalendarStoreNode* node = new CCalendarStoreNode(this, &mStoreRoot, true, false, false, (*iter).GetName());
+				node->SetFlags(CCalendarStoreNode::eIsDisplayHierarchy);
+				mStoreRoot.AddChild(node);
+			}
+			
 			// Now get new list
 			mClient->_ListCalendars(&mStoreRoot);
 
@@ -649,24 +729,23 @@ void CCalendarProtocol::SyncList()
 CCalendarStoreNode* CCalendarProtocol::SyncCalendarNode(const cdstring& node)
 {
 	// Break the name down into components
-	cdstrvect names;
+	cdstring acct;
+	cdstring path;
 	const char* start = node.c_str();
 	const char* end = ::strchr(start, cMailAccountSeparator);
-	while(end != NULL)
+	if (end != NULL)
 	{
-		names.push_back(cdstring(start, end - start));
-		start = end + 1;
-		end = ::strchr(start, GetDirDelim());
+		acct = cdstring(start, end - start);
+		path = cdstring(end + 1);
 	}
-	names.push_back(cdstring(start));
-	std::reverse(names.begin(), names.end());
+	else
+		return NULL;
 	
 	// Now test account name
-	if (names.back() != GetAccountName())
+	if (acct != GetAccountName())
 		return NULL;
-	names.pop_back();
 	
-	return names.empty() ? const_cast<CCalendarStoreNode*>(&mStoreRoot) : mStoreRoot.FindNodeOrCreate(names);
+	return mStoreRoot.FindNodeOrCreate(path);
 }
 
 void CCalendarProtocol::RefreshList()
@@ -696,25 +775,23 @@ void CCalendarProtocol::ListChanged()
 CCalendarStoreNode* CCalendarProtocol::GetNode(const cdstring& cal, bool parent) const
 {
 	// Break the name down into components
-	cdstrvect names;
+	cdstring acct;
+	cdstring path;
 	const char* start = cal.c_str();
 	const char* end = ::strchr(start, cMailAccountSeparator);
-	while(end != NULL)
+	if (end != NULL)
 	{
-		names.push_back(cdstring(start, end - start));
-		start = end + 1;
-		end = ::strchr(start, GetDirDelim());
+		acct = cdstring(start, end - start);
+		path = cdstring(end + 1);
 	}
-	if (!parent)
-		names.push_back(cdstring(start));
-	std::reverse(names.begin(), names.end());
-	
-	// Now test account name
-	if (names.back() != GetAccountName())
+	else
 		return NULL;
-	names.pop_back();
-	
-	return names.empty() ? const_cast<CCalendarStoreNode*>(&mStoreRoot) : mStoreRoot.FindNode(names);
+
+	// Now test account name
+	if (acct != GetAccountName())
+		return NULL;
+
+	return mStoreRoot.FindNode(path);
 }
 
 CCalendarStoreNode* CCalendarProtocol::GetNodeByRemoteURL(const cdstring& url) const
@@ -1312,6 +1389,7 @@ void CCalendarProtocol::SubscribeFullCalendar(const CCalendarStoreNode& node, iC
 {
 	// Always read from the main server
 	bool if_changed = !cal.GetETag().empty();
+	cal.Clear();
 	mClient->_ReadFullCalendar(node, cal, if_changed);
 
 	// Always keep disconnected cache in sync with server

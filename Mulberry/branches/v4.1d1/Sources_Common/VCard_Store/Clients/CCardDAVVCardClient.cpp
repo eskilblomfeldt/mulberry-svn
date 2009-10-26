@@ -102,13 +102,74 @@ CINETClient* CCardDAVVCardClient::CloneConnection()
 
 #pragma mark ____________________________Protocol
 
+// For CardDAV we need to do this twice - once on the base URI passed in, and then,
+// if we know access control is supported, a second time on the principal resource
+// which we know must indicate caldav capability levels.
+bool CCardDAVVCardClient::Initialise(const cdstring& host, const cdstring& base_uri)
+{
+	cdstring actual_base_uri = base_uri;
+	if (actual_base_uri.length() == 0)
+		actual_base_uri = "/";
+	
+	if (CWebDAVVCardClient::Initialise(host, actual_base_uri) && HasDAVACL())
+	{
+		bool no_preport = false;
+#ifdef NO_PRINCIPAL_REPORT
+		no_preport = (GetAccount()->GetName().find("nopreport") != cdstring::npos);
+#endif
+		if (no_preport)
+			return true;
+		else
+		{
+			cdstring puri;
+			if (GetSelfPrincipalResource(actual_base_uri, puri))
+			{
+				bool result = CWebDAVVCardClient::Initialise(host, puri);
+				if (result)
+				{
+					// May need to reset calendar-home path
+					if (GetAdbkOwner()->GetAddressAccount()->GetBaseRURL().empty())
+					{
+						// Get calendar-home-set from principal resource
+						_GetPrincipalDetails(puri);
+					}
+				}
+				return result;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void CCardDAVVCardClient::_GetPrincipalDetails(const cdstring& puri, bool reset_home)
+{
+	cdstrmap result;
+	xmllib::XMLNameList props;
+	props.push_back(http::carddav::cProperty_addressbook_home_set);
+	if (GetProperties(puri, props, result))
+	{
+		cdstrmap::const_iterator found = result.find(http::carddav::cProperty_addressbook_home_set.FullName());
+		if (found != result.end() and reset_home)
+		{
+			// May need to reset calendar-home path
+			if (GetAdbkOwner()->GetAddressAccount()->GetBaseRURL().empty())
+			{
+				_Reset((*found).second);
+			}
+		}
+		return;
+	}
+}
+
 void CCardDAVVCardClient::_CreateAdbk(const CAddressBook* adbk)
 {
 	// Start UI action
 	StINETClientAction _action(this, "Status::IMSP::CreateAddressBook", "Error::IMSP::OSErrCreateAddressBook", "Error::IMSP::NoBadCreateAddressBook", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Use MKCOL for directories
 	if (adbk->IsDirectory())
@@ -158,7 +219,8 @@ bool CCardDAVVCardClient::_AdbkChanged(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current CTag
@@ -174,7 +236,8 @@ void CCardDAVVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
 	StINETClientAction _action(this, "Status::IMSP::Checking", "Error::IMSP::OSErrCheck", "Error::IMSP::NoBadCheck", adbk->GetName());
 
 	// Determine URL and lock
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	cdstring lock_token = GetLockToken(rurl);
 
 	// Get current CTag
@@ -185,42 +248,36 @@ void CCardDAVVCardClient::_UpdateSyncToken(const CAddressBook* adbk)
 
 void CCardDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webdav::CWebDAVPropFindParser& parser)
 {
-	cdstring base_temp(mBaseURL);
-	base_temp.DecodeURL();
-	cdstring baser_temp(mBaseRURL);
-	baser_temp.DecodeURL();
-	
-	unsigned long url_strip_length = base_temp.length();
-	unsigned long rurl_strip_length = baser_temp.length();
+	cdstring nodeURL = root->GetName();
+	nodeURL.EncodeURL('/');
+	if (root->IsProtocol())
+		nodeURL = mBaseRURL;
+	cdstring nodeURLNoSlash = nodeURL;
+	if (nodeURLNoSlash.compare_end("/"))
+		nodeURLNoSlash.erase(nodeURLNoSlash.length() - 1);
+	else
+	{
+		nodeURLNoSlash = nodeURL;
+		nodeURL += "/";
+	}
 
-	cdstring strippedrooturl(GetRURL(root), rurl_strip_length, cdstring::npos);
-	strippedrooturl.DecodeURL();
-
-	cdstring strippedrooturl_noslash(strippedrooturl);
-	if (strippedrooturl_noslash.compare_end(cdstring('/')))
-		strippedrooturl_noslash.erase(strippedrooturl_noslash.length() - 1);
+	cdstring relBase = nodeURL;
+	cdstring relBaseNoSlash = nodeURLNoSlash;
 
 	// Look at each propfind result and determine type of address book
 	for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
 	{
 		// Get child element name (decode URL)
-		cdstring name((*iter)->GetResource());
-		name.DecodeURL();
-	
-		// Strip base prefix off
-		cdstring rpath;
-		if (name.compare_start(baser_temp))
-			rpath.assign(name, rurl_strip_length, cdstring::npos);
-		else if (name.compare_start(base_temp))
-			rpath.assign(name, url_strip_length, cdstring::npos);
-		if (rpath.empty() || (rpath == strippedrooturl) || (rpath == strippedrooturl_noslash))
+		cdstring rpath((*iter)->GetResource());
+		
+		// Strip of path prefix
+		if (rpath.compare_start(mHostURL))
+			rpath.erase(0, mHostURL.length());
+		
+		// Ignore root
+		if ((rpath == relBase) or (rpath == relBaseNoSlash))
 			continue;
-
-		// Strip off trailing .vcf
-		if (rpath.compare_end(".vcf"))
-			rpath.erase(rpath.length() - 4);
-		else if (rpath.compare_end("/"))
-			rpath.erase(rpath.length() - 1);
+		rpath.DecodeURL();
 
 		// Determine type of element
 		bool is_dir = false;
@@ -233,14 +290,14 @@ void CCardDAVVCardClient::ListAddressBooks(CAddressBook* root, const http::webda
 			const xmllib::XMLNode* node = (*(*iter)->GetNodeProperties().find(http::webdav::cProperty_resourcetype.FullName())).second;
 			
 			// Look at each child element
-			for(xmllib::XMLNodeList::const_iterator iter = node->Children().begin(); iter != node->Children().end(); iter++)
+			for(xmllib::XMLNodeList::const_iterator iter2 = node->Children().begin(); iter2 != node->Children().end(); iter2++)
 			{
 				// Look for collection
-				if ((*iter)->CompareFullName(http::webdav::cProperty_collection))
+				if ((*iter2)->CompareFullName(http::webdav::cProperty_collection))
 					is_col = true;
 				
 				// Look for address book
-				if ((*iter)->CompareFullName(http::carddav::cProperty_carddavadbk))
+				if ((*iter2)->CompareFullName(http::carddav::cProperty_carddavadbk))
 					is_adbk = true;
 			}
 
@@ -284,7 +341,8 @@ void CCardDAVVCardClient::_ReadFullAddressBook(CAddressBook* adbk)
 	// Get each item found and parse into calendar one at a time whilst caching HREF
 	
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	props.push_back(http::webdav::cProperty_getcontenttype);
@@ -338,7 +396,8 @@ void CCardDAVVCardClient::ReadAddressBookComponents(CAddressBook* adbk, const cd
 		return;
 
 	// Run the adbk-multiget report
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV REPORT
 	std::auto_ptr<http::carddav::CCardDAVMultigetReport> request(new http::carddav::CCardDAVMultigetReport(this, rurl, hrefs));
@@ -366,7 +425,7 @@ void CCardDAVVCardClient::ReadAddressBookComponents(CAddressBook* adbk, const cd
 
 void CCardDAVVCardClient::GetAddressBookComponents(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const http::webdav::CWebDAVPropFindParser& parser, cdstrmap& compinfo, bool last_path)
 {
-	CURL base(GetRURL(adbk, true), true);
+	CURL base(mHostURL + adbk->GetName(), true);
 	
 	// Look at each propfind result and determine type of address book
 	for(http::webdav::CWebDAVPropFindParser::CPropFindResults::const_iterator iter = parser.Results().begin(); iter != parser.Results().end(); iter++)
@@ -509,7 +568,8 @@ void CCardDAVVCardClient::_GetComponentInfo(CAddressBook* adbk, vCard::CVCardAdd
 	// Get each item found and parse into address book one at a time whilst caching HREF
 	
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	props.push_back(http::webdav::cProperty_getcontenttype);
@@ -577,7 +637,8 @@ void CCardDAVVCardClient::_RemoveComponent(CAddressBook* adbk, vCard::CVCardAddr
 		return;
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	rurl += comp_rurl;
 
 	// Create WebDAV DELETE
@@ -609,7 +670,8 @@ void CCardDAVVCardClient::_ReadComponents(CAddressBook* adbk, vCard::CVCardAddre
 
 	// Determine URLs
 	cdstrvect hrefs;
-	cdstring root_url = GetRURL(adbk);
+	cdstring root_url = adbk->GetName();
+	root_url.EncodeURL('/');
 	for(cdstrvect::const_iterator iter = rurls.begin(); iter != rurls.end(); iter++)
 	{
 		cdstring rurl = root_url;
@@ -629,7 +691,8 @@ vCard::CVCardVCard* CCardDAVVCardClient::_ReadComponent(CAddressBook* adbk, vCar
 	StINETClientAction _action(this, "Status::Calendar::Reading", "Error::Calendar::OSErrReadCalendar", "Error::Calendar::NoBadReadCalendar", adbk->GetName());
 
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	rurl += comp_rurl;
 
 	// Read it in	
@@ -655,7 +718,8 @@ void CCardDAVVCardClient::AddComponent(CAddressBook* adbk, vCard::CVCardAddressB
 		const_cast<vCard::CVCardVCard&>(component).GenerateRURL();
 
 		// Determine URL
-		rurl = GetRURL(adbk);
+		rurl = adbk->GetName();
+		rurl.EncodeURL('/');
 		rurl += component.GetRURL();
 
 #ifndef ORACLE_FIX_3
@@ -689,7 +753,8 @@ void CCardDAVVCardClient::ChangeComponent(CAddressBook* adbk, vCard::CVCardAddre
 {
 	// Determine URL
 #ifndef ORACLE_FIX_3
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk.GetName();
+	rurl.EncodeURL('/');
 	rurl += component.GetRURL();
 
 	// Lock it
@@ -709,7 +774,8 @@ void CCardDAVVCardClient::ChangeComponent(CAddressBook* adbk, vCard::CVCardAddre
 void CCardDAVVCardClient::WriteComponent(CAddressBook* adbk, vCard::CVCardAddressBook& vadbk, const vCard::CVCardVCard& component, bool new_item)
 {
 	// Determine URL
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	rurl += component.GetRURL();
 	cdstring lock_token = GetLockToken(rurl);
 
@@ -760,7 +826,8 @@ void CCardDAVVCardClient::WriteComponent(CAddressBook* adbk, vCard::CVCardAddres
 		if (new_path != component.GetRURL())
 		{
 			const_cast<vCard::CVCardVCard&>(component).SetRURL(new_path);
-			rurl = GetRURL(adbk);
+			rurl = adbk->GetName();
+			rurl.EncodeURL('/');
 			rurl += component.GetRURL();
 		}
 	}
@@ -932,7 +999,8 @@ void CCardDAVVCardClient::_SearchAddress(CAddressBook* adbk,
 void CCardDAVVCardClient::SizeAddressBook_DAV(CAddressBook* adbk)
 {
 	// Create WebDAV propfind
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	xmllib::XMLNameList props;
 	props.push_back(http::webdav::cProperty_getcontentlength);
 	std::auto_ptr<http::webdav::CWebDAVPropFind> request(new http::webdav::CWebDAVPropFind(this, rurl, http::webdav::eDepth0, props));
@@ -978,7 +1046,8 @@ void CCardDAVVCardClient::SizeAddressBook_DAV(CAddressBook* adbk)
 void CCardDAVVCardClient::SizeAddressBook_HTTP(CAddressBook* adbk)
 {
 	// Create WebDAV HEAD
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 	std::auto_ptr<http::webdav::CWebDAVGet> request(new http::webdav::CWebDAVGet(this, rurl, true));
 	http::CHTTPOutputDataString dout;
 	request->SetData(&dout);
@@ -1041,6 +1110,7 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 		case CAdbkAddress::eNotes:
 			prop_names.push_back(vCard::cVCardProperty_NOTE);
 			break;
+		default:;
 		}
 	}
 
@@ -1062,7 +1132,8 @@ void CCardDAVVCardClient::SearchAddressBook(CAddressBook* adbk, const cdstring& 
 	}
 
 	// Run the adbk-multiget report
-	cdstring rurl = GetRURL(adbk);
+	cdstring rurl = adbk->GetName();
+	rurl.EncodeURL('/');
 
 	// Create WebDAV REPORT
 	std::auto_ptr<http::carddav::CCardDAVQueryReport> request(new http::carddav::CCardDAVQueryReport(this, rurl, prop_names, name, match_type));
@@ -1111,6 +1182,8 @@ cdstring CCardDAVVCardClient::GetRURL(const cdstring& name, bool directory, bool
 {
 	// Determine URL
 	cdstring rurl = (abs ? mBaseURL : mBaseRURL);
+	if (name[0] == '/')
+		rurl = "";
 	cdstring temp(name);
 	temp.EncodeURL('/');
 	rurl += temp;

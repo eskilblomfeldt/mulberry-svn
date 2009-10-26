@@ -163,7 +163,25 @@ void CWebDAVPrefsClient::Reset()
 
 void CWebDAVPrefsClient::Logon()
 {
-	// Local does nothing
+	// Do initialisation if not already done
+	if (!Initialise(mServerAddr, mBaseRURL))
+	{
+		// Break connection with server
+		CloseConnection();
+		return;
+	}
+	
+	// Recache user id & password after successful logon
+	if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+	{
+		CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+		
+		// Only bother if it contains something
+		if (!auth->GetPswd().empty())
+		{
+			CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+		}
+	}
 }
 
 void CWebDAVPrefsClient::Logoff()
@@ -470,6 +488,29 @@ void CWebDAVPrefsClient::CloseSession()
 
 void CWebDAVPrefsClient::RunSession(CHTTPRequestResponse* request)
 {
+	// Do initialisation if not already done
+	if (!Initialised())
+	{
+		if (!Initialise(mServerAddr, mBaseRURL))
+		{
+			// Break connection with server
+			CloseConnection();
+			return;
+		}
+		
+		// Recache user id & password after successful logon
+		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
+		{
+			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
+			
+			// Only bother if it contains something
+			if (!auth->GetPswd().empty())
+			{
+				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
+			}
+		}
+	}
+	
 	// Server, base uri may change due to redirection
 	StValueChanger<cdstring> _preserve1(mServerAddr, mServerAddr);
 	StValueChanger<cdstring> _preserve2(mBaseRURL, mBaseRURL);
@@ -531,29 +572,6 @@ void CWebDAVPrefsClient::RunSession(CHTTPRequestResponse* request)
 
 void CWebDAVPrefsClient::DoSession(CHTTPRequestResponse* request)
 {
-	// Do initialisation if not already done
-	if (!Initialised())
-	{
-		if (!Initialise(mServerAddr, mBaseRURL))
-		{
-			// Break connection with server
-			CloseConnection();
-			return;
-		}
-		
-		// Recache user id & password after successful logon
-		if (GetAccount()->GetAuthenticator().RequiresUserPswd())
-		{
-			CAuthenticatorUserPswd* auth = GetAccount()->GetAuthenticatorUserPswd();
-
-			// Only bother if it contains something
-			if (!auth->GetPswd().empty())
-			{
-				CPasswordManager::GetManager()->AddPassword(GetAccount(), auth->GetPswd());
-			}
-		}
-	}
-	
 	// Do the request if present
 	if (request != NULL)
 	{
@@ -726,7 +744,7 @@ void CWebDAVPrefsClient::DoRequest(CHTTPRequestResponse* request)
 	WriteRequestData(request);
 
 	// Flush all request data
-	*mStream << flush;
+	*mStream << std::flush;
 	
 	// Blank line in log between 
 	if (mAllowLog)
