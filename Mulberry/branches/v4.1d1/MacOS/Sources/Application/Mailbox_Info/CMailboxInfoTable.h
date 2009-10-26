@@ -32,6 +32,7 @@
 const	ResIDT		RidL_CMailboxBtns = 1000;
 
 // Classes
+class CMailboxInfoView;
 class CMbox;
 class CMessage;
 class CDragIt;

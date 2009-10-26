@@ -86,7 +86,7 @@ void CPrefsMessageGeneral::FinishCreateSelf(void)
 }
 
 // Toggle display of IC items
-void CPrefsMessageGeneral::ToggleICDisplay(void)
+void CPrefsMessageGeneral::ToggleICDisplay(bool IC_on)
 {
 #if 0
 	if (mCopyPrefs->mUse_IC)
@@ -188,7 +188,7 @@ void CPrefsMessageGeneral::SetData(void* data)
 	mCopyPrefs = copyPrefs;
 
 	// Toggle IC display
-	ToggleICDisplay();
+	ToggleICDisplay(false);
 
 	// Copy info
 	mSaveCreator->SetText(copyPrefs->mSaveCreator.GetValue());

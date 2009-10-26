@@ -96,7 +96,7 @@ protected:
 public:
 	virtual void	ListenToMessage(MessageT inMessage, void *ioParam);
 
-	virtual void	ToggleICDisplay(void);					// Toggle display of IC - pure virtual
+	virtual void	ToggleICDisplay(bool IC_on);					// Toggle display of IC - pure virtual
 	virtual void	SetData(void* data);			// Set data
 	virtual void	UpdateData(void* data);			// Force update of data
 

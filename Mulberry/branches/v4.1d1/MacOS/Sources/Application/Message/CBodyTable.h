@@ -32,6 +32,8 @@ const FlavorType cDragPromiseFSSpec = 'fssP';
 // Classes
 
 class CAttachment;
+class CMessageView;
+class CMessageWindow;
 class CStaticText;
 
 class	CBodyTable : public CHierarchyTableDrag

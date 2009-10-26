@@ -32,6 +32,7 @@
 
 // Classes
 class CMailboxToolbarPopup;
+class CMailboxWindow;
 class CServerView;
 class CToolbar;
 class LBevelButton;

@@ -36,7 +36,7 @@ public:
 					CProgress();
 	virtual			~CProgress() {}
 	
-	virtual void	SetDescriptor(cdstring& inDescriptor)
+	virtual void	SetDescriptor(const cdstring& inDescriptor)
 		{ mTitle = inDescriptor; }
 
 	virtual void	Reset()
