@@ -680,8 +680,7 @@
 		AFCDE28D0AE176E200E30447 /* CDurationSelect.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD510AE176DB00E30447 /* CDurationSelect.cp */; };
 		AFCDE28E0AE176E200E30447 /* CNewComponentPanel.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD530AE176DB00E30447 /* CNewComponentPanel.cp */; };
 		AFCDE28F0AE176E200E30447 /* CNewTimingPanel.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD550AE176DB00E30447 /* CNewTimingPanel.cp */; };
-		AFCDE2900AE176E200E30447 /* CNewComponentTiming.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD570AE176DB00E30447 /* CNewComponentTiming.cp */; };
-		AFCDE2910AE176E200E30447 /* CNewComponentDescription.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD590AE176DB00E30447 /* CNewComponentDescription.cp */; };
+		AFCDE2900AE176E200E30447 /* CNewComponentDetails.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD570AE176DB00E30447 /* CNewComponentDetails.cp */; };
 		AFCDE2920AE176E200E30447 /* CNewComponentAlarm.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD5B0AE176DB00E30447 /* CNewComponentAlarm.cp */; };
 		AFCDE2930AE176E200E30447 /* CNewComponentAttendees.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD5D0AE176DB00E30447 /* CNewComponentAttendees.cp */; };
 		AFCDE2940AE176E200E30447 /* CAttendeeTable.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDDD5F0AE176DB00E30447 /* CAttendeeTable.cp */; };
@@ -1198,6 +1197,8 @@
 		AFDD7A140C41309900DE5877 /* MulberryBits.r in Rez */ = {isa = PBXBuildFile; fileRef = AFDD7A130C41309900DE5877 /* MulberryBits.r */; };
 		AFDD7BFD0C41315B00DE5877 /* MulberryAE.r in Rez */ = {isa = PBXBuildFile; fileRef = AFDD7BFC0C41315B00DE5877 /* MulberryAE.r */; };
 		AFE8B8830B2A4016008E5DC8 /* MulberryVers.r in Rez */ = {isa = PBXBuildFile; fileRef = AFE8B8820B2A4016008E5DC8 /* MulberryVers.r */; };
+		AFF40771102DE5BF00971DA1 /* CNewComponentRepeat.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFF4076F102DE5BF00971DA1 /* CNewComponentRepeat.cp */; };
+		AFF407FA102DFADE00971DA1 /* CNewComponentDialog.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFF407F8102DFADE00971DA1 /* CNewComponentDialog.cp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2920,10 +2921,8 @@
 		AFCDDD530AE176DB00E30447 /* CNewComponentPanel.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentPanel.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentPanel.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDD540AE176DB00E30447 /* CNewTimingPanel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewTimingPanel.h; path = Sources/Application/Calendar/Component_Editing/CNewTimingPanel.h; sourceTree = SOURCE_ROOT; };
 		AFCDDD550AE176DB00E30447 /* CNewTimingPanel.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewTimingPanel.cp; path = Sources/Application/Calendar/Component_Editing/CNewTimingPanel.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDD560AE176DB00E30447 /* CNewComponentTiming.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewComponentTiming.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentTiming.h; sourceTree = SOURCE_ROOT; };
-		AFCDDD570AE176DB00E30447 /* CNewComponentTiming.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentTiming.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentTiming.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDD580AE176DB00E30447 /* CNewComponentDescription.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewComponentDescription.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentDescription.h; sourceTree = SOURCE_ROOT; };
-		AFCDDD590AE176DB00E30447 /* CNewComponentDescription.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentDescription.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentDescription.cp; sourceTree = SOURCE_ROOT; };
+		AFCDDD560AE176DB00E30447 /* CNewComponentDetails.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewComponentDetails.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentDetails.h; sourceTree = "<group>"; };
+		AFCDDD570AE176DB00E30447 /* CNewComponentDetails.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentDetails.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentDetails.cp; sourceTree = "<group>"; };
 		AFCDDD5A0AE176DB00E30447 /* CNewComponentAlarm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewComponentAlarm.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentAlarm.h; sourceTree = SOURCE_ROOT; };
 		AFCDDD5B0AE176DB00E30447 /* CNewComponentAlarm.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentAlarm.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentAlarm.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDD5C0AE176DB00E30447 /* CNewComponentAttendees.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CNewComponentAttendees.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentAttendees.h; sourceTree = SOURCE_ROOT; };
@@ -3929,6 +3928,10 @@
 		AFDD7A130C41309900DE5877 /* MulberryBits.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = MulberryBits.r; path = Resources/MulberryBits.r; sourceTree = "<group>"; };
 		AFDD7BFC0C41315B00DE5877 /* MulberryAE.r */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.rez; name = MulberryAE.r; path = Resources/MulberryAE.r; sourceTree = "<group>"; };
 		AFE8B8820B2A4016008E5DC8 /* MulberryVers.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = MulberryVers.r; path = Resources/MulberryVers.r; sourceTree = "<group>"; };
+		AFF4076F102DE5BF00971DA1 /* CNewComponentRepeat.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentRepeat.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentRepeat.cp; sourceTree = "<group>"; };
+		AFF40770102DE5BF00971DA1 /* CNewComponentRepeat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNewComponentRepeat.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentRepeat.h; sourceTree = "<group>"; };
+		AFF407F8102DFADE00971DA1 /* CNewComponentDialog.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CNewComponentDialog.cp; path = Sources/Application/Calendar/Component_Editing/CNewComponentDialog.cp; sourceTree = "<group>"; };
+		AFF407F9102DFADE00971DA1 /* CNewComponentDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CNewComponentDialog.h; path = Sources/Application/Calendar/Component_Editing/CNewComponentDialog.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -6400,36 +6403,38 @@
 		AFCDDD4D0AE176DB00E30447 /* Component Editing */ = {
 			isa = PBXGroup;
 			children = (
-				AFCDDD4E0AE176DB00E30447 /* CDateTimeZoneSelect.h */,
-				AFCDDD4F0AE176DB00E30447 /* CDateTimeZoneSelect.cp */,
-				AFCDDD500AE176DB00E30447 /* CDurationSelect.h */,
-				AFCDDD510AE176DB00E30447 /* CDurationSelect.cp */,
+				AFF407F9102DFADE00971DA1 /* CNewComponentDialog.h */,
+				AFF407F8102DFADE00971DA1 /* CNewComponentDialog.cp */,
+				AFCDDD620AE176DB00E30447 /* CNewEventDialog.h */,
+				AFCDDD630AE176DB00E30447 /* CNewEventDialog.cp */,
+				AFCDDD660AE176DB00E30447 /* CNewToDoDialog.h */,
+				AFCDDD670AE176DB00E30447 /* CNewToDoDialog.cp */,
 				AFCDDD520AE176DB00E30447 /* CNewComponentPanel.h */,
 				AFCDDD530AE176DB00E30447 /* CNewComponentPanel.cp */,
+				AFCDDD560AE176DB00E30447 /* CNewComponentDetails.h */,
+				AFCDDD570AE176DB00E30447 /* CNewComponentDetails.cp */,
 				AFCDDD540AE176DB00E30447 /* CNewTimingPanel.h */,
 				AFCDDD550AE176DB00E30447 /* CNewTimingPanel.cp */,
-				AFCDDD560AE176DB00E30447 /* CNewComponentTiming.h */,
-				AFCDDD570AE176DB00E30447 /* CNewComponentTiming.cp */,
-				AFCDDD580AE176DB00E30447 /* CNewComponentDescription.h */,
-				AFCDDD590AE176DB00E30447 /* CNewComponentDescription.cp */,
+				AFCDDD640AE176DB00E30447 /* CNewEventTiming.h */,
+				AFCDDD650AE176DB00E30447 /* CNewEventTiming.cp */,
+				AFCDDD680AE176DB00E30447 /* CNewToDoTiming.h */,
+				AFCDDD690AE176DB00E30447 /* CNewToDoTiming.cp */,
+				AFF40770102DE5BF00971DA1 /* CNewComponentRepeat.h */,
+				AFF4076F102DE5BF00971DA1 /* CNewComponentRepeat.cp */,
 				AFCDDD5A0AE176DB00E30447 /* CNewComponentAlarm.h */,
 				AFCDDD5B0AE176DB00E30447 /* CNewComponentAlarm.cp */,
 				AFCDDD5C0AE176DB00E30447 /* CNewComponentAttendees.h */,
 				AFCDDD5D0AE176DB00E30447 /* CNewComponentAttendees.cp */,
+				AFCDDD4E0AE176DB00E30447 /* CDateTimeZoneSelect.h */,
+				AFCDDD4F0AE176DB00E30447 /* CDateTimeZoneSelect.cp */,
+				AFCDDD500AE176DB00E30447 /* CDurationSelect.h */,
+				AFCDDD510AE176DB00E30447 /* CDurationSelect.cp */,
 				AFCDDD5E0AE176DB00E30447 /* CAttendeeTable.h */,
 				AFCDDD5F0AE176DB00E30447 /* CAttendeeTable.cp */,
 				AFCDDD600AE176DB00E30447 /* CNewAttendeeDialog.h */,
 				AFCDDD610AE176DB00E30447 /* CNewAttendeeDialog.cp */,
 				AF2551F50C4328A7001AAE53 /* CCalendarAddressDisplay.h */,
 				AF2551F40C4328A7001AAE53 /* CCalendarAddressDisplay.cp */,
-				AFCDDD620AE176DB00E30447 /* CNewEventDialog.h */,
-				AFCDDD630AE176DB00E30447 /* CNewEventDialog.cp */,
-				AFCDDD640AE176DB00E30447 /* CNewEventTiming.h */,
-				AFCDDD650AE176DB00E30447 /* CNewEventTiming.cp */,
-				AFCDDD660AE176DB00E30447 /* CNewToDoDialog.h */,
-				AFCDDD670AE176DB00E30447 /* CNewToDoDialog.cp */,
-				AFCDDD680AE176DB00E30447 /* CNewToDoTiming.h */,
-				AFCDDD690AE176DB00E30447 /* CNewToDoTiming.cp */,
 				AFCDDD6A0AE176DB00E30447 /* CRecurrenceDialog.h */,
 				AFCDDD6B0AE176DB00E30447 /* CRecurrenceDialog.cp */,
 			);
@@ -7438,8 +7443,8 @@
 				AFCDE0520AE176DF00E30447 /* CCalendarClient.h */,
 				AFCDE0530AE176DF00E30447 /* CCalendarClient.cpp */,
 				AFCDE0540AE176DF00E30447 /* CLocalCalendarClient.h */,
-				AFCDE0560AE176DF00E30447 /* CWebDAVDefinitions.h */,
 				AFCDE0550AE176DF00E30447 /* CLocalCalendarClient.cpp */,
+				AFCDE0560AE176DF00E30447 /* CWebDAVDefinitions.h */,
 				AFCDE0570AE176DF00E30447 /* CWebDAVDefinitions.cpp */,
 				AFCDE0580AE176DF00E30447 /* CWebDAVCalendarClient.h */,
 				AFCDE0590AE176DF00E30447 /* CWebDAVCalendarClient.cpp */,
@@ -8831,8 +8836,7 @@
 				AFCDE28D0AE176E200E30447 /* CDurationSelect.cp in Sources */,
 				AFCDE28E0AE176E200E30447 /* CNewComponentPanel.cp in Sources */,
 				AFCDE28F0AE176E200E30447 /* CNewTimingPanel.cp in Sources */,
-				AFCDE2900AE176E200E30447 /* CNewComponentTiming.cp in Sources */,
-				AFCDE2910AE176E200E30447 /* CNewComponentDescription.cp in Sources */,
+				AFCDE2900AE176E200E30447 /* CNewComponentDetails.cp in Sources */,
 				AFCDE2920AE176E200E30447 /* CNewComponentAlarm.cp in Sources */,
 				AFCDE2930AE176E200E30447 /* CNewComponentAttendees.cp in Sources */,
 				AFCDE2940AE176E200E30447 /* CAttendeeTable.cp in Sources */,
@@ -9389,6 +9393,8 @@
 				AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */,
 				AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */,
 				AF8093D10D425EEF002A2E39 /* CVCardSearch.cpp in Sources */,
+				AFF40771102DE5BF00971DA1 /* CNewComponentRepeat.cp in Sources */,
+				AFF407FA102DFADE00971DA1 /* CNewComponentDialog.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9536,7 +9542,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
-				GCC_VERSION = 4.0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
@@ -9598,7 +9604,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
-				GCC_VERSION = 4.0;
+				GCC_VERSION = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
