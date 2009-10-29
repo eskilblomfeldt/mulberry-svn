@@ -37,6 +37,8 @@
 #include "CStringUtils.h"
 
 #include <stdlib.h>
+
+#include <memory>
 #include <strstream>
 
 #if __dest_os == __linux_os

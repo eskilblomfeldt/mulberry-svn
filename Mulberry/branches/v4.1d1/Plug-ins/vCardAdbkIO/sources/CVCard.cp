@@ -34,6 +34,7 @@
 #include "CStringUtils.h"
 #include "quotedprintable.h"
 
+#include <algorithm>
 #include <strstream>
 
 CVCardItem& CVCard::AddItem(const cdstring& name, const cdstring& value)

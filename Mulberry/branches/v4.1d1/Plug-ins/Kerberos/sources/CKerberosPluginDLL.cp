@@ -58,7 +58,7 @@
 
 #ifndef USE_KCLIENT
 #include <string>
-using namespace std;
+//using namespace std;
 #endif
 
 #define AUTHERROR(xx_msg, copyout) do { \

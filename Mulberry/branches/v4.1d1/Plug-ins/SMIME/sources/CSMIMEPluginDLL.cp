@@ -51,6 +51,9 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <algorithm>
+#include <memory>
+
 #if __dest_os == __linux_os
 #define O_BINARY 0
 #include <sys/stat.h>

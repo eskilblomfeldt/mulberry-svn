@@ -1,5 +1,8 @@
 # Makefile for Mulberry Plugin builds
 
+DEV_ROOT=../..
+JX_ROOT = ${DEV_ROOT}/JX
+JX_MAKEMAKE = ${DEV_ROOT}/JX/bin/makemake
 PLUGINS_DIR := ./
 PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
@@ -40,7 +43,7 @@ plugins:
 
 plugin:
 	@echo "-->Building ${PLUGIN}"
-	@(cd ${PLUGINS_DIR}/${PLUGIN}; makemake --obj-dir BIN; mkdir -p .obj; ${MAKE})
+	@(cd ${PLUGINS_DIR}/${PLUGIN}; ../${JX_MAKEMAKE} --obj-dir BIN; mkdir -p .obj; ${MAKE})
 
 cleanplugin:
 	@echo "-->Cleaning ${PLUGIN}"

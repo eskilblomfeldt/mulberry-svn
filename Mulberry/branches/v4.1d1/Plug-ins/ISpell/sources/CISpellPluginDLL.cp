@@ -35,8 +35,9 @@
 #include "CPluginInfo.h"
 #include "CStringUtils.h"
 
+#include <algorithm>
 #include <memory>
-using namespace std;
+//using namespace std;
 
 #include <fcntl.h>
 #include <signal.h>
@@ -783,7 +784,7 @@ int CISpellPluginDLL::GetLine(cdstring& line)
 			int readsize = ::read(mOutputfd[0], buf, buflen);
 			if (readsize < 0)
 				continue;
-			buf[min(buflen - 1, readsize)] = 0;
+			buf[std::min(buflen - 1, readsize)] = 0;
 #ifdef DEBUG_OUTPUT
 			//printf("%s", buf);
 #endif
