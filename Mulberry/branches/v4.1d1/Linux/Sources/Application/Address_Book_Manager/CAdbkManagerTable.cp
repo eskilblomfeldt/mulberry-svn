@@ -22,6 +22,7 @@
 #include "CAdbkManagerView.h"
 #include "CAdbkManagerWindow.h"
 #include "CAdbkProtocol.h"
+#include "CAddressBook.h"
 #include "CAddressBookManager.h"
 #include "CAddressBookWindow.h"
 #include "CAdminLock.h"
@@ -31,7 +32,6 @@
 #include "CMulberryApp.h"
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
-#include "CRemoteAddressBook.h"
 #include "CServerBrowse.h"
 #include "CTableRowSelector.h"
 #include "CTableRowGeometry.h"
@@ -69,7 +69,6 @@ CAdbkManagerTable::CAdbkManagerTable(JXScrollbarSet* scrollbarSet,
 	mManager = NULL;
 	mListChanging = false;
 	mHierarchyCol = 1;
-	mHasOthers = false;
 
 	// Create storage
 	mTableGeometry = new CTableRowGeometry(this, 128, 18);
@@ -158,13 +157,21 @@ bool CAdbkManagerTable::ObeyCommand(unsigned long cmd, SMenuCommandChoice* menu)
 		return true;
 		
 	case CCommand::eAddressesLogin:
-		OnLoginAddressBook();
+		OnLogin();
 		return true;
 		
-	case CCommand::eAddressesLogout:
-		OnLogoutAddressBook();
+	case CCommand::eDispHNew:
+		OnNewHierarchy();
 		return true;
-		
+
+	case CCommand::eDispHEdit:
+		OnRenameHierarchy();
+		return true;
+
+	case CCommand::eDispHRemove:
+		OnDeleteHierarchy();
+		return true;
+
 	case CCommand::eAddressesRefresh:
 		OnRefreshAddressBook();
 		return true;
@@ -225,6 +232,16 @@ void CAdbkManagerTable::UpdateCommand(unsigned long cmd, CCmdUI* cmdui)
 		OnUpdateLoggedOutSelection(cmdui);
 		return;
 
+	case CCommand::eMailboxDisplayHierarchy:
+	case CCommand::eDispHNew:
+		OnUpdateAlways(cmdui);
+		return;
+
+	case CCommand::eDispHEdit:
+	case CCommand::eDispHRemove:
+		OnUpdateHierarchy(cmdui);
+		return;
+
 		// These can only have logged off protocol selection
 	case CCommand::eAddressesRefresh:
 	case CCommand::eAddressesLogout:
@@ -263,39 +280,39 @@ void CAdbkManagerTable::LClickCell(const STableCell& inCell, const JXKeyModifier
 	case eAdbkColumnResolve:
 	case eAdbkColumnSearch:
 	{
-		CAdbkList::node_type* node = GetCellNode(inCell.row);
+		CAddressBook* adbk = GetCellNode(inCell.row);
 
 		// Do status flag
-		if (node->IsSelectable())
+		if (adbk->IsAdbk())
 		{
 			bool set;
 			switch(col_info.column_type)
 			{
 			case eAdbkColumnOpen:
-				set = !node->GetSelectData()->IsOpenOnStart();
-				node->GetSelectData()->SetFlags(CAddressBook::eOpenOnStart, set);
-				CAddressBookManager::sAddressBookManager->SyncAddressBook(node->GetSelectData(), set);
+				set = !adbk->IsOpenOnStart();
+				adbk->SetFlags(CAddressBook::eOpenOnStart, set);
+				CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, set);
 		
 				// Change prefs list
-				CPreferences::sPrefs->ChangeAddressBookOpenOnStart(node->GetSelectData(), set);
+				CPreferences::sPrefs->ChangeAddressBookOpenOnStart(adbk, set);
 				break;
 
 			case eAdbkColumnResolve:
-				set = !node->GetSelectData()->IsLookup();
-				node->GetSelectData()->SetFlags(CAddressBook::eLookup, set);
-				CAddressBookManager::sAddressBookManager->SyncAddressBook(node->GetSelectData(), set);
+				set = !adbk->IsLookup();
+				adbk->SetFlags(CAddressBook::eLookup, set);
+				CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, set);
 		
 				// Change prefs list
-				CPreferences::sPrefs->ChangeAddressBookLookup(node->GetSelectData(), set);
+				CPreferences::sPrefs->ChangeAddressBookLookup(adbk, set);
 				break;
 
 			case eAdbkColumnSearch:
-				set = !node->GetSelectData()->IsSearch();
-				node->GetSelectData()->SetFlags(CAddressBook::eSearch, set);
-				CAddressBookManager::sAddressBookManager->SyncAddressBook(node->GetSelectData(), set);
+				set = !adbk->IsSearch();
+				adbk->SetFlags(CAddressBook::eSearch, set);
+				CAddressBookManager::sAddressBookManager->SyncAddressBook(adbk, set);
 		
 				// Change prefs list
-				CPreferences::sPrefs->ChangeAddressBookSearch(node->GetSelectData(), set);
+				CPreferences::sPrefs->ChangeAddressBookSearch(adbk, set);
 				break;
 			}
 			
@@ -325,12 +342,12 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 
 	// Get cell data item
 	int	woRow = GetWideOpenIndex(inCell.row + TABLE_ROW_ADJUST);
-	CAdbkList::node_type* node = GetCellNode(inCell.row);
+	CAddressBook* adbk = GetCellNode(inCell.row);
 	cdstring theTxt;
 
 	// Erase to ensure drag hightlight is overwritten
 	unsigned long bkgnd = 0x00FFFFFF;
-	if (UsesBackgroundColor(node))
+	if (UsesBackgroundColor(inCell))
 	{
 		StPenState save(pDC);
 		JRect bgrect(inLocalRect);
@@ -339,7 +356,7 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 		//lines get broken up.
 		bgrect.bottom -=1;
 		
-		JColorIndex bkgnd_index = GetBackgroundColor(node);
+		JColorIndex bkgnd_index = GetBackgroundColor(inCell);
 		pDC->SetPenColor(bkgnd_index);
 		pDC->SetFilling(kTrue);
 		pDC->Rect(bgrect);
@@ -356,15 +373,28 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 	case eAdbkColumnName:
 		{
 		// Get suitable icon
-		ResIDT iconID = GetPlotIcon(node, GetCellAdbkProtocol(inCell.row));
+		ResIDT iconID = GetPlotIcon(adbk, GetCellAdbkProtocol(inCell.row));
 		JXImage* icon = CIconLoader::GetIcon(iconID, this, 16, bkgnd);
 
 		// Determine name to use
-		theTxt = node->IsSelectable() ? node->GetSelectData()->GetName() : *node->GetNoSelectData();
+		theTxt = adbk->GetDisplayShortName();
+
+		// Add protocol state descriptor
+		if (adbk->IsProtocol())
+		{
+			if (adbk->GetProtocol()->IsDisconnected() && !CConnectionManager::sConnectionManager.IsConnected())
+			{
+				theTxt.AppendResource("UI::Server::TitleDisconnected");
+			}
+			else if (adbk->GetProtocol()->IsDisconnected() || (!adbk->GetProtocol()->IsOffline() && !adbk->GetProtocol()->IsLoggedOn()))
+			{
+				theTxt.AppendResource("UI::Server::TitleOffline");
+			}
+		}
 
 		// Draw the string
 		bool strike = false;
-		SetTextStyle(pDC, node, GetCellAdbkProtocol(inCell.row), strike);
+		SetTextStyle(pDC, adbk, GetCellAdbkProtocol(inCell.row), strike);
 		int text_start = DrawHierarchyRow(pDC, inCell.row, inLocalRect, theTxt, icon);
 
 		// Always cache column number
@@ -372,10 +402,10 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 		break;
 		}
 	case eAdbkColumnOpen:
-		if (node->IsSelectable())
+		if (adbk->IsAdbk())
 		{
 			ResIDT iconID;
-			if (node->GetSelectData()->IsOpenOnStart())
+			if (adbk->IsOpenOnStart())
 				iconID = IDI_DIAMONDTICKED;
 			else
 				iconID = IDI_DIAMOND;
@@ -385,10 +415,10 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 		break;
 		
 	case eAdbkColumnResolve:
-		if (node->IsSelectable())
+		if (adbk->IsAdbk())
 		{
 			ResIDT iconID;
-			if (node->GetSelectData()->IsLookup())
+			if (adbk->IsLookup())
 				iconID = IDI_DIAMONDTICKED;
 			else
 				iconID = IDI_DIAMOND;
@@ -398,10 +428,10 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 		break;
 		
 	case eAdbkColumnSearch:
-		if (node->IsSelectable())
+		if (adbk->IsAdbk())
 		{
 			ResIDT iconID;
-			if (node->GetSelectData()->IsSearch())
+			if (adbk->IsSearch())
 				iconID = IDI_DIAMONDTICKED;
 			else
 				iconID = IDI_DIAMOND;
@@ -415,9 +445,9 @@ void CAdbkManagerTable::DrawCell(JPainter* pDC, const STableCell& inCell,
 
 
 // Get appropriate icon id
-JIndex CAdbkManagerTable::GetPlotIcon(const CAdbkList::node_type* node, CAdbkProtocol* proto)
+JIndex CAdbkManagerTable::GetPlotIcon(const CAddressBook* adbk, CAdbkProtocol* proto)
 {
-	if (!node->IsSelectable())
+	if (adbk->IsProtocol())
 	{
 		if (!proto)
 			return IDI_SERVERLOCAL;
@@ -428,24 +458,24 @@ JIndex CAdbkManagerTable::GetPlotIcon(const CAdbkList::node_type* node, CAdbkPro
 		else
 			return IDI_SERVERREMOTE;
 	}
+	else if (adbk->IsDirectory() && !adbk->IsAdbk())
+	{
+		return IDI_SERVERDIR;
+	}
 	else
 	{
-		const CRemoteAddressBook* adbk = dynamic_cast<const CRemoteAddressBook*>(node->GetSelectData());
-		if (adbk && adbk->GetProtocol()->CanDisconnect() && adbk->IsLocalAdbk())
-			return adbk->IsCachedAdbk() ? IDI_ADDRESSFILECACHED : IDI_ADDRESSFILEUNCACHED;
-		else
-			return IDI_ADDRESSFILE;
+		return adbk->IsCachedAdbk() ? IDI_ADDRESSFILECACHED : IDI_ADDRESSFILEUNCACHED;
 	}
 }
 
 // Get text style
-void CAdbkManagerTable::SetTextStyle(JPainter* pDC, const CAdbkList::node_type* node, CAdbkProtocol* proto, bool& strike)
+void CAdbkManagerTable::SetTextStyle(JPainter* pDC, const CAddressBook* adbk, CAdbkProtocol* proto, bool& strike)
 {
 	strike = false;
 	JFontStyle text_style;
 	short style = normal;
 
-	if (!node->IsSelectable())
+	if (adbk->IsProtocol())
 	{
 		if (!proto || proto->IsLoggedOn())
 		{
@@ -473,12 +503,13 @@ void CAdbkManagerTable::SetTextStyle(JPainter* pDC, const CAdbkList::node_type* 
 	pDC->SetFontStyle(text_style);
 }
 
-bool CAdbkManagerTable::UsesBackgroundColor(const CAdbkList::node_type* node) const
+bool CAdbkManagerTable::UsesBackgroundColor(const STableCell& inCell) const
 {
-	return !node->IsSelectable();
+	TableIndexT	woRow = mCollapsableTree->GetWideOpenIndex(inCell.row);
+	return mCollapsableTree->GetNestingLevel(woRow) == 0;
 }
 
-JColorIndex CAdbkManagerTable::GetBackgroundColor(const CAdbkList::node_type* node) const
+JColorIndex CAdbkManagerTable::GetBackgroundColor(const STableCell& inCell) const
 {
 	JColorIndex ret;
 	GetColormap()->JColormap::AllocateStaticColor(CPreferences::sPrefs->mServerBkgndStyle.GetValue().color, &ret);
@@ -488,168 +519,6 @@ JColorIndex CAdbkManagerTable::GetBackgroundColor(const CAdbkList::node_type* no
 SColumnInfo CAdbkManagerTable::GetColumnInfo(TableIndexT col)
 {
 	return mTableView->GetColumnInfo()[col - 1];
-}
-
-void CAdbkManagerTable::DoSelectionChanged()
-{
-	CHierarchyTableDrag::DoSelectionChanged();
-	
-	// Determine whether preview is triggered
-	const CUserAction& preview = mTableView->GetPreviewAction();
-	if (preview.GetSelection())
-		DoPreview();
-
-	// Determine whether full view is triggered
-	const CUserAction& fullview = mTableView->GetFullViewAction();
-	if (fullview.GetSelection())
-		DoFullView();
-}
-
-// Handle single click
-void CAdbkManagerTable::DoSingleClick(TableIndexT row, const CKeyModifiers& mods)
-{
-	// Determine whether preview is triggered
-	const CUserAction& preview = mTableView->GetPreviewAction();
-	if (preview.GetSingleClick() &&
-		(preview.GetSingleClickModifiers() == mods))
-		DoPreview();
-
-	// Determine whether full view is triggered
-	const CUserAction& fullview = mTableView->GetFullViewAction();
-	if (fullview.GetSingleClick() &&
-		(fullview.GetSingleClickModifiers() == mods))
-		DoFullView();
-}
-
-// Handle double click
-void CAdbkManagerTable::DoDoubleClick(TableIndexT row, const CKeyModifiers& mods)
-{
-	// Determine whether preview is triggered
-	const CUserAction& preview = mTableView->GetPreviewAction();
-	if (preview.GetDoubleClick() &&
-		(preview.GetDoubleClickModifiers() == mods))
-		DoPreview();
-
-	// Determine whether full view is triggered
-	const CUserAction& fullview = mTableView->GetFullViewAction();
-	if (fullview.GetDoubleClick() &&
-		(fullview.GetDoubleClickModifiers() == mods))
-		DoFullView();
-}
-
-void CAdbkManagerTable::DoPreview()
-{
-	PreviewAddressBook();
-}
-
-void CAdbkManagerTable::DoPreview(CAddressBook* adbk)
-{
-	PreviewAddressBook(adbk);
-}
-
-// Just edit the item
-void CAdbkManagerTable::DoFullView()
-{
-	OnOpenAddressBook();
-}
-
-// Reset the table from the mboxList
-void CAdbkManagerTable::ResetTable(void)
-{
-	// Start cursor for busy operation
-	CWaitCursor wait;
-
-	// Delete all existing rows
-	Clear();
-	mHierarchyCol = 1;
-	mData.clear();
-
-	// Only if we have the manager
-	if (!mManager)
-		return;
-
-	// Get list from manager
-	const CAdbkList& adbks = mManager->GetAddressBooks();
-
-	// Add each node
-	TableIndexT row = 0;
-	TableIndexT exp_row = 1;
-	mHasOthers = true;
-	ulvector expand_rows;
-	for(CAdbkList::node_list::const_iterator iter = adbks.GetChildren()->begin();
-		iter != adbks.GetChildren()->end(); iter++)
-	{
-		// Don't add empty first row
-		if ((iter != adbks.GetChildren()->begin()) || (*iter)->CountChildren())
-		{
-			AddNode(*iter, row, false);
-
-			// Listen to each protocol
-			CAdbkProtocol* proto = GetCellAdbkProtocol(exp_row);
-			if (proto)
-				proto->Add_Listener(this);
-			
-			// Check expansion - always expand if pure local address account
-			if (!proto || proto->GetAddressAccount()->GetExpanded())
-			{
-				// Add wide open row to expansion list which gets processed later
-				TableIndexT	woRow = GetWideOpenIndex(exp_row + TABLE_ROW_ADJUST);
-				expand_rows.push_back(woRow);
-			}
-			
-			// Bump up exposed row counter
-			exp_row++;
-		}
-		else
-			mHasOthers = false;
-	}
-
-	// Do expansions
-	if (expand_rows.size())
-	{
-		for(ulvector::const_iterator iter = expand_rows.begin(); iter != expand_rows.end(); iter++)
-			ExpandRow(*iter);
-	}
-	
-	// Always expand a single account
-	else if (exp_row == 2)
-		ExpandRow(1);
-
-	// Refresh list
-	Refresh();
-}
-
-// Reset the table from the mboxList
-void CAdbkManagerTable::ClearTable()
-{
-	// Delete all existing rows
-	Clear();
-	mData.clear();
-
-	// Refresh list
-	Refresh();
-	
-	// Force toolbar update
-	SelectionChanged();
-}
-
-// Remove rows and adjust parts
-void CAdbkManagerTable::RemoveRows(UInt32 inHowMany, TableIndexT inFromRow, bool inRefresh)
-{
-	// Count number to remove (this + descendents)
-	UInt32 remove_count = CountAllDescendents(inFromRow) + 1;
-
-	// Do standard removal
-	CHierarchyTableDrag::RemoveRows(inHowMany, inFromRow, inRefresh);
-	
-	// Remove our data using count
-	mData.erase(mData.begin() + (inFromRow - 1), mData.begin() + (inFromRow - 1 + remove_count));
-}
-
-// Get the selected adbk
-void* CAdbkManagerTable::GetCellData(TableIndexT woRow)
-{
-	return mData.at(woRow - 1);
 }
 
 #if NOTYET
@@ -802,7 +671,7 @@ void CAdbkManagerTable::OnUpdateAdbkSelection(CCmdUI* pCmdUI)
 	else if (!IsSelectionValid())
 	{
 		pCmdUI->Enable((pCmdUI->mCmd == CCommand::eAddressesNew) ? false :
-						!mHasOthers && !CAdminLock::sAdminLock.mNoLocalAdbks);
+						!CAdminLock::sAdminLock.mNoLocalAdbks);
 	}
 	else
 		pCmdUI->Enable(TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbk));
@@ -842,4 +711,9 @@ void CAdbkManagerTable::OnUpdateDisconnectedSelection(CCmdUI* pCmdUI)
 void CAdbkManagerTable::OnUpdateClearDisconnectedSelection(CCmdUI* pCmdUI)
 {
 	pCmdUI->Enable(TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionAdbkClearDisconnected));
+}
+
+void CAdbkManagerTable::OnUpdateHierarchy(CCmdUI* pCmdUI)
+{
+	pCmdUI->Enable(TestSelectionAnd((TestSelectionPP) &CAdbkManagerTable::TestSelectionHierarchy));
 }

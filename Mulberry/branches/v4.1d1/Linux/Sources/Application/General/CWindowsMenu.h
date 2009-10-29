@@ -20,7 +20,7 @@
 #ifndef __CWINDOWSMENU__MULBERRY__
 #define __CWINDOWSMENU__MULBERRY__
 
-#include "vector.h"
+#include <vector>
 #include "CCommander.h"
 #include <functional>
 
@@ -29,14 +29,14 @@ class JXTextMenu;
 
 class CWindowsMenu
 {
-	typedef vector<JXWindowDirector*> CWindowList;
+	typedef std::vector<JXWindowDirector*> CWindowList;
 
 private:
 	static CWindowList		sWindowList;
 	static long				sNumServers;
 	static bool				sDirty;
 
-	class AddWindowToMenu : public unary_function<void, JXWindowDirector*>
+	class AddWindowToMenu : public std::unary_function<void, JXWindowDirector*>
 	{
 	public:
 		AddWindowToMenu(JXTextMenu* menu) : menu_(menu), shortcut_(0) {}

@@ -27,6 +27,7 @@
 #include "CHTTPDefinitions.h"
 #include "CHTTPSession.h"
 
+#include <cstdlib>
 #include <strstream>
 
 using namespace http; 

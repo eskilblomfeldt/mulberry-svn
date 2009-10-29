@@ -39,6 +39,7 @@
 #include "XMLObject.h"
 
 #include <algorithm>
+#include <memory>
 #include <stdint.h>
 
 using namespace calstore; 

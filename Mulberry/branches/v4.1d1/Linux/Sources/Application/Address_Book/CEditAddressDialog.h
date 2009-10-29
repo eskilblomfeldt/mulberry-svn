@@ -45,6 +45,7 @@ protected:
     CTextInputField*   mFullName;
     CTextInputField*   mNickName;
     CTextInputField*   mEmail;
+    CTextInputField*   mCalendar;
     CTextInputField*   mCompany;
     CTextInputField*   mPhoneWork;
     CTextInputField*   mPhoneHome;

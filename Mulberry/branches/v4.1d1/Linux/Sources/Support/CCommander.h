@@ -93,7 +93,7 @@ public:
 	virtual void UpdateCommand(unsigned long cmd, CCmdUI* cmdui);
 
 protected:
-	typedef vector<CCommander*> CCommanders;
+	typedef std::vector<CCommander*> CCommanders;
 	
 	CCommander* mSuperCommander;
 	CCommanders	mSubCommanders;

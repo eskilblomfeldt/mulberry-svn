@@ -45,7 +45,7 @@ class JXWidgetSet;
 class CMultibitPopup;
 
 class CCriteriaBase;
-typedef vector<CCriteriaBase*> CCriteriaBaseList;
+typedef std::vector<CCriteriaBase*> CCriteriaBaseList;
 
 class CRulesDialog : public CDialogDirector,
 						public CSearchBase

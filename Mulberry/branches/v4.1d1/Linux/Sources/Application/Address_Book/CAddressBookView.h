@@ -59,7 +59,7 @@ public:
 		eBroadcast_SelectGroup = 'abvc'
 	};
 
-	typedef vector<CAddressBookView*>	CAddressBookViewList;
+	typedef std::vector<CAddressBookView*>	CAddressBookViewList;
 	static cdmutexprotect<CAddressBookViewList> sAddressBookViews;	// List of windows (protected for multi-thread access)
 
 					CAddressBookView(JXContainer* enclosure,

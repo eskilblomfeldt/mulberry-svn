@@ -35,6 +35,7 @@
 #include <JXWindow.h>
 #include <jXGlobals.h>
 
+#include <algorithm>
 #include <cassert>
 
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
@@ -404,7 +405,7 @@ void CMatchOptionsDialog::SetMatchItems(NMbox::EViewMode mbox_mode, const CMatch
 			iter != CPreferences::sPrefs->mSearchStyles.GetValue().end(); iter++)
 	{
 		names.push_back((*iter)->GetName());
-		bool select =  (::find(sets.begin(), sets.end(), (*iter)->GetName()) != sets.end());
+		bool select =  (std::find(sets.begin(), sets.end(), (*iter)->GetName()) != sets.end());
 		selected.push_back(select);
 	}
 	mTable->SetContents(names);

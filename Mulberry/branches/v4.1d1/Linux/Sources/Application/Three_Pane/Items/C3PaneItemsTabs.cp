@@ -151,25 +151,25 @@ void C3PaneItemsTabs::MenuChoice(JIndex choice, JIndex btn)
 	{
 	case menuChoice_MoveLeft:
 		{
-			pair<unsigned long, unsigned long> p(btn, btn - 1);
+			std::pair<unsigned long, unsigned long> p(btn, btn - 1);
 			mOwner->OnTabsMove(p);
 		}
 		break;
 	case menuChoice_MoveRight:
 		{
-			pair<unsigned long, unsigned long> p(btn, btn + 1);
+			std::pair<unsigned long, unsigned long> p(btn, btn + 1);
 			mOwner->OnTabsMove(p);
 		}
 		break;
 	case menuChoice_MoveStart:
 		{
-			pair<unsigned long, unsigned long> p(btn, 1);
+			std::pair<unsigned long, unsigned long> p(btn, 1);
 			mOwner->OnTabsMove(p);
 		}
 		break;
 	case menuChoice_MoveEnd:
 		{
-			pair<unsigned long, unsigned long> p(btn, GetTabCount());
+			std::pair<unsigned long, unsigned long> p(btn, GetTabCount());
 			mOwner->OnTabsMove(p);
 		}
 		break;

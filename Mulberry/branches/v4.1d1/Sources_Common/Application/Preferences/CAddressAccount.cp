@@ -25,6 +25,8 @@
 #include "CPreferenceVersions.h"
 #include "CUtils.h"
 
+#include <stdlib.h>
+
 extern const char* cSpace;
 extern const char* cValueBoolTrue;
 extern const char* cValueBoolFalse;

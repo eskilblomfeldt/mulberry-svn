@@ -22,7 +22,7 @@
 
 #include "CDialogDirector.h"
 
-#include "vector.h"
+#include <vector>
 #include "templs.h"
 
 // Classes
@@ -42,7 +42,7 @@ protected:
 	JXCardFile*				mPanelContainer;									// The container panel
 	JXWidgetSet*			mCurrentPanel;										// Current panel view
 	short					mCurrentPanelNum;									// Current prefs panel index
-	vector<JXWidgetSet*>	mPanelList;											// List of panel ids
+	std::vector<JXWidgetSet*>	mPanelList;											// List of panel ids
 	ulvector				mMsgPanelList;										// List of panel messages
 
 	virtual void	OnCreate();												// Do odds & ends

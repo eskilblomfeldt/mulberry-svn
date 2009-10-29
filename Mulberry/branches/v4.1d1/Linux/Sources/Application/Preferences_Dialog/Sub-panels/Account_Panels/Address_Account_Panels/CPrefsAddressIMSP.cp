@@ -21,7 +21,9 @@
 
 #include "CAddressAccount.h"
 #include "CAdminLock.h"
+#include "CTextField.h"
 
+#include <JXStaticText.h>
 #include <JXTextCheckbox.h>
 
 #include <cassert>
@@ -45,6 +47,16 @@ void CPrefsAddressIMSP::OnCreate()
                     JXWidget::kHElastic, JXWidget::kVElastic, 10,40, 245,20);
     assert( mDisconnected != NULL );
 
+    mBaseRURLText =
+        new JXStaticText("Path:", this,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,92, 35,20);
+    assert( mBaseRURLText != NULL );
+
+    mBaseRURL =
+        new CTextInputField(this,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 60,90, 280,20);
+    assert( mBaseRURL != NULL );
+
 // end JXLayout1
 
 	// Disable certain items
@@ -60,6 +72,14 @@ void CPrefsAddressIMSP::SetData(void* data)
 	// Copy info
 	mLogonAtStartup->SetState(JBoolean(account->GetLogonAtStart()));
 	mDisconnected->SetState(JBoolean(account->GetDisconnected()));
+
+	if (account->GetServerType() == CINETAccount::eCardDAVAdbk)
+		mBaseRURL->SetText(account->GetBaseRURL());
+	else
+	{
+		mBaseRURLText->Hide();
+		mBaseRURL->Hide();
+	}
 }
 
 // Force update of prefs
@@ -70,6 +90,8 @@ bool CPrefsAddressIMSP::UpdateData(void* data)
 	// Copy info from panel into prefs
 	account->SetLoginAtStart(mLogonAtStartup->IsChecked());
 	account->SetDisconnected(mDisconnected->IsChecked());
+	if (account->GetServerType() == CINETAccount::eCardDAVAdbk)
+		account->SetBaseRURL(mBaseRURL->GetText());
 	
 	return true;
 }

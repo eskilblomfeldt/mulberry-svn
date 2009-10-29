@@ -22,6 +22,7 @@
 #include "CCommands.h"
 #include "CDayWeekView.h"
 #include "CEventPreview.h"
+//#include "CFreeBusyView.h"
 #include "CFocusBorder.h"
 #include "CMonthView.h"
 #include "CMulberryCommon.h"
@@ -61,6 +62,8 @@ CCalendarView::CCalendarView(JXContainer* enclosure,
 	mDayWeekScale = 0;
 	mSummaryType = NCalendarView::eList;
 	mSummaryRange = NCalendarView::eThisWeek;
+	mFreeBusyRange = CDayWeekViewTimeRange::e24Hrs;
+	mFreeBusyScale = 0;
 	mSingleCalendar = false;
 	mCalendar = NULL;
 	mCalendarsView = NULL;
@@ -240,6 +243,12 @@ bool CCalendarView::ObeyCommand(unsigned long cmd, SMenuCommandChoice* menu)
 	case CCommand::eToolbarCalendarGotoBtn:
 		if (mCurrentView != NULL)
 			return mCurrentView->GetTable()->ObeyCommand(cmd, menu);
+		break;
+
+	case CCommand::eCalendarCheck:
+	case CCommand::eToolbarCalendarCheckBtn:
+		OnCheckCalendar();
+		return true;
 
 	default:;
 	};
@@ -301,6 +310,12 @@ void CCalendarView::UpdateCommand(unsigned long cmd, CCmdUI* cmdui)
 			mCurrentView->GetTable()->UpdateCommand(cmd, cmdui);
 			return;
 		}
+		break;
+
+	case CCommand::eCalendarCheck:
+	case CCommand::eToolbarCalendarCheckBtn:
+		OnUpdateAlways(cmdui);
+		return;
 
 	default:;
 	}
@@ -389,6 +404,12 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 			mSummaryType = static_cast<CSummaryView*>(mCurrentView)->GetType();
 			mSummaryRange = static_cast<CSummaryView*>(mCurrentView)->GetRange();
 			break;
+		case NCalendarView::eViewFreeBusy:
+#ifdef _TODO
+			mFreeBusyRange = static_cast<CFreeBusyView*>(mCurrentView)->GetRange();
+			mFreeBusyScale = static_cast<CFreeBusyView*>(mCurrentView)->GetScale();
+#endif
+			break;
 		default:;
 		}
 		
@@ -458,6 +479,14 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 		mCurrentView->FitToEnclosure();
 		static_cast<CSummaryView*>(mCurrentView)->SetType(mSummaryType);
 		static_cast<CSummaryView*>(mCurrentView)->SetRange(mSummaryRange);
+		break;
+	case NCalendarView::eViewFreeBusy:
+#ifdef _TODO
+		mCurrentView = static_cast<CFreeBusyView*>(UReanimator::CreateView(CFreeBusyView::pane_ID, mViewContainer, this));
+		mViewContainer->ExpandSubPane(mCurrentView, true, true);
+		static_cast<CFreeBusyView*>(mCurrentView)->SetRange(mFreeBusyRange);
+		static_cast<CFreeBusyView*>(mCurrentView)->SetScale(mFreeBusyScale);
+#endif
 		break;
 	}
 	

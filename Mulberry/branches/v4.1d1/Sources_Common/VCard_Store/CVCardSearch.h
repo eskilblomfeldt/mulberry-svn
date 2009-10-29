@@ -17,6 +17,8 @@
 #ifndef CVCardSearch_H
 #define CVCardSearch_H
 
+#include "cdstring.h"
+
 class CAddressBook;
 class CAddressList;
 

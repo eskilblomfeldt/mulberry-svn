@@ -8,10 +8,10 @@ Unit of measure: FL_COORD_PIXEL
 SnapGrid: 1
 
 =============== FORM ===============
-Name: CNewComponentTiming--JXLayout1--this
+Name: CNewComponentRepeat--JXLayout1--this
 Width: 500
 Height: 300
-Number of Objects: 5
+Number of Objects: 4
 
 --------------------
 class: FL_BOX
@@ -32,27 +32,9 @@ callback:
 argument: 
 
 --------------------
-class: FL_BOX
-type: FLAT_BOX
-box: 0 5 500 130
-boxtype: FL_FLAT_BOX
-colors: FL_COL1 FL_COL1
-alignment: FL_ALIGN_CENTER
-style: FL_NORMAL_STYLE
-size: FL_DEFAULT_SIZE
-lcol: FL_BLACK
-label: 
-shortcut: 
-resize: FL_RESIZE_ALL
-gravity: FL_NoGravity FL_NoGravity
-name: mTimingView
-callback: 
-argument: 
-
---------------------
 class: FL_CHECKBUTTON
 type: PUSH_BUTTON
-box: 10 140 80 20
+box: 10 10 80 20
 boxtype: FL_NO_BOX
 colors: FL_COL1 FL_YELLOW
 alignment: FL_ALIGN_CENTER
@@ -70,7 +52,7 @@ argument:
 --------------------
 class: FL_BOX
 type: DOWN_BOX
-box: 88 150 402 2
+box: 88 20 402 2
 boxtype: FL_DOWN_BOX
 colors: FL_COL1 FL_COL1
 alignment: FL_ALIGN_CENTER
@@ -88,7 +70,7 @@ argument: 0
 --------------------
 class: FL_BOX
 type: UP_BOX
-box: 10 160 480 140
+box: 10 30 480 140
 boxtype: FL_UP_BOX
 colors: FL_COL1 FL_COL1
 alignment: FL_ALIGN_CENTER
@@ -104,7 +86,7 @@ callback: CTabController(
 argument: 0
 
 =============== FORM ===============
-Name: CNewComponentTiming--JXLayout2--this
+Name: CNewComponentRepeat--JXLayout2--this
 Width: 480
 Height: 120
 Number of Objects: 11
@@ -197,7 +179,7 @@ resize: FL_RESIZE_ALL
 gravity: FL_North FL_East
 name: mOccursGroup
 callback: 
-argument: 0
+argument: -
 
 --------------------
 class: FL_CHECKBUTTON
@@ -308,7 +290,7 @@ callback: CDateTimeZoneSelect(
 argument: 0
 
 =============== FORM ===============
-Name: CNewComponentTiming--JXLayout3--this
+Name: CNewComponentRepeat--JXLayout3--this
 Width: 480
 Height: 120
 Number of Objects: 4
@@ -386,7 +368,7 @@ callback:
 argument: 
 
 =============== FORM ===============
-Name: CNewComponentTiming--JXLayout4--this
+Name: CNewComponentRepeat--JXLayout4--this
 Width: 480
 Height: 120
 Number of Objects: 3

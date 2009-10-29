@@ -308,7 +308,7 @@ bool CRegistration::ReadAppResource()
 		p += len;
 
 		// Put data into stream
-		istrstream in(reinterpret_cast<const char*>(p));
+		std::istrstream in(reinterpret_cast<const char*>(p));
 		cdstring str;
 
 		// Get licensee
@@ -469,7 +469,7 @@ void CRegistration::WriteRegistrationMap(const cdstrmap& kvmap) const
 
 	// Write all key-values to file
 	for(cdstrmap::const_iterator iter = kvmap.begin(); iter != kvmap.end(); iter++)
-		fout << (*iter).first << " " << (*iter).second << endl;
+		fout << (*iter).first << " " << (*iter).second << std::endl;
 
 	if (fout.fail())
 	{

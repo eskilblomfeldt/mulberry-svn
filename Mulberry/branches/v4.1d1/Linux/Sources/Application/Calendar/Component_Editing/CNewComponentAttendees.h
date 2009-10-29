@@ -47,13 +47,12 @@ public:
 
 	virtual void	ListenTo_Message(long msg, void* param);
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
-	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
-
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
-	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);
+	virtual void	SetComponent(const iCal::CICalendarComponentRecur& vcomponent, const iCal::CICalendarComponentExpanded* expanded);
+	virtual void	GetComponent(iCal::CICalendarComponentRecur& vcomponent);
 
 	virtual void	SetReadOnly(bool read_only);
+
+	void	ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status);
 
 protected:
 
@@ -72,6 +71,7 @@ protected:
     JXTextButton*   mNewBtn;
     JXTextButton*   mChangeBtn;
     JXTextButton*   mDeleteBtn;
+    JXTextButton*   mAvailabilityBtn;
 
 // end JXLayout2
 
@@ -88,9 +88,6 @@ protected:
 	
 	virtual void Receive(JBroadcaster* sender, const Message& message);
 
-			void		SetComponent(const iCal::CICalendarComponentRecur& vcomp);
-			void		GetComponent(iCal::CICalendarComponentRecur& vcomp);
-
 			void		SetIdentity(const CIdentity* id);
 
 			void		OnAddAttendees();
@@ -98,6 +95,9 @@ protected:
 			void		OnNew();
 			void		OnChange();
 			void		OnDelete();
+			void		OnAvailability();
+
+			void		SortAttendees();
 };
 
 #endif

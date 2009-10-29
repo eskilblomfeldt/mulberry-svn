@@ -27,6 +27,8 @@
 #include <jFileUtil.h>
 #include <jDirUtil.h>
 
+#include <algorithm>
+
 CMIMETypesMap CMIMETypesMap::sMIMETypesMap;
 
 void CMIMETypesMap::LoadDefaults(const cdstring& path)
@@ -102,7 +104,7 @@ const cdstring& CMIMETypesMap::GetExtension(const cdstring& MIMEType, const cdst
 		// Check to see whether original extension is in the matching list
 		if (found->second->extensions.size())
 		{
-			list<cdstring>::const_iterator found2 = ::find(found->second->extensions.begin(),
+			std::list<cdstring>::const_iterator found2 = std::find(found->second->extensions.begin(),
 															found->second->extensions.end(), original);
 
 			// Not in list and not appliucation/octet-stream => use first extension in list
@@ -116,7 +118,7 @@ const cdstring& CMIMETypesMap::GetExtension(const cdstring& MIMEType, const cdst
 	return original;
 }
 
-void CMIMETypesMap::ReadFromStream(istream& ins)
+void CMIMETypesMap::ReadFromStream(std::istream& ins)
 {
 	while (ins)
 	{
@@ -179,14 +181,14 @@ void CMIMETypesMap::AddEntry(const cdstring& mimetype, const cdstring& extension
 		mti->extensions.push_back(ext);
 
 		// Add to reverse lookup list
-		mExtToType.insert(make_pair(ext, mimetype));
+		mExtToType.insert(std::make_pair(ext, mimetype));
 
 		// Get next token
 		p = ::strtok(NULL, " \t,");
 	}
 
 	// Add entry to list
-	pair<MIMETypeInfoMap::iterator, bool> res = mTypeToInfo.insert(make_pair(mimetype, mti));
+	std::pair<MIMETypeInfoMap::iterator, bool> res = mTypeToInfo.insert(std::make_pair(mimetype, mti));
 	if (!res.second)
 	{
 		//it was already there, delete old info and replace it

@@ -21,6 +21,7 @@
 #define __CCALENDARADDRESS__MULBERRY__
 
 #include "cdstring.h"
+#include "ptrvector.h"
 
 class CCalendarAddress;
 typedef ptrvector<CCalendarAddress> CCalendarAddressList;

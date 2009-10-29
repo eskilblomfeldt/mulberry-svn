@@ -37,6 +37,8 @@
 #include "CVCardAddressBook.h"
 #include "CVCardVCard.h"
 
+#include <algorithm>
+#include <memory>
 #include <strstream>
 
 #include "XMLDocument.h"

@@ -190,7 +190,7 @@ void CPropCalendarGeneral::SetCalendar(calstore::CCalendarStoreNode* node)
 	}
 
 	// Copy text to edit fields
-	mName->SetText(node->GetShortName());
+	mName->SetText(node->GetDisplayName());
 
 	mServer->SetText(node->GetProtocol()->GetDescriptor());
 

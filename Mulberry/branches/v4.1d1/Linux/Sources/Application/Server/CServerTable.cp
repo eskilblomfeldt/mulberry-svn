@@ -912,7 +912,7 @@ bool CServerTable::IsDropCell(JArray<Atom>& typeList, const STableCell& cell)
 				{
 					// Allow drop if same server
 					void* data = mDropData;
-					data += sizeof(int);
+					data = ((char*)data) + sizeof(int);
 					CMbox* src = ((CMbox**) data)[0]; 
 					can_do = (src->GetProtocol() == GetCellMboxList(woRow)->GetProtocol());
 				}
@@ -1009,7 +1009,7 @@ bool CServerTable::IsDropAtCell(JArray<Atom>& typeList, STableCell& cell)
 				if (mDropData)
 				{
 					void* data = mDropData;
-					data += sizeof(int);
+					data = ((char*)data) + sizeof(int);
 					CMboxList* src = ((CMboxList**) data)[0];
 
 					// Check for same server of previous row

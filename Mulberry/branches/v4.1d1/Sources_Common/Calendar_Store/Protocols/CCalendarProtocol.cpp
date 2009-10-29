@@ -51,6 +51,7 @@
 #endif
 
 #include <algorithm>
+#include <memory>
 
 using namespace calstore; 
 
@@ -791,7 +792,15 @@ CCalendarStoreNode* CCalendarProtocol::GetNode(const cdstring& cal, bool parent)
 	if (acct != GetAccountName())
 		return NULL;
 
-	return mStoreRoot.FindNode(path);
+	if (parent)
+	{
+		cdstrvect segments;
+		path.split(cdstring(GetDirDelim()), segments);
+		segments.pop_back();
+		path.join(segments, cdstring(GetDirDelim()));
+	}
+
+	return (path.empty() ? const_cast<CCalendarStoreNode*>(&mStoreRoot) : mStoreRoot.FindNode(path));
 }
 
 CCalendarStoreNode* CCalendarProtocol::GetNodeByRemoteURL(const cdstring& url) const

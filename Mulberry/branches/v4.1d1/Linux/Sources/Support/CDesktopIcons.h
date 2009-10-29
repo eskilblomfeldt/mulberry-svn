@@ -66,7 +66,7 @@ public:
 	static const CIconRef*	GetDesktopIconsFromMIME(const cdstring& type, const cdstring& subtype);
 
 private:
-	typedef	map<cdstring, const CIconRef*> CIconRefMap;
+	typedef	std::map<cdstring, const CIconRef*> CIconRefMap;
 
 	static CIconRef*			sGenericUnknown;
 	static CIconRef*			sGenericFolder;

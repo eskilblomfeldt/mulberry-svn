@@ -21,6 +21,8 @@
 #include <jASCIIConstants.h>
 #include <jGlobals.h>
 
+#include <stdlib.h>
+
 CNumberEdit::CNumberEdit(const JCharacter* text, JXContainer* enclosure,
 								JXTextMenu* menu,
 								const HSizingOption hSizing, const VSizingOption vSizing,

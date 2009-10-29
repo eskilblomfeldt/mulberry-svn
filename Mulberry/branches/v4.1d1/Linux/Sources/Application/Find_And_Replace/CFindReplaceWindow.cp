@@ -33,6 +33,7 @@
 #include <JXUpRect.h>
 #include <JXWindow.h>
 
+#include <algorithm>
 #include <cassert>
 
 // Static 
@@ -109,7 +110,7 @@ void CFindReplaceWindow::UpdateFindReplace()
 void CFindReplaceWindow::SetFindText(const char* text)
 {
 	sFindText = text;
-	cdstrvect::const_iterator found = ::find(sFindHistory.begin(), sFindHistory.end(), sFindText);
+	cdstrvect::const_iterator found = std::find(sFindHistory.begin(), sFindHistory.end(), sFindText);
 	if (found == sFindHistory.end())
 	{
 		sFindHistory.insert(sFindHistory.begin(), sFindText);
@@ -356,13 +357,13 @@ void CFindReplaceWindow::CaptureState(void)
 	sReplaceText = cdstring(mReplaceText->GetText());
 	
 	// Do history
-	cdstrvect::const_iterator found = ::find(sFindHistory.begin(), sFindHistory.end(), sFindText);
+	cdstrvect::const_iterator found = std::find(sFindHistory.begin(), sFindHistory.end(), sFindText);
 	if (found == sFindHistory.end())
 	{
 		sFindHistory.insert(sFindHistory.begin(), sFindText);
 		InitHistory(mFindPopup, sFindHistory);
 	}
-	found = ::find(sReplaceHistory.begin(), sReplaceHistory.end(), sReplaceText);
+	found = std::find(sReplaceHistory.begin(), sReplaceHistory.end(), sReplaceText);
 	if (found == sReplaceHistory.end())
 	{
 		sReplaceHistory.insert(sReplaceHistory.begin(), sReplaceText);

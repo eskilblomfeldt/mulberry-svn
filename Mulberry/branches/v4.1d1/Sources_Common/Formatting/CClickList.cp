@@ -15,9 +15,7 @@
 */
 
 
-#include <iostream.h>
 #include "CClickList.h"
-
 
 CClickList::CClickList(){
 	list = NULL;

@@ -116,7 +116,7 @@ protected:
 			{ return mType & eServerBrowseIndex; }
 	};
 
-	typedef vector<SServerBrowseData> CServerNodeArray;
+	typedef std::vector<SServerBrowseData> CServerNodeArray;
 
 	CMboxProtocol*		mServer;					// Mail server associated with this window
 	CServerNodeArray	mData;						// data
@@ -223,12 +223,12 @@ protected:
 	bool TestSelectionMboxAll(TableIndexT row);						// Test for selected mailboxes or mailbox refs only
 	bool TestSelectionMboxAvailable(TableIndexT row);               
 
+public:
 	// Test for selected mailboxes on logged in servers
 	bool AddSelectionToList(TableIndexT row, CMboxList* list);				// Add selected mboxes to list
 	bool AddDSelectionToList(TableIndexT row, CMboxList* list);				// Add selected mboxes & directories to list
 	bool AddSelectedNodesToList(TableIndexT row, CServerNodeArray* list);	// Add selected items to list
 
-public:
 	virtual void	DoCreateMailbox(bool selection = true);			// Create & open a mailbox
 protected:
 	virtual bool	CreateMailboxName(SCreateMailbox& create);		// Create mailbox name

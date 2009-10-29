@@ -26,6 +26,8 @@
 
 #include "CICalendar.h"
 
+#include <algorithm>
+
 CCalendarWindow* CCalendarWindow::FindWindow(const calstore::CCalendarStoreNode* node)
 {
 	cdmutexprotect<CCalendarWindowList>::lock _lock(sCalendarWindows);

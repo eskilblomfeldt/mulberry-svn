@@ -23,6 +23,8 @@
 #include "CGroupPreview.h"
 #include "CPreferences.h"
 
+#include <algorithm>
+
 // Static members
 
 cdmutexprotect<CAddressView::CAddressViewList> CAddressView::sAddressViews;
@@ -50,7 +52,7 @@ CAddressView::~CAddressView()
 {
 	// Remove from list
 	cdmutexprotect<CAddressViewList>::lock _lock(sAddressViews);
-	CAddressViewList::iterator found = ::find(sAddressViews->begin(), sAddressViews->end(), this);
+	CAddressViewList::iterator found = std::find(sAddressViews->begin(), sAddressViews->end(), this);
 	if (found != sAddressViews->end())
 		sAddressViews->erase(found);
 }
@@ -90,7 +92,7 @@ void CAddressView::InitPreviews(void)
 bool CAddressView::ViewExists(const CAddressView* wnd)
 {
 	cdmutexprotect<CAddressViewList>::lock _lock(sAddressViews);
-	CAddressViewList::iterator found = ::find(sAddressViews->begin(), sAddressViews->end(), wnd);
+	CAddressViewList::iterator found = std::find(sAddressViews->begin(), sAddressViews->end(), wnd);
 	return found != sAddressViews->end();
 }
 

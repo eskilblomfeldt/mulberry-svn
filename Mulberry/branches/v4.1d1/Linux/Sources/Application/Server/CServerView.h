@@ -36,7 +36,7 @@ class CServerView : public CTableView
 	friend class CServerWindow;
 
 public:
-	typedef vector<CServerView*>	CServerViewList;
+	typedef std::vector<CServerView*>	CServerViewList;
 	static cdmutexprotect<CServerViewList> sServerViews;	// List of windows (protected for multi-thread access)
 
 					CServerView(JXContainer* enclosure,

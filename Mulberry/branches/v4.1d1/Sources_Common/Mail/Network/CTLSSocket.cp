@@ -29,6 +29,8 @@
 
 #include "openssl_.h"
 
+#include <algorithm>
+
 #if defined(_bsdsock)
 #include <errno.h>
 #define INVALID_SOCKET -1

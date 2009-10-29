@@ -39,13 +39,13 @@ class JXTextRadioButton;
 class CCreateAdbkDialog : public CDialogDirector
 {
 public:
-	enum {ePersonal, eGlobal};
-
 	struct SCreateAdbk
 	{
 		cdstring	name;
-		bool		personal;
+		cdstring	parent;
 		cdstring	account;
+		bool		directory;
+		bool		use_wd;
 		bool		open_on_startup;
 		bool		use_nicknames;
 		bool		use_search;
@@ -56,30 +56,30 @@ public:
 
 	static bool PoseDialog(SCreateAdbk* details);
 
+	enum {eFullPathname, eInHierarchy};
+
 protected:
 // begin JXLayout
 
+    JXRadioGroup*      mDirectoryGroup;
+    JXTextRadioButton* mMkAdbk;
+    JXTextRadioButton* mMkCol;
     CTextInputField*   mAdbkName;
-    JXRadioGroup*      mTypeGroup;
-    JXStaticText*      mTypeLabel;
-    JXTextRadioButton* mPersonal;
-    JXTextRadioButton* mGlobal;
-    HPopupMenu*        mAccountMenu;
+    JXRadioGroup*      mWhichPath;
+    JXTextRadioButton* mFullPath;
+    JXTextRadioButton* mUseDirectory;
+    CTextInputField*   mInHierarchy;
     CTextInputField*   mAccount;
+    HPopupMenu*        mAccountPopup;
     JXTextCheckbox*    mOpenOnStartup;
     JXTextCheckbox*    mUseNicknames;
     JXTextCheckbox*    mUseSearch;
-    JXTextButton*      mCancelBtn;
     JXTextButton*      mOKBtn;
+    JXTextButton*      mCancelBtn;
 
 // end JXLayout
 
-	bool				mHasLocal;
-	bool				mHasRemote;
-
 	virtual void Receive(JBroadcaster* sender, const Message& message);
-
-	void	OnAccountPopup(JIndex index);
 
 	virtual void OnCreate(void);					// Do odds & ends
 

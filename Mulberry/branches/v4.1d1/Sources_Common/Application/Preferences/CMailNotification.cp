@@ -163,7 +163,7 @@ void CMailNotification::SetTextToSpeak(const cdstring& text_to_speak)
 	if (!mTextToSpeak.empty())
 	{
 		mSpeakCombined = ::strstr(mTextToSpeak.c_str(), "##") || ::strstr(mTextToSpeak.c_str(), "**");
-		mSpeakSeparate = !(!::strchr(mTextToSpeak.c_str(), '#') && !::strchr(mTextToSpeak.c_str(), '*') || mSpeakCombined);
+		mSpeakSeparate = !((!::strchr(mTextToSpeak.c_str(), '#') && !::strchr(mTextToSpeak.c_str(), '*')) || mSpeakCombined);
 	}
 	else
 	{

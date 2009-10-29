@@ -33,7 +33,7 @@
 
 #include <jXGlobals.h>
 
-#include <algorithm.h>
+#include <algorithm>
 #include <cassert>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ void CEditGroupDialog::OnGroupEditSort()
 	}
 
 	// Sort list
-	::sort(list.begin(), list.end(), comp_strnocase);
+	std::sort(list.begin(), list.end(), comp_strnocase);
 
 	// Put back in field
 	txt = cdstring::null_str;

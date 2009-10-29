@@ -31,7 +31,6 @@
 #include "CNewACLDialog.h"
 #include "CPreferences.h"
 #include "CPropMailboxACL.h"
-#include "CRemoteAddressBook.h"
 #include "CTableScrollbarSet.h"
 
 #include <JXColormap.h>
@@ -262,7 +261,7 @@ void CPropAdbkACL::ListenTo_Message(long msg, void* param)
 }
 
 // Set adbk list
-void CPropAdbkACL::SetAdbkList(CFlatAdbkList* adbk_list)
+void CPropAdbkACL::SetAdbkList(CAddressBookList* adbk_list)
 {
 	// Save list
 	mAdbkList = adbk_list;
@@ -274,14 +273,12 @@ void CPropAdbkACL::SetAdbkList(CFlatAdbkList* adbk_list)
 // Set adbk list
 void CPropAdbkACL::SetAddressBook(CAddressBook* adbk)
 {
-	CRemoteAddressBook* radbk = dynamic_cast<CRemoteAddressBook*>(adbk);
-
 	// Set myrights
 	SetMyRights(adbk->GetMyRights());
 
 	// Set state of buttons
 	mCanChange = adbk->GetMyRights().HasRight(CAdbkACL::eAdbkACL_Admin) &&
-					radbk && radbk->GetProtocol()->IsLoggedOn();
+					adbk->GetProtocol()->IsLoggedOn();
 	SetButtons(mCanChange);
 
 	// Give list to table

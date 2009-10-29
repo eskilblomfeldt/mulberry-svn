@@ -15,7 +15,7 @@
 */
 
 
-//#include <iostream.h>
+//#include <iostream>
 #include "CJUtil.h"
 #include "cdstring.h"
 #include "math.h"

@@ -33,6 +33,8 @@
 
 #include <JXMenuBar.h>
 
+#include <algorithm>
+
 /////////////////////////////////////////////////////////////////////////////
 // CServerWindow construction/destruction
 
@@ -54,7 +56,7 @@ CServerWindow::~CServerWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CServerWindowList>::lock _lock(sServerWindows);
-		CServerWindowList::iterator found = ::find(sServerWindows->begin(), sServerWindows->end(), this);
+		CServerWindowList::iterator found = std::find(sServerWindows->begin(), sServerWindows->end(), this);
 		if (found != sServerWindows->end())
 			sServerWindows->erase(found);
 	}
@@ -79,7 +81,7 @@ CServerWindow* CServerWindow::ManualCreate(void)
 bool CServerWindow::WindowExists(const CServerWindow* wnd)
 {
 	cdmutexprotect<CServerWindowList>::lock _lock(sServerWindows);
-	CServerWindowList::iterator found = ::find(sServerWindows->begin(), sServerWindows->end(), wnd);
+	CServerWindowList::iterator found = std::find(sServerWindows->begin(), sServerWindows->end(), wnd);
 	return found != sServerWindows->end();
 }
 

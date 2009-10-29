@@ -411,7 +411,7 @@ basic_cdfilebuf<charT, traits>::seekoff(off_type off, std::ios_base::seekdir way
 		return pos_type(-1);
 
 	std::ios_base::openmode inout = std::ios_base::in | std::ios_base::out;
-	if (((which & inout) == inout) && (way == std::ios_base::cur) || ((which & inout) == 0))
+	if ((((which & inout) == inout) && (way == std::ios_base::cur)) || ((which & inout) == 0))
 		return pos_type(-1);
 
 	// Special for tellg/tellp

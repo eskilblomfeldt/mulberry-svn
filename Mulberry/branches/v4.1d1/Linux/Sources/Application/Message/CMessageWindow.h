@@ -31,6 +31,8 @@
 #include "cdustring.h"
 #include "cdmutexprotect.h"
 
+#include <memory>
+
 enum EReplyTo
 {
 	replyNone = 0,
@@ -108,7 +110,7 @@ class CMessageWindow : public CFileDocument
 	};
 
 public:
-	typedef vector <CMessageWindow*> CMessageWindowList;
+	typedef std::vector <CMessageWindow*> CMessageWindowList;
 	static cdmutexprotect<CMessageWindowList> sMsgWindows;	// List of windows (protected for multi-thread access)
 
 			CMessageWindow(JXDirector* supervisor);
@@ -129,7 +131,7 @@ protected:
 	virtual void UpdateCommand(unsigned long cmd, CCmdUI* cmdui);
 	virtual CCommander* GetTarget();
 
-	virtual void WriteTextFile(ostream& output, const JBoolean safetySave) const;
+	virtual void WriteTextFile(std::ostream& output, const JBoolean safetySave) const;
 
 public:
 			CTextDisplay* GetText()
@@ -288,8 +290,8 @@ private:
 	bool					mItsMsgError;				// Flag for cleared out message
 	CMessageList*			mMsgs;						// Used for multi-save operation
 	const char*				mShowText;					// Text to show
-	auto_ptr<unichar_t>		mUTF16Text;					// UTF16 text
-	auto_ptr<unichar_t>		mRawUTF16Text;				// Raw UTF16 text
+	std::auto_ptr<unichar_t>		mUTF16Text;					// UTF16 text
+	std::auto_ptr<unichar_t>		mRawUTF16Text;				// Raw UTF16 text
 	bool					mShowHeader;				// Show header
 	bool					mShowSecure;				// Show verify/decrypt area
 	bool					mSecureMulti;				// Multi-line verify/decrypt area

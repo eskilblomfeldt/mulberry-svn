@@ -22,10 +22,11 @@
 #include "CContextMenu.h"
 #include "CCommander.h"
 
-#include "vector.h"
+#include <vector>
 
 #include "CICalendarPeriod.h"
 #include "CICalendarVEvent.h"
+#include "CICalendarVFreeBusy.h"
 #include "CITIPProcessor.h"
 
 class CCalendarTableBase;
@@ -75,7 +76,7 @@ public:
 	virtual	~CCalendarEventBase();
 
 	void SetDetails(iCal::CICalendarComponentExpandedShared& event, CCalendarTableBase* table, const char* title, bool all_day, bool start_col, bool end_col, bool horiz);
-
+	void SetDetails(iCal::CICalendarVFreeBusy* freebusy, const iCal::CICalendarPeriod& period, CCalendarTableBase* table, const char* title, bool all_day, bool start_col, bool end_col, bool horiz);
 
 	void SetPreviousLink(CCalendarEventBase* prev)
 		{ mPreviousLink = prev; }
@@ -91,8 +92,21 @@ public:
 		return mNextLink;
 	}
 
+	bool IsEvent() const
+	{
+		return mVEvent.get() != NULL;
+	}
+	bool IsFreeBusy() const
+	{
+		return mVFreeBusy != NULL;
+	}
 	const iCal::CICalendarComponentExpandedShared& GetVEvent() const
 		{ return mVEvent; }
+	const iCal::CICalendarVFreeBusy* GetVFreeBusy() const
+		{ return mVFreeBusy; }
+
+	const iCal::CICalendarPeriod& GetInstancePeriod() const
+		{ return mPeriod; }
 
 	uint32_t	GetColumnSpan() const
 		{ return mColumnSpan; }
@@ -110,6 +124,7 @@ public:
 
 protected:
 	iCal::CICalendarComponentExpandedShared	mVEvent;
+	iCal::CICalendarVFreeBusy*				mVFreeBusy;
 
 	CCalendarTableBase*		mTable;
 	cdstring				mTitle;
@@ -127,6 +142,7 @@ protected:
 	CCalendarEventBase*		mNextLink;
 	uint32_t				mColour;
 	iCal::CICalendarPeriod	mPeriod;
+	bool					mIsInbox;
 
 	virtual void		OnCreate();
 	
@@ -143,6 +159,8 @@ protected:
 
 			bool		IsNow() const;
 	virtual void		SetupTagText();
+			void		SetupTagTextEvent();
+			void		SetupTagTextFreeBusy();
 
 private:
 			void		DrawHorizFrame(JXWindowPainter* pDC, JRect& rect);

@@ -74,8 +74,8 @@ public:
 	void	AddButton(CToolbarButton* btn, const CToolbarItem::CToolbarItemInfo& details);
 
 protected:
-	typedef vector<CToolbar*> CToolbarList;
-	typedef vector<CCommander*> CCommanderArray;
+	typedef std::vector<CToolbar*> CToolbarList;
+	typedef std::vector<CCommander*> CCommanderArray;
 
 	static CToolbarList	sToolbars;
 
@@ -108,7 +108,7 @@ protected:
 		JXWidget* mWnd;
 		CToolbarItem::CToolbarItemInfo	mDetails;
 	};
-	typedef vector<SItemSpec> CItemArray;
+	typedef std::vector<SItemSpec> CItemArray;
 
 	CItemArray mItemList;
 	

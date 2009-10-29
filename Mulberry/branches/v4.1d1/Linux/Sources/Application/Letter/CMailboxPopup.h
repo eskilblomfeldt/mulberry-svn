@@ -69,7 +69,7 @@ public:
 						{ return mMissingName.c_str(); }
 
  private:
-	typedef vector<CMailboxPopup*> CMailboxPopupList;
+	typedef std::vector<CMailboxPopup*> CMailboxPopupList;
 	static CMailboxPopupList	sMailboxPopupMenus;
 
 	bool			mCopyTo;											// Copy to or append to?

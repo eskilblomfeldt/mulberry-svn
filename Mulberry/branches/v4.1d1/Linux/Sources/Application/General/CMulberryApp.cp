@@ -41,7 +41,6 @@
 #include "CErrorHandler.h"
 #include "CFilterItem.h"
 #include "CFindReplaceWindow.h"
-#include "CLocalAddressBook.h"
 #include "CLetterWindow.h"
 #include "CLog.h"
 #include "CMacroEditDialog.h"
@@ -403,7 +402,7 @@ void CMulberryApp::CleanUpBeforeSuddenDeath(const JXDocumentManager::SafetySaveR
 	// Do safety save
 	unsigned long recovered = CLetterWindow::SaveAllTemporary();
 	if (recovered > 0)
-		cerr << "[Mulberry]: Saved " << recovered << " open drafts for recovery." << endl;
+		cerr << "[Mulberry]: Saved " << recovered << " open drafts for recovery." << std::endl;
 }
 
 #pragma mark ________________________
@@ -974,9 +973,7 @@ void CMulberryApp::OnAppAddressBookManager()
 void CMulberryApp::OnAppNewAddressBook()
 {
 	// Do local open if only local address books
-	if (CAddressBookManager::sAddressBookManager->GetProtocolList().empty())
-		OnAppNewLocalAddressBook();
-	else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+	if (CPreferences::sPrefs->mUse3Pane.GetValue())
 	{
 		// Show three pane window and force to contacts tab
 		if (C3PaneWindow::s3PaneWindow)
@@ -985,41 +982,17 @@ void CMulberryApp::OnAppNewAddressBook()
 			C3PaneWindow::s3PaneWindow->SetViewType(N3Pane::eView_Contacts);
 		}
 	}
-	else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+	else
 	{
 		// Show address book manager
 		CAdbkManagerWindow::CreateAdbkManagerWindow();
-	}
-}
-
-void CMulberryApp::OnAppNewLocalAddressBook()
-{
-	CLocalAddressBook* adbk = NULL;
-	try
-	{
-		// Create address book
-		adbk = new CLocalAddressBook(NULL);
-		
-		// New it
-		adbk->New();
-	}
-	catch (...)
-	{
-		CLOG_LOGCATCH(...);
-
-		// Remove from manager
-		if (adbk)
-			adbk->Close();
-		delete adbk;
 	}
 }
 
 void CMulberryApp::OnAppOpenAddressBook()
 {
 	// Do local open if only local address books
-	if (CAddressBookManager::sAddressBookManager->GetProtocolList().empty())
-		OnAppOpenLocalAddressBook();
-	else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+	if (CPreferences::sPrefs->mUse3Pane.GetValue())
 	{
 		// Show three pane window and force to contacts tab
 		if (C3PaneWindow::s3PaneWindow)
@@ -1028,74 +1001,10 @@ void CMulberryApp::OnAppOpenAddressBook()
 			C3PaneWindow::s3PaneWindow->SetViewType(N3Pane::eView_Contacts);
 		}
 	}
-	else if (CPreferences::sPrefs->mUse3Pane.GetValue())
+	else
 	{
 		// Show address book manager
 		CAdbkManagerWindow::CreateAdbkManagerWindow();
-	}
-}
-
-void CMulberryApp::OnAppOpenLocalAddressBook()
-{
-	// Make sure prefs exists - force if not
-	if (!mPrefsLoaded) StartUp();
-
-	if (CAdminLock::sAdminLock.mNoLocalAdbks)
-	{
-		::MessageBeep(1);
-		return;
-	}
-
-	// prompt the user (with all document templates)
-
-	JString fname;
-	if (JXGetChooseSaveFile()->ChooseFile("Address Book to open:", NULL, &fname))
-		OpenLocalAddressBook(cdstring(fname));
-}
-
-bool CMulberryApp::OpenLocalAddressBook(const cdstring& filename)
-{
-	// Fail silently but pretend it succeeded
-	if (CAdminLock::sAdminLock.mNoLocalAdbks)
-		return true;
-
-	// Check for existing file
-	CAddressBook* adbk = (CAddressBook*) CAddressBookManager::sAddressBookManager->CheckLocalOpen(filename);
-
-	// Does window already exist?
-	if (adbk)
-	{
-		CAddressBookWindow* theWindow = CAddressBookWindow::FindWindow(adbk);
-
-		if (theWindow)
-			// Found existing window so select
-			FRAMEWORK_WINDOW_TO_TOP(theWindow)
-
-		adbk = NULL;
-
-		return true;
-	}
-	else
-	{
-		try
-		{
-			// Create address book
-			adbk = new CLocalAddressBook(filename);
-
-			// Open it
-			adbk->Open();
-		}
-		catch (...)
-		{
-			CLOG_LOGCATCH(...);
-
-			// Remove from manager
-			if (adbk)
-				adbk->Close();
-			delete adbk;
-		}
-
-		return adbk;
 	}
 }
 
@@ -1391,7 +1300,7 @@ void CMulberryApp::InitConnection(CPreferences& prefs)
 		bool ctrlKey = modifiers.control();
 		
 		// Possible disconnect prompt
-		if (!prefs.mDisconnected.GetValue() && (prefs.mPromptDisconnected.GetValue() && CTCPSocket::WillDial() ||
+		if (!prefs.mDisconnected.GetValue() && ((prefs.mPromptDisconnected.GetValue() && CTCPSocket::WillDial()) ||
 			start_disconnected) || ctrlKey)
 		{
 			CErrorDialog::EDialogResult result = CErrorDialog::PoseDialog(CErrorDialog::eErrDialog_Caution,
@@ -1512,13 +1421,12 @@ void CMulberryApp::StartAddressBooks()
 		new CAddressBookManager;
 
 		// Force manager to update all accounts
-		CAddressBookManager::sAddressBookManager->StartLocal();
-		CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+		CAddressBookManager::sAddressBookManager->SyncAccounts();
 	}
 	else
 	{
 		// Force manager to update all accounts
-		CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+		CAddressBookManager::sAddressBookManager->SyncAccounts();
 	}
 }
 
@@ -1817,7 +1725,7 @@ bool CMulberryApp::DoPreferences()
 
 			// Sync address books
 			if (!stopped_adbk && CAddressBookManager::sAddressBookManager)
-				CAddressBookManager::sAddressBookManager->SyncAccounts(CPreferences::sPrefs->mAddressAccounts.GetValue());
+				CAddressBookManager::sAddressBookManager->SyncAccounts();
 
 			// Sync calendars
 			if (!stopped_cal && calstore::CCalendarStoreManager::sCalendarStoreManager)

@@ -30,9 +30,12 @@
 #include <openssl/pkcs12.h>
 #include <openssl/x509.h>
 
-using namespace NSSL;
+//using namespace NSSL;
 
 // Specialisations
+
+namespace NSSL
+{
 
 // ASN1_HEADER
 template<> void StSSLObject<ASN1_HEADER>::delete_obj()
@@ -84,7 +87,7 @@ template<> void StSSLObject<X509>::delete_obj()
 
 // Error strings
 
-void NSSL::ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
+void ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
 {
 	unsigned long l;
 	const char* file;
@@ -110,7 +113,7 @@ void NSSL::ERR_better_errors(cdstring& shorterrs, cdstring& longerrs)
 }
 
 // Passphrase callback
-int NSSL::PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
+int PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
 {
 	// Ask user for passphrase
 	cdstring passphrase;
@@ -125,4 +128,6 @@ int NSSL::PassphraseCallback(char* buf, int bufsiz, int verify, char* out)
 	::strncpy(out, passphrase.c_str(), 1024);
 	
 	return result;
+}
+
 }

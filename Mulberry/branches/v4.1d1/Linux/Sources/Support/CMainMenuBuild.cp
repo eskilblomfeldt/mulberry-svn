@@ -344,6 +344,7 @@ const SMenuBuilder cCalendarMenuBuilder[] =
 	{"Subscribed Calendars... %h s %l", CCommand::cCalendarSubscribe},
 	{"Create... %h c", CCommand::cCalendarCreate},
 	{"Rename... %h r", CCommand::cCalendarRename},
+	{"Check Calendars %h h", CCommand::cCalendarCheck},
 	{"Refresh List %h l %l", CCommand::cCalendarRefresh},
 	{"Delete Calendar... %h d %l", CCommand::cCalendarDelete},
 	{"Add Web Calendar... %h a", CCommand::cCalendarAddWeb},

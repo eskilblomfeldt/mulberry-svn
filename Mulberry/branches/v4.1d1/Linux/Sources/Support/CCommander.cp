@@ -29,7 +29,7 @@
 #include <JXWindow.h>
 #include <JXWindowDirector.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 CCommander* CCommander::sTarget = NULL;
 
@@ -141,7 +141,7 @@ CCommander* CCommander::GetSubTarget() const
 		return const_cast<CCommander*>(this);
 
 	// Verify that last sub target is still a sub-commander
-	CCommanders::const_iterator found = ::find(mSubCommanders.begin(), mSubCommanders.end(), mLastSubTarget);
+	CCommanders::const_iterator found = std::find(mSubCommanders.begin(), mSubCommanders.end(), mLastSubTarget);
 	if (found != mSubCommanders.end())
 		// Get last sub target to return the value
 		return mLastSubTarget->GetSubTarget();

@@ -31,7 +31,6 @@
 #include "cdstring.h"
 #include "cdfstream.h"
 
-#include <iostream.h>
 #include <time.h>
 
 // __________________________________________________________________________________________________

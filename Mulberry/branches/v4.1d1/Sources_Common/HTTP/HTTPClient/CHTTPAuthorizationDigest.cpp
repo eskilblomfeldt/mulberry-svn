@@ -31,6 +31,8 @@
 #include "base64.h"
 #include "md5.h"
 
+#include <memory>
+
 using namespace http; 
 
 void CHTTPAuthorizationDigest::GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const

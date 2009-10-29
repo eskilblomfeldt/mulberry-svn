@@ -83,7 +83,7 @@ class CLetterWindow : public CFileDocument,
 	};
 
 public:
-	typedef vector<CLetterWindow*>	CLetterWindowList;
+	typedef std::vector<CLetterWindow*>	CLetterWindowList;
 	static cdmutexprotect<CLetterWindowList> sLetterWindows;				// List of windows (protected for multi-thread access)
 
 	CLetterWindow(JXDirector* owner);
@@ -220,8 +220,8 @@ public:
 	virtual bool	IsDirty();								// Get dirty state
 	virtual void	SetDirty(bool dirty);					// Set dirty state
 	
-	void ReadTextFile(istream& input);
-	virtual void WriteTextFile(ostream& output, const JBoolean safetySave) const;
+	void ReadTextFile(std::istream& input);
+	virtual void WriteTextFile(std::ostream& output, const JBoolean safetySave) const;
 	virtual void	SafetySave(const JXDocumentManager::SafetySaveReason reason);
 	virtual bool	AbortSafetySave(const char* path);
 	

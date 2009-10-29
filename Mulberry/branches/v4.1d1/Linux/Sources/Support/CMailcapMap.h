@@ -40,7 +40,7 @@ class CMailcapMap
 	const cdstring& GetCommand(const cdstring& type);
 		
 	void AddEntry(const cdstring& mimetype, const cdstring& app);
-	void ReadFromStream(istream& ins);
+	void ReadFromStream(std::istream& ins);
 
 protected:
 	cdstrmap mTypeToApp;

@@ -38,6 +38,7 @@
 #include <JXTextButton.h>
 #include <JXUpRect.h>
 
+#include <algorithm>
 #include <cassert>
 
 // Static members
@@ -315,7 +316,7 @@ void CGroupPreview::SortAddresses(void)
 	}
 
 	// Sort list
-	::sort(list.begin(), list.end(), comp_strnocase_1);
+	std::sort(list.begin(), list.end(), comp_strnocase_1);
 
 	// Put back in field
 	txt = cdstring::null_str;

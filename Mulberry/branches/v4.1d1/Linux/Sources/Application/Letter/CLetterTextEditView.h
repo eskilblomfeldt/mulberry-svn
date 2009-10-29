@@ -77,7 +77,7 @@ private:
 	CLetterWindow*		mLtrWindow;
 	CDisplayFormatter*	mFormatter;
 	mutable CMessage*	mPrintMessage;
-	typedef vector<Atom> CFlavorsList;
+	typedef std::vector<Atom> CFlavorsList;
   	CFlavorsList		mDropFlavors;				// List of flavors to accept
 
 };

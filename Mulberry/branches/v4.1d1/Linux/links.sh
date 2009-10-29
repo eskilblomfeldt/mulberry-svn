@@ -16,10 +16,13 @@ all_paths="../Sources/Application \
 	    ../../Sources_Common/Mail \
 	    ../../Sources_Common/Offline \
 	    ../../Sources_Common/Plugins \
+	    ../../Sources_Common/Preferences_Store \
 	    ../../Sources_Common/Resources \
 	    ../../Sources_Common/Support \
 	    ../../Sources_Common/Tasks \
+	    ../../Sources_Common/VCard_Store \
 	    ../../../Libraries/CICalendar/Source \
+	    ../../../Libraries/vCard/Source \
 	    ../../../Libraries/XMLLib/Source"
 
 # clear out old link directory

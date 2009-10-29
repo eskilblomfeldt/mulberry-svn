@@ -35,7 +35,7 @@ class JXTextCheckbox;
 class JXUpRect;
 
 class JXImage;
-typedef vector<JXImage*> CIconArray;
+typedef std::vector<JXImage*> CIconArray;
 
 class CNamespaceTable : public CTable
 {

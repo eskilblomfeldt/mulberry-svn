@@ -27,6 +27,8 @@
 
 #include "base64.h"
 
+#include <memory>
+
 using namespace http; 
 
 void CHTTPAuthorizationBasic::GenerateAuthorization(std::ostream& os, const CHTTPRequestResponse* request) const

@@ -28,6 +28,7 @@
 //#include <UProfiler.h>
 
 #include <algorithm>
+#include <memory>
 
 #pragma mark ____________________________CMessageThread
 

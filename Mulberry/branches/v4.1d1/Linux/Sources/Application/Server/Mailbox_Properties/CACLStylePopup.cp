@@ -59,7 +59,7 @@ void CACLStylePopup::DoNewStyle(SACLRight rights)
 	if (CGetStringDialog::PoseDialog("Alerts::Server::SaveStyle", "Alerts::Server::SaveStyle", style_name))
 	{
 		// Add style to list and menu
-		SACLStyle style = make_pair(style_name, rights);
+		SACLStyle style = std::make_pair(style_name, rights);
 		mList->Value().push_back(style);
 		mList->SetDirty();
 

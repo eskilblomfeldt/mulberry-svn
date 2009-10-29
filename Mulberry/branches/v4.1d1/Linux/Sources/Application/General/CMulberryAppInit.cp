@@ -86,10 +86,10 @@ void CMulberryApp::StartUp()
 	//Start using the correct locale
 	if (!setlocale(LC_ALL, ""))
 	{
-		cerr <<"Can't set locale, using POSIX" << endl;
+		cerr <<"Can't set locale, using POSIX" << std::endl;
 		if (!setlocale(LC_ALL, "POSIX"))
 		{
-			cerr << "well, that failed too. Weird." << endl;
+			cerr << "well, that failed too. Weird." << std::endl;
 		}
 	}
 	
@@ -142,8 +142,8 @@ void CMulberryApp::StartUp()
 			else if (!CAdminLock::sAdminLock.mAllowDefault || !DoDefaultPrefsFile())
 			{
 				// If no sys folder prefs try multi-user
-				if (CAdminLock::sAdminLock.mUseMultiUser && DoMultiuser(muser_prefs) ||
-					!CAdminLock::sAdminLock.mUseMultiUser && ForcePrefsSetting())
+				if ((CAdminLock::sAdminLock.mUseMultiUser && DoMultiuser(muser_prefs)) ||
+					(!CAdminLock::sAdminLock.mUseMultiUser && ForcePrefsSetting()))
 					DoPostPrefsStartup();
 				else
 				{

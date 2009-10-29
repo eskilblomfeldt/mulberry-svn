@@ -455,7 +455,7 @@ bool CActionManager::NewDraft(CAddressList* to, CAddressList* cc, CAddressList* 
 
 		if (newWindow)
 		{
-			if (to && to->size() || cc && cc->size() || bcc && bcc->size())
+			if ((to && to->size()) || (cc && cc->size()) || (bcc && bcc->size()))
 				newWindow->AddAddressLists(to, cc, bcc);
 			if (!subject.empty())
 				newWindow->SetSubject(subject.c_str());
@@ -847,7 +847,7 @@ bool CActionManager::NewDraftiTIPManual(const CAddressList* to, const CAddressLi
 
 		if (newWindow)
 		{
-			if (to && to->size() || cc && cc->size() || bcc && bcc->size())
+			if ((to && to->size()) || (cc && cc->size()) || (bcc && bcc->size()))
 				newWindow->AddAddressLists(to, cc, bcc);
 			
 			newWindow->SetiTIP(subject, description, attach, msg);

@@ -44,6 +44,7 @@ protected:
     CTextInputField* mFullName;
     CTextInputField* mNickName;
     CTextInputField* mEmail;
+    CTextInputField* mCalendar;
     CTextInputField* mCompany;
 
 // end JXLayout1

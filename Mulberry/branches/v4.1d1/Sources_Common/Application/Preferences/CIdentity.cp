@@ -34,6 +34,7 @@
 
 #include "cdfstream.h"
 
+#include <algorithm>
 #include <strstream>
 
 extern const char* cSpace;

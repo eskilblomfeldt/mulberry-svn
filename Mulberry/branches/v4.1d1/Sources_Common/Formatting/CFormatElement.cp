@@ -15,13 +15,14 @@
 */
 
 
-#include <iostream.h>
 #include "CFormatElement.h"
 #include "ETag.h"
-#include <stdlib.h>
 #include "CHTMLCharacterEntity.h"
 #include "CStringUtils.h"
+
 #include <string.h>
+#include <stdlib.h>
+
 #if __dest_os == __mac_os || __dest_os == __mac_os_x || __dest_os == __linux_os
 #include "CFormattedTextDisplay.h"
 #elif __dest_os == __win32_os

@@ -22,7 +22,7 @@
 
 #include <JXWidgetSet.h>
 
-#include "CAdbkList.h"
+#include "CAddressBook.h"
 
 // Classes
 
@@ -37,11 +37,11 @@ public:
 	virtual 		~CAdbkPropPanel() {}
 
 	virtual void	OnCreate() = 0;							// Defined in subclass
-	virtual void	SetAdbkList(CFlatAdbkList* adbk_list) = 0;	// Set adbk list - pure virtual
+	virtual void	SetAdbkList(CAddressBookList* adbk_list) = 0;	// Set adbk list - pure virtual
 	virtual void	ApplyChanges(void) = 0;					// Force update of values
 
 protected:
-	CFlatAdbkList*	mAdbkList;
+	CAddressBookList*	mAdbkList;
 
 };
 

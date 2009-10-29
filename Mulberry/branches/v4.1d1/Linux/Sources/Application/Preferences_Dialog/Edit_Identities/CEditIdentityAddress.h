@@ -49,9 +49,9 @@ public:
 	virtual void SetData(void* data);			// Set data
 	virtual bool UpdateData(void* data);		// Force update of data
 	virtual void SetAddressType(bool from, bool reply_to, bool sender,
-									bool to, bool cc, bool bcc)
+									bool to, bool cc, bool bcc, bool calendar)
 		{ mFrom = from; mReplyTo = reply_to; mSender = sender;
-			mTo = to; mCC = cc; mBcc = bcc; }
+			mTo = to; mCC = cc; mBcc = bcc; mCalendar = calendar; }
 
 protected:
 // begin JXLayout1
@@ -97,6 +97,7 @@ protected:
 	bool mTo;
 	bool mCC;
 	bool mBcc;
+	bool mCalendar;
 	bool mSingle;
 
 	virtual void Receive(JBroadcaster* sender, const Message& message);

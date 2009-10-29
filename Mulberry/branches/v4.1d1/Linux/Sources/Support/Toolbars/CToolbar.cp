@@ -47,7 +47,7 @@
 #include "JXTextPushButton.h"
 #include "JXWindow.h"
 
-#include <algorithm.h>
+#include <algorithm>
 
 // Static members
 
@@ -540,7 +540,7 @@ void CToolbar::ListenTo_Message(long msg, void* param)
 void CToolbar::SetCommander(CCommander* cmdr)
 {
 	// See if already in the list
-	CCommanderArray::const_iterator found = ::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
+	CCommanderArray::const_iterator found = std::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
 	if (found == mCmdrs.end())
 	{
 		// Erase all
@@ -556,7 +556,7 @@ void CToolbar::SetCommander(CCommander* cmdr)
 void CToolbar::AddCommander(CCommander* cmdr)
 {
 	// See if already in the list
-	CCommanderArray::const_iterator found = ::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
+	CCommanderArray::const_iterator found = std::find(mCmdrs.begin(), mCmdrs.end(), cmdr);
 	if (found == mCmdrs.end())
 	{
 		mCmdrs.push_back(cmdr);

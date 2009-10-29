@@ -46,6 +46,8 @@
 #include <jXGlobals.h>
 #include <jXKeysym.h>
 
+#include <algorithm>
+
 // __________________________________________________________________________________________________
 // C L A S S __ C T E X T D I S P L A Y
 // __________________________________________________________________________________________________
@@ -235,7 +237,7 @@ bool CTextDisplay::HandleChar(const int key, const JXKeyModifiers& modifiers)
 			GetSelectionRange(new_sel_start, new_sel_end);
 			
 			// Extend to encompass full range
-			SetSelectionRange(min(new_sel_start, sel_start), max(new_sel_end, sel_end));
+			SetSelectionRange(std::min(new_sel_start, sel_start), std::max(new_sel_end, sel_end));
 		}
 	}
 	SpellTextChange();
@@ -1170,7 +1172,7 @@ JSize CTextDisplay::GetWordAt(JIndex pos, cdustring& word, JIndex* startPos, boo
 	// Determine sensible buffer range around start pos
 	JIndex rstart = (pos > maxWordSize) ? pos - maxWordSize : 0UL;
 	JIndex rend = pos + maxWordSize;
-	rend = min(rend, GetTextLength());
+	rend = std::min(rend, GetTextLength());
 
 	// Get the text in that range
 	cdustring buf;
@@ -1178,8 +1180,8 @@ JSize CTextDisplay::GetWordAt(JIndex pos, cdustring& word, JIndex* startPos, boo
 	const unichar_t* _buf = buf.c_str();
 	
 	// Locate beginning of word by stepping back
-	pos = min(pos, rstart + buf.length());
-	JIndex i = min(pos, maxWordSize);
+	pos = std::min(pos, rstart + buf.length());
+	JIndex i = std::min(pos, maxWordSize);
 	while((i > 0) &&
 			(IS_WORD_CHAR(_buf[i - 1]) ||
 			 (_buf[i - 1] == '.') ||
@@ -1328,7 +1330,7 @@ bool CTextDisplay::CheckWord(const cdustring& word, JIndex start)
 	// Canonicalise word
 	cdustring temp(word);
 	size_t wlen = temp.length();
-	if ((wlen > 0) && ((temp[wlen - 1] == '\'') || (temp[wlen - 1] == 'Õ')))
+	if ((wlen > 0) && (temp[wlen - 1] == '\''))
 	{
 		if ((wlen > 1) && (temp[wlen - 2] != 's') && (temp[wlen - 2] != 'S'))
 		{
@@ -1412,8 +1414,8 @@ void CTextDisplay::SpellInsertText(JIndex start, JSize numchars)
 	else
 		text_start = 0UL;
 	JSize text_len = cursor_pos - text_start;
-	text_len += max(text_len / 5UL, 256UL);
-	text_len = min(text_len, GetTextLength() - text_start);
+	text_len += std::max(text_len / 5UL, 256UL);
+	text_len = std::min(text_len, GetTextLength() - text_start);
 
 	// Copy text into buffer
 	cdustring text;

@@ -22,7 +22,7 @@
 
 #include "UNX_LStream.h"
 
-#include <strstream.h>
+#include <strstream>
 
 class LMemFileStream : public LStream
 {
@@ -40,10 +40,10 @@ public:
 	char* DetachData();
 
 protected:
-	void*			mDataF;
-	ostrstream		mOutStream;
-	unsigned long	offset;
-	unsigned long	datalen;
+	void*				mDataF;
+	std::ostrstream		mOutStream;
+	unsigned long		offset;
+	unsigned long		datalen;
 };
 
 

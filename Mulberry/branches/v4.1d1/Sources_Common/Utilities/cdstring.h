@@ -213,7 +213,7 @@ public:
 	int operator<(const cdstring& comp) const;						// Compare with same
 
 	size_type length() const										// Return length
-		{ return (_str ? std::strlen(_str) : 0); }
+		{ return (_str ? ::strlen(_str) : 0); }
 	void reserve(size_type res)										// Reserve space ready for ptr insert
 		{ _allocate('\0', res); }
 	void clear()													// Empty the string
@@ -326,7 +326,7 @@ public:
 	size_type find(const char* s, size_type pos, size_type n, bool casei = false) const;
 	size_type find(const char* s, size_type pos = 0, bool casei = false) const
 	{
-		return find(s, pos, std::strlen(s), casei);
+		return find(s, pos, ::strlen(s), casei);
 	}
 	size_type find(char c, size_type pos = 0, bool casei = false) const;
 
@@ -338,7 +338,7 @@ public:
 	size_type rfind(const char* s, size_type pos, size_type n, bool casei = false) const;
 	size_type rfind(const char* s, size_type pos = npos, bool casei = false) const
 	{
-		return rfind(s, pos, std::strlen(s), casei);
+		return rfind(s, pos, ::strlen(s), casei);
 	}
 	size_type rfind(char c, size_type pos = npos, bool casei = false) const;
 
@@ -350,7 +350,7 @@ public:
 	size_type find_first_of(const char* s, size_type pos, size_type n) const;
 	size_type find_first_of(const char* s, size_type pos = 0) const
 	{
-		return find_first_of(s, pos, std::strlen(s));
+		return find_first_of(s, pos, ::strlen(s));
 	}
 	size_type find_first_of(char c, size_type pos = 0) const
 	{
@@ -365,7 +365,7 @@ public:
 	size_type find_last_of(const char* s, size_type pos, size_type n) const;
 	size_type find_last_of(const char* s, size_type pos = npos) const
 	{
-		return find_last_of(s, pos, std::strlen(s));
+		return find_last_of(s, pos, ::strlen(s));
 	}
 	size_type find_last_of(char c, size_type pos = npos) const
 	{
@@ -380,7 +380,7 @@ public:
 	size_type find_first_not_of(const char* s, size_type pos, size_type n) const;
 	size_type find_first_not_of(const char* s, size_type pos = 0) const
 	{
-		return find_first_not_of(s, pos, std::strlen(s));
+		return find_first_not_of(s, pos, ::strlen(s));
 	}
 	size_type find_first_not_of(char c, size_type pos) const;
 
@@ -392,7 +392,7 @@ public:
 	size_type find_last_not_of(const char* s, size_type pos, size_type n) const;
 	size_type find_last_not_of(const char* s, size_type pos = npos) const
 	{
-		return find_last_not_of(s, pos, std::strlen(s));
+		return find_last_not_of(s, pos, ::strlen(s));
 	}
 	size_type find_last_not_of(char c, size_type pos = npos) const;
 
@@ -412,11 +412,11 @@ public:
 	}
 	int compare(const char* s, bool casei = false) const
 	{
-		return compare(0, length(), s, std::strlen(s), casei);
+		return compare(0, length(), s, ::strlen(s), casei);
 	}
 	int compare(size_type pos1, size_type n1, const char* s, bool casei = false) const
 	{
-		return compare(pos1, n1, s, std::strlen(s), casei);
+		return compare(pos1, n1, s, ::strlen(s), casei);
 	}
 	int compare(size_type pos1, size_type n1, const char* s, size_type n2, bool casei = false) const;
 

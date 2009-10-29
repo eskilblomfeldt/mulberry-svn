@@ -48,6 +48,9 @@
 #include "FullPath.h"
 #endif
 
+#include <algorithm>
+#include <memory>
+
 CAddressBookManager* CAddressBookManager::sAddressBookManager = NULL;
 
 CAddressBookManager::CAddressBookManager()

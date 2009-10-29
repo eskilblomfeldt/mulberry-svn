@@ -43,13 +43,13 @@ void CLoggingOptionsDialog::OnCreate()
 {
 // begin JXLayout
 
-    JXWindow* window = new JXWindow(this, 280,350, "");
+    JXWindow* window = new JXWindow(this, 455,350, "");
     assert( window != NULL );
     SetWindow(window);
 
     JXUpRect* obj1 =
         new JXUpRect(window,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 280,350);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 455,350);
     assert( obj1 != NULL );
 
     mActivate =
@@ -89,13 +89,13 @@ void CLoggingOptionsDialog::OnCreate()
 
     mOKBtn =
         new JXTextButton("OK", obj1,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 190,315, 70,25);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 365,315, 70,25);
     assert( mOKBtn != NULL );
     mOKBtn->SetShortcuts("^M");
 
     mCancelBtn =
         new JXTextButton("Cancel", obj1,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 100,315, 70,25);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 275,315, 70,25);
     assert( mCancelBtn != NULL );
     mCancelBtn->SetShortcuts("^[");
 
@@ -129,6 +129,16 @@ void CLoggingOptionsDialog::OnCreate()
                     JXWidget::kHElastic, JXWidget::kVElastic, 20,280, 180,20);
     assert( mOverwrite != NULL );
 
+    mClearBtn =
+        new JXTextButton("Clear Logs", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 140,315, 100,25);
+    assert( mClearBtn != NULL );
+
+    mFlushBtn =
+        new JXTextButton("Flush Logs", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 25,315, 100,25);
+    assert( mFlushBtn != NULL );
+
 // end JXLayout
 
 	mLogs[CLog::eLogIMAP] = mIMAP;
@@ -143,10 +153,31 @@ void CLoggingOptionsDialog::OnCreate()
 
 	window->SetTitle("Logging Options");
 	SetButtons(mOKBtn, mCancelBtn);
+	ListenTo(mFlushBtn);
+	ListenTo(mClearBtn);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CLoggingOptionsDialog message handlers
+
+void CLoggingOptionsDialog::Receive(JBroadcaster*	sender, const Message&	message)
+{
+	if (message.Is(JXButton::kPushed))
+	{
+		if (sender == mFlushBtn)
+		{
+			CLog::FlushLogs();
+			return;
+		}
+		else if (sender == mClearBtn)
+		{
+			CLog::ClearLogs();
+			return;
+		}
+	}
+
+	CDialogDirector::Receive(sender, message);
+}
 
 // Set options in dialog
 void CLoggingOptionsDialog::SetOptions(const CLog::SLogOptions& options)

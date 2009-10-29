@@ -23,6 +23,8 @@
 
 #include <JXImage.h>
 
+#include <memory>
+
 CIconRef::CIconRef()
 {
 	mIcon = NULL;
@@ -89,7 +91,7 @@ const CIconRef* CDesktopIcons::GetDesktopIcons(const cdstring& ext)
 	if (result == NULL)
 	{
 		// Create new icon ref
-		auto_ptr<CIconRef> icons(new CIconRef(ext));
+		std::auto_ptr<CIconRef> icons(new CIconRef(ext));
 		
 		// Try to load items and add to cache if successful
 		if (icons->GetIconRef() != NULL)
@@ -122,7 +124,7 @@ const CIconRef* CDesktopIcons::GetDesktopIconsFromMIME(const cdstring& type, con
 	if (result == NULL)
 	{
 		// Create new icon ref
-		auto_ptr<CIconRef> icons(new CIconRef);
+		std::auto_ptr<CIconRef> icons(new CIconRef);
 		icons->LoadIcons(type, subtype);
 		
 		// Try to load items and add to cache if successful

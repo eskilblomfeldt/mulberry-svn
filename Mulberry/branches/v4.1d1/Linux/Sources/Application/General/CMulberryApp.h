@@ -43,11 +43,11 @@ class CMulberryMDIServer;
 
 struct HFont
 {
-	string name_;
+	std::string name_;
 	JSize  size_;
 	JFontStyle style_;
 
-	HFont(const string& name, JSize size, const JFontStyle& style)
+	HFont(const std::string& name, JSize size, const JFontStyle& style)
 		: name_(name), size_(size), style_(style) {}
 	HFont(const HFont& other) : name_(other.name_), size_(other.size_),
 			style_(other.style_) {}
@@ -110,7 +110,6 @@ public:
 	virtual void RegisterClipboard();      // Register all clipboard formats
 
 	virtual bool OpenPrefs(const cdstring& filename, bool default_prefs = false);
-	virtual bool OpenLocalAddressBook(const cdstring& filename);
 
 	virtual JBoolean Close();         			// Terminate
 	virtual bool AttemptClose();       			// Terminate
@@ -156,9 +155,7 @@ public:
 	void 		OnAppOpenTarget();
 	void 		OnAppAddressBookManager();
 	void 		OnAppNewAddressBook();
-	void 		OnAppNewLocalAddressBook();
 	void 		OnAppOpenAddressBook();
-	void 		OnAppOpenLocalAddressBook();
 	void		OnAppAddrImportExport();			// Warn adbk import/export
 	void 		OnAppSearchAddress();
 	void 		OnAppSelect3PaneWindow();

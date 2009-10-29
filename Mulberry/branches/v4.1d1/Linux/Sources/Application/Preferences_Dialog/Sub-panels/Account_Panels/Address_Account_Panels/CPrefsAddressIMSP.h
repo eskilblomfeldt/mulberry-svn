@@ -23,7 +23,9 @@
 #include "CTabPanel.h"
 
 // Classes
+class JXStaticText;
 class JXTextCheckbox;
+class CTextInputField;
 
 class CPrefsAddressIMSP : public CTabPanel
 {
@@ -43,8 +45,10 @@ public:
 protected:
 // begin JXLayout1
 
-    JXTextCheckbox* mLogonAtStartup;
-    JXTextCheckbox* mDisconnected;
+    JXTextCheckbox*  mLogonAtStartup;
+    JXTextCheckbox*  mDisconnected;
+    JXStaticText*    mBaseRURLText;
+    CTextInputField* mBaseRURL;
 
 // end JXLayout1
 };

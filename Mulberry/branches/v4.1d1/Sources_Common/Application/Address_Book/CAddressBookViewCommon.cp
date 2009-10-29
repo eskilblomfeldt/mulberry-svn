@@ -39,6 +39,8 @@
 #include "CStringResources.h"
 #endif
 
+#include <algorithm>
+
 void CAddressBookView::ListenTo_Message(long msg, void* param)
 {
 	// Change the toolbar commander when a table is activated

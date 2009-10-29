@@ -23,6 +23,8 @@
 #include "CPreferences.h"
 #include "CToolbar.h"
 
+#include <algorithm>
+
 // Static members
 CToolbarView::CToolbarViewList CToolbarView::sToolbarViews;
 
@@ -47,7 +49,7 @@ CToolbarView::CToolbarView(JXContainer* enclosure,
 CToolbarView::~CToolbarView()
 {
 	// Remove from list
-	CToolbarViewList::iterator found = ::find(sToolbarViews.begin(), sToolbarViews.end(), this);
+	CToolbarViewList::iterator found = std::find(sToolbarViews.begin(), sToolbarViews.end(), this);
 	if (found != sToolbarViews.end())
 		sToolbarViews.erase(found);
 }
@@ -113,7 +115,7 @@ void CToolbarView::AddToolbar(CToolbar* toolbar, CCommander* cmdr, unsigned long
 void CToolbarView::ActivateToolbar(CToolbar* tb, bool show)
 {
 	// Find its index (it must be one we know about)
-	SToolbars::const_iterator found = ::find(mToolbars.begin(), mToolbars.end(), tb);
+	SToolbars::const_iterator found = std::find(mToolbars.begin(), mToolbars.end(), tb);
 	if (found == mToolbars.end())
 		return;
 	unsigned long index = found - mToolbars.begin();

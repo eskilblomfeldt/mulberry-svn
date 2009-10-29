@@ -29,7 +29,7 @@
 #include <jASCIIConstants.h>
 #include <jXUtil.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 // ---------------------------------------------------------------------------
 //	CCalendarEventTableBase														  [public]

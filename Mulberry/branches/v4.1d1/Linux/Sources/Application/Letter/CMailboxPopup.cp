@@ -86,7 +86,7 @@ void CMailboxPopup::CommonConstruct(JXContainer* enclosure,
 CMailboxPopup::~CMailboxPopup()
 {
 	// Remove from list
-	CMailboxPopupList::iterator found = ::find(sMailboxPopupMenus.begin(), sMailboxPopupMenus.end(), this);
+	CMailboxPopupList::iterator found = std::find(sMailboxPopupMenus.begin(), sMailboxPopupMenus.end(), this);
 	if (found != sMailboxPopupMenus.end())
 		sMailboxPopupMenus.erase(found);
 }

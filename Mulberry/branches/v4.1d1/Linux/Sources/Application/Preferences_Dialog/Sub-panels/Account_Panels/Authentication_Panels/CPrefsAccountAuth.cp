@@ -37,7 +37,7 @@
 #include <JXStaticText.h>
 #include <JXTextCheckbox.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 
@@ -259,7 +259,7 @@ void CPrefsAccountAuth::BuildAuthPopup(CINETAccount* account)
 
 	cdstrvect plugin_names;
 	CPluginManager::sPluginManager.GetAuthPlugins(plugin_names);
-	::sort(plugin_names.begin(), plugin_names.end());
+	std::sort(plugin_names.begin(), plugin_names.end());
 	short index = 2;
 	for(cdstrvect::const_iterator iter = plugin_names.begin(); iter != plugin_names.end(); iter++, index++)
 	{

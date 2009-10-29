@@ -23,6 +23,8 @@
 
 #include "CWebDAVOptions.h"
 
+#include <cstring>
+
 using namespace webdav; 
 
 CWebDAVOptions::CWebDAVOptions(CWebDAVSession* session, const cdstring& ruri) :

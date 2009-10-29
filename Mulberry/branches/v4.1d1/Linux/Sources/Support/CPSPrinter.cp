@@ -23,6 +23,8 @@
 #include <JXPSPrinter.h>
 #include <JXWindow.h>
 
+#include <stdlib.h>
+
 CPSPrinter CPSPrinter::sPSPrinter;
 
 JXPSPrinter* CPSPrinter::GetPSPrinter(JXWindow* wnd)

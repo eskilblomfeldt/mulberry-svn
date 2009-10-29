@@ -21,7 +21,8 @@
 #define __CADBKPROPDIALOG__MULBERRY__
 
 #include "CPropDialog.h"
-#include "CAdbkList.h"
+
+#include "CAddressBook.h"
 
 // Classes
 class JXTextButton;
@@ -32,7 +33,7 @@ class CAdbkPropDialog : public CPropDialog
 public:
 	CAdbkPropDialog(JXDirector* supervisor);
 
-	static bool PoseDialog(CFlatAdbkList* adbk_list);
+	static bool PoseDialog(CAddressBookList* adbk_list);
 
 protected:
 // begin JXLayout
@@ -50,9 +51,9 @@ protected:
 	virtual void	DoPanelInit(void);										// About to display a panel
 
 private:
-	CFlatAdbkList*	mAdbkList;											// List of selected adbks
+	CAddressBookList*	mAdbkList;											// List of selected adbks
 
-	void	SetAdbkList(CFlatAdbkList* adbk_list);								// Set mbox list
+	void	SetAdbkList(CAddressBookList* adbk_list);								// Set mbox list
 };
 
 #endif

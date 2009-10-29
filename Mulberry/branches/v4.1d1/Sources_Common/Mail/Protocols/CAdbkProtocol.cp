@@ -55,6 +55,9 @@
 #include "XMLObject.h"
 #include "XMLSAXSimple.h"
 
+#include <algorithm>
+#include <memory>
+
 #define USE_LOCAL_VCARDS
 
 using namespace vcardstore;
@@ -857,7 +860,15 @@ CAddressBook* CAdbkProtocol::GetNode(const cdstring& adbk, bool parent) const
 	if (acct != GetAccountName())
 		return NULL;
 	
-	return mStoreRoot.FindNode(path);
+	if (parent)
+	{
+		cdstrvect segments;
+		path.split(cdstring(GetDirDelim()), segments);
+		segments.pop_back();
+		path.join(segments, cdstring(GetDirDelim()));
+	}
+
+	return (path.empty() ? const_cast<CAddressBook*>(&mStoreRoot) : mStoreRoot.FindNode(path));
 }
 
 CAddressBook* CAdbkProtocol::GetParentNode(const cdstring& adbk) const

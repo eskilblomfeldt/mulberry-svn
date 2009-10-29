@@ -46,18 +46,18 @@ void CEditIdentityOutgoing::OnCreate()
 
 	// Create tab panels
 	CEditIdentityAddress* panel_to = new CEditIdentityAddress(true, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-	panel_to->SetAddressType(false, false, false, true, false, false);
+	panel_to->SetAddressType(false, false, false, true, false, false, false);
 	cdstring title;
 	title.FromResource(IDS_IDENTITY_PANEL_TO);
 	mTabs->AppendCard(panel_to, title);
 
 	CEditIdentityAddress* panel_cc = new CEditIdentityAddress(true, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-	panel_cc->SetAddressType(false, false, false, false, true, false);
+	panel_cc->SetAddressType(false, false, false, false, true, false, false);
 	title.FromResource(IDS_IDENTITY_PANEL_CC);
 	mTabs->AppendCard(panel_cc, title);
 
 	CEditIdentityAddress* panel_bcc = new CEditIdentityAddress(true, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-	panel_bcc->SetAddressType(false, false, false, false, false, true);
+	panel_bcc->SetAddressType(false, false, false, false, false, true, false);
 	title.FromResource(IDS_IDENTITY_PANEL_BCC);
 	mTabs->AppendCard(panel_bcc, title);
 

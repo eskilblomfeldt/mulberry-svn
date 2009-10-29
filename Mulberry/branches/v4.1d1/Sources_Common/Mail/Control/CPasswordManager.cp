@@ -20,7 +20,9 @@
 
 #include "CINETAccount.h"
 
+#if __dest_os == __mac_os_x
 #include <Security/Security.h>
+#endif
 
 CPasswordManager* CPasswordManager::sPasswordManager = NULL;
 

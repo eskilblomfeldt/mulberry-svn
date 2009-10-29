@@ -21,6 +21,8 @@
 
 #include <jXActionDefs.h>
 
+#include <string.h>
+
 #define DECLARE_CMD(name)	const char* CCommand::c##name = #name "Menu";
 
 DECLARE_CMD(FileNewMessage)
@@ -234,6 +236,7 @@ DECLARE_CMD(CalendarManager)
 DECLARE_CMD(CalendarSubscribe)
 DECLARE_CMD(CalendarCreate)
 DECLARE_CMD(CalendarRename)
+DECLARE_CMD(CalendarCheck)
 DECLARE_CMD(CalendarRefresh)
 DECLARE_CMD(CalendarDelete)
 DECLARE_CMD(CalendarAddWeb)
@@ -394,6 +397,7 @@ DECLARE_CMD(ToolbarAddressBookDeleteBtn)
 DECLARE_CMD(ToolbarCalendarCreateBtn)
 DECLARE_CMD(ToolbarCalendarNewEventBtn)
 DECLARE_CMD(ToolbarCalendarNewToDoBtn)
+DECLARE_CMD(ToolbarCalendarCheckBtn)
 DECLARE_CMD(ToolbarCalendarTodayBtn)
 DECLARE_CMD(ToolbarCalendarGotoBtn)
 DECLARE_CMD(ToolbarCalendarDayBtn)
@@ -643,6 +647,7 @@ static SCommandMap sCmdMap[] =
 	DECLARE_MAP(CalendarSubscribe)
 	DECLARE_MAP(CalendarCreate)
 	DECLARE_MAP(CalendarRename)
+	DECLARE_MAP(CalendarCheck)
 	DECLARE_MAP(CalendarRefresh)
 	DECLARE_MAP(CalendarDelete)
 	DECLARE_MAP(CalendarAddWeb)
@@ -803,6 +808,7 @@ static SCommandMap sCmdMap[] =
 	DECLARE_MAP(ToolbarCalendarCreateBtn)
 	DECLARE_MAP(ToolbarCalendarNewEventBtn)
 	DECLARE_MAP(ToolbarCalendarNewToDoBtn)
+	DECLARE_MAP(ToolbarCalendarCheckBtn)
 	DECLARE_MAP(ToolbarCalendarTodayBtn)
 	DECLARE_MAP(ToolbarCalendarGotoBtn)
 	DECLARE_MAP(ToolbarCalendarDayBtn)

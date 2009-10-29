@@ -27,6 +27,8 @@
 #include "CHTTPDataString.h"
 #include "CHTTPRequestResponse.h"
 
+#include <memory>
+
 using namespace webdav; 
 
 CWebDAVSession::CWebDAVSession()

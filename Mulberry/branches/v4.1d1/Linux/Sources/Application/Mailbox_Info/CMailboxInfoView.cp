@@ -57,9 +57,10 @@
 #include <JXStaticText.h>
 #include <JXUpRect.h>
 
+#include <algorithm>
 #include <cassert>
 #include <string.h>
-#include <numeric.h>
+#include <numeric>
 
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 
@@ -462,7 +463,7 @@ void CMailboxInfoView::DoQuickSearch(bool change_focus)
 
 	cdstring txt = mQuickSearchText->GetText();
 
-	auto_ptr<CSearchItem> spec;
+	std::auto_ptr<CSearchItem> spec;
 	switch(mQuickSearchCriteria->GetValue())
 	{
 	case eQuickSearchFrom:
@@ -525,7 +526,7 @@ void CMailboxInfoView::DoQuickSearchSavedPopup(long value)
 		mQuickSearchProgress->SetVisible(kTrue);
 
 		// Get search set
-		auto_ptr<CSearchItem> spec(new CSearchItem(CSearchItem::eNamedStyle, CPreferences::sPrefs->mSearchStyles.GetValue().at(value - IDM_SEARCH_STYLES_Start)->GetName()));
+		std::auto_ptr<CSearchItem> spec(new CSearchItem(CSearchItem::eNamedStyle, CPreferences::sPrefs->mSearchStyles.GetValue().at(value - IDM_SEARCH_STYLES_Start)->GetName()));
 
 		// Make sure search failure does not prevent clean-up
 		try
@@ -785,7 +786,7 @@ void CMailboxInfoView::SaveState(void)
 	if (!mbox->GetAutoViewMode())
 		match = GetInfoTable()->GetCurrentMatch();
 	NMbox::EViewMode mode = mbox->GetAutoViewMode() ? NMbox::eViewMode_All : mbox->GetViewMode();
-	if (!::accumulate(match.GetBitsSet().begin(), match.GetBitsSet().end(), false, logical_or<bool>()) && !match.GetSearchSet().size())
+	if (!std::accumulate(match.GetBitsSet().begin(), match.GetBitsSet().end(), false, std::logical_or<bool>()) && !match.GetSearchSet().size())
 		mode = NMbox::eViewMode_All;
 
 	// Sync column state

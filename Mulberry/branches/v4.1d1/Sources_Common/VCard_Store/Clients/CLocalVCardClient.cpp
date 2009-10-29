@@ -44,6 +44,7 @@
 #include "diriterator.h"
 #include "cdfstream.h"
 
+#include <memory>
 #include __stat_header
 
 const char* cVCardExtension = ".vcf";

@@ -34,7 +34,7 @@ class CFormatList;
 class CClickList;
 class CClickElement;
 class CAnchorClickElement;
-typedef map<cdstring, CAnchorClickElement> CAnchorElementMap;
+typedef std::map<cdstring, CAnchorClickElement> CAnchorElementMap;
 
 class CFormattedTextDisplay : public CSpacebarEditView
 {

@@ -84,13 +84,23 @@ void CAddressPersonalPanel::OnCreate()
     assert( mEmail != NULL );
 
     JXStaticText* obj4 =
-        new JXStaticText("Company:", this,
+        new JXStaticText("Calendar:", this,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 5,87, 65,20);
     assert( obj4 != NULL );
 
-    mCompany =
+    mCalendar =
         new CTextInputField(this,
                     JXWidget::kHElastic, JXWidget::kFixedTop, 85,85, 400,20);
+    assert( mCalendar != NULL );
+
+    JXStaticText* obj5 =
+        new JXStaticText("Company:", this,
+                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 5,112, 65,20);
+    assert( obj5 != NULL );
+
+    mCompany =
+        new CTextInputField(this,
+                    JXWidget::kHElastic, JXWidget::kFixedTop, 85,110, 400,20);
     assert( mCompany != NULL );
 
 // end JXLayout1
@@ -115,8 +125,12 @@ void CAddressPersonalPanel::SetFields(const CAdbkAddress* addr)
 	mNickName->SetText(txt);
 
 	if (addr)
-		txt = addr->GetMailAddress();
+		txt = addr->GetEmail(CAdbkAddress::eDefaultEmailType);
 	mEmail->SetText(txt);
+
+	if (addr)
+		txt = addr->GetCalendar();
+	mCalendar->SetText(txt);
 
 	if (addr)
 		txt = addr->GetCompany();
@@ -151,10 +165,17 @@ bool CAddressPersonalPanel::GetFields(CAdbkAddress* addr)
 	}
 
 	txt = mEmail->GetText();
-	cdstring test_addr = addr->GetMailAddress();
+	cdstring test_addr = addr->GetEmail(CAdbkAddress::eDefaultEmailType);
 	if (test_addr != txt)
 	{
 		addr->CopyMailAddress(txt);
+		done_edit = true;
+	}
+
+	txt = mCalendar->GetText();
+	if (addr->GetCalendar() != txt)
+	{
+		addr->SetCalendar(txt);
 		done_edit = true;
 	}
 

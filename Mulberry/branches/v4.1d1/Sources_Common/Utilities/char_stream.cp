@@ -24,6 +24,8 @@
 #include "CCharSpecials.h"
 #include "cdstring.h"
 
+#include <cstdlib>
+
 #if defined(__MULBERRY) || defined(__MULBERRY_CONFIGURE_V2_0)
 extern const char* cValueBoolTrue;
 #else

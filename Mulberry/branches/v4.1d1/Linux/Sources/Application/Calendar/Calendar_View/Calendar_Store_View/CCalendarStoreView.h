@@ -35,7 +35,7 @@ class CCalendarView;
 class	CCalendarStoreView : public CTableView
 {
 public:
-	typedef vector<CCalendarStoreView*>	CCalendarStoreViewList;
+	typedef std::vector<CCalendarStoreView*>	CCalendarStoreViewList;
 	static cdmutexprotect<CCalendarStoreViewList> sCalendarStoreViews;	// List of windows (protected for multi-thread access)
 
 						CCalendarStoreView(JXContainer* enclosure,

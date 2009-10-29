@@ -17,8 +17,7 @@ JX_ROOT = ${DEV_ROOT}/JX
 ACE_ROOT = ${JX_ROOT}/ACE/ACE_wrappers
 export JXLAYOUTDIR = ${JX_ROOT}/programs/jxlayout
 
-SSL_ROOT = /usr/local/ssl
-SSL_INC = -I${SSL_ROOT}/include -I/usr/kerberos/include
+SSL_INC = -I/usr/include/openssl -I/usr/kerberos/include
 
 HAS_GNUG_3 := $(shell \
    if { $(CXX) --version | egrep '3\.2' > /dev/null; } \
@@ -61,9 +60,9 @@ endif
 CPP = g++
 CC = g++
 LINKER = ${CPP}
-CFLAGS = ${STL_INC} ${SSL_INC} ${J_RAW_SYSTEM_STUFF} -Wall -Wcast-align -Wno-multichar -Wno-unused \
+CFLAGS = ${STL_INC} ${J_RAW_SYSTEM_STUFF} -Wall -Wcast-align -Wno-multichar -Wno-unused \
 	-Wno-unknown-pragmas -Wno-non-virtual-dtor -Wno-ctor-dtor-privacy\
-	${DFLAGS} -include Sources/Mulberry_Prefix.h ${MULINCS} -D_REENTRANT 
+	${DFLAGS} -include Sources/Mulberry_Prefix.h ${MULINCS} ${SSL_INC} -D_REENTRANT 
 
 ifeq (${BUILD_STATIC},1)
 LINK_STATIC = -Wl,-Bstatic
@@ -92,6 +91,7 @@ JXLINK =	${JX_LDFLAGS} \
 			${LINK_DYNAMIC} \
 			${J_X11_LIBS} \
 			-lldap -llber \
+			-lssl -lcrypto \
 			${LINK_STATIC} \
 				${STL_LIB} \
 			${LINK_DYNAMIC} \
@@ -115,6 +115,7 @@ MULINCS = ${JX_INC} -I./Resources \
 -I../Sources_Common \
 -I../Sources_Common/Utilities \
 -I../../Libraries/CICalendar/Source \
+-I../../Libraries/vCard/Source \
 -I../../Libraries/XMLLib/Source
 
 

@@ -33,6 +33,8 @@
 #include <JXTextButton.h>
 #include <JXUpRect.h>
 
+#include <algorithm>
+
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 
 // O T H E R  M E T H O D S ____________________________________________________________________________
@@ -191,7 +193,7 @@ void CPrefsRemoteSets::DoRename(void)
 				{
 
 					// Check for duplicate
-					if (::find(CMulberryApp::sRemotePrefs->GetRemoteSets().begin(),
+					if (std::find(CMulberryApp::sRemotePrefs->GetRemoteSets().begin(),
 								CMulberryApp::sRemotePrefs->GetRemoteSets().end(), new_name) != CMulberryApp::sRemotePrefs->GetRemoteSets().end())
 					{
 						CErrorHandler::PutStopAlertRsrc("Alerts::Preferences::DuplicateRenameSet");

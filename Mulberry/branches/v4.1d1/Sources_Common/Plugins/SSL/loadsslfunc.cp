@@ -77,6 +77,9 @@ IMPORT_FUNCTION(sSSLLoader, long, BIO_ctrl, (BIO *bp,int cmd,long larg,void *par
 //int	BIO_free(BIO *a);
 IMPORT_FUNCTION(sSSLLoader, int, BIO_free, (BIO *a), (a))
 
+//void BIO_clear_flags(BIO *b, int flags);
+IMPORT_FUNCTION_VOID(sSSLLoader, void, BIO_clear_flags, (BIO *b, int flags), (b, flags))
+
 //BIO_METHOD *BIO_f_base64(void);
 IMPORT_FUNCTION(sSSLLoader, BIO_METHOD *, BIO_f_base64, (void), ())
 
@@ -134,8 +137,8 @@ IMPORT_FUNCTION(sSSLLoader, void *, CRYPTO_malloc, (int num, const char *file, i
 //int CRYPTO_set_ex_data(CRYPTO_EX_DATA *ad, int idx, void *val);
 IMPORT_FUNCTION(sSSLLoader, int, CRYPTO_set_ex_data, (CRYPTO_EX_DATA *ad, int idx, void *val), (ad, idx, val))
 
-// ASN1_HEADER *d2i_ASN1_HEADER(ASN1_HEADER **a,unsigned char **pp, long length);
-IMPORT_FUNCTION(sSSLLoader, ASN1_HEADER *, d2i_ASN1_HEADER, (ASN1_HEADER **a, unsigned char **pp, long length), (a, pp, length))
+// ASN1_HEADER *d2i_ASN1_HEADER(ASN1_HEADER **a,const unsigned char **pp, long length);
+IMPORT_FUNCTION(sSSLLoader, ASN1_HEADER *, d2i_ASN1_HEADER, (ASN1_HEADER **a, const unsigned char **pp, long length), (a, pp, length))
 
 // PKCS12 *d2i_PKCS12_bio(BIO *bp, PKCS12 **p12);
 IMPORT_FUNCTION(sSSLLoader, PKCS12 *, d2i_PKCS12_bio, (BIO *bp, PKCS12 **p12), (bp, p12))
@@ -148,8 +151,8 @@ IMPORT_FUNCTION(sSSLLoader, PKCS7 *, d2i_PKCS7_bio, (BIO *bp,PKCS7 **p7), (bp, p
 IMPORT_FUNCTION(sSSLLoader, CMS *, d2i_CMS_bio, (BIO *bp,CMS **p7), (bp, p7))
 #endif
 
-//EVP_PKEY *	d2i_PrivateKey(int type,EVP_PKEY **a, unsigned char **pp, long length);
-IMPORT_FUNCTION(sSSLLoader, EVP_PKEY *, d2i_PrivateKey, (int type,EVP_PKEY **a, unsigned char **pp, long length), (type, a, pp, length))
+//EVP_PKEY *	d2i_PrivateKey(int type,EVP_PKEY **a, const unsigned char **pp, long length);
+IMPORT_FUNCTION(sSSLLoader, EVP_PKEY *, d2i_PrivateKey, (int type,EVP_PKEY **a, const unsigned char **pp, long length), (type, a, pp, length))
 
 // X509 *d2i_X509_bio(BIO *bp,X509 **x509);
 IMPORT_FUNCTION(sSSLLoader, X509 *, d2i_X509_bio, (BIO *bp,X509 **x509), (bp, x509))

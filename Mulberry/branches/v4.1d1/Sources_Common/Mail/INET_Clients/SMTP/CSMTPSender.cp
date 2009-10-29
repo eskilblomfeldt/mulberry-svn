@@ -54,6 +54,7 @@
 
 #include "base64.h"
 
+#include <algorithm>
 #include <errno.h>
 #include <string.h>
 #include <stdio.h>

@@ -26,6 +26,7 @@
 #include "char_stream.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #if __dest_os == __linux_os

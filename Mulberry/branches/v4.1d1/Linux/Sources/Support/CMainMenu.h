@@ -130,7 +130,7 @@ public:
 				kAddressesExpandAddresses, kAddressesCaptureAddress, kAddressSearch};
 
 	enum {kCalendarManager = 1, kCalendarSubscribe,
-				kCalendarCreate, kCalendarRename, kCalendarRefresh,
+				kCalendarCreate, kCalendarRename, kCalendarCheck, kCalendarRefresh,
 				kCalendarDelete,
 				kCalendarAddWeb, kCalendarRefreshWeb, kCalendarUploadWeb,
 				kCalendarNewEvent, kCalendarNewToDo, kCalendarEditItem, kCalendarDuplicateItem, kCalendarDeleteItem,

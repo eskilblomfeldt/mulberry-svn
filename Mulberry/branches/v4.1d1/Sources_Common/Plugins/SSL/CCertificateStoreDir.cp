@@ -42,6 +42,8 @@
 
 #include "diriterator.h"
 
+#include <algorithm>
+
 #define FORMAT_UNDEF    0
 #define FORMAT_ASN1     1
 #define FORMAT_TEXT     2

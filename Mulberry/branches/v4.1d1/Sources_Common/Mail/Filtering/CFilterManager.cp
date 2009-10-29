@@ -38,6 +38,7 @@
 #include "cdfstream.h"
 
 #include <algorithm>
+#include <memory>
 
 std::strstream* CFilterManager::sStrLog = NULL;
 

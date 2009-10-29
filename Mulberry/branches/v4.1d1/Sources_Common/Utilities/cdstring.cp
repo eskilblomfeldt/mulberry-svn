@@ -35,6 +35,8 @@
 
 #include <stdio.h>
 
+#include <algorithm>
+
 #ifdef __GNUC__
 #include <strstream>
 #else
@@ -394,11 +396,11 @@ cdstring& cdstring::erase(size_type pos, size_type n)
 	
 	// Copy over the chunk before the erase
 	if (pos != 0)
-		std::memcpy(p, _str, pos);
+		::memcpy(p, _str, pos);
 	
 	// Copy over the chunk after the erase
 	if (len_after != 0)
-		std::memcpy(p + pos, _str + pos + n, len_after);
+		::memcpy(p + pos, _str + pos + n, len_after);
 	p[pos + len_after] = 0;
 	steal(p);
 	
@@ -424,7 +426,7 @@ cdstring::size_type cdstring::find(const char* s, size_type pos, size_type n, bo
 			{
 				if (casei)
 				{
-					if (!std::tolower(*s1) != std::tolower(*p1))
+					if (!::tolower(*s1) != ::tolower(*p1))
 						goto loop;
 				}
 				else
@@ -447,12 +449,12 @@ cdstring::size_type cdstring::find(char c, size_type pos, bool casei) const
 	if (pos < sz)
 	{
 		const char* e = beg + sz;
-		char cl = std::tolower(c);
+		char cl = ::tolower(c);
 		for (const char* xpos = beg + pos; xpos < e; ++xpos)
 		{
 			if (casei)
 			{
-				if (cl == std::tolower(*xpos))
+				if (cl == ::tolower(*xpos))
 					return static_cast<size_type>(xpos - beg);
 			}
 			else
@@ -485,7 +487,7 @@ cdstring::size_type cdstring::rfind(const char* s, size_type pos, size_type n, b
 			{
 				if (casei)
 				{
-					if (std::tolower(*s1) != std::tolower(*p1))
+					if (::tolower(*s1) != ::tolower(*p1))
 						goto loop;
 				}
 				else
@@ -510,12 +512,12 @@ cdstring::size_type cdstring::rfind(char c, size_type pos, bool casei) const
 		if (pos > sz - 1)
 			pos = sz - 1;
 		const char* xpos = beg + pos;
-		char cl = std::tolower(c);
+		char cl = ::tolower(c);
 		do
 		{
 			if (casei)
 			{
-				if (cl == std::tolower(*xpos))
+				if (cl == ::tolower(*xpos))
 					return static_cast<size_type>(xpos - beg);
 			}
 			else
@@ -670,7 +672,7 @@ int cdstring::compare(size_type pos1, size_type n1, const char* s, size_type n2,
 		return 1;
 	size_type len = std::min(sz - pos1 , n1);
 	size_type rlen = std::min(len, n2);
-	int result = casei ? ::strncmpnocase(p + pos1, s, rlen) : std::strncmp(p + pos1, s, rlen);
+	int result = casei ? ::strncmpnocase(p + pos1, s, rlen) : ::strncmp(p + pos1, s, rlen);
 	if (result == 0)
 	{
 		if (len < n2)
@@ -687,7 +689,7 @@ bool cdstring::compare_start(const char* comp, bool casei) const
 {
 	// Length of this must be >= comp length
 	size_type len1 = length();
-	size_type len2 = std::strlen(comp);
+	size_type len2 = ::strlen(comp);
 	if ((len1 < len2) || !len1 || !len2)
 		return 0;
 
@@ -700,7 +702,7 @@ bool cdstring::compare_end(const char* comp, bool casei) const
 {
 	// Length of this must be >= comp length
 	size_type len1 = length();
-	size_type len2 = std::strlen(comp);
+	size_type len2 = ::strlen(comp);
 	if ((len1 < len2) || !len1 || !len2)
 		return 0;
 
@@ -788,7 +790,7 @@ bool cdstring::unquote()
 			// Strip quotes and store as new string
 			if (len > 2)
 			{
-				steal(::strndup(_str + 1, std::strlen(_str) -2));
+				steal(::strndup(_str + 1, ::strlen(_str) -2));
 				FilterOutEscapeChars();
 				return true;
 			}
@@ -2077,7 +2079,7 @@ char* cdstring::FromModifiedUTF7(char* str, bool charset)
 		{
 			// Use unmodified string
 			sout.clear();
-			sout.write(str, std::strlen(str));
+			sout.write(str, ::strlen(str));
 		}
 
 		return sout.str();
@@ -2406,7 +2408,7 @@ void cdstring::_allocate(const char* buf, size_type size)
 	_tidy();
 	if (buf != NULL)
 	{
-		size_type s = std::strlen(buf);
+		size_type s = ::strlen(buf);
 		if ((size == npos) || (size > s))
 			size = s;
 		if (size != 0)
@@ -2435,7 +2437,7 @@ void cdstring::_append(const char* buf, size_type size)
 {
 	if (buf != NULL)
 	{
-		size_type s = std::strlen(buf);
+		size_type s = ::strlen(buf);
 		if ((size == npos) || (size > s))
 			size = s;
 		if (size != 0)
@@ -2536,7 +2538,7 @@ std::istream& getline (std::istream& is, cdstring& str, char delim)
 			}
 
 			// Look for specific or general delim
-			if (delim && (c == delim) || (c == '\n'))
+			if ((delim && (c == delim)) || (c == '\n'))
 				break;								// stop reading - delim reached
 			else if (c == '\r')
 			{

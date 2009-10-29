@@ -23,7 +23,7 @@
 #include <JXFontManager.h>
 #include <jXGlobals.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 /******************************************************************************
  Constructor
@@ -227,7 +227,7 @@ void JXTabs::MoveCard(JIndex oldindex, JIndex newindex)
 		mCards->InsertCard(newindex, card);
 
 	// Now change the value if it moved
-	if ((selected >= min(oldindex, newindex)) && (selected <= max(oldindex, newindex)))
+	if ((selected >= std::min(oldindex, newindex)) && (selected <= std::max(oldindex, newindex)))
 	{
 		if (selected == oldindex)
 		{

@@ -53,6 +53,7 @@
 #include "StValueChanger.h"
 #endif
 
+#include <memory>
 #include <strstream>
 
 using namespace prefsstore; 

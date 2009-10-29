@@ -24,7 +24,6 @@
 #include "CAddressBookManager.h"
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
-#include "CResizeNotifier.h"
 #include "CTextField.h"
 
 #include "TPopupMenu.h"
@@ -47,8 +46,6 @@
 CCreateAdbkDialog::CCreateAdbkDialog(JXDirector* supervisor)
 	: CDialogDirector(supervisor)
 {
-	mHasLocal = false;
-	mHasRemote = false;
 }
 
 // Default destructor
@@ -63,107 +60,133 @@ void CCreateAdbkDialog::OnCreate()
 {
 // begin JXLayout
 
-    JXWindow* window = new JXWindow(this, 435,295, "");
+    JXWindow* window = new JXWindow(this, 435,345, "");
     assert( window != NULL );
     SetWindow(window);
 
-    CResizeNotifier* obj1 =
-        new CResizeNotifier(window,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 435,295);
+    JXUpRect* obj1 =
+        new JXUpRect(window,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 435,345);
     assert( obj1 != NULL );
 
+    mDirectoryGroup =
+        new JXRadioGroup(obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 10,10, 415,50);
+    assert( mDirectoryGroup != NULL );
+
+    mMkAdbk =
+        new JXTextRadioButton(1, "Create an Address Book", mDirectoryGroup,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 5,5, 250,20);
+    assert( mMkAdbk != NULL );
+
+    mMkCol =
+        new JXTextRadioButton(2, "Create an Address Book Hierarchy", mDirectoryGroup,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 5,25, 250,20);
+    assert( mMkCol != NULL );
+
     JXStaticText* obj2 =
-        new JXStaticText("Address Book Name:", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 15,15, 145,20);
+        new JXStaticText("Name:", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,65, 350,20);
     assert( obj2 != NULL );
 
     mAdbkName =
         new CTextInputField(obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 15,35, 390,20);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 20,85, 390,20);
     assert( mAdbkName != NULL );
 
-    mTypeGroup =
+    mWhichPath =
         new JXRadioGroup(obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,75, 415,60);
-    assert( mTypeGroup != NULL );
+                    JXWidget::kHElastic, JXWidget::kVElastic, 10,115, 415,80);
+    assert( mWhichPath != NULL );
 
-    mTypeLabel =
-        new JXStaticText("Type:", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 15,65, 40,15);
-    assert( mTypeLabel != NULL );
+    mFullPath =
+        new JXTextRadioButton(eFullPathname, "Full Pathname", mWhichPath,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 5,5, 140,20);
+    assert( mFullPath != NULL );
 
-    mPersonal =
-        new JXTextRadioButton(ePersonal, "Personal Address Book", mTypeGroup,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,10, 165,20);
-    assert( mPersonal != NULL );
+    mUseDirectory =
+        new JXTextRadioButton(eInHierarchy, "Create In Hierarchy:", mWhichPath,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 5,25, 140,20);
+    assert( mUseDirectory != NULL );
 
-    mGlobal =
-        new JXTextRadioButton(eGlobal, "Global Address Book", mTypeGroup,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,29, 150,20);
-    assert( mGlobal != NULL );
+    mInHierarchy =
+        new CTextInputField(mWhichPath,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 30,50, 370,20);
+    assert( mInHierarchy != NULL );
 
     JXStaticText* obj3 =
         new JXStaticText("In Account:", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 10,152, 80,20);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,212, 80,20);
     assert( obj3 != NULL );
-
-    mAccountMenu =
-        new HPopupMenu( "", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 95,150, 250,25);
-    assert( mAccountMenu != NULL );
 
     mAccount =
         new CTextInputField(obj1,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 95,150, 310,20);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 100,210, 310,20);
     assert( mAccount != NULL );
+
+    mAccountPopup =
+        new HPopupMenu("", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 100,210, 250,25);
+    assert( mAccountPopup != NULL );
 
     mOpenOnStartup =
         new JXTextCheckbox("Open on Startup", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 10,185, 130,20);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,245, 190,20);
     assert( mOpenOnStartup != NULL );
 
     mUseNicknames =
-        new JXTextCheckbox("Use for Nick-names", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 10,205, 145,20);
+        new JXTextCheckbox("Use for Nicknames", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,270, 190,20);
     assert( mUseNicknames != NULL );
 
     mUseSearch =
-        new JXTextCheckbox("Use for Searching and Expansion", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 10,225, 220,20);
+        new JXTextCheckbox("Use for Searching", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,295, 190,20);
     assert( mUseSearch != NULL );
-
-    mCancelBtn =
-        new JXTextButton("Cancel", obj1,
-                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 255,260, 70,25);
-    assert( mCancelBtn != NULL );
-    mCancelBtn->SetShortcuts("^[");
 
     mOKBtn =
         new JXTextButton("OK", obj1,
-                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 345,260, 70,25);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 345,310, 70,25);
     assert( mOKBtn != NULL );
     mOKBtn->SetShortcuts("^M");
+
+    mCancelBtn =
+        new JXTextButton("Cancel", obj1,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 255,310, 70,25);
+    assert( mCancelBtn != NULL );
+    mCancelBtn->SetShortcuts("^[");
 
 // end JXLayout
 
 	window->SetTitle("Create Address Book");
 	SetButtons(mOKBtn, mCancelBtn);
 
-	ListenTo(obj1);
-
+	mInHierarchy->Deactivate();
 	mAccount->Deactivate();
+
 	InitAccountMenu();
-	ListenTo(mAccountMenu);
+	ListenTo(mAccountPopup);
 
 }
 
 void CCreateAdbkDialog::Receive(JBroadcaster* sender, const Message& message)
 {
-	if (message.Is(JXMenu::kItemSelected) && sender == mAccountMenu)
+	if (message.Is(JXRadioGroup::kSelectionChanged))
 	{
-    	const JXMenu::ItemSelected* is = dynamic_cast<const JXMenu::ItemSelected*>(&message);
-    	OnAccountPopup(is->GetIndex());
-    	return;
+		const JXRadioGroup::SelectionChanged* info =
+			dynamic_cast<const JXRadioGroup::SelectionChanged*>(&message);
+		assert(info != NULL);
+		if (sender == mWhichPath)
+		{
+			mInHierarchy->SetActive(info->GetID() == eInHierarchy);
+		}
+		else if (sender == mDirectoryGroup)
+		{
+			mOpenOnStartup->SetActive(info->GetID() == 1);
+			mUseNicknames->SetActive(info->GetID() == 1);
+			mUseSearch->SetActive(info->GetID() == 1);
+		}
+		return;
 	}
 
 	CDialogDirector::Receive(sender, message);
@@ -173,13 +196,12 @@ void CCreateAdbkDialog::Receive(JBroadcaster* sender, const Message& message)
 void CCreateAdbkDialog::InitAccountMenu(void)
 {
 	// Delete previous items
-	mAccountMenu->RemoveAllItems();
+	mAccountPopup->RemoveAllItems();
 
 	JIndex menu_pos = 1;
 	if (!CAdminLock::sAdminLock.mNoLocalAdbks)
 	{
-		mAccountMenu->AppendItem(CPreferences::sPrefs->mLocalAdbkAccount.GetValue().GetName(), kFalse, kTrue);
-		mHasLocal = true;
+		mAccountPopup->AppendItem(CPreferences::sPrefs->mLocalAdbkAccount.GetValue().GetName(), kFalse, kTrue);
 		menu_pos++;
 	}
 	
@@ -189,47 +211,22 @@ void CCreateAdbkDialog::InitAccountMenu(void)
 	{
 		// Only if IMSP/ACAP
 		if (((*iter)->GetServerType() != CINETAccount::eIMSP) &&
-			((*iter)->GetServerType() != CINETAccount::eACAP))
+			((*iter)->GetServerType() != CINETAccount::eACAP) &&
+					((*iter)->GetServerType() != CINETAccount::eCardDAVAdbk))
 			continue;
 
 		// Add to menu
-		mAccountMenu->AppendItem((*iter)->GetName(), kFalse, kTrue);
-		mHasRemote = true;
+		mAccountPopup->AppendItem((*iter)->GetName(), kFalse, kTrue);
 		
 		// Disable if not logged in
 		if (!CAddressBookManager::sAddressBookManager->GetProtocol((*iter)->GetName())->IsLoggedOn())
-			mAccountMenu->DisableItem(menu_pos);
+			mAccountPopup->DisableItem(menu_pos);
 		
 		// Update menu id here after we have added an actual item
 		menu_pos++;
 	}
 
-	mAccountMenu->SetToPopupChoice(kTrue, 1);
-}
-
-// Account popup changed
-void CCreateAdbkDialog::OnAccountPopup(JIndex index)
-{
-	// Enable personal only for IMSP/ACAP accounts
-	if (mHasLocal && (index == 1))
-		mTypeGroup->Deactivate();
-	else
-	{
-		mTypeGroup->Activate();
-		
-		cdstring protoname = mAccountMenu->GetItemText(mAccountMenu->GetValue()).GetCString();
-		CAdbkProtocol* proto = CAddressBookManager::sAddressBookManager->GetProtocol(protoname);
-
-		cdstring default_name = proto->GetUserPrefix();
-		default_name += proto->GetAccount()->GetAuthenticator().GetAuthenticator()->GetActualUID();
-		bool personal_allowed = !default_name.empty();
-
-		if (!personal_allowed)
-		{
-			mPersonal->Deactivate();
-			mTypeGroup->SelectItem(eGlobal);
-		}
-	}
+	mAccountPopup->SetToPopupChoice(kTrue, 1);
 }
 
 // Set the details
@@ -239,51 +236,43 @@ void CCreateAdbkDialog::SetDetails(SCreateAdbk* create)
 	if (create->account.empty())
 	{
 		mAccount->Hide();
-		
-		// Make sure subscribe option is properly setup
-		OnAccountPopup(1);
 	}
 	else
 	{
-		mAccountMenu->Hide();
+		mAccountPopup->Hide();
 		mAccount->SetText(create->account);
-		
-		// Disable items if the one selected is the local account
-		if (create->account == CPreferences::sPrefs->mLocalAdbkAccount.GetValue().GetName())
-			mTypeGroup->Deactivate();
 	}
+
+	mInHierarchy->SetText(create->parent);
 
 	mOpenOnStartup->SetState(JBoolean(create->open_on_startup));
 	mUseNicknames->SetState(JBoolean(create->use_nicknames));
 	mUseSearch->SetState(JBoolean(create->use_search));
 	
-	// Hide type items if local
-	if (mHasLocal && !mHasRemote)
-	{
-		JPoint pt1 = mTypeGroup->GetBoundsGlobal().topLeft();
-		JPoint pt2 = mAccountMenu->GetBoundsGlobal().topLeft();
-		JCoordinate resizeby = pt1.y - pt2.y;
+	mWhichPath->SelectItem((create->use_wd && !create->parent.empty()) ? eInHierarchy : eFullPathname);
 
-		mTypeGroup->Hide();
-		mTypeLabel->Hide();
-		
-		AdjustSize(0, resizeby);
+	if (create->parent.empty())
+	{
+		mUseDirectory->Deactivate();
+		mInHierarchy->Deactivate();
 	}
 }
 
 // Get the details
 void CCreateAdbkDialog::GetDetails(SCreateAdbk* result)
 {
+	result->directory = (mDirectoryGroup->GetSelectedItem() == 2);
 	result->name = mAdbkName->GetText();
 
-	result->personal = (mTypeGroup->GetSelectedItem() == ePersonal);
+	result->use_wd = (mWhichPath->GetSelectedItem() != eFullPathname);
+
 	result->open_on_startup = mOpenOnStartup->IsChecked();
 	result->use_nicknames = mUseNicknames->IsChecked();
 	result->use_search = mUseSearch->IsChecked();
 
 	// Get account if not specified
 	if (result->account.empty())
-		result->account = mAccountMenu->GetItemText(mAccountMenu->GetValue());
+		result->account = mAccountPopup->GetItemText(mAccountPopup->GetValue());
 }
 
 // Do the dialog

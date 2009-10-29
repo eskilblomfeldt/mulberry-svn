@@ -28,6 +28,8 @@
 
 #include "char_stream.h"
 
+#include <algorithm>
+
 extern const char* cSpace;
 extern const char* cValueBoolTrue;
 extern const char* cValueBoolFalse;

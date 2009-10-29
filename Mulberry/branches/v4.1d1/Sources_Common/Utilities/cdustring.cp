@@ -22,6 +22,7 @@
 #include "CCharsetManager.h"
 #include "cdstring.h"
 
+#include <algorithm>
 #include <strstream>
 
 cdustring cdustring::null_str;
@@ -89,11 +90,11 @@ cdustring& cdustring::erase(size_type pos, size_type n)
 	
 	// Copy over the chunk before the erase
 	if (pos != 0)
-		std::memcpy(p, _str, pos * sizeof(unichar_t));
+		::memcpy(p, _str, pos * sizeof(unichar_t));
 	
 	// Copy over the chunk after the erase
 	if (len_after != 0)
-		std::memcpy(p + pos * sizeof(unichar_t), _str + pos * sizeof(unichar_t) + n * sizeof(unichar_t), len_after * sizeof(unichar_t));
+		::memcpy(p + pos * sizeof(unichar_t), _str + pos * sizeof(unichar_t) + n * sizeof(unichar_t), len_after * sizeof(unichar_t));
 	p[pos + len_after] = 0;
 	steal(p);
 	
@@ -348,7 +349,7 @@ std::istream& getline (std::istream& is, cdustring& str, unichar_t delim)
 			unichar_t c = ((c1 & 0xFF) << 8) | (c2 & 0xFF);
 
 			// Look for specific or general delim
-			if (delim && (c == delim) || (c == '\n'))
+			if ((delim && (c == delim)) || (c == '\n'))
 				break;								// stop reading - delim reached
 			else if (c == '\r')
 			{

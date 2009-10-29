@@ -71,7 +71,7 @@ argument:
 Name: CNewComponentAttendees--JXLayout2--this
 Width: 500
 Height: 299
-Number of Objects: 9
+Number of Objects: 10
 
 --------------------
 class: FL_BOX
@@ -194,7 +194,7 @@ lcol: FL_BLACK
 label: New...
 shortcut: 
 resize: FL_RESIZE_ALL
-gravity: FL_NoGravity FL_South
+gravity: FL_SouthWest FL_NoGravity
 name: mNewBtn
 callback: 
 argument: 
@@ -212,7 +212,7 @@ lcol: FL_BLACK
 label: Change...
 shortcut: 
 resize: FL_RESIZE_ALL
-gravity: FL_NoGravity FL_NoGravity
+gravity: FL_SouthWest FL_NoGravity
 name: mChangeBtn
 callback: 
 argument: 
@@ -230,8 +230,26 @@ lcol: FL_BLACK
 label: Delete
 shortcut: 
 resize: FL_RESIZE_ALL
-gravity: FL_NoGravity FL_South
+gravity: FL_SouthWest FL_NoGravity
 name: mDeleteBtn
+callback: 
+argument: 
+
+--------------------
+class: FL_BUTTON
+type: NORMAL_BUTTON
+box: 360 265 130 25
+boxtype: FL_UP_BOX
+colors: FL_COL1 FL_COL1
+alignment: FL_ALIGN_CENTER
+style: FL_NORMAL_STYLE
+size: FL_NORMAL_SIZE
+lcol: FL_BLACK
+label: Show Availability
+shortcut: 
+resize: FL_RESIZE_ALL
+gravity: FL_SouthEast FL_NoGravity
+name: mAvailabilityBtn
 callback: 
 argument: 
 

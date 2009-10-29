@@ -61,6 +61,7 @@
 #include <JXDisplay.h>
 #endif
 
+#include <algorithm>
 #include <strstream>
 
 #if __framework != __powerplant

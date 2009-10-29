@@ -19,7 +19,8 @@
 #include "CLog.h"
 #include "CUtils.h"
 
-#include <iostream.h>
+#include <exception>
+#include <iostream>
 
 #include <JXDisplay.h>
 #include <JXMenu.h>
@@ -57,7 +58,7 @@ int main(int argc, char* argv[])
 #ifdef _J_USE_XFT
 		if (!XftInit(NULL) || !XftInitFtLibrary())
 		{
-			cerr << "Could not initialise Xft library" << endl;
+			cerr << "Could not initialise Xft library" << std::endl;
 			throw -1;
 		}
 #endif
@@ -119,23 +120,23 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	catch (const exception& ex1)
+	catch (const std::exception& ex1)
 	{
-		CLOG_LOGCATCH(exception&);
+		CLOG_LOGCATCH(std::exception&);
 
-		cout << "Standard exception caught: " << ex1.what() << endl;
+		cout << "Standard exception caught: " << ex1.what() << std::endl;
 	}
 	catch (const JError& ex)
 	{
 		CLOG_LOGCATCH(JError&);
 
-		cout << "JError exception caught: " << ex.GetMessage() << endl;
+		cout << "JError exception caught: " << ex.GetMessage() << std::endl;
 	}
 	catch (...)
 	{
 		CLOG_LOGCATCH(...);
 
-		cout << "Nonstandard exception caught. Hrm. " << endl;
+		cout << "Nonstandard exception caught. Hrm. " << std::endl;
 	}
 
 	return 0;
@@ -255,7 +256,7 @@ void PrintHelp()
 
 void PrintVersion()
 {
-	cout << endl;
-	cout << GetVersionText(CMulberryApp::GetVersionNumber()).c_str() << endl;
-	cout << endl;
+	cout << std::endl;
+	cout << GetVersionText(CMulberryApp::GetVersionNumber()).c_str() << std::endl;
+	cout << std::endl;
 }

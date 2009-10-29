@@ -34,7 +34,7 @@ class CURLHelpersMap
 	static bool LaunchURL(const char* url);
 	static void SetupHelp();
 
-	void ReadFromStream(istream& ins);
+	void ReadFromStream(std::istream& ins);
 
 protected:
 	cdstrmap 	mHelpers;

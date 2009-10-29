@@ -112,8 +112,10 @@ void CCreateAccountDialog::InitAccountTypePopup()
 						"POP3 Mailbox %r |"
 						"Local Mailbox %r %l |"
 						"SMTP Send Email %r %l |"
+						"WebDAV Options %r |"
 						"IMSP Options %r |"
 						"ACAP Options %r %l |"
+						"CardDAV Address Books %r |"
 						"IMSP Address Books %r |"
 						"ACAP Address Books %r %l |"
 						"LDAP Address Search %r %l |"
@@ -126,12 +128,14 @@ void CCreateAccountDialog::InitAccountTypePopup()
 	mType->SetItemImageID(4, IDI_ACCOUNTSMTP);
 	mType->SetItemImageID(5, IDI_ACCOUNTREMOTE);
 	mType->SetItemImageID(6, IDI_ACCOUNTREMOTE);
-	mType->SetItemImageID(7, IDI_ACCOUNTADBK);
+	mType->SetItemImageID(7, IDI_ACCOUNTREMOTE);
 	mType->SetItemImageID(8, IDI_ACCOUNTADBK);
-	mType->SetItemImageID(9, IDI_ACCOUNTADDRSEARCH);
-	mType->SetItemImageID(10, IDI_ACCOUNTSIEVE);
-	mType->SetItemImageID(11, IDI_CALENDAR);
-	mType->SetItemImageID(12, IDI_CALENDAR);
+	mType->SetItemImageID(9, IDI_ACCOUNTADBK);
+	mType->SetItemImageID(10, IDI_ACCOUNTADBK);
+	mType->SetItemImageID(11, IDI_ACCOUNTADDRSEARCH);
+	mType->SetItemImageID(12, IDI_ACCOUNTSIEVE);
+	mType->SetItemImageID(13, IDI_CALENDAR);
+	mType->SetItemImageID(14, IDI_CALENDAR);
 
 	// Disable certain types
 	if (CAdminLock::sAdminLock.mNoLocalMbox)

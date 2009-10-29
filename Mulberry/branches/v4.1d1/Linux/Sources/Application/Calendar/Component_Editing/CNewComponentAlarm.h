@@ -55,10 +55,10 @@ public:
 
 	virtual void	OnCreate();
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
+	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
 
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
+	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);
 
 	virtual void	SetReadOnly(bool read_only);

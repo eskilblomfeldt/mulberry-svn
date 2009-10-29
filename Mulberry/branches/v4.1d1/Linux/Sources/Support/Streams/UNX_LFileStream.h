@@ -29,7 +29,7 @@
 #include <string.h>
 #include <errno.h>
 
-class LFileStreamError: public exception {
+class LFileStreamError: public std::exception {
  public:
   LFileStreamError(const char* why) : why_(why) {}
   virtual ~LFileStreamError() throw() {}

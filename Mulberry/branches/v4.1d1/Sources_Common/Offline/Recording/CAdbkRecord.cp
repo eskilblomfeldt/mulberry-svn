@@ -28,6 +28,8 @@
 
 #include "CVCardAddressBook.h"
 
+#include <memory>
+
 CAdbkRecord::CAdbkRecord()
 {
 }

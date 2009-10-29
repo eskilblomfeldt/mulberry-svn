@@ -22,7 +22,7 @@
 
 #include "CHierarchyTableDrag.h"
 
-#include "CAdbkList.h"
+#include "CAddressBook.h"
 #include "CAddressBookManager.h"
 #include "cdstring.h"
 #include "CWindowStatesFwd.h"
@@ -89,7 +89,7 @@ protected:
 
 private:
 	CAdbkSearchWindow*					mWindow;				// Owner window
-	vector<void*>						mData;					// data
+	std::vector<void*>					mData;					// data
 	CColumnInfoArray*					mColumnInfo;
 	TableIndexT							mLastParent;			// last parent row
 

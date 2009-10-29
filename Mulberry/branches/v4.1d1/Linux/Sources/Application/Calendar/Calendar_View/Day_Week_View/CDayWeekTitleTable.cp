@@ -58,7 +58,7 @@ void CDayWeekTitleTable::OnCreate()
 {
 	CSimpleTitleTable::OnCreate();
 
-	SetRowHeight(GetApertureHeight(), 1, 1);
+	//SetRowHeight(GetApertureHeight(), 1, 1);
 
 	ApertureResized(0, 0);
 }

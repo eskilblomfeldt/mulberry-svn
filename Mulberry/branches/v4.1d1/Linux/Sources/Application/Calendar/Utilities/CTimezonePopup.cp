@@ -80,6 +80,9 @@ void CTimezonePopup::NoFloating()
 	// Remove first menu item
 	RemoveItem(eNoTimezone);
 	mNoFloating = true;
+
+	// Always start with the current user default
+	SetTimezone(iCal::CICalendarManager::sICalendarManager->GetDefaultTimezone());
 }
 
 void CTimezonePopup::SetTimezone(const iCal::CICalendarTimezone& tz)

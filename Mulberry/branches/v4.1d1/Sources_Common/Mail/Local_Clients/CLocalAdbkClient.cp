@@ -37,9 +37,11 @@
 #include <string.h>
 #endif
 
+#include <algorithm>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 #include __stat_header
 #include <unistd.h>
 

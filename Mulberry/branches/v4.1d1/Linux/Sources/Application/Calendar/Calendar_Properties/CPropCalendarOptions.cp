@@ -65,14 +65,19 @@ void CPropCalendarOptions::OnCreate()
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,30, 205,20);
     assert( mSubscribe != NULL );
 
+    mFreeBusySet =
+        new JXTextCheckbox3("Searched During Freebusy Lookups", this,
+                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,55, 290,20);
+    assert( mFreeBusySet != NULL );
+
     JXDownRect* obj2 =
         new JXDownRect(this,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 15,85, 420,70);
+                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 15,100, 420,70);
     assert( obj2 != NULL );
 
     JXStaticText* obj3 =
         new JXStaticText("Identity", this,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 25,75, 50,20);
+                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 25,90, 50,20);
     assert( obj3 != NULL );
 
     mTieIdentity =
@@ -86,7 +91,7 @@ void CPropCalendarOptions::OnCreate()
     assert( obj4 != NULL );
 
     mIdentityPopup =
-        new CIdentityPopup("",obj2,
+        new CIdentityPopup("", obj2,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 70,35, 200,20);
     assert( mIdentityPopup != NULL );
 
@@ -110,6 +115,15 @@ void CPropCalendarOptions::Receive(JBroadcaster* sender, const Message& message)
 			for(calstore::CCalendarStoreNodeList::iterator iter = mCalList->begin(); iter != mCalList->end(); iter++)
 			{
 				calstore::CCalendarStoreManager::sCalendarStoreManager->SubscribeNode(*iter, !(*iter)->IsSubscribed());
+			}
+			return;
+		}
+		else if (sender == mFreeBusySet)
+		{
+			// Iterate over all Calendars
+			for(calstore::CCalendarStoreNodeList::iterator iter = mCalList->begin(); iter != mCalList->end(); iter++)
+			{
+				//calstore::CCalendarStoreManager::sCalendarStoreManager->SubscribeNode(*iter, !(*iter)->IsSubscribed());
 			}
 			return;
 		}
@@ -190,6 +204,7 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 
 	int first_type = -1;
 	int subscribe = 0;
+	int freebusyset = 0;
 	int multiple_tied = 0;
 	bool first = true;
 	bool all_directory = true;
@@ -200,6 +215,9 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 
 		// Only valid id not a directory
 		if (!node->IsDirectory() && node->IsSubscribed())
+			subscribe++;
+
+		if (node->IsStandardCalendar() && node->GetProtocol()->IsComponentCalendar())
 			subscribe++;
 
 		CIdentity* id = const_cast<CIdentity*>(CPreferences::sPrefs->mTiedCalendars.GetValue().GetTiedCalIdentity(*iter));
@@ -236,6 +254,9 @@ void CPropCalendarOptions::SetCalList(calstore::CCalendarStoreNodeList* cal_list
 	{
 		mSubscribe->Deactivate();
 	}
+
+	if (freebusyset == 0)
+		mFreeBusySet->Deactivate();
 
 	if (multiple_tied)
 	{

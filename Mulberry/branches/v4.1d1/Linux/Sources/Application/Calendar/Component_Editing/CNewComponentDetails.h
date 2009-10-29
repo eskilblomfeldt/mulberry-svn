@@ -14,47 +14,63 @@
     limitations under the License.
 */
 
-#ifndef H_CNewComponentDescription
-#define H_CNewComponentDescription
+#ifndef H_CNewComponentDetails
+#define H_CNewComponentDetails
 
 #include "CNewComponentPanel.h"
+#include "CTabPanel.h"
+
+#include "CICalendarRecurrence.h"
+
+#include "HPopupMenu.h"
+
+class JXFlatRect;
+
+class CNewTimingPanel;
 
 class CTextInputField;
 class CTextInputDisplay;
 
 // ===========================================================================
-//	CNewComponentDescription
+//	CNewComponentDetails
 
-class CNewComponentDescription : public CNewComponentPanel
+class CNewComponentDetails : public CNewComponentPanel
 {
 public:
-	CNewComponentDescription(JXContainer* enclosure,
+
+	CNewComponentDetails(JXContainer* enclosure,
 						const HSizingOption hSizing, const VSizingOption vSizing,
 						const JCoordinate x, const JCoordinate y,
 						const JCoordinate w, const JCoordinate h)
-		: CNewComponentPanel(enclosure, hSizing, vSizing, x, y, w, h) {}
-	virtual				~CNewComponentDescription() {}
+		: CNewComponentPanel(enclosure, hSizing, vSizing, x, y, w, h)
+		{ mTimingPanel = NULL; }
+	virtual				~CNewComponentDetails() {}
 
 	virtual void	OnCreate();
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
+	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
+	virtual void	GetPeriod(iCal::CICalendarPeriod& period);
 
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
+	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);
 
-	virtual void	SetReadOnly(bool read_only);
+	virtual	void	SetReadOnly(bool read_only);
+
+	const CNewTimingPanel* GetTimingPanel() const
+		{ return mTimingPanel; }
 
 protected:
 
 	// UI Objects
 // begin JXLayout1
 
+    JXFlatRect*        mTimingView;
     CTextInputField*   mLocation;
     CTextInputDisplay* mDescription;
 
 // end JXLayout1
-
+	CNewTimingPanel*	mTimingPanel;
 };
 
 #endif

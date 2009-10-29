@@ -39,6 +39,8 @@
 #include "CTCPStream.h"
 #include "CLog.h"
 
+#include <memory>
+
 #pragma mark ____________________________CAuthPlugin
 
 // Process information from plugin

@@ -39,6 +39,8 @@
 #include "CVCardURIValue.h"
 #include "CVCardVCard.h"
 
+#include <memory>
+
 //using namespace vcardstore;
 
 // Map from VCard representation into internal address/group format

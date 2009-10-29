@@ -95,7 +95,7 @@ void CChangePswdAcctDialog::InitAccountMenu()
 	}
 
 	// Add each remote account
-	for(CINETAccountList::const_iterator iter = CPreferences::sPrefs->mRemoteAccounts.GetValue().begin();
+	for(COptionsAccountList::const_iterator iter = CPreferences::sPrefs->mRemoteAccounts.GetValue().begin();
 			iter != CPreferences::sPrefs->mRemoteAccounts.GetValue().end(); iter++, menu_pos++)
 	{
 		::AppendItemToMenu(menuH, menu_pos, (*iter)->GetName(), false, cicn_RemoteAccount);
@@ -223,7 +223,7 @@ bool CChangePswdAcctDialog::PromptAcctPasswordChange(CINETAccount*& acct, CPswdC
 	}
 	
 	// Check each remote account
-	for(CINETAccountList::const_iterator iter = CPreferences::sPrefs->mRemoteAccounts.GetValue().begin();
+	for(COptionsAccountList::const_iterator iter = CPreferences::sPrefs->mRemoteAccounts.GetValue().begin();
 			iter != CPreferences::sPrefs->mRemoteAccounts.GetValue().end(); iter++)
 	{
 		if ((*iter)->GetAuthenticator().RequiresUserPswd())

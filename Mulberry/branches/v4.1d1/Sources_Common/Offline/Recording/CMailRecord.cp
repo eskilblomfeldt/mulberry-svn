@@ -34,6 +34,7 @@
 #include "CUnicodeStdLib.h"
 
 #include <algorithm>
+#include <memory>
 
 CMailRecord::CMailRecord()
 {

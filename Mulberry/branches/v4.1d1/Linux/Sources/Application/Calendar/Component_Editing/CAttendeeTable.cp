@@ -24,6 +24,7 @@
 #include "CTableRowSelector.h"
 #include "CTableRowGeometry.h"
 
+#include "CICalendarCalAddressValue.h"
 #include "CITIPProcessor.h"
 
 #include "StPenState.h"
@@ -55,6 +56,7 @@ void CAttendeeTable::OnCreate(void)
 	SetAllowDrag(false);
 	
 	InitTable();
+	EnableTooltips();
 	
 	ApertureResized(0, 0);
 }
@@ -97,8 +99,24 @@ void CAttendeeTable::DrawCell(JPainter* pDC, const STableCell& inCell, const JRe
 
 	if (theTxt.length() > 0)
 	{
+		JFontStyle style;
+		const CIdentity* id = NULL;
+		if (iCal::CITIPProcessor::AttendeeIdentity(prop, id))
+			style.bold = kTrue;
+		if (prop.GetCalAddressValue()->GetValue() == mOrganizer->GetCalAddressValue()->GetValue())
+			style.italic = kTrue;
+		pDC->SetFontStyle(style);
+
 		::DrawClippedStringUTF8(pDC, theTxt.c_str(), JPoint(inLocalRect.left + 4, inLocalRect.top), inLocalRect, eDrawString_Left);
 	}
+}
+
+// Get text for current tooltip cell
+void CAttendeeTable::GetTooltipText(cdstring& txt, const STableCell &inCell)
+{
+	// Get data for row
+	const iCal::CICalendarProperty& prop = mAttendees->at(inCell.row - 1);
+	txt = iCal::CITIPProcessor::GetAttendeeFullDescriptor(prop);
 }
 
 void CAttendeeTable::InitTable()
@@ -134,10 +152,11 @@ void CAttendeeTable::SelectionChanged()
 }
 
 // Reset the table from the address list
-void CAttendeeTable::ResetTable(const iCal::CICalendarPropertyList* items)
+void CAttendeeTable::ResetTable(const iCal::CICalendarPropertyList* items, const iCal::CICalendarProperty* organizer)
 {
 
 	mAttendees = items;
+	mOrganizer = organizer;
 
 	// Prevent selection changes
 	StDeferSelectionChanged _defer(this);

@@ -161,7 +161,7 @@ void CURLHelpersMap::SetupHelp()
 	}
 }
 
-void CURLHelpersMap::ReadFromStream(istream& ins)
+void CURLHelpersMap::ReadFromStream(std::istream& ins)
 {
 	while (ins)
 	{
@@ -196,7 +196,7 @@ void CURLHelpersMap::ReadFromStream(istream& ins)
 		launch.trimspace();
 
 		// Add to map
-		pair<cdstrmap::iterator, bool> ins = mHelpers.insert(make_pair(scheme, launch));
+		std::pair<cdstrmap::iterator, bool> ins = mHelpers.insert(std::make_pair(scheme, launch));
 		if (!ins.second)
 		{
 			// Already present - replace with the new one

@@ -24,6 +24,8 @@
 #include <jASCIIConstants.h>
 #include <jGlobals.h>
 
+#include <stdlib.h>
+
 CDateTimeControl::CDateTimeControl(const JCharacter* text, JXContainer* enclosure,
 								JXTextMenu* menu,
 								const HSizingOption hSizing, const VSizingOption vSizing,

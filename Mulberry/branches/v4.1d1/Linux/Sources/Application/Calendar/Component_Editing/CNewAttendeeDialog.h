@@ -28,7 +28,7 @@
 #include "CICalendarProperty.h"
 
 // Classes
-class	CAddressDisplay;
+class	CCalendarAddressDisplay;
 class	JXTextCheckbox;
 class	JXTextButton;
 
@@ -46,12 +46,12 @@ protected:
 	// UI Objects
 // begin JXLayout
 
-    CAddressDisplay* mNames;
-    HPopupMenu*      mRolePopup;
-    HPopupMenu*      mStatusPopup;
-    JXTextCheckbox*  mRSVP;
-    JXTextButton*    mCancelBtn;
-    JXTextButton*    mOKBtn;
+    CCalendarAddressDisplay* mNames;
+    HPopupMenu*              mRolePopup;
+    HPopupMenu*              mStatusPopup;
+    JXTextCheckbox*          mRSVP;
+    JXTextButton*            mCancelBtn;
+    JXTextButton*            mOKBtn;
 
 // end JXLayout
 	bool				mITIPSent;

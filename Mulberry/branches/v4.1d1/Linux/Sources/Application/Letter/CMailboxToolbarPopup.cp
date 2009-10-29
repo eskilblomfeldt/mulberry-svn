@@ -22,6 +22,8 @@
 #include "CMailAccountManager.h"
 #include "CMbox.h"
 
+#include <algorithm>
+
 const short cMaxMailbox = 300;
 const short	cMboxStartPos = 3;
 
@@ -58,7 +60,7 @@ CMailboxToolbarPopup::CMailboxToolbarPopup(bool copy_to, const JCharacter* label
 CMailboxToolbarPopup::~CMailboxToolbarPopup()
 {
 	// Remove from list
-	CMailboxToolbarPopupList::iterator found = ::find(sMailboxToolbarPopupMenus.begin(), sMailboxToolbarPopupMenus.end(), this);
+	CMailboxToolbarPopupList::iterator found = std::find(sMailboxToolbarPopupMenus.begin(), sMailboxToolbarPopupMenus.end(), this);
 	if (found != sMailboxToolbarPopupMenus.end())
 		sMailboxToolbarPopupMenus.erase(found);
 }

@@ -19,7 +19,7 @@
 
 #include "CTabPanel.h"
 
-#include <vector.h>
+#include <vector>
 
 #include "CICalendarVEvent.h"
 #include "CICalendarVToDo.h"
@@ -45,10 +45,13 @@ public:
 
 	virtual void	OnCreate() = 0;
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent) {}
+	virtual void	SetComponent(const iCal::CICalendarComponentRecur& vcomponent, const iCal::CICalendarComponentExpanded* expanded);
+	virtual void	GetComponent(iCal::CICalendarComponentRecur& vcomponent);
+
+	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded) {}
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent) {}
 
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo) {}
+	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded) {}
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo) {}
 
 	virtual void	SetReadOnly(bool read_only) = 0;
@@ -60,6 +63,6 @@ protected:
 	bool			mReadOnly;
 };
 
-typedef vector<CNewComponentPanel*> CNewComponentPanelList;
+typedef std::vector<CNewComponentPanel*> CNewComponentPanelList;
 
 #endif

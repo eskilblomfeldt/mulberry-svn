@@ -636,8 +636,8 @@ bool CCertificateManager::ImportCertificateFile(CCertificateManager::ECertificat
 				}
 			}
 
-			unsigned char* p = (unsigned char*) buf->data;
-			unsigned char* op = p;
+			const unsigned char* p = (unsigned char*) buf->data;
+			const unsigned char* op = p;
 
 			// First load the header
 			NSSL::StSSLObject<ASN1_HEADER> ah(::d2i_ASN1_HEADER(NULL, &p, (long)size));

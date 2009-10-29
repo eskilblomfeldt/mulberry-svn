@@ -22,6 +22,7 @@
 #include "CAdbkIOPlugin.h"
 #include "CAdbkProtocol.h"
 #include "CAdbkManagerTable.h"
+#include "CAddressBook.h"
 #include "CAddressBookToolbar.h"
 #include "CAddressBookTitleTable.h"
 #include "CAddressBookWindow.h"
@@ -35,7 +36,6 @@
 #include "CPluginManager.h"
 #include "CPreferences.h"
 #include "CReplyChooseDialog.h"
-#include "CRemoteAddressBook.h"
 #include "CTableScrollbarSet.h"
 #include "CSplitterView.h"
 #include "CTableScrollbarSet.h"
@@ -58,6 +58,7 @@
 #include <jFileUtil.h>
 #include <jXGlobals.h>
 
+#include <algorithm>
 #include <cassert>
 
 // Static members
@@ -93,7 +94,7 @@ CAddressBookView::~CAddressBookView()
 {
 	// Remove from list
 	cdmutexprotect<CAddressBookViewList>::lock _lock(sAddressBookViews);
-	CAddressBookViewList::iterator found = ::find(sAddressBookViews->begin(), sAddressBookViews->end(), this);
+	CAddressBookViewList::iterator found = std::find(sAddressBookViews->begin(), sAddressBookViews->end(), this);
 	if (found != sAddressBookViews->end())
 		sAddressBookViews->erase(found);
 }
@@ -417,16 +418,16 @@ void CAddressBookView::OnUpdateEditUndo(CCmdUI* pCmdUI)
 
 void CAddressBookView::OnUpdateDisconnectedSelection(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(dynamic_cast<CRemoteAddressBook*>(mAdbk) &&
-							static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->CanDisconnect() &&
-							!static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->IsDisconnected());
+	pCmdUI->Enable((mAdbk != NULL) &&
+					mAdbk->GetProtocol()->CanDisconnect() &&
+					!mAdbk->GetProtocol()->IsDisconnected());
 }
 
 void CAddressBookView::OnUpdateClearDisconnectedSelection(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(dynamic_cast<CRemoteAddressBook*>(mAdbk) &&
-							static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->CanDisconnect() &&
-							!static_cast<CRemoteAddressBook*>(mAdbk)->GetProtocol()->IsDisconnected());
+	pCmdUI->Enable((mAdbk != NULL) &&
+					mAdbk->GetProtocol()->CanDisconnect() &&
+					mAdbk->GetProtocol()->IsDisconnected());
 }
 
 // New address

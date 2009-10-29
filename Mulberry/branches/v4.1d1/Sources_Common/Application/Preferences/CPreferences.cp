@@ -56,6 +56,7 @@
 
 #include <typeinfo>
 #include <algorithm>
+#include <memory>
 
 // __________________________________________________________________________________________________
 // C L A S S __ C P R E F E R E N C E S

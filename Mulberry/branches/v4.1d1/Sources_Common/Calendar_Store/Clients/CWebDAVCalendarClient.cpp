@@ -63,6 +63,7 @@
 #include "StValueChanger.h"
 #endif
 
+#include <memory>
 #include <strstream>
 
 using namespace calstore; 
@@ -813,7 +814,7 @@ void CWebDAVCalendarClient::_ReadFullCalendar(const CCalendarStoreNode& node, iC
 		{
 			cdstring temp(*request->GetNewETag());
 
-			// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+			// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 			if (!temp.isquoted())
 				temp.quote(true);
 			
@@ -949,7 +950,7 @@ void CWebDAVCalendarClient::WriteFullCalendar_Put(const CCalendarStoreNode& node
 	{
 		cdstring temp(*request->GetNewETag());
 
-		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 		if (!temp.isquoted())
 			temp.quote(true);
 		
@@ -1221,7 +1222,7 @@ cdstring CWebDAVCalendarClient::GetETag(const cdstring& rurl, const cdstring& lo
 {
 	cdstring result = GetProperty(rurl, lock_token, http::webdav::cProperty_getetag);
 
-	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 	if (!result.empty() && !result.isquoted())
 		result.quote(true);
 
@@ -2041,7 +2042,7 @@ cdstring CWebDAVCalendarClient::GetRURL(const cdstring& name, bool directory, bo
 {
 	// Determine URL
 	cdstring rurl = (abs ? mBaseURL : mBaseRURL);
-	if (name[0] == '/')
+	if (name.c_str()[0] == '/')
 		rurl = "";
 	cdstring temp(name);
 	temp.EncodeURL('/');

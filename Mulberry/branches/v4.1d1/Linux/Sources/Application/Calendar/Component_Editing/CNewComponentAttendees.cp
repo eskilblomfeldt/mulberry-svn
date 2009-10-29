@@ -17,12 +17,22 @@
 #include "CNewComponentAttendees.h"
 
 #include "CAddress.h"
+#include "CCalendarAddress.h"
+#include "CCalendarStoreFreeBusy.h"
+#include "CCalendarStoreManager.h"
+#include "CCalendarStoreNode.h"
+#include "CCalendarWindow.h"
 #include "CAttendeeTable.h"
 #include "CErrorHandler.h"
+#include "CICalendar.h"
 #include "CICalendarCalAddressValue.h"
 #include "CIdentity.h"
 #include "CIdentityPopup.h"
+#include "CITIPProcessor.h"
+#include "CModelessDialog.h"
 #include "CNewAttendeeDialog.h"
+#include "CNewEventDialog.h"
+#include "CNewToDoDialog.h"
 #include "CPreferences.h"
 #include "CScrollbarSet.h"
 #include "CSimpleTitleTable.h"
@@ -90,7 +100,7 @@ void CNewComponentAttendees::OnCreate()
     assert( obj1 != NULL );
 
     mIdentity =
-        new CIdentityPopup("",mAttendeesPane,
+        new CIdentityPopup("", mAttendeesPane,
                     JXWidget::kHElastic, JXWidget::kVElastic, 90,10, 200,20);
     assert( mIdentity != NULL );
 
@@ -101,18 +111,23 @@ void CNewComponentAttendees::OnCreate()
 
     mNewBtn =
         new JXTextButton("New...", mAttendeesPane,
-                    JXWidget::kHElastic, JXWidget::kFixedBottom, 30,265, 90,25);
+                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 30,265, 90,25);
     assert( mNewBtn != NULL );
 
     mChangeBtn =
         new JXTextButton("Change...", mAttendeesPane,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 140,265, 90,25);
+                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 140,265, 90,25);
     assert( mChangeBtn != NULL );
 
     mDeleteBtn =
         new JXTextButton("Delete", mAttendeesPane,
-                    JXWidget::kHElastic, JXWidget::kFixedBottom, 250,265, 90,25);
+                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 250,265, 90,25);
     assert( mDeleteBtn != NULL );
+
+    mAvailabilityBtn =
+        new JXTextButton("Show Availability", mAttendeesPane,
+                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 360,265, 130,25);
+    assert( mAvailabilityBtn != NULL );
 
 // end JXLayout2
 
@@ -148,6 +163,14 @@ void CNewComponentAttendees::OnCreate()
 	ListenTo(mNewBtn);
 	ListenTo(mChangeBtn);
 	ListenTo(mDeleteBtn);
+	ListenTo(mAvailabilityBtn);
+
+	// Look for parent item
+	// Get dialog that owns this one
+	const CModelessDialog* dlg = dynamic_cast<const CModelessDialog*>(GetWindow()->GetDirector());
+	cdstring summary;
+	if (dynamic_cast<const CNewEventDialog*>(dlg) == NULL)
+		mAvailabilityBtn->Deactivate();
 }
 
 // Respond to clicks in the icon buttons
@@ -207,6 +230,11 @@ void CNewComponentAttendees::Receive(JBroadcaster* sender, const Message& messag
 			OnDelete();
 			return;
 		}
+		else if (sender == mAvailabilityBtn)
+		{
+			OnAvailability();
+			return;
+		}
 	}
 }
 
@@ -228,19 +256,7 @@ void CNewComponentAttendees::ListenTo_Message(long msg, void* param)
 	}
 }
 
-void CNewComponentAttendees::SetEvent(const iCal::CICalendarVEvent& vevent)
-{
-	// Set the relevant fields
-	SetComponent(vevent);
-}
-
-void CNewComponentAttendees::SetToDo(const iCal::CICalendarVToDo& vtodo)
-{
-	// Set the relevant fields
-	SetComponent(vtodo);
-}
-
-void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& vcomp)
+void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& vcomp, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Get organiser info
 	cdstring org;
@@ -251,26 +267,16 @@ void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& 
 	if (mHasOrganizer)
 	{
 		mOrganizer = vcomp.GetProperties().find(iCal::cICalProperty_ORGANIZER)->second;
-		if (org.compare_start(cMailtoURLScheme, true))
-		{
-			CAddress addr(org.c_str() + ::strlen(cMailtoURLScheme));
-			mOrganizerIsMe = CPreferences::TestSmartAddress(addr);
-			
-			// Now look for identity
-			if (mOrganizer.HasAttribute(iCal::cICalAttribute_ORGANIZER_X_IDENTITY))
-			{
-				const cdstring& idname = mOrganizer.GetAttributeValue(iCal::cICalAttribute_ORGANIZER_X_IDENTITY);
-				const CIdentity* id = CPreferences::sPrefs->mIdentities.GetValue().GetIdentity(idname);
-				if (id != NULL)
-				{
-					mOldIdentity = id;
-					mUseIdentity = true;
-					mOrganizerIsMe = true;
+		const CIdentity* id = iCal::CITIPProcessor::OrganiserIdentity(vcomp);
 
-					StStopListening _stop(mIdentity);
-					mIdentity->SetValue(mIdentity->FirstIndex() + CPreferences::sPrefs->mIdentities.GetValue().GetIndex(idname));
-				}
-			}
+		if (id != NULL)
+		{
+			mOldIdentity = id;
+			mUseIdentity = true;
+			mOrganizerIsMe = true;
+
+			StStopListening _stop(mIdentity);
+			mIdentity->SetIdentity(CPreferences::sPrefs, id);
 		}
 		else
 		{
@@ -280,6 +286,7 @@ void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& 
 		mNewBtn->SetActive(mOrganizerIsMe);
 		mChangeBtn->SetActive(mOrganizerIsMe);
 		mDeleteBtn->SetActive(mOrganizerIsMe);
+		mAvailabilityBtn->SetActive(kTrue);
 
 		// Switch to attendee pane
 		mAddAttendeesPane->SetVisible(false);
@@ -290,6 +297,7 @@ void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& 
 		mIdentity->SetVisible(mUseIdentity);
 		
 		// Set organiser text
+		org = iCal::CITIPProcessor::GetAttendeeDescriptor(mOrganizer);
 		mOrganiser->SetText(org);
 		
 		mOrganizerChanged = false;
@@ -297,26 +305,15 @@ void CNewComponentAttendees::SetComponent(const iCal::CICalendarComponentRecur& 
 
 	// Copy all attendee properties
 	const iCal::CICalendarPropertyMap& props = vcomp.GetProperties();
-	pair<iCal::CICalendarPropertyMap::const_iterator, iCal::CICalendarPropertyMap::const_iterator> result = props.equal_range(iCal::cICalProperty_ATTENDEE);
+	std::pair<iCal::CICalendarPropertyMap::const_iterator, iCal::CICalendarPropertyMap::const_iterator> result = props.equal_range(iCal::cICalProperty_ATTENDEE);
 	for(iCal::CICalendarPropertyMap::const_iterator iter = result.first; iter != result.second; iter++)
 	{
 		// Copy the property
 		mAttendees.push_back((*iter).second);
 	}
 	
-	mTable->ResetTable(&mAttendees);
-}
-
-void CNewComponentAttendees::GetEvent(iCal::CICalendarVEvent& vevent)
-{
-	// Do descriptive items
-	GetComponent(vevent);
-}
-
-void CNewComponentAttendees::GetToDo(iCal::CICalendarVToDo& vtodo)
-{
-	// Do descriptive items
-	GetComponent(vtodo);
+	SortAttendees();
+	mTable->ResetTable(&mAttendees, &mOrganizer);
 }
 
 void CNewComponentAttendees::GetComponent(iCal::CICalendarComponentRecur& vcomp)
@@ -352,6 +349,28 @@ void CNewComponentAttendees::SetReadOnly(bool read_only)
 	mDeleteBtn->SetActive(!read_only);
 }
 
+void CNewComponentAttendees::ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status)
+{
+	// Copy all attendee properties
+	for(iCal::CICalendarPropertyList::iterator iter = mAttendees.begin(); iter != mAttendees.end(); iter++)
+	{
+		// Copy the property
+		if ((*iter).GetCalAddressValue()->GetValue() == attendee.GetCalAddressValue()->GetValue())
+		{
+			// Work on Attendee property
+			(*iter).RemoveAttributes(iCal::cICalAttribute_PARTSTAT);
+			(*iter).RemoveAttributes(iCal::cICalAttribute_RSVP);
+			if (new_status.length() != 0)
+			{
+				iCal::CICalendarAttribute attr(iCal::cICalAttribute_PARTSTAT, new_status);
+				(*iter).AddAttribute(attr);
+			}
+		}
+	}
+
+	mTable->ResetTable(&mAttendees, &mOrganizer);
+}
+
 void CNewComponentAttendees::OnSelectionChange()
 {
 	bool has_selection = mTable->IsSelectionValid();
@@ -362,14 +381,12 @@ void CNewComponentAttendees::OnSelectionChange()
 void CNewComponentAttendees::SetIdentity(const CIdentity* id)
 {
 	// We get passed in an email address, so parse into an address item
-	CAddress addr(id->GetFrom(true));
-	
-	// Create the CalAddress URI part
-	cdstring uri(cMailtoURLScheme);
-	uri += addr.GetMailAddress();
+	cdstrvect addrs;
+	id->GetCalendarAddress().split("\r\n", addrs);
+	CCalendarAddress addr(addrs.front());
 	
 	// Create the property
-	iCal::CICalendarProperty prop(iCal::cICalProperty_ORGANIZER, uri, iCal::CICalendarValue::eValueType_CalAddress);
+	iCal::CICalendarProperty prop(iCal::cICalProperty_ORGANIZER, addr.GetAddress(), iCal::CICalendarValue::eValueType_CalAddress);
 	
 	// If a full name is present, create the CN= attribute
 	if (!addr.GetName().empty())
@@ -381,7 +398,7 @@ void CNewComponentAttendees::SetIdentity(const CIdentity* id)
 	{
 		CAddress sender(id->GetSender());
 		cdstring uri(cMailtoURLScheme);
-		uri += addr.GetMailAddress();
+		uri += sender.GetMailAddress();
 		prop.AddAttribute(iCal::CICalendarAttribute(iCal::cICalAttribute_SENT_BY, uri));
 	}
 	
@@ -404,28 +421,27 @@ void CNewComponentAttendees::SetIdentity(const CIdentity* id)
 				{
 					// See if value matches this identity
 					const cdstring& caladdr = prop.GetCalAddressValue()->GetValue();
-					if (caladdr.compare_start(cMailtoURLScheme))
+					cdstrvect addrs;
+					mOldIdentity->GetCalendarAddress().split("\r\n", addrs);
+					CCalendarAddress old_addr(addrs.front());
+					if (old_addr.GetAddress() == caladdr)
 					{
-						CAddress old_addr(mOldIdentity->GetFrom(true));
-						cdstring temp(caladdr, ::strlen(cMailtoURLScheme));
-						if (old_addr == temp)
-						{
-							// Change value to new identity
-							iCal::CICalendarCalAddressValue* value = const_cast<iCal::CICalendarCalAddressValue*>(prop.GetCalAddressValue());
-							value->SetValue(uri);
-							
-							// Remove any CN=
-							const_cast<iCal::CICalendarProperty&>(prop).RemoveAttributes(iCal::cICalAttribute_CN);
-							
-							// If a full name is present, create the CN= attribute
-							if (!addr.GetName().empty())
-							{
-								const_cast<iCal::CICalendarProperty&>(prop).AddAttribute(iCal::CICalendarAttribute(iCal::cICalAttribute_CN, addr.GetName()));
-							}
+						// Change value to new identity
+						iCal::CICalendarCalAddressValue* value = const_cast<iCal::CICalendarCalAddressValue*>(prop.GetCalAddressValue());
+						value->SetValue(addr.GetAddress());
 
-							mTable->ResetTable(&mAttendees);
-							break;
+						// Remove any CN=
+						const_cast<iCal::CICalendarProperty&>(prop).RemoveAttributes(iCal::cICalAttribute_CN);
+
+						// If a full name is present, create the CN= attribute
+						if (!addr.GetName().empty())
+						{
+							const_cast<iCal::CICalendarProperty&>(prop).AddAttribute(iCal::CICalendarAttribute(iCal::cICalAttribute_CN, addr.GetName()));
 						}
+
+						SortAttendees();
+						mTable->ResetTable(&mAttendees, &mOrganizer);
+						break;
 					}
 				}
 			}
@@ -438,12 +454,31 @@ void CNewComponentAttendees::SetIdentity(const CIdentity* id)
 
 void CNewComponentAttendees::OnAddAttendees()
 {
+	// Try identity tied to current calendar first
+	const CIdentity* id = NULL;
+
+	// Look for parent item
+	const CModelessDialog* dlg = dynamic_cast<const CModelessDialog*>(GetWindow()->GetDirector());
+
+	// Get current calendar
+	iCal::CICalendarRef calendar;
+	if (dynamic_cast<const CNewEventDialog*>(dlg))
+		calendar = static_cast<const CNewEventDialog*>(dlg)->GetCurrentCalendar();
+	else if (dynamic_cast<const CNewToDoDialog*>(dlg))
+		calendar = static_cast<const CNewToDoDialog*>(dlg)->GetCurrentCalendar();
+	const iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(calendar);
+	if (cal != NULL)
+	{
+		id = calstore::CCalendarStoreManager::sCalendarStoreManager->GetTiedIdentity(cal);
+	}
+	if (id == NULL)
+		id = &CPreferences::sPrefs->mIdentities.GetValue().front();
+
 	// Start with default identity - ideally should pick tied identity
-	const CIdentity* id = &CPreferences::sPrefs->mIdentities.GetValue().front();
 	SetIdentity(id);
 	{
 		StStopListening _stop(mIdentity);
-		mIdentity->SetValue(mIdentity->FirstIndex());
+		mIdentity->SetIdentity(CPreferences::sPrefs, id);
 	}
 
 	// Set the organiser
@@ -461,14 +496,12 @@ void CNewComponentAttendees::OnAddAttendees()
 	mIdentity->SetVisible(true);
 	
 	// We get passed in an email address, so parse into an address item
-	CAddress addr(id->GetFrom(true));
-	
-	// Create the CalAddress URI part
-	cdstring uri(cMailtoURLScheme);
-	uri += addr.GetMailAddress();
+	cdstrvect addrs;
+	id->GetCalendarAddress().split("\r\n", addrs);
+	CCalendarAddress addr(addrs.front());
 	
 	// Add chair
-	iCal::CICalendarProperty prop(iCal::cICalProperty_ATTENDEE, uri, iCal::CICalendarValue::eValueType_CalAddress);
+	iCal::CICalendarProperty prop(iCal::cICalProperty_ATTENDEE, addr.GetAddress(), iCal::CICalendarValue::eValueType_CalAddress);
 	prop.AddAttribute(iCal::CICalendarAttribute(iCal::cICalAttribute_ROLE, iCal::cICalAttribute_ROLE_CHAIR));
 	prop.AddAttribute(iCal::CICalendarAttribute(iCal::cICalAttribute_PARTSTAT, iCal::cICalAttribute_PARTSTAT_ACCEPTED));
 	if (!addr.GetName().empty())
@@ -477,7 +510,8 @@ void CNewComponentAttendees::OnAddAttendees()
 	}
 	mAttendees.push_back(prop);
 
-	mTable->ResetTable(&mAttendees);
+	SortAttendees();
+	mTable->ResetTable(&mAttendees, &mOrganizer);
 	OnSelectionChange();
 }
 
@@ -493,7 +527,8 @@ void CNewComponentAttendees::OnNew()
 		for(iCal::CICalendarPropertyList::const_iterator iter = props.begin(); iter != props.end(); iter++)
 			mAttendees.push_back(*iter);
 		
-		mTable->ResetTable(&mAttendees);
+		SortAttendees();
+		mTable->ResetTable(&mAttendees, &mOrganizer);
 	}
 }
 
@@ -508,7 +543,8 @@ void CNewComponentAttendees::OnChange()
 	{
 		// Add to list and reset table
 		mAttendees.at(selected - 1) = prop;
-		mTable->ResetTable(&mAttendees);
+		SortAttendees();
+		mTable->ResetTable(&mAttendees, &mOrganizer);
 	}
 }
 
@@ -527,5 +563,63 @@ void CNewComponentAttendees::OnDelete()
 	{
 		mAttendees.erase(mAttendees.begin() + *riter - 1);
 	}
-	mTable->ResetTable(&mAttendees);
+	SortAttendees();
+	mTable->ResetTable(&mAttendees, &mOrganizer);
 }
+
+void CNewComponentAttendees::OnAvailability()
+{
+	// Look for parent item
+	const CModelessDialog* dlg = dynamic_cast<const CModelessDialog*>(GetWindow()->GetDirector());
+
+	iCal::CICalendarRef calendar;
+	iCal::CICalendarPeriod period;
+	iCal::CICalendarDateTime startlocal;
+	if (dynamic_cast<const CNewEventDialog*>(dlg))
+	{
+		calendar = static_cast<const CNewEventDialog*>(dlg)->GetCurrentCalendar();
+		static_cast<const CNewEventDialog*>(dlg)->GetCurrentPeriod(period);
+
+		iCal::CICalendarDateTime start = period.GetStart();
+		start.SetHHMMSS(0, 0, 0);
+		startlocal = start;
+		start.AdjustToUTC();
+		iCal::CICalendarDateTime end(start);
+		end.OffsetDay(1);
+		period = iCal::CICalendarPeriod(start, end);
+	}
+	else
+		return;
+	const iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(calendar);
+
+	const CIdentity* identity = NULL;
+	if (mOrganizerIsMe)
+		identity = &CPreferences::sPrefs->mIdentities.GetValue()[mIdentity->GetValue() - mIdentity->FirstIndex()];
+	else
+	{
+		if (cal != NULL)
+		{
+			identity = calstore::CCalendarStoreManager::sCalendarStoreManager->GetTiedIdentity(cal);
+		}
+		if (identity == NULL)
+			identity = &CPreferences::sPrefs->mIdentities.GetValue().front();
+	}
+
+	CCalendarWindow::CreateFreeBusyWindow(calendar, identity->GetIdentity(), mOrganizer, mAttendees, startlocal);
+}
+
+void CNewComponentAttendees::SortAttendees()
+{
+	for(iCal::CICalendarPropertyList::iterator iter = mAttendees.begin(); iter != mAttendees.end(); iter++)
+	{
+		// Copy the property
+		if ((*iter).GetCalAddressValue()->GetValue() == mOrganizer.GetCalAddressValue()->GetValue())
+		{
+			const iCal::CICalendarProperty attendee = *iter;
+			mAttendees.erase(iter);
+			mAttendees.insert(mAttendees.begin(), attendee);
+			break;
+		}
+	}
+}
+

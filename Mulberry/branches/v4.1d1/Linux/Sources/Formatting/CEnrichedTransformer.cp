@@ -31,13 +31,15 @@
 #include <JColormap.h>
 #include <JFontManager.h>
 
+#include <strstream>
+
 #pragma mark ________________________________CEnrichedUtils
 
 // UTF8 in, UTF8 out
 char* CEnrichedUtils::ConvertToHTML(const char* enrichedText)
 {
 	int nofill=0;
-	ostrstream output;
+	std::ostrstream output;
 	cdstring myParam;
 
 	// Must add HTML start tags
@@ -371,12 +373,12 @@ char* CEnrichedUtils::ConvertToHTML(const char* enrichedText)
 	// Must add HTML stop tags
 	output << os_endl2 << "</BODY>" << os_endl2 << "</HTML>" << os_endl;
 
-	output << ends;
+	output << std::ends;
 	return output.str();
 }
 
 // UTF8 in, UTF8 out
-void CEnrichedUtils::WriteHTML(char ch, ostream &output)
+void CEnrichedUtils::WriteHTML(char ch, std::ostream &output)
 {
 	if (ch == '&')
 		output << "&amp;";
@@ -408,15 +410,15 @@ char* CEnrichedUtils::ToEnriched(const char* text)
 char* CEnrichedUtils::ToEnriched(const unichar_t* text)
 {
 	// Convert plain text blob to enriched
-	ostrstream output;
+	std::ostrstream output;
 	Write(output, text, ::unistrlen(text));
 	
-	output << ends;
+	output << std::ends;
 	return output.str();
 }
 
 // UTF16 in, UTF8 out
-void CEnrichedUtils::Write(ostrstream& sout, const unichar_t* string, size_t length)
+void CEnrichedUtils::Write(std::ostrstream& sout, const unichar_t* string, size_t length)
 {
 	const unichar_t* p = string;
 	bool got_endl = false;
@@ -445,7 +447,7 @@ void CEnrichedUtils::Write(ostrstream& sout, const unichar_t* string, size_t len
 }
 
 // UTF16 in, UTF8 out
-void CEnrichedUtils::WriteNoEndlDouble(ostrstream& sout, const unichar_t* string, size_t length)
+void CEnrichedUtils::WriteNoEndlDouble(std::ostrstream& sout, const unichar_t* string, size_t length)
 {
 	const unichar_t* p = string;
 
@@ -544,7 +546,7 @@ char* CEnrichedTransformer::Transform()
 	// Flush remaining tags
 	FlushStack();
 
-	mOut << os_endl << ends;
+	mOut << os_endl << std::ends;
 	return mOut.str();
 }
 

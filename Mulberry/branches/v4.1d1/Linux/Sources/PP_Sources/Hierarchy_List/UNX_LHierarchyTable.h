@@ -22,7 +22,7 @@
 #include <UNX_LCollapsableTree.h>
 
 class JXImage;
-typedef vector<JXImage*> CIconArray;
+typedef std::vector<JXImage*> CIconArray;
 
 class	LHierarchyTable : public CTableDragAndDrop {
 

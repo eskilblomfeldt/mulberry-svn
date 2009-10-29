@@ -14,10 +14,12 @@
     limitations under the License.
 */
 
-#include "CNewComponentTiming.h"
+#include "CNewComponentRepeat.h"
 
 #include "CDateTimeZoneSelect.h"
 #include "CDivider.h"
+#include "CNewEventDialog.h"
+#include "CNewToDoDialog.h"
 #include "CNewEventTiming.h"
 #include "CNewToDoTiming.h"
 #include "CNumberEdit.h"
@@ -37,34 +39,30 @@
 #include <JXTextCheckbox.h>
 #include <JXTextRadioButton.h>
 #include <JXTextButton.h>
+#include <JXWindow.h>
 
 #include <cassert>
 
 #pragma mark -
 
-void CNewComponentTiming::OnCreate()
+void CNewComponentRepeat::OnCreate()
 {
 	// Get UI items
 // begin JXLayout1
 
-    mTimingView =
-        new JXFlatRect(this,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 0,5, 500,130);
-    assert( mTimingView != NULL );
-
     mRepeats =
         new JXTextCheckbox("Repeats", this,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 10,140, 80,20);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 10,10, 80,20);
     assert( mRepeats != NULL );
 
     CDivider* obj1 =
         new CDivider(this,
-                    JXWidget::kHElastic, JXWidget::kFixedTop, 88,150, 402,2);
+                    JXWidget::kHElastic, JXWidget::kFixedTop, 88,20, 402,2);
     assert( obj1 != NULL );
 
     mRepeatsTabs =
         new CTabController(this,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 10,160, 480,140);
+                    JXWidget::kHElastic, JXWidget::kVElastic, 10,30, 480,140);
     assert( mRepeatsTabs != NULL );
 
 // end JXLayout1
@@ -89,7 +87,7 @@ void CNewComponentTiming::OnCreate()
 }
 
 // Respond to clicks in the icon buttons
-void CNewComponentTiming::Receive(JBroadcaster* sender, const Message& message)
+void CNewComponentRepeat::Receive(JBroadcaster* sender, const Message& message)
 {
 	if (message.Is(JXCheckbox::kPushed))
 	{
@@ -118,12 +116,25 @@ void CNewComponentTiming::Receive(JBroadcaster* sender, const Message& message)
 	}
 }
 
-void CNewComponentTiming::DoRepeat(bool repeat)
+const CNewTimingPanel* CNewComponentRepeat::GetTimingPanel() const
+{
+	// Look for parent item
+	const CModelessDialog* dlg = dynamic_cast<const CModelessDialog*>(GetWindow()->GetDirector());
+
+	if (dynamic_cast<const CNewEventDialog*>(dlg))
+		return static_cast<const CNewEventDialog*>(dlg)->GetTimingPanel();
+	else if (dynamic_cast<const CNewToDoDialog*>(dlg))
+		return static_cast<const CNewToDoDialog*>(dlg)->GetTimingPanel();
+	else
+		return NULL;
+}
+
+void CNewComponentRepeat::DoRepeat(bool repeat)
 {
 	mRepeatsTabs->SetActive(repeat);
 }
 
-void CNewComponentTiming::DoRepeatTab(JIndex value)
+void CNewComponentRepeat::DoRepeatTab(JIndex value)
 {
 	switch(value)
 	{
@@ -140,19 +151,19 @@ void CNewComponentTiming::DoRepeatTab(JIndex value)
 	}
 }
 
-void CNewComponentTiming::DoOccursGroup(JIndex value)
+void CNewComponentRepeat::DoOccursGroup(JIndex value)
 {
 	mRepeatSimpleItems->mOccursCounter->SetActive(value == eOccurs_Count);
 	mRepeatSimpleItems->mOccursDateTimeZone->SetActive(value == eOccurs_Until);
 }
 
-void CNewComponentTiming::DoOccursEdit()
+void CNewComponentRepeat::DoOccursEdit()
 {
 	// Get tzid set in the start
 	iCal::CICalendarTimezone tzid;
-	mTimingPanel->GetTimezone(tzid);
+	GetTimingPanel()->GetTimezone(tzid);
 
-	bool all_day = mTimingPanel->GetAllDay();
+	bool all_day = GetTimingPanel()->GetAllDay();
 
 	// Edit the stored recurrence item
 	iCal::CICalendarRecurrence	temp(mAdvancedRecur);
@@ -166,50 +177,24 @@ void CNewComponentTiming::DoOccursEdit()
 	}
 }
 
-void CNewComponentTiming::SetEvent(const iCal::CICalendarVEvent& vevent)
+void CNewComponentRepeat::SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded)
 {
-	if (mTimingPanel == NULL)
-	{
-		// Create the event timing panel
-		mTimingPanel = new CNewEventTiming(mTimingView, JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 500, 130);
-		mTimingPanel->OnCreate();
-		mTimingPanel->FitToEnclosure();
-	}
-
-	// Set the relevant fields
-	
-	// Do timing panel
-	mTimingPanel->SetEvent(vevent);
-	
 	// Set recurrence
 	SetRecurrence(vevent.GetRecurrenceSet());
 }
 
-void CNewComponentTiming::SetToDo(const iCal::CICalendarVToDo& vtodo)
+void CNewComponentRepeat::SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded)
 {
-	if (mTimingPanel == NULL)
-	{
-		// Create the event timing panel
-		mTimingPanel = new CNewToDoTiming(mTimingView, JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 500, 130);
-		mTimingPanel->OnCreate();
-		mTimingPanel->FitToEnclosure();
-	}
-
-	// Set the relevant fields
-	
-	// Do timing panel
-	mTimingPanel->SetToDo(vtodo);
-	
 	// Set recurrence
 	//SetRecurrence(vtodo.GetRecurrenceSet());
 }
 
-void CNewComponentTiming::SetRecurrence(const iCal::CICalendarRecurrenceSet* recurs)
+void CNewComponentRepeat::SetRecurrence(const iCal::CICalendarRecurrenceSet* recurs)
 {
 	static const int cFreqValueToPopup[] =
 	{
-		CNewComponentTiming::eOccurs_Secondly, CNewComponentTiming::eOccurs_Minutely, CNewComponentTiming::eOccurs_Hourly,
-		CNewComponentTiming::eOccurs_Daily, CNewComponentTiming::eOccurs_Weekly, CNewComponentTiming::eOccurs_Monthly, CNewComponentTiming::eOccurs_Yearly
+		CNewComponentRepeat::eOccurs_Secondly, CNewComponentRepeat::eOccurs_Minutely, CNewComponentRepeat::eOccurs_Hourly,
+		CNewComponentRepeat::eOccurs_Daily, CNewComponentRepeat::eOccurs_Weekly, CNewComponentRepeat::eOccurs_Monthly, CNewComponentRepeat::eOccurs_Yearly
 	};
 
 	// See whether it is simple enough that we can handle it
@@ -243,13 +228,13 @@ void CNewComponentTiming::SetRecurrence(const iCal::CICalendarRecurrenceSet* rec
 				
 				// Get tzid set in the start
 				iCal::CICalendarTimezone tzid;
-				mTimingPanel->GetTimezone(tzid);
+				GetTimingPanel()->GetTimezone(tzid);
 
 				// Adjust UNTIL to new timezone
 				iCal::CICalendarDateTime until(recur->GetUntil());
 				until.AdjustTimezone(tzid);
 
-				mRepeatSimpleItems->mOccursDateTimeZone->SetDateTimeZone(until, mTimingPanel->GetAllDay());
+				mRepeatSimpleItems->mOccursDateTimeZone->SetDateTimeZone(until, GetTimingPanel()->GetAllDay());
 			}
 			else
 				mRepeatSimpleItems->mOccursGroup->SelectItem(eOccurs_ForEver);
@@ -294,11 +279,8 @@ void CNewComponentTiming::SetRecurrence(const iCal::CICalendarRecurrenceSet* rec
 	}
 }
 
-void CNewComponentTiming::GetEvent(iCal::CICalendarVEvent& vevent)
+void CNewComponentRepeat::GetEvent(iCal::CICalendarVEvent& vevent)
 {
-	// Do timing panel
-	mTimingPanel->GetEvent(vevent);
-	
 	// Do recurrence items
 	// NB in complex mode we do not change the existing set
 	iCal::CICalendarRecurrenceSet recurs;
@@ -306,11 +288,8 @@ void CNewComponentTiming::GetEvent(iCal::CICalendarVEvent& vevent)
 		vevent.EditRecurrenceSet(recurs);
 }
 
-void CNewComponentTiming::GetToDo(iCal::CICalendarVToDo& vtodo)
+void CNewComponentRepeat::GetToDo(iCal::CICalendarVToDo& vtodo)
 {
-	// Do timing panel
-	mTimingPanel->GetToDo(vtodo);
-	
 	// Do recurrence items
 	// NB in complex mode we do not change the existing set
 	//iCal::CICalendarRecurrenceSet recurs;
@@ -324,7 +303,7 @@ static const iCal::ERecurrence_FREQ cFreqPopupToValue[] =
 	iCal::eRecurrence_HOURLY, iCal::eRecurrence_MINUTELY, iCal::eRecurrence_SECONDLY
 };
 
-bool CNewComponentTiming::GetRecurrence(iCal::CICalendarRecurrenceSet& recurs)
+bool CNewComponentRepeat::GetRecurrence(iCal::CICalendarRecurrenceSet& recurs)
 {
 	// Only if repeating enabled
 	if (!mRepeats->IsChecked())
@@ -363,7 +342,7 @@ bool CNewComponentTiming::GetRecurrence(iCal::CICalendarRecurrenceSet& recurs)
 			
 			// Get value from dialog
 			iCal::CICalendarDateTime until;
-			mRepeatSimpleItems->mOccursDateTimeZone->GetDateTimeZone(until, mTimingPanel->GetAllDay());
+			mRepeatSimpleItems->mOccursDateTimeZone->GetDateTimeZone(until, GetTimingPanel()->GetAllDay());
 			
 			// Adjust to UTC
 			until.AdjustToUTC();
@@ -382,11 +361,9 @@ bool CNewComponentTiming::GetRecurrence(iCal::CICalendarRecurrenceSet& recurs)
 	return true;
 }
 
-void CNewComponentTiming::SetReadOnly(bool read_only)
+void CNewComponentRepeat::SetReadOnly(bool read_only)
 {
 	mReadOnly = read_only;
-
-	mTimingPanel->SetReadOnly(read_only);
 
 	mRepeats->SetActive(!read_only);
 	mRepeatsTabs->SetActive(!read_only && mRepeats->IsChecked());
@@ -409,13 +386,13 @@ void CNewComponentRepeatSimple::OnCreate()
     assert( mOccursInterval != NULL );
 
     mOccursFreq =
-        new HPopupMenu("",this,
+        new HPopupMenu("", this,
                     JXWidget::kHElastic, JXWidget::kVElastic, 135,5, 110,20);
     assert( mOccursFreq != NULL );
 
     mOccursGroup =
         new JXRadioGroup(this,
-                    JXWidget::kFixedRight, JXWidget::kFixedTop, 5,30, 80,85);
+                    JXWidget::kHElastic, JXWidget::kFixedTop, 5,30, 80,85);
     assert( mOccursGroup != NULL );
     mOccursGroup->SetBorderWidth(0);
 
@@ -478,6 +455,7 @@ void CNewComponentRepeatAdvanced::OnCreate()
         new JXTextButton("Edit...", this,
                     JXWidget::kHElastic, JXWidget::kVElastic, 368,56, 80,25);
     assert( mOccursEdit != NULL );
+    mOccursEdit->SetFontSize(10);
 
 // end JXLayout3
 }

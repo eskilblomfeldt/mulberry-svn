@@ -38,6 +38,8 @@
 #endif
 #include "CPluginRegisterDialog.h"
 
+#include <cstdlib>
+
 #if __dest_os == __linux_os
 #include <netinet/in.h>
 #endif
@@ -205,7 +207,7 @@ bool CRegistration::ValidSerial(const cdstring& serial) const
 	// Check data if serial number == D for Demo
 	else if (*serial.c_str() == 'D')
 	{
-		// Get maximum values from licensee (format "Dxxx…-mmm-yyyy")
+		// Get maximum values from licensee (format "Dxxx-mmm-yyyy")
 		long max_year = 0;
 		long max_month = 0;
 

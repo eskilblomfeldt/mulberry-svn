@@ -40,7 +40,7 @@
 #include <jXGlobals.h>
 #include <jXKeysym.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 CTable::CTable(JXScrollbarSet* scrollbarSet, 
 				 JXContainer* enclosure,
@@ -95,7 +95,7 @@ void CTable::OnCreate()
 }
 
 // ---------------------------------------------------------------------------
-//		¥ ~CTable
+//		 ~CTable
 // ---------------------------------------------------------------------------
 //	Destructor
 
@@ -394,7 +394,7 @@ void CTable::HandleMouseHere(const JPoint& pt, const JXKeyModifiers& modifiers)
 
 			// Point to position and add cell height or at least cursor height
 			JPoint pos(pt);
-			pos.y += ::max(rowHeight, (JCoordinate) 18);
+			pos.y += std::max(rowHeight, (JCoordinate) 18);
 
 			// Determine suitable rect
 			JRect rect;

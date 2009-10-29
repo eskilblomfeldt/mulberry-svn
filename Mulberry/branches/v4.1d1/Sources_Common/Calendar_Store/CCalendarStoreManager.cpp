@@ -40,6 +40,7 @@
 #include "cdmutexprotect.h"
 
 #include <algorithm>
+#include <memory>
 
 using namespace calstore; 
 

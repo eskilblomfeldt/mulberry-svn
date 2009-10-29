@@ -87,7 +87,7 @@ JBoolean CAddressDisplay::OKToUnfocus()
 	return super::OKToUnfocus();
 }
 
-CAddressList* CAddressDisplay::GetAddresses()
+CAddressList* CAddressDisplay::GetAddresses(bool qualify)
 {
 	// Always resolve addresses if still active
 	if (!mResolving && HasFocus())
@@ -95,7 +95,7 @@ CAddressList* CAddressDisplay::GetAddresses()
 		try
 		{
 			StValueChanger<bool> _change(mResolving, true);
-			ResolveAddressList();
+			ResolveAddressList(qualify);
 		}
 		catch(...)
 		{
@@ -109,7 +109,7 @@ CAddressList* CAddressDisplay::GetAddresses()
 	return new CAddressList(addrs, addrs.length());
 }
 
-void CAddressDisplay::ResolveAddressList()
+void CAddressDisplay::ResolveAddressList(bool qualify)
 {
 	// Resolve addresses
 	cdstring str = GetText();
@@ -121,7 +121,7 @@ void CAddressDisplay::ResolveAddressList()
 		bool qualify = !CPreferences::sPrefs->mExpandFailedNicknames.GetValue();
 		
 		// Generate an address list
-		auto_ptr<CAddressList> list(new CAddressList(str, text_length, 0, resolution));
+		std::auto_ptr<CAddressList> list(new CAddressList(str, text_length, 0, resolution));
 		
 		if (!resolution || !qualify)
 		{
@@ -160,13 +160,14 @@ void CAddressDisplay::ResolveAddressList()
 		}
 
 		// Qualify remainder
-		list->QualifyAddresses(CPreferences::sPrefs->mMailDomain.GetValue());
+		if (qualify)
+			list->QualifyAddresses(CPreferences::sPrefs->mMailDomain.GetValue());
 		bool twist = (list->size() > 1);
 
 		// Write address list to stream and grab the string
-		ostrstream new_txt;
+		std::ostrstream new_txt;
 		list->WriteToStream(new_txt);
-		new_txt << ends;
+		new_txt << std::ends;
 		cdstring total;
 		total.steal(new_txt.str());
 

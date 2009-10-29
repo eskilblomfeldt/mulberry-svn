@@ -35,6 +35,8 @@
 #include <jFileUtil.h>
 #include <jXGlobals.h>
 
+#include <memory>
+
 #define COMMA_SPACE			", "
 
 const char cAnon[]				= "Anonymous";
@@ -69,23 +71,12 @@ CAddressBook* CAddressBookDoc::GetAddressBook() const
 // Is closing allowed
 JBoolean CAddressBookDoc::OKToClose()
 {
-	if (dynamic_cast<CLocalAddressBook*>(GetAddressBook()) && !CFileDocument::OKToClose())
+	// Look for dangling messages then process close actions
+	if (!GetAddressBookWindow()->GetAddressBookView()->TestClose())
 		return kFalse;
-	
-	// Do not show local alert when quitting
-	if (dynamic_cast<CLocalAddressBook*>(GetAddressBook()) && CMulberryApp::mQuitting)
-	{
-		return kTrue;
-	}
-	else
-	{
-		// Look for dangling messages then process close actions
-		if (!GetAddressBookWindow()->GetAddressBookView()->TestClose())
-			return kFalse;
 
-		// Close the view  - this will close the actual window at idle time
-		GetAddressBookWindow()->GetAddressBookView()->DoClose();
-	}
+	// Close the view  - this will close the actual window at idle time
+	GetAddressBookWindow()->GetAddressBookView()->DoClose();
 	
 	return kTrue;
 }
@@ -133,12 +124,12 @@ void CAddressBookDoc::UpdateCommand(unsigned long cmd, CCmdUI* cmdui)
 
 void CAddressBookDoc::OnUpdateFileSave(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(dynamic_cast<CLocalAddressBook*>(GetAddressBook()) ? true : false);	// Only if dirty
+	pCmdUI->Enable(false);
 }
 
 void CAddressBookDoc::OnUpdateFileRevert(CCmdUI* pCmdUI)
 {
-	pCmdUI->Enable(dynamic_cast<CLocalAddressBook*>(GetAddressBook()) && mAddressBookWnd->IsDirty());	// Only if dirty
+	pCmdUI->Enable(false);
 }
 
 void CAddressBookDoc::OnOpenDocument(const JString& fname)
@@ -175,7 +166,7 @@ void CAddressBookDoc::OnFileSaveAs()
 	
 	// Check for name change
 	if (GetFileName() != GetAddressBook()->GetName())
-		GetAddressBook()->SetName(GetFileName());
+		GetAddressBook()->SetName(GetFileName().GetCString());
 }
 
 void CAddressBookDoc::OnFileRevert()
@@ -203,7 +194,7 @@ void CAddressBookDoc::OnFileRevert()
 }
 
 // Read data from file
-void CAddressBookDoc::ReadTextFile(istream& input)
+void CAddressBookDoc::ReadTextFile(std::istream& input)
 {
 	// Read in string to arbitrary line end
 	cdstring s;
@@ -218,22 +209,22 @@ void CAddressBookDoc::ReadTextFile(istream& input)
 	}
 }
 
-void CAddressBookDoc::WriteTextFile(ostream& output, const JBoolean safetySave) const
+void CAddressBookDoc::WriteTextFile(std::ostream& output, const JBoolean safetySave) const
 {
 	ExportTabbedAddresses(output);
 }
 
-void CAddressBookDoc::ExportTabbedAddresses(ostream& output) const
+void CAddressBookDoc::ExportTabbedAddresses(std::ostream& output) const
 {
 	for(CAddressList::const_iterator iter = GetAddressBook()->GetAddressList()->begin(); iter != GetAddressBook()->GetAddressList()->end(); iter++)
 	{
-		auto_ptr<const char> out_addr(GetAddressBook()->ExportAddress(static_cast<const CAdbkAddress*>(*iter)));
+		std::auto_ptr<const char> out_addr(GetAddressBook()->ExportAddress(static_cast<const CAdbkAddress*>(*iter)));
 		output.write(out_addr.get(), ::strlen(out_addr.get()));
 	}
 
 	for(CGroupList::iterator iter = GetAddressBook()->GetGroupList()->begin(); iter != GetAddressBook()->GetGroupList()->end(); iter++)
 	{
-		auto_ptr<const char> out_grp(GetAddressBook()->ExportGroup(*iter));
+		std::auto_ptr<const char> out_grp(GetAddressBook()->ExportGroup(*iter));
 		output.write(out_grp.get(), ::strlen(out_grp.get()));
 	}
 }

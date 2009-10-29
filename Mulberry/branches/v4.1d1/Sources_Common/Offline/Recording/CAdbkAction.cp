@@ -22,6 +22,7 @@
 #include "CStringUtils.h"
 
 #include <istream>
+#include <stdlib.h>
 
 const char* cAdbkActionDescriptors[] =
 	{"None",

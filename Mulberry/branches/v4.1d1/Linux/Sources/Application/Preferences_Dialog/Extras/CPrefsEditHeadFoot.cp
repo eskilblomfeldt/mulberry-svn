@@ -44,7 +44,7 @@
 
 #include <cassert>
 
-#include <strstream.h>
+#include <strstream>
 
 // __________________________________________________________________________________________________
 // C L A S S __ C P R E F S E D I T H E A D F O O T
@@ -352,9 +352,9 @@ void CPrefsEditHeadFoot::UpdateFile()
 	{
 		// Open file and read content
 		cdifstream fin(fpath, ios::in | ios::binary);
-		ostrstream out;
+		std::ostrstream out;
 		::StreamCopy(fin, out, 0, ::StreamLength(fin));
-		out << ends;
+		out << std::ends;
 
 		cdstring result;
 		result.steal(out.str());

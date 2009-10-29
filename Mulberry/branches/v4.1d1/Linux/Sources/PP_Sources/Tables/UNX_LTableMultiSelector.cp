@@ -27,7 +27,8 @@
 
 #include <UNX_LTableMultiSelector.h>
 
-#include <vector.h>
+#include <algorithm>
+#include <vector>
 
 // ---------------------------------------------------------------------------
 //	 LTableMultiSelector					Constructor				  [public]
@@ -290,7 +291,7 @@ LTableMultiSelector::SelectCellBlock(
 
 		// Determine difference for unhilite
 		bool do_difference = false;
-		vector<bool> difference;
+		std::vector<bool> difference;
 		difference.insert(difference.begin(), old_selection.size(), false);
 		mFirstSelection.SetCell(0, 0);
 		mLastSelection.SetCell(0, 0);

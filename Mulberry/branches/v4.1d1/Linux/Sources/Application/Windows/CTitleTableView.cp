@@ -40,6 +40,7 @@
 #include <jXPainterUtil.h>
 #include "TPopupMenu.h"
 
+#include <algorithm>
 #include <cassert>
 
 int CTitleTableView::sClickColumn = 0;
@@ -503,7 +504,7 @@ void CTitleTableView::DrawText(JPainter* p, SColumnInfo& col_info, const JRect &
 void CTitleTableView::DrawIcon(JPainter* p, SColumnInfo& col_info, unsigned int icon_id, const JRect &cellRect)
 {
 	JXImage* icon = CIconLoader::GetIcon(icon_id, this, 16, 0x00CCCCCC);
-	int hoffset = min(cellRect.width() - 16, 2L);
+	int hoffset = std::min(cellRect.width() - 16, 2L);
 	int voffset = (cellRect.height() - icon->GetBounds().height())/2;
 	int left = 0;
 	if (RightJustify(col_info.column_type))

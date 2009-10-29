@@ -38,6 +38,7 @@ public:
 
 protected:
 	virtual void OnCreate();
+	virtual void Receive(JBroadcaster* sender, const Message& message);
 
 	void	SetOptions(const CLog::SLogOptions& options);		// Set options in dialog
 	void	GetOptions(CLog::SLogOptions& options);				// Get options from dialog
@@ -59,6 +60,8 @@ protected:
     JXTextCheckbox* mFiltering;
     JXTextCheckbox* mErrors;
     JXTextCheckbox* mOverwrite;
+    JXTextButton*   mClearBtn;
+    JXTextButton*   mFlushBtn;
 
 // end JXLayout
 	JXTextCheckbox*	mLogs[CLog::eLogTypeLast];

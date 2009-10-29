@@ -175,7 +175,7 @@ void CNewToDoTiming::DoDueGroup(JIndex group)
 	}
 }
 
-void CNewToDoTiming::SetToDo(const iCal::CICalendarVToDo& vtodo)
+void CNewToDoTiming::SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Set the relevant fields
 	bool all_day = true;

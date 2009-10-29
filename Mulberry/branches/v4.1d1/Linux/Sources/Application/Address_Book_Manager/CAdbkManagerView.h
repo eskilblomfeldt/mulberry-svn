@@ -37,7 +37,7 @@ class CAdbkManagerView : public CTableView
 	friend class CAdbkManagerWindow;
 
 public:
-	typedef vector<CAdbkManagerView*>	CAdbkManagerViewList;
+	typedef std::vector<CAdbkManagerView*>	CAdbkManagerViewList;
 	static cdmutexprotect<CAdbkManagerViewList>	sAdbkManagerViews;
 
 					CAdbkManagerView(JXContainer* enclosure,

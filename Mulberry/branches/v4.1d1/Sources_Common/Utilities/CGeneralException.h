@@ -31,7 +31,7 @@ typedef PP_PowerPlant::LException CGeneralException;
 
 #include "cdstring.h"
 
-class CGeneralException : public exception
+class CGeneralException : public std::exception
 {
 public:
 	CGeneralException(long err_code) :

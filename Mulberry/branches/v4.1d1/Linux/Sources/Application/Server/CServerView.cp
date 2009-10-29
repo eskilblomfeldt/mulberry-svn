@@ -39,6 +39,7 @@
 
 #include "JXMultiImageCheckbox.h"
 
+#include <algorithm>
 #include <cassert>
 
 // Static members
@@ -68,7 +69,7 @@ CServerView::~CServerView()
 {
 	// Remove from list
 	cdmutexprotect<CServerViewList>::lock _lock(sServerViews);
-	CServerViewList::iterator found = ::find(sServerViews->begin(), sServerViews->end(), this);
+	CServerViewList::iterator found = std::find(sServerViews->begin(), sServerViews->end(), this);
 	if (found != sServerViews->end())
 		sServerViews->erase(found);
 }

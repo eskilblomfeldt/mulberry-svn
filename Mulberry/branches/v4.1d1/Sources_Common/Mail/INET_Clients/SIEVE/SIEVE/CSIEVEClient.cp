@@ -30,6 +30,7 @@
 #include "StValueChanger.h"
 #endif
 
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 

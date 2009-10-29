@@ -33,7 +33,6 @@
 #include "CGroupList.h"
 #include "CGroupTableAction.h"
 #include "CIconLoader.h"
-#include "CLocalAddressBook.h"
 #include "CMessage.h"
 #include "CMulberryApp.h"
 #include "CMulSelectionData.h"
@@ -52,6 +51,8 @@
 #include <JTableSelection.h>
 #include <jASCIIConstants.h>
 #include <jXKeysym.h>
+
+#include <algorithm>
 
 /////////////////////////////////////////////////////////////////////////////
 // CGroupTable
@@ -156,7 +157,7 @@ void CGroupTable::SetDirty(bool dirty)
 // Is it dirty
 bool CGroupTable::IsDirty()
 {
-	return dynamic_cast<CLocalAddressBook*>(mAdbk) && mDirty;
+	return mDirty;
 }
 
 void CGroupTable::DoSelectionChanged()
@@ -662,7 +663,7 @@ void CGroupTable::AddGroupsFromList(CGroupList* grps)
 	SelectGroups(grps);
 	
 	mTableView->UpdateCaptions();
-	SetDirty(dynamic_cast<CLocalAddressBook*>(mAdbk));
+	SetDirty(false);
 }
 
 // Change from list
@@ -679,7 +680,7 @@ void CGroupTable::ChangeGroupsFromList(CGroupList* old_grps, CGroupList* new_grp
 	Refresh();	
 	mTableView->UpdateCaptions();
 
-	SetDirty(dynamic_cast<CLocalAddressBook*>(mAdbk));
+	SetDirty(false);
 }
 
 // Delete from list
@@ -695,7 +696,7 @@ void CGroupTable::RemoveGroupsFromList(CGroupList* grps)
 	UnselectAllCells();
 	Refresh();	
 	mTableView->UpdateCaptions();
-	SetDirty(dynamic_cast<CLocalAddressBook*>(mAdbk));
+	SetDirty(false);
 }
 
 // Delete from list
@@ -720,7 +721,7 @@ void CGroupTable::SelectGroups(CGroupList* grps)
 		if (item.mIsGroup)
 		{
 			CGroup* grp = item.mGroup;
-			CGroupList::const_iterator found = ::find(grps->begin(), grps->end(), grp);
+			CGroupList::const_iterator found = std::find(grps->begin(), grps->end(), grp);
 			if (found != grps->end())
 				SelectCell(STableCell(row, 1));
 		}
@@ -730,7 +731,7 @@ void CGroupTable::SelectGroups(CGroupList* grps)
 	ShowFirstSelection();
 
 	// Reset only after all changes have happened
-	SetDirty(dynamic_cast<CLocalAddressBook*>(mAdbk));
+	SetDirty(false);
 }
 
 // Add selected addresses to list

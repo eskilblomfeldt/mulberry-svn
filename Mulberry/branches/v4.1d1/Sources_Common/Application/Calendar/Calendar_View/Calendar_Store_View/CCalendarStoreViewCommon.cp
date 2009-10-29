@@ -28,6 +28,8 @@
 
 #include "CCalendarStoreManager.h"
 
+#include <algorithm>
+
 // Check for window
 bool CCalendarStoreView::ViewExists(const CCalendarStoreView* wnd)
 {

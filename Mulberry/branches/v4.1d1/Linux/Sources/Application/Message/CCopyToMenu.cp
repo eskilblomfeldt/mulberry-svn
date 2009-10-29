@@ -33,6 +33,7 @@
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
 
+#include <algorithm>
 #include <typeinfo>
 
 const unsigned short cMaxMailbox = 300;
@@ -342,7 +343,7 @@ void CCopyToMenu::AddProtocolToMenu(CMboxProtocol* proto, cdstring& menu, bool i
 			if (!(*iter).GetCopyToNone(true) && !(*iter).GetCopyToChoose(true))
 			{
 				// Must not be duplicate
-				cdstrvect::const_iterator found = ::find(added.begin(), added.end(), copyto);
+				cdstrvect::const_iterator found = std::find(added.begin(), added.end(), copyto);
 				if (found != added.end())
 					continue;
 

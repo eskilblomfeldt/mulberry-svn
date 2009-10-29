@@ -37,6 +37,8 @@
 
 #include <time.h>
 
+#include <memory>
+
 // Classes
 class CAddressText;
 class CAttachment;
@@ -109,7 +111,7 @@ public:
 			  mFontScale = copy.mFontScale;  }
 	};
 
-	typedef vector<CMessageView*>	CMessageViewList;
+	typedef std::vector<CMessageView*>	CMessageViewList;
 	static cdmutexprotect<CMessageViewList> sMsgViews;	// List of windows (protected for multi-thread access)
 
 private:
@@ -119,8 +121,8 @@ private:
 	bool			mWasUnseen;							// Was it unseen before being displayed
 	bool			mItsMsgError;						// Flag for cleared out message
 	const char*		mShowText;							// Text to show
-	auto_ptr<unichar_t>		mUTF16Text;					// UTF16 text
-	auto_ptr<unichar_t>		mRawUTF16Text;				// Raw UTF16 text
+	std::auto_ptr<unichar_t>		mUTF16Text;					// UTF16 text
+	std::auto_ptr<unichar_t>		mRawUTF16Text;				// Raw UTF16 text
 	bool			mShowHeader;						// Show header
 	bool			mShowAddressCaption;				// Show address caption area
 	bool			mShowParts;							// Show parts area

@@ -26,11 +26,11 @@
 #include "CICalendarVEvent.h"
 #include "CICalendarComponentExpanded.h"
 
-#include "vector.h"
+#include <vector>
 
 class CDayEvent;
 typedef std::vector<CDayEvent*> CDayEventList;
-typedef std::vector<pair<CDayEvent*, bool> > CDayEventSlotList;
+typedef std::vector<std::pair<CDayEvent*, bool> > CDayEventSlotList;
 typedef std::vector<CDayEventSlotList> CDayEventMatrixRow;
 typedef std::vector<CDayEventMatrixRow> CDayEventMatrix;
 typedef std::vector<CDayEventList> CDayEventColumn;
@@ -66,9 +66,11 @@ public:
 
 	void				ScaleRows(uint32_t scale);
 
-	void				AddEvents(iCal::CICalendarExpandedComponents& vevents);
+	void				AddItems(iCal::CICalendarExpandedComponents& vevents,
+								 iCal::CICalendarComponentList& vfreebusy);
 	void				AddAllDayEvent(iCal::CICalendarComponentExpandedShared& vevent);
 	void				AddTimedEvent(iCal::CICalendarComponentExpandedShared& vevent);
+	void				AddTimedFreeBusy(iCal::CICalendarComponent* vfreebusy);
 
 	const iCal::CICalendarDateTime&	GetCellStartDate(const STableCell& cell) const;
 	const iCal::CICalendarDateTime&	GetCellEndDate(const STableCell& cell) const;

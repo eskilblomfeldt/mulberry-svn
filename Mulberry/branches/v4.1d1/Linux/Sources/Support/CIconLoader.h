@@ -20,7 +20,7 @@
 #ifndef __CICONLOADER__MULBERRY__
 #define __CICONLOADER__MULBERRY__
 
-#include <map.h>
+#include <map>
 
 typedef unsigned int resType;
 
@@ -41,7 +41,7 @@ public:
 	static JXImage* GetIcon(resType resid, JXContainer* pCont, unsigned long size, unsigned long bkgnd, EState state = eNormal);
 	
 private:
-	typedef map<long long, JXImage*> CIconMap;
+	typedef std::map<long long, JXImage*> CIconMap;
 	static CIconMap	sIcons;
 
 	CIconLoader() {}

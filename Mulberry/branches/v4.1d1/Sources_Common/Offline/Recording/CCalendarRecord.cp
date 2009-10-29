@@ -28,6 +28,8 @@
 
 #include "CICalendar.h"
 
+#include <memory>
+
 CCalendarRecord::CCalendarRecord()
 {
 }

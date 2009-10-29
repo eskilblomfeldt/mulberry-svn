@@ -32,7 +32,7 @@
 #include <JXWindowPainter.h>
 #include <jASCIIConstants.h>
 
-#include <strstream.h>
+#include <strstream>
 
 const JCoordinate cItemHeight = 32;
 const JCoordinate cCheckboxLeftOffset = 2;

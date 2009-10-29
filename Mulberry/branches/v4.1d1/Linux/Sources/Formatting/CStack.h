@@ -18,7 +18,7 @@
 #ifndef __CSTACK__MULBERRY__
 #define __CSTACK__MULBERRY__
 
-#include <iostream.h>
+#include <iostream>
 
 
 class CStackElement{

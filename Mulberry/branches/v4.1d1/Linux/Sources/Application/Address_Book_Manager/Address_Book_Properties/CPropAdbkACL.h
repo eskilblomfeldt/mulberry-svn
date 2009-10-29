@@ -24,7 +24,6 @@
 #include "CListener.h"
 
 #include "CAdbkACL.h"
-#include "CAdbkList.h"
 
 // Classes
 class CACLStylePopup;
@@ -45,7 +44,7 @@ public:
 			{ mCanChange = false; }
 
 	virtual void	OnCreate();								// Do odds & ends
-	virtual void	SetAdbkList(CFlatAdbkList* adbk_list);		// Set adbk list
+	virtual void	SetAdbkList(CAddressBookList* adbk_list);		// Set adbk list
 	virtual void	DoChangeACL(CAdbkACL::EAdbkACL acl, bool set);	// User clicked a button
 	virtual void	ApplyChanges();							// Force update of adbks
 

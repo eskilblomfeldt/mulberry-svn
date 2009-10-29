@@ -50,6 +50,7 @@ using namespace i18n;
 
 #include "CCharsetData.cp"
 
+#include <memory>
 #ifdef __GNUC__
 #include <strstream>
 #else

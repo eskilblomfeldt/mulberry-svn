@@ -21,6 +21,7 @@
 
 #include "CStringUtils.h"
 
+#include <cstdlib>
 #include <memory>
 
 #pragma mark ____________________________CQuotaItem

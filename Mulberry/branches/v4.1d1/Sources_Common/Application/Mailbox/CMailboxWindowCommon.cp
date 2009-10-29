@@ -26,6 +26,8 @@
 #include "CPreferences.h"
 #include "CSplitterView.h"
 
+#include <algorithm>
+
 // Find the corresponding window using URL
 CMailboxWindow* CMailboxWindow::FindWindow(const CMbox* mbox)
 {

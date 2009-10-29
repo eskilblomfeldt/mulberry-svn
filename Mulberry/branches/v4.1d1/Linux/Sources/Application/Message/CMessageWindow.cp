@@ -79,9 +79,10 @@
 #include <JXWidgetSet.h>
 #include <JXWindow.h>
 
-#include <fstream.h>
+#include <algorithm>
+#include <fstream>
 #include <stdio.h>
-#include <strstream.h>
+#include <strstream>
 
 const int cWindowWidth = 575;
 const int cWindowHeight = 300;
@@ -181,7 +182,7 @@ CMessageWindow::~CMessageWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CMessageWindowList>::lock _lock(sMsgWindows);
-		CMessageWindowList::iterator found = ::find(sMsgWindows->begin(), sMsgWindows->end(), this);
+		CMessageWindowList::iterator found = std::find(sMsgWindows->begin(), sMsgWindows->end(), this);
 		if (found != sMsgWindows->end())
 			sMsgWindows->erase(found);
 	}
@@ -383,7 +384,7 @@ void CMessageWindow::DoSaveAs()
 }
 
 // Save data to file
-void CMessageWindow::WriteTextFile(ostream& output, const JBoolean safetySave) const
+void CMessageWindow::WriteTextFile(std::ostream& output, const JBoolean safetySave) const
 {
 	// Look for multiple operations
 	if (mMsgs)
@@ -837,9 +838,9 @@ void CMessageWindow::ResetText(void)
 		else if (!mHeaderState.mExpanded)
 		{
 			// Get summary from envelope
-			ostrstream hdr;
+			std::ostrstream hdr;
 			mItsMsg->GetEnvelope()->GetSummary(hdr);
-			hdr << ends;
+			hdr << std::ends;
 
 			mText->ParseHeader(hdr.str(), actual_view);
 			hdr.freeze(false);
@@ -1128,9 +1129,9 @@ void CMessageWindow::AddPrintSummary()
 		(!mShowHeader && mHeaderState.mExpanded))
 	{
 		// Get summary from envelope
-		ostrstream hdr;
+		std::ostrstream hdr;
 		mItsMsg->GetEnvelope()->GetSummary(hdr);
-		hdr << ends;
+		hdr << std::ends;
 
 		// Must filter out LFs for RichEdit 2.0
 		cdstring header_insert;
@@ -1149,9 +1150,9 @@ void CMessageWindow::RemovePrintSummary()
 		(!mShowHeader && mHeaderState.mExpanded))
 	{
 		// Get summary from envelope
-		ostrstream hdr;
+		std::ostrstream hdr;
 		mItsMsg->GetEnvelope()->GetSummary(hdr);
-		hdr << ends;
+		hdr << std::ends;
 
 		// Must filter out LFs for RichEdit 2.0
 		cdstring header_insert;

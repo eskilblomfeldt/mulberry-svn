@@ -33,6 +33,7 @@
 #include "CStringUtils.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // __________________________________________________________________________________________________
 // C L A S S __ C O P T I O N S M A P

@@ -26,8 +26,10 @@
 #include "CPreferences.h"
 #include "CRFC822.h"
 #include "CSequence.h"
+
 #include <ctype.h>
 #include <ctime>
+#include <memory>
 
 const unsigned long cDaySeconds = 60L*60L*24L;
 const unsigned long cWeekSeconds = 7L * cDaySeconds;

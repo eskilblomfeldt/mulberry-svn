@@ -15,7 +15,6 @@
 */
 
 
-#include <iostream.h>
 #include "CClickElement.h"
 #include "CMulberryApp.h"
 #include "cdstring.h"

@@ -21,6 +21,7 @@
 #include "CPreferences.h"
 #include "CStringUtils.h"
 
+#include <memory>
 #include <strstream>
 
 CParserEnriched::CParserEnriched(const unichar_t* st, CFormatList* format, bool use_styles)

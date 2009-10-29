@@ -53,9 +53,9 @@ protected:
 	virtual bool ObeyCommand(unsigned long cmd, SMenuCommandChoice* menu = NULL);
 	virtual void UpdateCommand(unsigned long cmd, CCmdUI* cmdui);
 
-	virtual void		ReadTextFile(istream& input);
-	virtual void		WriteTextFile(ostream& output, const JBoolean safetySave) const;
-	virtual void		ExportTabbedAddresses(ostream& output) const;
+	virtual void		ReadTextFile(std::istream& input);
+	virtual void		WriteTextFile(std::ostream& output, const JBoolean safetySave) const;
+	virtual void		ExportTabbedAddresses(std::ostream& output) const;
 
 	// Common updaters
 	void	OnUpdateFileSave(CCmdUI* pCmdUI);

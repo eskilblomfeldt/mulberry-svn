@@ -11,7 +11,7 @@ SnapGrid: 5
 Name: CAddressPersonalPanel--JXLayout1--this
 Width: 500
 Height: 250
-Number of Objects: 9
+Number of Objects: 11
 
 --------------------
 class: FL_BOX
@@ -64,8 +64,8 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_North FL_NoGravity
 name: mFullName
-callback: CTextInputField(
-argument: 0
+callback: CTextInputField
+argument: -
 
 --------------------
 class: FL_TEXT
@@ -100,8 +100,8 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_North FL_NoGravity
 name: mNickName
-callback: CTextInputField(
-argument: 0
+callback: CTextInputField
+argument: -
 
 --------------------
 class: FL_TEXT
@@ -136,8 +136,8 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_North FL_NoGravity
 name: mEmail
-callback: CTextInputField(
-argument: 0
+callback: CTextInputField
+argument: -
 
 --------------------
 class: FL_TEXT
@@ -149,7 +149,7 @@ alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
 style: FL_NORMAL_STYLE
 size: FL_NORMAL_SIZE
 lcol: FL_BLACK
-label: Company:
+label: Calendar:
 shortcut: 
 resize: FL_RESIZE_ALL
 gravity: FL_NorthWest FL_NoGravity
@@ -171,9 +171,45 @@ label:
 shortcut: 
 resize: FL_RESIZE_ALL
 gravity: FL_North FL_NoGravity
+name: mCalendar
+callback: CTextInputField
+argument: -
+
+--------------------
+class: FL_TEXT
+type: NORMAL_TEXT
+box: 5 112 65 20
+boxtype: FL_FLAT_BOX
+colors: FL_COL1 FL_MCOL
+alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
+style: FL_NORMAL_STYLE
+size: FL_NORMAL_SIZE
+lcol: FL_BLACK
+label: Company:
+shortcut: 
+resize: FL_RESIZE_ALL
+gravity: FL_NorthWest FL_NoGravity
+name: 
+callback: 
+argument: 
+
+--------------------
+class: FL_INPUT
+type: NORMAL_INPUT
+box: 85 110 400 20
+boxtype: FL_DOWN_BOX
+colors: FL_COL1 FL_MCOL
+alignment: FL_ALIGN_LEFT
+style: FL_NORMAL_STYLE
+size: FL_NORMAL_SIZE
+lcol: FL_BLACK
+label: 
+shortcut: 
+resize: FL_RESIZE_ALL
+gravity: FL_North FL_NoGravity
 name: mCompany
-callback: CTextInputField(
-argument: 0
+callback: CTextInputField
+argument: -
 
 ==============================
 create_the_forms

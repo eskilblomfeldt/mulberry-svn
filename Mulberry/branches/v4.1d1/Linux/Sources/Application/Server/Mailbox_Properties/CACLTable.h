@@ -26,9 +26,9 @@
 #include "CCalendarACL.h"
 #include "CMboxACL.h"
 
-#include "vector.h"
+#include <vector>
 class JXImage;
-typedef vector<JXImage*> CIconArray;
+typedef std::vector<JXImage*> CIconArray;
 
 // Classes
 
@@ -43,7 +43,7 @@ class CACLTable : public CTableDragAndDrop
 	};
 
 public:
-		CACLTable::CACLTable(JXScrollbarSet* scrollbarSet, 
+		CACLTable(JXScrollbarSet* scrollbarSet,
 						JXContainer* enclosure,
 						const HSizingOption hSizing, 
 						const VSizingOption vSizing,

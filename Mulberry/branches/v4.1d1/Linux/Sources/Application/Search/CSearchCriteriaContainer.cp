@@ -29,6 +29,7 @@
 #include <JXEngravedRect.h>
 #include <JXTextButton.h>
 
+#include <algorithm>
 #include <cassert>
 
 /////////////////////////////////////////////////////////////////////////////
@@ -355,7 +356,7 @@ void CSearchCriteriaContainer::SelectNextCriteria(CSearchCriteria* previous)
 	if (mCriteriaItems.size() > 1)
 	{
 		// Find current
-		CCriteriaBaseList::iterator found = ::find(mCriteriaItems.begin(), mCriteriaItems.end(), previous);
+		CCriteriaBaseList::iterator found = std::find(mCriteriaItems.begin(), mCriteriaItems.end(), previous);
 		if (found != mCriteriaItems.end())
 		{
 			// Bump to next one (may need to go back to first if at end)

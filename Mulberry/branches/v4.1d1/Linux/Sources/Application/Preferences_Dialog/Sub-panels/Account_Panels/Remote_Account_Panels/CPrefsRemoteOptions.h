@@ -23,7 +23,9 @@
 #include "CTabPanel.h"
 
 // Classes
+class JXStaticText;
 class JXTextCheckbox;
+class CTextInputField;
 
 class CPrefsRemoteOptions : public CTabPanel
 {
@@ -43,7 +45,9 @@ public:
 protected:
 // begin JXLayout1
 
-    JXTextCheckbox* mUseRemote;
+    JXTextCheckbox*  mUseRemote;
+    JXStaticText*    mBaseRURLText;
+    CTextInputField* mBaseRURL;
 
 // end JXLayout1
 };

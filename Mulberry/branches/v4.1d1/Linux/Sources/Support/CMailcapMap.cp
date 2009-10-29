@@ -137,7 +137,7 @@ const cdstring& CMailcapMap::GetCommand(const cdstring& type)
 // ReadFromStream : read lines of data from mailcap file and add them to the mailcap map
 // ins            : (file) input stream to read from
 // 
-void CMailcapMap::ReadFromStream(istream& ins)
+void CMailcapMap::ReadFromStream(std::istream& ins)
 {
 	while (ins)
 	{
@@ -230,5 +230,5 @@ void CMailcapMap::AddEntry(const cdstring& mimetype, const cdstring& app)
 
 	// Add entry to list - this will change an existing entry, only add a new one
 	// ensuring that the first entry found is the one used if there are duplicates
-	pair<cdstrmap::iterator, bool> ins = mTypeToApp.insert(make_pair(mimetype, app));
+	std::pair<cdstrmap::iterator, bool> ins = mTypeToApp.insert(std::make_pair(mimetype, app));
 }

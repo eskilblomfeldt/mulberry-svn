@@ -31,7 +31,8 @@
 #include <JXColormap.h>
 #include "CMulSelectionData.h"
 
-#include <assert.h>
+#include <algorithm>
+#include <cassert>
 
 #pragma mark ____________________________________CTableDropSource
 
@@ -496,7 +497,7 @@ bool CTableDragAndDrop::ItemIsAcceptable(Atom type)
 	if (mReadOnly)
 		return kFalse;
 
-	CFlavorsList::const_iterator found = ::find(mDropFlavors.begin(), mDropFlavors.end(), type);
+	CFlavorsList::const_iterator found = std::find(mDropFlavors.begin(), mDropFlavors.end(), type);
 	return found != mDropFlavors.end();
 
 } // CTableDragAndDrop::ItemIsAcceptable
@@ -684,7 +685,7 @@ bool CTableDragAndDrop::FlavorsMatch(const JArray<Atom>& list1,
 	Atom i;
 	while (ti->Next(&i))
 	{
-		CFlavorsList::const_iterator found = ::find(list2.begin(), list2.end(), i);
+		CFlavorsList::const_iterator found = std::find(list2.begin(), list2.end(), i);
 		if (found != list2.end()) {
 			if (match) *match = i;
 			delete ti;

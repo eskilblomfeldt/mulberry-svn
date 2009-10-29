@@ -20,13 +20,11 @@
 #include "CAdbkPropDialog.h"
 
 #include "CAddressBook.h"
-#include "CAdbkList.h"
 #include "CAdbkProtocol.h"
 #include "CMulberryApp.h"
 #include "CMulberryCommon.h"
 #include "CPropAdbkACL.h"
 #include "CPropAdbkGeneral.h"
-#include "CRemoteAddressBook.h"
 
 #include "JXIconTextButton.h"
 
@@ -148,7 +146,7 @@ void CAdbkPropDialog::DoPanelInit(void)
 }
 
 // Set input panel
-void CAdbkPropDialog::SetAdbkList(CFlatAdbkList* adbk_list)
+void CAdbkPropDialog::SetAdbkList(CAddressBookList* adbk_list)
 {
 	mAdbkList = adbk_list;
 
@@ -164,20 +162,20 @@ void CAdbkPropDialog::SetAdbkList(CFlatAdbkList* adbk_list)
 	GetWindow()->SetTitle(title);
 
 	// Disable unwanted prefs panels
-	CRemoteAddressBook* radbk = dynamic_cast<CRemoteAddressBook*>(mAdbkList->front());
-	bool logged_in = radbk && radbk->GetProtocol()->IsLoggedOn();
-	if (!logged_in || !radbk->GetProtocol()->UsingACLs())
+	CAddressBook* adbk = mAdbkList->front();
+	bool logged_in = adbk && adbk->GetProtocol()->IsLoggedOn();
+	if (!logged_in || !adbk->GetProtocol()->UsingACLs())
 		mAccessBtn->Deactivate();
 
 	// Give list to each panel
-	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(std::vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 		static_cast<CAdbkPropPanel*>(*iter)->SetAdbkList(mAdbkList);
 
 	// Initial panel
 	SetPanel(1);
 }
 
-bool CAdbkPropDialog::PoseDialog(CFlatAdbkList* adbk_list)
+bool CAdbkPropDialog::PoseDialog(CAddressBookList* adbk_list)
 {
 	CAdbkPropDialog* dlog = new CAdbkPropDialog(JXGetApplication());
 	dlog->OnCreate();

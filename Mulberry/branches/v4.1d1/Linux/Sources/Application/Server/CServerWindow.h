@@ -35,7 +35,7 @@ class CServerWindow : public CTableViewWindow
 	friend class CServerTable;
 
 public:
-	typedef vector<CServerWindow*> CServerWindowList;
+	typedef std::vector<CServerWindow*> CServerWindowList;
 	static cdmutexprotect<CServerWindowList> sServerWindows;	// List of windows (protected for multi-thread access)
 
 	CServerWindow(JXDirector* owner);

@@ -10,13 +10,13 @@ SnapGrid: 5
 =============== FORM ===============
 Name: CEditAddressDialog
 Width: 545
-Height: 290
-Number of Objects: 23
+Height: 315
+Number of Objects: 25
 
 --------------------
 class: FL_BOX
 type: UP_BOX
-box: 0 0 545 290
+box: 0 0 545 315
 boxtype: FL_UP_BOX
 colors: FL_COL1 FL_COL1
 alignment: FL_ALIGN_CENTER
@@ -149,7 +149,7 @@ alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
 style: FL_NORMAL_STYLE
 size: FL_NORMAL_SIZE
 lcol: FL_BLACK
-label: Company:
+label: Calendar:
 shortcut: 
 resize: FL_RESIZE_ALL
 gravity: FL_NoGravity FL_NoGravity
@@ -161,6 +161,42 @@ argument:
 class: FL_INPUT
 type: NORMAL_INPUT
 box: 85 85 200 20
+boxtype: FL_DOWN_BOX
+colors: FL_COL1 FL_MCOL
+alignment: FL_ALIGN_LEFT
+style: FL_NORMAL_STYLE
+size: FL_NORMAL_SIZE
+lcol: FL_BLACK
+label: 
+shortcut: 
+resize: FL_RESIZE_ALL
+gravity: FL_NoGravity FL_NoGravity
+name: mCalendar
+callback: 
+argument: 
+
+--------------------
+class: FL_TEXT
+type: NORMAL_TEXT
+box: 5 112 65 20
+boxtype: FL_FLAT_BOX
+colors: FL_COL1 FL_MCOL
+alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
+style: FL_NORMAL_STYLE
+size: FL_NORMAL_SIZE
+lcol: FL_BLACK
+label: Company:
+shortcut: 
+resize: FL_RESIZE_ALL
+gravity: FL_NoGravity FL_NoGravity
+name: 
+callback: 
+argument: 
+
+--------------------
+class: FL_INPUT
+type: NORMAL_INPUT
+box: 85 110 200 20
 boxtype: FL_DOWN_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT
@@ -286,7 +322,7 @@ argument:
 --------------------
 class: FL_TEXT
 type: NORMAL_TEXT
-box: 5 112 60 20
+box: 5 137 60 20
 boxtype: FL_FLAT_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
@@ -304,7 +340,7 @@ argument:
 --------------------
 class: FL_INPUT
 type: MULTILINE_INPUT
-box: 85 110 260 50
+box: 85 135 260 50
 boxtype: FL_DOWN_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT
@@ -316,13 +352,13 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_NoGravity FL_NoGravity
 name: mAddress
-callback: CTextInputDisplay(
-argument: 0
+callback: CTextInputDisplay
+argument: -
 
 --------------------
 class: FL_TEXT
 type: NORMAL_TEXT
-box: 5 167 55 20
+box: 5 192 55 20
 boxtype: FL_FLAT_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
@@ -340,7 +376,7 @@ argument:
 --------------------
 class: FL_INPUT
 type: MULTILINE_INPUT
-box: 85 165 260 50
+box: 85 190 260 50
 boxtype: FL_DOWN_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT
@@ -352,13 +388,13 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_NoGravity FL_NoGravity
 name: mURL
-callback: CTextInputDisplay(
-argument: 0
+callback: CTextInputDisplay
+argument: -
 
 --------------------
 class: FL_TEXT
 type: NORMAL_TEXT
-box: 5 222 55 20
+box: 5 247 55 20
 boxtype: FL_FLAT_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT|FL_ALIGN_INSIDE
@@ -376,7 +412,7 @@ argument:
 --------------------
 class: FL_INPUT
 type: MULTILINE_INPUT
-box: 85 220 260 50
+box: 85 245 260 50
 boxtype: FL_DOWN_BOX
 colors: FL_COL1 FL_MCOL
 alignment: FL_ALIGN_LEFT
@@ -388,13 +424,13 @@ shortcut:
 resize: FL_RESIZE_ALL
 gravity: FL_NoGravity FL_NoGravity
 name: mNotes
-callback: CTextInputDisplay(
-argument: 0
+callback: CTextInputDisplay
+argument: -
 
 --------------------
 class: FL_BUTTON
 type: NORMAL_BUTTON
-box: 365 255 70 25
+box: 365 280 70 25
 boxtype: FL_UP_BOX
 colors: FL_COL1 FL_COL1
 alignment: FL_ALIGN_CENTER
@@ -412,7 +448,7 @@ argument:
 --------------------
 class: FL_BUTTON
 type: NORMAL_BUTTON
-box: 455 255 70 25
+box: 455 280 70 25
 boxtype: FL_UP_BOX
 colors: FL_COL1 FL_COL1
 alignment: FL_ALIGN_CENTER

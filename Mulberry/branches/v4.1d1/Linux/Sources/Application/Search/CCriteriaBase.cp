@@ -21,6 +21,8 @@
 
 #include "JXMultiImageButton.h"
 
+#include <algorithm>
+
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 
 // Default constructor
@@ -89,7 +91,7 @@ void CCriteriaBase::SetBottom(bool bottom)
 void CCriteriaBase::OnSetMove(bool up)
 {
 	CCriteriaBaseList& list = GetList();
-	CCriteriaBaseList::iterator found = ::find(list.begin(), list.end(), this);
+	CCriteriaBaseList::iterator found = std::find(list.begin(), list.end(), this);
 	unsigned long index = 0;
 	if (found != list.end())
 		index = found - list.begin();

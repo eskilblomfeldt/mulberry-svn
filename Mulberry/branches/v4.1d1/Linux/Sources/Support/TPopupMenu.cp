@@ -28,6 +28,7 @@
 #include <jXPainterUtil.h>
 #include <jXGlobals.h>
 
+#include <algorithm>
 #include <cassert>
 
 const JCoordinate _kTotalArrowWidth   = 28;
@@ -42,7 +43,7 @@ template <class T> void TPopupMenu<T>::TPopupMenuX(const JCoordinate	x,
 								const JCoordinate	h)
 {
 	// Resize back to its original after title change forced dynamic size
-	this->SetSize(max(w, _kTotalArrowWidth + 2*kJXDefaultBorderWidth), h);
+	this->SetSize(std::max(w, _kTotalArrowWidth + 2*kJXDefaultBorderWidth), h);
 
 	// By default all items are enabled
 	// Whoever owns this popup will have to handle any enabling etc

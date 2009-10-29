@@ -42,7 +42,7 @@ public:
 	virtual void		GetSelection(boolvector& selection) const;
 
 protected:
-	typedef vector<JXTextCheckbox*> CCheckboxArray;
+	typedef std::vector<JXTextCheckbox*> CCheckboxArray;
 	CCheckboxArray		mItems;
 
 	virtual void		ApertureResized(const JCoordinate dw, const JCoordinate dh);

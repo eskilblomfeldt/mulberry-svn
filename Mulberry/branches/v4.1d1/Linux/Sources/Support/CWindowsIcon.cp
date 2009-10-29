@@ -126,7 +126,7 @@ void CWindowsIcon::ParseData(const unsigned long* ico, unsigned long size, unsig
 
 	SetDimensions(size, size);
 
-	set<unsigned long> colorset;
+	std::set<unsigned long> colorset;
 	colorset.insert(0xBAADF00D);
 	for(unsigned long y = 0; y < size; y++)
 	{
@@ -154,7 +154,7 @@ void CWindowsIcon::ParseData(const unsigned long* ico, unsigned long size, unsig
 	const JColorIndex blackColor = GetColormap()->GetBlackColor();
 
 	JIndex i=0;
-	for (set<unsigned long>::const_iterator iter = colorset.begin(); iter != colorset.end(); iter++, i++)
+	for (std::set<unsigned long>::const_iterator iter = colorset.begin(); iter != colorset.end(); iter++, i++)
 	{
 		JSize r;
 		JSize g;
@@ -199,7 +199,7 @@ void CWindowsIcon::ParseData(const unsigned long* ico, unsigned long size, unsig
 			pixel = AlphaBlend(pixel, bkgnd, 0xBAADF00D, state);
 
 			JIndex i=0;
-			for (set<unsigned long>::const_iterator iter = colorset.begin(); iter != colorset.end(); iter++, i++)
+			for (std::set<unsigned long>::const_iterator iter = colorset.begin(); iter != colorset.end(); iter++, i++)
 			{
 				if (*iter == pixel)
 					break;

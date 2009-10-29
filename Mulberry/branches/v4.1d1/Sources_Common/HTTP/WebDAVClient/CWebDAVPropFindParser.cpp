@@ -27,6 +27,7 @@
 #include "CWebDAVDefinitions.h"
 #include "XMLNode.h"
 
+#include <memory>
 #include <ostream>
 
 using namespace http; 

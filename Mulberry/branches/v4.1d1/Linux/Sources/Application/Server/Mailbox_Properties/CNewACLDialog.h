@@ -52,6 +52,7 @@ protected:
     JXMultiImageCheckbox* mSeenBtn;
     JXMultiImageCheckbox* mWriteBtn;
     JXMultiImageCheckbox* mInsertBtn;
+    JXMultiImageCheckbox* mScheduleBtn;
     JXMultiImageCheckbox* mPostBtn;
     JXMultiImageCheckbox* mCreateBtn;
     JXMultiImageCheckbox* mDeleteBtn;

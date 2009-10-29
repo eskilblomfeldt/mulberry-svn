@@ -16,7 +16,7 @@
 
 
 #include "CStack.h"
-#include <iostream.h>
+#include <iostream>
 
 CStackElement::CStackElement(char *string){
 	value = string;

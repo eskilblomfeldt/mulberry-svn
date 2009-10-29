@@ -115,6 +115,11 @@ void CNewACLDialog::OnCreate()
                     JXWidget::kHElastic, JXWidget::kVElastic, 146,110, 24,24);
     assert( mInsertBtn != NULL );
 
+    mScheduleBtn =
+        new JXMultiImageCheckbox(mInsertBtn,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 24,24);
+    assert( mScheduleBtn != NULL );
+
     mPostBtn =
         new JXMultiImageCheckbox(obj1,
                     JXWidget::kHElastic, JXWidget::kVElastic, 170,110, 24,24);
@@ -136,7 +141,7 @@ void CNewACLDialog::OnCreate()
     assert( mAdminBtn != NULL );
 
     mStylePopup =
-        new CACLStylePopup("",obj1,
+        new CACLStylePopup("", obj1,
                     JXWidget::kHElastic, JXWidget::kVElastic, 50,145, 35,20);
     assert( mStylePopup != NULL );
 
@@ -166,6 +171,7 @@ void CNewACLDialog::OnCreate()
 	mSeenBtn->SetImage(IDI_ACL_SEEN);
 	mWriteBtn->SetImage(IDI_ACL_WRITE);
 	mInsertBtn->SetImage(IDI_ACL_INSERT);
+	mScheduleBtn->SetImage(IDI_ACL_INSERT);
 	mPostBtn->SetImage(IDI_ACL_POST);
 	mCreateBtn->SetImage(IDI_ACL_CREATE);
 	mDeleteBtn->SetImage(IDI_ACL_DELETE);
@@ -183,10 +189,15 @@ void CNewACLDialog::SetDetails(bool mbox, bool adbk, bool cal)
 	mCalendar = cal;
 
 	// Remove unwanted buttons
-	if (!mMbox)
+	if (mMbox)
+	{
+		mScheduleBtn->Hide();
+	}
+	if (mAdbk)
 	{
 		mSeenBtn->Hide();
 		mInsertBtn->Hide();
+		mScheduleBtn->Hide();
 		mPostBtn->Hide();
 
 		// Move others
@@ -194,6 +205,19 @@ void CNewACLDialog::SetDetails(bool mbox, bool adbk, bool cal)
 		mCreateBtn->Move(-3*cAdbkStyleBtnMove, 0);
 		mDeleteBtn->Move(-3*cAdbkStyleBtnMove, 0);
 		mAdminBtn->Move(-3*cAdbkStyleBtnMove, 0);
+	}
+	if (mCalendar)
+	{
+		mSeenBtn->Hide();
+		mInsertBtn->Hide();
+		mPostBtn->Hide();
+
+		// Move others
+		mWriteBtn->Move(-cAdbkStyleBtnMove, 0);
+		mScheduleBtn->Move(-cAdbkStyleBtnMove, 0);
+		mCreateBtn->Move(-2*cAdbkStyleBtnMove, 0);
+		mDeleteBtn->Move(-2*cAdbkStyleBtnMove, 0);
+		mAdminBtn->Move(-2*cAdbkStyleBtnMove, 0);
 	}
 
 	// Force style popup to proper type
@@ -242,9 +266,10 @@ void CNewACLDialog::SetACL(SACLRight rights)
 	}
 	else
 	{
-		mLookupBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Lookup)));
+		mLookupBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_ReadFreeBusy)));
 		mReadBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Read)));
 		mWriteBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Write)));
+		mScheduleBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Schedule)));
 		mCreateBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Create)));
 		mDeleteBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Delete)));
 		mAdminBtn->SetState(JBoolean(rights.HasRight(CCalendarACL::eCalACL_Admin)));
@@ -300,11 +325,13 @@ SACLRight CNewACLDialog::GetRights(void)
 	{
 		// Get ACL state from buttons
 		if (mLookupBtn->IsChecked())
-			rights.SetRight(CCalendarACL::eCalACL_Lookup, true);
+			rights.SetRight(CCalendarACL::eCalACL_ReadFreeBusy, true);
 		if (mReadBtn->IsChecked())
 			rights.SetRight(CCalendarACL::eCalACL_Read, true);
 		if (mWriteBtn->IsChecked())
 			rights.SetRight(CCalendarACL::eCalACL_Write, true);
+		if (mScheduleBtn->IsChecked())
+			rights.SetRight(CCalendarACL::eCalACL_Schedule, true);
 		if (mCreateBtn->IsChecked())
 			rights.SetRight(CCalendarACL::eCalACL_Create, true);
 		if (mDeleteBtn->IsChecked())
@@ -388,7 +415,7 @@ CCalendarACLList* CNewACLDialog::GetDetailsCal()
 	{
 		// Make new ACL
 		CCalendarACL acl;
-		acl.SetUID(s);
+		acl.SetSmartUID(s);
 		acl.SetRights(rights);
 
 		// Add to list

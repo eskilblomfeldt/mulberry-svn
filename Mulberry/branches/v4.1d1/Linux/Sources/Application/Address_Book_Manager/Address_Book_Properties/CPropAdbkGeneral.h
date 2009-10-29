@@ -40,7 +40,7 @@ public:
 			{ }
 
 	virtual void	OnCreate();								// Do odds & ends
-	virtual void	SetAdbkList(CFlatAdbkList* adbk_list);		// Set adbk list
+	virtual void	SetAdbkList(CAddressBookList* adbk_list);		// Set adbk list
 	virtual void	ApplyChanges(void);							// Force update of mboxes
 
 protected:

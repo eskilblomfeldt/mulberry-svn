@@ -19,7 +19,7 @@
 
 #include "CNewAttendeeDialog.h"
 
-#include "CAddressDisplay.h"
+#include "CCalendarAddressDisplay.h"
 #include "CAddressList.h"
 #include "CMulberryCommon.h"
 #include "CPreferences.h"
@@ -37,6 +37,7 @@
 #include <jXGlobals.h>
 
 #include <cassert>
+#include <memory>
 
 // __________________________________________________________________________________________________
 // C L A S S __ C C R E A T E M A I L B O X D I A L O G
@@ -79,7 +80,7 @@ void CNewAttendeeDialog::OnCreate()
     assert( obj2 != NULL );
 
     mNames =
-        new CAddressDisplay(obj1,
+        new CCalendarAddressDisplay(obj1,
                     JXWidget::kHElastic, JXWidget::kVElastic, 10,30, 420,150);
     assert( mNames != NULL );
 
@@ -89,7 +90,7 @@ void CNewAttendeeDialog::OnCreate()
     assert( obj3 != NULL );
 
     mRolePopup =
-        new HPopupMenu("",obj1,
+        new HPopupMenu("", obj1,
                     JXWidget::kHElastic, JXWidget::kVElastic, 75,190, 180,25);
     assert( mRolePopup != NULL );
 
@@ -99,7 +100,7 @@ void CNewAttendeeDialog::OnCreate()
     assert( obj4 != NULL );
 
     mStatusPopup =
-        new HPopupMenu("",obj1,
+        new HPopupMenu("", obj1,
                     JXWidget::kHElastic, JXWidget::kVElastic, 75,225, 180,25);
     assert( mStatusPopup != NULL );
 
@@ -110,13 +111,13 @@ void CNewAttendeeDialog::OnCreate()
 
     mCancelBtn =
         new JXTextButton("Cancel", obj1,
-                    JXWidget::kHElastic, JXWidget::kFixedBottom, 225,285, 85,25);
+                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 225,285, 85,25);
     assert( mCancelBtn != NULL );
     mCancelBtn->SetShortcuts("^[");
 
     mOKBtn =
         new JXTextButton("OK", obj1,
-                    JXWidget::kHElastic, JXWidget::kFixedBottom, 330,285, 85,25);
+                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 330,285, 85,25);
     assert( mOKBtn != NULL );
     mOKBtn->SetShortcuts("^M");
 
@@ -159,24 +160,21 @@ void CNewAttendeeDialog::SetDetails(const iCal::CICalendarProperty& prop)
 	if (value != NULL)
 	{
 		// Get email address
-		cdstring temp = value->GetValue();
-		if (temp.compare_start("mailto:"))
-		{
-			temp.erase(0, 7);
+		cdstring temp = "<";
+		temp += value->GetValue();
+		temp += ">";
 
-			// Get CN
-			if (prop.HasAttribute(iCal::cICalAttribute_CN))
+		// Get CN
+		if (prop.HasAttribute(iCal::cICalAttribute_CN))
+		{
+			cdstring cntxt = prop.GetAttributeValue(iCal::cICalAttribute_CN);
+			if (cntxt.length() > 0)
 			{
-				cdstring cntxt = prop.GetAttributeValue(iCal::cICalAttribute_CN);
-				if (cntxt.length() > 0)
-				{
-					cntxt += " <";
-					cntxt += temp;
-					cntxt += ">";
-					temp = cntxt;
-				}
-				
+				cntxt += " ";
+				cntxt += temp;
+				temp = cntxt;
 			}
+
 		}
 		
 		mNames->SetText(temp);
@@ -265,16 +263,15 @@ void CNewAttendeeDialog::GetDetails(iCal::CICalendarProperty& prop)
 // Get the details
 void CNewAttendeeDialog::GetDetails(iCal::CICalendarPropertyList& proplist)
 {
-	auto_ptr<CAddressList> addrs(mNames->GetAddresses());
+	std::auto_ptr<CCalendarAddressList> addrs(mNames->GetAddresses());
 
-	for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
+	for(CCalendarAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 	{
-		// Convert name into mailto
-		cdstring mailto = cMailtoURLScheme;
-		mailto += (*iter)->GetMailAddress();
+		// Get calendar user address
+		cdstring addr = (*iter)->GetCalendarAddress();
 
 		// Create a new property
-		iCal::CICalendarProperty newprop(iCal::cICalProperty_ATTENDEE, mailto, iCal::CICalendarValue::eValueType_CalAddress);
+		iCal::CICalendarProperty newprop(iCal::cICalProperty_ATTENDEE, addr, iCal::CICalendarValue::eValueType_CalAddress);
 
 		// Add attributes
 		{

@@ -36,7 +36,7 @@ class CAddressBook;
 class CAddressBookWindow : public CAddressBookDoc
 {
 public:
-	typedef vector<CAddressBookWindow*>	CAddressBookWindowList;
+	typedef std::vector<CAddressBookWindow*>	CAddressBookWindowList;
 	static cdmutexprotect<CAddressBookWindowList> sAddressBookWindows;	// List of windows (protected for multi-thread access)
 
 			CAddressBookWindow(JXDirector* owner);

@@ -19,6 +19,8 @@
 
 #include "CConverterOneByte.h"
 
+#include <string.h>
+
 using namespace i18n;
 
 static char undefined_charmap = '?';		// Undefined mapping character

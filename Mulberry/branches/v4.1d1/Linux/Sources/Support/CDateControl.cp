@@ -26,6 +26,7 @@
 #include <JXStaticText.h>
 
 #include <cassert>
+#include <stdlib.h>
 
 // C O N S T R U C T I O N / D E S T R U C T I O N  M E T H O D S
 // Default constructor

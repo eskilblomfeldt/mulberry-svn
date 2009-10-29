@@ -32,6 +32,7 @@
 
 #include "CCalendarStoreManager.h"
 #include "CICalendarUtils.h"
+#include "CICalendarVFreeBusy.h"
 #include "CITIPProcessor.h"
 
 #include "StPenState.h"
@@ -40,7 +41,7 @@
 #include <JXImage.h>
 #include <JXWindowPainter.h>
 
-#include <strstream.h>
+#include <strstream>
 
 // ---------------------------------------------------------------------------
 //	CCalendarEventBase														  [public]
@@ -55,6 +56,7 @@ CCalendarEventBase::CCalendarEventBase(JXContainer* enclosure,
 {
 	SetBorderWidth(0);
 
+	mVFreeBusy = NULL;
 	mTable = NULL;
 	mAllDay = true;
 	mStartsInCol = true;
@@ -67,6 +69,7 @@ CCalendarEventBase::CCalendarEventBase(JXContainer* enclosure,
 	mPreviousLink = NULL;
 	mNextLink = NULL;
 	mColour = 0;
+	mIsInbox = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -133,6 +136,36 @@ void CCalendarEventBase::SetDetails(iCal::CICalendarComponentExpandedShared& eve
 	
 	// Determine colour
 	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(event->GetMaster<iCal::CICalendarVEvent>()->GetCalendar());
+	if (cal)
+	{
+		mColour = calstore::CCalendarStoreManager::sCalendarStoreManager->GetCalendarColour(cal);
+	}
+
+	// Check for inbox
+	const calstore::CCalendarStoreNode* node = calstore::CCalendarStoreManager::sCalendarStoreManager->GetNode(cal);
+	mIsInbox = node->IsInbox();
+}
+
+void CCalendarEventBase::SetDetails(iCal::CICalendarVFreeBusy* freebusy, const iCal::CICalendarPeriod& period, CCalendarTableBase* table, const char* title, bool all_day, bool start_col, bool end_col, bool horiz)
+{
+	mVFreeBusy = freebusy;
+	mPeriod = period;
+	mTable = table;
+
+	mTitle = title;
+	mAllDay = all_day;
+	mStartsInCol = start_col;
+	mEndsInCol = end_col;
+	mHoriz = horiz;
+	mIsCancelled = false;
+	mHasAlarm = false;
+	mAttendeeState = iCal::CITIPProcessor::GetAttendeeState(*mVFreeBusy);
+
+	// Setup a help tag
+	SetupTagText();
+
+	// Determine colour
+	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVFreeBusy->GetCalendar());
 	if (cal)
 	{
 		mColour = calstore::CCalendarStoreManager::sCalendarStoreManager->GetCalendarColour(cal);

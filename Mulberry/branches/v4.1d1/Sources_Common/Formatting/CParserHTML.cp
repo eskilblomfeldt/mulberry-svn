@@ -28,7 +28,9 @@
 #include "CStringUtils.h"
 #include "CUTF8.h"
 
+#include <memory>
 #include <strstream>
+
 #if __dest_os == __linux_os
 #include <JFontManager.h>
 #include <JXDisplay.h>

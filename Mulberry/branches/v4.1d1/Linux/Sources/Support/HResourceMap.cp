@@ -23,6 +23,8 @@
 #include <JXContainer.h>
 #include <JXImage.h>
 
+#include <stdlib.h>
+
 struct JICO
 {
 	JICO(const unsigned long* data) : _d(data) {}
@@ -49,10 +51,10 @@ HPredefResourceMap globalMap;
 
 void* HResourceMap::GetResource(ResIDT resId) 
 {
-	map<int, void*>::iterator f = resMap_.find(resId);
+	std::map<int, void*>::iterator f = resMap_.find(resId);
 	if (f == resMap_.end())
 	{
-		//cerr << "Unable to find resource with id number " << resId << "." << endl;
+		//cerr << "Unable to find resource with id number " << resId << "." << std::endl;
 		CLOG_LOGTHROW(CGeneralException, resId);
 		throw CGeneralException(-1L);
 	}
@@ -82,7 +84,7 @@ JXImage* iconFromResource(ResIDT resId, JXContainer* pCont, unsigned long size, 
 		{
 			CLOG_LOGCATCH(CGeneralException&);
 
-			//cerr << "Couldn't find default icon." << endl;
+			//cerr << "Couldn't find default icon." << std::endl;
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -106,7 +108,7 @@ JXImage* bmpFromResource(ResIDT resId, JXContainer* pCont)
 		{
 			CLOG_LOGCATCH(CGeneralException&);
 
-			//cerr << "Couldn't find default icon." << endl;
+			//cerr << "Couldn't find default icon." << std::endl;
 			exit(EXIT_FAILURE);
 		}
 	}

@@ -301,7 +301,8 @@ void CDayWeekView::OnUpdateNewEvent(CCmdUI* pCmdUI)
 void CDayWeekView::SetDate(const iCal::CICalendarDateTime& date)
 {
 	mDate = date;
-	mTimezonePopup->SetTimezone(date.GetTimezone());
+	//mTimezonePopup->SetTimezone(date.GetTimezone());
+	mTimezonePopup->GetTimezone(mDate.GetTimezone());
 	ResetDate();
 }
 

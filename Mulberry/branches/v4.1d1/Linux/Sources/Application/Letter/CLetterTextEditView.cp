@@ -37,6 +37,8 @@
 #include <JXDisplay.h>
 #include <JXDNDManager.h>
 
+#include <algorithm>
+
 /////////////////////////////////////////////////////////////////////////////
 // CLetterTextEditView
 
@@ -284,11 +286,11 @@ JBoolean CLetterTextEditView::TEXWillAcceptDrop
 	Atom move = dndMgr->GetDNDActionMoveXAtom();
 	if (action == move)
 	{
-		auto_ptr<JOrderedSetIterator<Atom> > ti(typeList.NewIterator());
+		std::auto_ptr<JOrderedSetIterator<Atom> > ti(typeList.NewIterator());
 		Atom i;
 		while (ti->Next(&i))
 		{
-			CFlavorsList::const_iterator found = ::find(mDropFlavors.begin(), mDropFlavors.end(), i);
+			CFlavorsList::const_iterator found = std::find(mDropFlavors.begin(), mDropFlavors.end(), i);
 			if (found != mDropFlavors.end()) {
 				return kTrue;
 			}

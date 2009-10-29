@@ -52,6 +52,7 @@ protected:
 
     JXImageWidget*   mIconState;
     JXTextCheckbox3* mSubscribe;
+    JXTextCheckbox3* mFreeBusySet;
     JXTextCheckbox3* mTieIdentity;
     CIdentityPopup*  mIdentityPopup;
 

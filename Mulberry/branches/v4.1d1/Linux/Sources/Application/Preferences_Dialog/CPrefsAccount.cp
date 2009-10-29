@@ -78,8 +78,10 @@ enum
 	eAccountPOP3Mailbox,
 	eAccountLocalMailbox,
 	eAccountSMTPMailbox,
+	eAccountWebDAVOptions,
 	eAccountIMSPOptions,
 	eAccountACAPOptions,
+	eAccountCardDAVAdbk,
 	eAccountIMSPAdbk,
 	eAccountACAPAdbk,
 	eAccountLDAPSearch,
@@ -319,7 +321,7 @@ void CPrefsAccount::InitAccountMenu(void)
 	}
 
 	// Add each remote account
-	for(CINETAccountList::const_iterator iter = mCopyPrefs->mRemoteAccounts.GetValue().begin();
+	for(COptionsAccountList::const_iterator iter = mCopyPrefs->mRemoteAccounts.GetValue().begin();
 			iter != mCopyPrefs->mRemoteAccounts.GetValue().end(); iter++, menu_pos++)
 	{
 		mAccountPopup->AppendItem((*iter)->GetName(), kFalse, kTrue);
@@ -335,6 +337,7 @@ void CPrefsAccount::InitAccountMenu(void)
 		{
 		case CINETAccount::eIMSP:
 		case CINETAccount::eACAP:
+		case CINETAccount::eCardDAVAdbk:
 			mAccountPopup->AppendItem((*iter)->GetName(), kFalse, kTrue);
 			mAccountPopup->SetItemImageID(mAccountPopup->GetItemCount(), IDI_ACCOUNTADBK);
 			break;
@@ -408,11 +411,13 @@ void CPrefsAccount::DoNewAccount(void)
 				acct_list = (CINETAccountList*) &mCopyPrefs->mSMTPAccounts.GetValue();
 				break;
 
+			case eAccountWebDAVOptions:
 			case eAccountIMSPOptions:
 			case eAccountACAPOptions:
 				acct_list = (CINETAccountList*) &mCopyPrefs->mRemoteAccounts.GetValue();
 				break;
 
+			case eAccountCardDAVAdbk:
 			case eAccountIMSPAdbk:
 			case eAccountACAPAdbk:
 			case eAccountLDAPSearch:
@@ -477,11 +482,15 @@ void CPrefsAccount::DoNewAccount(void)
 								mCopyPrefs->mSMTPAccounts.GetValue().size() - 1;
 				break;
 
+			case eAccountWebDAVOptions:
 			case eAccountIMSPOptions:
 			case eAccountACAPOptions:
-				acct = new CINETAccount;
+				acct = new COptionsAccount;
 				switch(acct_type)
 				{
+				case eAccountWebDAVOptions:
+					acct->SetServerType(CINETAccount::eWebDAVPrefs);
+					break;
 				case eAccountIMSPOptions:
 					acct->SetServerType(CINETAccount::eIMSP);
 					break;
@@ -490,19 +499,23 @@ void CPrefsAccount::DoNewAccount(void)
 					break;
 				}
 				acct->SetName(new_name);
-				mCopyPrefs->mRemoteAccounts.Value().push_back(acct);
+				mCopyPrefs->mRemoteAccounts.Value().push_back((COptionsAccount*)acct);
 				mCopyPrefs->mRemoteAccounts.SetDirty();
 				insert_pos = mCopyPrefs->mMailAccounts.GetValue().size() +
 								mCopyPrefs->mSMTPAccounts.GetValue().size() +
 								mCopyPrefs->mRemoteAccounts.GetValue().size() - 1;
 				break;
 
+			case eAccountCardDAVAdbk:
 			case eAccountIMSPAdbk:
 			case eAccountACAPAdbk:
 			case eAccountLDAPSearch:
 				acct = new CAddressAccount;
 				switch(acct_type)
 				{
+				case eAccountCardDAVAdbk:
+					acct->SetServerType(CINETAccount::eCardDAVAdbk);
+					break;
 				case eAccountIMSPAdbk:
 					acct->SetServerType(CINETAccount::eIMSP);
 					break;
@@ -621,7 +634,7 @@ void CPrefsAccount::DoRenameAccount(void)
 					acct_list = (CINETAccountList*) &mCopyPrefs->mMailAccounts.GetValue();
 				else if (typeid(*acct) == typeid(CSMTPAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mSMTPAccounts.GetValue();
-				else if (typeid(*acct) == typeid(CINETAccount))
+				else if (typeid(*acct) == typeid(COptionsAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mRemoteAccounts.GetValue();
 				else if (typeid(*acct) == typeid(CAddressAccount))
 					acct_list = (CINETAccountList*) &mCopyPrefs->mAddressAccounts.GetValue();
@@ -653,7 +666,7 @@ void CPrefsAccount::DoRenameAccount(void)
 					mCopyPrefs->mMailAccounts.SetDirty();
 				else if (typeid(*acct) == typeid(CSMTPAccount))
 					mCopyPrefs->mSMTPAccounts.SetDirty();
-				else if (typeid(*acct) == typeid(CINETAccount))
+				else if (typeid(*acct) == typeid(COptionsAccount))
 					mCopyPrefs->mRemoteAccounts.SetDirty();
 				else if (typeid(*acct) == typeid(CAddressAccount))
 					mCopyPrefs->mAddressAccounts.SetDirty();
@@ -707,7 +720,7 @@ void CPrefsAccount::DoDeleteAccount(void)
 			mCopyPrefs->mMailAccounts.SetDirty();
 		else if (typeid(*acct) == typeid(CSMTPAccount))
 			mCopyPrefs->mSMTPAccounts.SetDirty();
-		else if (typeid(*acct) == typeid(CINETAccount))
+		else if (typeid(*acct) == typeid(COptionsAccount))
 		{
 			// Prevent delete of last remote account if set to remote
 			if ((mCopyPrefs->mRemoteAccounts.GetValue().size() == 1) && !CPreferencesDialog::sPrefsDlog->IsLocal())
@@ -774,7 +787,7 @@ void CPrefsAccount::UpdateItems(bool enable)
 	{
 		
 		if (!CAdminLock::sAdminLock.mLockServerAddress ||
-			mIsSMTP && CAdminLock::sAdminLock.mNoLockSMTP)
+			(mIsSMTP && CAdminLock::sAdminLock.mNoLockSMTP))
 			mServerIP->Activate();
 
 		mPanels->Activate();
@@ -825,10 +838,13 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 			copyStr.FromResource("UI::Preferences::AccountSMTPSendMail");
 			mIsSMTP = true;
 		}
-		else if (typeid(*account) == typeid(CINETAccount))
+		else if (typeid(*account) == typeid(COptionsAccount))
 		{
 			switch(account->GetServerType())
 			{
+			case CINETAccount::eWebDAVPrefs:
+				copyStr.FromResource("UI::Preferences::AccountWebDAVOptions");
+				break;
 			case CINETAccount::eIMSP:
 				copyStr.FromResource("UI::Preferences::AccountIMSPOptions");
 				break;
@@ -842,6 +858,9 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 		{
 			switch(account->GetServerType())
 			{
+			case CINETAccount::eCardDAVAdbk:
+				copyStr.FromResource("UI::Preferences::AccountCardDAVAddressBooks");
+				break;
 			case CINETAccount::eIMSP:
 				copyStr.FromResource("UI::Preferences::AccountIMSPAddressBooks");
 				break;
@@ -892,7 +911,7 @@ void CPrefsAccount::SetAccount(const CINETAccount* account)
 
 		// Enable/disable server ip based on admin locks
 		if (!CAdminLock::sAdminLock.mLockServerAddress ||
-			mIsSMTP && CAdminLock::sAdminLock.mNoLockSMTP)
+			(mIsSMTP && CAdminLock::sAdminLock.mNoLockSMTP))
 			mServerIP->Activate();
 		else
 			mServerIP->Deactivate();
@@ -921,8 +940,8 @@ void CPrefsAccount::UpdateAccount(void)
 		account = new CMailAccount(*(CMailAccount*) current);
 	else if (typeid(*current) == typeid(CSMTPAccount))
 		account = new CSMTPAccount(*(CSMTPAccount*) current);
-	else if (typeid(*current) == typeid(CINETAccount))
-		account = new CINETAccount(*(CINETAccount*) current);
+	else if (typeid(*current) == typeid(COptionsAccount))
+		account = new COptionsAccount(*(COptionsAccount*) current);
 	else if (typeid(*current) == typeid(CAddressAccount))
 		account = new CAddressAccount(*(CAddressAccount*) current);
 	else if (typeid(*current) == typeid(CManageSIEVEAccount))
@@ -948,8 +967,8 @@ void CPrefsAccount::UpdateAccount(void)
 		same = (*((CMailAccount*) current) == *((CMailAccount*) account));
 	else if (typeid(*current) == typeid(CSMTPAccount))
 		same = (*((CSMTPAccount*) current) == *((CSMTPAccount*) account));
-	else if (typeid(*current) == typeid(CINETAccount))
-		same = (*((CINETAccount*) current) == *((CINETAccount*) account));
+	else if (typeid(*current) == typeid(COptionsAccount))
+		same = (*((COptionsAccount*) current) == *((COptionsAccount*) account));
 	else if (typeid(*current) == typeid(CAddressAccount))
 		same = (*((CAddressAccount*) current) == *((CAddressAccount*) account));
 	else if (typeid(*current) == typeid(CManageSIEVEAccount))
@@ -964,7 +983,7 @@ void CPrefsAccount::UpdateAccount(void)
 			mCopyPrefs->mMailAccounts.SetDirty();
 		else if (typeid(*account) == typeid(CSMTPAccount))
 			mCopyPrefs->mSMTPAccounts.SetDirty();
-		else if (typeid(*account) == typeid(CINETAccount))
+		else if (typeid(*account) == typeid(COptionsAccount))
 			mCopyPrefs->mRemoteAccounts.SetDirty();
 		else if (typeid(*account) == typeid(CAddressAccount))
 			mCopyPrefs->mAddressAccounts.SetDirty();
@@ -1073,12 +1092,13 @@ void CPrefsAccount::SetPanel(const CINETAccount* account)
 	}
 	else if (typeid(*account) == typeid(CSMTPAccount))
 		panel = eSMTPAccountPanel;
-	else if (typeid(*account) == typeid(CINETAccount))
+	else if (typeid(*account) == typeid(COptionsAccount))
 		panel = eRemoteAccountPanel;
 	else if (typeid(*account) == typeid(CAddressAccount))
 	{
 		switch(account->GetServerType())
 		{
+		case CINETAccount::eCardDAVAdbk:
 		case CINETAccount::eIMSP:
 		case CINETAccount::eACAP:
 			panel = eAdbkAccountPanel;

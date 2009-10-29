@@ -34,7 +34,7 @@
 #include <JXColormap.h>
 #include <JXImage.h>
 
-#include <algorithm.h>
+#include <algorithm>
 #include "HResourceMap.h"
 
 const int cHorizIndent = 18;
@@ -789,7 +789,7 @@ int LHierarchyTable::DrawHierarchyRow(JPainter* pDC, UInt32 inAtRow,
 	unsigned long size = pDC->GetStringWidth(title);
 
 	JRect str_area = nested;
-	str_area.right = min(str_area.left + size + 1, (unsigned long) str_area.right);
+	str_area.right = std::min(str_area.left + size + 1, (unsigned long) str_area.right);
 
 	if (selected && mDrawSelection)
 	{

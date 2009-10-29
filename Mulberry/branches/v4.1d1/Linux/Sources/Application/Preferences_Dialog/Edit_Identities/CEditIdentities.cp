@@ -144,7 +144,7 @@ void CEditIdentities::OnCreate()
 	if (mFromEnabled)
 	{
 		CEditIdentityAddress* panel_from = new CEditIdentityAddress(false, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-		panel_from->SetAddressType(true, false, false, false, false, false);
+		panel_from->SetAddressType(true, false, false, false, false, false, false);
 		cdstring title;
 		title.FromResource(IDS_IDENTITY_PANEL_FROM);
 		mTabs->AppendCard(panel_from, title);
@@ -154,7 +154,7 @@ void CEditIdentities::OnCreate()
 	if (mReplyToEnabled)
 	{
 		CEditIdentityAddress* panel_reply_to = new CEditIdentityAddress(false, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-		panel_reply_to->SetAddressType(false, true, false, false, false, false);
+		panel_reply_to->SetAddressType(false, true, false, false, false, false, false);
 		cdstring title;
 		title.FromResource(IDS_IDENTITY_PANEL_REPLYTO);
 		mTabs->AppendCard(panel_reply_to, title);
@@ -164,7 +164,7 @@ void CEditIdentities::OnCreate()
 	if (mSenderEnabled)
 	{
 		CEditIdentityAddress* panel_sender = new CEditIdentityAddress(false, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
-		panel_sender->SetAddressType(false, false, true, false, false, false);
+		panel_sender->SetAddressType(false, false, true, false, false, false, false);
 		cdstring title;
 		title.FromResource(IDS_IDENTITY_PANEL_SENDER);
 		mTabs->AppendCard(panel_sender, title);
@@ -181,6 +181,14 @@ void CEditIdentities::OnCreate()
 	{
 		CEditIdentitySecurity* panel_security = new CEditIdentitySecurity(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
 		mTabs->AppendCard(panel_security, "Security");
+	}
+
+	mCalendarEnabled = !CAdminLock::sAdminLock.mLockIdentityFrom;
+	if (mFromEnabled)
+	{
+		CEditIdentityAddress* panel_calendar = new CEditIdentityAddress(false, mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0, 0, 450, 150);
+		panel_calendar->SetAddressType(false, false, false, false, false, false, true);
+		mTabs->AppendCard(panel_calendar, "Calendar");
 	}
 
 	// Give data to tab panels

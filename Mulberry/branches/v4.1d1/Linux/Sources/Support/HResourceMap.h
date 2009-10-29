@@ -17,7 +17,7 @@
 #ifndef _H_HRESOURCEMAP
 #define _H_HRESOURCEMAP
 
-#include <map.h>
+#include <map>
 
 class JXImage;
 
@@ -30,7 +30,7 @@ public:
 	void AddResource(ResIDT resId, void* res);
 
 private:
-	map<int, void*> resMap_;
+	std::map<int, void*> resMap_;
 };
 
 class HPredefResourceMap : public HResourceMap

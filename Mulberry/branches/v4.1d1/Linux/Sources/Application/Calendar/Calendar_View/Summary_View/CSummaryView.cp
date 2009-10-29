@@ -199,7 +199,8 @@ void CSummaryView::OnUpdateNewEvent(CCmdUI* pCmdUI)
 void CSummaryView::SetDate(const iCal::CICalendarDateTime& date)
 {
 	mDate = date;
-	mTimezonePopup->SetTimezone(date.GetTimezone());
+	//mTimezonePopup->SetTimezone(date.GetTimezone());
+	mTimezonePopup->GetTimezone(mDate.GetTimezone());
 	
 	// Date is always based on today
 	mDate.SetNow();

@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef H_CNewComponentTiming
-#define H_CNewComponentTiming
+#ifndef H_CNewComponentRepeat
+#define H_CNewComponentRepeat
 
 #include "CNewComponentPanel.h"
 #include "CTabPanel.h"
@@ -24,17 +24,15 @@
 
 #include "HPopupMenu.h"
 
-class CDateTimeZoneSelect;
-class CNewEventTiming;
-class CNewTimingPanel;
-class CNumberEdit;
-
 class CNewComponentRepeatSimple;
 class CNewComponentRepeatAdvanced;
 class CNewComponentRepeatComplex;
 
+class CDateTimeZoneSelect;
+class CNewTimingPanel;
+class CNumberEdit;
+
 class CTabController;
-class JXFlatRect;
 class JXRadioGroup;
 class JXStaticText;
 class JXTextCheckbox;
@@ -42,26 +40,26 @@ class JXTextRadioButton;
 class JXTextButton;
 
 // ===========================================================================
-//	CNewComponentTiming
+//	CNewComponentRepeat
 
-class CNewComponentTiming : public CNewComponentPanel
+class CNewComponentRepeat : public CNewComponentPanel
 {
 public:
 
-	CNewComponentTiming(JXContainer* enclosure,
+	CNewComponentRepeat(JXContainer* enclosure,
 						const HSizingOption hSizing, const VSizingOption vSizing,
 						const JCoordinate x, const JCoordinate y,
 						const JCoordinate w, const JCoordinate h)
 		: CNewComponentPanel(enclosure, hSizing, vSizing, x, y, w, h)
-		{ mTimingPanel = NULL; }
-	virtual				~CNewComponentTiming() {}
+		{ }
+	virtual				~CNewComponentRepeat() {}
 
 	virtual void	OnCreate();
 
-	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent);
+	virtual void	SetEvent(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetEvent(iCal::CICalendarVEvent& vevent);
 
-	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo);
+	virtual void	SetToDo(const iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded);
 	virtual void	GetToDo(iCal::CICalendarVToDo& vtodo);
 
 	virtual	void	SetReadOnly(bool read_only);
@@ -95,13 +93,10 @@ protected:
 	// UI Objects
 // begin JXLayout1
 
-    JXFlatRect*     mTimingView;
     JXTextCheckbox* mRepeats;
     CTabController* mRepeatsTabs;
 
 // end JXLayout1
-	CNewTimingPanel*		mTimingPanel;
-
 	CNewComponentRepeatSimple*		mRepeatSimpleItems;
 	CNewComponentRepeatAdvanced*	mRepeatAdavancedItems;
 	CNewComponentRepeatComplex*		mRepeatComplexItems;
@@ -111,6 +106,8 @@ protected:
 
 	virtual void Receive(JBroadcaster* sender, const Message& message);
 	
+	const CNewTimingPanel* GetTimingPanel() const;
+
 			void	DoRepeat(bool repeat);
 			void	DoRepeatTab(JIndex value);
 			void	DoOccursGroup(JIndex value);
@@ -119,9 +116,6 @@ protected:
 			void	SetRecurrence(const iCal::CICalendarRecurrenceSet* recurs);
 			
 			bool	GetRecurrence(iCal::CICalendarRecurrenceSet& recurs);
-			
-			void	SyncEnd();
-			void	SyncDuration();
 };
 
 class CNewComponentRepeatSimple : public CTabPanel
@@ -176,7 +170,7 @@ public:
 // end JXLayout3
 
 protected:
-	CNewComponentTiming*	mTimingPanel;
+    CNewComponentRepeat*	mTimingPanel;
 };
 
 class CNewComponentRepeatComplex : public CTabPanel

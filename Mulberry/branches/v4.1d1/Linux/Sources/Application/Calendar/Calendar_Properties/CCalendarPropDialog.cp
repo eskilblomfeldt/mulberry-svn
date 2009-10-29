@@ -241,7 +241,7 @@ void CCalendarPropDialog::SetCalList(calstore::CCalendarStoreNodeList* cal_list)
 	}
 
 	// Give list to each panel
-	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(std::vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 	{
 		static_cast<CCalendarPropPanel*>(*iter)->SetCalList(mCalList);
 		static_cast<CCalendarPropPanel*>(*iter)->SetProtocol(mCalProtocol);
@@ -274,7 +274,7 @@ void CCalendarPropDialog::SetProtocol(calstore::CCalendarProtocol* proto)
 	mAccessBtn->Deactivate();
 
 	// Give server to each panel
-	for(vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
+	for(std::vector<JXWidgetSet*>::iterator iter = mPanelList.begin(); iter != mPanelList.end(); iter ++)
 		static_cast<CCalendarPropPanel*>(*iter)->SetProtocol(mCalProtocol);
 
 	// Initial panel

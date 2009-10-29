@@ -61,6 +61,7 @@
 #include "StValueChanger.h"
 #endif
 
+#include <memory>
 #include <strstream>
 
 using namespace vcardstore; 
@@ -775,7 +776,7 @@ void CWebDAVVCardClient::_ReadFullAddressBook(CAddressBook* adbk)
 	{
 		cdstring temp(*request->GetNewETag());
 
-		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 		if (!temp.isquoted())
 			temp.quote(true);
 		
@@ -882,7 +883,7 @@ void CWebDAVVCardClient::WriteFullAddressBook_Put(CAddressBook* adbk, const cdst
 	{
 		cdstring temp(*request->GetNewETag());
 
-		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+		// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 		if (!temp.isquoted())
 			temp.quote(true);
 		
@@ -1151,7 +1152,7 @@ cdstring CWebDAVVCardClient::GetETag(const cdstring& rurl, const cdstring& lock_
 {
 	cdstring result = GetProperty(rurl, lock_token, http::webdav::cProperty_getetag);
 
-	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 ¤3.11
+	// Handle server bug: ETag value MUST be quoted per HTTP/1.1 3.11
 	if (!result.empty() && !result.isquoted())
 		result.quote(true);
 
@@ -1915,7 +1916,7 @@ cdstring CWebDAVVCardClient::GetRURL(const cdstring& name, bool directory, bool 
 {
 	// Determine URL
 	cdstring rurl = (abs ? mBaseURL : mBaseRURL);
-	if (name[0] == '/')
+	if (name.c_str()[0] == '/')
 		rurl = "";
 	cdstring temp(name);
 	temp.EncodeURL('/');

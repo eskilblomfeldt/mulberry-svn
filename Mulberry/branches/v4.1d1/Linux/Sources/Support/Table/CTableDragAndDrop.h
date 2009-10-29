@@ -92,7 +92,7 @@ protected:
 	bool				mExternalDrag;				// Allow drag to others
 	bool				mAllowMove;					// Allow drag to delete originals
 	bool				mHandleMove;				// Do delete original on drag move
-	typedef vector<Atom> CFlavorsList;
+	typedef std::vector<Atom> CFlavorsList;
 	CFlavorsList	mDragFlavors;				// List of flavors to send
   	CFlavorsList	mDropFlavors;				// List of flavors to accept
 	JArray<Atom>	mCurrentDropFlavors;   		// List of flavors of the current drop

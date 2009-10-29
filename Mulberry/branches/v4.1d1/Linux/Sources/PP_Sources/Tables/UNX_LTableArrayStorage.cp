@@ -19,7 +19,9 @@
 
 #include <UNX_LTableArrayStorage.h>
 
-
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
 
 // ---------------------------------------------------------------------------
 //	 LTableArrayStorage					Constructor				  [public]

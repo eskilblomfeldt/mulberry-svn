@@ -35,7 +35,7 @@
 
 #include "CCalendarStoreManager.h"
 
-#include <algorithm.h>
+#include <algorithm>
 #include <cassert>
 
 // Static members

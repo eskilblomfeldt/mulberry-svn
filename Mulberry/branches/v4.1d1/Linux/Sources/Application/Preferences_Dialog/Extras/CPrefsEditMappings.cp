@@ -39,7 +39,7 @@
 
 #include <jXGlobals.h>
 
-#include <algorithm.h>
+#include <algorithm>
 
 #include <cassert>
 

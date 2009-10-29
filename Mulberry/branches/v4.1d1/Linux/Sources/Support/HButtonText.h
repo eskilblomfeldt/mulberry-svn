@@ -35,14 +35,14 @@ public:
 			itsEnclosure(enclosure){}
 
 	void SetText(const char* newTxt);
-	const string& GetText() const
+	const std::string& GetText() const
 		{ return txt; }
 
 	virtual void	Show();					// must call inherited
 	virtual void	Hide();					// must call inherited
 	
 private:
-	string txt;
+	std::string txt;
 	JXStaticText *itsText;
 	JXContainer* itsEnclosure;//this is kinda lame but need to have non-const
                            	//pointer

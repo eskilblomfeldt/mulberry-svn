@@ -23,7 +23,6 @@
 #include "CAddressBook.h"
 #include "CAddressBookDoc.h"
 #include "CCommands.h"
-#include "CLocalAddressBook.h"
 #include "CLog.h"
 #include "CMenuBar.h"
 #include "CMulberryApp.h"
@@ -36,6 +35,8 @@
 #include "HResourceMap.h"
 
 #include <JXMenuBar.h>
+
+#include <algorithm>
 
 /////////////////////////////////////////////////////////////////////////////
 // CAddressBookWindow
@@ -66,7 +67,7 @@ CAddressBookWindow::~CAddressBookWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CAddressBookWindowList>::lock _lock(sAddressBookWindows);
-		CAddressBookWindowList::iterator found = ::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), this);
+		CAddressBookWindowList::iterator found = std::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), this);
 		if (found != sAddressBookWindows->end())
 			sAddressBookWindows->erase(found);
 	}
@@ -89,46 +90,7 @@ CAddressBookWindow* CAddressBookWindow::ManualCreate(CAddressBook* adbk, const c
 		// Set lists
 		pWnd->InitDoc(adbk);
 		pWnd->SetAddressBook(adbk);
-
-		if ((fname == NULL) || !dynamic_cast<CLocalAddressBook*>(adbk))
-		{
-			// create a new document - with default document name
-			if (dynamic_cast<CLocalAddressBook*>(adbk))
-			{
-				cdstring title("Untitled Address Book #");
-				title += s_nUntitledCount++;
-				pWnd->GetWindow()->SetTitle(title);
-			}
-			else
-				pWnd->GetWindow()->SetTitle(adbk->GetName());
-		}
-		else
-		{
-			// open an existing document
-			try
-			{
-				pWnd->OnOpenDocument(fname);
-				pWnd->GetWindow()->SetTitle(fname);
-				pWnd->GetAddressBookView()->ResetTable();
-			}
-			catch (...)
-			{
-				CLOG_LOGCATCH(...);
-
-				// Remove address book reference first to prevent
-				// local adbk close warning
-				pWnd->InitDoc(NULL);
-				FRAMEWORK_DELETE_WINDOW(pWnd);
-				pWnd = NULL;
-
-				// Throw up
-				CLOG_LOGRETHROW;
-				throw;
-			}
-		}
-
-		if (fname)
-			pWnd->GetWindow()->SetTitle(fname);
+		pWnd->GetWindow()->SetTitle(adbk->GetName());
 		pWnd->ResetState();
 	}
 	
@@ -283,7 +245,7 @@ CAddressBookWindow* CAddressBookWindow::FindWindow(const CAddressBook* adbk)
 bool CAddressBookWindow::WindowExists(const CAddressBookWindow* wnd)
 {
 	cdmutexprotect<CAddressBookWindowList>::lock _lock(sAddressBookWindows);
-	CAddressBookWindowList::iterator found = ::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), wnd);
+	CAddressBookWindowList::iterator found = std::find(sAddressBookWindows->begin(), sAddressBookWindows->end(), wnd);
 	return found != sAddressBookWindows->end();
 }
 

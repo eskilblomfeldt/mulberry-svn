@@ -41,15 +41,15 @@ class CMIMETypesMap
 	const cdstring& GetExtension(const cdstring& MIMEType, const cdstring& original);
 		
 	void AddEntry(const cdstring& mimetype, const cdstring& extensions, const cdstring& description);
-	void ReadFromStream(istream& ins);
+	void ReadFromStream(std::istream& ins);
 
 protected:
 	struct MIMETypeInfo
 	{
-		list<cdstring> extensions;
+		std::list<cdstring> extensions;
 		cdstring description;
 	};
-	typedef map<cdstring, MIMETypeInfo*> MIMETypeInfoMap;
+	typedef std::map<cdstring, MIMETypeInfo*> MIMETypeInfoMap;
 	MIMETypeInfoMap mTypeToInfo;
 
 	typedef cdstrmap ExtensionTypeMap;

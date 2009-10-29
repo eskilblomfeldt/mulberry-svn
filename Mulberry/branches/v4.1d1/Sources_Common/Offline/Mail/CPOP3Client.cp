@@ -42,7 +42,9 @@
 
 #include __stat_header
 
+#include <algorithm>
 #include <cerrno>
+#include <memory>
 
 #if __dest_os == __win32_os
 #include "StValueChanger.h"

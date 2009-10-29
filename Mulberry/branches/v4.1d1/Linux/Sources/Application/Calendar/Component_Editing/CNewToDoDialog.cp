@@ -26,8 +26,8 @@
 #include "CMulberryApp.h"
 #include "CNewComponentAlarm.h"
 #include "CNewComponentAttendees.h"
-#include "CNewComponentDescription.h"
-#include "CNewComponentTiming.h"
+#include "CNewComponentDetails.h"
+#include "CNewComponentRepeat.h"
 #include "CPreferences.h"
 #include "CTabController.h"
 #include "CTextField.h"
@@ -40,7 +40,6 @@
 
 #include "TPopupMenu.h"
 
-#include <JXStaticText.h>
 #include <JXTextButton.h>
 #include <JXTextCheckbox.h>
 #include <JXUpRect.h>
@@ -50,21 +49,14 @@
 
 #include <cassert>
 
-uint32_t CNewToDoDialog::sTitleCounter = 0;
-set<CNewToDoDialog*> CNewToDoDialog::sDialogs;
-
 // ---------------------------------------------------------------------------
 //	CNewToDoDialog														  [public]
 /**
 	Default constructor */
 
 CNewToDoDialog::CNewToDoDialog(JXDirector* supervisor)
-		: CModelessDialog(supervisor)
+		: CNewComponentDialog(supervisor)
 {
-	mCurrentPanel = 0;
-	sDialogs.insert(this);
-
-	CWindowsMenu::AddWindow(this, false);
 }
 
 
@@ -75,8 +67,6 @@ CNewToDoDialog::CNewToDoDialog(JXDirector* supervisor)
 
 CNewToDoDialog::~CNewToDoDialog()
 {
-	sDialogs.erase(this);
-	CWindowsMenu::RemoveWindow(this);
 }
 
 #pragma mark -
@@ -84,105 +74,40 @@ CNewToDoDialog::~CNewToDoDialog()
 void CNewToDoDialog::OnCreate()
 {
 	// Get UI items
-// begin JXLayout
+	CNewComponentDialog::OnCreate();
 
-    JXWindow* window = new JXWindow(this, 540,450, "");
-    assert( window != NULL );
-    SetWindow(window);
-
-    JXUpRect* obj1 =
-        new JXUpRect(window,
-                    JXWidget::kHElastic, JXWidget::kVElastic, 0,0, 540,450);
-    assert( obj1 != NULL );
-
-    JXStaticText* obj2 =
-        new JXStaticText("Summary:", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,10, 70,20);
-    assert( obj2 != NULL );
-
-    mSummary =
-        new CTextInputField(obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 80,10, 200,20);
-    assert( mSummary != NULL );
-
-    mCalendar =
-        new CCalendarPopup("",obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 300,10, 200,20);
-    assert( mCalendar != NULL );
+	// begin JXLayout1
 
     mCompleted =
-        new JXTextCheckbox("Completed", obj1,
+        new JXTextCheckbox("Completed", mContainer,
                     JXWidget::kFixedLeft, JXWidget::kFixedTop, 5,40, 90,20);
     assert( mCompleted != NULL );
 
     mCompletedDateTimeZone =
-        new CDateTimeZoneSelect(obj1,
+        new CDateTimeZoneSelect(mContainer,
                     JXWidget::kHElastic, JXWidget::kVElastic, 94,35, 400,30);
     assert( mCompletedDateTimeZone != NULL );
 
     mCompletedNow =
-        new JXTextButton("Now", obj1,
-                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 495,40, 35,20);
+        new JXTextButton("Now", mContainer,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 495,40, 35,20);
     assert( mCompletedNow != NULL );
     mCompletedNow->SetFontSize(10);
 
-    mTabs =
-        new CTabController(obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedTop, 10,70, 520,330);
-    assert( mTabs != NULL );
+// end JXLayout1
 
-    mOrganiserEdit =
-        new JXTextCheckbox("Allow Changes to Organised Event", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 10,410, 235,20);
-    assert( mOrganiserEdit != NULL );
-
-    mCancelBtn =
-        new JXTextButton("Cancel", obj1,
-                    JXWidget::kFixedLeft, JXWidget::kFixedBottom, 310,410, 85,25);
-    assert( mCancelBtn != NULL );
-    mCancelBtn->SetShortcuts("]");
-
-    mOKBtn =
-        new JXTextButton("OK", obj1,
-                    JXWidget::kFixedRight, JXWidget::kFixedBottom, 425,410, 85,25);
-    assert( mOKBtn != NULL );
-    mOKBtn->SetShortcuts("^M");
-
-// end JXLayout
-
-	window->SetTitle("New Task");
-	SetButtons(mOKBtn, mCancelBtn);
-
-	CModelessDialog::OnCreate();
-	
-	mCalendar->OnCreate();
-	mCompletedDateTimeZone->OnCreate();
-	mCompletedDateTimeZone->SetActive(false);
-	mCompletedDateTimeZone->SetVisible(false);
-	mCompletedNow->SetVisible(false);
-
-	ListenTo(mSummary);
-	ListenTo(mCalendar);
-	ListenTo(mCompleted);
-	ListenTo(mCompletedNow);
-	ListenTo(mTabs);
-	ListenTo(mOrganiserEdit);
-
-	// Init controls
-	InitPanels();
-	DoTab(1);
-
-	// Focus on summary
+    ListenTo(mCompleted);
+    ListenTo(mCompletedNow);
 }
 
 void CNewToDoDialog::InitPanels()
 {
 	// Load each panel for the tabs
-	mPanels.push_back(new CNewComponentTiming(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0,0, 500,300));
-	mTabs->AppendCard(mPanels.back(), "Timing");
-
-	mPanels.push_back(new CNewComponentDescription(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0,0, 500,300));
+	mPanels.push_back(new CNewComponentDetails(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0,0, 500,300));
 	mTabs->AppendCard(mPanels.back(), "Details");
+
+	mPanels.push_back(new CNewComponentRepeat(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0,0, 500,300));
+	mTabs->AppendCard(mPanels.back(), "Repeat");
 
 	mPanels.push_back(new CNewComponentAlarm(mTabs->GetCardEnclosure(), JXWidget::kFixedLeft, JXWidget::kFixedTop, 0,0, 500,300));
 	mTabs->AppendCard(mPanels.back(), "Alarms");
@@ -207,37 +132,11 @@ void CNewToDoDialog::ListenTo_Message(long msg, void* param)
 // Handle controls
 void CNewToDoDialog::Receive(JBroadcaster* sender, const Message& message)
 {
-	if (message.Is(JTextEditor16::kTextChanged))
-	{
-		if (sender == mSummary)
-		{
-			ChangedSummary();
-			return;
-		}
-	}
-	else if(message.Is(JXMenu::kItemSelected))
-	{
-		const JXMenu::ItemSelected* is = dynamic_cast<const JXMenu::ItemSelected*>(&message);
-		if (sender == mCalendar)
-		{
-			ChangedCalendar();
-			return;
-		}
-	}
-	else if (message.Is(JXTextButton::kPushed))
+	if (message.Is(JXTextButton::kPushed))
 	{
 		if (sender == mCompletedNow)
 		{
 			DoNow();
-			return;
-		}
-	}
-	else if (message.Is(JXRadioGroup::kSelectionChanged))
-	{
-		JIndex index = dynamic_cast<const JXRadioGroup::SelectionChanged*>(&message)->GetID();
-		if (sender == mTabs)
-		{
-			DoTab(mTabs->GetSelectedItem());
 			return;
 		}
 	}
@@ -248,23 +147,9 @@ void CNewToDoDialog::Receive(JBroadcaster* sender, const Message& message)
 			DoCompleted(mCompleted->IsChecked());
 			return;
 		}
-		else if (sender == mOrganiserEdit)
-		{
-			OnOrganiserEdit();
-			return;
-		}
 	}
 
-	CModelessDialog::Receive(sender, message);
-}
-
-void CNewToDoDialog::DoTab(JIndex value)
-{
-	// Only if different
-	if (mCurrentPanel != value - 1)
-	{
-		mCurrentPanel = value - 1;
-	}
+	CNewComponentDialog::Receive(sender, message);
 }
 
 void CNewToDoDialog::DoCompleted(bool set)
@@ -288,152 +173,52 @@ void CNewToDoDialog::DoNow()
 	mCompletedDateTimeZone->SetDateTimeZone(mActualCompleted, false);
 }
 
-bool CNewToDoDialog::ContainsToDo(const iCal::CICalendarVToDo& vtodo) const
+void CNewToDoDialog::SetComponent(iCal::CICalendarComponentRecur& vcomponent, const iCal::CICalendarComponentExpanded* expanded)
 {
-	// Does this dialog contain a copy of this event
-	return vtodo.GetMapKey() == mVToDo->GetMapKey();
-}
+	CNewComponentDialog::SetComponent(vcomponent, expanded);
 
-void CNewToDoDialog::SetToDo(iCal::CICalendarVToDo& vtodo)
-{
-	// Listen to original calendar as we need to cancel if calendar goes away
-	iCal::CICalendarRef calref = vtodo.GetCalendar();
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(calref);
-	if (cal)
-		cal->Add_Listener(this);
-	
-	mVToDo = &vtodo;
+	mCompleted->SetState(static_cast<iCal::CICalendarVToDo&>(vcomponent).GetStatus() == iCal::eStatus_VToDo_Completed);
 
-	// Set the relevant fields
-	
-	mSummary->SetText(vtodo.GetSummary());
-
-	mCalendar->SetCalendar(vtodo.GetCalendar());
-	ChangedCalendar();
-
-	mCompleted->SetState(vtodo.GetStatus() == iCal::eStatus_VToDo_Completed);
-
-	mCompletedExists = vtodo.HasCompleted();
+	mCompletedExists = static_cast<iCal::CICalendarVToDo&>(vcomponent).HasCompleted();
 	if (mCompletedExists)
 	{
 		// COMPLETED is in UTC but we adjust to local timezone
-		mActualCompleted = vtodo.GetCompleted();
+		mActualCompleted = static_cast<iCal::CICalendarVToDo&>(vcomponent).GetCompleted();
 		mActualCompleted.AdjustTimezone(iCal::CICalendarManager::sICalendarManager->GetDefaultTimezone());
 	
 		mCompletedDateTimeZone->SetDateTimeZone(mActualCompleted, false);
 	}
-	DoCompleted(vtodo.GetStatus() == iCal::eStatus_VToDo_Completed);
-
-	// Set in each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->SetToDo(vtodo);
-	}
-	
-	// Set title to summary if not empty
-	if (!vtodo.GetSummary().empty())
-	{
-		GetWindow()->SetTitle(vtodo.GetSummary());
-	}
-
-	// Determine read-only status based on organiser
-	SetReadOnly((vtodo.CountProperty(iCal::cICalProperty_ORGANIZER) != 0) && !iCal::CITIPProcessor::OrganiserIsMe(vtodo));
-	mOrganiserEdit->SetVisible(mReadOnly);
+	DoCompleted(static_cast<iCal::CICalendarVToDo&>(vcomponent).GetStatus() == iCal::eStatus_VToDo_Completed);
 }
 
-void CNewToDoDialog::GetToDo(iCal::CICalendarVToDo& vtodo)
+void CNewToDoDialog::GetComponent(iCal::CICalendarComponentRecur& vcomponent)
 {
-	// Do descriptive items
-	vtodo.EditSummary(mSummary->GetText());
+	CNewComponentDialog::GetComponent(vcomponent);
 
-	vtodo.EditStatus(mCompleted->IsChecked() ? iCal::eStatus_VToDo_Completed : iCal::eStatus_VToDo_NeedsAction);
+	static_cast<iCal::CICalendarVToDo&>(vcomponent).EditStatus(mCompleted->IsChecked() ? iCal::eStatus_VToDo_Completed : iCal::eStatus_VToDo_NeedsAction);
 	
 	// Changed completed date if needed
 	mCompletedDateTimeZone->GetDateTimeZone(mActualCompleted, false);
-	if (mCompleted->IsChecked() && (vtodo.GetCompleted() != mActualCompleted))
+	if (mCompleted->IsChecked() && (static_cast<iCal::CICalendarVToDo&>(vcomponent).GetCompleted() != mActualCompleted))
 	{
 		// Adjust to UTC and then change
 		mActualCompleted.AdjustToUTC();
-		vtodo.EditCompleted(mActualCompleted);
+		static_cast<iCal::CICalendarVToDo&>(vcomponent).EditCompleted(mActualCompleted);
 	}
-
-	// Get from each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->GetToDo(vtodo);
-	}
-}
-
-void CNewToDoDialog::ChangedSummary()
-{
-	GetWindow()->SetTitle(mSummary->GetText());
-	CWindowsMenu::RenamedWindow();
-}
-
-void CNewToDoDialog::ChangedCalendar()
-{
-	iCal::CICalendarRef newcal;
-	mCalendar->GetCalendar(newcal);
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(newcal);
-	mOKBtn->SetActive(!mReadOnly && (cal != NULL) && (!cal->IsReadOnly()));
 }
 
 void CNewToDoDialog::SetReadOnly(bool read_only)
 {
-	mReadOnly = read_only;
+	CNewComponentDialog::SetReadOnly(read_only);
 
-	// This will reset state of OK button
-	ChangedCalendar();
-
-	mSummary->SetReadOnly(mReadOnly);
-	mCalendar->SetActive(!mReadOnly);
 	mCompleted->SetActive(!mReadOnly);
 	mCompletedDateTimeZone->SetActive(!mReadOnly);
 	mCompletedNow->SetActive(!mReadOnly);
-
-	// Set in each panel
-	for(CNewComponentPanelList::iterator iter = mPanels.begin(); iter != mPanels.end(); iter++)
-	{
-		(*iter)->SetReadOnly(mReadOnly);
-	}
 }
 
-cdstring CNewToDoDialog::GetCurrentSummary() const
+void CNewToDoDialog::ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status)
 {
-	return mSummary->GetText();
-}
-
-void CNewToDoDialog::OnOK()
-{
-	bool result = true;
-	switch(mAction)
-	{
-	case eNew:
-	case eDuplicate:
-		result = DoNewOK();
-		break;
-	case eEdit:
-		result = DoEditOK();
-		break;
-	default:;
-	}
-	
-	// Now do inherited if result was OK
-	if (result)
-		CModelessDialog::OnOK();
-}
-
-void CNewToDoDialog::OnCancel()
-{
-	DoCancel();
-	
-	// Now do inherited
-	CModelessDialog::OnCancel();
-}
-
-void CNewToDoDialog::OnOrganiserEdit()
-{
-	SetReadOnly(!mOrganiserEdit->IsChecked());
+	static_cast<CNewComponentAttendees*>(mPanels.back())->ChangedMyStatus(attendee, new_status);
 }
 
 bool CNewToDoDialog::DoNewOK()
@@ -446,13 +231,13 @@ bool CNewToDoDialog::DoNewOK()
 		return false;
 
 	// Get updated info
-	GetToDo(*mVToDo);
+	GetComponent(*mComponent);
 	
 	// Look for change to calendar
-	if (newcal != mVToDo->GetCalendar())
+	if (newcal != mComponent->GetCalendar())
 	{
 		// Use new calendar
-		mVToDo->SetCalendar(newcal);
+		mComponent->SetCalendar(newcal);
 		
 		// Set the default calendar for next time
 		const calstore::CCalendarStoreNode* node = calstore::CCalendarStoreManager::sCalendarStoreManager->GetNode(new_cal);
@@ -461,8 +246,8 @@ bool CNewToDoDialog::DoNewOK()
 	}
 
 	// Add to calendar (this will do the display update)
-	iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVToDo->GetCalendar());
-	new_cal->AddNewVToDo(mVToDo);
+	//iCal::CICalendar* cal = iCal::CICalendar::GetICalendar(mVToDo->GetCalendar());
+	new_cal->AddNewVToDo(static_cast<iCal::CICalendarVToDo*>(mComponent));
 	CCalendarView::ToDosChangedAll();
 	
 	return true;
@@ -471,7 +256,7 @@ bool CNewToDoDialog::DoNewOK()
 bool CNewToDoDialog::DoEditOK()
 {
 	// Find the original calendar if it still exists
-	iCal::CICalendarRef oldcal = mVToDo->GetCalendar();
+	iCal::CICalendarRef oldcal = mComponent->GetCalendar();
 	iCal::CICalendar* old_cal = iCal::CICalendar::GetICalendar(oldcal);
 	if (old_cal == NULL)
 	{
@@ -485,7 +270,7 @@ bool CNewToDoDialog::DoEditOK()
 	}
 	
 	// Find the original to do if it still exists
-	iCal::CICalendarVToDo*	original = static_cast<iCal::CICalendarVToDo*>(old_cal->FindComponent(mVToDo));
+	iCal::CICalendarVToDo*	original = static_cast<iCal::CICalendarVToDo*>(old_cal->FindComponent(mComponent));
 	if (original == NULL)
 	{
 		// Inform user of missing calendar
@@ -504,7 +289,7 @@ bool CNewToDoDialog::DoEditOK()
 		return false;
 
 	// Get updated info
-	GetToDo(*original);
+	GetComponent(*original);
 	
 	// Look for change to calendar
 	if (new_cal != NULL)
@@ -528,29 +313,8 @@ bool CNewToDoDialog::DoEditOK()
 void CNewToDoDialog::DoCancel()
 {
 	// Delete the to do which we own and is not going to be used
-	delete mVToDo;
-	mVToDo = NULL;
-}
-
-bool CNewToDoDialog::GetCalendar(iCal::CICalendarRef oldcal, iCal::CICalendarRef& newcal, iCal::CICalendar*& new_cal)
-{
-	mCalendar->GetCalendar(newcal);
-	if ((oldcal == 0) || (newcal != oldcal))
-	{
-		new_cal = iCal::CICalendar::GetICalendar(newcal);
-		if (new_cal == NULL)
-		{
-			// Inform user of missing calendar
-			CErrorDialog::StopAlert(rsrc::GetString("CNewToDoDialog::MissingNewCalendar"));
-			
-			// Force calendar popup reset and return to dialog
-			mCalendar->Reset();
-			mCalendar->SetCalendar(oldcal);
-			return false;
-		}
-	}
-	
-	return true;
+	delete mComponent;
+	mComponent = NULL;
 }
 
 void CNewToDoDialog::StartNew(const iCal::CICalendar* calin)
@@ -577,15 +341,15 @@ void CNewToDoDialog::StartNew(const iCal::CICalendar* calin)
 	// Set event with initial timing
 	vtodo->EditTiming();
 
-	StartModeless(*vtodo, CNewToDoDialog::eNew);
+	StartModeless(*vtodo, NULL, CNewToDoDialog::eNew);
 }
 
-void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original)
+void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original, const iCal::CICalendarComponentExpanded* expanded)
 {
 	// Look for an existinf dialog for this event
-	for(set<CNewToDoDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
+	for(std::set<CNewComponentDialog*>::const_iterator iter = sDialogs.begin(); iter != sDialogs.end(); iter++)
 	{
-		if ((*iter)->ContainsToDo(original))
+		if ((*iter)->ContainsComponent(original))
 		{
 			(*iter)->GetWindow()->Raise();
 			return;
@@ -595,7 +359,7 @@ void CNewToDoDialog::StartEdit(const iCal::CICalendarVToDo& original)
 	// Use a copy of the event
 	iCal::CICalendarVToDo* vtodo = new iCal::CICalendarVToDo(original);
 	
-	StartModeless(*vtodo, CNewToDoDialog::eEdit);
+	StartModeless(*vtodo, expanded, CNewToDoDialog::eEdit);
 }
 
 void CNewToDoDialog::StartDuplicate(const iCal::CICalendarVToDo& original)
@@ -604,14 +368,14 @@ void CNewToDoDialog::StartDuplicate(const iCal::CICalendarVToDo& original)
 	iCal::CICalendarVToDo* vtodo = new iCal::CICalendarVToDo(original);
 	vtodo->Duplicated();
 	
-	StartModeless(*vtodo, CNewToDoDialog::eDuplicate);
+	StartModeless(*vtodo, NULL, CNewToDoDialog::eDuplicate);
 }
 
-void CNewToDoDialog::StartModeless(iCal::CICalendarVToDo& vtodo, EModelessAction action)
+void CNewToDoDialog::StartModeless(iCal::CICalendarVToDo& vtodo, const iCal::CICalendarComponentExpanded* expanded, EModelessAction action)
 {
 	CNewToDoDialog* dlog = new CNewToDoDialog(JXGetApplication());
 	dlog->OnCreate();
 	dlog->SetAction(action);
-	dlog->SetToDo(vtodo);
+	dlog->SetComponent(vtodo, expanded);
 	dlog->Activate();
 }

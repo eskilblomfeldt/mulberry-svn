@@ -1,4 +1,4 @@
-/*
+	/*
     Copyright (c) 2007 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@
 #include "CSMTPSendThread.h"
 #include "CSMTPWindow.h"
 
+#include <algorithm>
 #include <unistd.h>
 
 CSMTPAccountManager* CSMTPAccountManager::sSMTPAccountManager = NULL;

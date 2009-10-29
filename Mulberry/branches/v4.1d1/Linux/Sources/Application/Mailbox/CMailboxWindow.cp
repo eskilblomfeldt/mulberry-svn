@@ -31,6 +31,8 @@
 
 #include <string.h>
 
+#include <algorithm>
+
 // __________________________________________________________________________________________________
 // C L A S S __ C M A I L B O X W I N D O W
 // __________________________________________________________________________________________________
@@ -63,7 +65,7 @@ CMailboxWindow::~CMailboxWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CMailboxWindowList>::lock _lock(sMboxWindows);
-		CMailboxWindowList::iterator found = ::find(sMboxWindows->begin(), sMboxWindows->end(), this);
+		CMailboxWindowList::iterator found = std::find(sMboxWindows->begin(), sMboxWindows->end(), this);
 		if (found != sMboxWindows->end())
 			sMboxWindows->erase(found);
 	}

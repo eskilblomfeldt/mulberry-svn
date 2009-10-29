@@ -47,7 +47,7 @@ public:
 			void	SetTwister(CTwister* twister)
 		{ mTwister = twister; }
 
-			CAddressList*	GetAddresses();
+			CAddressList*	GetAddresses(bool qualify = true);
 
 	// Generated message map functions
 protected:
@@ -59,7 +59,7 @@ protected:
 	JBoolean OKToUnfocus();
 	void OnExpandAddress();
 
-	void	ResolveAddressList();
+	void	ResolveAddressList(bool qualify = true);
 	bool	ExpandAddressText(cdstring& expand, cdstrvect& results);
 
 	virtual void HandleDNDDrop(const JPoint& pt, const JArray<Atom>& typeList,

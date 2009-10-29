@@ -17,106 +17,52 @@
 #ifndef H_CNewEventDialog
 #define H_CNewEventDialog
 
-#include "CModelessDialog.h"
-#include "CListener.h"
+#include "CNewComponentDialog.h"
 
 #include "CICalendarVEvent.h"
 
 #include "HPopupMenu.h"
 
-class CTabController;
-class CTextInputField;
 class JXTextCheckbox;
-class JXTextButton;
-
-class CCalendarPopup;
-class CNewComponentPanel;
-typedef vector<CNewComponentPanel*> CNewComponentPanelList;
 
 // ===========================================================================
 //	CNewEventDialog
 
-class CNewEventDialog : public CModelessDialog, public CListener
+class CNewEventDialog : public CNewComponentDialog
 {
 public:
-	enum EModelessAction
-	{
-		eNew,
-		eEdit,
-		eDuplicate
-	};
-
 	static void StartNew(const iCal::CICalendarDateTime& dtstart, const iCal::CICalendar* calin = NULL);
-	static void StartEdit(const iCal::CICalendarVEvent& vevent);
+	static void StartEdit(const iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded);
 	static void StartDuplicate(const iCal::CICalendarVEvent& vevent);
 
 						CNewEventDialog(JXDirector* supervisor);
 	virtual				~CNewEventDialog();
 
-	virtual void		ListenTo_Message(long msg, void* param);
-
-		cdstring		GetCurrentSummary() const;
-
 protected:
 	// UI Objects
-// begin JXLayout
+// begin JXLayout1
 
-    CTextInputField* mSummary;
-    CCalendarPopup*  mCalendar;
-    HPopupMenu*      mStatus;
-    CTabController*  mTabs;
-    JXTextCheckbox*  mOrganiserEdit;
-    JXTextButton*    mCancelBtn;
-    JXTextButton*    mOKBtn;
+    HPopupMenu*     mStatus;
+    JXTextCheckbox* mAvailability;
 
-// end JXLayout
+// end JXLayout1
 
-	EModelessAction			mAction;
-	CNewComponentPanelList	mPanels;
-	uint32_t				mCurrentPanel;
-	iCal::CICalendarVEvent*	mVEvent;
-	bool					mReadOnly;
+	static void StartModeless(iCal::CICalendarVEvent& vevent, const iCal::CICalendarComponentExpanded* expanded, EModelessAction action);
 
-	static void StartModeless(iCal::CICalendarVEvent& vevent, EModelessAction action);
+	virtual void	OnCreate();
 
-	virtual void		OnCreate();
-	virtual void		Receive(JBroadcaster* sender, const Message& message);
+	virtual void	InitPanels();
 
-			bool		ContainsEvent(const iCal::CICalendarVEvent& vevent) const;
+	virtual void	SetComponent(iCal::CICalendarComponentRecur& vcomponent, const iCal::CICalendarComponentExpanded* expanded);
+	virtual void	GetComponent(iCal::CICalendarComponentRecur& vcomponent);
 
-			void		InitPanels();
+	virtual void	SetReadOnly(bool read_only);
 	
-			void	SetAction(EModelessAction action)
-			{
-				mAction = action;
-			}
-			void	SetEvent(iCal::CICalendarVEvent& vevent);
-			void	GetEvent(iCal::CICalendarVEvent& vevent);
-			void	ChangedSummary();
-			void	ChangedCalendar();
+	virtual void	ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status);
 
-			void	SetReadOnly(bool read_only);
-
-			void	DoTab(JIndex value);
-
-	virtual void	OnOK();
-	virtual void	OnCancel();
-			void	OnOrganiserEdit();
-
-	virtual uint32_t&	TitleCounter()
-	{
-		return sTitleCounter;
-	}
-
-			bool	DoNewOK();
-			bool	DoEditOK();
-			void	DoCancel();
-			
-			bool	GetCalendar(iCal::CICalendarRef oldcal, iCal::CICalendarRef& newcal, iCal::CICalendar*& new_cal);
-
-private:
-	static uint32_t					sTitleCounter;
-	static set<CNewEventDialog*>	sDialogs;
+	virtual bool	DoNewOK();
+	virtual bool	DoEditOK();
+	virtual void	DoCancel();
 };
 
 #endif

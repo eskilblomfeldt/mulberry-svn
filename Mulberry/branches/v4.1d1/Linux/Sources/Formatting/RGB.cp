@@ -15,9 +15,10 @@
 */
 
 
-#include <iostream.h>
 #include "RGB.h"
 
+#include <cstring>
+#include <iostream>
 
 
 RGB::RGB()

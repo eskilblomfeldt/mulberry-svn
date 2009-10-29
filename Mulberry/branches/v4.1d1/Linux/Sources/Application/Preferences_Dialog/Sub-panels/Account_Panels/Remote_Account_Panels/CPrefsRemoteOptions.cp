@@ -19,8 +19,10 @@
 
 #include "CPrefsRemoteOptions.h"
 
-#include "CINETAccount.h"
+#include "COptionsAccount.h"
+#include "CTextField.h"
 
+#include <JXStaticText.h>
 #include <JXTextCheckbox.h>
 
 #include <cassert>
@@ -39,24 +41,44 @@ void CPrefsRemoteOptions::OnCreate()
                     JXWidget::kHElastic, JXWidget::kVElastic, 10,10, 225,20);
     assert( mUseRemote != NULL );
 
+    mBaseRURLText =
+        new JXStaticText("Path:", this,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 15,57, 35,20);
+    assert( mBaseRURLText != NULL );
+
+    mBaseRURL =
+        new CTextInputField(this,
+                    JXWidget::kHElastic, JXWidget::kVElastic, 60,55, 280,20);
+    assert( mBaseRURL != NULL );
+
 // end JXLayout1
 }
 
 // Set prefs
 void CPrefsRemoteOptions::SetData(void* data)
 {
-	CINETAccount* acct = (CINETAccount*) data;
+	COptionsAccount* acct = (COptionsAccount*) data;
 
 	// Copy info
 	mUseRemote->SetState(JBoolean(acct->GetLogonAtStart()));
+
+	if (acct->GetServerType() == CINETAccount::eWebDAVPrefs)
+		mBaseRURL->SetText(acct->GetBaseRURL());
+	else
+	{
+		mBaseRURLText->Hide();
+		mBaseRURL->Hide();
+	}
 }
 
 // Force update of prefs
 bool CPrefsRemoteOptions::UpdateData(void* data)
 {
-	CINETAccount* acct = (CINETAccount*) data;
+	COptionsAccount* acct = (COptionsAccount*) data;
 
 	acct->SetLoginAtStart(mUseRemote->IsChecked());
+	if (acct->GetServerType() == CINETAccount::eWebDAVPrefs)
+		acct->SetBaseRURL(mBaseRURL->GetText());
 	
 	return true;
 }

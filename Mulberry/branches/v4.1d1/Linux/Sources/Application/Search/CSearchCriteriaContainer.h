@@ -34,7 +34,7 @@ class JXTextButton;
 class JXWidget;
 
 class CCriteriaBase;
-typedef vector<CCriteriaBase*> CCriteriaBaseList;
+typedef std::vector<CCriteriaBase*> CCriteriaBaseList;
 
 class CSearchCriteriaContainer : public JXWidgetSet, public CBroadcaster, public CListener
 {

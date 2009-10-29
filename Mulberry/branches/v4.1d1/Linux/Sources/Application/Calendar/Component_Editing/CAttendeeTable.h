@@ -47,12 +47,15 @@ public:
 	virtual void		OnCreate();
 	virtual void		ApertureResized(const JCoordinate dw, const JCoordinate dh);
 
+	virtual	void		GetTooltipText(cdstring& txt, const STableCell &inCell);				// Get text for current tooltip cell
+
 	virtual void		SelectionChanged();
 
-			void		ResetTable(const iCal::CICalendarPropertyList* items);
+			void		ResetTable(const iCal::CICalendarPropertyList* items, const iCal::CICalendarProperty* organizer);
 
 protected:
 	const iCal::CICalendarPropertyList*	mAttendees;
+	const iCal::CICalendarProperty*	mOrganizer;
 
 	virtual void		LDblClickCell(const STableCell& inCell, const JXKeyModifiers& mods);
 	virtual void		DrawCell(JPainter* pDC, const STableCell& inCell, const JRect& inLocalRect);

@@ -38,6 +38,7 @@
 
 #include "CICalendar.h"
 
+#include <algorithm>
 #include <cassert>
 
 // Static
@@ -53,6 +54,7 @@ CCalendarWindow::CCalendarWindow(JXDirector* owner) :
 	CWindow(owner)
 {
 	mPreviewVisible = true;
+	mNode = NULL;
 
 	// Add to list
 	{
@@ -75,7 +77,7 @@ CCalendarWindow::~CCalendarWindow()
 	// Remove from list
 	{
 		cdmutexprotect<CCalendarWindowList>::lock _lock(sCalendarWindows);
-		CCalendarWindowList::iterator found = ::find(sCalendarWindows->begin(), sCalendarWindows->end(), this);
+		CCalendarWindowList::iterator found = std::find(sCalendarWindows->begin(), sCalendarWindows->end(), this);
 		if (found != sCalendarWindows->end())
 			sCalendarWindows->erase(found);
 	}
@@ -115,6 +117,36 @@ void CCalendarWindow::MakeWindow(calstore::CCalendarStoreNode* node)
 		throw;
 	}
 }
+
+// Create a free busy window
+void CCalendarWindow::CreateFreeBusyWindow(iCal::CICalendarRef calref, const cdstring& id, const iCal::CICalendarProperty& organizer, const iCal::CICalendarPropertyList& attendees, const iCal::CICalendarDateTime& date)
+{
+	// Look for existing window with this node
+
+	CCalendarWindow* newWindow = NULL;
+	try
+	{
+		// Create the message window
+		newWindow = new CCalendarWindow(CMulberryApp::sApp);
+		newWindow->OnCreate();
+		newWindow->SetFreeBusy(calref, id, organizer, attendees, date);
+		newWindow->ResetState();
+		newWindow->Show();
+	}
+	catch (...)
+	{
+		CLOG_LOGCATCH(...);
+
+		// Only delete if it still exists
+		if (WindowExists(newWindow))
+			FRAMEWORK_DELETE_WINDOW(newWindow)
+
+		// Should throw out of here
+		CLOG_LOGRETHROW;
+		throw;
+	}
+}
+
 
 // Create it or bring it to the front
 void CCalendarWindow::CreateSubscribedWindow()

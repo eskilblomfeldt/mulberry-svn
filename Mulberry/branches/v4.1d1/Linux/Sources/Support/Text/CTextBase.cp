@@ -35,6 +35,7 @@
 #include <jASCIIConstants.h>
 #include <jXGlobals.h>
 
+#include <algorithm>
 #include <cassert>
 
 CTextBase::StPreserveSelection::StPreserveSelection(CTextBase* txt)
@@ -46,8 +47,8 @@ CTextBase::StPreserveSelection::StPreserveSelection(CTextBase* txt)
 CTextBase::StPreserveSelection::~StPreserveSelection()
 {
 	// Make sure new selection is still in range
-	mSelStart = min(mSelStart, mTxt->GetTextLength());
-	mSelEnd = min(mSelEnd, mTxt->GetTextLength());
+	mSelStart = std::min(mSelStart, mTxt->GetTextLength());
+	mSelEnd = std::min(mSelEnd, mTxt->GetTextLength());
 	mTxt->SetSel(mSelStart, mSelEnd);
 }
 
@@ -584,7 +585,7 @@ void CTextBase::ResetFont(const SFontInfo& font, long scale)
 	StPreserveSelection _save(this);
 
 	SetFontName(font.fontname);
-	SetFontSize((JSize)max(1.0, pow(1.2, scale) * font.size));
+	SetFontSize((JSize)std::max(1.0, pow(1.2, scale) * font.size));
 	SetBackgroundColor(GetColormap()->GetDefaultFocusColor());
 }
 

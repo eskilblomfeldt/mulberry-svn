@@ -31,6 +31,8 @@
 #include "CTaskClasses.h"
 #include "C3PaneWindow.h"
 
+#include <algorithm>
+
 CServerWindow* CServerView::GetServerWindow(void) const
 {
 	return !Is3Pane() ? static_cast<CServerWindow*>(GetOwningWindow()) : NULL;

@@ -63,6 +63,7 @@ protected:
 	bool				mFromEnabled;
 	bool				mReplyToEnabled;
 	bool				mSenderEnabled;
+	bool				mCalendarEnabled;
 
 			void OnCreate();
 

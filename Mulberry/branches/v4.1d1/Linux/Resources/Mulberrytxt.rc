@@ -574,14 +574,14 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "Internet Client for Win32, MacOS and Unix\0"
-            VALUE "CompanyName", "ISAMET, Inc.\0"
+            VALUE "CompanyName", "Mulberrymail.com.\0"
             VALUE "FileDescription", "Mulberry\0"
-            VALUE "FileVersion", "4.0.3\0"
+            VALUE "FileVersion", "4.1a1\0"
             VALUE "InternalName", "Mulberry\0"
-            VALUE "LegalCopyright", "Copyright © 1995-2005 ISAMET, Inc.\0"
+            VALUE "LegalCopyright", "Copyright  2006-2009 Cyrus Daboo.\0"
             VALUE "OriginalFilename", "Mulberry.exe\0"
             VALUE "ProductName", "Mulberry\0"
-            VALUE "ProductVersion", "4.0.3\0"
+            VALUE "ProductVersion", "4.1a1\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -5085,7 +5085,7 @@ BEGIN
     LTEXT           "",IDC_SPLASHVERSION,244,113,38,8
     LTEXT           "",IDC_SPLASHSERIAL,51,71,123,8
     LTEXT           "",IDC_SPLASHLICENSEE,4,87,170,25
-    LTEXT           "Copyright © ISAMET, Inc., 1995 - 2005",
+    LTEXT           "Copyright  ISAMET, Inc., 1995 - 2005",
                     IDC_STATIC,4,113,180,8
 //    CONTROL         801,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,
 //                    290,126
@@ -5101,7 +5101,7 @@ BEGIN
     LTEXT           "",IDC_SPLASHVERSION,209,103,33,8
     LTEXT           "",IDC_SPLASHSERIAL,51,61,107,8
     LTEXT           "",IDC_SPLASHLICENSEE,4,77,154,25
-    LTEXT           "Copyright © ISAMET, Inc., 1995 - 2005",
+    LTEXT           "Copyright  ISAMET, Inc., 1995 - 2005",
                     IDC_STATIC,4,103,154,8
 //    CONTROL         801,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,0,0,
 //                    249,126
@@ -5126,7 +5126,7 @@ BEGIN
     EDITTEXT        IDC_ABOUTLICENSEE,64,154,168,24,ES_MULTILINE | 
                     ES_READONLY
     LTEXT           "http://www.mulberrymail.com",IDC_STATIC,4,182,180,8
-    LTEXT           "Copyright © ISAMET, Inc., 1995 - 2005",
+    LTEXT           "Copyright  ISAMET, Inc., 1995 - 2005",
                     IDC_STATIC,4,194,180,8
 END
 
@@ -10489,6 +10489,7 @@ BEGIN
 	IDS_IDENTITY_PANEL_TO			"To"
 	IDS_IDENTITY_PANEL_CC			"CC"
 	IDS_IDENTITY_PANEL_BCC			"Bcc"
+	IDS_IDENTITY_PANEL_CALENDAR		"Calendar"
 END
 
 STRINGTABLE DISCARDABLE 
