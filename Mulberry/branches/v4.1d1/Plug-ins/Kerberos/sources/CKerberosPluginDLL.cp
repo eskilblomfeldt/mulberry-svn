@@ -58,7 +58,6 @@
 
 #ifndef USE_KCLIENT
 #include <string>
-//using namespace std;
 #endif
 
 #define AUTHERROR(xx_msg, copyout) do { \
@@ -333,7 +332,7 @@ long CKerberosPluginDLL::ProcessFirstData(SAuthPluginData* info)
     if (rc != 0)
     	AUTHERROR("create kclient session failed", true);
 #else
-	string service, realm, instance;
+	std::string service, realm, instance;
 #endif
 
 	// Determine actual server principal
@@ -464,7 +463,7 @@ long CKerberosPluginDLL::ProcessFirstData(SAuthPluginData* info)
 									const_cast<char*>(realm.c_str()), 0);
 	if (rc)
 	{
-		string error_txt;
+		std::string error_txt;
 		error_txt = "krb_mk_req failed: ";
 		error_txt += service;
 		error_txt += ", ";
@@ -482,11 +481,7 @@ long CKerberosPluginDLL::ProcessFirstData(SAuthPluginData* info)
 		AUTHERRORLOG("krb_get_cred failed:", rc);
 
 	memcpy(mSession, creds.session, sizeof(des_cblock));
-#if __dest_os == __linux_os
-	::des_key_sched(&mSession, &mSchedule[0]);
-#else
 	::des_key_sched(&mSession[0], &mSchedule[0]);
-#endif
 	if (rc == 0)
 	{
 		rc = ::krb_mk_req(&authent, const_cast<char*>(service.c_str()), 
@@ -495,7 +490,7 @@ long CKerberosPluginDLL::ProcessFirstData(SAuthPluginData* info)
 										ran_num);
 		if (rc)
 		{
-			string error_txt;
+			std::string error_txt;
 			error_txt = "krb_mk_req 2 failed: ";
 			error_txt += service;
 			error_txt += ", ";

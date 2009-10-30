@@ -3,7 +3,7 @@
 @CommunicatorAdbkIOPlugin.so
 -prefix sources/
 CCommAdbkIOPluginDLL
-.c line64
+.c line64mac
 -prefix ../PluginLibrary/
 .a PluginLib
 -prefix ../Common/

@@ -37,5 +37,5 @@ $.${BIN}/%.o %.o: %.cp
 	@ echo "    ---- Compiling $< (C++)"
 	 $(CPP) $(CFLAGS) -c -o $@ $<
 
-${BIN}/line64.o: sources/line64.c
+${BIN}/line64mac.o: sources/line64mac.c
 	 $(CC) $(CFLAGS) -c -o $@ $<

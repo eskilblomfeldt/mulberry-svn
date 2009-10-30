@@ -555,8 +555,8 @@ int CASpellPluginDLL::GetDictionaries(const char** dicts)
 	::delete_aspell_dict_info_enumeration(dels);
 
 	// Sort then make list unique
-	::sort(mData->mListBuffer.begin(), mData->mListBuffer.end());
-	mData->mListBuffer.erase(::unique(mData->mListBuffer.begin(), mData->mListBuffer.end()), mData->mListBuffer.end());
+	std::sort(mData->mListBuffer.begin(), mData->mListBuffer.end());
+	mData->mListBuffer.erase(std::unique(mData->mListBuffer.begin(), mData->mListBuffer.end()), mData->mListBuffer.end());
 
 	// Allocate space for array and arrays
 	mData->mBuffer.clear();

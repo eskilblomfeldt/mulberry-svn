@@ -13,12 +13,6 @@ include ../include/nostl.mak
 
 BIN = .obj
 
-#KRBHOME = ${DEV_ROOT}/tools/krb5/src
-#KRBINCS = -I${KRBHOME}/include \
-#			-I${KRBHOME}/include/krb5 \
-#			-I${KRBHOME}/include/gssapi
-#KRBLIBS = -static -L${KRBHOME}/lib -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err
-
 KRBINCS = -I/usr/include/gssapi
 KRBLIBS = -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err
 
