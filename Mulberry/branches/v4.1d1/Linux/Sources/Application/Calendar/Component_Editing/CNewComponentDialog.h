@@ -106,7 +106,7 @@ protected:
 			void	ChangedCalendar();
 	virtual void ChangedMyStatus(const iCal::CICalendarProperty& attendee, const cdstring& new_status);
 
-			void	SetReadOnly(bool read_only);
+	virtual void	SetReadOnly(bool read_only);
 
 			void	DoTab(JIndex value);
 
