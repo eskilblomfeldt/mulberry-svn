@@ -9,11 +9,7 @@
 
 # compiler flags ------------------------------
 
-
-#where does stuff live? Note JX_ROOT and ACE_ROOT don't have
-#to be under DEV_ROOT 
-DEV_ROOT=../..
-JX_ROOT = ${DEV_ROOT}/JX
+JX_ROOT = ../Libraries/JX
 ACE_ROOT = ${JX_ROOT}/ACE/ACE_wrappers
 export JXLAYOUTDIR = ${JX_ROOT}/programs/jxlayout
 
@@ -114,9 +110,9 @@ MULINCS = ${JX_INC} -I./Resources \
 -I./Sources/Utilities \
 -I../Sources_Common \
 -I../Sources_Common/Utilities \
--I../../Libraries/CICalendar/Source \
--I../../Libraries/vCard/Source \
--I../../Libraries/XMLLib/Source
+-I../Libraries/CICalendar/Source \
+-I../Libraries/vCard/Source \
+-I../Libraries/XMLLib/Source
 
 
 LDFLAGS = -L/usr/X11R6/lib

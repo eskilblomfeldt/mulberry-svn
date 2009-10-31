@@ -905,7 +905,7 @@
 .cpp CCardDAVVCardClient
 -prefix ../Sources_Common/Preferences_Store/Clients/
 .cpp CWebDAVPrefsClient
--prefix ../../Libraries/CICalendar/Source/
+-prefix ../Libraries/CICalendar/Source/
 .cpp CITIPDefinitions
 .cpp CITIPProcessor
 .cpp CITIPScheduleResults
@@ -952,7 +952,7 @@
 .cpp CICalendarVTimezoneElement
 .cpp CICalendarVTimezoneStandard
 .cpp CICalendarVToDo
--prefix ../../Libraries/vCard/Source/
+-prefix ../Libraries/vCard/Source/
 .cpp CVCardAddressBook
 .cpp CVCardAddress
 .cpp CVCardAddressValue
@@ -1018,7 +1018,7 @@
 .cpp CCardDAVMultigetReport
 .cpp CCardDAVQueryReport
 .cpp CCardDAVReportParser
--prefix ../../Libraries/XMLLib/Source/
+-prefix ../Libraries/XMLLib/Source/
 .cp CStreamBuffer
 .cp XMLDocument
 .cp XMLNode

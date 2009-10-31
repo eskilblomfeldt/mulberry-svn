@@ -1,33 +1,10 @@
-DEV_HOME := .
-MULBERRY_HOME := ${DEV_HOME}/Mulberry
-JX_HOME := ${DEV_HOME}/JX
-LIBRARIES_HOME := ${DEV_HOME}/Libraries
-
-SVN_ROOT := http://svn.mulberrymail.com
-SVN_MULBERRY := ${SVN_ROOT}/mulberry
-SVN_LIBRARIES := ${SVN_ROOT}/repos
-SVN_PATH := branches/v4.1d1
-
-jxsrc:
-	svn checkout ${SVN_MULBERRY}/JX/trunk JX
-
-librariessrc:
-	(mkdir ${LIBRARIES_HOME}; \
-	 cd ${LIBRARIES_HOME}; \
-	 svn checkout ${SVN_LIBRARIES}/CICalendar/${SVN_PATH} CICalendar; \
-	 svn checkout ${SVN_LIBRARIES}/vCard/${SVN_PATH} vCard; \
-	 svn checkout ${SVN_LIBRARIES}/XMLLib/${SVN_PATH} XMLLib)
-
-mulberrysrc:
-	svn checkout ${SVN_MULBERRY}/Mulberry/${SVN_PATH} Mulberry
-
 jxinit:
-	(cd ${JX_HOME}/include; \
+	(cd Libraries/JX/include; \
 	 ln -sf ../libjcore/code jcore; \
 	 ln -sf ../libjx/code jx; \
 	 ln -sf ../libjx/image jximage; \
 	 ln -sf ../libjx/strings jxstrings)
-	(cd ${JX_HOME}/lib; \
+	(cd Libraries/JX/lib; \
 	 ln -sf ../ACE/ACE_wrappers/ace/libACE.a libACE-5_4_7.a; \
 	 ln -sf ../ACE/ACE_wrappers/ace/libACE.so libACE-5_4_7.so; \
 	 ln -sf ../ACE/ACE_wrappers/ace/libACE.so.5.4.7 libACE.so.5.4.7; \
@@ -35,39 +12,39 @@ jxinit:
 	 ln -sf ../libjcore/libjcore-2_5_0.so libjcore-2_5_0.so; \
 	 ln -sf ../libjx/libjx-2_5_0.a libjx-2_5_0.a; \
 	 ln -sf ../libjx/libjx-2_5_0.so libjx-2_5_0.so)
-	touch ${JX_HOME}/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
+	touch Libraries/JX/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
 
 mulberryinit: mulberrypostinit
-	(cd ${MULBERRY_HOME}/Linux; ./links.sh)
+	(cd Linux; ./links.sh)
 
 mulberrypostinit:
-	if { test ! -f ${MULBERRY_HOME}/Linux/Makefile; } then \
-		(cd ${MULBERRY_HOME}/Linux; ../../${JX_HOME}/bin/makemake) \
+	if { test ! -f Linux/Makefile; } then \
+		(cd Linux; Libraries/JX/bin/makemake) \
 	fi \
 
-updatejx:
-	(cd ${JX_HOME}; svn update)
+update:
+	(svn update)
 
 buildjx:
-	(cd ${JX_HOME}; ./build)
+	(cd Libraries/JX; ./build)
 
 updatemulberry:
-	(cd ${MULBERRY_HOME}/Build; ${MAKE} svn)
+	(cd Build; ${MAKE} svn)
 
 buildmulberry:
-	(cd ${MULBERRY_HOME}/Build; ${MAKE} static)
+	(cd Build; ${MAKE} static)
 
 install:
-	(cd ${MULBERRY_HOME}/Build; ${MAKE} install)
+	(cd Build; ${MAKE} install)
 	
-init: jxsrc librariessrc mulberrysrc jxinit mulberryinit
+init: jxinit mulberryinit
 
 build: buildjx buildmulberry
 
 update: updatejx updatemulberry
 
 runit:
-	(cd ${MULBERRY_HOME}/Linux; ./mulberry &)
+	(cd Linux; ./mulberry &)
 
 run: update build runit
 

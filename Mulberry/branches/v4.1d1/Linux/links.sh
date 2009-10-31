@@ -21,9 +21,9 @@ all_paths="../Sources/Application \
 	    ../../Sources_Common/Support \
 	    ../../Sources_Common/Tasks \
 	    ../../Sources_Common/VCard_Store \
-	    ../../../Libraries/CICalendar/Source \
-	    ../../../Libraries/vCard/Source \
-	    ../../../Libraries/XMLLib/Source"
+	    ../../Libraries/CICalendar/Source \
+	    ../../Libraries/vCard/Source \
+	    ../../Libraries/XMLLib/Source"
 
 # clear out old link directory
 \rm -rf Includes/*

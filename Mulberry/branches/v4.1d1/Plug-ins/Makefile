@@ -1,8 +1,6 @@
 # Makefile for Mulberry Plugin builds
 
-DEV_ROOT=../..
-JX_ROOT = ${DEV_ROOT}/JX
-JX_MAKEMAKE = ${DEV_ROOT}/JX/bin/makemake
+JX_MAKEMAKE = ../Libraries/JX/bin/makemake
 PLUGINS_DIR := ./
 PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
