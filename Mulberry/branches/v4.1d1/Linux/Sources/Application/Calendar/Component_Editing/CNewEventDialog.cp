@@ -75,9 +75,6 @@ void CNewEventDialog::OnCreate()
 	// Get UI items
 	CNewComponentDialog::OnCreate();
 
-	mStatus->SetMenuItems("None %r | Confirmed %r | Tentative %r | Cancelled %r");
-	mStatus->SetValue(1);
-
 // begin JXLayout1
 
     JXStaticText* obj1 =
@@ -96,6 +93,9 @@ void CNewEventDialog::OnCreate()
     assert( mAvailability != NULL );
 
 // end JXLayout1
+
+	mStatus->SetMenuItems("None %r | Confirmed %r | Tentative %r | Cancelled %r");
+	mStatus->SetValue(1);
 }
 
 void CNewEventDialog::InitPanels()
