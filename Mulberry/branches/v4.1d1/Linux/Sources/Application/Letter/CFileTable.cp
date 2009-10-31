@@ -1527,7 +1527,8 @@ bool CFileTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 	if (type == CMulberryApp::sFlavorAtchList)
 	{
 		// Create list to hold dragged items
-		CAttachmentList atchs;
+		std::auto_ptr<CAttachmentList> atchs(new CAttachmentList);
+		atchs->set_delete_data(false);
 
 		// Add selected attachments at same level
 		TableIndexT parent = 0;
@@ -1555,28 +1556,13 @@ bool CFileTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 				CAttachment* attach;
 				UInt32 dataSize = sizeof(CAttachment*);
 				GetCellData(woCell, &attach, dataSize);
-				atchs.push_back(attach);
+				atchs->push_back(attach);
 			}
 		}
 
 		// Allocate global memory for the text if not already
-		unsigned long dataLength = atchs.size() * sizeof(CAttachment*) + sizeof(int) + sizeof(CMessage*);
-		unsigned char* data = new unsigned char[dataLength];
-		if (data)
-		{
-			// Copy to global after lock
-			CAttachment** pAddr = reinterpret_cast<CAttachment**>(data);
-			*((int*) pAddr) = atchs.size();
-			pAddr += sizeof(int);
-			for(CAttachmentList::iterator iter = atchs.begin(); iter != atchs.end(); iter++)
-				*pAddr++ = *iter;
-			
-			seldata->SetData(type, data, dataLength);
-			rendered = true;
-		}
-		
-		// Do not delete originals
-		atchs.clear();
+		seldata->SetData(type, reinterpret_cast<unsigned char*>(atchs.release()), sizeof(CAttachmentList*));
+		rendered = true;
 	}
 	
 	return rendered;
@@ -1598,24 +1584,20 @@ bool CFileTable::DropDataIntoCell(Atom theFlavor, unsigned char* drag_data,
 
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			CMessage* theMsg = ((CMessage**) drag_data)[i];
-			CMessageAttachment* new_attach = new CMessageAttachment(theMsg, theMsg);
+			CMessageAttachment* new_attach = new CMessageAttachment(*iter, *iter);
 			AddPart(new_attach, parent, woRow, -1, false);
 			added = true;
 		}
 	}
 	else if (theFlavor == CMulberryApp::sFlavorAtchList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CAttachmentList* atchs = reinterpret_cast<CAttachmentList*>(drag_data);
+		for(CAttachmentList::const_iterator iter = atchs->begin(); iter != atchs->end(); iter++)
 		{
-			CAttachment* theAtch = ((CAttachment**) drag_data)[i];
-			CAttachment* new_attach = CAttachment::CopyAttachment(*theAtch);
+			CAttachment* new_attach = CAttachment::CopyAttachment(**iter);
 			AddPart(new_attach, parent, woRow, -1, false);
 			added = true;
 		}
@@ -1722,24 +1704,20 @@ bool CFileTable::DropDataAtCell(Atom theFlavor, unsigned char* drag_data,
 
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			CMessage* theMsg = ((CMessage**) drag_data)[i];
-			CMessageAttachment* new_attach = new CMessageAttachment(theMsg, theMsg);
+			CMessageAttachment* new_attach = new CMessageAttachment(*iter, *iter);
 			AddPart(new_attach, parent, parent_row, pos, false);
 			added = true;
 		}
 	}
 	else if (theFlavor == CMulberryApp::sFlavorAtchList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CAttachmentList* atchs = reinterpret_cast<CAttachmentList*>(drag_data);
+		for(CAttachmentList::const_iterator iter = atchs->begin(); iter != atchs->end(); iter++)
 		{
-			CAttachment* theAtch = ((CAttachment**) drag_data)[i];
-			CAttachment* new_attach = CAttachment::CopyAttachment(*theAtch);
+			CAttachment* new_attach = CAttachment::CopyAttachment(**iter);
 			AddPart(new_attach, parent, parent_row, pos, false);
 			added = true;
 		}
@@ -1838,24 +1816,20 @@ bool CFileTable::DropData(Atom theFlavor, unsigned char* drag_data, unsigned lon
 
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			CMessage* theMsg = ((CMessage**) drag_data)[i];
-			CMessageAttachment* new_attach = new CMessageAttachment(theMsg, theMsg);
+			CMessageAttachment* new_attach = new CMessageAttachment(*iter, *iter);
 			AddPart(new_attach, parent, parent_row, pos, false);
 			added = true;
 		}
 	}
 	else if (theFlavor == CMulberryApp::sFlavorAtchList)
 	{
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CAttachmentList* atchs = reinterpret_cast<CAttachmentList*>(drag_data);
+		for(CAttachmentList::const_iterator iter = atchs->begin(); iter != atchs->end(); iter++)
 		{
-			CAttachment* theAtch = ((CAttachment**) drag_data)[i];
-			CAttachment* new_attach = CAttachment::CopyAttachment(*theAtch);
+			CAttachment* new_attach = CAttachment::CopyAttachment(**iter);
 			AddPart(new_attach, parent, parent_row, pos, false);
 			added = true;
 		}

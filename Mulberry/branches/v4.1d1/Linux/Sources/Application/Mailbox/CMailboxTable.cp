@@ -62,6 +62,7 @@
 #include <JXTextMenu.h>
 
 #include <algorithm>
+#include <memory>
 
 // Consts
 
@@ -1441,27 +1442,14 @@ bool CMailboxTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 	bool rendered = false;
 
 	// Make list of selected messages
-	CMessageList msgs;
-	msgs.SetOwnership(false);
-	DoToSelection1((DoToSelection1PP) &CMailboxTable::AddSelectionToDrag, &msgs);
+	std::auto_ptr<CMessageList> msgs(new CMessageList);
+	msgs->SetOwnership(false);
+	DoToSelection1((DoToSelection1PP) &CMailboxTable::AddSelectionToDrag, msgs.get());
 
 	if (type == CMulberryApp::sFlavorMsgList)
 	{
-		// Allocate global memory for the text if not already
-		unsigned long dataLength = msgs.size() * sizeof(CMessage*) + sizeof(int);
-		unsigned char* data = new unsigned char[dataLength];
-		if (data)
-		{
-			// Copy to global after lock
-			CMessage** pAddr = reinterpret_cast<CMessage**>(data);
-			*((int*) pAddr) = msgs.size();
-			pAddr += sizeof(int);
-			for(CMessageList::iterator iter = msgs.begin(); iter != msgs.end(); iter++)
-				*pAddr++ = *iter;
-			
-			seldata->SetData(type, data, dataLength);
-			rendered = true;
-		}
+		seldata->SetData(type, reinterpret_cast<unsigned char*>(msgs.release()), sizeof(CMessageList*));
+		rendered = true;
 	}
 	else if ((type == GetDisplay()->GetSelectionManager()->GetMimePlainTextXAtom()) ||
 			 (type == GetDisplay()->GetSelectionManager()->GetTextXAtom()))
@@ -1469,7 +1457,7 @@ bool CMailboxTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 		cdstring txt;
 		
 		// Add text of each message
-		for(CMessageList::const_iterator iter = msgs.begin(); iter != msgs.end(); iter++)
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
 			// Check message size first
 			if (!CMailControl::CheckSizeWarning(*iter))
@@ -1553,24 +1541,21 @@ bool CMailboxTable::DropData(Atom theFlavor, unsigned char* drag_data, unsigned 
 	{
 		// Get list of chosen message nums
 		ulvector nums;
-		CMessage* theMsg = NULL;
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		CMbox* mbox_from = NULL;
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			theMsg = ((CMessage**) drag_data)[i];
-
-			// Do not allow copy to same mailbox
-			nums.push_back(theMsg->GetMessageNumber());
+			nums.push_back((*iter)->GetMessageNumber());
+			mbox_from = (*iter)->GetMbox();
 		}
 
 		// Do mail message copy from mbox in drag to this mbox
-		if (theMsg && (nums.size() > 0))
+		if (mbox_from && (nums.size() > 0))
 		{
 			try
 			{
 				// Do copy action - delete if drop was a move
-				CActionManager::CopyMessage(theMsg->GetMbox(), GetMbox(), &nums, mDropActionMove);
+				CActionManager::CopyMessage(mbox_from, GetMbox(), &nums, mDropActionMove);
 			}
 			catch (...)
 			{

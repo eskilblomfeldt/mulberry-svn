@@ -1165,25 +1165,21 @@ bool CServerTable::DropDataIntoCell(Atom theFlavor, unsigned char* drag_data,
 
 		// Get list of chosen message nums
 		ulvector nums;
-		CMessage* theMsg = NULL;
-		int count = *((int*) drag_data);
-		drag_data += sizeof(int);
-		for(int i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		CMbox* mbox_from = NULL;
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			theMsg = ((CMessage**) drag_data)[i];
-
-			// Do not allow copy to same mailbox
-			if (theMsg->GetMbox() != mbox_to)
-				nums.push_back(theMsg->GetMessageNumber());
+			nums.push_back((*iter)->GetMessageNumber());
+			mbox_from = (*iter)->GetMbox();
 		}
 
 		// Do mail message copy from mbox in drag to this mbox
-		if (theMsg && (nums.size() > 0))
+		if (mbox_from && (nums.size() > 0))
 		{
 			try
 			{
 				// Do copy action - delete if drop was a move
-				CActionManager::CopyMessage(theMsg->GetMbox(), mbox_to, &nums, mDropActionMove);
+				CActionManager::CopyMessage(mbox_from, mbox_to, &nums, mDropActionMove);
 
 				// Set flag to allow delete after copy
 				CMailboxInfoTable::sDropOnMailbox = true;

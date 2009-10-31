@@ -53,6 +53,7 @@
 #include <jXKeysym.h>
 
 #include <algorithm>
+#include <memory>
 
 /////////////////////////////////////////////////////////////////////////////
 // CGroupTable
@@ -1207,57 +1208,25 @@ bool CGroupTable::RenderSelectionData(CMulSelectionData* seldata, Atom type)
 	if  (type == CMulberryApp::sFlavorGrpList)
 	{
 		// Create list to hold dragged items
-		CGroupList grps;
+		std::auto_ptr<CGroupList> grps(new CGroupList);
+		grps->set_delete_data(false);
 
 		// Add each selected address
-		DoToSelection1((DoToSelection1PP) &CGroupTable::AddGroupToList, &grps);
-		
-		// Allocate global memory for the text if not already
-		unsigned long dataLength = grps.size() * sizeof(CGroup*) + sizeof(unsigned long);
-		unsigned char* data = new unsigned char[dataLength];
-		if (data)
-		{
-			// Copy to global after lock
-			CGroup** pGrp = reinterpret_cast<CGroup**>(data);
-			*((unsigned long*) pGrp) = grps.size();
-			pGrp += sizeof(unsigned long);
-			for(CGroupList::iterator iter = grps.begin(); iter != grps.end(); iter++)
-				*pGrp++ = *iter;
-
-			seldata->SetData(type, data, dataLength);
-			rendered = true;
-		}
-		
-		// Do not delete originals
-		grps.clear_without_delete();
+		DoToSelection1((DoToSelection1PP) &CGroupTable::AddGroupToList, grps.get());
+		seldata->SetData(type, reinterpret_cast<unsigned char*>(grps.release()), sizeof(CGroupList*));
+		rendered = true;
 	}
 
 	else if  (type == CMulberryApp::sFlavorAddrList)
 	{
-		// Create list to hold dragged items
-		CAddressList addrs;
+		// Create list to hold deleted items
+		std::auto_ptr<CAddressList> addrs(new CAddressList);
+		addrs->set_delete_data(false);
 
 		// Add each selected address
-		DoToSelection1((DoToSelection1PP) &CGroupTable::AddAddressesToList, &addrs);
-		
-		// Allocate global memory for the text if not already
-		unsigned long dataLength = addrs.size() * sizeof(CAddress*) + sizeof(unsigned long);
-		unsigned char* data = new unsigned char[dataLength];
-		if (data)
-		{
-			// Copy to global after lock
-			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
-			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long);
-			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
-				*pAddr++ = *iter;
-
-			seldata->SetData(type, data, dataLength);
-			rendered = true;
-		}
-		
-		// Do not delete originals <- do this as address are all copies
-		addrs.clear_without_delete();
+		DoToSelection1((DoToSelection1PP) &CGroupTable::AddAddressesToList, addrs.get());
+		seldata->SetData(type, reinterpret_cast<unsigned char*>(addrs.release()), sizeof(CAddressList*));
+		rendered = true;
 	}
 
 	else if ((type == GetDisplay()->GetSelectionManager()->GetMimePlainTextXAtom()) ||
@@ -1287,19 +1256,14 @@ bool CGroupTable::DropData(Atom inFlavor, unsigned char* drag_data, unsigned lon
 {
 	if (inFlavor == CMulberryApp::sFlavorGrpList)
 	{
-		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long);
-		
+		CGroupList* grps = reinterpret_cast<CGroupList*>(drag_data);
 		CGroupTableNewAction* add_action = NULL;
-
-		for(unsigned long i = 0; i < count; i++)
+		for(CGroupList::const_iterator iter = grps->begin(); iter != grps->end(); iter++)
 		{
-			CGroup* theGrp = ((CGroup**) drag_data)[i];
-
 			// Does it already exist?
-			if (!mAdbk->GetGroupList()->IsDuplicate(theGrp))
+			if (!mAdbk->GetGroupList()->IsDuplicate(*iter))
 			{
-				CGroup* copy = new CGroup(*theGrp);
+				CGroup* copy = new CGroup(**iter);
 				
 				// Check for existing action
 				if (add_action)
@@ -1341,12 +1305,10 @@ bool CGroupTable::DropDataIntoCell(Atom theFlavor,
 
 	if (theFlavor == CMulberryApp::sFlavorMsgList)
 	{
-		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long);
-		for(unsigned long i = 0; i < count; i++)
+		CMessageList* msgs = reinterpret_cast<CMessageList*>(drag_data);
+		for(CMessageList::const_iterator iter = msgs->begin(); iter != msgs->end(); iter++)
 		{
-			CMessage* theMsg = ((CMessage**) drag_data)[i];
-			CEnvelope* theEnv = theMsg->GetEnvelope();
+			CEnvelope* theEnv = (*iter)->GetEnvelope();
 
 			// Add From
 			if (theEnv->GetFrom()->size())
@@ -1387,17 +1349,13 @@ bool CGroupTable::DropDataIntoCell(Atom theFlavor,
 	}
 	else if (theFlavor == CMulberryApp::sFlavorAddrList)
 	{
-		unsigned long count = *((unsigned long*) drag_data);
-		drag_data += sizeof(unsigned long);
-		for(unsigned long i = 0; i < count; i++)
+		CAddressList* addrs = reinterpret_cast<CAddressList*>(drag_data);
+		for(CAddressList::const_iterator iter = addrs->begin(); iter != addrs->end(); iter++)
 		{
-			CAddress* theAddr = ((CAddress**) drag_data)[i];
-			{
-				// Add to list
-				cdstring txt = theAddr->GetFullAddress();
-				new_grp->AddAddress(txt);
-				added = true;
-			}
+			// Add to list
+			cdstring txt = (*iter)->GetFullAddress();
+			new_grp->AddAddress(txt);
+			added = true;
 		}
 	}
 	else if (theFlavor == CMulberryApp::sFlavorGrpList)

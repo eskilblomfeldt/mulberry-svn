@@ -21,6 +21,7 @@
 
 #include "CAttachment.h"
 #include <algorithm>
+
 // Default constructor
 CAttachmentList::CAttachmentList()
 {
@@ -43,8 +44,6 @@ CAttachmentList::CAttachmentList(const CAttachmentList& copy)
 // Default destructor
 CAttachmentList::~CAttachmentList()
 {
-	// Delete all attachments if owned
-	DeleteAll();
 }
 
 // Recursively search cache for mbox with requested name
@@ -64,20 +63,14 @@ unsigned long CAttachmentList::FetchIndexOf(const CAttachment* attach) const
 void CAttachmentList::InsertAttachmentAt(unsigned long index, CAttachment* attach)
 {
 	// Find it
-	CAttachmentList::iterator iter = begin() + index;
-
-	insert(iter, attach);
+	insert(begin() + index, attach);
 }
 
 // Delete attachment at specific position
 void CAttachmentList::RemoveAttachmentAt(unsigned long index)
 {
-	// Find it
-	CAttachmentList::iterator iter = begin() + index;
-
-	// Delete and remove
-	delete *iter;
-	erase(iter);
+	// Remove
+	erase(begin() + index);
 }
 
 // Delete the attachment from the list
@@ -88,25 +81,11 @@ void CAttachmentList::RemoveAttachment(CAttachment* attach, bool delete_it)
 	if (found != end())
 	{
 		// Delete before erase
-		if (delete_it)
-			delete *found;
+		if (not delete_it)
+			*found = NULL;
 		erase(found);
 	}
 }
-
-// Delete all attachments from the list
-void CAttachmentList::DeleteAll()
-{
-	// Delete all
-	for(CAttachmentList::iterator iter = begin(); iter != end(); iter++)
-	{
-		// Delete
-		delete *iter;
-	}
-
-	clear();
-
-} // CAttachmentList::DeleteAll
 
 // Check for duplicate attachment
 bool CAttachmentList::DuplicateItem(const CAttachment* test) const

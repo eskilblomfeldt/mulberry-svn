@@ -144,7 +144,7 @@ void CFileTableAddAction::Add(CAttachment* add)
 	if (!mIsDone)
 	{
 		// Delete all items in lists
-		mItems.DeleteAll();
+		mItems.clear();
 		mItemPos.clear();
 
 		// Reset state

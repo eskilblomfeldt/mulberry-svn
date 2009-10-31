@@ -50,6 +50,8 @@
 
 #include "StPenState.h"
 
+#include <memory>
+
 // __________________________________________________________________________________________________
 // C L A S S __ C M A I L B O X T I T L E T A B L E
 // __________________________________________________________________________________________________
@@ -612,29 +614,13 @@ bool CAdbkSearchTable::RenderSelectionData(CMulSelectionData* seldata, Atom type
 	if (type == CMulberryApp::sFlavorAddrList)
 	{
 		// Create list to hold deleted items
-		CAddressList addrs;
+		std::auto_ptr<CAddressList> addrs(new CAddressList);
+		addrs->set_delete_data(false);
 
 		// Add each selected address
-		AddSelectionToList(&addrs);
-		
-		// Allocate global memory for the text if not already
-		unsigned long dataLength = addrs.size() * sizeof(CAddress*) + sizeof(unsigned long);
-		unsigned char* data = new unsigned char[dataLength];
-		if (data)
-		{
-			// Copy to global after lock
-			CAddress** pAddr = reinterpret_cast<CAddress**>(data);
-			*((unsigned long*) pAddr) = addrs.size();
-			pAddr += sizeof(unsigned long);
-			for(CAddressList::iterator iter = addrs.begin(); iter != addrs.end(); iter++)
-				*pAddr++ = *iter;
-			
-			seldata->SetData(type, data, dataLength);
-			rendered = true;
-		}
-		
-		// Do not delete originals
-		addrs.clear_without_delete();
+		AddSelectionToList(addrs.get());
+		seldata->SetData(type, reinterpret_cast<unsigned char*>(addrs.release()), sizeof(CAddressList*));
+		rendered = true;
 	}
 
 	else if ((type == GetDisplay()->GetSelectionManager()->GetMimePlainTextXAtom()) ||

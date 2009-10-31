@@ -20,13 +20,13 @@
 #ifndef __CATTACHMENTLIST__MULBERRY__
 #define __CATTACHMENTLIST__MULBERRY__
 
-#include <vector>
+#include "ptrvector.h"
 
 // Classes
 
 class CAttachment;
 
-class CAttachmentList : public std::vector<CAttachment*> {
+class CAttachmentList : public ptrvector<CAttachment> {
 
 public:
 						CAttachmentList();
@@ -39,7 +39,6 @@ public:
 	void				RemoveAttachmentAt(unsigned long index);							// Remove attachment at specific position
 
 	void				RemoveAttachment(CAttachment* attach, bool delete_it = true);		// Remove (and possibly delete) the attachment from the list
-	void				DeleteAll();													// Delete all attachments from list
 
 	bool				DuplicateItem(const CAttachment* test) const;						// Look for duplicate in full hierarchy
 };
