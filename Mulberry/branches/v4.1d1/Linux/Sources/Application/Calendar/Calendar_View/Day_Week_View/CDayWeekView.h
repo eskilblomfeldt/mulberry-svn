@@ -62,6 +62,8 @@ public:
 
 			void SetType(EDayWeekType type);
 
+	virtual void ResetFont(const SFontInfo& finfo);			// Reset text traits
+
 	virtual void DoPrint();
 
 	CDayWeekViewTimeRange::ERanges GetRange() const

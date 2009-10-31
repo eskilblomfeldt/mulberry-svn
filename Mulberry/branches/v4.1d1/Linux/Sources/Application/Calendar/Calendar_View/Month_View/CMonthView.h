@@ -56,6 +56,8 @@ public:
 
 	virtual cdstring GetTitle() const;
 
+	virtual void ResetFont(const SFontInfo& finfo);			// Reset text traits
+
 	virtual void DoPrint();
 
 	virtual CCalendarTableBase* GetTable() const;

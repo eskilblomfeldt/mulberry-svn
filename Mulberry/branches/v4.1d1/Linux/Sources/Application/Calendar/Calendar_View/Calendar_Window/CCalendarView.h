@@ -19,6 +19,8 @@
 
 #include "CBaseView.h"
 
+#include "CWindowStatesFwd.h"
+
 #include "CDayWeekViewTimeRange.h"
 #include "CCalendarViewTypes.h"
 
@@ -120,6 +122,8 @@ public:
 
 	virtual bool	HasFocus() const;
 	virtual void	Focus();
+
+	virtual void	ResetFont(const SFontInfo& finfo);
 
 	virtual void	ResetState(bool force = false);
 	virtual void	SaveState();							// Save current state in prefs

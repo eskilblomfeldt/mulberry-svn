@@ -50,6 +50,8 @@ public:
 
 	virtual CCalendarTableBase* GetTable() const;
 
+	virtual void ResetFont(const SFontInfo& finfo);			// Reset text traits
+
 protected:
 
 	enum

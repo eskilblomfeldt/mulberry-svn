@@ -242,6 +242,10 @@ void CYearView::OnLayout()
 	ResetDate();
 }
 
+void CYearView::ResetFont(const SFontInfo& finfo)
+{
+}
+
 void CYearView::DoPrint()
 {
 #ifdef _TODO

@@ -347,6 +347,16 @@ void CDayWeekView::OnRange()
 	Refresh();
 }
 
+void CDayWeekView::ResetFont(const SFontInfo& finfo)
+{
+	// Change fonts
+	//mTable->ResetFont(finfo);
+
+	// May need to manually adjust titles and position of table
+	mTitles->ResetFont(finfo);
+	mTitles->SyncTable(mTable, true);
+}
+
 void CDayWeekView::DoPrint()
 {
 #ifdef _TODO

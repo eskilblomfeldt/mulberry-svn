@@ -27,6 +27,7 @@
 #include "CAddressBookView.h"
 #include "CAddressBookWindow.h"
 #include "CAdminLock.h"
+#include "CCalendarView.h"
 #include "CCalendarStoreWindow.h"
 #include "CCalendarWindow.h"
 #include "CCopyToMenu.h"
@@ -810,6 +811,7 @@ void CPreferencesDialog::MakeChanges(CPreferences* newPrefs)
 	bool refresh_adbkmanager = false;
 	bool refresh_adbksearch = false;
 	bool refresh_addressbook = false;
+	bool refresh_calendar = false;
 	bool refresh_rules = false;
 	bool refresh_mrus = false;
 
@@ -852,6 +854,7 @@ void CPreferencesDialog::MakeChanges(CPreferences* newPrefs)
 		refresh_adbkmanager = true;
 		refresh_adbksearch = true;
 		refresh_addressbook = true;
+		refresh_calendar = true;
 		refresh_rules = true;
 	}
 
@@ -994,6 +997,27 @@ void CPreferencesDialog::MakeChanges(CPreferences* newPrefs)
 		// Iterate over all address books
 		cdmutexprotect<CAddressBookView::CAddressBookViewList>::lock _lock(CAddressBookView::sAddressBookViews);
 		for(CAddressBookView::CAddressBookViewList::iterator iter = CAddressBookView::sAddressBookViews->begin(); iter != CAddressBookView::sAddressBookViews->end(); iter++)
+#ifndef USE_FONTMAPPER
+			(*iter)->ResetFont(newPrefs->mListTextFontInfo.GetValue());
+#else
+			(*iter)->ResetFont(newPrefs->mListFontMap.GetValue().GetCharsetFontDescriptor(eUSAscii).mTraits.traits);
+#endif
+	}
+
+	if (refresh_calendar)
+	{
+		// Iterate over all calendars windows
+		cdmutexprotect<CCalendarStoreView::CCalendarStoreViewList>::lock _lock1(CCalendarStoreView::sCalendarStoreViews);
+		for(CCalendarStoreView::CCalendarStoreViewList::iterator iter = CCalendarStoreView::sCalendarStoreViews->begin(); iter != CCalendarStoreView::sCalendarStoreViews->end(); iter++)
+#ifndef USE_FONTMAPPER
+			(*iter)->ResetFont(newPrefs->mListTextFontInfo.GetValue());
+#else
+			(*iter)->ResetFont(newPrefs->mListFontMap.GetValue().GetCharsetFontDescriptor(eUSAscii).mTraits.traits);
+#endif
+
+		// Iterate over all calendars windows
+		cdmutexprotect<CCalendarView::CCalendarViewList>::lock _lock2(CCalendarView::sCalendarViews);
+		for(CCalendarView::CCalendarViewList::iterator iter = CCalendarView::sCalendarViews->begin(); iter != CCalendarView::sCalendarViews->end(); iter++)
 #ifndef USE_FONTMAPPER
 			(*iter)->ResetFont(newPrefs->mListTextFontInfo.GetValue());
 #else

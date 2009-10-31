@@ -552,6 +552,14 @@ void CCalendarView::ShowToDo(bool show)
 	}
 }
 
+void CCalendarView::ResetFont(const SFontInfo& finfo)
+{
+	if (mCurrentView != NULL)
+		mCurrentView->ResetFont(finfo);
+	if (mToDoView != NULL)
+		mToDoView->ResetFont(finfo);
+}
+
 void CCalendarView::ResetState(bool force)
 {
 	// Use "Calendars" for the 1-pane/3-pane calendar manager

@@ -21,6 +21,7 @@
 #include "CCommander.h"
 #include "CBroadcaster.h"
 #include "CListener.h"
+#include "CWindowStatesFwd.h"
 
 #include "CICalendar.h"
 #include "CICalendarDateTime.h"
@@ -75,6 +76,8 @@ public:
 	virtual iCal::CICalendarDateTime GetSelectedDate() const = 0;
 
 	virtual cdstring GetTitle() const = 0;
+
+	virtual void ResetFont(const SFontInfo& finfo) = 0;			// Reset text traits
 
 	virtual void DoPrint() {}
 

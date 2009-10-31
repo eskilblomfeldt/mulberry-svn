@@ -161,3 +161,8 @@ void CToDoView::OnShowPopup()
 	mShowValue = mShowPopup->GetValue();
 	ResetDate();
 }
+
+void CToDoView::ResetFont(const SFontInfo& finfo)
+{
+}
+
