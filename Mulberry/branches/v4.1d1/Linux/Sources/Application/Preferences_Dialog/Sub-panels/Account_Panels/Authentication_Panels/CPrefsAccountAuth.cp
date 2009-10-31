@@ -287,7 +287,7 @@ void CPrefsAccountAuth::BuildAuthPopup(CINETAccount* account)
 
 void CPrefsAccountAuth::InitTLSPopup(CINETAccount* account)
 {
-	mTLSPopup->SetMenuItems("No Security %r | SSLv3 %r | STARTTLS - TLSv1 %r | STARTTLS - SSL %r");
+	mTLSPopup->SetMenuItems("No Security %r | SSLv23 %r | SSLv3 %r | STARTTLS - TLSv1 %r | STARTTLS - SSL %r");
 	mTLSPopup->SetUpdateAction(JXMenu::kDisableNone);
 	mTLSPopup->SetToPopupChoice(kTrue, 1);
 
