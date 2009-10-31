@@ -220,24 +220,95 @@ void CEditAddressDialog::SetFields(CAdbkAddress* addr, bool allow_edit)
 
 bool CEditAddressDialog::GetFields(CAdbkAddress* addr)
 {
-	// Nick-name cannot contain '@' and no spaces surrounding it
-	cdstring nickname(mNickName->GetText());
-	::strreplace(nickname.c_str_mod(), "@", '*');
-	nickname.trimspace();
+	bool done_edit = false;
 
-	addr->SetADL(nickname);
-	addr->SetName(mFullName->GetText());
-	addr->CopyMailAddress(mEmail->GetText());
-	addr->SetCalendar(mCalendar->GetText());
-	addr->SetCompany(mCompany->GetText());
-	addr->SetPhone(mPhoneWork->GetText(), CAdbkAddress::eWorkPhoneType);
-	addr->SetPhone(mPhoneHome->GetText(), CAdbkAddress::eHomePhoneType);
-	addr->SetPhone(mFax->GetText(), CAdbkAddress::eFaxType);
-	addr->SetAddress(mAddress->GetText(), CAdbkAddress::eDefaultAddressType);
-	addr->SetURL(mURL->GetText());
-	addr->SetNotes(mNotes->GetText());
-	
-	return true;
+	// Nick-name cannot contain '@' and no spaces surrounding it
+	cdstring txt = mNickName->GetText();
+	::strreplace(txt.c_str_mod(), "@", '*');
+	txt.trimspace();
+
+	if (addr->GetADL() != txt)
+	{
+		addr->SetADL(txt);
+		done_edit = true;
+	}
+
+	txt = mFullName->GetText();
+	if (addr->GetName() != txt)
+	{
+		addr->SetName(txt);
+		done_edit = true;
+	}
+
+	txt = mEmail->GetText();
+	cdstring test_addr = addr->GetEmail(CAdbkAddress::eDefaultEmailType);
+	if (test_addr != txt)
+	{
+		addr->SetEmail(txt, CAdbkAddress::eDefaultEmailType);
+		done_edit = true;
+	}
+
+	txt = mCalendar->GetText();
+	if (addr->GetCalendar() != txt)
+	{
+		addr->SetCalendar(txt);
+		done_edit = true;
+	}
+
+	txt = mCompany->GetText();
+	if (addr->GetCompany() != txt)
+	{
+		addr->SetCompany(txt);
+		done_edit = true;
+	}
+
+	txt = mAddress->GetText();
+
+	// Give to address if not same as previous
+	if (addr->GetAddress(CAdbkAddress::eDefaultAddressType) != txt)
+	{
+		addr->SetAddress(txt, CAdbkAddress::eDefaultAddressType);
+		done_edit = true;
+	}
+
+	txt = mURL->GetText();
+
+	// Give to URL if not same as previous
+	if (addr->GetURL() != txt)
+	{
+		addr->SetURL(txt);
+		done_edit = true;
+	}
+
+	txt = mPhoneWork->GetText();
+	if (addr->GetPhone(CAdbkAddress::eWorkPhoneType) != txt)
+	{
+		addr->SetPhone(txt, CAdbkAddress::eWorkPhoneType);
+		done_edit = true;
+	}
+
+	txt = mPhoneHome->GetText();
+	if (addr->GetPhone(CAdbkAddress::eHomePhoneType) != txt)
+	{
+		addr->SetPhone(txt, CAdbkAddress::eHomePhoneType);
+		done_edit = true;
+	}
+
+	txt = mFax->GetText();
+	if (addr->GetPhone(CAdbkAddress::eFaxType) != txt)
+	{
+		addr->SetPhone(txt, CAdbkAddress::eFaxType);
+		done_edit = true;
+	}
+
+	txt = mNotes->GetText();
+	if (addr->GetNotes() != txt)
+	{
+		addr->SetNotes(txt);
+		done_edit = true;
+	}
+
+	return done_edit;
 }
 
 bool CEditAddressDialog::PoseDialog(CAdbkAddress* addr, bool allow_edit)

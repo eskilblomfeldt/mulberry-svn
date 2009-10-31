@@ -165,38 +165,53 @@ void CEditGroupDialog::OnGroupEditSort()
 	std::sort(list.begin(), list.end(), comp_strnocase);
 
 	// Put back in field
-	txt = cdstring::null_str;
 	for(unsigned long i = 0; i < list.size(); i++)
 	{
-		txt += list.at(i);
-		txt += os_endl;
+		mOriginalListText += list.at(i);
+		mOriginalListText += os_endl;
 	}
 
-	mAddressList->SetText(txt);
+	mAddressList->SetText(mOriginalListText);
 }
 
 bool CEditGroupDialog::GetFields(CGroup* grp)
 {
-	// Nick-name cannot contain '@' and no spaces surrounding it
-	cdstring nickname(mNickName->GetText());
-	::strreplace(nickname.c_str_mod(), "@", '*');
-	nickname.trimspace();
+	bool done_edit = false;
 
-	grp->GetNickName() = nickname;
-	grp->GetName() = mGroupName->GetText();
-	
-	grp->GetAddressList().clear();
-	cdstring txt = mAddressList->GetText();
-	char* s = txt.c_str_mod();
-	s = ::strtok(s, "\n");
-	while(s)
+	// Nick-name cannot contain '@' and no spaces surrounding it
+	cdstring txt = mNickName->GetText();
+	::strreplace(txt.c_str_mod(), "@", '*');
+	txt.trimspace();
+
+	if (grp->GetNickName() != txt)
 	{
-		grp->GetAddressList().push_back(cdstring(s));
-		
-		s = ::strtok(nil, "\n");
+		grp->GetNickName() = txt;
+		done_edit = true;
 	}
 
-	return true;
+	txt = mGroupName->GetText();
+	if (grp->GetName() != txt)
+	{
+		grp->GetName() = txt;
+		done_edit = true;
+	}
+
+	txt = mAddressList->GetText();
+	if (mOriginalListText != txt)
+	{
+		grp->GetAddressList().clear();
+		char* s = txt.c_str_mod();
+		s = ::strtok(s, "\n");
+		while(s)
+		{
+			grp->GetAddressList().push_back(cdstring(s));
+
+			s = ::strtok(nil, "\n");
+		}
+		done_edit = true;
+	}
+
+	return done_edit;
 }
 
 void CEditGroupDialog::SetFields(const CGroup* grp)

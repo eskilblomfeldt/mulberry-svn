@@ -23,6 +23,8 @@
 
 #include "CDialogDirector.h"
 
+#include "cdstring.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CEditGroupDialog dialog
 
@@ -50,6 +52,8 @@ protected:
     JXTextButton*      mOKBtn;
 
 // end JXLayout
+
+	cdstring mOriginalListText;
 
 	virtual void OnCreate();
 	virtual void Receive(JBroadcaster* sender, const Message& message);
