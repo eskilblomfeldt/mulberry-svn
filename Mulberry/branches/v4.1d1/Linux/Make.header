@@ -17,7 +17,7 @@ JX_ROOT = ${DEV_ROOT}/JX
 ACE_ROOT = ${JX_ROOT}/ACE/ACE_wrappers
 export JXLAYOUTDIR = ${JX_ROOT}/programs/jxlayout
 
-SSL_INC = -I/usr/include/openssl -I/usr/kerberos/include
+SSL_INC = -I/usr/include/openssl
 
 HAS_GNUG_3 := $(shell \
    if { $(CXX) --version | egrep '3\.2' > /dev/null; } \
