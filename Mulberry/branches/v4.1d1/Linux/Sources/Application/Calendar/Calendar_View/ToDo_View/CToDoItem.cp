@@ -300,8 +300,8 @@ void CToDoItem::Draw(JXWindowPainter& p, const JRect& rect)
 		float red = CCalendarUtils::GetRed(mColour);
 		float green = CCalendarUtils::GetGreen(mColour);
 		float blue = CCalendarUtils::GetBlue(mColour);
-		if (mIsSelected)
-			CCalendarUtils::UnflattenColours(red, green, blue);
+		if (not mIsSelected)
+			CCalendarUtils::LightenColours(red, green, blue);
 		GetColormap()->JColormap::AllocateStaticColor(CCalendarUtils::GetRGBColor(red, green, blue), &cindex);
 		p.SetPenColor(cindex);
 		p.SetFilling(true);
@@ -321,7 +321,20 @@ void CToDoItem::Draw(JXWindowPainter& p, const JRect& rect)
 	if (mType == eToDo)
 		box.left += cCheckboxLeftOffset + cCheckboxSize;
 	box.bottom = box.top + cItemHeight / 2;
-	p.SetPenColor(GetColormap()->GetBlackColor());
+	float red = CCalendarUtils::GetRed(mColour);
+	float green = CCalendarUtils::GetGreen(mColour);
+	float blue = CCalendarUtils::GetBlue(mColour);
+	if (mIsSelected)
+	{
+		cindex = (red + green + blue > 2.5) ? p.GetColormap()->GetBlackColor() : p.GetColormap()->GetWhiteColor();
+	}
+	else
+	{
+		CCalendarUtils::DarkenColours(red, green, blue);
+		JRGB fill = CCalendarUtils::GetRGBColor(red, green, blue);
+		GetColormap()->JColormap::AllocateStaticColor(fill, &cindex);
+	}
+	p.SetPenColor(cindex);
 	::DrawClippedStringUTF8(&p, mSummary, JPoint(box.left, box.top), box, (mType == eToDo) ? eDrawString_Left : eDrawString_Center);
 
 	// Draw status text

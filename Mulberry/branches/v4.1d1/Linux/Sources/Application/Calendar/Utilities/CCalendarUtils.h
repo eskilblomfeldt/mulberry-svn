@@ -71,6 +71,10 @@ namespace CCalendarUtils
 		else if (blue < 0.0)
 			blue = 0.0;
 	}
+	void LightenColours(float& red, float& green, float& blue, bool lighter = false);
+	void DarkenColours(float& red, float& green, float& blue);
+	void RGB2HSV(const float& r, const float& g, const float& b, float& h, float& s, float& v);
+	void HSV2RGB(const float& h, const float& s, const float& v, float& r, float& g, float& b);
 
 	inline JRGB	GetRGBColor(const uint32_t& colour)
 	{

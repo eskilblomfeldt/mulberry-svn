@@ -223,29 +223,40 @@ void CCalendarEventBase::Draw(JXWindowPainter& p, const JRect& rect)
 		DrawVertFrame(&p, actual_rect);
 	
 	// Draw title
-	actual_rect.Shrink(3, 1);
+	actual_rect.left += 3;
+	actual_rect.right -= (mHoriz && mAllDay || IsFreeBusy()) ? 3 : 0;
 	JRect cliprect(actual_rect);
-	if (actual_rect.height() < 16)
+	if (cliprect.height() < 16)
 	{
-		JCoordinate height_adjust = (16 - actual_rect.height()) / 2;
-		actual_rect.top -= height_adjust;
-		actual_rect.bottom = actual_rect.top + 16;
-		cliprect = rect;
-		cliprect.Shrink(0, 1);
-		cliprect.left = actual_rect.left;
-		cliprect.right = actual_rect.right;
+		JCoordinate height_adjust = (16 - cliprect.height()) / 2;
+		cliprect.top -= height_adjust;
+		cliprect.bottom = cliprect.top + 16;
 	}
 
 	JFontStyle style;
-	style.color = mIsSelected ? p.GetColormap()->GetWhiteColor() : p.GetColormap()->GetBlackColor();
+	float red = CCalendarUtils::GetRed(mColour);
+	float green = CCalendarUtils::GetGreen(mColour);
+	float blue = CCalendarUtils::GetBlue(mColour);
+	if (mIsSelected)
+	{
+		style.color = (red + green + blue > 2.5) ? p.GetColormap()->GetBlackColor() : p.GetColormap()->GetWhiteColor();
+	}
+	else
+	{
+		CCalendarUtils::DarkenColours(red, green, blue);
+		JColorIndex cindex;
+		JRGB fill = CCalendarUtils::GetRGBColor(red, green, blue);
+		GetColormap()->JColormap::AllocateStaticColor(fill, &cindex);
+		style.color = cindex;
+	}
 	p.SetPenColor(style.color);
 	p.SetFont(CPreferences::sPrefs->mListTextFontInfo.GetValue().fontname, CPreferences::sPrefs->mListTextFontInfo.GetValue().size, style);
 
 	if (mHoriz)
-		::DrawClippedStringUTF8(&p, mTitle, JPoint(actual_rect.left, actual_rect.top), cliprect, mAllDay ? eDrawString_Center : eDrawString_Left);
+		::DrawClippedStringUTF8(&p, mTitle, JPoint(cliprect.left, cliprect.top), cliprect, (mAllDay || IsFreeBusy()) ? eDrawString_Center : eDrawString_Left);
 	else
 	{
-		CTextBox::DrawText(&p, mTitle, cliprect, eDrawString_Left);
+		CTextBox::DrawText(&p, mTitle, cliprect, IsFreeBusy() ? eDrawString_Center : eDrawString_Left);
 	}
 	
 	// Strike out text if status is cancelled
@@ -287,7 +298,16 @@ void CCalendarEventBase::DrawHorizFrame(JXWindowPainter* pDC, JRect& rect)
 	float green = CCalendarUtils::GetGreen(mColour);
 	float blue = CCalendarUtils::GetBlue(mColour);
 	if (mIsSelected)
-		CCalendarUtils::UnflattenColours(red, green, blue);
+	{
+		if (IsFreeBusy())
+			red = green = blue = 1.0;
+	}
+	else
+	{
+		CCalendarUtils::LightenColours(red, green, blue);
+		if (IsFreeBusy())
+			red = green = blue = 1.0;
+	}
 
 	// Fill with appropriate colour first
 	JColorIndex cindex;
@@ -353,11 +373,6 @@ void CCalendarEventBase::DrawHorizFrame(JXWindowPainter* pDC, JRect& rect)
 		
 		// Offset right edge of text
 		rect.right -= 16;
-	}
-	
-	if (!mHasAlarm || (mAttendeeState == iCal::CITIPProcessor::eNone))
-	{
-		rect.right -= 4;
 	}
 }
 
@@ -499,13 +514,25 @@ void CCalendarEventBase::DrawVertFrame(JXWindowPainter* pDC, JRect& rect)
 {
 	rect.Shrink(1, 0);
 	rect.bottom -= 1;
-	
+
+	if (IsFreeBusy())
+		rect.Shrink(3, 3);
+
 	// Use unsaturated colour for selected item
 	float red = CCalendarUtils::GetRed(mColour);
 	float green = CCalendarUtils::GetGreen(mColour);
 	float blue = CCalendarUtils::GetBlue(mColour);
 	if (mIsSelected)
-		CCalendarUtils::UnflattenColours(red, green, blue);
+	{
+		if (IsFreeBusy())
+			red = green = blue = 1.0;
+	}
+	else
+	{
+		CCalendarUtils::LightenColours(red, green, blue);
+		if (IsFreeBusy())
+			red = green = blue = 1.0;
+	}
 	
 	// Fill with appropriate colour first
 	JColorIndex cindex;
@@ -527,7 +554,7 @@ void CCalendarEventBase::DrawVertFrame(JXWindowPainter* pDC, JRect& rect)
 	// Adjust rect for jaggies/round corners
 	if (mStartsInCol)
 	{
-		rect.top += 3;
+		rect.top += 2;
 	}
 	else
 	{
@@ -535,18 +562,11 @@ void CCalendarEventBase::DrawVertFrame(JXWindowPainter* pDC, JRect& rect)
 	}
 	if (mEndsInCol)
 	{
-		rect.bottom -= 3;
+		rect.bottom -= 2;
 	}
 	else
 	{
 		rect.bottom -= cJaggedEdgeHeight;
-	}
-
-	// Adjust for round edges clip
-	if (rect.height() < 20)
-	{
-		rect.left += 3;
-		rect.right -= 3;
 	}
 
 	// Display alarm indicator
