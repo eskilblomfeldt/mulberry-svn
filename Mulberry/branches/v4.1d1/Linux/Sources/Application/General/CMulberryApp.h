@@ -89,10 +89,10 @@ public:
 	static CPeriodicCheck*		sMailCheck;       		// Mail check
 
 	// Clipboard formats
-	static Atom		sFlavorServerList;	// List of messages
-	static Atom		sFlavorWDList;		// List of messages
-	static Atom		sFlavorMboxList;	// List of messages
-	static Atom		sFlavorMboxRefList;	// List of messages
+	static Atom		sFlavorServerList;	// List of servers
+	static Atom		sFlavorWDList;		// List of display hierarchies
+	static Atom		sFlavorMboxList;	// List of mailboxes
+	static Atom		sFlavorMboxRefList;	// List of mailbox references
 
 	static Atom		sFlavorMsgList;		// List of messages
 	static Atom		sFlavorAddrList;	// List of addresses
