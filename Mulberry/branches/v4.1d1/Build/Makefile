@@ -103,10 +103,8 @@ svn:
 	@(cd Bits; svn update)
 
 static: cleanrelease plugins appstatic archivestatic
-staticcw: cleanrelease plugins appstaticcw archivestatic
 
 staticnoplugins: cleanrelease pluginsnobuild appstatic archivestatic
-staticnopluginscw: cleanrelease pluginsnobuild appstaticcw archivestatic
 
 dynamic: cleanrelease plugins app lib archivedynamic
 
@@ -131,13 +129,15 @@ cleanrelease:
 	@echo "--> Removing ${RELEASE_NAME}"
 	@rm -rf ${RELEASE_DIR}
 	@rm -f ${LINK_DIR}
-	@echo "--> Creating ${RELEASE_NAME}"
-	@mkdir ${RELEASE_DIR}
-	@mkdir ${RELEASE_DIR}/${HIDDEN_DIR}
-	@mkdir ${RESOURCE_RELEASE_DIR}
-	@ln -s ${RELEASE_DIR} ${LINK_DIR}
 
-plugins:
+createrelease:
+	@echo "--> Creating ${RELEASE_NAME}"
+	@mkdir -p ${RELEASE_DIR}
+	@mkdir -p ${RELEASE_DIR}/${HIDDEN_DIR}
+	@mkdir -p ${RESOURCE_RELEASE_DIR}
+	@ln -sf ${RELEASE_DIR} ${LINK_DIR}
+
+plugins: createrelease
 	@echo "-->Building Plugins"
 	@rm -rf ${PLUGIN_RELEASE_DIR}; mkdir ${PLUGIN_RELEASE_DIR}
 	@(cd ${PLUGINS_DIR}; ${MAKE} all)
@@ -145,7 +145,7 @@ plugins:
 	@cp ${PLUGINS_DIR}/*/*Plugin.so ${PLUGIN_RELEASE_DIR}
 	@strip ${PLUGIN_RELEASE_DIR}/*Plugin.so
 
-pluginsnobuild:
+pluginsnobuild: createrelease
 	@echo "-->Copying Plugins"
 	@cp ${PLUGINS_DIR}/*/*Plugin.so ${PLUGIN_RELEASE_DIR}
 	@strip ${PLUGIN_RELEASE_DIR}/*Plugin.so
@@ -153,22 +153,11 @@ pluginsnobuild:
 appstatic:
 	@${MAKE} "BUILD_STATIC=1" app
 
-appstaticcw:
-	@${MAKE} "BUILD_STATIC=1" appcw
-
-app:
+app: createrelease
 	@echo ""
 	@echo "-->Building Mulberry"
 	@rm -f ${RELEASE_DIR}/${APP_NAME}
 	@(cd ${APP_DIR}; ${MAKE})
-	@echo "-->Copying Mulberry"
-	@cp ${APP_DIR}/${APP_NAME} ${RELEASE_DIR}
-	@strip ${RELEASE_DIR}/${APP_NAME}
-
-appcw:
-	@echo ""
-	@echo "-->Assuming Mulberry is Already Built"
-	@rm -f ${RELEASE_DIR}/${APP_NAME}
 	@echo "-->Copying Mulberry"
 	@cp ${APP_DIR}/${APP_NAME} ${RELEASE_DIR}
 	@strip ${RELEASE_DIR}/${APP_NAME}
