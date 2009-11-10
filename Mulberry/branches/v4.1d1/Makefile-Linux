@@ -14,12 +14,12 @@ jxinit:
 	 ln -sf ../libjx/libjx-2_5_0.so libjx-2_5_0.so)
 	touch Libraries/JX/ACE/ACE_wrappers/ace/Svc_Conf_l.cpp
 
-mulberryinit: mulberrypostinit
+mulberryinit:
 	(cd Linux; ./links.sh)
 
-mulberrypostinit:
+mulberrymakemake:
 	if { test ! -f Linux/Makefile; } then \
-		(cd Linux; Libraries/JX/bin/makemake) \
+		(cd Linux; ../Libraries/JX/bin/makemake) \
 	fi \
 
 update:
@@ -31,8 +31,14 @@ buildjx:
 updatemulberry:
 	(cd Build; ${MAKE} svn)
 
-buildmulberry:
+buildmulberry: mulberrymakemake
 	(cd Build; ${MAKE} static)
+
+buildmulberryapp: mulberrymakemake
+	(cd Build; ${MAKE} app)
+
+buildmulberryplugins:
+	(cd Build; ${MAKE} plugins)
 
 install:
 	(cd Build; ${MAKE} install)
