@@ -5,7 +5,7 @@ PLUGINS_DIR := ./
 PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
 # Plugins to build
-BUILD_PLUGINS := PluginLibrary CRAM-MD5 DIGEST-MD5 GSSAPI Kerberos \
+BUILD_PLUGINS := PluginLibrary CRAM-MD5 DIGEST-MD5 GSSAPI \
 			CommunicatorAdbkIO Eudora4AdbkIO EudoraAdbkIO NetscapeAdbkIO \
 			PineAdbkIO QuickmailAdbkIO vCardAdbkIO \
 			ISpell ASpell \
