@@ -26,6 +26,8 @@
 
 #include "CDialogDirector.h"
 
+#include <stdint.h>
+
 class CStaticText;
 class JXTextButton;
 class JXImageWidget;

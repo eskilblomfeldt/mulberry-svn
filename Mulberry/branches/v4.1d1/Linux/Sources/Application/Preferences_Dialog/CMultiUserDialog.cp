@@ -445,7 +445,7 @@ void CMultiUserDialog::InitServerField()
 		temp = CPreferences::sPrefs->mMailAccounts.GetValue().front()->GetServerIP();
 	
 	// Is it multiple?
-	if (::strchr(temp, ','))
+	if (::strchr(temp.c_str(), ','))
 	{
 		// Hide server name
 		mServerTxt->Hide();
@@ -539,7 +539,7 @@ void CMultiUserDialog::UpdatePrefs(void)
 			cdstring temp = CPreferences::sPrefs->mSMTPAccounts.GetValue().front()->GetServerIP();
 			
 			// Is it multiple?
-			if (::strchr(temp, ','))
+			if (::strchr(temp.c_str(), ','))
 			{
 				// Parse into list
 				cdstrvect servers;

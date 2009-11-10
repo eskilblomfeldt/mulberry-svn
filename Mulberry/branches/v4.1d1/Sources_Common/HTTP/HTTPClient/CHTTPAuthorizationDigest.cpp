@@ -32,6 +32,7 @@
 #include "md5.h"
 
 #include <memory>
+#include <stdio.h>
 
 using namespace http; 
 

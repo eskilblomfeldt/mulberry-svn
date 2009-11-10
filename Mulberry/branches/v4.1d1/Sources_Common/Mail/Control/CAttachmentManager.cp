@@ -864,7 +864,7 @@ bool CAttachmentManager::MapToFile(const cdstring& name, fspectype& file, bool v
 		while(JFileExists(file))
 		{
 			// Add number to name
-			char* p = ::strrchr(fname, '.');
+			const char* p = ::strrchr(fname.c_str(), '.');
 			nname = cdstring(fname, 0, p - fname.c_str());
 			nname += cdstring((long) ctr++);
 			nname += p;

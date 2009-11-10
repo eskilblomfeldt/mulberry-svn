@@ -203,11 +203,11 @@ void CCalendarAddressDisplay::OnExpandAddress()
 	{
 		cdstring str = GetText();
 		expand.assign(str, selStart);
-		char* p1 = ::strrchr(expand, ',');
-		char* p2 = ::strrchr(expand, '\n');
+		const char* p1 = ::strrchr(expand.c_str(), ',');
+		const char* p2 = ::strrchr(expand.c_str(), '\n');
 		if (p1 || p2)
 		{
-			char* p = (p1 > p2) ? p1 : p2;
+			const char* p = (p1 > p2) ? p1 : p2;
 			p++;
 			while(*p == ' ') p++;
 			SetSel(p - expand.c_str(), selStart);

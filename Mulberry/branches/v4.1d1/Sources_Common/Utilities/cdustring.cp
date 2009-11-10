@@ -24,6 +24,7 @@
 
 #include <algorithm>
 #include <strstream>
+#include <stdio.h>
 
 cdustring cdustring::null_str;
 unichar_t cdustring::_empty = 0;

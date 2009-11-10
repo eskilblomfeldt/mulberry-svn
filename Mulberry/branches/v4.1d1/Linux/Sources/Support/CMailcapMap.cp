@@ -106,7 +106,7 @@ cdstring CMailcapMap::GetAppName(const cdstring& type)
 		return cdstring::null_str;
 
 	cdstring temp = cmd;
-	char* p = ::strchr(temp, ' ');
+	char* p = ::strchr(temp.c_str_mod(), ' ');
 	if (p)
 		*p = 0;
 
@@ -188,7 +188,7 @@ void CMailcapMap::ReadFromStream(std::istream& ins)
 		view_command.trimspace();
 
 		// Look for the %s and see if quoted
-		const char* p = ::strstr(view_command, "%s");
+		const char* p = ::strstr(view_command.c_str(), "%s");
 		if (p)
 		{
 			// Check for quotes either side
@@ -225,7 +225,7 @@ void CMailcapMap::ReadFromStream(std::istream& ins)
 void CMailcapMap::AddEntry(const cdstring& mimetype, const cdstring& app)
 {
 	// Must be valid mime specification
-	if (!::strchr(mimetype, '/'))
+	if (!::strchr(mimetype.c_str(), '/'))
 		return;
 
 	// Add entry to list - this will change an existing entry, only add a new one

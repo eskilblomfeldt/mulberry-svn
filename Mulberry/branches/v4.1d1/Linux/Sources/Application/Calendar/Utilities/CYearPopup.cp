@@ -18,6 +18,8 @@
 
 #include "CMulberryCommon.h"
 
+#include <stdio.h>
+
 #pragma mark -
 
 void CYearPopup::OnCreate()

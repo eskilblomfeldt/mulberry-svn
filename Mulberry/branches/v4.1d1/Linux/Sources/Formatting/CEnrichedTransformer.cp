@@ -31,6 +31,7 @@
 #include <JColormap.h>
 #include <JFontManager.h>
 
+#include <stdio.h>
 #include <strstream>
 
 #pragma mark ________________________________CEnrichedUtils

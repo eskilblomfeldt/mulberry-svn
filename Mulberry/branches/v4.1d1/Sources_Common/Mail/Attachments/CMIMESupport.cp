@@ -898,7 +898,7 @@ void CMIMESupport::MapFileToMIME(CAttachment& attach)
 
 	// Get suffix
 	const cdstring& name = content.GetMappedName();
-	const char* pos = ::strrchr(name, '.');
+	const char* pos = ::strrchr(name.c_str(), '.');
 
 	if (pos)
 	{
@@ -1239,7 +1239,7 @@ bool CMIMESupport::MapToFile(const cdstring& name, cdstring& fpath)
 		while(JFileExists(fpath))
 		{
 			// Add number to name
-			char* p = ::strrchr(fname, '.');
+			const char* p = ::strrchr(fname.c_str(), '.');
 			nname = cdstring(fname, 0, p - fname.c_str());
 			nname += cdstring((long) ctr++);
 			nname += p;

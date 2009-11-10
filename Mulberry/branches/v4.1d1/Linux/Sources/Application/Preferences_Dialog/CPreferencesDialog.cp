@@ -1382,12 +1382,12 @@ bool CPreferencesDialog::PrefsRemoteSaveAs()
 		if (!mCurrentPrefsFile->IsRemote())
 		{
 			cdstring temp;
-			const char* p = ::strrchr(saveAsName, os_dir_delim);
+			const char* p = ::strrchr(saveAsName.c_str(), os_dir_delim);
 			if (p)
 				temp = ++p;
 			else
 				temp = saveAsName;
-			p = ::strrchr(temp, '.');
+			p = ::strrchr(temp.c_str(), '.');
 			if (p)
 				*const_cast<char*>(p) = 0;
 			saveAsName = temp;

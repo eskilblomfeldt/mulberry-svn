@@ -33,6 +33,7 @@
 
 #include "ETag.h"
 
+#include <stdio.h>
 #include <strstream>
 #include <JFontManager.h>
 #include <JColormap.h>

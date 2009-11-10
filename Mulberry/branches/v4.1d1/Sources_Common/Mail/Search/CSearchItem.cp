@@ -30,6 +30,7 @@
 #include <ctype.h>
 #include <ctime>
 #include <memory>
+#include <stdio.h>
 
 const unsigned long cDaySeconds = 60L*60L*24L;
 const unsigned long cWeekSeconds = 7L * cDaySeconds;

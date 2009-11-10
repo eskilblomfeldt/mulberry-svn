@@ -443,7 +443,7 @@ void CPrefsSimple::SetPrefs(CPreferences* prefs)
 	// Strip account name
 	cdstring copy_to = id->GetCopyTo();
 	if (::strchr(copy_to.c_str(), cMailAccountSeparator))
-		copyStr = ::strchr(copy_to, cMailAccountSeparator) + 1;
+		copyStr = ::strchr(copy_to.c_str(), cMailAccountSeparator) + 1;
 	else
 		copyStr = copy_to;
 	mCopyToMailbox->SetText(copyStr);
