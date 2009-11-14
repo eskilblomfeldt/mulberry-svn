@@ -138,3 +138,15 @@ Resources/xmps.cp: resources/iconlist.txt
 
 ../Plug-ins/CRAM-MD5/sources/md5/md5c.o: ../Plug-ins/CRAM-MD5/sources/md5/md5c.c ../Plug-ins/CRAM-MD5/sources/md5/md5.h
 	 $(CC) -c -o $@ $<
+
+#
+# string data
+#
+
+.PHONY : strings
+strings:
+ifneq (${COMPILE_STRINGS},0)
+	${JX_ROOT}/bin/compile_jstrings ${JX_ROOT}/libjx/strings/* \
+      --code kJXCoreDefaultStringData Sources/Support/jxStringData.h
+endif
+	 

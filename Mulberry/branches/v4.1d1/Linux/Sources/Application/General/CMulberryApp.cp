@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -87,6 +87,8 @@
 
 #include "StValueChanger.h"
 
+#include "jxStringData.h"
+
 #include <JFontManager.h>
 #include <JThisProcess.h>
 #include <JXChooseSaveFile.h>
@@ -114,7 +116,6 @@ cdstrvect openurls;
 static bool start_disconnected = false;
 
 const JCharacter* cSendMailHelpCmd = "mulberry -u \"$a\"";
-const JCharacter* cDefaultStringData[] = { NULL };
 
 void pwr_signal(int sigint);
 void pwr_signal(int sigint)
@@ -125,7 +126,7 @@ void pwr_signal(int sigint)
 }
 
 CMulberryApp::CMulberryApp(int *argc, char* argv[]) 
-	: JXApplication(argc, argv, "Mulberry", cDefaultStringData), startedYet(false)
+	: JXApplication(argc, argv, "Mulberry", kJXCoreDefaultStringData), startedYet(false)
 {
 	// Init this first
 	sApp = this;
