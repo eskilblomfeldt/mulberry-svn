@@ -12,7 +12,7 @@ APP_NAME := mulberry
 PLUGINS_DIR := ${MULBERRY_DIR}/Plug-ins
 PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 
-JX_DIR := ${DEVHOME}/JX
+JX_DIR := ${MULBERRY_DIR}/Libraries/JX
 
 BITS_DIR := ./Bits
 TIMEZONE_DIR := ./Bits/Timezones
