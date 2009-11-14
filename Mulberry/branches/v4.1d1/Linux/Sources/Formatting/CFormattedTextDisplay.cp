@@ -786,7 +786,7 @@ void CFormattedTextDisplay::OnCopyLink()
 	mContextClickElement = NULL;
 
 	// Now copy to scrap
-	CClipboard::CopyToSecondaryClipboard(GetDisplay(), url);
+	CClipboard::CopyToPrimaryClipboard(GetDisplay(), url);
 }
 
 bool CFormattedTextDisplay::DoAnchor(const CClickElement* anchor)
