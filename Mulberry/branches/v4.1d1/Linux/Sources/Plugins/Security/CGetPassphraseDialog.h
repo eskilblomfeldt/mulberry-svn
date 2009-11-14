@@ -42,7 +42,8 @@ class CGetPassphraseDialog : public CDialogDirector
 public:
 	CGetPassphraseDialog(JXDirector* supervisor);   // standard constructor
 
-	static bool PoseDialog(cdstring& change, const char** keys, cdstring& chosen_key, unsigned long& index);
+	static bool PoseDialog(cdstring& passphrase, const char* title);
+	static bool PoseDialog(cdstring& change, const char** keys, cdstring& chosen_key, unsigned long& index, const char* title = NULL);
 
 protected:
 // begin JXLayout

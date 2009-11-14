@@ -21,6 +21,8 @@
 
 #include "CGetPassphraseDialog.h"
 
+#include "CXStringResources.h"
+
 #include <JXWindow.h>
 #include <JXUpRect.h>
 #include <JXStaticText.h>
@@ -216,11 +218,20 @@ void CGetPassphraseDialog::OnHideTyping()
 		show_it->SetSelection(sel_start + 1, sel_end);
 }
 
-bool CGetPassphraseDialog::PoseDialog(cdstring& change, const char** keys, cdstring& chosen_key, unsigned long& index)
+bool CGetPassphraseDialog::PoseDialog(cdstring& passphrase, const char* title)
+{
+	cdstring dummy1;
+	unsigned long dummy2;
+	return PoseDialog(passphrase, NULL, dummy1, dummy2, title);
+}
+
+bool CGetPassphraseDialog::PoseDialog(cdstring& change, const char** keys, cdstring& chosen_key, unsigned long& index, const char* title)
 {
 	CGetPassphraseDialog* dlog = new CGetPassphraseDialog(JXGetApplication());
 	dlog->mKeys = keys;
 	dlog->OnCreate();
+	if (title != NULL)
+		dlog->GetWindow()->SetTitle(rsrc::GetString(title));
 	dlog->mPassphrase1->SetText(change);
 
 	if (dlog->DoModal(false) == kDialogClosed_OK)

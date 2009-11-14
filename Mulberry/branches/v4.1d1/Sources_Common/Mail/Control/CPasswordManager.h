@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -30,16 +30,19 @@ class CINETAccount;
 class CPasswordManager
 {
 public:
-	static CPasswordManager* GetManager();
+	static CPasswordManager* GetManager()
+	{
+		return sPasswordManager;
+	}
 
-	bool GetPassword(const CINETAccount* acct, cdstring& pswd);
-	void AddPassword(const CINETAccount* acct, const cdstring& pswd);
+	virtual bool GetPassword(const CINETAccount* acct, cdstring& pswd) = 0;
+	virtual void AddPassword(const CINETAccount* acct, const cdstring& pswd) = 0;
 
-private:
+protected:
 	static CPasswordManager* sPasswordManager;
 
-	CPasswordManager();
-	~CPasswordManager();
+	CPasswordManager() {}
+	virtual ~CPasswordManager() {}
 };
 
 

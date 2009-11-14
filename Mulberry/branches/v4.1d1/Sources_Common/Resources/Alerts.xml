@@ -39,6 +39,8 @@
 	<string id="Alerts::General::ConnectionsResetDisconnect">Mulberry has detected that your computer has woken from sleep. Existing connections to servers will be re-established, if possible. Make sure that your network is correctly setup before continuing. Alternatively, you can switch directly into Disconnected mode if network connectivity has been lost.</string>
 	<string id="Alerts::General::ConnectionsRecover">Recovering active network connections…</string>
 	<string id="Alerts::General::FileError">accessing: </string>
+	<string id="Alerts::General::GetPassphrase">Enter your Encrypted Keyring Passphrase:</string>
+	<string id="Alerts::General::GetPassphrase_Title">Passphrase Dialog</string>
 
 <!-- Admin -->
 	<string id="Alerts::Admin::PreventAddress">There are too many addresses listed in the 'To', 'CC' and 'Bcc' fields of this draft. It cannot be sent.</string>

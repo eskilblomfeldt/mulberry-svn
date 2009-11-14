@@ -41,6 +41,7 @@
 #include "CErrorHandler.h"
 #include "CFilterItem.h"
 #include "CFindReplaceWindow.h"
+#include "CGetPassphraseDialog.h"
 #include "CLetterWindow.h"
 #include "CLog.h"
 #include "CMacroEditDialog.h"
@@ -51,6 +52,7 @@
 #include "CMulberryHelp.h"
 #include "CMulberryMDIServer.h"
 #include "COptionsProtocol.h"
+#include "CPasswordManagerKeyring.h"
 #include "CPeriodicCheck.h"
 #include "CPluginManager.h"
 #include "CPreferences.h"
@@ -637,6 +639,18 @@ void CMulberryApp::OpenUp(bool first_time)
 	{
 		if (CErrorHandler::PutCautionAlertRsrc(true, "Alerts::General::LoggingInsecure") == CErrorHandler::Cancel)
 			CLog::DisableActiveLogs();
+	}
+
+	// Do keyring load
+	CPasswordManagerKeyring::MakePasswordManagerKeyring();
+	if (CPasswordManagerKeyring::GetKeyRingManager()->KeyringExists())
+	{
+		// Ask for real name
+		cdstring passphrase;
+		if (CGetPassphraseDialog::PoseDialog(passphrase, "Alerts::General::GetPassphrase_Title"))
+		{
+			CPasswordManagerKeyring::GetKeyRingManager()->SetPassphrase(passphrase);
+		}
 	}
 }
 
@@ -1300,8 +1314,8 @@ void CMulberryApp::InitConnection(CPreferences& prefs)
 		bool ctrlKey = modifiers.control();
 		
 		// Possible disconnect prompt
-		if (!prefs.mDisconnected.GetValue() && ((prefs.mPromptDisconnected.GetValue() && CTCPSocket::WillDial()) ||
-			start_disconnected) || ctrlKey)
+		if ((!prefs.mDisconnected.GetValue() && ((prefs.mPromptDisconnected.GetValue() && CTCPSocket::WillDial()) ||
+			start_disconnected)) || ctrlKey)
 		{
 			CErrorDialog::EDialogResult result = CErrorDialog::PoseDialog(CErrorDialog::eErrDialog_Caution,
 													"ErrorDialog::Btn::Disconnected",
