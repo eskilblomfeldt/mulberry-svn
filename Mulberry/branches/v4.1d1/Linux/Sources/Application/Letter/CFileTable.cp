@@ -626,7 +626,7 @@ void CFileTable::OnDraftAttachFile(void)
 		return;
 
 	// Do standard open dialog
-	JPtrArray<JString> files(JPtrArrayT::kDeleteAllAsArrays);
+	JPtrArray<JString> files(JPtrArrayT::kDeleteAll);
 	if (JXGetChooseSaveFile()->ChooseFiles("Attachments", NULL, &files)) 
 	{
 		bool added = false;
