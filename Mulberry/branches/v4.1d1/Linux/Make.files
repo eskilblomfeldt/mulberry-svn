@@ -687,6 +687,7 @@
 .cp CSMTPAccountManager
 .cp CSMTPSendThread
 .cp CPasswordManager
+.cp CPasswordManagerKeyring
 -prefix ../Sources_Common/Mail/AddressBook/
 .cp CAddressBookManager
 -prefix ../Sources_Common/Mail/Control/
