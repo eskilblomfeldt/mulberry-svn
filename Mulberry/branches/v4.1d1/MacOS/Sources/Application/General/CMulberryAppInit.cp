@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@
 #include "CMultiUserDialog.h"
 #include "COptionClick.h"
 #include "COptionsProtocol.h"
+#include "CPasswordManagerKeychain.h"
 #include "CPeriodicCheck.h"
 #include "CPluginManager.h"
 #include "CPPRegister.h"
@@ -156,6 +157,9 @@ bail:
 	// Create Calendar manager
 	new iCal::CICalendarManager;
 	iCal::CICalendarManager::sICalendarManager->InitManager();
+	
+	// Create Keychain manager
+	CPasswordManagerKeychain::MakePasswordManagerKeychain();
 
 	// Now do standard app init
 	OpenUp(true);
