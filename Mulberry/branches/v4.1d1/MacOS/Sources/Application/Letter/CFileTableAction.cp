@@ -154,7 +154,7 @@ void CFileTableAddAction::Add(CAttachment* add)
 	// Delete existing if undone and new copy takes place
 	if (!mIsDone) {
 		// Delete all items in lists
-		mItems.DeleteAll();
+		mItems.clear();
 		mItemPos.RemoveItemsAt(mItemPos.GetCount(), LArray::index_Last);
 
 		// Reset state
