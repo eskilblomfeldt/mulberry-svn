@@ -119,6 +119,7 @@ void CPasswordManagerKeychain::GetSecurityDetails(const CINETAccount* acct, cdst
 				authenticationType = kSecAuthenticationTypeHTTPDigest;
 		}
 		break;
+		default:;
 	}
 }
 
