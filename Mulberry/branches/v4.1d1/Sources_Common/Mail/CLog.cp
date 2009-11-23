@@ -557,7 +557,7 @@ void CLog::BeginLog(cdofstream*& log, const char* name, bool user_start)
 	StCreatorType creatortype('R*ch', 'TEXT');
 #endif
 
-	log = new cdofstream(fullpath, sOverwrite ? (ios::out | ios::binary) : (ios::out | ios::app | ios::binary));
+	log = new cdofstream(fullpath, sOverwrite ? (std::ios::out | std::ios::binary) : (std::ios::out | std::ios::app | std::ios::binary));
 
 	*log << os_endl;
 	if (user_start)
