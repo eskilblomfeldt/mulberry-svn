@@ -160,6 +160,7 @@
 		AF82694D0C1B2C9300B18EED /* XMLObject.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693A0C1B2C9300B18EED /* XMLObject.cp */; };
 		AF8269500C1B2C9300B18EED /* XMLParserSAX.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693D0C1B2C9300B18EED /* XMLParserSAX.cp */; };
 		AF8269520C1B2C9300B18EED /* XMLSAXSimple.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */; };
+		AFB052F110AFAB180077F8B8 /* CPasswordManagerKeychain.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFB052EF10AFAB180077F8B8 /* CPasswordManagerKeychain.cp */; };
 		AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */; };
 		AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */; };
 		AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */; };
@@ -1678,8 +1679,8 @@
 		AF2551DA0C43272D001AAE53 /* CKSC_5601_1992.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CKSC_5601_1992.h; path = ../Sources_Common/i18n/Charsets/Converters/TwoByte/CKSC_5601_1992.h; sourceTree = SOURCE_ROOT; };
 		AF2551DD0C432752001AAE53 /* CIMAPUTF7.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CIMAPUTF7.cp; path = ../Sources_Common/i18n/Charsets/Converters/Unicode/CIMAPUTF7.cp; sourceTree = SOURCE_ROOT; };
 		AF2551DE0C432752001AAE53 /* CIMAPUTF7.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CIMAPUTF7.h; path = ../Sources_Common/i18n/Charsets/Converters/Unicode/CIMAPUTF7.h; sourceTree = SOURCE_ROOT; };
-		AF2551E30C432809001AAE53 /* CITIPScheduleResults.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CITIPScheduleResults.cpp; sourceTree = "<group>"; };
-		AF2551E40C432809001AAE53 /* CITIPScheduleResults.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CITIPScheduleResults.h; sourceTree = "<group>"; };
+		AF2551E30C432809001AAE53 /* CITIPScheduleResults.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CITIPScheduleResults.cpp; path = Source/CITIPScheduleResults.cpp; sourceTree = "<group>"; };
+		AF2551E40C432809001AAE53 /* CITIPScheduleResults.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CITIPScheduleResults.h; path = Source/CITIPScheduleResults.h; sourceTree = "<group>"; };
 		AF2551E80C432843001AAE53 /* CWebKitControl.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CWebKitControl.cp; sourceTree = "<group>"; };
 		AF2551E90C432843001AAE53 /* CWebKitControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CWebKitControl.h; sourceTree = "<group>"; };
 		AF2551EA0C432843001AAE53 /* CWebKitControlImp.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CWebKitControlImp.cp; sourceTree = "<group>"; };
@@ -1819,6 +1820,8 @@
 		AF82693E0C1B2C9300B18EED /* XMLParserSAX.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLParserSAX.h; path = ../../Libraries/XMLLib/Source/XMLParserSAX.h; sourceTree = "<group>"; };
 		AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = XMLSAXSimple.cp; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.cp; sourceTree = "<group>"; };
 		AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLSAXSimple.h; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.h; sourceTree = "<group>"; };
+		AFB052EF10AFAB180077F8B8 /* CPasswordManagerKeychain.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPasswordManagerKeychain.cp; path = ../Sources_Common/Mail/Control/CPasswordManagerKeychain.cp; sourceTree = SOURCE_ROOT; };
+		AFB052F010AFAB180077F8B8 /* CPasswordManagerKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPasswordManagerKeychain.h; path = ../Sources_Common/Mail/Control/CPasswordManagerKeychain.h; sourceTree = SOURCE_ROOT; };
 		AFBE2AB50D2F30DB002132BE /* CWebDAVPrefsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CWebDAVPrefsClient.h; sourceTree = "<group>"; };
 		AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CWebDAVPrefsClient.cpp; sourceTree = "<group>"; };
 		AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = COptionsAccount.cp; path = ../Sources_Common/Application/Preferences/COptionsAccount.cp; sourceTree = SOURCE_ROOT; };
@@ -3526,96 +3529,96 @@
 		AFCDDFE20AE176DE00E30447 /* CGroupList.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CGroupList.cp; path = ../Sources_Common/Mail/Address/CGroupList.cp; sourceTree = SOURCE_ROOT; };
 		AFCDDFE30AE176DE00E30447 /* CGroupComparators.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CGroupComparators.h; path = ../Sources_Common/Mail/Address/CGroupComparators.h; sourceTree = SOURCE_ROOT; };
 		AFCDDFE40AE176DE00E30447 /* CGroupComparators.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CGroupComparators.cp; path = ../Sources_Common/Mail/Address/CGroupComparators.cp; sourceTree = SOURCE_ROOT; };
-		AFCDDFE60AE176DE00E30447 /* CICalendarManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarManager.h; sourceTree = "<group>"; };
-		AFCDDFE70AE176DE00E30447 /* CICalendarManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarManager.cpp; sourceTree = "<group>"; };
-		AFCDDFE80AE176DE00E30447 /* CITIPProcessor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CITIPProcessor.h; sourceTree = "<group>"; };
-		AFCDDFE90AE176DE00E30447 /* CITIPProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CITIPProcessor.cpp; sourceTree = "<group>"; };
-		AFCDDFEA0AE176DE00E30447 /* CICalendarComponentBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponentBase.h; sourceTree = "<group>"; };
-		AFCDDFEB0AE176DE00E30447 /* CICalendarComponentBase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponentBase.cpp; sourceTree = "<group>"; };
-		AFCDDFEC0AE176DE00E30447 /* CICalendar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendar.h; sourceTree = "<group>"; };
-		AFCDDFED0AE176DE00E30447 /* CICalendar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendar.cpp; sourceTree = "<group>"; };
-		AFCDDFEE0AE176DE00E30447 /* CICalendarSync.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarSync.h; sourceTree = "<group>"; };
-		AFCDDFEF0AE176DE00E30447 /* CICalendarSync.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarSync.cpp; sourceTree = "<group>"; };
-		AFCDDFF00AE176DE00E30447 /* CICalendarComponentRecord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponentRecord.h; sourceTree = "<group>"; };
-		AFCDDFF10AE176DE00E30447 /* CICalendarComponentRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponentRecord.cpp; sourceTree = "<group>"; };
-		AFCDDFF20AE176DE00E30447 /* CICalendarComponent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponent.h; sourceTree = "<group>"; };
-		AFCDDFF30AE176DE00E30447 /* CICalendarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponent.cpp; sourceTree = "<group>"; };
-		AFCDDFF40AE176DE00E30447 /* CICalendarComponentRecur.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponentRecur.h; sourceTree = "<group>"; };
-		AFCDDFF50AE176DE00E30447 /* CICalendarComponentRecur.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponentRecur.cpp; sourceTree = "<group>"; };
-		AFCDDFF60AE176DE00E30447 /* CICalendarComponentExpanded.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponentExpanded.h; sourceTree = "<group>"; };
-		AFCDDFF70AE176DE00E30447 /* CICalendarComponentExpanded.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponentExpanded.cpp; sourceTree = "<group>"; };
-		AFCDDFF80AE176DE00E30447 /* CICalendarComponentDB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarComponentDB.h; sourceTree = "<group>"; };
-		AFCDDFF90AE176DE00E30447 /* CICalendarComponentDB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarComponentDB.cpp; sourceTree = "<group>"; };
-		AFCDDFFA0AE176DE00E30447 /* CICalendarVEvent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVEvent.h; sourceTree = "<group>"; };
-		AFCDDFFB0AE176DE00E30447 /* CICalendarVEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVEvent.cpp; sourceTree = "<group>"; };
-		AFCDDFFC0AE176DE00E30447 /* CICalendarVToDo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVToDo.h; sourceTree = "<group>"; };
-		AFCDDFFD0AE176DE00E30447 /* CICalendarVToDo.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVToDo.cpp; sourceTree = "<group>"; };
-		AFCDDFFE0AE176DE00E30447 /* CICalendarVJournal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVJournal.h; sourceTree = "<group>"; };
-		AFCDDFFF0AE176DE00E30447 /* CICalendarVJournal.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVJournal.cpp; sourceTree = "<group>"; };
-		AFCDE0000AE176DE00E30447 /* CICalendarVFreeBusy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVFreeBusy.h; sourceTree = "<group>"; };
-		AFCDE0010AE176DE00E30447 /* CICalendarVFreeBusy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVFreeBusy.cpp; sourceTree = "<group>"; };
-		AFCDE0020AE176DE00E30447 /* CICalendarVTimezone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVTimezone.h; sourceTree = "<group>"; };
-		AFCDE0030AE176DE00E30447 /* CICalendarVTimezone.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVTimezone.cpp; sourceTree = "<group>"; };
-		AFCDE0040AE176DE00E30447 /* CICalendarVTimezoneElement.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVTimezoneElement.h; sourceTree = "<group>"; };
-		AFCDE0050AE176DE00E30447 /* CICalendarVTimezoneElement.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVTimezoneElement.cpp; sourceTree = "<group>"; };
-		AFCDE0060AE176DE00E30447 /* CICalendarVTimezoneStandard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVTimezoneStandard.h; sourceTree = "<group>"; };
-		AFCDE0070AE176DE00E30447 /* CICalendarVTimezoneStandard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVTimezoneStandard.cpp; sourceTree = "<group>"; };
-		AFCDE0080AE176DE00E30447 /* CICalendarVTimezoneDaylight.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVTimezoneDaylight.h; sourceTree = "<group>"; };
-		AFCDE0090AE176DE00E30447 /* CICalendarVTimezoneDaylight.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVTimezoneDaylight.cpp; sourceTree = "<group>"; };
-		AFCDE00A0AE176DE00E30447 /* CICalendarVAlarm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarVAlarm.h; sourceTree = "<group>"; };
-		AFCDE00B0AE176DE00E30447 /* CICalendarVAlarm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarVAlarm.cpp; sourceTree = "<group>"; };
-		AFCDE00C0AE176DE00E30447 /* CICalendarProperty.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarProperty.h; sourceTree = "<group>"; };
-		AFCDE00D0AE176DE00E30447 /* CICalendarProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarProperty.cpp; sourceTree = "<group>"; };
-		AFCDE00E0AE176DE00E30447 /* CICalendarAttribute.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarAttribute.h; sourceTree = "<group>"; };
-		AFCDE00F0AE176DE00E30447 /* CICalendarAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarAttribute.cpp; sourceTree = "<group>"; };
-		AFCDE0100AE176DE00E30447 /* CICalendarValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarValue.h; sourceTree = "<group>"; };
-		AFCDE0110AE176DE00E30447 /* CICalendarValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarValue.cpp; sourceTree = "<group>"; };
-		AFCDE0120AE176DE00E30447 /* CICalendarMultiValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarMultiValue.h; sourceTree = "<group>"; };
-		AFCDE0130AE176DE00E30447 /* CICalendarMultiValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarMultiValue.cpp; sourceTree = "<group>"; };
-		AFCDE0140AE176DE00E30447 /* CICalendarDummyValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDummyValue.h; sourceTree = "<group>"; };
-		AFCDE0150AE176DE00E30447 /* CICalendarDummyValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDummyValue.cpp; sourceTree = "<group>"; };
-		AFCDE0160AE176DE00E30447 /* CICalendarDateTimeValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDateTimeValue.h; sourceTree = "<group>"; };
-		AFCDE0170AE176DE00E30447 /* CICalendarDateTimeValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDateTimeValue.cpp; sourceTree = "<group>"; };
-		AFCDE0180AE176DE00E30447 /* CICalendarDurationValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDurationValue.h; sourceTree = "<group>"; };
-		AFCDE0190AE176DE00E30447 /* CICalendarDurationValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDurationValue.cpp; sourceTree = "<group>"; };
-		AFCDE01A0AE176DE00E30447 /* CICalendarIntegerValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarIntegerValue.h; sourceTree = "<group>"; };
-		AFCDE01B0AE176DE00E30447 /* CICalendarIntegerValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarIntegerValue.cpp; sourceTree = "<group>"; };
-		AFCDE01C0AE176DE00E30447 /* CICalendarPeriodValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarPeriodValue.h; sourceTree = "<group>"; };
-		AFCDE01D0AE176DE00E30447 /* CICalendarPeriodValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarPeriodValue.cpp; sourceTree = "<group>"; };
-		AFCDE01E0AE176DE00E30447 /* CICalendarRecurrenceValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarRecurrenceValue.h; sourceTree = "<group>"; };
-		AFCDE01F0AE176DE00E30447 /* CICalendarRecurrenceValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarRecurrenceValue.cpp; sourceTree = "<group>"; };
-		AFCDE0200AE176DE00E30447 /* CICalendarPlainTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarPlainTextValue.h; sourceTree = "<group>"; };
-		AFCDE0210AE176DE00E30447 /* CICalendarPlainTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarPlainTextValue.cpp; sourceTree = "<group>"; };
-		AFCDE0220AE176DE00E30447 /* CICalendarTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarTextValue.h; sourceTree = "<group>"; };
-		AFCDE0230AE176DE00E30447 /* CICalendarTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarTextValue.cpp; sourceTree = "<group>"; };
-		AFCDE0240AE176DE00E30447 /* CICalendarCalAddressValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarCalAddressValue.h; sourceTree = "<group>"; };
-		AFCDE0250AE176DE00E30447 /* CICalendarCalAddressValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarCalAddressValue.cpp; sourceTree = "<group>"; };
-		AFCDE0260AE176DE00E30447 /* CICalendarURIValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarURIValue.h; sourceTree = "<group>"; };
-		AFCDE0270AE176DE00E30447 /* CICalendarURIValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarURIValue.cpp; sourceTree = "<group>"; };
-		AFCDE0280AE176DE00E30447 /* CICalendarUTCOffsetValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarUTCOffsetValue.h; sourceTree = "<group>"; };
-		AFCDE0290AE176DE00E30447 /* CICalendarUTCOffsetValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarUTCOffsetValue.cpp; sourceTree = "<group>"; };
-		AFCDE02A0AE176DE00E30447 /* CICalendarDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDefinitions.h; sourceTree = "<group>"; };
-		AFCDE02B0AE176DE00E30447 /* CICalendarDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDefinitions.cpp; sourceTree = "<group>"; };
-		AFCDE02C0AE176DE00E30447 /* CITIPDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CITIPDefinitions.h; sourceTree = "<group>"; };
-		AFCDE02D0AE176DE00E30447 /* CITIPDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CITIPDefinitions.cpp; sourceTree = "<group>"; };
-		AFCDE02E0AE176DE00E30447 /* CICalendarUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarUtils.h; sourceTree = "<group>"; };
-		AFCDE02F0AE176DE00E30447 /* CICalendarUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarUtils.cpp; sourceTree = "<group>"; };
-		AFCDE0300AE176DE00E30447 /* CICalendarLocale.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarLocale.h; sourceTree = "<group>"; };
-		AFCDE0310AE176DE00E30447 /* CICalendarLocale.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarLocale.cpp; sourceTree = "<group>"; };
-		AFCDE0320AE176DE00E30447 /* CICalendarFreeBusy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarFreeBusy.h; sourceTree = "<group>"; };
-		AFCDE0330AE176DE00E30447 /* CICalendarFreeBusy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarFreeBusy.cpp; sourceTree = "<group>"; };
-		AFCDE0340AE176DE00E30447 /* CICalendarDateTime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDateTime.h; sourceTree = "<group>"; };
-		AFCDE0350AE176DF00E30447 /* CICalendarDateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDateTime.cpp; sourceTree = "<group>"; };
-		AFCDE0360AE176DF00E30447 /* CICalendarTimezone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarTimezone.h; sourceTree = "<group>"; };
-		AFCDE0370AE176DF00E30447 /* CICalendarTimezone.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarTimezone.cpp; sourceTree = "<group>"; };
-		AFCDE0380AE176DF00E30447 /* CICalendarDuration.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarDuration.h; sourceTree = "<group>"; };
-		AFCDE0390AE176DF00E30447 /* CICalendarDuration.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarDuration.cpp; sourceTree = "<group>"; };
-		AFCDE03A0AE176DF00E30447 /* CICalendarPeriod.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarPeriod.h; sourceTree = "<group>"; };
-		AFCDE03B0AE176DF00E30447 /* CICalendarPeriod.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarPeriod.cpp; sourceTree = "<group>"; };
-		AFCDE03C0AE176DF00E30447 /* CICalendarRecurrenceSet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarRecurrenceSet.h; sourceTree = "<group>"; };
-		AFCDE03D0AE176DF00E30447 /* CICalendarRecurrenceSet.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarRecurrenceSet.cpp; sourceTree = "<group>"; };
-		AFCDE03E0AE176DF00E30447 /* CICalendarRecurrence.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CICalendarRecurrence.h; sourceTree = "<group>"; };
-		AFCDE03F0AE176DF00E30447 /* CICalendarRecurrence.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = CICalendarRecurrence.cpp; sourceTree = "<group>"; };
+		AFCDDFE60AE176DE00E30447 /* CICalendarManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarManager.h; path = Source/CICalendarManager.h; sourceTree = "<group>"; };
+		AFCDDFE70AE176DE00E30447 /* CICalendarManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarManager.cpp; path = Source/CICalendarManager.cpp; sourceTree = "<group>"; };
+		AFCDDFE80AE176DE00E30447 /* CITIPProcessor.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CITIPProcessor.h; path = Source/CITIPProcessor.h; sourceTree = "<group>"; };
+		AFCDDFE90AE176DE00E30447 /* CITIPProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CITIPProcessor.cpp; path = Source/CITIPProcessor.cpp; sourceTree = "<group>"; };
+		AFCDDFEA0AE176DE00E30447 /* CICalendarComponentBase.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponentBase.h; path = Source/CICalendarComponentBase.h; sourceTree = "<group>"; };
+		AFCDDFEB0AE176DE00E30447 /* CICalendarComponentBase.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponentBase.cpp; path = Source/CICalendarComponentBase.cpp; sourceTree = "<group>"; };
+		AFCDDFEC0AE176DE00E30447 /* CICalendar.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendar.h; path = Source/CICalendar.h; sourceTree = "<group>"; };
+		AFCDDFED0AE176DE00E30447 /* CICalendar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendar.cpp; path = Source/CICalendar.cpp; sourceTree = "<group>"; };
+		AFCDDFEE0AE176DE00E30447 /* CICalendarSync.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarSync.h; path = Source/CICalendarSync.h; sourceTree = "<group>"; };
+		AFCDDFEF0AE176DE00E30447 /* CICalendarSync.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarSync.cpp; path = Source/CICalendarSync.cpp; sourceTree = "<group>"; };
+		AFCDDFF00AE176DE00E30447 /* CICalendarComponentRecord.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponentRecord.h; path = Source/CICalendarComponentRecord.h; sourceTree = "<group>"; };
+		AFCDDFF10AE176DE00E30447 /* CICalendarComponentRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponentRecord.cpp; path = Source/CICalendarComponentRecord.cpp; sourceTree = "<group>"; };
+		AFCDDFF20AE176DE00E30447 /* CICalendarComponent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponent.h; path = Source/CICalendarComponent.h; sourceTree = "<group>"; };
+		AFCDDFF30AE176DE00E30447 /* CICalendarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponent.cpp; path = Source/CICalendarComponent.cpp; sourceTree = "<group>"; };
+		AFCDDFF40AE176DE00E30447 /* CICalendarComponentRecur.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponentRecur.h; path = Source/CICalendarComponentRecur.h; sourceTree = "<group>"; };
+		AFCDDFF50AE176DE00E30447 /* CICalendarComponentRecur.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponentRecur.cpp; path = Source/CICalendarComponentRecur.cpp; sourceTree = "<group>"; };
+		AFCDDFF60AE176DE00E30447 /* CICalendarComponentExpanded.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponentExpanded.h; path = Source/CICalendarComponentExpanded.h; sourceTree = "<group>"; };
+		AFCDDFF70AE176DE00E30447 /* CICalendarComponentExpanded.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponentExpanded.cpp; path = Source/CICalendarComponentExpanded.cpp; sourceTree = "<group>"; };
+		AFCDDFF80AE176DE00E30447 /* CICalendarComponentDB.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarComponentDB.h; path = Source/CICalendarComponentDB.h; sourceTree = "<group>"; };
+		AFCDDFF90AE176DE00E30447 /* CICalendarComponentDB.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarComponentDB.cpp; path = Source/CICalendarComponentDB.cpp; sourceTree = "<group>"; };
+		AFCDDFFA0AE176DE00E30447 /* CICalendarVEvent.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVEvent.h; path = Source/CICalendarVEvent.h; sourceTree = "<group>"; };
+		AFCDDFFB0AE176DE00E30447 /* CICalendarVEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVEvent.cpp; path = Source/CICalendarVEvent.cpp; sourceTree = "<group>"; };
+		AFCDDFFC0AE176DE00E30447 /* CICalendarVToDo.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVToDo.h; path = Source/CICalendarVToDo.h; sourceTree = "<group>"; };
+		AFCDDFFD0AE176DE00E30447 /* CICalendarVToDo.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVToDo.cpp; path = Source/CICalendarVToDo.cpp; sourceTree = "<group>"; };
+		AFCDDFFE0AE176DE00E30447 /* CICalendarVJournal.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVJournal.h; path = Source/CICalendarVJournal.h; sourceTree = "<group>"; };
+		AFCDDFFF0AE176DE00E30447 /* CICalendarVJournal.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVJournal.cpp; path = Source/CICalendarVJournal.cpp; sourceTree = "<group>"; };
+		AFCDE0000AE176DE00E30447 /* CICalendarVFreeBusy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVFreeBusy.h; path = Source/CICalendarVFreeBusy.h; sourceTree = "<group>"; };
+		AFCDE0010AE176DE00E30447 /* CICalendarVFreeBusy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVFreeBusy.cpp; path = Source/CICalendarVFreeBusy.cpp; sourceTree = "<group>"; };
+		AFCDE0020AE176DE00E30447 /* CICalendarVTimezone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVTimezone.h; path = Source/CICalendarVTimezone.h; sourceTree = "<group>"; };
+		AFCDE0030AE176DE00E30447 /* CICalendarVTimezone.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVTimezone.cpp; path = Source/CICalendarVTimezone.cpp; sourceTree = "<group>"; };
+		AFCDE0040AE176DE00E30447 /* CICalendarVTimezoneElement.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVTimezoneElement.h; path = Source/CICalendarVTimezoneElement.h; sourceTree = "<group>"; };
+		AFCDE0050AE176DE00E30447 /* CICalendarVTimezoneElement.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVTimezoneElement.cpp; path = Source/CICalendarVTimezoneElement.cpp; sourceTree = "<group>"; };
+		AFCDE0060AE176DE00E30447 /* CICalendarVTimezoneStandard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVTimezoneStandard.h; path = Source/CICalendarVTimezoneStandard.h; sourceTree = "<group>"; };
+		AFCDE0070AE176DE00E30447 /* CICalendarVTimezoneStandard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVTimezoneStandard.cpp; path = Source/CICalendarVTimezoneStandard.cpp; sourceTree = "<group>"; };
+		AFCDE0080AE176DE00E30447 /* CICalendarVTimezoneDaylight.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVTimezoneDaylight.h; path = Source/CICalendarVTimezoneDaylight.h; sourceTree = "<group>"; };
+		AFCDE0090AE176DE00E30447 /* CICalendarVTimezoneDaylight.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVTimezoneDaylight.cpp; path = Source/CICalendarVTimezoneDaylight.cpp; sourceTree = "<group>"; };
+		AFCDE00A0AE176DE00E30447 /* CICalendarVAlarm.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarVAlarm.h; path = Source/CICalendarVAlarm.h; sourceTree = "<group>"; };
+		AFCDE00B0AE176DE00E30447 /* CICalendarVAlarm.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarVAlarm.cpp; path = Source/CICalendarVAlarm.cpp; sourceTree = "<group>"; };
+		AFCDE00C0AE176DE00E30447 /* CICalendarProperty.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarProperty.h; path = Source/CICalendarProperty.h; sourceTree = "<group>"; };
+		AFCDE00D0AE176DE00E30447 /* CICalendarProperty.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarProperty.cpp; path = Source/CICalendarProperty.cpp; sourceTree = "<group>"; };
+		AFCDE00E0AE176DE00E30447 /* CICalendarAttribute.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarAttribute.h; path = Source/CICalendarAttribute.h; sourceTree = "<group>"; };
+		AFCDE00F0AE176DE00E30447 /* CICalendarAttribute.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarAttribute.cpp; path = Source/CICalendarAttribute.cpp; sourceTree = "<group>"; };
+		AFCDE0100AE176DE00E30447 /* CICalendarValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarValue.h; path = Source/CICalendarValue.h; sourceTree = "<group>"; };
+		AFCDE0110AE176DE00E30447 /* CICalendarValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarValue.cpp; path = Source/CICalendarValue.cpp; sourceTree = "<group>"; };
+		AFCDE0120AE176DE00E30447 /* CICalendarMultiValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarMultiValue.h; path = Source/CICalendarMultiValue.h; sourceTree = "<group>"; };
+		AFCDE0130AE176DE00E30447 /* CICalendarMultiValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarMultiValue.cpp; path = Source/CICalendarMultiValue.cpp; sourceTree = "<group>"; };
+		AFCDE0140AE176DE00E30447 /* CICalendarDummyValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDummyValue.h; path = Source/CICalendarDummyValue.h; sourceTree = "<group>"; };
+		AFCDE0150AE176DE00E30447 /* CICalendarDummyValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDummyValue.cpp; path = Source/CICalendarDummyValue.cpp; sourceTree = "<group>"; };
+		AFCDE0160AE176DE00E30447 /* CICalendarDateTimeValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDateTimeValue.h; path = Source/CICalendarDateTimeValue.h; sourceTree = "<group>"; };
+		AFCDE0170AE176DE00E30447 /* CICalendarDateTimeValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDateTimeValue.cpp; path = Source/CICalendarDateTimeValue.cpp; sourceTree = "<group>"; };
+		AFCDE0180AE176DE00E30447 /* CICalendarDurationValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDurationValue.h; path = Source/CICalendarDurationValue.h; sourceTree = "<group>"; };
+		AFCDE0190AE176DE00E30447 /* CICalendarDurationValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDurationValue.cpp; path = Source/CICalendarDurationValue.cpp; sourceTree = "<group>"; };
+		AFCDE01A0AE176DE00E30447 /* CICalendarIntegerValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarIntegerValue.h; path = Source/CICalendarIntegerValue.h; sourceTree = "<group>"; };
+		AFCDE01B0AE176DE00E30447 /* CICalendarIntegerValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarIntegerValue.cpp; path = Source/CICalendarIntegerValue.cpp; sourceTree = "<group>"; };
+		AFCDE01C0AE176DE00E30447 /* CICalendarPeriodValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarPeriodValue.h; path = Source/CICalendarPeriodValue.h; sourceTree = "<group>"; };
+		AFCDE01D0AE176DE00E30447 /* CICalendarPeriodValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarPeriodValue.cpp; path = Source/CICalendarPeriodValue.cpp; sourceTree = "<group>"; };
+		AFCDE01E0AE176DE00E30447 /* CICalendarRecurrenceValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarRecurrenceValue.h; path = Source/CICalendarRecurrenceValue.h; sourceTree = "<group>"; };
+		AFCDE01F0AE176DE00E30447 /* CICalendarRecurrenceValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarRecurrenceValue.cpp; path = Source/CICalendarRecurrenceValue.cpp; sourceTree = "<group>"; };
+		AFCDE0200AE176DE00E30447 /* CICalendarPlainTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarPlainTextValue.h; path = Source/CICalendarPlainTextValue.h; sourceTree = "<group>"; };
+		AFCDE0210AE176DE00E30447 /* CICalendarPlainTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarPlainTextValue.cpp; path = Source/CICalendarPlainTextValue.cpp; sourceTree = "<group>"; };
+		AFCDE0220AE176DE00E30447 /* CICalendarTextValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarTextValue.h; path = Source/CICalendarTextValue.h; sourceTree = "<group>"; };
+		AFCDE0230AE176DE00E30447 /* CICalendarTextValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarTextValue.cpp; path = Source/CICalendarTextValue.cpp; sourceTree = "<group>"; };
+		AFCDE0240AE176DE00E30447 /* CICalendarCalAddressValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarCalAddressValue.h; path = Source/CICalendarCalAddressValue.h; sourceTree = "<group>"; };
+		AFCDE0250AE176DE00E30447 /* CICalendarCalAddressValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarCalAddressValue.cpp; path = Source/CICalendarCalAddressValue.cpp; sourceTree = "<group>"; };
+		AFCDE0260AE176DE00E30447 /* CICalendarURIValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarURIValue.h; path = Source/CICalendarURIValue.h; sourceTree = "<group>"; };
+		AFCDE0270AE176DE00E30447 /* CICalendarURIValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarURIValue.cpp; path = Source/CICalendarURIValue.cpp; sourceTree = "<group>"; };
+		AFCDE0280AE176DE00E30447 /* CICalendarUTCOffsetValue.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarUTCOffsetValue.h; path = Source/CICalendarUTCOffsetValue.h; sourceTree = "<group>"; };
+		AFCDE0290AE176DE00E30447 /* CICalendarUTCOffsetValue.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarUTCOffsetValue.cpp; path = Source/CICalendarUTCOffsetValue.cpp; sourceTree = "<group>"; };
+		AFCDE02A0AE176DE00E30447 /* CICalendarDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDefinitions.h; path = Source/CICalendarDefinitions.h; sourceTree = "<group>"; };
+		AFCDE02B0AE176DE00E30447 /* CICalendarDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDefinitions.cpp; path = Source/CICalendarDefinitions.cpp; sourceTree = "<group>"; };
+		AFCDE02C0AE176DE00E30447 /* CITIPDefinitions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CITIPDefinitions.h; path = Source/CITIPDefinitions.h; sourceTree = "<group>"; };
+		AFCDE02D0AE176DE00E30447 /* CITIPDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CITIPDefinitions.cpp; path = Source/CITIPDefinitions.cpp; sourceTree = "<group>"; };
+		AFCDE02E0AE176DE00E30447 /* CICalendarUtils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarUtils.h; path = Source/CICalendarUtils.h; sourceTree = "<group>"; };
+		AFCDE02F0AE176DE00E30447 /* CICalendarUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarUtils.cpp; path = Source/CICalendarUtils.cpp; sourceTree = "<group>"; };
+		AFCDE0300AE176DE00E30447 /* CICalendarLocale.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarLocale.h; path = Source/CICalendarLocale.h; sourceTree = "<group>"; };
+		AFCDE0310AE176DE00E30447 /* CICalendarLocale.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarLocale.cpp; path = Source/CICalendarLocale.cpp; sourceTree = "<group>"; };
+		AFCDE0320AE176DE00E30447 /* CICalendarFreeBusy.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarFreeBusy.h; path = Source/CICalendarFreeBusy.h; sourceTree = "<group>"; };
+		AFCDE0330AE176DE00E30447 /* CICalendarFreeBusy.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarFreeBusy.cpp; path = Source/CICalendarFreeBusy.cpp; sourceTree = "<group>"; };
+		AFCDE0340AE176DE00E30447 /* CICalendarDateTime.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDateTime.h; path = Source/CICalendarDateTime.h; sourceTree = "<group>"; };
+		AFCDE0350AE176DF00E30447 /* CICalendarDateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDateTime.cpp; path = Source/CICalendarDateTime.cpp; sourceTree = "<group>"; };
+		AFCDE0360AE176DF00E30447 /* CICalendarTimezone.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarTimezone.h; path = Source/CICalendarTimezone.h; sourceTree = "<group>"; };
+		AFCDE0370AE176DF00E30447 /* CICalendarTimezone.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarTimezone.cpp; path = Source/CICalendarTimezone.cpp; sourceTree = "<group>"; };
+		AFCDE0380AE176DF00E30447 /* CICalendarDuration.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarDuration.h; path = Source/CICalendarDuration.h; sourceTree = "<group>"; };
+		AFCDE0390AE176DF00E30447 /* CICalendarDuration.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarDuration.cpp; path = Source/CICalendarDuration.cpp; sourceTree = "<group>"; };
+		AFCDE03A0AE176DF00E30447 /* CICalendarPeriod.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarPeriod.h; path = Source/CICalendarPeriod.h; sourceTree = "<group>"; };
+		AFCDE03B0AE176DF00E30447 /* CICalendarPeriod.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarPeriod.cpp; path = Source/CICalendarPeriod.cpp; sourceTree = "<group>"; };
+		AFCDE03C0AE176DF00E30447 /* CICalendarRecurrenceSet.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarRecurrenceSet.h; path = Source/CICalendarRecurrenceSet.h; sourceTree = "<group>"; };
+		AFCDE03D0AE176DF00E30447 /* CICalendarRecurrenceSet.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarRecurrenceSet.cpp; path = Source/CICalendarRecurrenceSet.cpp; sourceTree = "<group>"; };
+		AFCDE03E0AE176DF00E30447 /* CICalendarRecurrence.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CICalendarRecurrence.h; path = Source/CICalendarRecurrence.h; sourceTree = "<group>"; };
+		AFCDE03F0AE176DF00E30447 /* CICalendarRecurrence.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CICalendarRecurrence.cpp; path = Source/CICalendarRecurrence.cpp; sourceTree = "<group>"; };
 		AFCDE0410AE176DF00E30447 /* CCalendarStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarStoreManager.h; path = ../Sources_Common/Calendar_Store/CCalendarStoreManager.h; sourceTree = SOURCE_ROOT; };
 		AFCDE0420AE176DF00E30447 /* CCalendarStoreManager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarStoreManager.cpp; path = ../Sources_Common/Calendar_Store/CCalendarStoreManager.cpp; sourceTree = SOURCE_ROOT; };
 		AFCDE0430AE176DF00E30447 /* CCalendarStoreNode.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = CCalendarStoreNode.h; path = ../Sources_Common/Calendar_Store/CCalendarStoreNode.h; sourceTree = SOURCE_ROOT; };
@@ -4023,7 +4026,7 @@
 				AFCDDFB00AE176DE00E30447 /* Filtering */,
 				AFCDDFBD0AE176DE00E30447 /* Attachments */,
 				AFCDDFD00AE176DE00E30447 /* Address */,
-				AFCDDFE50AE176DE00E30447 /* iCalendar */,
+				AFCDDFE50AE176DE00E30447 /* CICalendar */,
 				AFCDE0400AE176DF00E30447 /* Calendar_Store */,
 				AF2551720C4326EF001AAE53 /* vCard */,
 				AF25515A0C4326C8001AAE53 /* VCard_Store */,
@@ -4207,7 +4210,7 @@
 				AF2551A50C4326EF001AAE53 /* CVCardVCard.h */,
 			);
 			name = vCard;
-			path = ../../Libraries/vCard;
+			path = ../Libraries/vCard;
 			sourceTree = SOURCE_ROOT;
 		};
 		AF2551E70C432843001AAE53 /* HTML */ = {
@@ -4491,6 +4494,7 @@
 				AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */,
 			);
 			name = XMLLib;
+			path = ../Libraries/XMLLib;
 			sourceTree = "<group>";
 		};
 		AFBE2AB30D2F3089002132BE /* Preferences_Store */ = {
@@ -7111,6 +7115,8 @@
 				AFCDDF620AE176DD00E30447 /* CAttachmentManager.cp */,
 				AFC798190CCADCAF00E62F0F /* CPasswordManager.h */,
 				AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */,
+				AFB052F010AFAB180077F8B8 /* CPasswordManagerKeychain.h */,
+				AFB052EF10AFAB180077F8B8 /* CPasswordManagerKeychain.cp */,
 			);
 			name = Control;
 			sourceTree = "<group>";
@@ -7297,7 +7303,7 @@
 			name = Address;
 			sourceTree = "<group>";
 		};
-		AFCDDFE50AE176DE00E30447 /* iCalendar */ = {
+		AFCDDFE50AE176DE00E30447 /* CICalendar */ = {
 			isa = PBXGroup;
 			children = (
 				AFCDDFE60AE176DE00E30447 /* CICalendarManager.h */,
@@ -7393,8 +7399,8 @@
 				AFCDE03E0AE176DF00E30447 /* CICalendarRecurrence.h */,
 				AFCDE03F0AE176DF00E30447 /* CICalendarRecurrence.cpp */,
 			);
-			name = iCalendar;
-			path = ../../Libraries/CICalendar/Source;
+			name = CICalendar;
+			path = ../Libraries/CICalendar;
 			sourceTree = SOURCE_ROOT;
 		};
 		AFCDE0400AE176DF00E30447 /* Calendar_Store */ = {
@@ -9395,6 +9401,7 @@
 				AF8093D10D425EEF002A2E39 /* CVCardSearch.cpp in Sources */,
 				AFF40771102DE5BF00971DA1 /* CNewComponentRepeat.cp in Sources */,
 				AFF407FA102DFADE00971DA1 /* CNewComponentDialog.cp in Sources */,
+				AFB052F110AFAB180077F8B8 /* CPasswordManagerKeychain.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
