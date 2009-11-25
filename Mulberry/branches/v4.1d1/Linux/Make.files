@@ -321,6 +321,15 @@
 -prefix ../Sources_Common/Application/Calendar/Calendar_View/Summary_View/
 .cp CSummaryTableCommon
 .cp CSummaryEvent
+-prefix Sources/Application/Calendar/Calendar_View/Free_Busy_View/
+.cp CFreeBusyView
+-prefix ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/
+.cp CFreeBusyViewCommon
+-prefix Sources/Application/Calendar/Calendar_View/Free_Busy_View/
+.cp CFreeBusyTitleTable
+.cp CFreeBusyTable
+-prefix ../Sources_Common/Application/Calendar/Calendar_View/Free_Busy_View/
+.cp CFreeBusyTableCommon
 -prefix Sources/Application/Calendar/Calendar_View/ToDo_View/
 .cp CToDoView
 -prefix ../Sources_Common/Application/Calendar/Calendar_View/ToDo_View/

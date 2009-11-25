@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -98,6 +98,18 @@ namespace CCalendarUtils
 		col.blue = (unsigned short) (255.0 * blue);
 		col.blue |= (col.blue << 8);
 		
+		return col;
+	}
+	inline JRGB	GetGreyColor(float grey)
+	{
+		JRGB col;
+		col.red = (unsigned short) (255.0 * grey);
+		col.red |= (col.red << 8);
+		col.green = (unsigned short) (255.0 * grey);
+		col.green |= (col.green << 8);
+		col.blue = (unsigned short) (255.0 * grey);
+		col.blue |= (col.blue << 8);
+
 		return col;
 	}
 

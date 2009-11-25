@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 #include "CCommands.h"
 #include "CDayWeekView.h"
 #include "CEventPreview.h"
-//#include "CFreeBusyView.h"
+#include "CFreeBusyView.h"
 #include "CFocusBorder.h"
 #include "CMonthView.h"
 #include "CMulberryCommon.h"
@@ -405,10 +405,8 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 			mSummaryRange = static_cast<CSummaryView*>(mCurrentView)->GetRange();
 			break;
 		case NCalendarView::eViewFreeBusy:
-#ifdef _TODO
 			mFreeBusyRange = static_cast<CFreeBusyView*>(mCurrentView)->GetRange();
 			mFreeBusyScale = static_cast<CFreeBusyView*>(mCurrentView)->GetScale();
-#endif
 			break;
 		default:;
 		}
@@ -417,7 +415,7 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 		mToolbar->RemoveCommander(mCurrentView->GetTable());
 	}
 
-	// Now change the tyope
+	// Now change the type
 	mViewType = type;
 
 	// Get current views date
@@ -481,12 +479,11 @@ void CCalendarView::ResetView(NCalendarView::EViewType type, iCal::CICalendarDat
 		static_cast<CSummaryView*>(mCurrentView)->SetRange(mSummaryRange);
 		break;
 	case NCalendarView::eViewFreeBusy:
-#ifdef _TODO
-		mCurrentView = static_cast<CFreeBusyView*>(UReanimator::CreateView(CFreeBusyView::pane_ID, mViewContainer, this));
-		mViewContainer->ExpandSubPane(mCurrentView, true, true);
+		mCurrentView = new CFreeBusyView(mViewContainer, JXWidget::kHElastic, JXWidget::kVElastic, 0, 0, 500, 200);
+		mCurrentView->OnCreate();
+		mCurrentView->FitToEnclosure();
 		static_cast<CFreeBusyView*>(mCurrentView)->SetRange(mFreeBusyRange);
 		static_cast<CFreeBusyView*>(mCurrentView)->SetScale(mFreeBusyScale);
-#endif
 		break;
 	}
 	
