@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -42,7 +42,9 @@
 #endif
 #include "CPreferences.h"
 #include "CTaskClasses.h"
+#if __dest_os != __win32_os
 #include "CWaitCursor.h"
+#endif
 
 #if __dest_os == __mac_os || __dest_os == __mac_os_x
 #include "CStringResources.h"
@@ -561,10 +563,10 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 				new_name = create.parent;
 				if (node->GetProtocol()->GetDirDelim())
 					new_name += node->GetProtocol()->GetDirDelim();
-				new_name += create.name;
+				new_name += create.new_name;
 			}
 			else
-				new_name = create.name;
+				new_name = create.new_name;
 
 			// Check and get proto from dialog
 			if (!proto)
