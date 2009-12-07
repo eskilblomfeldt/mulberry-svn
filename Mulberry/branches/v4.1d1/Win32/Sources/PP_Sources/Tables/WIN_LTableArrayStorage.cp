@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -160,7 +160,7 @@ LTableArrayStorage::GetCellDataByIndex(
 	if (outDataPtr == NULL) {
 		ioDataSize = mDataArray->at(inCellIndex - 1).second;
 	} else {
-		ioDataSize = min(mDataArray->at(inCellIndex - 1).second, ioDataSize);
+		ioDataSize = std::min(mDataArray->at(inCellIndex - 1).second, ioDataSize);
 		::memcpy(outDataPtr, mDataArray->at(inCellIndex - 1).first, ioDataSize);
 	}
 }

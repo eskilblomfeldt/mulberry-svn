@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2007 Cyrus Daboo. All rights reserved.
+    Copyright (c) 2007-2009 Cyrus Daboo. All rights reserved.
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 #include "CLog.h"
 #include "CNewACLDialog.h"
 #include "CPreferences.h"
-#include "CRemoteAddressBook.h"
 #include "CSDIFrame.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -112,7 +111,7 @@ void CPropAdbkACL::ListenTo_Message(long msg, void* param)
 	}
 }
 
-void CPropAdbkACL::SetAdbkList(CFlatAdbkList* adbk_list)
+void CPropAdbkACL::SetAdbkList(CAddressBookList* adbk_list)
 {
 	// Save list
 	mAdbkList = adbk_list;
@@ -121,14 +120,12 @@ void CPropAdbkACL::SetAdbkList(CFlatAdbkList* adbk_list)
 // Set mbox list
 void CPropAdbkACL::SetAdbk(CAddressBook* adbk)
 {
-	CRemoteAddressBook* radbk = dynamic_cast<CRemoteAddressBook*>(adbk);
-
 	// Set myrights
 	SetMyRights(adbk->GetMyRights());
 	
 	// Set state of buttons
 	mCanChange = adbk->GetMyRights().HasRight(CAdbkACL::eAdbkACL_Admin) &&
-					radbk && radbk->GetProtocol()->IsLoggedOn();
+					adbk->GetProtocol()->IsLoggedOn();
 	SetButtons(mCanChange);
 
 	// Give list to table
