@@ -111,8 +111,8 @@ void CFreeBusyView::ResetDate()
 		mDetails = selected;
 	}
 
-	mTable->AddItems(mDetails);
-	mTable->Refresh();
+	mTable.AddItems(mDetails);
+	FRAMEWORK_REFRESH_WINDOW(&mTable)
 
 	// Broadcast change to listeners
 	Broadcast_Message(eBroadcast_ViewChanged, this);
