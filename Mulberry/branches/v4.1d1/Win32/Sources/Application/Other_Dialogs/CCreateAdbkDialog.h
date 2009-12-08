@@ -37,7 +37,7 @@ class CCreateAdbkDialog : public CHelpDialog
 public:
 	struct SCreateAdbk
 	{
-		cdstring	new_name;
+		cdstring	name;
 		cdstring	parent;
 		cdstring	account;
 		bool		directory;

@@ -139,7 +139,7 @@ void CCreateAdbkDialog::SetDetails(SCreateAdbk* create)
 void CCreateAdbkDialog::GetDetails(SCreateAdbk* result)
 {
 	result->directory = (mDirectory.GetCheck() == 1);
-	result->new_name = mAdbkName.GetText();
+	result->name = mAdbkName.GetText();
 
 	result->use_wd = (mFullPath.GetCheck() != 1);
 
@@ -196,7 +196,7 @@ bool CCreateAdbkDialog::PoseDialog(SCreateAdbk* details)
 	// Let DialogHandler process events
 	if (dlog.DoModal() == IDOK)
 	{					
-		result = !details->new_name.empty();
+		result = !details->name.empty();
 	}
 
 	return result;

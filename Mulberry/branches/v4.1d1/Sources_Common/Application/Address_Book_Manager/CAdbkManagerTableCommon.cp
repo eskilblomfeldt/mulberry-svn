@@ -563,10 +563,10 @@ void CAdbkManagerTable::OnNewAddressBook(void)
 				new_name = create.parent;
 				if (node->GetProtocol()->GetDirDelim())
 					new_name += node->GetProtocol()->GetDirDelim();
-				new_name += create.new_name;
+				new_name += create.name;
 			}
 			else
-				new_name = create.new_name;
+				new_name = create.name;
 
 			// Check and get proto from dialog
 			if (!proto)
