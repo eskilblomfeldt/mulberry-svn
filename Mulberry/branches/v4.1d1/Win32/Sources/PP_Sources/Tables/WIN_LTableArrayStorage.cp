@@ -231,14 +231,17 @@ LTableArrayStorage::InsertRows(
 	mTableView->GetTableSize(rows, cols);
 
 	// Insert blank elements first - though all with the correct size
-	LTableStorageElement element(NULL, inDataSize);
-	mDataArray->insert(mDataArray->begin() + (startIndex - 1), inHowMany * cols, element);
-	
-	// Now create new data elements and store in each new array element
-	for(LTableStorageArray::iterator iter = mDataArray->begin() + (startIndex - 1); iter != mDataArray->begin() + (startIndex - 1 + inHowMany * cols); iter++)
+	if ((inHowMany > 0) && (cols > 0))
 	{
-		(*iter).first = std::malloc(inDataSize);
-		std::memcpy((*iter).first, inDataPtr, inDataSize);
+		LTableStorageElement element(NULL, inDataSize);
+		mDataArray->insert(mDataArray->begin() + (startIndex - 1), inHowMany * cols, element);
+	
+		// Now create new data elements and store in each new array element
+		for(LTableStorageArray::iterator iter = mDataArray->begin() + (startIndex - 1); iter != mDataArray->begin() + (startIndex - 1 + inHowMany * cols); iter++)
+		{
+			(*iter).first = std::malloc(inDataSize);
+			std::memcpy((*iter).first, inDataPtr, inDataSize);
+		}
 	}
 }
 
@@ -268,14 +271,17 @@ LTableArrayStorage::InsertCols(
 		mTableView->CellToIndex(theCell, startIndex);
 
 		// Insert blank elements first - though all with the correct size
-		LTableStorageElement element(NULL, inDataSize);
-		mDataArray->insert(mDataArray->begin() + (startIndex - 1), inHowMany, element);
-		
-		// Now create new data elements and store in each new array element
-		for(LTableStorageArray::iterator iter = mDataArray->begin() + (startIndex - 1); iter != mDataArray->begin() + (startIndex - 1 + inHowMany); iter++)
+		if (inHowMany)
 		{
-			(*iter).first = std::malloc(inDataSize);
-			std::memcpy((*iter).first, inDataPtr, inDataSize);
+			LTableStorageElement element(NULL, inDataSize);
+			mDataArray->insert(mDataArray->begin() + (startIndex - 1), inHowMany, element);
+
+			// Now create new data elements and store in each new array element
+			for(LTableStorageArray::iterator iter = mDataArray->begin() + (startIndex - 1); iter != mDataArray->begin() + (startIndex - 1 + inHowMany); iter++)
+			{
+				(*iter).first = std::malloc(inDataSize);
+				std::memcpy((*iter).first, inDataPtr, inDataSize);
+			}
 		}
 	}
 }
