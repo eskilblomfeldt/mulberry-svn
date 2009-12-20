@@ -175,6 +175,12 @@ void CCreateAdbkDialog::InitAccountMenu(void)
 	for(CAddressAccountList::const_iterator iter = CPreferences::sPrefs->mAddressAccounts.GetValue().begin();
 			iter != CPreferences::sPrefs->mAddressAccounts.GetValue().end(); iter++, menu_id++)
 	{
+		// Only if IMSP/ACAP/CardDAV
+		if (((*iter)->GetServerType() != CINETAccount::eIMSP) &&
+			((*iter)->GetServerType() != CINETAccount::eACAP) &&
+			((*iter)->GetServerType() != CINETAccount::eCardDAVAdbk))
+			continue;
+
 		// Add to menu
 		CUnicodeUtils::AppendMenuUTF8(pPopup, MF_STRING, menu_id, (*iter)->GetName());
 		
@@ -191,7 +197,7 @@ bool CCreateAdbkDialog::PoseDialog(SCreateAdbk* details)
 
 	// Create the dialog
 	CCreateAdbkDialog dlog(CSDIFrame::GetAppTopWindow());
-	dlog.SetDetails(details);
+	dlog.mData = details;
 
 	// Let DialogHandler process events
 	if (dlog.DoModal() == IDOK)
