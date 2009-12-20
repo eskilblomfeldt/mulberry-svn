@@ -8,6 +8,7 @@
 //#include "portable.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 //#include <ac/stdlib.h>
@@ -23,10 +24,14 @@ int ldif_debug = 0;
 #define LDAP_DEBUG_PARSE	0x0800
 #define LDAP_DEBUG_NONE		0x8000
 #define LDAP_DEBUG_ANY		-1
+#define LDAP_CONST			const
 
 //#include "lber_pvt.h"
 //#include <lber_types.h>
-//#include "ldif.h"
+#define ber_len_t size_t
+#define strcasecmp strcmp
+
+#include "ldif.h"
 
 #define RIGHT2			0x03
 #define RIGHT4			0x0f
@@ -54,7 +59,7 @@ int ldif_fetch_url( LDAP_CONST char *line, char **value, ber_len_t *vlen )
 	return 1;
 }
 
-static const char nib2b64[0x40] =
+static const char nib2b64[0x41] =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 static const unsigned char b642nib[0x80] = {
@@ -244,7 +249,7 @@ ldif_parse_line(
 	}
 
 	if( !url ) {
-		p = ber_memalloc( vlen + 1 );
+		p = (char *)ber_memalloc( vlen + 1 );
 		if( p == NULL ) {
 			ber_pvt_log_printf( LDAP_DEBUG_ANY, ldif_debug,
 				"ldif_parse_line: value malloc failed\n");
@@ -627,7 +632,7 @@ ldif_read_record(
 
 		if ( *buflenp - lcur <= len ) {
 			*buflenp += len + BUFSIZ;
-			nbufp = ber_memrealloc( *bufp, *buflenp );
+			nbufp = (char*)ber_memrealloc( *bufp, *buflenp );
 			if( nbufp == NULL ) {
 				return 0;
 			}

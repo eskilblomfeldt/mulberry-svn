@@ -46,26 +46,8 @@
 #endif
 
 #ifdef __VCPP__
-#define LDAP_UNICODE 0
-#include <winldap.h>
-#define LDAP_CONST const
-#define LDIF_PUT_VALUE 1
 #define ber_len_t size_t
-int
-ldif_parse_line(
-    LDAP_CONST char	*line,
-    char	**typep,
-    char	**valuep,
-    ber_len_t *vlenp
-);
-char *
-ldif_getline( char **next );
-char *
-ldif_put(
-	int type,
-	LDAP_CONST char *name,
-	LDAP_CONST char *val,
-	ber_len_t vlen );
+#include "ldif.h"
 #else
 #define NEEDPROTOS
 #include <lber.h>

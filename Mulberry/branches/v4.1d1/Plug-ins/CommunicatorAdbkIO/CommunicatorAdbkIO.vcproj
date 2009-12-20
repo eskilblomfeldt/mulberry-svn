@@ -196,6 +196,28 @@
 				>
 			</File>
 			<File
+				RelativePath=".\sources\line64win.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAs="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAs="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\Common\MulberryPrefixWin32.cp"
 				>
 				<FileConfiguration
@@ -243,6 +265,14 @@
 			</File>
 			<File
 				RelativePath="..\Common\CPluginInfo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sources\ldap_cdefs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\sources\ldif.h"
 				>
 			</File>
 			<File
