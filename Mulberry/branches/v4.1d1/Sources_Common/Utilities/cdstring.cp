@@ -2429,9 +2429,8 @@ void cdstring::_allocate(const char* buf, size_type size)
 	_tidy();
 	if (buf != NULL)
 	{
-		size_type s = ::strlen(buf);
-		if ((size == npos) || (size > s))
-			size = s;
+		if (size == npos)
+			size = ::strlen(buf);
 		if (size != 0)
 		{
 			_str = new char[size+1];
@@ -2458,9 +2457,8 @@ void cdstring::_append(const char* buf, size_type size)
 {
 	if (buf != NULL)
 	{
-		size_type s = ::strlen(buf);
-		if ((size == npos) || (size > s))
-			size = s;
+		if (size == npos)
+			size = ::strlen(buf);
 		if (size != 0)
 		{
 			char* more = new char[length() + size + 1];
