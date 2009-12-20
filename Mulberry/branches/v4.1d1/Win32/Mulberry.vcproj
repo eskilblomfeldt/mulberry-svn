@@ -8984,7 +8984,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;F:\Program Files\VS8\VC\atlmfc\src\mfc&quot;"
+						AdditionalIncludeDirectories=""
 						UsePrecompiledHeader="1"
 						PrecompiledHeaderThrough="MulberryUnicode.pch++"
 					/>
@@ -8994,7 +8994,7 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories="&quot;F:\Program Files\VS8\VC\atlmfc\src\mfc&quot;"
+						AdditionalIncludeDirectories=""
 						UsePrecompiledHeader="1"
 						PrecompiledHeaderThrough="MulberryUnicode.pch++"
 					/>
