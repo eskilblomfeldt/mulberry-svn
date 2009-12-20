@@ -50,7 +50,7 @@ void CPropCalendarACL::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CPropCalendarACL)
-	DDX_Control(pDX, IDC_CALENDARACL_STYLEPOPUP, mStylePopup);
+	//DDX_Control(pDX, IDC_CALENDARACL_STYLEPOPUP, mStylePopup);
 	DDX_Control(pDX, IDC_CALENDARACL_DELETEUSER, mDeleteUserBtn);
 	DDX_Control(pDX, IDC_CALENDARACL_NEWUSER, mNewUserBtn);
 	DDX_Control(pDX, IDC_CALENDARACL_APPLYALL, mChangeAllBtn);
