@@ -45,7 +45,7 @@ void CPropAdbkACL::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CPropAdbkACL)
-	DDX_Control(pDX, IDC_ADBKACL_STYLEPOPUP, mStylePopup);
+	//DDX_Control(pDX, IDC_ADBKACL_STYLEPOPUP, mStylePopup);
 	DDX_Control(pDX, IDC_ADBKACL_DELETEUSER, mDeleteUserBtn);
 	DDX_Control(pDX, IDC_ADBKACL_NEWUSER, mNewUserBtn);
 	//}}AFX_DATA_MAP
