@@ -223,6 +223,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\Common\PluginDLLmain.cp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
