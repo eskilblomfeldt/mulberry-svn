@@ -43,11 +43,6 @@
 
 using namespace iCal;
 
-CICalendarProperty::CValueTypeMap CICalendarProperty::sDefaultValueTypeMap;
-CICalendarProperty::CValueTypeMap CICalendarProperty::sValueTypeMap;
-CICalendarProperty::CTypeValueMap CICalendarProperty::sTypeValueMap;
-CICalendarProperty::CMultiValues CICalendarProperty::sMultiValues;
-
 void CICalendarProperty::_init_attr_value(const int32_t& ival)
 {
 	// Value
@@ -514,7 +509,7 @@ void CICalendarProperty::Generate(std::ostream& os) const
 				
 				// Make sure we do not split in the middle of a utf-8 multi-octet sequence
 				unsigned char* up = (unsigned char*) p;
-				while((up[bytes] > 0x7F) and ((up[bytes] & 0xC0) == 0x80))
+				while((up[bytes] > 0x7F) && ((up[bytes] & 0xC0) == 0x80))
 					bytes--;
 			}
 			os.write(p, bytes);
