@@ -1,0 +1,50 @@
+1. PRE-REQUISITES
+Get and install Visual Studio 2008 standard edition (at a minimum).
+If your Visual Studio tool does not have an assembler, get 
+http://nasm.sourceforge.net/. The current nasm.exe binary should be 
+copied to nasmw.exe in one's path for use by the openssl Makefile. 
+You will need perl installed to build openssl.
+
+2. OpenSSL
+
+Download the latest openssl-0.9.7 release (note 0.9.7 NOT 0.9.8).
+(KAP: testing with 0.9.8m, latest at time of test.)
+Extract to an 'openssl' directory in 'mulberry-open\Libraries'.
+At a command prompt in the 'openssl' directory do:
+
+  perl Configure VC-WIN32
+
+Then do:
+
+  ms\do_nasm or ms\do_masm or ms\do_ms depending on what assembler you have
+
+Copy 'openssl\ms\nt.mak' to 'openssl\ms\nt-static.mak'.
+Edit 'nt-static.mak' and do:
+
+- Change 'OUT_D=out32' to 'OUT_D=out32s'.
+- Change 'TMP_D=tmp32' to 'TMP_D=tmp32s'.
+
+Copy 'openssl\ms\nt-static.mak' to 'openssl\ms\nt-debug.mak'.
+Edit 'nt-debug.mak' and do:
+
+- Change /MT to /MDd in CFLAG.
+- Change 'OUT_D=out32s' to 'OUT_D=out32d'.
+- Change 'TMP_D=tmp32s' to 'TMP_D=tmp32d'.
+
+Open a console window. cd to the Visual Studio top-level directory.
+Run vcvarsall.bat to set up the environment for command line building.
+cd to 'Libraries\openssl'.
+Do 'nmake -f ms\nt-debug.mak'.
+Do 'nmake -f ms\nt-static.mak'.
+
+Both the nmakes will likely take a while to complete.
+
+3. BUILDING MULBERRY WITH VISUAL STUDIO.
+
+Add file extension .cp to list of C++ file extensions:
+Select Tools | Options. Go to Projects and Solutions,
+VC++ Project Settings, C/C++ File Extensions, and add *.cp
+to the list if not already present.
+Open 'Win32\Mulberry.sln' in Visual Studio.
+Run the 'Build Solution' command from the 'Build' menu.
+That will build the Debug variant of all plugins and the Mulberry app.
