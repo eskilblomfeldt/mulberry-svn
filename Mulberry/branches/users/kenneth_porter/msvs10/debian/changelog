@@ -1,0 +1,41 @@
+mulberry (4.1d1-svn-20110322-1450) unstable; urgency=low
+
+  * Integration of Cyrus' changes  (main 357:368)
+
+ -- Martin Dietze <herbert@spamcop.net>  Tue, 22 Mar 2011 14:50:00 +0100
+
+mulberry (4.1d1-svn-20101210-0934) unstable; urgency=low
+
+  * Integration of Cyrus' changes r343..r357 (main) and r133 (external)
+
+ -- Martin Dietze <herbert@spamcop.net>  Fri, 10 Dec 2010 09:34:00 +0100
+
+mulberry (4.1d1-svn-20100901-1340) unstable; urgency=low
+
+  * Build from the SVN on Wed Sep 01 13:40:30 CET 2010
+
+ -- Martin Dietze <herbert@spamcop.net>  Wed, 01 Sep 2010 13:40:31 +0100
+
+mulberry (4.1d1-svn-20100616-1647) unstable; urgency=low
+
+  * Build from the SVN on Wed Jun 16 15:55:30 CET 2010
+
+ -- Martin Dietze <herbert@spamcop.net>  Wed, 16 Jun 2010 16:47:31 +0100
+
+mulberry (4.1d1-svn-20091122-1254) unstable; urgency=low
+
+  * Automatic build from the SVN on Sun Nov 22 12:54:30 CET 2009
+
+ -- Martin Dietze <herbert@spamcop.net>  Sun, 22 Nov 2009 12:54:31 +0100
+
+mulberry (4.1d1-svn-20091122-1232) unstable; urgency=low
+
+  * Automatic build from the SVN on Sun Nov 22 12:32:42 CET 2009
+
+ -- Martin Dietze <herbert@spamcop.net>  Sun, 22 Nov 2009 12:32:44 +0100
+
+mulberry (4.1d1-1) unstable; urgency=low
+
+  * Initial Debianisation
+
+ -- Martin Dietze <herbert@spamcop.net>  Sat, 07 Nov 2009 16:50:24 -0400
