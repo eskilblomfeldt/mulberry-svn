@@ -28,6 +28,7 @@
 #include "char_stream.h"
 
 #include <algorithm>
+#include <iterator>
 #include <memory>
 
 extern const char* cSpace;
