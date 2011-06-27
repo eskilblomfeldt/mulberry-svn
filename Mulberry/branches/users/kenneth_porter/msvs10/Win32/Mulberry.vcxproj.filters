@@ -3515,2235 +3515,2232 @@
     <None Include="Resources\RESXP\XHeaderLines.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\sources_common\utilities\base64.cp">
+    <CLCompile Include="..\sources_common\utilities\base64.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\accounts\C3PaneAccounts.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\accounts\C3PaneAccounts.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneAdbkToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneAdbkToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\preview\C3PaneAddress.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\preview\C3PaneAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\items\C3PaneAddressBook.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\items\C3PaneAddressBook.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\items\C3PaneCalendar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\items\C3PaneCalendar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\accounts\C3PaneCalendarAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\accounts\C3PaneCalendarAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneCalendarToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneCalendarToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\accounts\C3PaneContactsAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\accounts\C3PaneContactsAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\preview\C3PaneEvent.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\preview\C3PaneEvent.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\items\C3PaneItems.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\items\C3PaneItems.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\items\C3PaneItemsTabs.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\items\C3PaneItemsTabs.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\accounts\C3PaneMailAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\accounts\C3PaneMailAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\items\C3PaneMailbox.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\items\C3PaneMailbox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneMailboxToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneMailboxToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneMainPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneMainPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\preview\C3PaneMessage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\preview\C3PaneMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\three_pane\C3PaneOptions.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\three_pane\C3PaneOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PanePanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PanePanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneParentPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneParentPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\preview\C3PanePreview.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\preview\C3PanePreview.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneViewPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneViewPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\C3PaneWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\C3PaneWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CAboutBox.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CAboutBox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\general\CAboutPluginsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\general\CAboutPluginsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\acap\CACAPClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\acap\CACAPClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\ssl\CAcceptCertDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\ssl\CAcceptCertDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\extensions\CACL.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\extensions\CACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CACLStylePopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CACLStylePopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CACLTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CACLTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CACLTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CACLTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CActionItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CActionItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\automation\CActionManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\automation\CActionManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CActionRecorder.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CActionRecorder.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\extensions\CAdbkACL.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\extensions\CAdbkACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CAdbkAction.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CAdbkAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CAdbkAddress.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CAdbkAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\addressbooks\CAdbkIOPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\addressbooks\CAdbkIOPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\address_book_manager\CAdbkManagerTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\address_book_manager\CAdbkManagerTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\address_book_manager\CAdbkManagerViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\address_book_manager\CAdbkManagerViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\CAdbkManagerWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\CAdbkManagerWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\address_book_properties\CAdbkPropDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\address_book_properties\CAdbkPropDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CAdbkProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CAdbkProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CAdbkRecord.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CAdbkRecord.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkSearchDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkSearchDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkSearchFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkSearchFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkSearchTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkSearchTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkSearchTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkSearchTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkSearchWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkSearchWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_search\CAdbkServerPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_search\CAdbkServerPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CAddress.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CAddressAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CAddressAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\addressbook\CAddressBook.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\addressbook\CAddressBook.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookDocTemplate.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookDocTemplate.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\addressbook\CAddressBookManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\addressbook\CAddressBookManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\address_book\CAddressBookViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\address_book\CAddressBookViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressBookWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressBookWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CAddressComparators.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CAddressComparators.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressContactPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressContactPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CAddressDisplay.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CAddressDisplay.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressGroupAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressGroupAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CAddressList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CAddressList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressNotesPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressNotesPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressPanelBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressPanelBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CAddressPaneOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CAddressPaneOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressPersonalPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressPersonalPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressPreview.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressPreview.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressTableAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressTableAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CAddressView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CAddressView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\three_pane\CAddressViewOptions.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\three_pane\CAddressViewOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CAdmin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CAdmin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CAdminLock.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CAdminLock.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CAFFilter.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CAFFilter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CAliasAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CAliasAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CApplyRulesMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CApplyRulesMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\onebyte\CASCII.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\onebyte\CASCII.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CAttachmentList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CAttachmentList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CAttachmentManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CAttachmentManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CAttendeeTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CAttendeeTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CAuthenticator.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CAuthenticator.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\authentication\CAuthPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\authentication\CAuthPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CBaseView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CBaseView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CBig5.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CBig5.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CBinHexFilter.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CBinHexFilter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CBlockOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CBlockOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CBodyTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CBodyTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\action dialogs\CBounceActionDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\action dialogs\CBounceActionDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CBroadcaster.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CBroadcaster.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\browse_dialog\CBrowseMailboxDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\browse_dialog\CBrowseMailboxDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CCacheMessageDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CCacheMessageDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CCalendarAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CCalendarAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\extensions\CCalendarACL.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\extensions\CCalendarACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CCalendarAction.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CCalendarAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Mail\Address\CCalendarAddress.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Mail\Address\CCalendarAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Component_Editing\CCalendarAddressDisplay.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Component_Editing\CCalendarAddressDisplay.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarETBaseCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarETBaseCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarEventBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarEventBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarEventBaseCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarEventBaseCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarEventTableBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarEventTableBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CCalendarPaneOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CCalendarPaneOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\utilities\CCalendarPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\utilities\CCalendarPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CCalendarPropDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CCalendarPropDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CCalendarRecord.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CCalendarRecord.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_store_view\CCalendarStoreViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_store_view\CCalendarStoreViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_store_view\CCalendarStoreWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarTableBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarTableBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\utilities\CCalendarUtils.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\utilities\CCalendarUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarViewBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarViewBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarViewBaseCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarViewBaseCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\three_pane\CCalendarViewOptions.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\three_pane\CCalendarViewOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarViewPrintout.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarViewPrintout.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\calendar_window\CCalendarWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\calendar_window\CCalendarWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\calendar_window\CCalendarWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\status\CCancelDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\status\CCancelDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CCaptionParser.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CCaptionParser.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CCertificate.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CCertificate.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CCertificateManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CCertificateManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CCertificateStore.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CCertificateStore.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CCertificateStoreDir.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CCertificateStoreDir.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\ssl\CCertManagerDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\ssl\CCertManagerDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CChangePswdAcctDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CChangePswdAcctDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CChangePswdDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CChangePswdDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\CCharsetManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\CCharsetManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CCharSpecials.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CCharSpecials.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\dialogs\CChooseDateDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\dialogs\CChooseDateDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CChooseServersDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CChooseServersDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CCJKBase.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CCJKBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CClearNodeTree.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CClearNodeTree.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CClickElement.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CClickElement.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CClickList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CClickList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CCmdBackground.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CCmdBackground.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\text\CCmdEdit.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\text\CCmdEdit.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\text\CCmdEditView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\text\CCmdEditView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CColorButton.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CColorButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CColorMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CColorMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CCommander.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CCommander.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CCommanderProtect.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CCommanderProtect.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CCommonViewOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CCommonViewOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\configuration\CConfigPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\configuration\CConfigPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CConnectionManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CConnectionManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CContainerView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CContainerView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CContainerWnd.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CContainerWnd.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\CConverterBase.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\CConverterBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\onebyte\CConverterOneByte.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\onebyte\CConverterOneByte.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CCopyToMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CCopyToMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\extras\CCreateAccountDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\extras\CCreateAccountDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CCreateAdbkDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CCreateAdbkDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\dialogs\CCreateCalendarDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\dialogs\CCreateCalendarDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CCreateFileFilter.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CCreateFileFilter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\dialogs\CCreateMailboxDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\dialogs\CCreateMailboxDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CCriteriaBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CCriteriaBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CDataAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CDataAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\automation\CDataItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\automation\CDataItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CDateControl.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CDateControl.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CDateTimeZoneSelect.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CDateTimeZoneSelect.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\day_week_view\CDayEvent.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\day_week_view\CDayEvent.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\day_week_view\CDayWeekTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\day_week_view\CDayWeekTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\day_week_view\CDayWeekView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\day_week_view\CDayWeekViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\day_week_view\CDayWeekViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdcond.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdcond.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CDefaultOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CDefaultOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CDeleteACLStyleDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CDeleteACLStyleDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CDeleteIdentityDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CDeleteIdentityDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CDesktopIcons.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CDesktopIcons.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CDictionaryPageList.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CDictionaryPageList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CDisconnectDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CDisconnectDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CDisconnectListPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CDisconnectListPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CDisplayFormatter.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CDisplayFormatter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CDisplayItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CDisplayItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CDLLFunctions.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CDLLFunctions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdmutex.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdmutex.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdomutex.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdomutex.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\tasks\CDragTasks.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\tasks\CDragTasks.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CDrawUtils.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CDrawUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CDSN.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CDSN.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdstring.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdstring.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdthread.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdthread.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CDurationSelect.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CDurationSelect.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\cdustring.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\cdustring.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CDynamicMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CDynamicMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CEditAddressDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CEditAddressDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CEditGroupDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CEditGroupDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentities.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentities.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentityAddress.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentityAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentityDSN.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentityDSN.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentityOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentityOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentityOutgoing.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentityOutgoing.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CEditIdentitySecurity.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CEditIdentitySecurity.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\macros\CEditMacro.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\macros\CEditMacro.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\extras\CEditMapDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\extras\CEditMapDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CEnrichedTransformer.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CEnrichedTransformer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CEnvelope.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CEnvelope.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CErrorDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CErrorDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CErrorHandler.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CErrorHandler.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\event_todo_preview\CEventPreview.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\event_todo_preview\CEventPreview.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CFavouriteItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CFavouriteItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CFieldDisplay.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CFieldDisplay.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CFileAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CFileAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CFileOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CFileOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CFileTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CFileTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CFileTableAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CFileTableAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CFilter.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CFilter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CFilterItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CFilterItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CFilterManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CFilterManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CFilterProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CFilterProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CFilterSchedule.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CFilterSchedule.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CFilterScript.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CFilterScript.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CFilterTarget.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CFilterTarget.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\find_replace\CFindReplaceWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\find_replace\CFindReplaceWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CFontCache.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CFontCache.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CFontMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CFontMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CFormatElement.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CFormatElement.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CFormatList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CFormatList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CFormattedTextDisplay.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CFormattedTextDisplay.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\action dialogs\CForwardActionDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\action dialogs\CForwardActionDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CForwardOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CForwardOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTable.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyView.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Application\Calendar\Calendar_View\Free_Busy_View\CFreeBusyViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CFullFileStream.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CFullFileStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CFutureItems.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CFutureItems.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CGB2312.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CGB2312.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\security\CGetPassphraseDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\security\CGetPassphraseDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CGetStringDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CGetStringDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CGrayBackground.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CGrayBackground.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CGrayBorder.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CGrayBorder.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CGroup.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CGroup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CGroupComparators.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CGroupComparators.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\address\CGroupList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\address\CGroupList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CGroupPreview.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CGroupPreview.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CGroupTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CGroupTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book\CGroupTableAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book\CGroupTableAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\char_stream.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\char_stream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CHelpDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CHelpDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CHelpFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CHelpFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CHelpPropertyPage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CHelpPropertyPage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CHelpPropertySheet.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CHelpPropertySheet.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CHierarchyTableDrag.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CHierarchyTableDrag.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CHTMLCharacterEntity.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CHTMLCharacterEntity.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CHTMLTransformer.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CHTMLTransformer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CIconButton.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CIconButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CIconLoader.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CIconLoader.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CIconMenu.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CIconMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CIconTextTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CIconTextTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CIconWnd.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CIconWnd.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CIdentity.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CIdentity.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CIdentityPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CIdentityPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\imap\CIMAPClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\imap\CIMAPClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\imap\CIMAPCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\imap\CIMAPCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\extras\CIMAPLabelsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\extras\CIMAPLabelsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\imsp\CIMSPClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\imsp\CIMSPClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\imsp\CIMSPCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\imsp\CIMSPCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CINETAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CINETAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\CINETClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\CINETCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\CINETCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CINETProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CINETProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_CN.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_CN.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_JP.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_JP.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_KR.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\iso2022\CISO2022_KR.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CJIS_0201.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CJIS_0201.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CJIS_0208.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CJIS_0208.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CKeyAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CKeyAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CKeyChoiceDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CKeyChoiceDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CKSC_5601_1987.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CKSC_5601_1987.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\ldap\CLDAPClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\ldap\CLDAPClient.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterHeaderView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterHeaderView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterPartProp.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterPartProp.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterTextEditView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterTextEditView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CLetterWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CLetterWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\letter\CLetterWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\letter\CLetterWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CLicenseDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CLicenseDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CListener.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CListener.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\local_clients\CLocalAdbkClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\local_clients\CLocalAdbkClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CLocalAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CLocalAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CLocalClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CLocalClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\CLocalCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\CLocalCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CLocalMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CLocalMessage.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\local_clients\CLocalPrefsClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\local_clients\CLocalPrefsClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\CLog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\CLog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CLoggingOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CLoggingOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CMacJapanese.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CMacJapanese.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CMacKorean.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CMacKorean.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CMacProgressCtrl.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CMacProgressCtrl.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\macros\CMacroEditDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\macros\CMacroEditDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CMacSimpChinese.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CMacSimpChinese.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CMacTradChinese.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CMacTradChinese.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CMailAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CMailAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CMailAccountManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CMailAccountManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CMailAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CMailAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox\CMailboxDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox\CMailboxDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMailboxInfoFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMailboxInfoFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMailboxInfoTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMailboxInfoTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox_info\CMailboxInfoTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox_info\CMailboxInfoTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMailboxInfoToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMailboxInfoToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMailboxInfoView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMailboxInfoView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox_info\CMailboxInfoViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox_info\CMailboxInfoViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMailboxInfoWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMailboxInfoWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox_info\CMailboxInfoWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox_info\CMailboxInfoWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CMailboxListPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CMailboxListPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CMailboxPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CMailboxPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CMailboxPropDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CMailboxPropDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox\CMailboxTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox\CMailboxTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox\CMailboxTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox\CMailboxTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox\CMailboxTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox\CMailboxTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CMailboxToolbarPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CMailboxToolbarPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox\CMailboxView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox\CMailboxView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox\CMailboxViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox\CMailboxViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox\CMailboxWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox\CMailboxWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\mailbox\CMailboxWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\mailbox\CMailboxWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CMailCheckThread.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CMailCheckThread.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CMailControl.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CMailControl.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CMailNotification.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CMailNotification.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CMailRecord.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CMailRecord.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\three_pane\CMailViewOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\three_pane\CMailViewOptions.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CManageSIEVEAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CManageSIEVEAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CMatchItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CMatchItem.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CMatchOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CMatchOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CMbox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CMbox.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\extensions\CMboxACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\extensions\CMboxACL.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CMboxACLProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CMboxACLProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CMboxList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CMboxList.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CMboxProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CMboxProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CMboxRef.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CMboxRef.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CMboxRefList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CMboxRefList.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMDNPromptDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMDNPromptDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CMessage.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CMessageAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CMessageAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CMessageComparators.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CMessageComparators.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageHeaderView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageHeaderView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CMessageList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CMessageList.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CMessagePaneOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CMessagePaneOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessagePartProp.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessagePartProp.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CMessageRef.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CMessageRef.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageSimpleView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageSimpleView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\message\CMessageThread.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\message\CMessageThread.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\message\CMessageViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\message\CMessageViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CMessageWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CMessageWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\message\CMessageWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\message\CMessageWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CMIMEContent.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CMIMEContent.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CMIMEFilters.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CMIMEFilters.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CMIMEMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CMIMEMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CMIMESupport.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CMIMESupport.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\attachments\CMIMETypes.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\attachments\CMIMETypes.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CModelessDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CModelessDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\month_view\CMonthEvent.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\month_view\CMonthEvent.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\month_view\CMonthIndicator.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\month_view\CMonthIndicator.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\utilities\CMonthPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\utilities\CMonthPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\month_view\CMonthTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\month_view\CMonthTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\month_view\CMonthTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\month_view\CMonthTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\month_view\CMonthTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\month_view\CMonthTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\month_view\CMonthView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\month_view\CMonthView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\month_view\CMonthViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\month_view\CMonthViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryApp.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryApp.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryAppProtect.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryAppProtect.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryAppRegistry.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryAppRegistry.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryAppXtra.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryAppXtra.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CMulberryWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CMulberryWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CMultiUserDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CMultiUserDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CMyStack.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CMyStack.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\dialogs\CNamespaceDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\dialogs\CNamespaceDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CNetworkResetError.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CNetworkResetError.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CNewACLDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CNewACLDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CNewACLStyleDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CNewACLStyleDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewAttendeeDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewAttendeeDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewComponentAlarm.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewComponentAlarm.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewComponentAttendees.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewComponentAttendees.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Component_Editing\CNewComponentDetails.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Component_Editing\CNewComponentDetails.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Component_Editing\CNewComponentDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Component_Editing\CNewComponentDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewComponentPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewComponentPanel.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Application\Calendar\Component_Editing\CNewComponentRepeat.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Application\Calendar\Component_Editing\CNewComponentRepeat.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewEventDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewEventDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewEventTiming.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewEventTiming.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\tasks\CNewMailTask.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\tasks\CNewMailTask.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\dialogs\CNewSearchDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\dialogs\CNewSearchDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewTimingPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewTimingPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewToDoDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewToDoDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CNewToDoTiming.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CNewToDoTiming.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\dialogs\CNewWildcardDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\dialogs\CNewWildcardDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CNodeTree.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CNodeTree.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\hierarchy list\CNodeVectorTree.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\hierarchy list\CNodeVectorTree.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CNoFocusButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CNoFocusButton.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CNotification.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CNotification.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\text\CNumberEdit.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\text\CNumberEdit.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\dialogs\COpenMailboxDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\dialogs\COpenMailboxDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Application\Preferences\COptionsAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Application\Preferences\COptionsAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\COptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\COptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\COptionsProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\COptionsProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\COSStringMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\COSStringMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserEnriched.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserEnriched.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserEnrichedStack.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserEnrichedStack.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserHTML.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserHTML.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserHTMLStack.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserHTMLStack.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserPlain.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserPlain.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\formatting\CParserPlainElement.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\formatting\CParserPlainElement.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Mail\Control\CPasswordManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Mail\Control\CPasswordManager.cp">
+    </CLCompile>
+    <CLCompile Include="..\Sources_Common\Mail\Control\CPasswordManagerKeyring.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Sources_Common\Mail\Control\CPasswordManagerKeyring.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CPeriodicCheck.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CPeriodicCheck.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\general\CPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\general\CPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\general\CPluginManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\general\CPluginManager.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\general\CPluginRegisterDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\general\CPluginRegisterDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CPOP3Client.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CPOP3Client.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CPOP3Common.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CPOP3Common.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CPopupButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CPopupButton.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferenceEnum.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferenceEnum.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferenceKeys.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferenceKeys.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferences.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferences.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferencesBits.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferencesBits.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPreferencesDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPreferencesDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferencesFile.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferencesFile.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferencesRW.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferencesRW.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CPreferencesXtra.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CPreferencesXtra.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAccountAuth.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAccountAuth.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsAccountExtras.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsAccountExtras.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\CPrefsAccountPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\CPrefsAccountPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\calendar_account_panels\CPrefsAccountRemoteCalendar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\calendar_account_panels\CPrefsAccountRemoteCalendar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsAccounts.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsAccounts.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAdbkAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAdbkAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsAddress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsAddress.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\address_panels\CPrefsAddressCapture.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\address_panels\CPrefsAddressCapture.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\address_panels\CPrefsAddressExpansion.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\address_panels\CPrefsAddressExpansion.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressIMSP.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressIMSP.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAP1.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAP1.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAP2.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAP2.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAPOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsAddressLDAPOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsAlerts.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsAlerts.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\alerts_panels\CPrefsAlertsAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\alerts_panels\CPrefsAlertsAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\alerts_panels\CPrefsAlertsMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\alerts_panels\CPrefsAlertsMessage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsAttachments.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsAttachments.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\attachment_panels\CPrefsAttachmentsReceive.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\attachment_panels\CPrefsAttachmentsReceive.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\attachment_panels\CPrefsAttachmentsSend.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\attachment_panels\CPrefsAttachmentsSend.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAuthKerberos.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAuthKerberos.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAuthPlainText.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\authentication_panels\CPrefsAuthPlainText.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsCalendar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsCalendar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsDisplay.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsDisplay.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayLabel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayLabel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayMailbox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayMailbox.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayMessage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayQuotes.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayQuotes.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayServer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayServer.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayStyles.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\display_panels\CPrefsDisplayStyles.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\extras\CPrefsEditCaption.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\extras\CPrefsEditCaption.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\edit_identities\CPrefsEditHeadFoot.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\edit_identities\CPrefsEditHeadFoot.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\extras\CPrefsEditMappings.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\extras\CPrefsEditMappings.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsFormatting.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsFormatting.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsIdentity.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsIdentity.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsLDAPAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\address_account_panels\CPrefsLDAPAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsLetter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsLetter.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterGeneral.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterGeneral.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterStyled.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\letter_panels\CPrefsLetterStyled.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\local_account_panels\CPrefsLocalAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\local_account_panels\CPrefsLocalAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\local_account_panels\CPrefsLocalOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\local_account_panels\CPrefsLocalOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsMailAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsMailAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsMailbox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsMailbox.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxAdvanced.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxAdvanced.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxBasic.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxBasic.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxDisconnected.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxDisconnected.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\mailbox_panels\CPrefsMailboxOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsMailIMAP.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\imap_account_panels\CPrefsMailIMAP.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsMessage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsMessage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\message_panels\CPrefsMessageGeneral.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\message_panels\CPrefsMessageGeneral.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\message_panels\CPrefsMessageOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\message_panels\CPrefsMessageOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\pop3_account_panels\CPrefsPOP3Account.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\pop3_account_panels\CPrefsPOP3Account.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\pop3_account_panels\CPrefsPOP3Options.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\pop3_account_panels\CPrefsPOP3Options.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\calendar_account_panels\CPrefsRemoteCalendarAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\calendar_account_panels\CPrefsRemoteCalendarAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteSets.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\remote_account_panels\CPrefsRemoteSets.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsSecurity.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsSecurity.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\sieve_account_panels\CPrefsSIEVEAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\sieve_account_panels\CPrefsSIEVEAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsSimple.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsSimple.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\smtp_account_panels\CPrefsSMTPAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\smtp_account_panels\CPrefsSMTPAccount.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\account_panels\smtp_account_panels\CPrefsSMTPOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\account_panels\smtp_account_panels\CPrefsSMTPOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\CPrefsSpelling.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\CPrefsSpelling.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\spelling_panels\CPrefsSpellingOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\spelling_panels\CPrefsSpellingOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\preferences_dialog\sub-panels\spelling_panels\CPrefsSpellingSuggestions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\preferences_dialog\sub-panels\spelling_panels\CPrefsSpellingSuggestions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\status\CProgress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\status\CProgress.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\address_book_properties\CPropAdbkACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\address_book_properties\CPropAdbkACL.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\address_book_manager\address_book_properties\CPropAdbkGeneral.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\address_book_manager\address_book_properties\CPropAdbkGeneral.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CPropCalendarACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CPropCalendarACL.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CPropCalendarGeneral.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CPropCalendarGeneral.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CPropCalendarOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CPropCalendarOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CPropCalendarServer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CPropCalendarServer.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_properties\CPropCalendarWebcal.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_properties\CPropCalendarWebcal.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CPropMailboxACL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CPropMailboxACL.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CPropMailboxGeneral.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CPropMailboxGeneral.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CPropMailboxOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CPropMailboxOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CPropMailboxQuota.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CPropMailboxQuota.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CPropMailboxServer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CPropMailboxServer.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\password\CPswdChangeClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\password\CPswdChangeClient.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\passwordchange\CPswdChangePlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\passwordchange\CPswdChangePlugin.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CQuickSearchSavedPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CQuickSearchSavedPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CQuickSearchText.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CQuickSearchText.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CQuotaProtocol.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CQuotaProtocol.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\extensions\CQuotas.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\extensions\CQuotas.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\mailbox_properties\CQuotaTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\mailbox_properties\CQuotaTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\recording\CRecordableAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\recording\CRecordableAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\component_editing\CRecurrenceDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\component_editing\CRecurrenceDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\general\CRegistration.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\general\CRegistration.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\general\CRegistrationCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\general\CRegistrationCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CRegistrationDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CRegistrationDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\action dialogs\CRejectActionDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\action dialogs\CRejectActionDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CRemoteOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CRemoteOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CRemotePrefsSets.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CRemotePrefsSets.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\action dialogs\CReplyActionDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\action dialogs\CReplyActionDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CReplyChooseDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CReplyChooseDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\protocols\CRFC822.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\protocols\CRFC822.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CRFC822Parser.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CRFC822Parser.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CRulesAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CRulesAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CRulesActionLocal.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CRulesActionLocal.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CRulesActionSIEVE.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CRulesActionSIEVE.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CRulesDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CRulesDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CRulesDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CRulesDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CRulesFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CRulesFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CRulesTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CRulesTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\rules\CRulesTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\rules\CRulesTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CRulesTarget.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CRulesTarget.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CRulesWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CRulesWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\letter\CSaveDraftDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\letter\CSaveDraftDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CScreenDimensions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CScreenDimensions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\CScriptsTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\CScriptsTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\rules\CScriptsTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\rules\CScriptsTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSDIDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSDIDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSDIFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSDIFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchBase.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchBase.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchCriteria.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchCriteria.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchCriteriaContainer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchCriteriaContainer.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchCriteriaLocal.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchCriteriaLocal.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchCriteriaSIEVE.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchCriteriaSIEVE.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchDoc.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\search\CSearchEngine.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\search\CSearchEngine.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchFrame.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\search\CSearchItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\search\CSearchItem.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchListPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchListPanel.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CSearchStyle.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CSearchStyle.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\search\CSearchThread.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\search\CSearchThread.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\search\CSearchWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\search\CSearchWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\security\CSecurityPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\security\CSecurityPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\mailbox_info\CSelectPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\mailbox_info\CSelectPopup.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\imap\CSequence.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\imap\CSequence.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerBrowse.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerBrowse.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\server\CServerBrowseCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\server\CServerBrowseCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\browse_dialog\CServerBrowseTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\browse_dialog\CServerBrowseTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerDoc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerDoc.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerFrame.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\server\CServerTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\server\CServerTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\server\CServerViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\server\CServerViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerViewPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerViewPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\server\CServerWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\server\CServerWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\text\CSetNumberEdit.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\text\CSetNumberEdit.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\sieve\sieve\CSIEVEClient.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\sieve\sieve\CSIEVEClient.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CSimpleTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CSimpleTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CSizeMenu.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CSizeMenu.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\twobyte\CSJIS.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\twobyte\CSJIS.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CSMTPAccount.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CSMTPAccount.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CSMTPAccountManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CSMTPAccountManager.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPAccountPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPAccountPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPFrame.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPFrame.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\inet_clients\smtp\CSMTPSender.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\inet_clients\smtp\CSMTPSender.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\control\CSMTPSendThread.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\control\CSMTPSendThread.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\smtp_queue\CSMTPTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\smtp_queue\CSMTPTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\smtp_queue\CSMTPViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\smtp_queue\CSMTPViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\smtp_queue\CSMTPWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\smtp_queue\CSMTPWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\smtp_queue\CSMTPWindowCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\smtp_queue\CSMTPWindowCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSoundPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSoundPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CSpacebarEdit.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CSpacebarEdit.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\message\CSpacebarEditView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\message\CSpacebarEditView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\speech\CSpeechSynthesis.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\speech\CSpeechSynthesis.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CSpellAddDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CSpellAddDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CSpellCheckDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CSpellCheckDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CSpellChooseDictDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CSpellChooseDictDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CSpellEditDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CSpellEditDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\spelling\CSpellOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\spelling\CSpellOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\spelling\CSpellPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\spelling\CSpellPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\general\CSplashBox.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\general\CSplashBox.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSplitter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSplitter.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSplitterView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSplitterView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CSSLPlugin.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CSSLPlugin.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\CSSLUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\CSSLUtils.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\status\CStatusWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\status\CStatusWindow.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\offline\mail\CStreamAttachment.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\offline\mail\CStreamAttachment.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\CStreamBuffer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\CStreamBuffer.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CStreamOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CStreamOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CStreamUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CStreamUtils.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CStringOptionsMap.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CStringOptionsMap.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CStringUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CStringUtils.cp">
+    </CLCompile>
+    <CLCompile Include="sources\formatting\CStyleToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\formatting\CStyleToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CSubPanelController.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CSubPanelController.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryEvent.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryEvent.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\summary_view\CSummaryTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\summary_view\CSummaryTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\summary_view\CSummaryTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\summary_view\CSummaryTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\summary_view\CSummaryView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\summary_view\CSummaryView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\summary_view\CSummaryViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CSynchroniseDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CSynchroniseDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CTabber.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CTabber.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CTabController.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CTabController.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTableColumnSelector.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTableColumnSelector.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTableDragAndDrop.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTableDragAndDrop.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTableRowGeometry.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTableRowGeometry.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTableRowSelector.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTableRowSelector.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CTableView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CTableView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CTableViewWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CTableViewWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CTableWindow.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CTableWindow.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CTabPanel.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CTabPanel.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filtering\CTargetItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filtering\CTargetItem.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CTargetsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CTargetsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\tasks\CTaskClasses.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\tasks\CTaskClasses.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\tasks\CTaskQueue.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\tasks\CTaskQueue.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\network\CTCPSocket.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\network\CTCPSocket.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\network\CTCPStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\network\CTCPStream.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CTextButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CTextButton.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CTextEngine.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CTextEngine.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTextListChoice.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTextListChoice.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CTextMacros.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CTextMacros.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTextTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTextTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\utilities\CTimezonePopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\utilities\CTimezonePopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CTitleTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CTitleTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\windows\CTitleTableView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\windows\CTitleTableView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\network\CTLSSocket.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\network\CTLSSocket.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\todo_view\CToDoItem.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\todo_view\CToDoItem.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoItemCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoItemCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\todo_view\CToDoTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\todo_view\CToDoTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\todo_view\CToDoView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\todo_view\CToDoView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\todo_view\CToDoViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\toolbars\CToolbar.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\toolbars\CToolbar.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CToolbarButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CToolbarButton.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\support\toolbars\CToolbarManager.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\support\toolbars\CToolbarManager.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CToolbarPopupButton.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CToolbarPopupButton.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\toolbars\CToolbarView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\toolbars\CToolbarView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CTreeNode.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CTreeNode.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\mailbox\CTreeNodeList.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\mailbox\CTreeNodeList.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\table\CTwister.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\table\CTwister.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\unicode\CUCS2.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\unicode\CUCS2.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\unicode\CUCS4.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\unicode\CUCS4.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CUnicodeStdLib.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CUnicodeStdLib.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CUnicodeUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CUnicodeUtils.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\dialog\CUploadScriptDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\dialog\CUploadScriptDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\urls\CURL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\urls\CURL.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\three_pane\CUserAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\three_pane\CUserAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CUserActionOptions.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CUserActionOptions.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\other_dialogs\CUserPswdDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\other_dialogs\CUserPswdDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CUStringUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CUStringUtils.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\unicode\CUTF16.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\unicode\CUTF16.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\i18n\charsets\converters\unicode\CUTF8.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\i18n\charsets\converters\unicode\CUTF8.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\CUtils.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\CUtils.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\CUUFilter.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\CUUFilter.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\rules\action dialogs\CVacationActionDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\rules\action dialogs\CVacationActionDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\plugins\ssl\CViewCertDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\plugins\ssl\CViewCertDialog.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\status\CVisualProgress.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\status\CVisualProgress.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\three pane\options dialog\CWindowOptionsDialog.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\three pane\options dialog\CWindowOptionsDialog.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CWindowStates.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CWindowStates.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\preferences\CWindowStatesXtras.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\preferences\CWindowStatesXtras.cp">
+    </CLCompile>
+    <CLCompile Include="Sources\Support\CWininet.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Sources\Support\CWininet.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CWinRegistry.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CWinRegistry.cp">
+    </CLCompile>
+    <CLCompile Include="sources\support\CWndAligner.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\support\CWndAligner.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\utilities\CYearPopup.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\utilities\CYearPopup.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\year_view\CYearTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\year_view\CYearTable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\year_view\CYearTableCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\year_view\CYearTableCommon.cp">
+    </CLCompile>
+    <CLCompile Include="sources\application\calendar\calendar_view\year_view\CYearView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\application\calendar\calendar_view\year_view\CYearView.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\application\calendar\calendar_view\year_view\CYearViewCommon.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\application\calendar\calendar_view\year_view\CYearViewCommon.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\diriterator.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\diriterator.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\encrypt.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\encrypt.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\filterbuf.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\filterbuf.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\plugins\ssl\loadsslfunc.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\plugins\ssl\loadsslfunc.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\mail\filters\mimefilters.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\mail\filters\mimefilters.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\os_dep.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\os_dep.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\prefsvector.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\prefsvector.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\quotedprintable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\quotedprintable.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\strfind.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\strfind.cp">
+    </CLCompile>
+    <CLCompile Include="..\sources_common\utilities\ustrfind.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\sources_common\utilities\ustrfind.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\undoable\WIN_LAction.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\undoable\WIN_LAction.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\streams\WIN_LDataStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\streams\WIN_LDataStream.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\streams\WIN_LFileStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\streams\WIN_LFileStream.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\hierarchy list\WIN_LHierarchyTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\hierarchy list\WIN_LHierarchyTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\streams\WIN_LMemFileStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\streams\WIN_LMemFileStream.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LScrollable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LScrollable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\streams\WIN_LStream.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\streams\WIN_LStream.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableArrayStorage.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableArrayStorage.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableMonoGeometry.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableMonoGeometry.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableMultiGeometry.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableMultiGeometry.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableMultiSelector.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableMultiSelector.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableSingleSelector.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableSingleSelector.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\tables\WIN_LTableView.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\tables\WIN_LTableView.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\hierarchy list\WIN_LTextHierTable.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\hierarchy list\WIN_LTextHierTable.cp">
+    </CLCompile>
+    <CLCompile Include="sources\pp_sources\undoable\WIN_LUndoer.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="sources\pp_sources\undoable\WIN_LUndoer.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLName.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLName.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLNamespace.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLNamespace.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLNode.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLNode.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLObject.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLObject.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLParserSAX.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLParserSAX.cp">
+    </CLCompile>
+    <CLCompile Include="..\Libraries\XMLLib\Source\XMLSAXSimple.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Libraries\XMLLib\Source\XMLSAXSimple.cp">
-      <Filter>Source Files</Filter>
-    </None>
+    </CLCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\Mulberry.rc">
@@ -5988,9 +5985,6 @@
     <ClCompile Include="..\Sources_Common\VCard_Store\Clients\CLocalVCardClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\Application\Calendar\Component_Editing\cnewcomponentdialog.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Libraries\vCard\Source\CVCardAddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -6226,6 +6220,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Libraries\XMLLib\Source\XMLDocument.cp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sources_common\mail\inet_clients\CINETClient.cp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

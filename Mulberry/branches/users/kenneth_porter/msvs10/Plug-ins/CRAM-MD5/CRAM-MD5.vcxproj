@@ -60,7 +60,7 @@
       <ForcedIncludeFiles>Plugin_Prefix_Win32.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)..\PluginLibrary\$(Configuration)\PluginLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\PluginLibrary\$(Configuration)\PluginLib.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -86,7 +86,7 @@
       <ForcedIncludeFiles>Plugin_Prefix_Win32.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(ProjectDir)..\PluginLibrary\$(Configuration)\PluginLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\PluginLibrary\$(Configuration)\PluginLib.lib;Ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -102,16 +102,16 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Common\CAuthPluginDLL.cp" />
-    <None Include="sources\CCRAMMD5PluginDLL.cp" />
-    <None Include="..\Common\CPluginDLL.cp" />
-    <None Include="..\Common\kbase64.cp" />
+    <CLCompile Include="..\Common\CAuthPluginDLL.cp" />
+    <CLCompile Include="sources\CCRAMMD5PluginDLL.cp" />
+    <CLCompile Include="..\Common\CPluginDLL.cp" />
+    <CLCompile Include="..\Common\kbase64.cp" />
     <ClCompile Include="..\Common\MulberryPrefixWin32.cp">
       <FileType>Document</FileType>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <None Include="..\Common\PluginDLLmain.cp" />
+    <CLCompile Include="..\Common\PluginDLLmain.cp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\md5\hmac-md5.c">

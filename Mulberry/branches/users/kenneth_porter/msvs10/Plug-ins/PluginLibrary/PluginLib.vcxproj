@@ -80,24 +80,24 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\Sources_Common\Utilities\base64.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\OneByte\CASCII.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\CCharsetManager.cp" />
-    <None Include="..\..\Sources_Common\Utilities\CCharSpecials.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\CConverterBase.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\OneByte\CConverterOneByte.cp" />
-    <None Include="..\..\Sources_Common\Utilities\cdstring.cp" />
-    <None Include="..\..\Sources_Common\Utilities\cdustring.cp" />
-    <None Include="..\..\Sources_Common\Utilities\char_stream.cp" />
-    <None Include="..\..\Sources_Common\Utilities\CStringUtils.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUCS2.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUCS4.cp" />
-    <None Include="..\..\Sources_Common\Mail\URLs\CURL.cp" />
-    <None Include="..\..\Sources_Common\Utilities\CUStringUtils.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUTF16.cp" />
-    <None Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUTF8.cp" />
-    <None Include="..\..\Sources_Common\Utilities\diriterator.cp" />
-    <None Include="..\..\Sources_Common\Utilities\encrypt.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\base64.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\OneByte\CASCII.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\CCharsetManager.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\CCharSpecials.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\CConverterBase.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\OneByte\CConverterOneByte.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\cdstring.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\cdustring.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\char_stream.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\CStringUtils.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUCS2.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUCS4.cp" />
+    <CLCompile Include="..\..\Sources_Common\Mail\URLs\CURL.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\CUStringUtils.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUTF16.cp" />
+    <CLCompile Include="..\..\Sources_Common\i18n\Charsets\Converters\Unicode\CUTF8.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\diriterator.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\encrypt.cp" />
     <ClCompile Include="..\Common\MulberryPrefixWin32.cp">
       <FileType>Document</FileType>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">__VCPP__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -107,10 +107,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Plugin_Prefix_Win32.h</PrecompiledHeaderFile>
     </ClCompile>
-    <None Include="..\Common\os_dep.cp" />
-    <None Include="..\..\Sources_Common\Utilities\quotedprintable.cp" />
-    <None Include="..\..\Sources_Common\Utilities\strfind.cp" />
-    <None Include="..\..\Sources_Common\Utilities\ustrfind.cp" />
+    <CLCompile Include="..\Common\os_dep.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\quotedprintable.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\strfind.cp" />
+    <CLCompile Include="..\..\Sources_Common\Utilities\ustrfind.cp" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>

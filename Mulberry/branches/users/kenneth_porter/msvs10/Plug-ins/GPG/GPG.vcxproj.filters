@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sources\CGPGPluginDLL.cp">
+    <CLCompile Include="sources\CGPGPluginDLL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Common\CPluginDLL.cp">
+    </CLCompile>
+    <CLCompile Include="..\Common\CPluginDLL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Common\CSecurityPluginDLL.cp">
+    </CLCompile>
+    <CLCompile Include="..\Common\CSecurityPluginDLL.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\Win32\Sources\Support\CUnicodeStdLib.cp">
+    </CLCompile>
+    <CLCompile Include="..\..\Win32\Sources\Support\CUnicodeStdLib.cp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\Common\PluginDLLmain.cp">
+    </CLCompile>
+    <CLCompile Include="..\Common\PluginDLLmain.cp">
       <Filter>Source Files</Filter>
-    </None>
+    </CLCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sources\CGPGPluginDLL.h">

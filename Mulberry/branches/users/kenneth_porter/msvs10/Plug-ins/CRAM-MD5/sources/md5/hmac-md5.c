@@ -11,6 +11,8 @@
 /* for htonl() and ntohl() */
 #include <sys/types.h>
 #include <netinet/in.h>
+#elif __dest_os == __win32_os
+#include <Winsock2.h>
 #else
 /* assume system headers define htonl and ntohl
  */

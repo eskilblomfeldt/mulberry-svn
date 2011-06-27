@@ -61,7 +61,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/Def:"SSL.def" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>$(ProjectDir)..\..\Libraries\openssl\out32d\libeay32.lib;$(ProjectDir)..\..\Libraries\openssl\out32d\ssleay32.lib;WSOCK32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\..\Libraries\openssl\out32d\libeay32.lib;$(ProjectDir)..\..\Libraries\openssl\out32d\ssleay32.lib;WSOCK32.lib;Crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -89,7 +89,7 @@
     </ClCompile>
     <Link>
       <AdditionalOptions>/Def:"SSL.def" %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>$(ProjectDir)..\..\Libraries\openssl\out32s\libeay32.lib;$(ProjectDir)..\..\Libraries\openssl\out32s\ssleay32.lib;WSOCK32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)..\..\Libraries\openssl\out32s\libeay32.lib;$(ProjectDir)..\..\Libraries\openssl\out32s\ssleay32.lib;WSOCK32.lib;Crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -106,15 +106,15 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Common\CPluginDLL.cp" />
-    <None Include="sources\CSSLPluginDLL.cp" />
+    <CLCompile Include="..\Common\CPluginDLL.cp" />
+    <CLCompile Include="sources\CSSLPluginDLL.cp" />
     <ClCompile Include="..\Common\MulberryPrefixWin32.cp">
       <FileType>Document</FileType>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <None Include="..\Common\os_dep.cp" />
-    <None Include="..\Common\PluginDLLmain.cp" />
+    <CLCompile Include="..\Common\os_dep.cp" />
+    <CLCompile Include="..\Common\PluginDLLmain.cp" />
     <None Include="SSL.def" />
   </ItemGroup>
   <ItemGroup>
