@@ -426,7 +426,7 @@ long CGSSAPIPluginDLL::ProcessStep(SAuthPluginData* info)
 				if (*p == '\\')
 					p++;
 				else
-					*q++ == *p++;
+					*q++ = *p++;
 			}
 			*q = 0;
 			

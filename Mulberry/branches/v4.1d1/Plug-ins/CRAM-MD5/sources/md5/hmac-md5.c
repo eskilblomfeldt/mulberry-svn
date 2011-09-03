@@ -14,8 +14,12 @@
 #else
 /* default to big endian
  */
+#ifndef htonl
 #define htonl(x) (x)
+#endif
+#ifndef ntohl
 #define ntohl(x) (x)
+#endif
 #endif
 
 /* MD5 block size */
