@@ -1153,7 +1153,7 @@ void CAddressBookManager::CaptureAddress(CAddressList& addrs)
 			if (proto)
 			{
 				// Check for valid address book list in protocol
-				CAddressBook* adbk = proto->GetStoreRoot();
+				adbk = proto->GetStoreRoot();
 				if ((adbk != NULL) && adbk->HasInferiors())
 				{
 					// Get the first valid address book
