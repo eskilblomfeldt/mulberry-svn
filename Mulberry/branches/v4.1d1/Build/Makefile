@@ -15,7 +15,7 @@ PLUGINLIB_DIR := ${PLUGINS_DIR}/PluginLibrary
 JX_DIR := ${MULBERRY_DIR}/Libraries/JX
 
 BITS_DIR := ./Bits
-TIMEZONE_DIR := ./Bits/Timezones
+TIMEZONE_DIR := ${MULBERRY_DIR}/Sources_Common/Timezones/zoneinfo
 RESOURCES_DIR := ${MULBERRY_DIR}/Sources_Common/Resources
 LICENSE_FILE := Mulberry_License
 CHANGES_FILE := CHANGES
@@ -166,12 +166,10 @@ bits:
 	@echo ""
 	@echo "-->Copying Bits to appropriate locations"
 	@cp ${BITS_DIR}/${LICENSE_FILE} ${RELEASE_DIR}
-	@cp -r ${BITS_DIR}/icons ${RELEASE_DIR}/${HIDDEN_DIR}
+	@svn export ${BITS_DIR}/icons ${RELEASE_DIR}/${HIDDEN_DIR}/icons
 	@rm -rf ${RELEASE_DIR}/${HIDDEN_DIR}/icons/CVS
 	@cp ${RESOURCES_DIR}/*.xml ${RESOURCE_RELEASE_DIR}
-	@cp -r ${TIMEZONE_DIR} ${PLUGIN_RELEASE_DIR}
-	@rm -rf ${TIMEZONE_RELEASE_DIR}/CVS
-	@rm -rf ${TIMEZONE_RELEASE_DIR}/.AppleDouble
+	@svn export ${TIMEZONE_DIR} ${TIMEZONE_RELEASE_DIR}
 	@cp ${BITS_DIR}/${CHANGES_FILE} ${RELEASE_DIR}/${HIDDEN_DIR}
 	@cp ${BITS_DIR}/${CHANGES_FILE_DEV} ${RELEASE_DIR}/${HIDDEN_DIR}
 	@cp ${BITS_DIR}/${CHANGES_FILE_V3} ${RELEASE_DIR}/${HIDDEN_DIR}
