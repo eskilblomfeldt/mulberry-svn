@@ -20,10 +20,10 @@ resource 'vers' (1) {
 	0x4,
 	0x10,
 	alpha,
-	0x1,
+	0x3,
 	0,
-	"v4.1a1",
-	"Mulberry v4.1a1, © Cyrus Daboo, 2006-2009."
+	"v4.1a3",
+	"Mulberry v4.1a3, © Cyrus Daboo, 2006-2012."
 };
 
 resource 'vers' (2) {
@@ -32,6 +32,6 @@ resource 'vers' (2) {
 	alpha,
 	0x1,
 	0,
-	"v4.1a1",
-	"Mulberry v4.1a1"
+	"v4.1a3",
+	"Mulberry v4.1a3"
 };
