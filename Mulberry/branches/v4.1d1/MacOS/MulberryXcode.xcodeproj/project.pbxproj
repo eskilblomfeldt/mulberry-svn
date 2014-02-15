@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -79,6 +79,9 @@
 		AF3754720AE2D15900C56E20 /* Mulberry.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF37546B0AE2D15900C56E20 /* Mulberry.icns */; };
 		AF3754730AE2D15900C56E20 /* Pref.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF37546C0AE2D15900C56E20 /* Pref.icns */; };
 		AF3754740AE2D15900C56E20 /* shlb.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF37546D0AE2D15900C56E20 /* shlb.icns */; };
+		AF3D685314783A5700598FB3 /* CAddressFieldMultiLine.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF3D685114783A5700598FB3 /* CAddressFieldMultiLine.cp */; };
+		AF3D68561478749700598FB3 /* CAddressFieldSubContainer.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF3D68541478749600598FB3 /* CAddressFieldSubContainer.cp */; };
+		AF4F945B1462F0A30078DC56 /* CAddressFieldBase.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF4F94591462F0A30078DC56 /* CAddressFieldBase.cp */; };
 		AF52ED890AE2F8F600A75C72 /* LTableSelState.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF52ED870AE2F8F600A75C72 /* LTableSelState.cp */; };
 		AF52EDD60AE322FA00A75C72 /* FSpCompat.c in Sources */ = {isa = PBXBuildFile; fileRef = AF52EDD50AE322FA00A75C72 /* FSpCompat.c */; };
 		AF52F1D80AE3367D00A75C72 /* 0bb21872.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF1D0AE32EB200A75C72 /* 0bb21872.0 */; };
@@ -147,6 +150,7 @@
 		AF52F2170AE3367D00A75C72 /* f4996e82.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF5C0AE32EB300A75C72 /* f4996e82.0 */; };
 		AF52F2180AE3367D00A75C72 /* f73e89fd.0 in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF52EF5D0AE32EB300A75C72 /* f73e89fd.0 */; };
 		AF6573A3136CACDD0088690F /* LDAP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6573A2136CACDC0088690F /* LDAP.framework */; };
+		AF6AA590146044EA00035D50 /* CAddressPreviewAdvanced.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF6AA58E146044EA00035D50 /* CAddressPreviewAdvanced.cp */; };
 		AF8093D10D425EEF002A2E39 /* CVCardSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF8093D00D425EEF002A2E39 /* CVCardSearch.cpp */; };
 		AF8269410C1B2C9300B18EED /* CStreamBuffer.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82692E0C1B2C9200B18EED /* CStreamBuffer.cp */; };
 		AF8269440C1B2C9300B18EED /* XMLDocument.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF8269310C1B2C9200B18EED /* XMLDocument.cp */; };
@@ -157,8 +161,10 @@
 		AF8269500C1B2C9300B18EED /* XMLParserSAX.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693D0C1B2C9300B18EED /* XMLParserSAX.cp */; };
 		AF8269520C1B2C9300B18EED /* XMLSAXSimple.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF82693F0C1B2C9300B18EED /* XMLSAXSimple.cp */; };
 		AF84FE71129AC70500CB7C63 /* CWebDAVErrorResponseParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF84FE6F129AC70500CB7C63 /* CWebDAVErrorResponseParser.cpp */; };
+		AF85A6C414642833009C526E /* CAddressFieldContainer.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF85A6C214642833009C526E /* CAddressFieldContainer.cp */; };
 		AF899FE2111F3A51002548C0 /* CWebDAVSyncReport.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF899FE1111F3A51002548C0 /* CWebDAVSyncReport.cpp */; };
 		AF89A008111F50B9002548C0 /* CWebDAVSyncReportParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF89A007111F50B9002548C0 /* CWebDAVSyncReportParser.cpp */; };
+		AF905F5B147834E20096CDFC /* CAddressFieldText.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF905F59147834E20096CDFC /* CAddressFieldText.cp */; };
 		AF97490F136F10BF0073E7F2 /* CCalendarCheckThread.cp in Sources */ = {isa = PBXBuildFile; fileRef = AF97490D136F10BF0073E7F2 /* CCalendarCheckThread.cp */; };
 		AF9BC8EE13D5D46700240750 /* CocoaSpeller.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF9BC8ED13D5D46600240750 /* CocoaSpeller.bundle */; };
 		AF9BC90813D5D7F000240750 /* CommunicatorAdbkIO.bundle in CopyFiles */ = {isa = PBXBuildFile; fileRef = AF9BC90713D5D7EF00240750 /* CommunicatorAdbkIO.bundle */; };
@@ -181,6 +187,7 @@
 		AFBC9BC7136C899100593A2C /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = AFBC9BC6136C899100593A2C /* libssl.dylib */; };
 		AFBE2AB70D2F30DB002132BE /* CWebDAVPrefsClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */; };
 		AFBE2ABA0D2F34A4002132BE /* COptionsAccount.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */; };
+		AFC64A2A147C34A6001777F1 /* CEditAddressAdvancedDialog.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFC64A28147C34A4001777F1 /* CEditAddressAdvancedDialog.cp */; };
 		AFC7981B0CCADCAF00E62F0F /* CPasswordManager.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */; };
 		AFC798200CCAE69000E62F0F /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC7981F0CCAE69000E62F0F /* Security.framework */; };
 		AFCDD2D30AE1647A00E30447 /* os_dep.cp in Sources */ = {isa = PBXBuildFile; fileRef = AFCDD2D20AE1647A00E30447 /* os_dep.cp */; };
@@ -1910,6 +1917,13 @@
 			remoteGlobalIDString = AF419C850AEA6B9E00E19592;
 			remoteInfo = "SSL MachO";
 		};
+		AF7C331414A3C2CC00C70C9D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AF419E9F0AEA750800E19592 /* PluginLibrary.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = AF41CB68136BB4B7004178E5;
+			remoteInfo = "PluginLibrary MachO";
+		};
 		AFC79A500CCBEB4C00E62F0F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AFC79A4C0CCBEB4C00E62F0F /* CocoaSpeller.xcodeproj */;
@@ -1934,15 +1948,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		AF17A4D4136CE01E00ED3921 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		AF52EE1A0AE328B700A75C72 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2689,6 +2694,10 @@
 		AF37546B0AE2D15900C56E20 /* Mulberry.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Mulberry.icns; path = Resources/Mulberry.icns; sourceTree = SOURCE_ROOT; };
 		AF37546C0AE2D15900C56E20 /* Pref.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = Pref.icns; path = Resources/Pref.icns; sourceTree = SOURCE_ROOT; };
 		AF37546D0AE2D15900C56E20 /* shlb.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = shlb.icns; path = Resources/shlb.icns; sourceTree = SOURCE_ROOT; };
+		AF3D685114783A5700598FB3 /* CAddressFieldMultiLine.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressFieldMultiLine.cp; path = Sources/Application/Address_Book/CAddressFieldMultiLine.cp; sourceTree = "<group>"; };
+		AF3D685214783A5700598FB3 /* CAddressFieldMultiLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressFieldMultiLine.h; path = Sources/Application/Address_Book/CAddressFieldMultiLine.h; sourceTree = "<group>"; };
+		AF3D68541478749600598FB3 /* CAddressFieldSubContainer.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressFieldSubContainer.cp; path = Sources/Application/Address_Book/CAddressFieldSubContainer.cp; sourceTree = "<group>"; };
+		AF3D68551478749600598FB3 /* CAddressFieldSubContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressFieldSubContainer.h; path = Sources/Application/Address_Book/CAddressFieldSubContainer.h; sourceTree = "<group>"; };
 		AF419E460AEA72AE00E19592 /* CommunicatorAdbkIO.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CommunicatorAdbkIO.xcodeproj; path = "../Plug-ins/CommunicatorAdbkIO/CommunicatorAdbkIO.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AF419E4F0AEA72BB00E19592 /* Eudora4AdbkIO.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Eudora4AdbkIO.xcodeproj; path = "../Plug-ins/Eudora4AdbkIO/Eudora4AdbkIO.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AF419E580AEA72C900E19592 /* EudoraAdbkIO.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EudoraAdbkIO.xcodeproj; path = "../Plug-ins/EudoraAdbkIO/EudoraAdbkIO.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -2703,6 +2712,8 @@
 		AF419EC00AEA753B00E19592 /* SMIME.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SMIME.xcodeproj; path = "../Plug-ins/SMIME/SMIME.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AF419EC60AEA753B00E19592 /* SSL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SSL.xcodeproj; path = "../Plug-ins/SSL/SSL.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		AF419EC90AEA753B00E19592 /* vCardAdbkIO.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = vCardAdbkIO.xcodeproj; path = "../Plug-ins/vCardAdbkIO/vCardAdbkIO.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		AF4F94591462F0A30078DC56 /* CAddressFieldBase.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressFieldBase.cp; path = Sources/Application/Address_Book/CAddressFieldBase.cp; sourceTree = "<group>"; };
+		AF4F945A1462F0A30078DC56 /* CAddressFieldBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressFieldBase.h; path = Sources/Application/Address_Book/CAddressFieldBase.h; sourceTree = "<group>"; };
 		AF52ED870AE2F8F600A75C72 /* LTableSelState.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = LTableSelState.cp; sourceTree = "<group>"; };
 		AF52ED880AE2F8F600A75C72 /* LTableSelState.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = LTableSelState.h; sourceTree = "<group>"; };
 		AF52EDD50AE322FA00A75C72 /* FSpCompat.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = FSpCompat.c; sourceTree = "<group>"; };
@@ -2772,6 +2783,8 @@
 		AF52EF5C0AE32EB300A75C72 /* f4996e82.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = f4996e82.0; sourceTree = "<group>"; };
 		AF52EF5D0AE32EB300A75C72 /* f73e89fd.0 */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = f73e89fd.0; sourceTree = "<group>"; };
 		AF6573A2136CACDC0088690F /* LDAP.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LDAP.framework; path = System/Library/Frameworks/LDAP.framework; sourceTree = SDKROOT; };
+		AF6AA58E146044EA00035D50 /* CAddressPreviewAdvanced.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressPreviewAdvanced.cp; path = Sources/Application/Address_Book/CAddressPreviewAdvanced.cp; sourceTree = "<group>"; };
+		AF6AA58F146044EA00035D50 /* CAddressPreviewAdvanced.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressPreviewAdvanced.h; path = Sources/Application/Address_Book/CAddressPreviewAdvanced.h; sourceTree = "<group>"; };
 		AF8093CF0D425EEF002A2E39 /* CVCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVCardSearch.h; sourceTree = "<group>"; };
 		AF8093D00D425EEF002A2E39 /* CVCardSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CVCardSearch.cpp; sourceTree = "<group>"; };
 		AF82692E0C1B2C9200B18EED /* CStreamBuffer.cp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = CStreamBuffer.cp; path = ../../Libraries/XMLLib/Source/CStreamBuffer.cp; sourceTree = "<group>"; };
@@ -2795,10 +2808,14 @@
 		AF8269400C1B2C9300B18EED /* XMLSAXSimple.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = XMLSAXSimple.h; path = ../../Libraries/XMLLib/Source/XMLSAXSimple.h; sourceTree = "<group>"; };
 		AF84FE6F129AC70500CB7C63 /* CWebDAVErrorResponseParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CWebDAVErrorResponseParser.cpp; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVErrorResponseParser.cpp; sourceTree = SOURCE_ROOT; };
 		AF84FE70129AC70500CB7C63 /* CWebDAVErrorResponseParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWebDAVErrorResponseParser.h; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVErrorResponseParser.h; sourceTree = SOURCE_ROOT; };
+		AF85A6C214642833009C526E /* CAddressFieldContainer.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressFieldContainer.cp; path = Sources/Application/Address_Book/CAddressFieldContainer.cp; sourceTree = "<group>"; };
+		AF85A6C314642833009C526E /* CAddressFieldContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressFieldContainer.h; path = Sources/Application/Address_Book/CAddressFieldContainer.h; sourceTree = "<group>"; };
 		AF899FE0111F3A51002548C0 /* CWebDAVSyncReport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWebDAVSyncReport.h; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVSyncReport.h; sourceTree = "<group>"; };
 		AF899FE1111F3A51002548C0 /* CWebDAVSyncReport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CWebDAVSyncReport.cpp; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVSyncReport.cpp; sourceTree = "<group>"; };
 		AF89A006111F50B9002548C0 /* CWebDAVSyncReportParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CWebDAVSyncReportParser.h; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVSyncReportParser.h; sourceTree = "<group>"; };
 		AF89A007111F50B9002548C0 /* CWebDAVSyncReportParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CWebDAVSyncReportParser.cpp; path = ../Sources_Common/HTTP/WebDAVClient/CWebDAVSyncReportParser.cpp; sourceTree = "<group>"; };
+		AF905F59147834E20096CDFC /* CAddressFieldText.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAddressFieldText.cp; path = Sources/Application/Address_Book/CAddressFieldText.cp; sourceTree = "<group>"; };
+		AF905F5A147834E20096CDFC /* CAddressFieldText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAddressFieldText.h; path = Sources/Application/Address_Book/CAddressFieldText.h; sourceTree = "<group>"; };
 		AF97490D136F10BF0073E7F2 /* CCalendarCheckThread.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CCalendarCheckThread.cp; path = ../Sources_Common/Mail/Control/CCalendarCheckThread.cp; sourceTree = "<group>"; };
 		AF97490E136F10BF0073E7F2 /* CCalendarCheckThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCalendarCheckThread.h; path = ../Sources_Common/Mail/Control/CCalendarCheckThread.h; sourceTree = "<group>"; };
 		AF9BC8ED13D5D46600240750 /* CocoaSpeller.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; name = CocoaSpeller.bundle; path = "../Plug-ins/CocoaSpeller/build/Debug/CocoaSpeller.bundle"; sourceTree = SOURCE_ROOT; };
@@ -2825,6 +2842,8 @@
 		AFBE2AB60D2F30DB002132BE /* CWebDAVPrefsClient.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CWebDAVPrefsClient.cpp; sourceTree = "<group>"; };
 		AFBE2AB80D2F34A4002132BE /* COptionsAccount.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = COptionsAccount.cp; path = ../Sources_Common/Application/Preferences/COptionsAccount.cp; sourceTree = SOURCE_ROOT; };
 		AFBE2AB90D2F34A4002132BE /* COptionsAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = COptionsAccount.h; path = ../Sources_Common/Application/Preferences/COptionsAccount.h; sourceTree = SOURCE_ROOT; };
+		AFC64A28147C34A4001777F1 /* CEditAddressAdvancedDialog.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CEditAddressAdvancedDialog.cp; path = Sources/Application/Address_Book/CEditAddressAdvancedDialog.cp; sourceTree = "<group>"; };
+		AFC64A29147C34A5001777F1 /* CEditAddressAdvancedDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CEditAddressAdvancedDialog.h; path = Sources/Application/Address_Book/CEditAddressAdvancedDialog.h; sourceTree = "<group>"; };
 		AFC798190CCADCAF00E62F0F /* CPasswordManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CPasswordManager.h; path = ../Sources_Common/Mail/Control/CPasswordManager.h; sourceTree = SOURCE_ROOT; };
 		AFC7981A0CCADCAF00E62F0F /* CPasswordManager.cp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPasswordManager.cp; path = ../Sources_Common/Mail/Control/CPasswordManager.cp; sourceTree = SOURCE_ROOT; };
 		AFC7981F0CCAE69000E62F0F /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -5953,6 +5972,14 @@
 			path = Timezones;
 			sourceTree = "<group>";
 		};
+		AF7C331114A3C2CC00C70C9D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AF7C331514A3C2CC00C70C9D /* libPluginLibrary.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		AF82692D0C1B2C3500B18EED /* XMLLib */ = {
 			isa = PBXGroup;
 			children = (
@@ -8366,6 +8393,8 @@
 				AFCDDE9A0AE176DD00E30447 /* CAddressTableAction.cp */,
 				AFCDDE9B0AE176DD00E30447 /* CEditAddressDialog.h */,
 				AFCDDE9C0AE176DD00E30447 /* CEditAddressDialog.cp */,
+				AFC64A29147C34A5001777F1 /* CEditAddressAdvancedDialog.h */,
+				AFC64A28147C34A4001777F1 /* CEditAddressAdvancedDialog.cp */,
 				AFCDDE9D0AE176DD00E30447 /* CGroupTable.h */,
 				AFCDDE9E0AE176DD00E30447 /* CGroupTable.cp */,
 				AFCDDE9F0AE176DD00E30447 /* CGroupTableAction.h */,
@@ -8375,6 +8404,18 @@
 				AFCDDEA30AE176DD00E30447 /* CAddressView.h */,
 				AFCDDEA40AE176DD00E30447 /* CAddressView.cp */,
 				AFCDDEA50AE176DD00E30447 /* CAddressPreviewBase.h */,
+				AF6AA58F146044EA00035D50 /* CAddressPreviewAdvanced.h */,
+				AF6AA58E146044EA00035D50 /* CAddressPreviewAdvanced.cp */,
+				AF85A6C314642833009C526E /* CAddressFieldContainer.h */,
+				AF85A6C214642833009C526E /* CAddressFieldContainer.cp */,
+				AF3D68551478749600598FB3 /* CAddressFieldSubContainer.h */,
+				AF3D68541478749600598FB3 /* CAddressFieldSubContainer.cp */,
+				AF4F945A1462F0A30078DC56 /* CAddressFieldBase.h */,
+				AF4F94591462F0A30078DC56 /* CAddressFieldBase.cp */,
+				AF905F5A147834E20096CDFC /* CAddressFieldText.h */,
+				AF905F59147834E20096CDFC /* CAddressFieldText.cp */,
+				AF3D685214783A5700598FB3 /* CAddressFieldMultiLine.h */,
+				AF3D685114783A5700598FB3 /* CAddressFieldMultiLine.cp */,
 				AFCDDEA60AE176DD00E30447 /* CAddressPreview.h */,
 				AFCDDEA70AE176DD00E30447 /* CAddressPreview.cp */,
 				AFCDDEA80AE176DD00E30447 /* CAddressPanelBase.h */,
@@ -10137,7 +10178,6 @@
 				AF52EE1A0AE328B700A75C72 /* CopyFiles */,
 				AF52F0A50AE3323E00A75C72 /* CopyFiles */,
 				AF52F0F60AE3330600A75C72 /* CopyFiles */,
-				AF17A4D4136CE01E00ED3921 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -10170,8 +10210,11 @@
 /* Begin PBXProject section */
 		20286C28FDCF999611CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
 			buildConfigurationList = C0E91AC908A95435008D54AB /* Build configuration list for PBXProject "MulberryXcode" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -10226,6 +10269,10 @@
 				{
 					ProductGroup = AF419E9D0AEA750800E19592 /* Products */;
 					ProjectRef = AF419E9C0AEA750800E19592 /* PineAdbkIO.xcodeproj */;
+				},
+				{
+					ProductGroup = AF7C331114A3C2CC00C70C9D /* Products */;
+					ProjectRef = AF419E9F0AEA750800E19592 /* PluginLibrary.xcodeproj */;
 				},
 				{
 					ProductGroup = AF419EA30AEA750800E19592 /* Products */;
@@ -10345,6 +10392,13 @@
 			fileType = wrapper.cfbundle;
 			path = vCardAdbkIO.bundle;
 			remoteRef = AF419EE20AEA753C00E19592 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		AF7C331514A3C2CC00C70C9D /* libPluginLibrary.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPluginLibrary.a;
+			remoteRef = AF7C331414A3C2CC00C70C9D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		AFC79A510CCBEB4C00E62F0F /* CocoaSpeller.bundle */ = {
@@ -11498,6 +11552,13 @@
 				AF89A008111F50B9002548C0 /* CWebDAVSyncReportParser.cpp in Sources */,
 				AF84FE71129AC70500CB7C63 /* CWebDAVErrorResponseParser.cpp in Sources */,
 				AF97490F136F10BF0073E7F2 /* CCalendarCheckThread.cp in Sources */,
+				AF6AA590146044EA00035D50 /* CAddressPreviewAdvanced.cp in Sources */,
+				AF4F945B1462F0A30078DC56 /* CAddressFieldBase.cp in Sources */,
+				AF85A6C414642833009C526E /* CAddressFieldContainer.cp in Sources */,
+				AF905F5B147834E20096CDFC /* CAddressFieldText.cp in Sources */,
+				AF3D685314783A5700598FB3 /* CAddressFieldMultiLine.cp in Sources */,
+				AF3D68561478749700598FB3 /* CAddressFieldSubContainer.cp in Sources */,
+				AFC64A2A147C34A6001777F1 /* CEditAddressAdvancedDialog.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11605,6 +11666,7 @@
 				DEAD_CODE_STRIPPING = YES;
 				EXECUTABLE_EXTENSION = app;
 				INFOPLIST_FILE = Packaging/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = YES;
 				PRIVATE_HEADERS_FOLDER_PATH = "";
 				PRODUCT_NAME = Mulberry;
@@ -11615,26 +11677,27 @@
 		AF93880A0B116AA0000C5A54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				OTHER_CPLUSPLUSFLAGS = "-fpermissive";
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.6;
 				VALID_ARCHS = i386;
 			};
 			name = Debug;
@@ -11656,24 +11719,26 @@
 		C0E91ACB08A95435008D54AB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Sources/MulberryXcode_Prefix.pch;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
-				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
 				HEADER_SEARCH_PATHS = /Developer/Headers/FlatCarbon;
 				OTHER_CPLUSPLUSFLAGS = "-fpermissive";
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = macosx10.6;
 				SEPARATE_STRIP = YES;
 				VALID_ARCHS = i386;
 			};
