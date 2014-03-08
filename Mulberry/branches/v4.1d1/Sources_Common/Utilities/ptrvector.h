@@ -21,6 +21,7 @@
 #define __PTRVECTOR__MULBERRY__
 
 #include <vector>
+#include <stddef.h>
 
 // Classes
 
