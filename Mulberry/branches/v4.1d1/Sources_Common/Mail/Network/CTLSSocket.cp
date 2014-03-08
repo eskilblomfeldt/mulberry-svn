@@ -415,7 +415,7 @@ void CTLSSocket::TLSStartConnection()
 		mCertIssuer = str;
 
 		// Get cipher in use
-		SSL_CIPHER* cipher = ::SSL_get_current_cipher(m_tls);
+		const SSL_CIPHER* cipher = ::SSL_get_current_cipher(m_tls);
 		
 		char cipher_desc[256];
 		::SSL_CIPHER_description(cipher, cipher_desc, 256);
