@@ -21,6 +21,7 @@
 #define __CBROADCASTER__MULBERRY__
 
 #include <vector>
+#include <stddef.h>
 
 class CListener;
 typedef std::vector<CListener*> CListenerList;
