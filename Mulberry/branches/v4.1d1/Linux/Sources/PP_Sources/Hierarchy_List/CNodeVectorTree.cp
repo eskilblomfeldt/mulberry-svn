@@ -23,6 +23,7 @@
 
 #include "CNodeVectorTree.h"
 
+#include <stddef.h>
 
 // ---------------------------------------------------------------------------
 //		 CNodeVectorTree
